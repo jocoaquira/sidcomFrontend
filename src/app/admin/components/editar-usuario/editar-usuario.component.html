@@ -1,104 +1,95 @@
 <form [formGroup]="form.formulario" (ngSubmit)="onSubmit()">
-    <label for="email">Email:</label>
-    <input id="email" formControlName="email" type="email" />
-    <div *ngIf="form.isEmailInvalid()">
-      El correo electrónico es obligatorio y debe tener un formato válido.
-    </div>
-  
-    <label for="nombre">Nombre:</label>
-    <input id="nombre" formControlName="nombre" type="text" />
-    <div *ngIf="form.formulario.get('nombre')?.invalid && form.formulario.get('nombre')?.touched">
-      El nombre es obligatorio.
-    </div>
-  
-    <button type="submit">Enviar</button>
-  </form>
-    
-    
-    <div>       
-            <div class="field">
-                <span class="p-float-label mt-5">
-                    <p-dropdown
-                        inputId="dropdown"
-                        [autoDisplayFirst]="false"
-                        [options]="roles"
-                        [(ngModel)]="sw1"
-                        optionLabel="name"
-                        (ngModelChange)="onChangeRol($event)"
-                    ></p-dropdown>
+    <div class="field">
+        <span class="p-float-label mt-5">
+            <p-dropdown
+                inputId="dropdown"
+                [autoDisplayFirst]="false"
+                [options]="roles"
+                formControlName="rol_id"
+                optionLabel="name"
+                (onChange)="onChangeRol($event)"
+            ></p-dropdown>
 
-                    <label for="dropdown">Nivel de Usuario</label>
-                </span>
-            </div>
-            <div class="field">
-                 <label for="nombre">Nombre</label>
-                 <input type="text" pInputText id="nombre" [(ngModel)]="usuario.nombre" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !usuario.nombre}"/>
-                 <small class="ng-dirty ng-invalid" *ngIf="submitted && !usuario.nombre">nombre is required.</small>
-             </div>
-             <div class="field">
-                 <label for="apellidos">Apellidos</label>
-                 <input type="text" pInputText id="apellidos" [(ngModel)]="usuario.apellidos" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !usuario.apellidos}"/>
-                 <small class="ng-dirty ng-invalid" *ngIf="submitted && !usuario.apellidos">apellidos is required.</small>
-             </div>
-             <div class="field">
-                 <label for="email">Email</label>
-                 <input type="text" pInputText id="email" [(ngModel)]="usuario.email" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !usuario.email}"/>
-                 <small class="ng-dirty ng-invalid" *ngIf="submitted && !usuario.email">email is required.</small>
-             </div>
-             <div *ngIf="admin">
-                <div class="field">
-                    <label for="password">Contraseña</label>
-                    <input type="text" pInputText id="password" [(ngModel)]="usuario.password" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !usuario.password}"/>
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !usuario.password">password is required.</small>
-                </div>
-                <div class="field">
-                    <label for="repetir_password">Repetir Contraseña</label>
-                    <input type="text" pInputText id="repetir_password" [(ngModel)]="usuario.repetir_password" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !usuario.repetir_password}"/>
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !usuario.repetir_password">repetir_password is required.</small>
-                </div>
-             </div>
-             
-             
-             <div class="field" *ngIf="!admin">
-                 <span class="p-float-label mt-5">
-                     <p-dropdown
-                         inputId="dropdown"
-                         [autoDisplayFirst]="false"
-                         [options]="operadores"
-                         [(ngModel)]="sw"
-                         optionLabel="razon_social"
-                         (ngModelChange)="onChangeOperadores($event)"
-                     ></p-dropdown>
-     
-                     <label for="dropdown">Operador Minero</label>
-                 </span>
-             </div>
-             <div class="field">
-                <span class="p-float-label mt-5">
-                    <p-dropdown
-                        inputId="dropdown"
-                        [autoDisplayFirst]="false"
-                        [options]="estados"
-                        [(ngModel)]="sw2"
-                        optionLabel="label"
-                        (ngModelChange)="onChangeEstado($event)"
-                    >
-                        <ng-template pTemplate="selectedItem">
-                            <span *ngIf="usuario && usuario.estado" [class]="'usuario-badge estado-' + usuario.estado.toString().toLowerCase()">{{ +usuario.estado === 1 ? 'Habilitado' : 'Inhabilitado' }}</span>
-                        </ng-template>
-                        <ng-template let-option pTemplate="item">
-                            <span [class]="'usuario-badge estado-' + option.value">{{option.label}}</span>
-                        </ng-template>
-                    </p-dropdown>
-    
-                    <label for="dropdown">Estado</label>
-                </span>
-            </div> 
-            <div class="botones-derecha">
-                <span class="p-buttonset col-12 md:col-6 ">
-                    <button pButton pRipple label="Guardar" class="p-button-secondary" icon="pi pi-check" (click)="guardarusuario()"></button>
-                    <button pButton pRipple label="Cancelar"  class="p-button-danger" icon="pi pi-trash" (click)="ocultarDialogo()"></button>
-                </span>  
-            </div> 
-              
+            <label for="dropdown">Nivel de Usuario</label>
+        </span>
     </div>
+    <div class="field">
+        <label for="ci">Cedula de Identidad</label>
+        <input type="text" pInputText id="ci" formControlName="ci" autofocus/>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('ci')">{{form.getErrorMessage('ci')}}</small>
+    </div>
+    <div class="field">
+        <label>Nombre:</label>
+        <input type="text" pInputText id="nombre" formControlName="nombre"  autofocus />
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('nombre')">{{form.getErrorMessage('nombre')}}</small>
+    </div>
+    <div class="field">
+        <label for="apellidos">Apellidos</label>
+        <input type="text" pInputText id="apellidos" formControlName="apellidos" autofocus/>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('apellidos')">{{form.getErrorMessage('apellidos')}}</small>
+    </div>
+    <div class="field">
+        <label for="email">Correo Electrónico</label>
+        <input type="text" pInputText id="email" formControlName="email" autofocus/>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('email')">{{form.getErrorMessage('email')}}</small>
+    </div>
+    <div class="field">
+        <label for="celular">Celular</label>
+        <input type="text" pInputText id="celular" formControlName="celular" autofocus/>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('celular')">{{form.getErrorMessage('celular')}}</small>
+    </div>
+    <div *ngIf="admin">
+        <div class="field">
+            <label for="password">Contraseña</label>
+            <input type="password" pInputText id="password" formControlName="password" autofocus/>
+            <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('password')">{{form.getErrorMessage('password')}}</small>
+        </div>
+        <div class="field">
+            <label for="repetir_password">Repetir Contraseña</label>
+            <input type="password" pInputText id="repetir_password" formControlName="repetir_password" autofocus/>
+            <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('repetir_password')">{{form.getErrorMessage('repetir_password')}}</small>
+        </div>
+    </div>
+    <div class="field" *ngIf="!admin">
+        <span class="p-float-label mt-5">
+            <p-dropdown
+                inputId="dropdown"
+                [autoDisplayFirst]="false"
+                [options]="operadores"
+                formControlName="operator_id"
+                optionLabel="razon_social"
+                (ngModelChange)="onChangeOperadores($event)"
+            ></p-dropdown>
+
+            <label for="dropdown">Operador Minero</label>
+        </span>
+    </div>
+    <div class="field">
+        <span class="p-float-label mt-5">
+            <p-dropdown
+                inputId="dropdown"
+                [autoDisplayFirst]="false"
+                [options]="estados"
+                formControlName="estado"
+                optionLabel="label"
+                (ngModelChange)="onChangeEstado($event)"
+            >
+                <ng-template pTemplate="selectedItem">
+                    <span *ngIf="usuario && usuario.estado" [class]="'usuario-badge estado-' + usuario.estado.toString().toLowerCase()">{{ +usuario.estado === 1 ? 'Habilitado' : 'Inhabilitado' }}</span>
+                </ng-template>
+                <ng-template let-option pTemplate="item">
+                    <span [class]="'usuario-badge estado-' + option.value">{{option.label}}</span>
+                </ng-template>
+            </p-dropdown>
+
+            <label for="dropdown">Estado</label>
+        </span>
+    </div>
+    <div class="botones-derecha">
+        <span class="p-buttonset col-12 md:col-6 ">
+            <button pButton pRipple label="Guardar" class="p-button-secondary" icon="pi pi-check" type="submit"></button>
+            <button pButton pRipple label="Cancelar"  class="p-button-danger" icon="pi pi-trash" (click)="ocultarDialogo()"></button>
+        </span>
+    </div>
+</form>
+

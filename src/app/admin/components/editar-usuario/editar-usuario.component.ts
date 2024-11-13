@@ -31,8 +31,8 @@ export class EditarUsuarioComponent implements OnInit {
   constructor(
     private rolesServices:RolesService,
     private operadoresService:OperatorsService
-  ) { 
-      
+  ) {
+
   }
 
   ngOnInit(): void {
@@ -42,7 +42,7 @@ export class EditarUsuarioComponent implements OnInit {
 
     },
     (error:any)=> this.error=this.rolesServices.handleError(error));
-    
+
     this.operadoresService.verOperatorsSimple('hj').subscribe(
       (data:any)=>{
       this.operadores=this.operadoresService.handleOperatorSimple(data.data);
@@ -55,8 +55,10 @@ export class EditarUsuarioComponent implements OnInit {
   ];
   }
   onChangeRol(rol_id:any){
-    console.log(rol_id.name);
-    if(rol_id.name.search('Operador')!=-1)
+    let name=rol_id.value.name;
+    console.log(name);
+
+    if(name.search('Operador')!=-1)
     {
       this.admin=false;
     }
@@ -66,9 +68,12 @@ export class EditarUsuarioComponent implements OnInit {
 
   }
   onChangeEstado(operator_id:any){
-    this.usuario.estado=operator_id.value;
+
+   // this.form.formulario.value.estado=operator_id.value
+    console.log(this.form.formulario.value.estado);
   }
   onChangeOperadores(operator_id:any){
+    console.log(operator_id);
   }
   ocultarDialogo(){
     this.estadoDialogo.emit(false);
@@ -77,6 +82,7 @@ export class EditarUsuarioComponent implements OnInit {
 
   }
   onSubmit() {
+    console.log('Datos del usuario:', this.form.formulario.value);
     if (this.form.formulario.valid) {
       console.log('Datos del usuario:', this.form.formulario.value);
     } else {

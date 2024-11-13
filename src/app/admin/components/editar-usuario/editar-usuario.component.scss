@@ -78,3 +78,14 @@
     display: flex;
     justify-content: flex-end;
 }
+
+.ng-invalid.ng-dirty {
+    color: red; /* Cambia el color del texto a rojo */
+  }
+
+  .ng-valid.ng-dirty {
+    color: green; /* Opcional: Cambia el color del texto a verde cuando sea válido */
+  }
+  label {
+    color: black;  /* Color por defecto para el label, puede ajustarse a cualquier color */
+}
