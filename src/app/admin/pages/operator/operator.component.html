@@ -1,0 +1,173 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button pButton pRipple label="Nuevo Operador Minero" icon="pi pi-plus" class="p-button-success mr-2" routerLink="/admin/operador/crear"></button>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #dt [value]="listaOperadores" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['id','razon_social','dl_direccion','estado','rep_nombre_completo']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Administrar Operadores Mineros</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."  class="w-full sm:w-auto"/>
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+
+                        <th pSortableColumn="idom">IDOM <p-sortIcon field="idom"></p-sortIcon></th>
+                        <th pSortableColumn="razon_social">Razon Social <p-sortIcon field="razon_social"></p-sortIcon></th>
+                        <th pSortableColumn="price">Vigencia NIM <p-sortIcon field="price"></p-sortIcon></th>
+                        <th pSortableColumn="price">Vigencia SEPREC <p-sortIcon field="price"></p-sortIcon></th>
+                        <th pSortableColumn="category">Documentos <p-sortIcon field="category"></p-sortIcon></th>
+                        <th pSortableColumn="rating">Mapa <p-sortIcon field="rating"></p-sortIcon></th>
+                        <th pSortableColumn="inventoryStatus">Estado <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
+                        <th pSortableColumn="inventoryStatus">Acciones <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-operador>
+                    <tr>
+
+                        <td style="width:14%; min-width:6rem;"><span class="p-column-title">IDOM</span>
+                            {{operador.id}}
+                        </td>
+                        <td style="width:20%; min-width:15rem;">
+                            <span class="p-column-title">razon_social</span>
+                            {{operador.razon_social}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">fecha_exp_nim</span>
+                            <p-tag severity="success" *ngIf="diasActivos(operador.fecha_exp_nim)>5" value="{{diasActivos(operador.fecha_exp_nim)+' dias'}}"></p-tag>
+                            <p-tag severity="warning" *ngIf="diasActivos(operador.fecha_exp_nim)<5 && diasActivos(operador.fecha_exp_nim)>0" value="{{diasActivos(operador.fecha_exp_nim)+' dias'}}"></p-tag>
+                            <p-tag severity="danger" *ngIf="diasActivos(operador.fecha_exp_nim)<1" value="{{diasActivos(operador.fecha_exp_nim)+' dias'}}"></p-tag>
+                        </td>
+                        <td style="width:14%; min-width:8rem;">
+                            <span class="p-column-title">fecha_exp_seprec</span>
+                            <p-tag severity="success" *ngIf="diasActivos(operador.fecha_exp_seprec)>5" value="{{diasActivos(operador.fecha_exp_seprec)+' dias'}}"></p-tag>
+                            <p-tag severity="warning" *ngIf="diasActivos(operador.fecha_exp_seprec)<5 && diasActivos(operador.fecha_exp_seprec)>0" value="{{diasActivos(operador.fecha_exp_seprec)+' dias'}}"></p-tag>
+                            <p-tag severity="danger" *ngIf="diasActivos(operador.fecha_exp_seprec)<1" value="{{diasActivos(operador.fecha_exp_seprec)+' dias'}}"></p-tag>
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Category</span>
+                            <div class="flex">
+                                <button pButton pRipple type="button" class="p-button-rounded p-button-outlined mr-1" (click)="editProduct(operador)">NIT</button>
+                                <button pButton pRipple type="button" class="p-button-rounded p-button-secondary p-button-outlined mr-1" (click)="editProduct(operador)">NIM</button>
+                                <button pButton pRipple type="button" class="p-button-rounded p-button-info p-button-outlined mr-1" (click)="editProduct(operador)">IDOM</button>
+                            </div>
+                            </td>
+                        <td style="width:8%; min-width: 5rem;"><span class="p-column-title">Reviews</span>
+                            <button pButton pRipple icon="pi pi-map-marker" type="button" class="p-button-rounded p-button-help mr-1" (click)="editProduct(operador)"></button>
+                        </td>
+                        <td style="width:10%; min-width: 10rem;"><span class="p-column-title">Status</span>
+
+                            <p-tag severity="success" *ngIf="operador.estado>=1" value="Activo"></p-tag>
+                            <p-tag severity="danger" *ngIf="operador.estado<1" value="Desabilitado"></p-tag>
+                            </td>
+                        <td>
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editProduct(operador)"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Product Details" [modal]="true" class="p-fluid">
+            <ng-template pTemplate="content">
+                <img [src]="'assets/demo/images/product/' + operador.image" [alt]="operador.image" width="150" class="mt-0 mx-auto mb-5 block shadow-2" *ngIf="operador.image">
+                <div class="field">
+                    <label for="name">Name</label>
+                    <input type="text" pInputText id="name" [(ngModel)]="operador.name" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !operador.name}"/>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !operador.name">Name is required.</small>
+                </div>
+                <div class="field">
+                    <label for="description">Description</label>
+                    <textarea id="description" pInputTextarea [(ngModel)]="operador.description" required rows="3" cols="20"></textarea>
+                </div>
+                <div class="field">
+                    <label for="status">Inventory Status</label>
+                    <p-dropdown [(ngModel)]="operador.inventoryStatus" inputId="inventoryStatus" optionValue="label" [options]="statuses" placeholder="Select">
+                        <ng-template pTemplate="selectedItem">
+                            <span *ngIf="operador && operador.inventoryStatus" [class]="'product-badge status-' + operador.inventoryStatus.toString().toLowerCase()">{{operador.inventoryStatus}}</span>
+                        </ng-template>
+                        <ng-template let-option pTemplate="item">
+                            <span [class]="'product-badge status-' + option.value">{{option.label}}</span>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+
+                <div class="field">
+                    <label class="mb-3">Category</label>
+                    <div class="formgrid grid">
+                        <div class="field-radiobutton col-6">
+                            <p-radioButton id="category1" name="category" value="Accessories" [(ngModel)]="operador.category"></p-radioButton>
+                            <label for="category1">Accessories</label>
+                        </div>
+                        <div class="field-radiobutton col-6">
+                            <p-radioButton id="category2" name="category" value="Clothing" [(ngModel)]="operador.category"></p-radioButton>
+                            <label for="category2">Clothing</label>
+                        </div>
+                        <div class="field-radiobutton col-6">
+                            <p-radioButton id="category3" name="category" value="Electronics" [(ngModel)]="operador.category"></p-radioButton>
+                            <label for="category3">Electronics</label>
+                        </div>
+                        <div class="field-radiobutton col-6">
+                            <p-radioButton id="category4" name="category" value="Fitness" [(ngModel)]="operador.category"></p-radioButton>
+                            <label for="category4">Fitness</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="price">Price</label>
+                        <p-inputNumber id="price" [(ngModel)]="product.price" mode="currency" currency="USD" locale="en-US"></p-inputNumber>
+                    </div>
+                    <div class="field col">
+                        <label for="quantity">Quantity</label>
+                        <p-inputNumber id="quantity" [(ngModel)]="product.quantity"></p-inputNumber>
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveProduct()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+               </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span>Are you sure you want to delete selected products?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
+            </ng-template>
+        </p-dialog>
+    </div>
+</div>

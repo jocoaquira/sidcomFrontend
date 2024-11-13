@@ -1,0 +1,64 @@
+
+<!--
+    <div class="alert alert-danger" [hidden]="!error">
+      {{error}}
+    </div>
+
+    <div class="user-box">
+      <input type="text" name="email" required id="inputEmail3" placeholder="Email" [(ngModel)]="form.email">
+      <label>Usuario</label>
+    </div>
+    <div class="user-box">
+      <input type="password" name="password" required placeholder="Contraseña" [(ngModel)]="form.password">
+      <label>Contraseña</label>
+    </div>
+    <div class="form-group row">
+      <div class="col-sm-10 offset-2">
+        <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">
+          Ingresar
+        </button>
+
+        <a routerLink="/auth/crear" class="btn btn-info offset-3" >
+          Registrar
+        </a>
+      </div>
+    </div>
+    <small class="float-right offset-6">
+      <a routerLink="/request-password-reset">¿Olvidó su Contraseña?</a>
+    </small>-->
+
+
+<div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+    <div class="flex flex-column align-items-center justify-content-center">
+        <div style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, rgba(161, 4, 4, 0.801) 10%, rgba(33, 150, 243, 0) 30%);">
+            <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius:53px">
+                <div class="text-center mb-5">
+                    <img src="assets/layout/images/logo-dark.png" alt="Image" height="100" class="mb-3">
+                    <div class="text-900 text-3xl font-medium mb-3">SIDCOM 2.0</div>
+                    <span class="text-600 font-medium">Iniciar sesion para continuar..</span>
+                </div>
+
+                <div>
+                    <label for="email1" class="block text-900 text-xl font-medium mb-2">Correo Electronico</label>
+                    <input type="text" placeholder="Email address" pInputText class="w-full md:w-30rem mb-5" style="padding:1rem" [(ngModel)]="form.email">
+
+                    <label for="password1" class="block text-900 font-medium text-xl mb-2">Contraseña</label>
+                    <p-password name="password" [(ngModel)]="form.password" placeholder="Password" [toggleMask]="true" styleClass="mb-5" inputStyleClass="w-full p-3 md:w-30rem"></p-password>
+
+                    <div class="flex align-items-center justify-content-between mb-5 gap-5">
+                        <div class="flex align-items-center">
+                            <p-checkbox id="rememberme1" [binary]="true" styleClass="mr-2"></p-checkbox>
+                            <label for="rememberme1">Recordarme</label>
+                        </div>
+                        <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">¿Olvidaste tu contraseña?</a>
+                    </div>
+                    <button pButton (click)="onSubmit()" pRipple label="Ingresar" class="w-full p-3 p-button-warning text-xl"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

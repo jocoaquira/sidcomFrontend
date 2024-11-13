@@ -1,0 +1,1122 @@
+<p-dialog (onShow)="actualizarMapa()" [(visible)]="mapaDialogo" [style]="{width: '800px',height:'800px'}" header="Mapa (Hacer click en el lugar que desee)" [modal]="true" class="p-fluid">
+    <div style="height: 90%;" leaflet [leafletOptions]="options" [leafletLayers]="[streetLayer,satelliteLayer]" (leafletMapReady)="onMapReady($event)"></div>
+    <div class="grid p-fluid" >
+        <div class="col-12 md:col-6">
+            <button (click)="agregarPunto()" pButton pRipple type="button" icon="pi pi-plus" label="Agregar" class="p-button-outlined p-button-info" ></button>
+        </div>
+        <div class="col-12 md:col-6">
+            <button pButton pRipple type="button" icon="pi pi-times" label="Cancelar" class="p-button-outlined p-button-danger"></button>
+        </div>
+    </div>
+
+</p-dialog>
+
+<div class="card">
+    <h4 class="text-center">FORMULARIO DE REGISTRO DEL OPERADOR MINERO</h4>
+    <h5>
+       A. Identificacion del Actor Productivo Minero
+    </h5>
+
+
+    <div class="grid p-fluid mt-3">
+        <div class="field col-12 md:col-8">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="razon_social"
+                    pInputText
+                    [(ngModel)]="form.razon_social"
+					class="ng-dirty"
+                    [style.border]="errorOperator.razon_social ? '1px solid red' : ''"
+                    
+                />
+                <label for="Razón Social">Razón Social</label>
+				<small id="razon_social" class="p-error " [hidden]="!errorOperator.razon_social">
+					{{errorOperator.razon_social}}
+				</small>
+            </span>
+        </div>
+		<div class="field col-12 md:col-2">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="nit"
+                    pInputText
+                    [(ngModel)]="form.nit"
+					class="ng-dirty"
+                    [style.border]="errorOperator.nit ? '1px solid red' : ''"
+                />
+                <label for="NIT">NIT</label>
+				<small id="nit" class="p-error " [hidden]="!errorOperator.nit">
+					{{errorOperator.nit}}
+				</small>
+            </span>
+        </div>
+		<div class="field col-12 md:col-2">
+			<p-fileUpload
+			mode="basic" accept=".pdf,.jpg,.jpeg,.png"
+			[maxFileSize]="1000000" label="Cargar NIT"
+			chooseLabel="Subir NIT" class="mr-2 inline-block"
+			(onClick)="onFileSelect()"
+			></p-fileUpload>
+		</div>
+
+		<div class="field col-12 md:col-3">
+            <span class="p-float-label">
+                <p-dropdown
+                    inputId="dropdown"
+                    [autoDisplayFirst]="false"
+                    [options]="nimniar"
+                    [(ngModel)]="sw1"
+                    optionLabel="name"
+                    (ngModelChange)="onChangeNimNiar($event)"
+                ></p-dropdown>
+
+                <label for="dropdown">NIM/NIAR</label>
+            </span>
+        </div>
+		<div class="field col-12 md:col-3">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="nro_nim"
+                    pInputText
+                    [(ngModel)]="form.nro_nim"
+					class="ng-dirty "
+                    [style.border]="errorOperator.nro_nim ? '1px solid red' : ''"
+                />
+                <label for="nro_nim">Numero NIM</label>
+				<small id="nro_nim" class="p-error " [hidden]="!errorOperator.nro_nim">
+					{{errorOperator.nro_nim}}
+				</small>
+            </span>
+        </div>
+        <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+                <p-calendar
+                    inputId="fecha_exp_nim"
+					[locale]="es"
+  					dateFormat="dd/mm/yy"
+                    [(ngModel)]="form.fecha_exp_nim"
+                    [class.p-invalid]="errorOperator.fecha_exp_nim"
+                ></p-calendar>
+                <label for="calendar">Fecha Expiracion NIM</label>
+                <small id="fecha_exp_nim" class="p-error " [hidden]="!errorOperator.fecha_exp_nim">
+					{{errorOperator.fecha_exp_nim}}
+				</small>
+            </span>
+        </div>
+		<div class="field col-12 md:col-3">
+			<p-fileUpload
+			mode="basic" accept=".pdf,.jpg,.jpeg,.png"
+			[maxFileSize]="1000000" label="Cargar NIM/NIAR"
+			chooseLabel="Subir NIM/NIAR" class="mr-2 inline-block"
+			></p-fileUpload>
+		</div>
+
+        <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+                <p-dropdown
+                    inputId="tipoOperador"
+                    [autoDisplayFirst]="false"
+                    [options]="tipoOperador"
+                    [(ngModel)]="sw1"
+                    (ngModelChange)="onChangeActorProductivo($event)"
+                    optionLabel="name"
+                ></p-dropdown>
+
+                <label for="dropdown">Actor Productivo Minero</label>
+            </span>
+        </div>
+</div>
+</div>
+<div class="card" [hidden]="form.tipo_operador!=1">
+
+    <h5>
+        B. Actor Productivo Minero: COOPERATIVA
+    </h5>
+    <div class="grid p-fluid mt-3">
+        <div class="field col-12 md:col-4">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="nro_personeria"
+                    pInputText
+                    [(ngModel)]="form.nro_personeria"
+					class="ng-dirty "
+                    [style.border]="errorOperator.nro_personeria ? '1px solid red' : ''"
+                />
+                <label for="nro_personeria">Numero  de Personeria Jurídica </label>
+				<small id="nro_personeria" class="p-error " [hidden]="!errorOperator.nro_personeria">
+					{{errorOperator.nro_personeria}}
+				</small>
+            </span>
+        </div>
+        <div class="field col-12 md:col-4">
+            <p-fileUpload
+            mode="basic" accept=".pdf,.jpg,.jpeg,.png"
+            [maxFileSize]="1000000" label="Cargar PERSONERIA JURÍDICA"
+            chooseLabel="Subir PERSONERIA JURÍDICA" class="mr-2 inline-block"
+            ></p-fileUpload>
+        </div>
+    </div>
+</div>
+
+<div class="card" [hidden]="form.tipo_operador!=3">
+
+    <h5>
+        B. Actor Productivo Minero: EMPRESA PRIVADA
+    </h5>
+    <div class="grid p-fluid mt-3">
+        <div class="field col-12 md:col-4">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="nro_matricula_seprec"
+                    pInputText
+                    [(ngModel)]="form.nro_matricula_seprec"
+					class="ng-dirty "
+                    [style.border]="errorOperator.nro_matricula_seprec ? '1px solid red' : ''"
+                />
+                <label for="nro_matricula_seprec">Numero   de Matricula SEPREC </label>
+				<small id="nro_matricula_seprec" class="p-error " [hidden]="!errorOperator.nro_matricula_seprec">
+					{{errorOperator.nro_matricula_seprec}}
+				</small>
+            </span>
+        </div>
+        <div class="field col-12 md:col-4">
+            <span class="p-float-label">
+                <p-calendar
+                    inputId="fecha_exp_seprec"
+					[locale]="es"
+  					dateFormat="dd/mm/yy"
+                    [(ngModel)]="form.fecha_exp_seprec"
+                ></p-calendar>
+                <label for="fecha_exp_seprec">Fecha Expiracion SEPREC</label>
+            </span>
+        </div>
+        <div class="field col-12 md:col-4">
+            <p-fileUpload
+            mode="basic" accept=".pdf,.jpg,.jpeg,.png"
+            [maxFileSize]="1000000" label="Cargar SEPREC"
+            chooseLabel="Subir SEPREC" class="mr-2 inline-block"
+            ></p-fileUpload>
+        </div>
+    </div>
+</div>
+
+<div class="card" [hidden]="form.tipo_operador!=2">
+    <h5>
+        B. Actor Productivo Minero: EMPRESA ESTATAL
+    </h5>
+    <div class="grid p-fluid mt-3">
+        <div class="field col-12 md:col-4">
+            <span class="p-float-label">
+                <p-dropdown
+                    inputId="tipoCreacion"
+                    [autoDisplayFirst]="false"
+                    [options]="tipoCreacion"
+                    [(ngModel)]="sw1"
+                    optionLabel="name"
+                    (ngModelChange)="onChangeTipoCreacion($event)"
+                ></p-dropdown>
+
+                <label for="dropdown">Tipo de Creación</label>
+            </span>
+        </div>
+        <div class="field col-12 md:col-4">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="doc_creacion"
+                    pInputText
+                    [(ngModel)]="form.doc_creacion"
+					class="ng-dirty"
+                    [style.border]="errorOperator.doc_creacion ? '1px solid red' : ''"
+                />
+                <label for="doc_creacion">Documento de Creacion de la Empresa </label>
+				<small id="doc_creacion" class="p-error " [hidden]="!errorOperator.doc_creacion">
+					{{errorOperator.doc_creacion}}
+				</small>
+            </span>
+        </div>
+        <div class="field col-12 md:col-4">
+            <p-fileUpload
+            mode="basic" accept=".pdf,.jpg,.jpeg,.png"
+            [maxFileSize]="1000000" label="Cargar DOCUMENTO DE RESPALDO"
+            chooseLabel="Subir DOCUMENTO DE RESPALDO" class="mr-2 inline-block"
+            ></p-fileUpload>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+
+    <h5>
+        C. DOMICILIO DE LA EMPRESA
+    </h5>
+    <div class="grid p-fluid mt-3">
+        <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+                <p-dropdown
+                    inputId="departamento"
+                    [autoDisplayFirst]="false"
+                    [options]="departamento"
+
+                    optionLabel="nombre"
+                    (onChange)="cambioDepartamento($event)"
+                ></p-dropdown>
+
+                <label for="dropdown">Departamento</label>
+            </span>
+        </div>
+        <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+                <p-dropdown
+                    inputId="municipio"
+                    [autoDisplayFirst]="false"
+                    [options]="municipio"
+                    optionLabel="municipio"
+                    (onChange)="cambioMunicipio($event)"
+                ></p-dropdown>
+
+                <label for="dropdown">Municipio</label>
+            </span>
+        </div>
+        <div class="field col-12 md:col-2">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="ofi_lat"
+                    pInputText
+                    [(ngModel)]="form.ofi_lat"
+					[style.border]="errorOperator.ofi_lat ? '1px solid red' : ''"
+                />
+                <label for="ofi_lat">Latitud </label>
+				<small id="ofi_lat" class="p-error " [hidden]="!errorOperator.ofi_lat">
+					{{errorOperator.ofi_lat}}
+				</small>
+            </span>
+        </div>
+        <div class="field col-12 md:col-2">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="ofi_lon"
+                    pInputText
+                    [(ngModel)]="form.ofi_lon"
+					[style.border]="errorOperator.ofi_lon ? '1px solid red' : ''"
+                />
+                <label for="ofi_lon">Longitud </label>
+				<small id="ofi_lon" class="p-error " [hidden]="!errorOperator.ofi_lon">
+					{{errorOperator.ofi_lon}}
+				</small>
+            </span>
+        </div>
+        <div class="field col-12 md:col-2">
+            <button pButton pRipple type="button" icon="pi pi-map" label="Buscar en Mapa" class="p-button-outlined p-button-info" (click)="abrirMapa()"></button>
+        </div>
+        <div class="field col-12 md:col-8">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="dl_direccion"
+                    pInputText
+                    [(ngModel)]="form.dl_direccion"
+					class="ng-dirty"
+                    [style.border]="errorOperator.dl_direccion ? '1px solid red' : ''"
+                />
+                <label for="dl_direccion">Dirección </label>
+				<small id="dl_direccion" class="p-error " [hidden]="!errorOperator.dl_direccion">
+					{{errorOperator.dl_direccion}}
+				</small>
+            </span>
+        </div>
+        <div class="field col-12 md:col-4">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="correo_inst"
+                    pInputText
+                    [(ngModel)]="form.correo_inst"
+					class="ng-dirty"
+                    [style.border]="errorOperator.correo_inst ? '1px solid red' : ''"
+                />
+                <label for="correo_inst">Correo Electrónico </label>
+				<small id="correo_inst" class="p-error " [hidden]="!errorOperator.correo_inst">
+					{{errorOperator.correo_inst}}
+				</small>
+            </span>
+        </div>
+        <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="tel_fijo"
+                    pInputText
+                    [(ngModel)]="form.tel_fijo"
+					class="ng-dirty"
+                    [style.border]="errorOperator.tel_fijo ? '1px solid red' : ''"
+                />
+                <label for="tel_fijo">Teléfono Fijo </label>
+				<small id="tel_fijo" class="p-error " [hidden]="!errorOperator.tel_fijo">
+					{{errorOperator.tel_fijo}}
+				</small>
+            </span>
+        </div>
+        <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="celular"
+                    pInputText
+                    [(ngModel)]="form.celular"
+					class="ng-dirty "
+                    [style.border]="errorOperator.celular ? '1px solid red' : ''"
+                />
+                <label for="celular">Celular </label>
+				<small id="celular" class="p-error " [hidden]="!errorOperator.celular">
+					{{errorOperator.celular}}
+				</small>
+            </span>
+        </div>
+        <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="otro_celular"
+                    pInputText
+                    [(ngModel)]="form.otro_celular"
+					class="ng-dirty"
+                    [style.border]="errorOperator.celular ? '1px solid red' : ''"
+                />
+                <label for="otro_celular">Otro Celular </label>
+				<small id="otro_celular" class="p-error " [hidden]="!errorOperator.otro_celular">
+					{{errorOperator.otro_celular}}
+				</small>
+            </span>
+        </div>
+        <div class="col-12 md:col-3">
+            <div class="field-checkbox">
+                <p-inputSwitch [(ngModel)]="valSwitch"></p-inputSwitch>
+                <label for="sf">Añadir Sucursales</label>
+            </div>
+        </div>
+        <div class="grid p-fluid mt-3" *ngIf="valSwitch">
+            <div class="col-12">
+                <p>
+                    Sucursales de la Empresa
+                </p>
+            </div>
+
+            <div class="field col-12 md:col-2">
+                <span class="p-float-label">
+                    <p-dropdown
+                        inputId="departamento"
+                        [autoDisplayFirst]="false"
+                        [options]="departamento"
+
+                        optionLabel="nombre"
+                        (onChange)="cambioDepartamento1($event)"
+                    ></p-dropdown>
+
+                    <label for="dropdown">Departamento</label>
+                </span>
+            </div>
+            <div class="field col-12 md:col-3">
+                <span class="p-float-label">
+                    <p-dropdown
+                        inputId="municipio_sucursal"
+                        [autoDisplayFirst]="false"
+                        [options]="municipio_sucursal"
+                        optionLabel="municipio"
+                        (onChange)="cambioMunicipio1($event)"
+                    ></p-dropdown>
+
+                    <label for="dropdown">Municipio</label>
+                </span>
+            </div>
+            <div class="field col-12 md:col-2">
+                <span class="p-float-label">
+                    <input
+                        type="text"
+                        id="latitud"
+                        pInputText
+                        [(ngModel)]="sucursal.latitud"
+                        class="ng-dirty"
+                        [style.border]="errorSucursal.latitud ? '1px solid red' : ''"
+                    />
+                    <label for="latitud">Latitud </label>
+                    <small id="latitud" class="p-error " [hidden]="!errorSucursal.latitud">
+                        {{errorSucursal.latitud}}
+                    </small>
+                </span>
+            </div>
+            <div class="field col-12 md:col-2">
+                <span class="p-float-label">
+                    <input
+                        type="text"
+                        id="longitud"
+                        pInputText
+                        [(ngModel)]="sucursal.longitud"
+                        class="ng-dirty"
+                        [style.border]="errorSucursal.longitud ? '1px solid red' : ''"
+                    />
+                    <label for="longitud">Longitud </label>
+                    <small id="longitud" class="p-error " [hidden]="!errorSucursal.longitud">
+                        {{errorSucursal.longitud}}
+                    </small>
+                </span>
+            </div>
+            <div class="field col-12 md:col-3">
+                <button pButton pRipple type="button" icon="pi pi-map" label="Buscar en Mapa" class="p-button-outlined p-button-info" (click)="abrirMapaSucursal()"></button>
+            </div>
+            <div class="field col-12 md:col-10">
+                <span class="p-float-label">
+                    <input
+                        type="text"
+                        id="direccion"
+                        pInputText
+                        [(ngModel)]="sucursal.direccion"
+                        class="ng-dirty"
+                        [style.border]="errorSucursal.longitud ? '1px solid red' : ''"
+                    />
+                    <label for="direccion">Direccíon </label>
+                    <small id="direccion" class="p-error " [hidden]="!errorSucursal.direccion">
+                        {{errorSucursal.direccion}}
+                    </small>
+                </span>
+            </div>
+            <div class="field col-12 md:col-2">
+                <button pButton pRipple (click)="agregarDireccion()" type="button" icon="pi pi-plus" label="Agregar" class="p-button-outlined p-button-info"></button>
+            </div>
+            <div class="field col-12">
+            <p-table #dt [value]="oficina" [columns]="cols"
+            responsiveLayout="scroll" [rows]="10"
+            [paginator]="false"  [showCurrentPageReport]="false"
+            [(selection)]="oficinaSelecionadas"
+            selectionMode="multiple"
+            [rowHover]="true"
+            dataKey="id">
+
+                <ng-template pTemplate="header">
+                    <tr>
+
+                        <th pSortableColumn="code">Direccion <p-sortIcon field="code"></p-sortIcon></th>
+                        <th pSortableColumn="name">Departamento <p-sortIcon field="name"></p-sortIcon></th>
+                        <th pSortableColumn="price">Municipio <p-sortIcon field="price"></p-sortIcon></th>
+                        <th pSortableColumn="category">Tipo <p-sortIcon field="category"></p-sortIcon></th>
+                        <th pSortableColumn="rating">Latitud <p-sortIcon field="rating"></p-sortIcon></th>
+                        <th pSortableColumn="inventoryStatus">Longitud <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product>
+                    <tr>
+
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">Direccion</span>
+                            {{product.direccion}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Departamento</span>
+                            {{product.departamento_id}}
+                        </td>
+                        <td style="width:14%; min-width:8rem;">
+                            <span class="p-column-title">Municipio</span>
+                            {{product.municipio_id}}
+                        </td>
+                        <td style="width:14%; min-width:8rem;">
+                            <span class="p-column-title">Tipo</span>
+                            {{product.tipo}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Latitud</span>
+                            {{product.latitud}}
+                        </td>
+                        <td style="width:14%; min-width: 10rem;">
+                            <span class="p-column-title">Longitud</span>
+                            {{product.longitud}}
+                        </td>
+                        <td>
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="eliminar(product)"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            </div>
+        </div>
+</div>
+</div>
+<div class="card">
+    <h5>ACTIVIDAD DE LA EMPRESA (Art. 10 Ley N° 535)</h5>
+			<div class="grid formgrid">
+				<div class="col-12 md:col-3">
+					<div class="field-checkbox">
+						<p-checkbox name="group1"
+                        value="Exploración"
+                        [(ngModel)]="act_exploracion"
+                        id="ny"
+                        (onChange)="onExploracion($event)"
+                        ></p-checkbox>
+						<label for="ny">Exploración</label>
+					</div>
+				</div>
+				<div class="col-12 md:col-3">
+					<div class="field-checkbox">
+						<p-checkbox name="group1"
+                        value="Comercialización Interna"
+                        [(ngModel)]="act_comer_interna" id="sf"
+                        (onChange)="onComerInterna($event)"
+                        ></p-checkbox>
+						<label for="sf">Comercialización Interna</label>
+					</div>
+				</div>
+				<div class="col-12 md:col-3">
+					<div class="field-checkbox">
+						<p-checkbox name="group1"
+                        value="Traslado de Colas"
+                        [(ngModel)]="act_tras_colas"
+                        (onChange)="onTrasColas($event)"
+                        id="la"></p-checkbox>
+						<label for="la">Traslado de Colas</label>
+					</div>
+				</div>
+                <div class="col-12 md:col-3">
+					<div class="field-checkbox">
+						<p-checkbox name="group1"
+                        value="Beneficio o COncentración"
+                        [(ngModel)]="act_ben_concentracion"
+                        (onChange)="onConcentracion($event)"
+                        id="ny"></p-checkbox>
+						<label for="ny">Beneficio o Concentración</label>
+					</div>
+				</div>
+                <div class="col-12 md:col-3">
+					<div class="field-checkbox">
+						<p-checkbox name="group1"
+                        value="Refinación"
+                        [(ngModel)]="act_refinacion"
+                        (onChange)="onRefinacion($event)"
+                        id="ny"></p-checkbox>
+						<label for="ny">Refinación</label>
+					</div>
+				</div>
+                <div class="col-12 md:col-3">
+					<div class="field-checkbox">
+						<p-checkbox
+                        name="act_industrializacion"
+                        value="act_industrializacion"
+                        [(ngModel)]="act_industrializacion"
+                        id="act_industrializacion"
+                        (onChange)="onIndustrializacion($event)"
+                        ></p-checkbox>
+						<label for="ny">Industrialización</label>
+					</div>
+				</div>
+                <div class="col-12 md:col-3">
+					<div class="field-checkbox">
+						<p-checkbox name="group1"
+                        value="Comercialización Externa"
+                        [(ngModel)]="act_comer_externa"
+                        (onChange)="onComerExterna($event)"
+                        id="ny"></p-checkbox>
+						<label for="ny">Comercialización Externa</label>
+					</div>
+				</div>
+                <div class="col-12 md:col-3">
+					<div class="field-checkbox">
+						<p-checkbox name="group1"
+                        value="Explotación"
+                        [(ngModel)]="act_explotacion"
+                        (onChange)="onExplotacion($event)"
+                        id="ny"></p-checkbox>
+						<label for="ny">Explotación</label>
+					</div>
+				</div>
+                <div class="col-12 md:col-3">
+					<div class="field-checkbox">
+						<p-checkbox name="group1"
+                        value="Fundición"
+                        [(ngModel)]="act_fundicion"
+                        (onChange)="onFundicion($event)"
+                        id="ny" (click)="verForm()"></p-checkbox>
+						<label for="ny">Fundición</label>
+					</div>
+				</div>
+	</div>
+</div>
+
+<div class="card" *ngIf="form.act_explotacion">
+    <div class="grid p-fluid mt-3">
+        <div class="field col-12 md:col-4">
+            <h5>
+                Actividad Minera de Explotacion
+            </h5>
+        </div>
+
+        <div class="field col-12 md:col-6">
+            <p-fileUpload
+            mode="basic" accept=".pdf,.jpg,.jpeg,.png"
+            [maxFileSize]="1000000" label="Cargar DOCUMENTO DE RESPALDO"
+            chooseLabel="Subir Documento de Respaldo" class="mr-2 inline-block"
+            ></p-fileUpload>
+        </div>
+    </div>
+    <div class="grid p-fluid mt-3">
+        <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+                <p-dropdown
+                    inputId="tipoExplotacion"
+                    [autoDisplayFirst]="false"
+                    [options]="tipoExplotacion"
+                    [(ngModel)]="sw1"
+                    optionLabel="name"
+                    (onChange)="onChangeExplotacion($event)"
+                ></p-dropdown>
+                <label for="dropdown">Tipo de Explotacion</label>
+            </span>
+        </div>
+        <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="codigo_unico"
+                    pInputText
+                    [(ngModel)]="arrendamiento.codigo_unico"
+					class="ng-dirty"
+                    [style.border]="errorArrendamiento.codigo_unico ? '1px solid red' : ''"
+                />
+                <label for="codigo_unico">Nro. de Código Único</label>
+				<small id="codigo_unico" class="p-error " [hidden]="!errorArrendamiento.codigo_unico">
+					{{errorArrendamiento.codigo_unico}}
+				</small>
+            </span>
+        </div>
+        <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="nro_cuadricula"
+                    pInputText
+                    [(ngModel)]="arrendamiento.nro_cuadricula"
+					class="ng-dirty"
+                    [style.border]="errorArrendamiento.nro_cuadricula ? '1px solid red' : ''"
+                />
+                <label for="nro_cuadricula">Nro. de Cuadricula</label>
+				<small id="nro_cuadricula" class="p-error " [hidden]="!errorArrendamiento.nro_cuadricula">
+					{{errorArrendamiento.nro_cuadricula}}
+				</small>
+            </span>
+        </div>
+        <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="denominacion_areas"
+                    pInputText
+                    [(ngModel)]="arrendamiento.denominacion_areas"
+					class="ng-dirty"
+                    [style.border]="errorArrendamiento.denominacion_areas ? '1px solid red' : ''"
+                />
+                <label for="denominacion_areas">Denominacion de Áreas</label>
+				<small id="denominacion_areas" class="p-error " [hidden]="!errorArrendamiento.denominacion_areas">
+					{{errorArrendamiento.denominacion_areas}}
+				</small>
+            </span>
+        </div>
+        <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+                <p-dropdown
+                    inputId="departamento"
+                    [autoDisplayFirst]="false"
+                    [options]="departamento"
+
+                    optionLabel="nombre"
+                    (onChange)="cambioDepartamentoArrendamiento($event)"
+                ></p-dropdown>
+
+                <label for="dropdown">Departamento</label>
+            </span>
+        </div>
+        <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+                <p-dropdown
+                    inputId="municipio_arrendamiento"
+                    [autoDisplayFirst]="false"
+                    [options]="municipio_arrendamiento"
+                    optionLabel="municipio"
+                    (onChange)="cambioMunicipioArrendamiento($event)"
+                ></p-dropdown>
+
+                <label for="dropdown">Municipio</label>
+            </span>
+        </div>
+        <div class="field col-12 md:col-2">
+            <button pButton pRipple (click)="agregarArrendamiento()" type="button" icon="pi pi-plus" label="Agregar" class="p-button-outlined p-button-info"></button>
+        </div>
+    </div>
+    <div class="field col-12">
+        <p-table #dt [value]="lista_arrendamiento" [columns]="cols"
+        responsiveLayout="scroll" [rows]="10"
+        [paginator]="false"  [showCurrentPageReport]="false"
+        [(selection)]="oficinaSelecionadas"
+        selectionMode="multiple"
+        [rowHover]="true"
+        dataKey="id">
+
+            <ng-template pTemplate="header">
+                <tr>
+
+                    <th pSortableColumn="code">Código Único <p-sortIcon field="code"></p-sortIcon></th>
+                    <th pSortableColumn="name">Nro. de Cuadriculas <p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="price">Denominacion de Areas <p-sortIcon field="price"></p-sortIcon></th>
+                    <th pSortableColumn="category">Municipio <p-sortIcon field="category"></p-sortIcon></th>
+                    <th pSortableColumn="rating">Tipo de Explotacion <p-sortIcon field="rating"></p-sortIcon></th>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product>
+                <tr>
+
+                    <td style="width:14%; min-width:10rem;"><span class="p-column-title">Direccion</span>
+                        {{product.codigo_unico}}
+                    </td>
+                    <td style="width:14%; min-width:10rem;">
+                        <span class="p-column-title">Departamento</span>
+                        {{product.nro_cuadricula}}
+                    </td>
+                    <td style="width:14%; min-width:8rem;">
+                        <span class="p-column-title">Municipio</span>
+                        {{product.denominacion_areas}}
+                    </td>
+                    <td style="width:14%; min-width:8rem;">
+                        <span class="p-column-title">Tipo</span>
+                        {{product.municipio_id}}
+                    </td>
+                    <td style="width:14%; min-width:10rem;">
+                        <span class="p-column-title">Latitud</span>
+                        {{product.tipo_explotacion}}
+                    </td>
+                    <td>
+                        <div class="flex">
+                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="eliminar(product)"></button>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        </div>
+</div>
+
+<div class="card" *ngIf="form.act_comer_externa">
+
+    <h5>
+        Comercio Externo
+    </h5>
+    <div class="grid p-fluid mt-3">
+        <div class="field col-12 md:col-4">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="nro_ruex"
+                    pInputText
+                    [(ngModel)]="form.nro_ruex"
+					class="ng-dirty"
+                    [style.border]="errorArrendamiento.nro_ruex ? '1px solid red' : ''"
+                    
+                />
+                <label for="nro_ruex">Numero de RUEX </label>
+				<small id="nro_ruex" class="p-error " [hidden]="!errorOperator.nro_ruex">
+					{{errorOperator.nro_ruex}}
+				</small>
+            </span>
+        </div>
+        <div class="field col-12 md:col-4">
+            <span class="p-float-label">
+                <p-calendar
+                    inputId="vencimiento_ruex"
+					[locale]="es"
+  					dateFormat="dd/mm/yy"
+                    [(ngModel)]="form.vencimiento_ruex"
+                ></p-calendar>
+                <label for="vencimiento_ruex">Fecha Expiracion RUEX</label>
+            </span>
+        </div>
+        <div class="field col-12 md:col-4">
+            <p-fileUpload
+            mode="basic" accept=".pdf,.jpg,.jpeg,.png"
+            [maxFileSize]="10000000" label="Cargar RUEX"
+            chooseLabel="Subir RUEX" class="mr-2 inline-block"
+            ></p-fileUpload>
+        </div>
+    </div>
+</div>
+<div class="card" *ngIf="form.act_fundicion || form.act_industrializacion || form.act_refinacion">
+
+    <h5>
+        Refinación, Fundicion o Industrializacion
+    </h5>
+    <div class="grid p-fluid mt-3">
+        <label class="mb-3">Cuenta con el Certificado de Liberacion del 40%?</label>
+        <div class="formgrid grid">
+            <div class="field-radiobutton col-4 ml-5">
+                <p-radioButton id="category1" name="verif_cert_liberacion" value="1" [(ngModel)]="form.verif_cert_liberacion"></p-radioButton>
+                <label for="category1">Si</label>
+            </div>
+            <div class="field-radiobutton col-6">
+                <p-radioButton id="category2" name="verif_cert_liberacion" value="0" [(ngModel)]="form.verif_cert_liberacion"></p-radioButton>
+                <label for="category2">No</label>
+            </div>
+        </div>
+    </div>
+    <div class="grid p-fluid mt-3">
+        <div class="field col-12 md:col-4">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="nro_res_ministerial"
+                    pInputText
+                    [(ngModel)]="form.nro_res_ministerial"
+					class="ng-dirty"
+                    [style.border]="errorArrendamiento.nro_res_ministerial ? '1px solid red' : ''"
+                />
+                <label for="nro_res_ministerial">Numero de Resolución Ministerial </label>
+				<small id="nro_res_ministerial" class="p-error " [hidden]="!errorOperator.nro_res_ministerial">
+					{{errorOperator.nro_res_ministerial}}
+				</small>
+            </span>
+        </div>
+        <div class="field col-12 md:col-6">
+            <p-fileUpload
+            mode="basic" accept=".pdf,.jpg,.jpeg,.png"
+            [maxFileSize]="10000000" label="Cargar Certificado de Respaldo"
+            chooseLabel="Subir Certificado de Respaldo" class="mr-2 inline-block"
+            ></p-fileUpload>
+        </div>
+    </div>
+</div>
+<div class="card">
+
+    <h5>
+        D. INFORMACION DEL REPRESENTANTE LEGAL
+    </h5>
+    <div class="grid p-fluid mt-2">
+        <div class="field col-12 md:col-5">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="rep_nombre_completo"
+                    pInputText
+                    [(ngModel)]="form.rep_nombre_completo"
+					class="ng-dirty"
+                    [style.border]="errorOperator.rep_nombre_completo ? '1px solid red' : ''"
+                />
+                <label for="rep_nombre_completo">Nombre Completo </label>
+				<small id="rep_nombre_completo" class="p-error " [hidden]="!errorOperator.rep_nombre_completo">
+					{{errorOperator.rep_nombre_completo}}
+				</small>
+            </span>
+        </div>
+        <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="rep_ci"
+                    pInputText
+                    [(ngModel)]="form.rep_ci"
+					class="ng-dirty"
+                    [style.border]="errorOperator.rep_ci ? '1px solid red' : ''"
+                />
+                <label for="rep_ci">Cedula de Identidad </label>
+				<small id="rep_ci" class="p-error " [hidden]="!errorOperator.rep_ci">
+					{{errorOperator.rep_ci}}
+				</small>
+            </span>
+        </div>
+        <div class="field col-12 md:col-4">
+            <p-fileUpload
+            mode="basic" accept=".pdf,.jpg,.jpeg,.png"
+            [maxFileSize]="10000000" label="Cargar CI"
+            chooseLabel="Subir CI" class="mr-2 inline-block"
+            ></p-fileUpload>
+        </div>
+        <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+                <p-dropdown
+                    inputId="departamento"
+                    [autoDisplayFirst]="false"
+                    [options]="departamento"
+
+                    optionLabel="nombre"
+                    (onChange)="cambioDepartamento($event)"
+                ></p-dropdown>
+
+                <label for="dropdown">Departamento</label>
+            </span>
+        </div>
+        <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+                <p-dropdown
+                    inputId="municipio"
+                    [autoDisplayFirst]="false"
+                    [options]="municipio"
+                    optionLabel="municipio"
+                    (onChange)="cambioMunicipio($event)"
+                ></p-dropdown>
+
+                <label for="dropdown">Municipio</label>
+            </span>
+        </div>
+        <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="rep_telefono"
+                    pInputText
+                    [(ngModel)]="form.rep_telefono"
+					class="ng-dirty"
+                    [style.border]="errorOperator.rep_telefono ? '1px solid red' : ''"
+                />
+                <label for="rep_telefono">Teléfono Fijo </label>
+				<small id="rep_telefono" class="p-error " [hidden]="!errorOperator.rep_telefono">
+					{{errorOperator.rep_telefono}}
+				</small>
+            </span>
+        </div>
+        <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="rep_celular"
+                    pInputText
+                    [(ngModel)]="form.rep_celular"
+					class="ng-dirty"
+                    [style.border]="errorOperator.rep_celular ? '1px solid red' : ''"
+                />
+                <label for="rep_celular">Celular </label>
+				<small id="rep_celular" class="p-error " [hidden]="!errorOperator.rep_celular">
+					{{errorOperator.rep_celular}}
+				</small>
+            </span>
+        </div>
+        <div class="field col-12 md:col-8">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="rep_direccion"
+                    pInputText
+                    [(ngModel)]="form.rep_direccion"
+					class="ng-dirty"
+                    [style.border]="errorOperator.rep_direccion ? '1px solid red' : ''"
+                />
+                <label for="rep_direccion">Dirección </label>
+				<small id="rep_direccion" class="p-error " [hidden]="!errorOperator.rep_direccion">
+					{{errorOperator.rep_direccion}}
+				</small>
+            </span>
+        </div>
+        <div class="field col-12 md:col-4">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="rep_correo"
+                    pInputText
+                    [(ngModel)]="form.rep_correo"
+					class="ng-dirty"
+                    [style.border]="errorOperator.rep_correo ? '1px solid red' : ''"
+                />
+                <label for="rep_correo">Correo Electrónico </label>
+				<small id="rep_correo" class="p-error " [hidden]="!errorOperator.rep_correo">
+					{{errorOperator.rep_correo}}
+				</small>
+            </span>
+        </div>
+
+    </div>
+</div>
+<div class="card">
+
+    <h5>
+        OTRAS FUNCIONES 
+    </h5>
+    <div class="grid p-fluid mt-3">
+        <label class="mb-3">HABILITAR ACTA DE VERIFICACION DE TOMA DE MUESTRAS:</label>
+        <div class="formgrid grid">
+            <div class="field-radiobutton col-4 ml-5">
+                <p-radioButton id="category1" name="verificacion_toma_muestra" value="1" [(ngModel)]="form.verificacion_toma_muestra"></p-radioButton>
+                <label for="category1">Si</label>
+            </div>
+            <div class="field-radiobutton col-6">
+                <p-radioButton id="category2" name="verificacion_toma_muestra" value="0" [(ngModel)]="form.verificacion_toma_muestra"></p-radioButton>
+                <label for="category2">No</label>
+            </div>
+        </div>
+    </div>
+    <div class="grid p-fluid mt-3">
+        <label class="mb-3">COMERCIO INTERNO COOPERATIVAS:</label>
+        <div class="formgrid grid">
+            <div class="field-radiobutton col-4 ml-5">
+                <p-radioButton id="category1" name="comercio_interno_coperativa" value="1" [(ngModel)]="form.comercio_interno_coperativa"></p-radioButton>
+                <label for="category1">Si</label>
+            </div>
+            <div class="field-radiobutton col-6">
+                <p-radioButton id="category2" name="comercio_interno_coperativa" value="0" [(ngModel)]="form.comercio_interno_coperativa"></p-radioButton>
+                <label for="category2">No</label>
+            </div>
+        </div>
+    </div>
+    <div class="grid p-fluid mt-3">
+        <label class="mb-3"> TRASLADO DE COLAS:</label>
+        <div class="formgrid grid">
+            <div class="field-radiobutton col-4 ml-5">
+                <p-radioButton id="category1" name="traslado_colas" value="1" [(ngModel)]="form.traslado_colas"></p-radioButton>
+                <label for="category1">Si</label>
+            </div>
+            <div class="field-radiobutton col-6">
+                <p-radioButton id="category2" name="traslado_colas" value="0" [(ngModel)]="form.traslado_colas"></p-radioButton>
+                <label for="category2">No</label>
+            </div>
+        </div>
+    </div>
+    <div class="grid p-fluid mt-3">
+        <label class="mb-3">  TRANBORDO:</label>
+        <div class="formgrid grid">
+            <div class="field-radiobutton col-4 ml-5">
+                <p-radioButton id="category1" name="transbordo" value="1" [(ngModel)]="form.transbordo"></p-radioButton>
+                <label for="category1">Si</label>
+            </div>
+            <div class="field-radiobutton col-6">
+                <p-radioButton id="category2" name="transbordo" value="0" [(ngModel)]="form.transbordo"></p-radioButton>
+                <label for="category2">No</label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="grid p-fluid mt-2">
+        <div class="field col-12 md:col-12">
+            <span class="p-float-label">
+                <input
+                    type="text"
+                    id="observaciones"
+                    pInputText
+                    [(ngModel)]="form.observaciones"
+                    class="ng-dirty"
+                    [style.border]="errorOperator.observaciones ? '1px solid red' : ''"
+                />
+                <label for="observaciones">Observaciones </label>
+                <small id="observaciones" class="p-error " [hidden]="!errorOperator.observaciones">
+                    {{errorOperator.observaciones}}
+                </small>
+            </span>
+        </div>
+        <div class="field col-12 md:col-6">
+            <button pButton pRipple label="Guardar Operador" icon="pi pi-check" class="p-button-success mr-2" ></button>
+        </div>
+        <div class="field col-12 md:col-6">
+            <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-danger" ></button>
+        </div>          
+    </div>
+</div>
