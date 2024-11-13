@@ -36,10 +36,19 @@ export class UsuariosService {
     let usuario:IUsuario[]=data;
     return usuario
   }
+  verificarEmail(nombre:string)
+  {
+    // Inicializacion de objeto params
+    let params = new HttpParams();
+    params = params.append('email', nombre);
+
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}verificar-email`,{params:params});
+  }
 //---------------------crear   usuario-------------------------------------------
 crearusuario(data:IUsuario) {
   this.token();
-  return this.http.post(`${this.baseUrl}/usuarios`,data, {headers:this.headers})
+  return this.http.post(`${this.baseUrl}usuarios`,data, {headers:this.headers})
 }
 handleCrearusuarioError(error: any): any {
   return error=error;

@@ -6,6 +6,8 @@ import { IRol } from '@data/rol.metadata';
 import { IOperatorSimple } from '@data/operador_simple.metadata';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UsuarioFormulario } from '../../validators/usuario';
+import { UsuariosService } from '../../services/usuarios.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-editar-usuario',
@@ -17,6 +19,8 @@ export class EditarUsuarioComponent implements OnInit {
   @Input() usuario!:IUsuario;
   @Output() estadoDialogo = new EventEmitter<boolean>();
   public error!:any;
+  public errorVerificarContraseña:boolean=true;
+  public errorVerificarEmail:boolean=false;
   public roles!:IRol[];
   public operadores!:IOperatorSimple[];
   public nombre:string='';
@@ -27,10 +31,13 @@ export class EditarUsuarioComponent implements OnInit {
   public estados:any;
   public admin:boolean=false;
   public form=new UsuarioFormulario();
+  public errorUsuario:any={};
 
   constructor(
     private rolesServices:RolesService,
-    private operadoresService:OperatorsService
+    private operadoresService:OperatorsService,
+    private usuarioService:UsuariosService,
+    private notify:ToastrService
   ) {
 
   }
@@ -55,38 +62,91 @@ export class EditarUsuarioComponent implements OnInit {
   ];
   }
   onChangeRol(rol_id:any){
-    let name=rol_id.value.name;
-    console.log(name);
-
-    if(name.search('Operador')!=-1)
+    let id=rol_id.value;
+    let rol:IRol=this.roles.find(element => element.id === id);
+    if(rol.name.search('Operador')!=-1)
     {
       this.admin=false;
     }
     else{
       this.admin=true;
     }
-
   }
   onChangeEstado(operator_id:any){
 
    // this.form.formulario.value.estado=operator_id.value
-    console.log(this.form.formulario.value.estado);
   }
   onChangeOperadores(operator_id:any){
-    console.log(operator_id);
   }
   ocultarDialogo(){
+    this.form.formulario.reset();
     this.estadoDialogo.emit(false);
   }
   guardarusuario(){
 
   }
   onSubmit() {
-    console.log('Datos del usuario:', this.form.formulario.value);
-    if (this.form.formulario.valid) {
-      console.log('Datos del usuario:', this.form.formulario.value);
-    } else {
-      console.log('Formulario no válido');
+    if(this.admin && this.form.formulario.value.password!=null){
+      if (this.form.formulario.valid && !this.errorVerificarContraseña && !this.errorVerificarEmail) {
+        this.usuarioService.crearusuario(this.form.formulario.value).subscribe(
+          (data:any) =>
+          {
+            this.usuarioService.handleCrearusuario(data.data);
+            if(data.status=='success')
+            {
+              this.form.formulario.reset();
+              this.estadoDialogo.emit(false);
+              this.notify.success('Creado Correctamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
+            }
+          },
+          (error:any) =>
+          {
+            this.errorUsuario=this.usuarioService.handleCrearusuarioError(error.error.data);
+            if(error.error.status=='fail')
+            {
+              this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
+            }
+          }
+        );
+        this.notify.success('Revise los datos e intente nuevamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
+      } else {
+        this.notify.error('Revise los datos e intente nuevamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
+      }
+    }
+    else{
+      if (this.form.formulario.valid && !this.errorVerificarEmail && this.form.formulario.value.operator_id!=null) {
+        this.notify.success('Revise los datos e intente nuevamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
+      } else {
+        this.notify.error('Revise los datos e intente nuevamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
+      }
+    }
+    
+  }
+  errorEmailRepetido(event:any){
+    const email = (event.target as HTMLInputElement).value;
+    this.usuarioService.verificarEmail(email).subscribe(
+      (data:any)=>{
+        
+        if(data.data==true)
+        {
+          this.errorVerificarEmail=true;
+        }
+        else{
+          this.errorVerificarEmail=false;
+        }
+    },
+    (error:any)=> this.error=this.usuarioService.handleError(error));
+  }
+  errorPassword():boolean{
+    return this.errorVerificarContraseña;
+  }
+  verificar(event:Event){
+    const input = (event.target as HTMLInputElement).value;
+    if(this.form.formulario.value.repetir_password==this.form.formulario.value.password){
+      this.errorVerificarContraseña=false;
+    }
+    else{
+      this.errorVerificarContraseña=true;
     }
   }
 
