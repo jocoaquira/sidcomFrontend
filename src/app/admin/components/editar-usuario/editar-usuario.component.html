@@ -7,10 +7,11 @@
                 [options]="roles"
                 formControlName="rol_id"
                 optionLabel="name"
+                optionValue="id"
                 (onChange)="onChangeRol($event)"
             ></p-dropdown>
-
             <label for="dropdown">Nivel de Usuario</label>
+            <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('rol_id')">{{form.getErrorMessage('rol_id')}}</small>
         </span>
     </div>
     <div class="field">
@@ -30,8 +31,9 @@
     </div>
     <div class="field">
         <label for="email">Correo Electrónico</label>
-        <input type="text" pInputText id="email" formControlName="email" autofocus/>
-        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('email')">{{form.getErrorMessage('email')}}</small>
+        <input type="text" pInputText id="email" formControlName="email" autofocus (input)="errorEmailRepetido($event)"/>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('email') || errorVerificarEmail" >{{form.getErrorMessage('email')}}</small>
+        <small class="ng-dirty ng-invalid" *ngIf="errorVerificarEmail" >El email ya existe en el sistema</small>
     </div>
     <div class="field">
         <label for="celular">Celular</label>
@@ -46,8 +48,8 @@
         </div>
         <div class="field">
             <label for="repetir_password">Repetir Contraseña</label>
-            <input type="password" pInputText id="repetir_password" formControlName="repetir_password" autofocus/>
-            <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('repetir_password')">{{form.getErrorMessage('repetir_password')}}</small>
+            <input type="password" pInputText id="repetir_password" formControlName="repetir_password" autofocus (input)="verificar($event)"/>
+            <small class="ng-dirty ng-invalid" *ngIf="errorPassword()">Las contraseñas no coinciden</small>
         </div>
     </div>
     <div class="field" *ngIf="!admin">
@@ -58,6 +60,7 @@
                 [options]="operadores"
                 formControlName="operator_id"
                 optionLabel="razon_social"
+                optionValue="id"
                 (ngModelChange)="onChangeOperadores($event)"
             ></p-dropdown>
 
@@ -72,11 +75,9 @@
                 [options]="estados"
                 formControlName="estado"
                 optionLabel="label"
+                optionValue="value"
                 (ngModelChange)="onChangeEstado($event)"
             >
-                <ng-template pTemplate="selectedItem">
-                    <span *ngIf="usuario && usuario.estado" [class]="'usuario-badge estado-' + usuario.estado.toString().toLowerCase()">{{ +usuario.estado === 1 ? 'Habilitado' : 'Inhabilitado' }}</span>
-                </ng-template>
                 <ng-template let-option pTemplate="item">
                     <span [class]="'usuario-badge estado-' + option.value">{{option.label}}</span>
                 </ng-template>
