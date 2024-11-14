@@ -48,8 +48,9 @@ export class IDOMService {
 
       doc.text('ACTIVIDAD:', 50, 260);
       doc.text('COMERCIO INTERNO, COMERCIO EXTERNO', 150, 260);
-
+      doc.setFont("helvetica", "bold");
       doc.text('REPRESENTANTE LEGAL:', 50, 280);
+      doc.setFont("helvetica", "normal");
       doc.text('JHIM HEBER CACERES GUTIERREZ', 200, 280);
 
       doc.text('DIRECCIÓN DE OFICINA:', 50, 300);
@@ -60,6 +61,23 @@ export class IDOMService {
 
       doc.text('TELÉFONO Y/O CELULAR:', 50, 340);
       doc.text('5213945, 68366410, 76137852', 200, 340);
+      doc.text(" y texto en normal", 10 + doc.getTextWidth("Texto en negrita"), 10);
+
+      const x = 10; // Coordenada X
+const y = 10; // Coordenada Y
+const width = 180; // Ancho del recuadro
+const height = 50; // Alto del recuadro
+
+// Agregar un rectángulo de fondo para representar el área de texto
+doc.rect(x, y, width, height);
+      // Texto largo que se ajustará al recuadro
+const text = "Este es un texto largo que debería ajustarse dentro del recuadro. Si el texto es muy largo, debería dividirse en varias líneas para que no se salga del límite.";
+
+// Usar splitTextToSize para ajustar el texto al recuadro
+const lines = doc.splitTextToSize(text, width);  // Ajusta el texto al ancho del recuadro
+
+// Escribe el texto ajustado dentro del recuadro, comenzando en la posición (x, y)
+doc.text(lines, x, y + 10); // El +10 es para dar un pequeño margen en la parte superior
 
       // Pie de página
       doc.setFontSize(8);
