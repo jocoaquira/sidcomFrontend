@@ -33,6 +33,7 @@ export class EditarUsuarioComponent implements OnInit {
   public admin:boolean=false;
   public form=new UsuarioFormulario();
   public errorUsuario:any={};
+  
 
   constructor(
     private rolesServices:RolesService,
@@ -46,26 +47,27 @@ export class EditarUsuarioComponent implements OnInit {
   ngOnInit(): void {
     this.rolesServices.verRoles('hj').subscribe(
       (data:any)=>{
-      this.roles=this.rolesServices.handlerol(data.data);
+        console.log(data);
+      this.roles=this.rolesServices.handlerol(data);
 
     },
     (error:any)=> this.error=this.rolesServices.handleError(error));
 
     this.operadoresService.verOperatorsSimple('hj').subscribe(
       (data:any)=>{
-      this.operadores=this.operadoresService.handleOperatorSimple(data.data);
+      this.operadores=this.operadoresService.handleOperatorSimple(data);
     },
     (error:any)=> this.error=this.operadoresService.handleOperatorSimpleError(error));
 
     this.estados = [
-      { label: 'HABILITADO', value: '1' },
-      { label: 'DESHABILITADO', value: '0' }
+      { label: 'ACTIVO', value: '1' },
+      { label: 'INACTIVO', value: '0' }
   ];
   }
   onChangeRol(rol_id:any){
     let id=rol_id.value;
     let rol:IRol=this.roles.find(element => element.id === id);
-    if(rol.name.search('Operador')!=-1)
+    if(rol.nombre.search('Operador')!=-1)
     {
       this.admin=false;
     }
@@ -87,16 +89,19 @@ export class EditarUsuarioComponent implements OnInit {
 
   }
   onSubmit() {
+    this.form.formulario.value.estado=this.form.formulario.value.estado.label;
+    this.form.formulario.value.celular=parseInt(this.form.formulario.value.celular);
     if(this.admin && this.form.formulario.value.password!=null){
       if (this.form.formulario.valid && !this.errorVerificarContraseña && !this.errorVerificarEmail) {
+        console.log(this.form.formulario.value);
         this.usuarioService.crearusuario(this.form.formulario.value).subscribe(
           (data:any) =>
           {
-            this.usuarioService.handleCrearusuario(data.data);
-            console.log(data.data);
-            if(data.status=='success')
+            this.usuarioService.handleCrearusuario(data);
+            console.log(data);
+            if(data.error==null)
             {
-              //this.form.formulario.reset();
+              this.form.formulario.reset();
               this.estadoDialogo.emit(false);
               this.notify.success('El usuario se registro correctamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
             }
@@ -124,11 +129,11 @@ export class EditarUsuarioComponent implements OnInit {
         this.usuarioService.crearusuario(this.form.formulario.value).subscribe(
             (data:any) =>
             {
-              this.usuarioService.handleCrearusuario(data.data);
-              console.log(data.data);
-              if(data.status=='success')
+              this.usuarioService.handleCrearusuario(data);
+              console.log(data);
+              if(data.error==null)
               {
-                //this.form.formulario.reset();
+                this.form.formulario.reset();
                 this.estadoDialogo.emit(false);
                 this.notify.success('Creado Correctamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
               }
@@ -152,8 +157,8 @@ export class EditarUsuarioComponent implements OnInit {
     const email = (event.target as HTMLInputElement).value;
     this.usuarioService.verificarEmail(email).subscribe(
       (data:any)=>{
-
-        if(data.data==true)
+        console.log(data)
+        if(data==true)
         {
           this.errorVerificarEmail=true;
         }

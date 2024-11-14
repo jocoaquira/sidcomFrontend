@@ -39,7 +39,7 @@ export class RolesService {
 //---------------------crear   rol-------------------------------------------
 crearrol(data:IRol) {
   this.token();
-  return this.http.post(`${this.baseUrl}/roles`,data, {headers:this.headers})
+  return this.http.post(`${this.baseUrl}roles`,data, {headers:this.headers})
 }
 handleCrearrolError(error: any): any {
   return error=error;

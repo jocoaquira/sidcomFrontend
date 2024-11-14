@@ -64,14 +64,14 @@ export class ListarUsuarioComponent implements OnInit {
     ngOnInit() {
         this.usuariosService.verusuarios(this.nombre).subscribe(
             (data:any)=>{
-            this.listaUsuarios=this.usuariosService.handleusuario(data.data);
+            this.listaUsuarios=this.usuariosService.handleusuario(data);
 
           },
           (error:any)=> this.error=this.usuariosService.handleError(error));
 
         this.rolesServices.verRoles(this.nombre).subscribe(
             (data:any)=>{
-            this.roles=this.rolesServices.handlerol(data.data);
+            this.roles=this.rolesServices.handlerol(data);
 
           },
           (error:any)=> this.error=this.rolesServices.handleError(error));
@@ -202,7 +202,7 @@ export class ListarUsuarioComponent implements OnInit {
                 break;
             }
         }
-        return this.roles[index].name;
+        return this.roles[index].nombre;
     }
     return '';
     }

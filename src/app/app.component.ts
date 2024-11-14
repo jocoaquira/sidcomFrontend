@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 export class AppComponent implements OnInit {
 
     constructor(private primengConfig: PrimeNGConfig) { 
-        localStorage.setItem('url-backend', environment.API_URL+'api/');
+        localStorage.setItem('url-backend', environment.API_URL);
         localStorage.setItem('url-backend-admin', environment.API_URL+'admin/');
   
     }

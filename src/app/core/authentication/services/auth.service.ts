@@ -13,7 +13,7 @@ import { ILogin } from '../data/ilogin.metadata';
   providedIn:'root'
 })
 export class AuthService {
-  private baseUrl = environment.API_URL+'api/';
+  private baseUrl = environment.API_URL;
 public currentUser:BehaviorSubject<any>;
 public nameUserLS:string='currentUser';
 
@@ -32,7 +32,7 @@ public nameUserLS:string='currentUser';
   }
   login(data:ILogin): Observable <IAuth>{
     const response ={error:true,msg:'error usuario no existe',data:null};
-    return this.http.post<{error:boolean,msg:string,data:any}>(this.baseUrl+'login',data).pipe(
+    return this.http.post<{error:boolean,msg:string,data:any}>(this.baseUrl+'auth/login',data).pipe(
       map( r => {
         response.msg=r.msg;
         response.error=r.error;

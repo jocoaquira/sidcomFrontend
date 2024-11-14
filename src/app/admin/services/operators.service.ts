@@ -27,7 +27,7 @@ export class OperatorsService {
     params = params.append('nombre', nombre);
 
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}operators`,{params:params});
+    return this.http.get(`${this.baseUrl}operator`,{params:params});
   }
   handleError(error: any): any {
     return error=error.error.error;
@@ -44,7 +44,7 @@ export class OperatorsService {
     params = params.append('nombre', nombre);
 
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}operators-simple`,{params:params});
+    return this.http.get(`${this.baseUrl}operator/operators-simple`,{params:params});
   }
   handleOperatorSimpleError(error: any): any {
     return error=error.error.error;
@@ -58,7 +58,7 @@ export class OperatorsService {
 //---------------------crear   operator-------------------------------------------
 crearoperator(data:IOperator) {
   this.token();
-  return this.http.post(`${this.baseUrl}/operators`,data, {headers:this.headers})
+  return this.http.post(`${this.baseUrl}/operator`,data, {headers:this.headers})
 }
 handleCrearoperatorError(error: any): any {
   return error=error;
@@ -70,7 +70,7 @@ handleCrearoperator(data: IOperator):IOperator {
 //---------------------Editar   operator-------------------------------------------
 editaroperator(data:IOperator) {
   this.token();
-  return this.http.put(`${this.baseUrl}/operators/`+data.id, data)
+  return this.http.put(`${this.baseUrl}/operator/`+data.id, data)
 }
 handleEditaroperatorError(error: any): any {
   return error=error;
