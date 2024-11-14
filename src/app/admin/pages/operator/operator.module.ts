@@ -20,6 +20,7 @@ import { OperatorComponent } from './operator.component';
 import { BadgeModule } from 'primeng/badge';
 import { TagModule } from 'primeng/tag';
 import { CrearOperadorModule } from './crear-operador/crear-operador.module';
+import { IdomModule } from './pdf/idom/idom.module';
 
 @NgModule({
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -42,7 +43,8 @@ import { CrearOperadorModule } from './crear-operador/crear-operador.module';
         RadioButtonModule,
         InputNumberModule,
         DialogModule,
-        CrearOperadorModule
+        CrearOperadorModule,
+        IdomModule
     ],
     declarations: [OperatorComponent],
 })

@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<!-- saved from url=(0073)https://mineria.oruro.gob.bo/sidcom/operador_minero/nuevo_operador_minero -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Ivan MG">
+
+    <title>sidcom App - Crear operador minero</title>
+    <link rel="icon" type="image/png" href="https://mineria.oruro.gob.bo/sidcom/public/img/favicon.png">
+    <!-- Styles-->
+    <link rel="stylesheet" href="./sidcom App - Crear operador minero_files/purecss.min.css">
+    <link rel="stylesheet" href="./sidcom App - Crear operador minero_files/grids-responsive-min.css">
+    <link rel="stylesheet" href="./sidcom App - Crear operador minero_files/jquery-ui.min.css">
+    <link rel="stylesheet" href="./sidcom App - Crear operador minero_files/styles.css">
+    <!-- End Styles-->
+
+    <!-- SRC scripts-->
+    <script src="./sidcom App - Crear operador minero_files/jquery.min.js.descarga"></script>
+    <script src="./sidcom App - Crear operador minero_files/jquery-ui.min.js.descarga"></script>
+    <script src="./sidcom App - Crear operador minero_files/parsley.min.js.descarga"></script>
+    <script>
+      var base_url = "https://mineria.oruro.gob.bo/sidcom/";
+    </script>
+    <!-- End SRC scripts-->
+
+    <!-- CDN-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>-->
+    <!-- FIN CDN-->
+    <script>
+      //preloader
+      $(window).load(function(){
+          $('#page-loader').fadeOut(500);
+      });
+    </script>
+  </head>
+<body>
+<div id="page-loader" style="display: none;"><span class="preloader-interior"></span></div>
+ <style scoped="">
+    .button-success,
+    .button-error,
+    .button-warning,
+    .button-black,
+    .button-secondary {
+        color: white;
+        border-radius: 4px;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    }
+    .button-success {
+      color: #C5FFB9;
+      background: rgb(28, 184, 65); /* this is a green */
+    }
+    .button-success:hover {
+      color: #FFF;
+      opacity: 0.7;
+    }
+    .button-error {
+      color: #FFB6B6;
+      background: rgb(202, 60, 60); /* this is a maroon */
+    }
+    .button-error:hover {
+      color: #FFF;
+      opacity: 0.7;
+    }
+    .button-warning {
+      color: #FFEF67;
+      background: rgb(223, 117, 20); /* this is an orange */
+    }
+    .button-warning:hover {
+      color: #fff;
+      opacity: 0.7;
+    }
+    .button-secondary {
+      color: #C1E7FF;
+      background: #64b5f6; /* this is a light blue */
+    }
+    .button-secondary:hover {
+      color: #fff;
+      opacity: 0.7;
+    }
+    .button-black {
+      color:#DE9D00;
+      background: #303030; /* this is a light black */
+    }
+    .button-black:hover {
+      color:#fff;
+      opacity: 0.7;
+    }
+    .button-xsmall {
+      font-size: 70%;
+    }
+    .button-small {
+      font-size: 80%;
+    }
+    .button-large {
+      font-size: 110%;
+    }
+    .button-xlarge {
+      font-size: 125%;
+    }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin:50px auto;
+  }
+tr:nth-of-type(odd) {
+  background: #eee;
+  }
+
+th {
+  color: white;
+  font-weight: bold;
+  background-color: #777;;
+  }
+
+td, th {
+  padding: 5px;
+  border: 1px solid #ccc;
+  text-align: left;
+  font-size: 14px;
+  }
+@media only screen and (max-width: 760px),(min-device-width: 768px) and (max-device-width: 1024px){
+  #btn_nuevo{width: 100%}
+  #btn_editar{width: 100%}
+  #btn_bloquear{width: 100%}
+
+  table {
+         display: block;
+         overflow-x: auto;
+       }  
+}
+  </style>
+
+<div id="layout">
+    <!-- Menu toggle -->
+    <a href="https://mineria.oruro.gob.bo/sidcom/operador_minero/nuevo_operador_minero#menu" id="menuLink" class="menu-link">
+        <!-- Hamburger icon -->
+        <span></span>
+    </a>
+
+  <div id="menu">
+    <div class="pure-menu">
+      <a class="pure-menu-heading" href="https://mineria.oruro.gob.bo/sidcom/">
+        INICIO      </a>
+      <ul class="pure-menu-list">
+        
+        <li class="pure-menu-item"><a href="https://mineria.oruro.gob.bo/sidcom/admin/" class="pure-menu-link" type="submit">ADMINISTRACIÓN</a></li>
+      
+        <li class="pure-menu-item"><a href="https://mineria.oruro.gob.bo/sidcom/reporte/" class="pure-menu-link" type="submit">REPORTES</a></li>
+      
+        <li class="pure-menu-item"><a href="https://mineria.oruro.gob.bo/sidcom/formulario/" class="pure-menu-link" type="submit">FORMULARIOS</a></li>
+      
+        <li class="pure-menu-item"><a href="https://mineria.oruro.gob.bo/sidcom/inicio/logout/7697e72986fbb355bbabb0af917430bb" class="pure-menu-link" type="submit">SALIR</a></li>
+      
+          </ul>
+    </div>
+  </div>
+    <div id="main"><script>
+  var cont_actividades_mineras = 0;
+  function atrrCooperativa(){
+    $("#nro_personalidad_juridica").attr("required","required");
+    $("#nro_personalidad_juridica_resp").attr("required","required");
+    $("#tipo_doc_cre_emp").removeAttr("required");
+    $("#documento_creacion_empresa").removeAttr("required");
+    $("#estatal_doc_resp").removeAttr("required"); 
+    $("#nro_matricula_funda").removeAttr("required"); 
+    $("#fecha_exp_funda").removeAttr("required"); 
+    $("#nro_matricula_funda_resp").removeAttr("required"); 
+  }
+  function atrrEstatal(){
+    $("#tipo_doc_cre_emp").attr("required","required");
+    $("#documento_creacion_empresa").attr("required","required");
+    $("#estatal_doc_resp").attr("required","required"); 
+    $("#nro_matricula_funda").removeAttr("required"); 
+    $("#fecha_exp_funda").removeAttr("required"); 
+    $("#nro_matricula_funda_resp").removeAttr("required"); 
+    $("#nro_personalidad_juridica").removeAttr("required");
+    $("#nro_personalidad_juridica_resp").removeAttr("required");
+  }
+  function atrrPrivada(){
+    $("#nro_matricula_funda").attr("required","required"); 
+    $("#fecha_exp_funda").attr("required","required"); 
+    $("#nro_matricula_funda_resp").attr("required","required"); 
+    $("#nro_personalidad_juridica").removeAttr("required");
+    $("#nro_personalidad_juridica_resp").removeAttr("required");
+    $("#tipo_doc_cre_emp").removeAttr("required");
+    $("#documento_creacion_empresa").removeAttr("required");
+    $("#estatal_doc_resp").removeAttr("required");
+  }
+  function atrrDefault(){
+    $("#nro_matricula_funda").removeAttr("required");
+    $("#fecha_exp_funda").removeAttr("required");
+    $("#nro_matricula_funda_resp").removeAttr("required");
+    $("#nro_personalidad_juridica").removeAttr("required");
+    $("#nro_personalidad_juridica_resp").removeAttr("required");
+    $("#tipo_doc_cre_emp").removeAttr("required");
+    $("#documento_creacion_empresa").removeAttr("required");
+    $("#estatal_doc_resp").removeAttr("required");
+  }
+  
+  var estadoExplotacion = 0;
+  $(document).ready(function(){
+    $("#actor_minero").change(function (){
+      switch ($("#actor_minero").val()) {
+        case '1':
+          $("#div_cooperativa").fadeIn();
+          atrrCooperativa();
+          $("#div_actividad_minera").fadeIn();
+          $("#div_titulo_actmin").fadeIn();
+          $("#div_estatal").fadeOut(0);
+          $("#div_privado").fadeOut(0);
+          limpiar_div_estatal();
+          limpiar_div_privado();
+          break;
+          
+          case '2':
+          $("#div_estatal").fadeIn();
+          atrrEstatal();
+          $("#div_actividad_minera").fadeIn();
+          $("#div_titulo_actmin").fadeIn();
+          $("#div_cooperativa").fadeOut(0);
+          $("#div_privado").fadeOut(0);
+          limpiar_div_cooperativa();
+          limpiar_div_privado();
+          break;
+
+          case '3':
+          $("#div_privado").fadeIn();
+          atrrPrivada();
+          $("#div_actividad_minera").fadeIn();
+          $("#div_titulo_actmin").fadeIn();
+          $("#div_cooperativa").fadeOut(0);
+          $("#div_estatal").fadeOut(0);
+          limpiar_div_cooperativa();
+          limpiar_div_estatal();
+          break;
+
+        default:
+          atrrDefault()
+          $("#div_cooperativa").fadeOut();
+          $("#div_estatal").fadeOut();
+          $("#div_privado").fadeOut();
+          $("#div_titulo_actmin").fadeOut();
+          $("#div_actividad_minera").fadeOut();
+          $("#div_explotacion").fadeOut();
+          $("#div_patente").fadeOut();
+          $("#div_municipio").fadeOut();
+          limpiar_div_actividad_minera();
+          break;
+      }
+    });
+
+    $("#tipo_act_mine_explo").change(function (){
+      if($("#tipo_act_mine_explo").val()=='1'){// si es patente
+        $("#nro_cod_unico").attr("disabled", false);
+        $("#nro_cod_unico").attr("placeholder", "1111");
+        $("#nro_cod_unico").val("");
+      }else{
+        $("#nro_cod_unico").attr("disabled", "true");
+        $("#nro_cod_unico").attr("placeholder", "");
+        $("#nro_cod_unico").val("");
+      }
+    });
+
+    
+  });
+  function explotacion(){
+    estadoExplotacion++;
+    if((estadoExplotacion % 2) == 0){
+      $("#div_explotacion").fadeOut();
+      $("#div_patente").fadeOut();
+      $("#div_municipio").fadeOut();
+    }
+    else{
+      $("#div_explotacion").fadeIn();
+      $("#div_patente").fadeIn();
+      $("#div_municipio").fadeIn();
+      
+    }
+  }
+
+  function limpiar_div_cooperativa(){
+    $("#nro_personalidad_juridica").val("");
+    $("#nro_personalidad_juridica_resp").val("");
+  }
+  function limpiar_div_estatal(){
+    $("#tipo_doc_cre_emp").val("");
+    $("#documento_creacion_empresa").val("");
+    $("#nro_personalidad_juridica_resp").val("");
+    
+  }
+  function limpiar_div_privado(){
+    $("#nro_matricula_funda").val("");
+    $("#fecha_exp_funda").val("");
+    $("#nro_matricula_funda_resp").val(""); 
+  }
+  
+  function limpiar_div_actividad_minera(){
+    $("#act_explotacion").attr('checked', false);
+    $("#act_comercio_interno").attr('checked', false);
+    $("#act_comercio_externo").attr('checked', false);
+    $("#act_concentracion").attr('checked', false);
+    $("#act_fundicion").attr('checked', false);
+    $("#act_tostacion").attr('checked', false);
+    $("#act_calcinacion").attr('checked', false);
+    $("#act_refinacion").attr('checked', false);    
+    estadoExplotacion = 0;
+  }
+
+  var municipiosArr = [];
+  var municipios = [
+    'ANTEQUERA',
+    'BELEN DE ANDAMARCA',
+    'CARACOLLO',
+    'CARANGAS',
+    'CHALLAPATA',
+    'CHIPAYA',
+    'CHOQUECOTA',
+    'COIPASA',
+    'CORQUE',
+    'CR. MACHACAMARCA',
+    'CURAHUARA CAR',
+    'EL CHORO',
+    'ESCARA',
+    'ESMERALDA',
+    'EUCALIPTUS',
+    'GAIOC DE SALINAS',
+    'HUACHACALLA',
+    'HUANUNI',
+    'HUAYLLAMARCA',
+    'LA RIVERA',
+    'MACHACAMARCA',
+    'ORURO',
+    'PAMPA AULLAGAS',
+    'PAZÑA',
+    'POOPO',
+    'QUILLACAS',
+    'S. DE ANDAMARCA',
+    'S. G. MENDOZA',
+    'SABAYA',
+    'SORACACHI',
+    'STGO. DE HUARI',
+    'TODOS SANTOS',
+    'TOLEDO',
+    'TOTORA',
+    'TURCO',
+    'YUNGUYO DE LIT.'
+
+  ];
+  
+  function add_municipio(){
+    var item = $("#municipio").val();
+    var exite = false;
+      for(i=0;i<municipiosArr.length;i++){
+        if(municipiosArr[i]==item){
+          exite=true;
+        }
+      }
+    if(!exite){
+      municipiosArr.push(item);
+    }
+    dibujarTabla();
+  }
+
+  function dibujarTabla(){
+        $('#tabla_municipio > tbody > tr').remove();
+        
+        for(var i=0;i<municipiosArr.length;i++){
+            $('#tabla_municipio > tbody').append('<tr id="tr_'+i+'"><td>'+(municipios[municipiosArr[i]])+'</td> <td style="text-align:center"><a href="javascript:eliminar_municipio('+(i)+')" class="pure-button button-small button-error">Quitar</a></td></tr>');
+        }
+        $("#str_municipios").val(municipiosArr);
+    }
+  function eliminar_municipio(i){
+      municipiosArr.splice(i, 1);
+      dibujarTabla();
+  }
+
+</script>
+
+<div class="header" style="background:#303030;">
+  <span class="titulo_pagina">Administración - operador minero - Nuevo</span>
+</div>
+<p></p>
+
+  <div class="content">
+    <div class="pure-g">      
+      <div class="pure-u-1 pure-u-md-1-4"><p style="margin:5px 20px 5px 20px"><a href="https://mineria.oruro.gob.bo/sidcom/operador_minero" class="pure-button button-secondary" style="width:100%;">Volver atras</a></p></div>
+    </div>
+    <hr>
+      <form action="https://mineria.oruro.gob.bo/sidcom/operador_minero/crear_operador_minero" class="pure-form pure-form-stacked" id="form_nuevo" data-parsley-validate="" enctype="multipart/form-data" method="post" accept-charset="utf-8" novalidate="">
+                                                                                                   <input type="hidden" name="csrf_sidcom_app" value="7697e72986fbb355bbabb0af917430bb">
+        <input type="hidden" name="csrf_sidcom_app" value="7697e72986fbb355bbabb0af917430bb">
+        <fieldset>
+          <div class="pure-g">
+          <div class="pure-u-1 pure-u-md-1-1">
+              <div class="pure-control-group">
+                <label>Razón social:</label>
+                <input id="razon_social" name="razon_social" type="text" placeholder="Ej. Morococala Ltda" style="width:95%" autofocus="" required="">
+              </div>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-1">
+              <div class="pure-control-group" style="background:#FFE9BE;padding:0.5em">
+                <label>Origen mineral por defecto:</label>
+                <select name="origen_mineral_defecto" id="origen_mineral_defecto">
+<option value="sn">Sin municipio</option>
+<option value="0">ORURO - ANTEQUERA</option>
+<option value="1">ORURO - BELEN DE ANDAMARCA</option>
+<option value="2">ORURO - CARACOLLO</option>
+<option value="3">ORURO - CARANGAS</option>
+<option value="4">ORURO - CHALLAPATA</option>
+<option value="5">ORURO - GAIOC DE URU CHIPAYA</option>
+<option value="6">ORURO - CHOQUECOTA</option>
+<option value="7">ORURO - COIPASA</option>
+<option value="8">ORURO - CORQUE</option>
+<option value="9">ORURO - CR. MACHACAMARCA</option>
+<option value="10">ORURO - CURAHUARA CARANGAS</option>
+<option value="11">ORURO - EL CHORO</option>
+<option value="12">ORURO - ESCARA</option>
+<option value="13">ORURO - ESMERALDA</option>
+<option value="14">ORURO - EUCALIPTUS</option>
+<option value="15">ORURO - GAIOC DE SALINAS</option>
+<option value="16">ORURO - HUACHACALLA</option>
+<option value="17">ORURO - HUANUNI</option>
+<option value="18">ORURO - HUAYLLAMARCA</option>
+<option value="19">ORURO - LA RIVERA</option>
+<option value="20">ORURO - MACHACAMARCA</option>
+<option value="21">ORURO - ORURO</option>
+<option value="22">ORURO - PAMPA AULLAGAS</option>
+<option value="23">ORURO - PAZÑA</option>
+<option value="24">ORURO - POOPO</option>
+<option value="25">ORURO - QUILLACAS</option>
+<option value="26">ORURO - S. DE ANDAMARCA</option>
+<option value="28">ORURO - SABAYA</option>
+<option value="29">ORURO - SORACACHI</option>
+<option value="30">ORURO - STGO. DE HUARI</option>
+<option value="31">ORURO - TODOS SANTOS</option>
+<option value="32">ORURO - TOLEDO</option>
+<option value="33">ORURO - TOTORA</option>
+<option value="34">ORURO - TURCO</option>
+<option value="35">ORURO - YUNGUYO DE LITORAL</option>
+<option value="36">POTOSI - ACASIO</option>
+<option value="37">POTOSI - ARAMPAMPA</option>
+<option value="38">POTOSI - ATOCHA</option>
+<option value="39">POTOSI - BETANZOS</option>
+<option value="40">POTOSI - C KOCHAS</option>
+<option value="41">POTOSI - CAIZA D.</option>
+<option value="42">POTOSI - CARIPUYO</option>
+<option value="43">POTOSI - CHAQUI</option>
+<option value="44">POTOSI - CHAYANTA</option>
+<option value="45">POTOSI - CHUQUIHUTA AYLLU JUCUMANI</option>
+<option value="46">POTOSI - COLCHA K.</option>
+<option value="47">POTOSI - COLQUECHACA</option>
+<option value="48">POTOSI - COTAGAITA</option>
+<option value="49">POTOSI - LLALLAGUA</option>
+<option value="50">POTOSI - LLICA</option>
+<option value="51">POTOSI - MOJINETE</option>
+<option value="52">POTOSI - OCURI</option>
+<option value="53">POTOSI - POCOATA</option>
+<option value="54">POTOSI - PORCO</option>
+<option value="55">POTOSI - POTOSI</option>
+<option value="56">POTOSI - RAVELO</option>
+<option value="57">POTOSI - S. A. ESMORUCO</option>
+<option value="58">POTOSI - S. P. DE LIPEZ</option>
+<option value="59">POTOSI - S. P. DE QUEMES</option>
+<option value="60">POTOSI - SACACA</option>
+<option value="61">POTOSI - SALAR DE UYUNI</option>
+<option value="62">POTOSI - SAN AGUSTIN</option>
+<option value="63">POTOSI - SAN PEDRO</option>
+<option value="64">POTOSI - TACOBAMBA</option>
+<option value="65">POTOSI - TAHUA</option>
+<option value="66">POTOSI - TINQUIPAYA</option>
+<option value="67">POTOSI - TOMAVE</option>
+<option value="68">POTOSI - TORO TORO</option>
+<option value="69">POTOSI - TUPIZA</option>
+<option value="70">POTOSI - UNCIA</option>
+<option value="71">POTOSI - URMIRI</option>
+<option value="72">POTOSI - UYUNI</option>
+<option value="73">POTOSI - V. DE PUNA</option>
+<option value="74">POTOSI - VILLAZON</option>
+<option value="75">POTOSI - VITICHI</option>
+<option value="76">POTOSI - YOCALLA</option>
+<option value="77">LA PAZ - ACHACACHI</option>
+<option value="78">LA PAZ - ACHOCALLA</option>
+<option value="79">LA PAZ - ANCORAIMES</option>
+<option value="80">LA PAZ - APOLO</option>
+<option value="81">LA PAZ - AUCAPATA</option>
+<option value="82">LA PAZ - AYATA</option>
+<option value="83">LA PAZ - AYO AYO</option>
+<option value="84">LA PAZ - BATALLAS</option>
+<option value="85">LA PAZ - CAIROMA</option>
+<option value="86">LA PAZ - CAJUATA</option>
+<option value="87">LA PAZ - CALACOTO</option>
+<option value="88">LA PAZ - CALAMARCA</option>
+<option value="89">LA PAZ - CAQUIAVIRI</option>
+<option value="90">LA PAZ - CARABUCO</option>
+<option value="91">LA PAZ - CARANAVI</option>
+<option value="92">LA PAZ - CATACORA</option>
+<option value="93">LA PAZ - CHACARILLA</option>
+<option value="94">LA PAZ - CHARAÑA</option>
+<option value="95">LA PAZ - CHARAZANI</option>
+<option value="96">LA PAZ - CHULUMANI</option>
+<option value="97">LA PAZ - CHUMA</option>
+<option value="98">LA PAZ - COLLANA</option>
+<option value="99">LA PAZ - COLQUENCHA</option>
+<option value="100">LA PAZ - COLQUIRI</option>
+<option value="101">LA PAZ - COMANCHE</option>
+<option value="102">LA PAZ - COMBAYA</option>
+<option value="103">LA PAZ - COPACABANA</option>
+<option value="104">LA PAZ - CORIPATA</option>
+<option value="105">LA PAZ - COROCORO</option>
+<option value="106">LA PAZ - COROICO</option>
+<option value="107">LA PAZ - CURVA</option>
+<option value="108">LA PAZ - DESAGUADERO</option>
+<option value="109">LA PAZ - EL ALTO</option>
+<option value="110">LA PAZ - G. J. J. PEREZ</option>
+<option value="111">LA PAZ - GUANAY</option>
+<option value="112">LA PAZ - GUAQUI</option>
+<option value="113">LA PAZ - ICHOCA</option>
+<option value="114">LA PAZ - INQUISIVI</option>
+<option value="115">LA PAZ - IRUPANA</option>
+<option value="116">LA PAZ - IXIAMAS</option>
+<option value="117">LA PAZ - JESUS DE MACHACA</option>
+<option value="118">LA PAZ - LA ASUNTA</option>
+<option value="119">LA PAZ - LA PAZ</option>
+<option value="120">LA PAZ - LAJA</option>
+<option value="121">LA PAZ - LICOMA PAMPA</option>
+<option value="122">LA PAZ - LURIBAY</option>
+<option value="123">LA PAZ - MALLA</option>
+<option value="124">LA PAZ - MAPIRI</option>
+<option value="125">LA PAZ - MECAPACA</option>
+<option value="126">LA PAZ - MOCOMOCO</option>
+<option value="127">LA PAZ - NAZACARA</option>
+<option value="128">LA PAZ - PALCA</option>
+<option value="129">LA PAZ - PALOS BLANCOS</option>
+<option value="130">LA PAZ - PAPEL PAMPA</option>
+<option value="131">LA PAZ - PATACAMAYA</option>
+<option value="132">LA PAZ - PELECHUCO</option>
+<option value="133">LA PAZ - PTO. ACOSTA</option>
+<option value="134">LA PAZ - PTO. PEREZ</option>
+<option value="135">LA PAZ - PUCARANI</option>
+<option value="136">LA PAZ - QUIAVAYA</option>
+<option value="137">LA PAZ - QUIME</option>
+<option value="138">LA PAZ - S. B. VENTURA</option>
+<option value="139">LA PAZ - S. CALLAPA</option>
+<option value="140">LA PAZ - S. P. CURAHUARA</option>
+<option value="141">LA PAZ - S. PDR. TIQUINA</option>
+<option value="142">LA PAZ - SAN ANDRES DE MACHACA</option>
+<option value="143">LA PAZ - SAPAHAQUI</option>
+<option value="144">LA PAZ - SGTO. MACHACA</option>
+<option value="145">LA PAZ - SORATA</option>
+<option value="146">LA PAZ - TACACOMA</option>
+<option value="147">LA PAZ - TARACO</option>
+<option value="148">LA PAZ - TEOPONTE</option>
+<option value="149">LA PAZ - TIAHUANACU</option>
+<option value="150">LA PAZ - TIPUANI</option>
+<option value="151">LA PAZ - TITO YUPANQUI</option>
+<option value="152">LA PAZ - UMALA</option>
+<option value="153">LA PAZ - VIACHA</option>
+<option value="154">LA PAZ - VILLA AROMA</option>
+<option value="155">LA PAZ - W. BALLIVIAN</option>
+<option value="156">LA PAZ - YACO</option>
+<option value="157">LA PAZ - YANACACHI</option>
+<option value="158">COCHABAMBA - AIQUILE</option>
+<option value="159">COCHABAMBA - ALALAY</option>
+<option value="160">COCHABAMBA - ARANI</option>
+<option value="161">COCHABAMBA - ARBIETO</option>
+<option value="162">COCHABAMBA - ARQUE</option>
+<option value="163">COCHABAMBA - AYOPAYA</option>
+<option value="164">COCHABAMBA - BOLIVAR</option>
+<option value="165">COCHABAMBA - CAPINOTA</option>
+<option value="166">COCHABAMBA - CHIMORE</option>
+<option value="167">COCHABAMBA - CLIZA</option>
+<option value="168">COCHABAMBA - COCAPATA</option>
+<option value="169">COCHABAMBA - COCHABAMBA</option>
+<option value="170">COCHABAMBA - COLCAPIRHUA</option>
+<option value="171">COCHABAMBA - COLOMI</option>
+<option value="172">COCHABAMBA - CUCHUMUELA</option>
+<option value="173">COCHABAMBA - ENTRE RIOS</option>
+<option value="174">COCHABAMBA - MIZQUE</option>
+<option value="175">COCHABAMBA - MOROCHATA</option>
+<option value="176">COCHABAMBA - OMEREQUE</option>
+<option value="177">COCHABAMBA - PASORAPA</option>
+<option value="178">COCHABAMBA - POCOMA</option>
+<option value="179">COCHABAMBA - POJO</option>
+<option value="180">COCHABAMBA - PT. VILLARROEL</option>
+<option value="181">COCHABAMBA - PUNATA</option>
+<option value="182">COCHABAMBA - QUILLACOLLO</option>
+<option value="183">COCHABAMBA - RAQAYPAMPA</option>
+<option value="184">COCHABAMBA - SACABA</option>
+<option value="185">COCHABAMBA - SACABAMBA</option>
+<option value="186">COCHABAMBA - SAN BENITO</option>
+<option value="187">COCHABAMBA - SICAYA</option>
+<option value="188">COCHABAMBA - SIPE SIPE</option>
+<option value="189">COCHABAMBA - TACACHI</option>
+<option value="190">COCHABAMBA - TACOPAYA</option>
+<option value="191">COCHABAMBA - TAPACARI</option>
+<option value="192">COCHABAMBA - TARATA</option>
+<option value="193">COCHABAMBA - TIQUIPAYA</option>
+<option value="194">COCHABAMBA - TIRAQUE</option>
+<option value="195">COCHABAMBA - TOCO</option>
+<option value="196">COCHABAMBA - TOLATA</option>
+<option value="197">COCHABAMBA - TOTORA</option>
+<option value="198">COCHABAMBA - V. ANZALDO</option>
+<option value="199">COCHABAMBA - V. RIVERO</option>
+<option value="200">COCHABAMBA - V. SANTIVAÑEZ</option>
+<option value="201">COCHABAMBA - V. TUNARI</option>
+<option value="202">COCHABAMBA - VACAS</option>
+<option value="203">COCHABAMBA - VILA VILA</option>
+<option value="204">COCHABAMBA - VINTO</option>
+<option value="205">SANTA CRUZ - AS. GUARAYOS</option>
+<option value="206">SANTA CRUZ - AYACUCHO</option>
+<option value="207">SANTA CRUZ - BOYUIBE</option>
+<option value="208">SANTA CRUZ - BUENA VISTA</option>
+<option value="209">SANTA CRUZ - CABEZAS</option>
+<option value="210">SANTA CRUZ - CAMIRI</option>
+<option value="211">SANTA CRUZ - CHARAGUA</option>
+<option value="212">SANTA CRUZ - COLPA BELGICA</option>
+<option value="213">SANTA CRUZ - COMARAPA</option>
+<option value="214">SANTA CRUZ - CONCEPCION</option>
+<option value="215">SANTA CRUZ - COTOCA</option>
+<option value="216">SANTA CRUZ - CUATRO CAÑADAS</option>
+<option value="217">SANTA CRUZ - CUEVO</option>
+<option value="218">SANTA CRUZ - EL CARMEN RIVERO TORREZ</option>
+<option value="219">SANTA CRUZ - EL PUENTE</option>
+<option value="220">SANTA CRUZ - EL TORNO</option>
+<option value="221">SANTA CRUZ - FERNANDEZ ALONSO</option>
+<option value="222">SANTA CRUZ - GRAL. SAAVEDRA</option>
+<option value="223">SANTA CRUZ - GUTIERREZ</option>
+<option value="224">SANTA CRUZ - LA GUARDIA</option>
+<option value="225">SANTA CRUZ - LAGUNILLAS</option>
+<option value="226">SANTA CRUZ - MAIRANA</option>
+<option value="227">SANTA CRUZ - MINEROS</option>
+<option value="228">SANTA CRUZ - MONTERO</option>
+<option value="229">SANTA CRUZ - MORO MORO</option>
+<option value="230">SANTA CRUZ - OKINAWA</option>
+<option value="231">SANTA CRUZ - PAILON</option>
+<option value="232">SANTA CRUZ - PAMPA GRANDE</option>
+<option value="233">SANTA CRUZ - PORTACHUELO</option>
+<option value="234">SANTA CRUZ - POSTRER VALLE</option>
+<option value="235">SANTA CRUZ - PUCARA</option>
+<option value="236">SANTA CRUZ - PUERTO QUIJARRO</option>
+<option value="237">SANTA CRUZ - PUERTO SUAREZ</option>
+<option value="238">SANTA CRUZ - QUIRUSILLA</option>
+<option value="239">SANTA CRUZ - ROBORE</option>
+<option value="240">SANTA CRUZ - SAIPINA</option>
+<option value="241">SANTA CRUZ - SAMAIPATA</option>
+<option value="242">SANTA CRUZ - SAN ANTONIO DEL LOMERIO</option>
+<option value="243">SANTA CRUZ - SAN CARLOS</option>
+<option value="244">SANTA CRUZ - SAN IGNACIO DE VELASCO</option>
+<option value="245">SANTA CRUZ - SAN JAVIER</option>
+<option value="246">SANTA CRUZ - SAN JOSE DE CHIQUITOS</option>
+<option value="247">SANTA CRUZ - SAN JUAN</option>
+<option value="248">SANTA CRUZ - SAN JULIAN</option>
+<option value="249">SANTA CRUZ - SAN MATIAS</option>
+<option value="250">SANTA CRUZ - SAN MIGUEL</option>
+<option value="251">SANTA CRUZ - SAN PEDRO</option>
+<option value="252">SANTA CRUZ - SAN RAFAEL</option>
+<option value="253">SANTA CRUZ - SAN RAMON</option>
+<option value="254">SANTA CRUZ - SANTA CRUZ</option>
+<option value="255">SANTA CRUZ - SANTA ROSA DEL SARA</option>
+<option value="256">SANTA CRUZ - TRIGAL</option>
+<option value="257">SANTA CRUZ - URUBICHA</option>
+<option value="258">SANTA CRUZ - VALLEGRANDE</option>
+<option value="259">SANTA CRUZ - WARNES</option>
+<option value="260">SANTA CRUZ - YAPACANI</option>
+<option value="261">CHUQUISACA - AZURDUY</option>
+<option value="262">CHUQUISACA - CAMARGO</option>
+<option value="263">CHUQUISACA - CAMATAQUI</option>
+<option value="264">CHUQUISACA - CULPINA</option>
+<option value="265">CHUQUISACA - EL VILLAR</option>
+<option value="266">CHUQUISACA - HUACARETA</option>
+<option value="267">CHUQUISACA - HUACAYA</option>
+<option value="268">CHUQUISACA - ICLA</option>
+<option value="269">CHUQUISACA - INCA HUASI</option>
+<option value="270">CHUQUISACA - LAS CARRERAS</option>
+<option value="271">CHUQUISACA - MACHARETI</option>
+<option value="272">CHUQUISACA - MOJOCOYA</option>
+<option value="273">CHUQUISACA - MONTEAGUDO</option>
+<option value="274">CHUQUISACA - PADILLA</option>
+<option value="275">CHUQUISACA - POROMA</option>
+<option value="276">CHUQUISACA - PRESTO</option>
+<option value="277">CHUQUISACA - SAN LUCAS</option>
+<option value="278">CHUQUISACA - SOPACHUY</option>
+<option value="279">CHUQUISACA - SUCRE</option>
+<option value="280">CHUQUISACA - TARABUCO</option>
+<option value="281">CHUQUISACA - TARVITA</option>
+<option value="282">CHUQUISACA - TOMINA</option>
+<option value="283">CHUQUISACA - V. ALCALA</option>
+<option value="284">CHUQUISACA - V. SERRANO</option>
+<option value="285">CHUQUISACA - V. VACA GUZMAN</option>
+<option value="286">CHUQUISACA - YAMPARAEZ</option>
+<option value="287">CHUQUISACA - YOTALA</option>
+<option value="288">CHUQUISACA - ZUDAÑEZ</option>
+<option value="289">TARIJA - BERMEJO</option>
+<option value="290">TARIJA - CARAPARI</option>
+<option value="291">TARIJA - EL PUENTE</option>
+<option value="292">TARIJA - ENTRE RIOS</option>
+<option value="293">TARIJA - PADCAYA</option>
+<option value="294">TARIJA - TARIJA</option>
+<option value="295">TARIJA - URIONDO</option>
+<option value="296">TARIJA - V. SAN LORENZO</option>
+<option value="297">TARIJA - VILLA MONTES</option>
+<option value="298">TARIJA - YACUIBA</option>
+<option value="299">TARIJA - YUNCHARA</option>
+<option value="300">BENI - BAURES</option>
+<option value="301">BENI - EXALTACION</option>
+<option value="302">BENI - GUAYARAMERIN</option>
+<option value="303">BENI - HUACARAJE</option>
+<option value="304">BENI - LORETO</option>
+<option value="305">BENI - MAGDALENA</option>
+<option value="306">BENI - PUERTO SILES</option>
+<option value="307">BENI - REYES</option>
+<option value="308">BENI - RIBERALTA</option>
+<option value="309">BENI - RURRENABAQUE</option>
+<option value="310">BENI - SAN ANDRES</option>
+<option value="311">BENI - SAN BORJA</option>
+<option value="312">BENI - SAN IGNACIO</option>
+<option value="313">BENI - SAN JAVIER</option>
+<option value="314">BENI - SAN JOAQUIN</option>
+<option value="315">BENI - SAN RAMON</option>
+<option value="316">BENI - SANTA ANA</option>
+<option value="317">BENI - SANTA ROSA</option>
+<option value="318">BENI - TRINIDAD</option>
+<option value="319">PANDO - BELLA FLOR</option>
+<option value="320">PANDO - BOLPEBRA</option>
+<option value="321">PANDO - COBIJA</option>
+<option value="322">PANDO - FILADELFIA</option>
+<option value="323">PANDO - INGAVI</option>
+<option value="324">PANDO - NUEVA ESPERANZA</option>
+<option value="325">PANDO - PORVENIR</option>
+<option value="326">PANDO - PUERTO G. MORENO</option>
+<option value="327">PANDO - PUERTO RICO</option>
+<option value="328">PANDO - SAN LORENZO</option>
+<option value="329">PANDO - SAN PEDRO</option>
+<option value="330">PANDO - SANTA ROSA DEL ABUNAÂ</option>
+<option value="331">PANDO - SANTOS MERCADO</option>
+<option value="332">PANDO - SENA</option>
+<option value="333">PANDO - VILLA NUEVA</option>
+</select>
+              </div>
+            </div>
+          </div>
+
+          <div class="pure-g">
+            <div class="pure-u-1 pure-u-md-1-4">
+              <div class="pure-control-group">
+                <label>NIT:</label>
+                <input id="nit" name="nit" type="text" placeholder="Ej. 40123456010" required="">
+              </div>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-4">
+              <div class="pure-control-group">
+                <label>NIT respaldo:</label>
+                <input id="nit_resp" name="nit_resp" type="file" style="width:200px;" required="">
+              </div>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-4">
+              <div class="pure-control-group">
+                <label>NIM/NIAR:</label>
+                <input id="nim" name="nim" type="text" placeholder="Ej. 05-4452-33" required="">
+              </div>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-4">
+              <div class="pure-control-group">
+                <label>NIM/NIAR respaldo:</label>
+                <input id="nim_resp" name="nim_resp" type="file" style="color: transparefnt; width:200px;" required="">
+              </div>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-4">
+                <div class="pure-control-group">
+                  <label>Fecha exp. NIM:</label>
+                  <input id="fecha_exp_nim" name="fecha_exp_nim" type="date" required="">
+                </div>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-4">
+              <div class="pure-control-group">
+                <label>Actor minero:</label>
+                <select name="actor_minero" id="actor_minero" required="">
+                  <option value="">Seleccione</option>
+                  <option value="1">Cooperativa</option>
+                  <option value="2">Empresa estatal</option>
+                  <option value="3">Empresa privada</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <!-- COOPERATIVA -->
+          <div id="div_cooperativa" class="pure-g ocultar">
+            <div class="pure-u-1 pure-u-md-1-3">
+              <div class="pure-control-group">
+                <label>Actor minero:</label>
+                <h3>Cooperativa</h3>
+              </div>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-3">
+              <div class="pure-control-group">
+                <label>N° de personalidad juridica:</label>
+                <input id="nro_personalidad_juridica" name="nro_personalidad_juridica" type="text" placeholder="Ej. 123456789">
+              </div>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-3">
+              <div class="pure-control-group">
+                <label>Doc. respaldo:</label>
+                <input id="nro_personalidad_juridica_resp" name="nro_personalidad_juridica_resp" type="file" style="width:200px;">
+              </div>
+            </div>
+          </div>
+          <!-- FIN COOPERATIVA -->
+
+          <!-- ESTATAL -->
+          <div id="div_estatal" class="pure-g ocultar">
+            <div class="pure-u-1 pure-u-md-1-4">
+              <div class="pure-control-group">
+                <label>Actor minero:</label>
+                <h3>Empresa estatal</h3>
+              </div>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-4">
+              <div class="pure-control-group">
+                <label>Tipo Doc. creación empresa:</label>
+                <select name="tipo_doc_cre_emp" id="tipo_doc_cre_emp">
+                  <option value="">Seleccione...</option>
+                  <option value="1">Ley</option>
+                  <option value="2">D.S.</option>
+                  <option value="3">Resolución Ministerial</option>
+                </select>
+              </div>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-4">
+              <div class="pure-control-group">
+                <label>Doc. creación empresa:</label>
+                <input id="documento_creacion_empresa" name="documento_creacion_empresa" type="text" placeholder="Ej. 987654321">
+              </div>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-4">
+              <div class="pure-control-group">
+                <label>Doc. respaldo:</label>
+                <input id="estatal_doc_resp" name="estatal_doc_resp" type="file" style="width:200px;">
+              </div>
+            </div>
+          </div>
+          <!-- FIN ESTATAL -->
+
+          <!-- PRIVADO -->
+          <div id="div_privado" class="pure-g ocultar">
+            <div class="pure-u-1 pure-u-md-1-4">
+              <div class="pure-control-group">
+                <label>Actor minero:</label>
+                <h3>Empresa privada</h3>
+              </div>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-4">
+              <div class="pure-control-group">
+                <label>N° matricula SEPREC:</label>
+                <input id="nro_matricula_funda" name="nro_matricula_funda" type="text" placeholder="Ej. 111222333">
+              </div>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-4">
+                <div class="pure-control-group">
+                  <label>Fecha exp. SEPREC:</label>
+                  <input id="fecha_exp_funda" name="fecha_exp_funda" type="date">
+                </div>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-4">
+              <div class="pure-control-group">
+                <label>Doc. SEPREC:</label>
+                <input id="nro_matricula_funda_resp" name="nro_matricula_funda_resp" type="file" style="width:200px;">
+              </div>
+            </div>
+          </div>
+          <!-- FIN PRIVADO -->
+        
+        <!-- Actividad minera -->
+        <div style="padding:.5em; margin-top:.5em; background:#fff; font-weight:bold; display:none" id="div_titulo_actmin">Actividad minera</div>
+        <div class="pure-g ocultar" id="div_actividad_minera" style="padding:.5em; background:#fff">
+          <div class="pure-u-1 pure-u-md-1-4">
+            <div class="pure-control-group">
+              <label><input type="checkbox" id="act_explotacion" name="act_explotacion" onclick="explotacion();" value="1" data-parsley-multiple="act_explotacion"> Explotación</label>
+            </div>
+          </div>
+          <div class="pure-u-1 pure-u-md-1-4">
+            <div class="pure-control-group">
+              <label><input type="checkbox" id="act_comercio_interno" value="1" name="act_comercio_interno" data-parsley-multiple="act_comercio_interno"> Comercio interno</label>
+            </div>
+          </div>
+          <div class="pure-u-1 pure-u-md-1-4">
+            <div class="pure-control-group">
+              <label><input type="checkbox" id="act_comercio_externo" value="1" name="act_comercio_externo" data-parsley-multiple="act_comercio_externo"> Comercio externo</label>
+            </div>
+          </div>
+          <div class="pure-u-1 pure-u-md-1-4">
+            <div class="pure-control-group">
+              <label><input type="checkbox" id="act_concentracion" value="1" name="act_concentracion" data-parsley-multiple="act_concentracion"> Concentración</label>
+            </div>
+          </div>
+
+          <div class="pure-u-1 pure-u-md-1-4">
+            <div class="pure-control-group">
+              <label><input type="checkbox" id="act_fundicion" value="1" name="act_fundicion" data-parsley-multiple="act_fundicion"> Fundición</label>
+            </div>
+          </div>
+          <div class="pure-u-1 pure-u-md-1-4">
+            <div class="pure-control-group">
+              <label><input type="checkbox" id="act_tostacion" value="1" name="act_tostacion" data-parsley-multiple="act_tostacion"> Tostación</label>
+            </div>
+          </div>
+          <div class="pure-u-1 pure-u-md-1-4">
+            <div class="pure-control-group">
+              <label><input type="checkbox" id="act_calcinacion" value="1" name="act_calcinacion" data-parsley-multiple="act_calcinacion"> Calcinación</label>
+            </div>
+          </div>
+          <div class="pure-u-1 pure-u-md-1-4">
+            <div class="pure-control-group">
+              <label><input type="checkbox" id="act_refinacion" value="1" name="act_refinacion" data-parsley-multiple="act_refinacion"> Refinación</label>
+            </div>
+          </div>
+        </div>
+        <!-- FIN Actividad minera -->
+
+        <!-- Explotacion -->
+        <div class="pure-g ocultar" id="div_explotacion" style="padding:.5em; background:#fff">
+          <div class="pure-u-1 pure-u-md-1-3">
+            <div class="pure-control-group">
+              <label>Actividad minera explotación:</label>
+              <select name="tipo_act_mine_explo" id="tipo_act_mine_explo">
+                <option value="1">Patente minera</option>
+                <option value="2">Contrato arrendamiento</option>
+              </select>
+            </div>      
+          </div> 
+          <div class="pure-u-1 pure-u-md-1-3">
+            <div class="pure-control-group">
+              <label>Doc. respaldo:</label>
+              <input id="act_mine_explo_resp" name="act_mine_explo_resp" type="file" style="width:200px;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Patente minera-->
+        <div class="pure-g ocultar" id="div_patente" style="padding:.5em; background:#fff">
+          <div class="pure-u-1 pure-u-md-1-3">
+            <div class="pure-control-group" id="cod_unico">
+              <label>N° de código único:</label>
+              <input id="nro_cod_unico" name="nro_cod_unico" type="text" placeholder="Ej. 1111">
+            </div>
+          </div>
+          <div class="pure-u-1 pure-u-md-1-3">
+            <div class="pure-control-group">
+              <label>N° de cuadricula:</label>
+              <input id="nro_cuadricula" name="nro_cuadricula" type="text" placeholder="Ej. 2222">
+            </div>
+          </div>
+          <div class="pure-u-1 pure-u-md-1-3">
+            <div class="pure-control-group">
+              <label>Denominación de áreas:</label>
+              <input id="denominacion_area" name="denominacion_area" type="text" placeholder="Ej. abc123">
+            </div>
+          </div>
+        </div>
+        <!-- Fin Patente minera-->
+
+        <div class="pure-g ocultar" id="div_municipio" style="padding:.5em; background:#fff">
+          <div class="pure-u-1 pure-u-md-1-2">
+            <div class="pure-control-group">
+              <label>Municipios:</label>
+                <select name="municipio" id="municipio">
+                  <option value="0">ANTEQUERA</option>
+                  <option value="1">BELEN DE ANDAMARCA</option>
+                  <option value="2">CARACOLLO</option>
+                  <option value="3">CARANGAS</option>
+                  <option value="4">CHALLAPATA</option>
+                  <option value="5">CHIPAYA</option>
+                  <option value="6">CHOQUECOTA</option>
+                  <option value="7">COIPASA</option>
+                  <option value="8">CORQUE</option>
+                  <option value="9">CR. MACHACAMARCA</option>
+                  <option value="10">CURAHUARA CAR</option>
+                  <option value="11">EL CHORO</option>
+                  <option value="12">ESCARA</option>
+                  <option value="13">ESMERALDA</option>
+                  <option value="14">EUCALIPTUS</option>
+                  <option value="15">GAIOC DE SALINAS</option>
+                  <option value="16">HUACHACALLA</option>
+                  <option value="17">HUANUNI</option>
+                  <option value="18">HUAYLLAMARCA</option>
+                  <option value="19">LA RIVERA</option>
+                  <option value="20">MACHACAMARCA</option>
+                  <option value="21">ORURO</option>
+                  <option value="22">PAMPA AULLAGAS</option>
+                  <option value="23">PAZÑA</option>
+                  <option value="24">POOPO</option>
+                  <option value="25">QUILLACAS</option>
+                  <option value="26">S. DE ANDAMARCA</option>
+                  <option value="27">S. G. MENDOZA</option>
+                  <option value="28">SABAYA</option>
+                  <option value="29">SORACACHI</option>
+                  <option value="30">STGO. DE HUARI</option>
+                  <option value="31">TODOS SANTOS</option>
+                  <option value="32">TOLEDO</option>
+                  <option value="33">TOTORA</option>
+                  <option value="34">TURCO</option>
+                  <option value="35">YUNGUYO DE LIT.</option>
+                </select>
+              </div>
+          </div>
+          <div class="pure-u-1 pure-u-md-1-2">
+            <div class="pure-controls">
+              <label>Agregar municipio:</label>
+              <button onclick="add_municipio();" type="button" class="pure-button button-warning">Agregar</button>
+            </div>
+          </div>
+
+          <div class="pure-u-1 pure-u-md-1-2">
+            <table id="tabla_municipio" style="margin: 0 0 15px 0;">
+                <caption><strong>MUNICIPIOS SELECCIONADOS</strong></caption>
+                <thead>
+                    <tr><th width="85%">Municipio</th>
+                    <th width="10%">Borrar</th>
+                </tr></thead>
+                <tbody>
+                </tbody>
+            </table>            
+          </div>
+
+        </div>
+        <!-- FIN explotacion -->
+      <input id="str_municipios" name="str_municipios" type="hidden">
+        <div class="pure-g">
+          <div class="pure-u-1 pure-u-md-1-4">
+            <div class="pure-control-group">
+              <label>Dirección oficina:</label>
+              <input id="direccion_oficina" name="direccion_oficina" type="text" placeholder="Ej. Calle 1 entre calle 2 nro. 8" required="">
+            </div>
+          </div>
+          <div class="pure-u-1 pure-u-md-1-4">
+            <div class="pure-control-group">
+              <label>Latitud:</label>
+              <input id="ofi_lat" name="ofi_lat" type="text" placeholder="Ej. -17.969619" required="">
+            </div>
+          </div>
+          <div class="pure-u-1 pure-u-md-1-4">
+            <div class="pure-control-group">
+              <label>Longitud:</label>
+              <input id="ofi_lon" name="ofi_lon" type="text" placeholder="Ej. -67.115087" required="">
+            </div>
+          </div>
+          <div class="pure-u-1 pure-u-md-1-4">
+            <div class="pure-control-group">
+              <label>Correo electrónico:</label>
+              <input id="email_op_min" name="email_op_min" type="text" placeholder="Ej. empresa_min_x@gmail.com">
+            </div>
+          </div>
+          <div class="pure-u-1 pure-u-md-1-4">
+            <div class="pure-control-group">
+              <label>Teléfono:</label>
+              <input id="tel_op_min" name="tel_op_min" type="text" placeholder="Ej. 5212345">
+            </div>
+          </div>
+          <div class="pure-u-1 pure-u-md-1-4">
+            <div class="pure-control-group">
+              <label>Fax:</label>
+              <input id="fax_op_min" name="fax_op_min" type="text" placeholder="Ej. (591)(2)5212345">
+            </div>
+          </div>
+          <div class="pure-u-1 pure-u-md-1-4">
+            <div class="pure-control-group">
+              <label>Celular:</label>
+              <input id="cel_op_min" name="cel_op_min" type="text" placeholder="Ej. 77112345" required="">
+            </div>
+          </div>
+        </div>
+
+<!-- Actividad minera -->
+<div style="padding:.5em; margin-top:.5em; background:#ffe9be; font-weight:bold;" id="div_titulo_actmin">Datos representante legal</div>
+        <div class="pure-g" id="div_actividad_minera" style="padding:.5em; background:#ffe9be">
+        <div class="pure-u-1 pure-u-md-1-3">
+            <div class="pure-control-group">
+              <label>Nombre representante legal:</label>
+              <input id="nombre_rep_legal" name="nombre_rep_legal" type="text" placeholder="Ej. Juan Carlos Lopez" required="">
+            </div>
+          </div>
+          <div class="pure-u-1 pure-u-md-1-3">
+            <div class="pure-control-group">
+              <label>C.I. representante legal:</label>
+              <input id="ci_rep_legal" name="ci_rep_legal" type="text" placeholder="Ej. 4545323 OR" required="">
+            </div>
+          </div>
+          <div class="pure-u-1 pure-u-md-1-3">
+            <div class="pure-control-group">
+              <label>Celular representante legal:</label>
+              <input id="cel_rep_legal" name="cel_rep_legal" type="text" placeholder="Ej. 61171235">
+            </div>
+          </div>          
+          <div class="pure-u-1 pure-u-md-1-3">
+            <div class="pure-control-group">
+              <label>CI respaldo:</label>
+              <input id="ci_resp_legal" name="ci_resp_legal" type="file" style="width:200px;" required="">
+            </div>
+          </div>
+          
+        </div>
+        <!-- FIN Actividad minera -->
+
+      <div class="pure-g">
+        <div class="pure-u-1 pure-u-md-1-1">
+          <div class="pure-control-group">
+            <label>Observaciones:</label>
+            <input id="observaciones" name="observaciones" type="text" placeholder="Ej. observaciones" style="width:95%">
+          </div>
+        </div>
+      </div>
+
+        <div class="pure-g">
+            <div class="pure-u-1 pure-u-md-1-4">
+              <div class="pure-controls">
+                <label>Crear nuevo:</label>
+                <button id="btn_guardar" type="submit" class="pure-button button-success">Guardar</button>
+              </div>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-4">
+              <div class="pure-controls">
+                <label>Cancelar:</label>
+                <a href="javascript:history.back()" class="pure-button button-error">Cancelar</a>
+              </div>
+            </div>
+        </div>
+        </fieldset>
+      </form>
+  </div>
+<script>
+  $('#form_nuevo').submit(function(){
+    if($(this).parsley().isValid()){
+      //$("#str_municipios").val(municipiosArr);
+      $("#btn_guardar").attr("disabled", true);
+      $('input[type=checkbox]:checked').each(function() {
+        cont_actividades_mineras++;
+      });
+      if(cont_actividades_mineras==0){
+        alert("Debe seleccionar al menos una Actividad minera.");
+        $("#btn_guardar").attr("disabled", false);
+        return false;
+      }
+    }
+    else
+      return false;
+
+  });
+</script>
+
+
+
+<!--<p><a id="lanzador" href="#modal_asistente">Open Modal</a></p>-->
+<!-- MODAL 
+<script>
+    $("#modal_asistente").modal({
+        escapeClose: false,
+        clickClose: false,
+        showClose: true
+    });
+</script>
+-->
+
+
+		<div class="footer">
+			sidcom © 2024		</div>
+  </div>
+<!-- Fin main-->
+</div>
+<!-- Fin layout-->
+
+<script src="./sidcom App - Crear operador minero_files/functions.js.descarga"></script>
+
+
+
+
+</body></html>

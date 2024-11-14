@@ -8,6 +8,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UsuarioFormulario } from '../../validators/usuario';
 import { UsuariosService } from '../../services/usuarios.service';
 import { ToastrService } from 'ngx-toastr';
+import { TextoAleatorio } from '../../functions/texto-aleatorio';
 
 @Component({
   selector: 'app-editar-usuario',
@@ -92,15 +93,17 @@ export class EditarUsuarioComponent implements OnInit {
           (data:any) =>
           {
             this.usuarioService.handleCrearusuario(data.data);
+            console.log(data.data);
             if(data.status=='success')
             {
-              this.form.formulario.reset();
+              //this.form.formulario.reset();
               this.estadoDialogo.emit(false);
-              this.notify.success('Creado Correctamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
+              this.notify.success('El usuario se registro correctamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
             }
           },
           (error:any) =>
           {
+            console.log(error);
             this.errorUsuario=this.usuarioService.handleCrearusuarioError(error.error.data);
             if(error.error.status=='fail')
             {
@@ -108,25 +111,48 @@ export class EditarUsuarioComponent implements OnInit {
             }
           }
         );
-        this.notify.success('Revise los datos e intente nuevamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
+
       } else {
         this.notify.error('Revise los datos e intente nuevamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
       }
     }
     else{
       if (this.form.formulario.valid && !this.errorVerificarEmail && this.form.formulario.value.operator_id!=null) {
-        this.notify.success('Revise los datos e intente nuevamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
+        let pass_gen=TextoAleatorio.generarCadenaSegura(8);
+        this.form.formulario.value.password=pass_gen;
+        this.form.formulario.value.pass_gen=pass_gen;
+        this.usuarioService.crearusuario(this.form.formulario.value).subscribe(
+            (data:any) =>
+            {
+              this.usuarioService.handleCrearusuario(data.data);
+              console.log(data.data);
+              if(data.status=='success')
+              {
+                //this.form.formulario.reset();
+                this.estadoDialogo.emit(false);
+                this.notify.success('Creado Correctamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
+              }
+            },
+            (error:any) =>
+            {
+              console.log(error);
+              this.errorUsuario=this.usuarioService.handleCrearusuarioError(error.error.data);
+              if(error.error.status=='fail')
+              {
+                this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
+              }
+            }
+          );
       } else {
         this.notify.error('Revise los datos e intente nuevamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
       }
     }
-    
   }
   errorEmailRepetido(event:any){
     const email = (event.target as HTMLInputElement).value;
     this.usuarioService.verificarEmail(email).subscribe(
       (data:any)=>{
-        
+
         if(data.data==true)
         {
           this.errorVerificarEmail=true;

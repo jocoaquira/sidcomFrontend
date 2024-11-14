@@ -35,7 +35,7 @@ export class UsuarioFormulario {
         operator_id:new FormControl(this.usuario.operator_id),
         estado:new FormControl(this.usuario.estado,[Validators.required]),
         pass_gen:new FormControl(this.usuario.pass_gen),
-        password:new FormControl(this.usuario.password),
+        password:new FormControl(this.usuario.password,[Validators.minLength(8)]),
         repetir_password:new FormControl(this.usuario.repetir_password)
     },
     [passwordMatchValidator()]);

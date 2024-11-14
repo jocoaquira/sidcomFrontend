@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!-- saved from url=(0036)https://mineria.oruro.gob.bo/sidcom/ -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Ivan MG">
+
+    <title>sidcom App - Inicio</title>
+    <link rel="icon" type="image/png" href="https://mineria.oruro.gob.bo/sidcom/public/img/favicon.png">
+    <!-- Styles-->
+    <link rel="stylesheet" href="./sidcom App - Inicio_files/purecss.min.css">
+    <link rel="stylesheet" href="./sidcom App - Inicio_files/grids-responsive-min.css">
+    <link rel="stylesheet" href="./sidcom App - Inicio_files/jquery-ui.min.css">
+    <link rel="stylesheet" href="./sidcom App - Inicio_files/styles.css">
+    <!-- End Styles-->
+
+    <!-- SRC scripts-->
+    <script src="./sidcom App - Inicio_files/jquery.min.js.descarga"></script>
+    <script src="./sidcom App - Inicio_files/jquery-ui.min.js.descarga"></script>
+    <script src="./sidcom App - Inicio_files/parsley.min.js.descarga"></script>
+    <script>
+      var base_url = "https://mineria.oruro.gob.bo/sidcom/";
+    </script>
+    <!-- End SRC scripts-->
+    <script>
+      $(window).load(function(){
+          $('#page-loader').fadeOut(500);
+      });
+    </script>
+  </head>
+<body>
+<div id="page-loader" style="display: none;"><span class="preloader-interior"></span></div>
+<div class="cover-background">
+  <div class="espaciado"></div>
+  <div class="form-ingreso-padre">
+  <div class="form-ingreso">
+    <h2 style="text-align: center;">INGRESO</h2>
+    <form class="pure-form pure-form-stacked" id="form_login" data-parsley-validate="" novalidate="">
+      <fieldset>
+        <div class="pure-control-group">
+          <label for="usuario">Email:</label>
+          <input class="responsivo" id="usuario" name="usuario" type="email" placeholder="Ej. imorales@sidcom.com" value="" required="">
+        </div>
+        <div class="pure-control-group">
+          <label for="usuario">Contraseña:</label>
+          <input class="responsivo" id="password" name="password" type="password" placeholder="Ej. contraseña" value="" required="">
+        </div>
+        <br>
+        <div class="pure-control-group">
+          <input type="hidden" name="csrf_sidcom_app" value="9cc170983d770ea995deb4194ecc2da6">
+          <div id="login_ajax" style="text-align:center"></div>
+        </div>
+        <div class="pure-controls">
+          <button type="submit" class="pure-button pure-button-primary responsivo">Ingresar</button>
+        </div>
+      </fieldset>
+    </form>
+    </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$("#usuario").focus();
+$('#form_login').submit(function(){
+  if($(this).parsley().isValid())
+    {
+      var url = base_url+"inicio/login";
+      var $contenidoAjax = $('#login_ajax').html('<div><img src="https://mineria.oruro.gob.bo/sidcom/public/img/loader.gif" /></div><br>');
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: $('#form_login').serialize(),
+        success: function(data)
+        {
+          $contenidoAjax.html(data);
+          console.log(data);
+
+          if($("#login_ajax").html()=='true'){
+            $("#login_ajax").html('<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"><p><span class="ui-icon ui-icon-check" style="float: left; margin-right: .3em;"></span><strong>¡Correcto!</strong> Redirigiendo...</p></div>');
+            location.href = base_url;
+          }
+          else{
+            $("#login_ajax").html('<div class="ui-state-error ui-corner-all" style="padding: 0 .7em; text-align:left;"><p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span><strong>Error:</strong> Al introducir el usuario o contraseña.</p></div>');
+          }
+          
+        }
+      });
+    }
+  return false;
+});
+</script>
+<script src="./sidcom App - Inicio_files/functions.js.descarga"></script>
+
+
+</body></html>
