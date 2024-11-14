@@ -4,8 +4,8 @@ import { environment } from 'src/environments/environment';
 @Injectable()
 export class TokenService {
   private iss = {
-    login: environment.API_URL+'/api/login',
-    signup: environment.API_URL+'api/signup'
+    login: environment.API_URL+'/auth/login',
+    signup: environment.API_URL+'auth/signup'
   };
 
   constructor() { }

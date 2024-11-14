@@ -6,7 +6,7 @@
                 [autoDisplayFirst]="false"
                 [options]="roles"
                 formControlName="rol_id"
-                optionLabel="name"
+                optionLabel="nombre"
                 optionValue="id"
                 (onChange)="onChangeRol($event)"
             ></p-dropdown>
@@ -75,7 +75,6 @@
                 [options]="estados"
                 formControlName="estado"
                 optionLabel="label"
-                optionValue="value"
                 (ngModelChange)="onChangeEstado($event)"
             >
                 <ng-template let-option pTemplate="item">

@@ -27,7 +27,7 @@ export class UsuariosService {
     params = params.append('nombre', nombre);
 
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}usuarios`,{params:params});
+    return this.http.get(`${this.baseUrl}user`,{params:params});
   }
   handleError(error: any): any {
     return error=error.error.error;
@@ -39,16 +39,19 @@ export class UsuariosService {
   verificarEmail(nombre:string)
   {
     // Inicializacion de objeto params
+    let email:any={
+      email: nombre,
+    };
     let params = new HttpParams();
     params = params.append('email', nombre);
-
+    this.token();
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}verificar-email`,{params:params});
+    return this.http.post(`${this.baseUrl}auth/checkemail`,email,{headers:this.headers});
   }
 //---------------------crear   usuario-------------------------------------------
 crearusuario(data:IUsuario) {
   this.token();
-  return this.http.post(`${this.baseUrl}usuarios`,data, {headers:this.headers})
+  return this.http.post(`${this.baseUrl}user`,data, {headers:this.headers})
 }
 handleCrearusuarioError(error: any): any {
   return error=error;
@@ -60,7 +63,7 @@ handleCrearusuario(data: IUsuario):IUsuario {
 //---------------------Editar   usuario-------------------------------------------
 editarusuario(data:IUsuario) {
   this.token();
-  return this.http.put(`${this.baseUrl}/usuarios/`+data.id, data)
+  return this.http.put(`${this.baseUrl}/user/`+data.id, data)
 }
 handleEditarusuarioError(error: any): any {
   return error=error;
