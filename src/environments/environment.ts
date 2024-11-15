@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
-  //API_URL:'https://localhost/sidcom_v2/sidcom_backend/public/'
-  API_URL: 'http://192.168.130.128:3000/'
+  FRONTEND_URL:'https://mineria.oruro.gob.bo/sidcom/',
+  API_URL:'http://localhost/sidcom_v2/sidcom_backend/public/api/'
+  //API_URL: 'http://192.168.130.128:3000/'
 };
