@@ -37,7 +37,7 @@ export class IDOMService {
 
     // Espera a que la imagen se cargue
     logo.onload = () => {
-        QRCode.toDataURL(localStorage.getItem('url-frontend')+'operador_minero/verificacion/'+operador.id, (err, url) => {
+        QRCode.toDataURL(localStorage.getItem('url-frontend')+'operador/verificacion/'+operador.hash, (err, url) => {
             if (err) throw err;
       // Agregar la imagen al PDF una vez cargada
       doc.addImage(logo, 'JPEG', 0, 0, 612, 792); // Tamaño para cubrir toda la página Letter

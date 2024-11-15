@@ -313,18 +313,13 @@ export class CrearOperadorComponent implements OnInit {
 
         this.departamentosService.verdepartamentos(this.nombre).subscribe(
             (data:any)=>{
-            this.departamento=this.departamentosService.handledepartamento(data.data);
-            console.log(data.data);
+            this.departamento=this.departamentosService.handledepartamento(data);
+            console.log(data);
           },
           (error:any)=> this.error=this.departamentosService.handleError(error)
         );
 
-
-
-        this.options = {
-            center: latLng(-17.959294341362188, -67.09223407148914),
-            zoom: 13.5
-          };
+       
           this.satelliteLayer = tileLayer(
             'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
             {
@@ -342,7 +337,6 @@ export class CrearOperadorComponent implements OnInit {
             }
           );
     }
-
 
     onSubmitOperador(regisForm:NgForm) {
         this.operadorService.crearoperator(regisForm.value).subscribe(
@@ -374,7 +368,8 @@ export class CrearOperadorComponent implements OnInit {
         this.form.dl_departamento=departamento.value.id;
         this.municipiosService.vermunicipios(this.form.dl_departamento.toString()).subscribe(
             (data:any)=>{
-            this.municipio=this.municipiosService.handlemunicipio(data.data);
+                console.log(data);
+            this.municipio=this.municipiosService.handlemunicipio(data);
 
             this.options = {
                 center: latLng(departamento.value.latitud,departamento.value.longitud),
@@ -391,7 +386,7 @@ export class CrearOperadorComponent implements OnInit {
         this.sucursal.departamento_id=departamento.value.id;
         this.municipiosService.vermunicipios(this.sucursal.departamento_id.toString()).subscribe(
             (data:any)=>{
-            this.municipio_sucursal=this.municipiosService.handlemunicipio(data.data);
+            this.municipio_sucursal=this.municipiosService.handlemunicipio(data);
           },
           (error:any)=> this.error=this.municipiosService.handleError(error)
         );
@@ -400,7 +395,7 @@ export class CrearOperadorComponent implements OnInit {
 
         this.municipiosService.vermunicipios(departamento.value.id.toString()).subscribe(
             (data:any)=>{
-            this.municipio_arrendamiento=this.municipiosService.handlemunicipio(data.data);
+            this.municipio_arrendamiento=this.municipiosService.handlemunicipio(data);
             console.log(this.municipio_arrendamiento);
           },
           (error:any)=> this.error=this.municipiosService.handleError(error)

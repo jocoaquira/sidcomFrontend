@@ -29,6 +29,7 @@ import { AppLayoutComponent } from "./layout/app.layout.component";
                 ]
             },
             { path: 'landing', loadChildren: () => import('./demo/components/landing/landing.module').then(m => m.LandingModule) },
+            { path: 'operador/verificacion', loadChildren: () => import('./admin/pages/operator/verificacion-operador/verificacion-operador.module').then(m => m.VerificacionOperadorModule) },
             { path: 'notfound', component: NotfoundComponent },
             { path: '**', redirectTo: '/notfound' },
         ], { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled', onSameUrlNavigation: 'reload',useHash:true}

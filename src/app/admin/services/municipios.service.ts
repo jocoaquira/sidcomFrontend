@@ -27,7 +27,7 @@ export class MunicipiosService {
     params = params.append('departamento_id', nombre);
 
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}municipios`,{params:params});
+    return this.http.get(`${this.baseUrl}municipio`,{params:params});
   }
   handleError(error: any): any {
     return error=error.error.error;
@@ -39,7 +39,7 @@ export class MunicipiosService {
 //---------------------crear   municipio-------------------------------------------
 crearmunicipio(data:IMunicipio) {
   this.token();
-  return this.http.post(`${this.baseUrl}/municipios`,data, {headers:this.headers})
+  return this.http.post(`${this.baseUrl}/municipio`,data, {headers:this.headers})
 }
 handleCrearmunicipioError(error: any): any {
   return error=error;
@@ -51,7 +51,7 @@ handleCrearmunicipio(data: IMunicipio):IMunicipio {
 //---------------------Editar   municipio-------------------------------------------
 editarmunicipio(data:IMunicipio) {
   this.token();
-  return this.http.put(`${this.baseUrl}/municipios/`+data.id, data)
+  return this.http.put(`${this.baseUrl}/municipio/`+data.id, data)
 }
 handleEditarmunicipioError(error: any): any {
   return error=error;

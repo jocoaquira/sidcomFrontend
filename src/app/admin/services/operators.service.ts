@@ -36,6 +36,21 @@ export class OperatorsService {
     let operator:IOperator[]=data;
     return operator
   }
+  //-----------------Visualizar Operador Hash-------------------------------------------
+  hashOperador(nombre:string)
+  {
+    // Inicializacion de objeto params
+    let params = new HttpParams();
+    const encodeHash=encodeURIComponent(nombre);
+    params = params.append('hash', nombre);
+
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}operator/verificacion`,{params:params});
+  }
+  handleOperador(data: IOperator):IOperator {
+    let operator:IOperator=data;
+    return operator
+  }
   //-----------------Visualizar operadores-------------------------------------------
   verOperatorsSimple(nombre:string)
   {

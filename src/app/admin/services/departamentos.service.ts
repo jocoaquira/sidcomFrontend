@@ -27,7 +27,7 @@ export class DepartamentosService {
     params = params.append('nombre', nombre);
 
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}departamentos`,{params:params});
+    return this.http.get(`${this.baseUrl}departamento`,{params:params});
   }
   handleError(error: any): any {
     return error=error.error.error;
@@ -39,7 +39,7 @@ export class DepartamentosService {
 //---------------------crear   departamento-------------------------------------------
 creardepartamento(data:IDepartamento) {
   this.token();
-  return this.http.post(`${this.baseUrl}/departamentos`,data, {headers:this.headers})
+  return this.http.post(`${this.baseUrl}/departamento`,data, {headers:this.headers})
 }
 handleCreardepartamentoError(error: any): any {
   return error=error;
@@ -51,7 +51,7 @@ handleCreardepartamento(data: IDepartamento):IDepartamento {
 //---------------------Editar   departamento-------------------------------------------
 editardepartamento(data:IDepartamento) {
   this.token();
-  return this.http.put(`${this.baseUrl}/departamentos/`+data.id, data)
+  return this.http.put(`${this.baseUrl}/departamentos`+data.id, data)
 }
 handleEditardepartamentoError(error: any): any {
   return error=error;
