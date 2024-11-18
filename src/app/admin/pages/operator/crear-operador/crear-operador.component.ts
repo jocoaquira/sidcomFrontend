@@ -14,6 +14,7 @@ import { IDepartamento } from '@data/departamento.metadata';
 import { IMunicipio } from '@data/municipio.metadata';
 import { IOficina } from '@data/oficina.metadata';
 import { IArrendamiento } from '@data/arrendamiento.metadata';
+import { OperatorFormulario } from 'src/app/admin/validators/operator';
 @Component({
     templateUrl: './crear-operador.component.html',
 
@@ -21,8 +22,6 @@ import { IArrendamiento } from '@data/arrendamiento.metadata';
 export class CrearOperadorComponent implements OnInit {
 
     es: any;
-
-
 
     @ViewChild('fileUpload') fileUpload: FileUpload;
     countries: any[] = [];
@@ -175,7 +174,7 @@ export class CrearOperadorComponent implements OnInit {
         dl_departamento:null,
         dl_direccion:'',
         dl_municipio:null,
-        dl_ubicacion:'',
+        dl_ubicacion:false,
         doc_creacion:'',
         fecha_exp_nim:'',
         fecha_exp_seprec:'',
@@ -319,7 +318,7 @@ export class CrearOperadorComponent implements OnInit {
           (error:any)=> this.error=this.departamentosService.handleError(error)
         );
 
-       
+
           this.satelliteLayer = tileLayer(
             'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
             {
@@ -338,8 +337,9 @@ export class CrearOperadorComponent implements OnInit {
           );
     }
 
-    onSubmitOperador(regisForm:NgForm) {
-        this.operadorService.crearoperator(regisForm.value).subscribe(
+    onSubmitOperador() {
+        console.log(this.form)
+        this.operadorService.crearoperator(this.form).subscribe(
           (data:any) =>
           {
             this.form=this.operadorService.handleCrearoperator(data.data);
@@ -499,10 +499,7 @@ export class CrearOperadorComponent implements OnInit {
             this.sucursal.longitud=position.lng;
         }
         this.mapaDialogo = false;
-         // Si ya existe un marcador, lo eliminamos
-         if (this.currentMarker) {
-            this.map.removeLayer(this.currentMarker);
-          }
+
     }
     validarDireccion():boolean{
         let sw=true;
@@ -615,4 +612,7 @@ export class CrearOperadorComponent implements OnInit {
         }
         this.verForm();
     }
+    verificarEstado() {
+        console.log('Estado de valSwitch:', this.valSwitch);
+      }
 }

@@ -1,7 +1,8 @@
 export interface ISucursal {
    id?:number,
-   departamento_id:string,
-   municipio_id:string,
+   departamento_id:number,
+   municipio_id:number,
+   operator_id:number,
    latitud:number,
    longitud:number,
    direccion:string,

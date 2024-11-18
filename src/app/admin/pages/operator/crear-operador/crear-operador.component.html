@@ -28,7 +28,7 @@
                     [(ngModel)]="form.razon_social"
 					class="ng-dirty"
                     [style.border]="errorOperator.razon_social ? '1px solid red' : ''"
-                    
+
                 />
                 <label for="Razón Social">Razón Social</label>
 				<small id="razon_social" class="p-error " [hidden]="!errorOperator.razon_social">
@@ -399,8 +399,10 @@
         <div class="col-12 md:col-3">
             <div class="field-checkbox">
                 <p-inputSwitch [(ngModel)]="valSwitch"></p-inputSwitch>
-                <label for="sf">Añadir Sucursales</label>
+                <label for="sf">Añadir Sucursal</label>
+                <button (click)="verificarEstado()">Verificar Estado</button>
             </div>
+
         </div>
         <div class="grid p-fluid mt-3" *ngIf="valSwitch">
             <div class="col-12">
@@ -825,7 +827,7 @@
                     [(ngModel)]="form.nro_ruex"
 					class="ng-dirty"
                     [style.border]="errorArrendamiento.nro_ruex ? '1px solid red' : ''"
-                    
+
                 />
                 <label for="nro_ruex">Numero de RUEX </label>
 				<small id="nro_ruex" class="p-error " [hidden]="!errorOperator.nro_ruex">
@@ -1039,7 +1041,7 @@
 <div class="card">
 
     <h5>
-        OTRAS FUNCIONES 
+        OTRAS FUNCIONES
     </h5>
     <div class="grid p-fluid mt-3">
         <label class="mb-3">HABILITAR ACTA DE VERIFICACION DE TOMA DE MUESTRAS:</label>
@@ -1113,10 +1115,10 @@
             </span>
         </div>
         <div class="field col-12 md:col-6">
-            <button pButton pRipple label="Guardar Operador" icon="pi pi-check" class="p-button-success mr-2" ></button>
+            <button pButton pRipple label="Guardar Operador" icon="pi pi-check" class="p-button-success mr-2" (click)="onSubmitOperador()"></button>
         </div>
         <div class="field col-12 md:col-6">
             <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-danger" ></button>
-        </div>          
+        </div>
     </div>
 </div>

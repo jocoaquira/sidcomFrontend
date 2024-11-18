@@ -1,3 +1,61 @@
-:host {
-  display: block;
-}
+/* Estilos generales para los tags */
+.custom-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 15px; /* Reducción de espacio para hacer los bordes más cortos */
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 14px;
+    border-radius: 15px; /* Bordes más cortos */
+    min-width: 100px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08); /* Sombra más sutil */
+    text-align: center;
+    color: #fff; /* Letras claras */
+  }
+
+  .custom-tag:hover {
+    transform: scale(1.05); /* Efecto de hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Sombra más intensa en hover */
+  }
+
+  /* Icono de estado (puedes agregar un ícono de acuerdo al estado) */
+  .status-icon {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+
+  /* Estilos específicos para cada estado */
+
+  /* GENERADO */
+  .generado-tag {
+    background-color: #f9e35e; /* Amarillo suave */
+    color: #333; /* Texto más oscuro para mayor contraste */
+  }
+
+  /* EMITIDO */
+  .emitido-tag {
+    background-color: #66bb6a; /* Verde */
+    color: white; /* Texto claro */
+  }
+
+  /* VENCIDO */
+  .vencido-tag {
+    background-color: #42a5f5; /* Azul */
+    color: white; /* Texto claro */
+  }
+
+  /* ANULADO */
+  .anulado-tag {
+    background-color: #e57373; /* Rojo */
+    color: white; /* Texto claro */
+  }
+
+  /* Transición suave de color */
+  .custom-tag {
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }

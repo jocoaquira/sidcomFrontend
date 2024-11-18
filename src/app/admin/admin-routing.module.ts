@@ -11,7 +11,7 @@ import { AppLayoutComponent } from '@layout/app.layout.component';
         children:[
         { path: 'operador', loadChildren: () => import('./pages/operator/operator.module').then(m => m.OperatorModule) },
         { path: 'usuario', loadChildren: () => import('./pages/usuario/usuario.module').then(m => m.UsuarioModule) },
-
+        { path: 'formulario-101', loadChildren: () => import('./pages/formulario-101/formulario-101.module').then(m => m.Formulario101Module) },
         { path: '**', redirectTo: '/notfound' }
         ]
         }

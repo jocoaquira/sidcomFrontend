@@ -51,7 +51,7 @@ handleCreardepartamento(data: IDepartamento):IDepartamento {
 //---------------------Editar   departamento-------------------------------------------
 editardepartamento(data:IDepartamento) {
   this.token();
-  return this.http.put(`${this.baseUrl}/departamentos`+data.id, data)
+  return this.http.put(`${this.baseUrl}/departamento`+data.id, data)
 }
 handleEditardepartamentoError(error: any): any {
   return error=error;

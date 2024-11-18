@@ -1,0 +1,104 @@
+.card {
+    background: linear-gradient(to bottom, #eafaec, #d6fcc9); /* Fondo con gradiente */
+    border-radius: 15px; /* Bordes redondeados */
+    padding: 20px; /* Espaciado interno */
+    box-shadow: 0 4px 12px rgba(12, 104, 39, 0.1); /* Sombra suave */
+    margin-bottom: 20px; /* Espaciado inferior */
+}
+.card-titulo {
+    background: linear-gradient(to bottom, #eff5f0, #acd1bd); /* Fondo con gradiente */
+    border-radius: 15px; /* Bordes redondeados */
+    padding: 20px; /* Espaciado interno */
+    box-shadow: 0 4px 12px rgba(12, 104, 39, 0.1); /* Sombra suave */
+    margin-bottom: 20px; /* Espaciado inferior */
+}
+
+.card-declaracion {
+    background: linear-gradient(to bottom, #f4fbd3, #d6f36e); /* Fondo con gradiente */
+    border-radius: 15px; /* Bordes redondeados */
+    padding: 20px; /* Espaciado interno */
+    box-shadow: 0 4px 12px rgba(12, 104, 39, 0.1); /* Sombra suave */
+    margin-bottom: 20px; /* Espaciado inferior */
+}
+
+.card-declaracion {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to bottom, #f4fbd3, #d6f36e); /* Fondo con gradiente */
+    border-radius: 15px; /* Bordes redondeados */
+    padding: 20px; /* Espaciado interno */
+    box-shadow: 0 4px 12px rgba(12, 104, 39, 0.1); /* Sombra suave */
+    margin-bottom: 20px; /* Espaciado inferior */
+    margin: 0 auto;  /* Centra el card horizontalmente */
+  }
+
+.card-vencido {
+    background-color: #add8e6; /* Azul claro */
+    color: #333;
+}
+
+.card-anulado {
+    background-color: #f8d7da; /* Rojo claro */
+    color: #333;
+}
+
+
+/* Centrar el contenido del card */
+.card-declaracion.text-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Ajusta la altura según sea necesario */
+  }
+/* Estilos para el checkbox */
+.custom-checkbox {
+    transform: scale(1.9); /* Aumentar el tamaño del checkbox si lo deseas */
+    margin-right: 10px; /* Espacio entre el checkbox y la etiqueta */
+    accent-color: red; /* Cambia el color del checkbox y el estado seleccionado */
+  }
+
+  /* Estilos para la etiqueta */
+  .custom-checkbox + label {
+    color: red; /* Cambia el color de la etiqueta */
+    font-size: 18px;
+    font-weight: bold; /* Ajusta el tamaño de la fuente de la etiqueta */
+  }
+
+/* Contenedor de los botones */
+.card-botones {
+    display: flex;  /* Utiliza Flexbox para alinearlos en fila */
+    justify-content: flex-end;  /* Alinea los botones a la derecha */
+    gap: 15px;  /* Espacio entre los botones */
+    margin-top: 20px;  /* Espaciado superior */
+    padding: 10px;  /* Relleno alrededor de los botones */
+  }
+
+  /* Estilo general para los botones */
+  .card-botones .p-button {
+    padding: 10px 20px;  /* Ajusta el espaciado dentro de los botones */
+    border-radius: 9px;  /* Bordes redondeados */
+    font-weight: bold; /* Convierte el texto a mayúsculas */
+    font-size: 18px;  /* Tamaño de fuente más legible */
+  }
+
+  /* Personalización para el botón de éxito (Guardar) */
+  .card-botones .p-button-success {
+    background-color: #28a745;  /* Color verde personalizado */
+    border: none;  /* Quita el borde */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  /* Sombra sutil */
+  }
+
+  /* Personalización para el botón de peligro (Cancelar) */
+  .card-botones .p-button-danger {
+    background-color: #dc3545;  /* Color rojo personalizado */
+    border: none;  /* Quita el borde */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  /* Sombra sutil */
+  }
+
+  /* Efecto al pasar el mouse */
+  .card-botones .p-button:hover {
+    opacity: 0.9;  /* Le da un efecto de suavizado al pasar el mouse */
+    transition: all 0.3s ease;  /* Transición suave */
+  }

@@ -1,0 +1,14 @@
+<span class="p-float-label">
+    <p-dropdown
+        inputId="dropdown"
+        [autoDisplayFirst]="false"
+        [options]="departamentos"
+        optionLabel="nombre"
+        optionValue="id"
+        (onChange)="cambioDepartamento($event)"
+    ></p-dropdown>
+    <label for="dropdown">Departamento</label>
+    <small id="presentacion" class="p-error " *ngIf="error">
+        {{error}}
+    </small>
+</span>

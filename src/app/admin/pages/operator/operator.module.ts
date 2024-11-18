@@ -19,7 +19,7 @@ import { OperatorRoutingModule } from './operator-routing.module';
 import { OperatorComponent } from './operator.component';
 import { BadgeModule } from 'primeng/badge';
 import { TagModule } from 'primeng/tag';
-import { CrearOperadorModule } from './crear-operador/crear-operador.module';
+import { CrearOperadorModule } from './crear-operador-validacion/crear-operador.module';
 
 @NgModule({
     schemas: [CUSTOM_ELEMENTS_SCHEMA],

@@ -73,7 +73,7 @@ export class OperatorsService {
 //---------------------crear   operator-------------------------------------------
 crearoperator(data:IOperator) {
   this.token();
-  return this.http.post(`${this.baseUrl}/operator`,data, {headers:this.headers})
+  return this.http.post(`${this.baseUrl}operator`,data, {headers:this.headers})
 }
 handleCrearoperatorError(error: any): any {
   return error=error;
@@ -85,7 +85,7 @@ handleCrearoperator(data: IOperator):IOperator {
 //---------------------Editar   operator-------------------------------------------
 editaroperator(data:IOperator) {
   this.token();
-  return this.http.put(`${this.baseUrl}/operator/`+data.id, data)
+  return this.http.put(`${this.baseUrl}operator/`+data.id, data)
 }
 handleEditaroperatorError(error: any): any {
   return error=error;

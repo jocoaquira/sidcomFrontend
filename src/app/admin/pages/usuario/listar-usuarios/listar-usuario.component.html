@@ -55,8 +55,8 @@
                         </td>
                         <td style="width:10%; min-width: 10rem;"><span class="p-column-title">Estado</span>
 
-                            <p-tag severity="success" *ngIf="usuario.estado==1" value="Habilitado"></p-tag>
-                            <p-tag severity="danger" *ngIf="usuario.estado==0" value="Desabilitado"></p-tag>
+                            <p-tag severity="success" *ngIf="usuario.estado=='ACTIVO'" value="ACTIVO"></p-tag>
+                            <p-tag severity="danger" *ngIf="usuario.estado==0" value="INACTIVO"></p-tag>
                         </td>
 
                         <td>

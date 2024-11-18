@@ -73,8 +73,8 @@
                         </td>
                         <td style="width:10%; min-width: 10rem;"><span class="p-column-title">Status</span>
 
-                            <p-tag severity="success" *ngIf="operador.estado>=1" value="Activo"></p-tag>
-                            <p-tag severity="danger" *ngIf="operador.estado<1" value="Desabilitado"></p-tag>
+                            <p-tag severity="success" *ngIf="operador.estado=='ACTIVO'" value="ACTIVO"></p-tag>
+                            <p-tag severity="danger" *ngIf="operador.estado=='INACTIVO'" value="INACTIVO"></p-tag>
                             </td>
                         <td>
                             <div class="flex">

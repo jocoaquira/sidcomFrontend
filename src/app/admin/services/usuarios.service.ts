@@ -63,7 +63,7 @@ handleCrearusuario(data: IUsuario):IUsuario {
 //---------------------Editar   usuario-------------------------------------------
 editarusuario(data:IUsuario) {
   this.token();
-  return this.http.put(`${this.baseUrl}/user/`+data.id, data)
+  return this.http.put(`${this.baseUrl}user/`+data.id, data)
 }
 handleEditarusuarioError(error: any): any {
   return error=error;

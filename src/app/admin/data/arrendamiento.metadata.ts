@@ -5,5 +5,5 @@ export interface IArrendamiento{
     nro_cuadricula:number,
     denominacion_areas?:string,
     municipio_id:number,
-    tipo_explotacion:number
+    tipo_explotacion:string
 }

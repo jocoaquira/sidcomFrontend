@@ -1,0 +1,13 @@
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { CreateFormularioInternoComponent } from './create-formulario-interno/create-formulario-interno.component';
+import { FormularioInternoComponent } from './formulario-interno.component';
+
+@NgModule({
+	imports: [RouterModule.forChild([
+		{ path: '', component: FormularioInternoComponent },
+		{path:'crear',component:CreateFormularioInternoComponent}
+	])],
+	exports: [RouterModule]
+})
+export class FormularioInternoRoutingModule { }

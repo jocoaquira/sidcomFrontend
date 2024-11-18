@@ -4,7 +4,7 @@ export interface IFormularioInterno {
    operator_id:number,
    nro_formulario:string,
    lote:string,
-   presentacion:number,
+   presentacion:string,
    cantidad:number,
    peso_bruto_humedo:number,
    peso_neto_seco:number,
@@ -21,7 +21,7 @@ export interface IFormularioInterno {
    licencia: string,
    observaciones: string,
    fecha_creacion: string,
-   fecha_fencimiento: string,
+   fecha_vencimiento: string,
    justificacion_anulacion: string,
    estado:string //'GENERADO','EMITIDO','VENCIDO', 'ANULADO'
 

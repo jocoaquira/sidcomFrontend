@@ -18,7 +18,6 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { BadgeModule } from 'primeng/badge';
 import { TagModule } from 'primeng/tag';
 import { UsuarioRoutingModule } from './usuario-routing.module';
-import { ListarUsuarioComponent } from './listar-usuarios/listar-usuario.component';
 import { ListarUsuarioModule } from './listar-usuarios/listar-usuario.module';
 
 @NgModule({

@@ -1,5 +1,6 @@
 export interface IActividadExplotacion {
    id?:number,
+   operator_id:number,
    codigo_unico:string,//nullable
    nro_cuadriculas:string,
    denominacion_areas:number,
