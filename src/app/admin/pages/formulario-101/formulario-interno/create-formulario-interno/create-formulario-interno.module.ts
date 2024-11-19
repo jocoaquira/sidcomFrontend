@@ -13,6 +13,8 @@ import { MunicipioSelectModule } from 'src/app/admin/components/municipioSelect/
 import { MineralesSelectModule } from 'src/app/admin/components/mineralesSelect/mineralesSelect.module';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CheckboxModule } from 'primeng/checkbox';
+import { StepsModule } from 'primeng/steps';
+import { TabMenuModule } from 'primeng/tabmenu';
 
 @NgModule({
   imports: [
@@ -28,7 +30,9 @@ import { CheckboxModule } from 'primeng/checkbox';
     DepartamentoSelectModule,
     MunicipioSelectModule,
     MineralesSelectModule,
-    CheckboxModule
+    CheckboxModule,
+    StepsModule,
+    TabMenuModule
   ],
   declarations: [CreateFormularioInternoComponent]
 })

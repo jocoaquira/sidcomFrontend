@@ -46,6 +46,23 @@ export class CreateFormularioInternoComponent implements OnInit {
         municipio:null,
         municipio_id:null
      }
+
+      // Definir los pasos para Steps
+  steps = [
+    { label: '1. Datos del mineral y/o Metal' },
+    { label: '2. Origen del mineral y/o Metal' },
+    { label: '3. Destino del mineral y/o Metal' },
+    { label: '4. Datos del Medio de Transporte' }
+  ];
+
+  activeStep: number = 0; // Establecer el paso activo inicial
+
+  // Función para seleccionar una pestaña
+  selectTab(index: number) {
+    this.activeStep = index;
+  }
+
+
   constructor(
     private operadoresService:OperatorsService,
     private formularioInternoService:FormularioInternosService,
@@ -191,6 +208,6 @@ export class CreateFormularioInternoComponent implements OnInit {
         console.log(this.formulario_interno.formulario.value);
     }
     declaracionJurada(event){
-        
+
     }
 }
