@@ -49,18 +49,60 @@ export class CreateFormularioInternoComponent implements OnInit {
 
       // Definir los pasos para Steps
   steps = [
-    { label: '1. Datos del mineral y/o Metal' },
-    { label: '2. Origen del mineral y/o Metal' },
-    { label: '3. Destino del mineral y/o Metal' },
-    { label: '4. Datos del Medio de Transporte' }
+    { label: '1. Datos del mineral y/o Metal', command: (event: any) => this.gotoStep(0)},
+    { label: '2. Origen del mineral y/o Metal',command: (event: any) => this.gotoStep(1) },
+    { label: '3. Destino del mineral y/o Metal', command: (event: any) => this.gotoStep(2) },
+    { label: '4. Datos del Medio de Transporte', command: (event: any) => this.gotoStep(3) }
   ];
 
   activeStep: number = 0; // Establecer el paso activo inicial
 
-  // Función para seleccionar una pestaña
-  selectTab(index: number) {
+// Función para ir al siguiente paso
+nextStep() {
+    if ((this.activeStep < this.steps.length - 1) && this.isStepValid(this.activeStep)) {
+            this.activeStep++;
+    }
+    else{
+        this.formulario_interno.formulario.markAllAsTouched();
+        this.notify.error('Por favor, complete todos los campos','Error con el Registro',{timeOut:2000,positionClass: 'toast-bottom-right'});
+    }
+  }
+
+  // Función para ir al paso anterior
+  prevStep() {
+    if (this.activeStep > 0) {
+      this.activeStep--;
+    }
+  }
+
+  // Función para ir a un paso específico
+  gotoStep(index: number) {
     this.activeStep = index;
   }
+
+  // Validar si los campos del paso actual son correctos
+  isStepValid(stepIndex: number): boolean {
+    let valid = true;
+    console.log(valid);
+    switch (stepIndex) {
+      case 0:
+        // Validar los campos del Paso 1
+        valid = this.formulario_interno.formulario.get('peso_bruto_humedo')?.valid && this.formulario_interno.formulario.get('tara')?.valid &&
+        this.formulario_interno.formulario.get('merma')?.valid && this.formulario_interno.formulario.get('humedad')?.valid &&
+        this.formulario_interno.formulario.get('lote')?.valid && this.formulario_interno.formulario.get('presentacion')?.valid &&
+        this.formulario_interno.formulario.get('cantidad')?.valid && this.formulario_interno.formulario.get('peso_neto_seco')?.valid && this.lista_leyes_mineral.length>0;
+        console.log(valid);
+        break;
+      case 1:
+        // Validar los campos del Paso 2
+        valid =true
+        break;
+      // Agregar validaciones para otros pasos si es necesario
+    }
+
+    return valid;
+  }
+
 
 
   constructor(
@@ -125,7 +167,46 @@ export class CreateFormularioInternoComponent implements OnInit {
         { nombre: 'FLOTA', id: '14' },
         { nombre: 'TRAILER FURGON', id: '15' }
     ];
+    this.formulario_interno.formulario.get('peso_bruto_humedo')?.valueChanges.subscribe(() => {
+        this.calcularPesoNeto();
+      });
+      this.formulario_interno.formulario.get('tara')?.valueChanges.subscribe(() => {
+        this.calcularPesoNeto();
+      });
+      this.formulario_interno.formulario.get('merma')?.valueChanges.subscribe(() => {
+        this.calcularPesoNeto();
+      });
+      this.formulario_interno.formulario.get('humedad')?.valueChanges.subscribe(() => {
+        this.calcularPesoNeto();
+      });
   }
+
+ // Función para calcular el peso neto
+ calcularPesoNeto() {
+        // Obtener los valores de cada campo individualmente
+    const peso_bruto_humedo = this.formulario_interno.formulario.get('peso_bruto_humedo')?.value;
+    const tara = this.formulario_interno.formulario.get('tara')?.value;
+    const merma = this.formulario_interno.formulario.get('merma')?.value;
+    const humedad = this.formulario_interno.formulario.get('humedad')?.value;
+
+
+    // Validar que los campos necesarios tengan valores
+    if (peso_bruto_humedo && tara !== null && merma !== null && humedad !== null) {
+      const pesoSinTara = peso_bruto_humedo - tara;
+      const pesoConMerma = peso_bruto_humedo * (merma / 100);
+      const pesoConHumedad = peso_bruto_humedo * (humedad / 100);
+
+      // Calcular el peso neto
+      let pesoNeto = pesoSinTara - pesoConMerma - pesoConHumedad;
+      this.formulario_interno.formulario.patchValue({
+        peso_neto_seco: pesoNeto
+      });
+      console.log('Valores del formulario:', { peso_bruto_humedo, tara, merma, humedad });
+
+    }
+  }
+
+
   onSubmit(){
 
   }
@@ -209,5 +290,13 @@ export class CreateFormularioInternoComponent implements OnInit {
     }
     declaracionJurada(event){
 
+    }
+
+    pesoNetoSeco(event){
+        let peso_neto:number=0;
+        this.formulario_interno.formulario.value.peso_bruto_humedo=event;
+        let merma:number= this.formulario_interno.formulario.value.peso_bruto_humedo*this.formulario_interno.formulario.value.merma*(1/100);
+        let humedad:number= this.formulario_interno.formulario.value.peso_bruto_humedo*this.formulario_interno.formulario.value.humedad*(1/100);
+        this.formulario_interno.formulario.value.peso_neto_seco=this.formulario_interno.formulario.value.peso_bruto_humedo-this.formulario_interno.formulario.value.tara-merma-humedad;
     }
 }

@@ -1,16 +1,12 @@
 
 <form [formGroup]="formulario_interno.formulario" (ngSubmit)="onSubmit()">
-
-
-
     <div class="card-titulo">
         <h4 class="text-center" style="color: white;">CREACION DE NUEVO FORMULARIO 101 INTERNO</h4>
-
     </div>
         <div class="grid p-fluid">
             <div class="card card-w-title flex flex-wrap col-12">
                 <div class="col-12">
-                    <p-steps [model]="steps" [(activeIndex)]="activeStep" styleClass="mt-1" [readonly]="false"></p-steps>
+                    <p-steps [model]="steps" [(activeIndex)]="activeStep" styleClass="mt-1" [readonly]="false" ></p-steps>
                 </div>
                 <div class="col-12">
                     <div *ngIf="activeStep === 0" class="card">
@@ -85,6 +81,7 @@
                                         pInputText
                                         formControlName="peso_bruto_humedo"
                                         class="ng-dirty"
+                                        (input)="pesoNetoSeco($event)"
                                     />
                                     <label for="Razón Social">Peso bruto humedo (Kg.)</label>
                                     <small id="peso_bruto_humedo" class="p-error "*ngIf="formulario_interno.esCampoInvalido('peso_bruto_humedo')">
@@ -100,6 +97,7 @@
                                         pInputText
                                         formControlName="tara"
                                         class="ng-dirty"
+                                        (input)="pesoNetoSeco()"
                                     />
                                     <label for="Razón Social">Tara (Kg.)</label>
                                     <small id="tara" class="p-error "*ngIf="formulario_interno.esCampoInvalido('tara')">
@@ -115,6 +113,7 @@
                                         pInputText
                                         formControlName="humedad"
                                         class="ng-dirty"
+                                        (input)="pesoNetoSeco()"
                                     />
                                     <label for="Razón Social">Humedad (%)</label>
                                     <small id="humedad" class="p-error "*ngIf="formulario_interno.esCampoInvalido('humedad')">
@@ -130,6 +129,7 @@
                                         pInputText
                                         formControlName="merma"
                                         class="ng-dirty"
+                                        (input)="pesoNetoSeco()"
                                     />
                                     <label for="Razón Social">Merma (%)</label>
                                     <small id="merma" class="p-error "*ngIf="formulario_interno.esCampoInvalido('merma')">
@@ -182,9 +182,7 @@
                                         (onChange)="cambioUnidad($event)"
                                     ></p-dropdown>
                                     <label for="dropdown">Unidad</label>
-                                    <small id="presentacion" class="p-error " *ngIf="formulario_interno.esCampoInvalido('presentacion')">
-                                        {{formulario_interno.getErrorMessage('presentacion')}}
-                                    </small>
+
                                 </span>
                             </div>
                             <div class="field col-12 md:col-2">
@@ -356,7 +354,7 @@
                     </div>
                     <div *ngIf="activeStep === 3" class="card">
                         <div class="grid p-fluid mt-2">
-                        <div class="field col-12 md:col-4">
+                        <div class="field col-12 md:col-3">
                             <span class="p-float-label">
                                 <p-dropdown
                                     inputId="dropdown"
@@ -366,13 +364,13 @@
                                     optionLabel="nombre"
                                     optionValue="nombre"
                                 ></p-dropdown>
-                                <label for="dropdown">Destino</label>
+                                <label for="dropdown">Tipo de Transporte</label>
                                 <small id="tipo_transporte" class="p-error " *ngIf="formulario_interno.esCampoInvalido('tipo_transporte')">
                                     {{formulario_interno.getErrorMessage('tipo_transporte')}}
                                 </small>
                             </span>
                         </div>
-                        <div *ngIf="formulario_interno.formulario.value.tipo_transporte==='VOLQUETA'" class="field col-12 md:col-3">
+                        <div *ngIf="formulario_interno.formulario.value.tipo_transporte==='VOLQUETA'" class="field col-12 md:col-2">
                             <span class="p-float-label">
                                 <input
                                     type="number"
@@ -462,7 +460,7 @@
                                 </small>
                             </span>
                         </div>
-                        <div *ngIf="formulario_interno.formulario.value.tipo_transporte!=='VIA FERREA'" class="field col-12 md:col-3">
+                        <div *ngIf="formulario_interno.formulario.value.tipo_transporte!=='VIA FERREA'" class="field col-12 md:col-2">
                             <span class="p-float-label">
                                 <input
                                     type="text"
@@ -492,7 +490,7 @@
                                 </small>
                             </span>
                         </div>
-                        <div *ngIf="formulario_interno.formulario.value.tipo_transporte!=='VIA FERREA'" class="field col-12 md:col-3">
+                        <div *ngIf="formulario_interno.formulario.value.tipo_transporte!=='VIA FERREA'" class="field col-12 md:col-2">
                             <span class="p-float-label">
                                 <input
                                     type="text"
@@ -525,10 +523,12 @@
                         </div>
                         <div class="card-declaracion text-center">
                             <h5 class="text-center"><strong>DECLARACIÓN JURADA DE TRANSPORTE DE MINERALES</strong></h5>
-                            <p>El Formulario 101 es el único documento habilitado para el transporte de
-                             minerales y/o metales, de aplicación obligatoria para los operadores mineros,
-                             personas naturales o jurídicas conforme señala el
-                             <strong>Artículo 7 del D.S. N°2288 con carácter de Declaración Jurada.</strong>
+                            <p>El Formulario 101 es el único instrumento que habilita el transporte de minerales y/o
+                                metales al interior o exterior del país, que permite la identificación del Municipio,
+                                Departamento Productor y otros datos técnicos,<strong> tiene carácter de Declaración Jurada
+                                de uso obligatorio conforme al Art. 31 del D.D. de Oruro N° 157 </strong>para los actores productivos mineros, operadores mineros, comercializadoras y personas naturales que se encuentran en posesión o realicen el transporte de minerales y/o metales en sujeción al D.S. N° 2288, Art 7
+
+
                             </p>
 
                                 <div class="field-checkbox">
@@ -541,19 +541,40 @@
                                   <label for="sf">Acepto la DDJJ</label>
                                 </div>
                         </div>
-                        <div class="card-botones">
-                            <button pButton pRipple (click)="agregarLey()" type="button" icon="pi pi-save" label="Guardar Formulario" class="p-button-success"></button>
-                            <button pButton pRipple (click)="agregarLey()" type="button" icon="pi pi-trash" label="Cancelar" class="p-button-danger"></button>
-                        </div>
                     </div>
+                    </div>
+                    <div class="centrar-botones">
+                        <div class="col-33" *ngIf="activeStep > 0">
+                            <button pButton pRipple type="button" label="Anterior"
+                            class="p-button-rounded p-button-secondary boton-ajustado"
+                            (click)="prevStep()"
+                            icon="pi pi-arrow-left"></button>
+                        </div>
+                        <div class="col-33" *ngIf="activeStep!== steps.length - 1">
+                            <button pButton pRipple type="button" label="Siguiente"
+                            class="p-button-rounded p-button-success boton-icono-derecha boton-ajustado"
+                            (click)="nextStep()"
+                            icon="pi pi-arrow-right">
+                            </button>
+                        </div>
+                        <div class="col-33" *ngIf="activeStep=== steps.length - 1">
+                            <button pButton pRipple type="button" label="Guardar"
+                            class="p-button-rounded p-button-info  boton-ajustado"
+                            (click)="guardar()"
+                            icon="pi pi-save">
+                            </button>
+                        </div>
+                        <div class="col-33">
+                            <button pButton pRipple type="button" label="Cancelar"
+                            class="p-button-rounded p-button-danger boton-ajustado"
+                            (click)="prevStep()"
+                            icon="pi pi-trash"></button>
+                        </div>
+
                     </div>
 
                 </div>
             </div>
 
         </div>
-
-
-
-
 </form>

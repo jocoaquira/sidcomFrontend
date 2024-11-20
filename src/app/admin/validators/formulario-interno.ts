@@ -14,8 +14,8 @@ export class FormularioInternoFormulario {
         lote:null,
         presentacion:null,
         cantidad:null,
-        peso_bruto_humedo:null,
-        peso_neto_seco:null,
+        peso_bruto_humedo:0,
+        peso_neto_seco:0,
         tara:0,
         humedad:0,
         merma:0,
@@ -46,12 +46,12 @@ export class FormularioInternoFormulario {
         operator_id:new FormControl(this.formulario_interno.operator_id,[Validators.required,Validators.pattern('^[0-9]*$')]),
         lote:new FormControl(this.formulario_interno.lote,[Validators.required]),
         presentacion:new FormControl(this.formulario_interno.presentacion,[Validators.required]),
-        cantidad:new FormControl(this.formulario_interno.cantidad,[Validators.required,Validators.pattern('^[0-9]*$')]),
-        peso_bruto_humedo:new FormControl(this.formulario_interno.peso_bruto_humedo,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$')]),
-        peso_neto_seco: new FormControl(this.formulario_interno.peso_neto_seco,[Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$')]),
-        tara:new FormControl(this.formulario_interno.tara,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$')]),
-        humedad: new FormControl(this.formulario_interno.humedad,[Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$')]),
-        merma:new FormControl(this.formulario_interno.merma,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$')]),
+        cantidad:new FormControl(this.formulario_interno.cantidad,[Validators.pattern('^[0-9]*$'),  Validators.min(0)]),
+        peso_bruto_humedo:new FormControl(this.formulario_interno.peso_bruto_humedo,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
+        peso_neto_seco: new FormControl(this.formulario_interno.peso_neto_seco,[Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
+        tara:new FormControl(this.formulario_interno.tara,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'),Validators.min(0)]),
+        humedad: new FormControl(this.formulario_interno.humedad,[Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0), Validators.max(100)]),
+        merma:new FormControl(this.formulario_interno.merma,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0), Validators.max(100)]),
         des_tipo: new FormControl(this.formulario_interno.des_tipo,[Validators.required]),
         des_comprador:new FormControl(this.formulario_interno.des_comprador),
         des_planta: new FormControl(this.formulario_interno.des_planta),
@@ -94,7 +94,12 @@ getErrorMessage(controlName: string): string | null {
     if (control?.hasError('email')) {
       return 'Debe ingresar un correo electrónico válido.';
     }
-
+    if (control?.hasError('min')) {
+        return `El numero ingresado debe ser mayor.`;
+      }
+      if (control?.hasError('max')) {
+        return `El número introducido debe ser menor.`;
+      }
     if (control?.hasError('minlength')) {
       return `Debe tener al menos ${control.errors?.['minlength']?.requiredLength} caracteres.`;
     }

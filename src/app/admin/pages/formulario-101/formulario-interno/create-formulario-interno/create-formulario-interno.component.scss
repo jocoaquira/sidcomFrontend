@@ -112,3 +112,38 @@
   label[type="text"] {
     font-size: 2rem !important; // Forzar el tamaño de texto
   }
+
+
+  .centrar-botones {
+    display: flex;          /* Activa flexbox */
+    justify-content: center; /* Centra horizontalmente */
+    //align-items: center;    /* Centra verticalmente (si es necesario) */
+    margin-top: 7px;
+    gap: 10px;              /* Espacio entre los botones */
+    //height: 10;           /* Ajusta si necesitas centrar en un contenedor más grande */
+}
+
+.col-33 {
+    display: flex;          /* Asegura que los hijos directos también respeten el centrado */
+}
+
+
+.boton-ajustado {
+    padding: 1em; /* Controla el espacio interno según prefieras */
+    min-width: unset; /* Elimina el tamaño mínimo predeterminado */
+    width: auto; /* Permite que el ancho se ajuste al contenido */
+    font-size: 1em; /* Ajusta el tamaño de la fuente si es necesario */
+    display: inline-flex;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.p-button-rounded {
+    border-radius: 50px; /* Mantén el diseño redondeado */
+}
+.boton-icono-derecha {
+    flex-direction: row-reverse;
+    margin-right: 8px; /* Coloca el ícono después del texto */
+    font-size: 1em;
+}
