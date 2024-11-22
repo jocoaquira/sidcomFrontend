@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { IDepartamento } from '@data/departamento.metadata';
 import { DepartamentosService } from '../../services/departamentos.service';
 import { catchError, retry } from 'rxjs/operators';
@@ -10,16 +10,20 @@ import { of } from 'rxjs';
   styleUrls: ['./departamentoSelect.component.css']
 })
 export class DepartamentoSelectComponent implements OnInit {
-  @Output() departamento_id = new EventEmitter<number>();
-  @Output() nombre_departamento = new EventEmitter<string>();
+  @Input() departamento_id: number | null = null;  // Recibe el departamento seleccionado
+  @Output() cambioDepartamento = new EventEmitter<number>();  // Emite el cambio del departamento
+  @Output() nombre_departamento=new EventEmitter<string>();
   departamentos: IDepartamento[] = [];
   error: any;
   loading: boolean = true;
 
-  constructor(public departamentosService: DepartamentosService) {}
+  constructor(public departamentosService: DepartamentosService) {
+    this.cargarDepartamentos();
+  }
 
   ngOnInit() {
-    this.cargarDepartamentos();
+
+
   }
 
   cargarDepartamentos() {
@@ -38,19 +42,14 @@ export class DepartamentoSelectComponent implements OnInit {
       });
   }
 
-  cambioDepartamento(event: any) {
+  cambioDepartamentos(event: any) {
+    console.log(event.value);
+    console.log(this.departamentos);
     if (!event.value) {
       console.warn('El valor seleccionado no es válido');
       return;
     }
-
-    const departamento = this.departamentos.find((d) => d.id === event.value);
-
-    if (departamento) {
-      this.departamento_id.emit(departamento.id);
-      this.nombre_departamento.emit(departamento.nombre);
-    } else {
-      console.warn('El departamento seleccionado no existe');
-    }
+    this.cambioDepartamento.emit(this.departamentos.find(i => i.id === event.value).id); // Emite solo el ID
+    this.nombre_departamento.emit(this.departamentos.find(i => i.id === event.value).nombre);
   }
 }

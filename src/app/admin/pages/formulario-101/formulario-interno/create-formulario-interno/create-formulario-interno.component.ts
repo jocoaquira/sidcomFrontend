@@ -5,6 +5,7 @@ import { IFormularioInternoMunicipioOrigen } from '@data/form_int_municipio_orig
 import { IMineral } from '@data/mineral.metadata';
 import { IOperatorSimple } from '@data/operador_simple.metadata';
 import { ToastrService } from 'ngx-toastr';
+import { first } from 'rxjs';
 import { FormularioInternosService } from 'src/app/admin/services/formulariosinternos.service';
 import { MineralsService } from 'src/app/admin/services/minerales.service';
 import { OperatorsService } from 'src/app/admin/services/operators.service';
@@ -19,11 +20,25 @@ export class CreateFormularioInternoComponent implements OnInit {
 
     public formulario_interno=new FormularioInternoFormulario();
     public departamento_id:number=0;
-    public departamento_id1:number=0;
+    departamento_id1: number | null = null;  // Guardar el ID del departamento seleccionado
+  municipio_id1: number | null = null;
+
+  // Método que se llama cuando cambia el departamento
+  cambioDepartamento1(departamentoId: number): void {
+    this.departamento_id1 = departamentoId;
+    // Aquí puedes hacer cualquier acción extra cuando el departamento cambie
+  }
     public formulario_Interno_registrado!:IFormularioInterno;
     public operadores!:IOperatorSimple[];
     public minerales!:IMineral[];
     public presentaciones!:any;
+    public presentacion:any={
+        nombre:null,
+        id:null,
+        humedad:0,
+        merma:0,
+        cantidad:0
+    }
     public tipo_transporte!:any;
     public destinos!:any;
     public unidades!:any;
@@ -55,8 +70,16 @@ export class CreateFormularioInternoComponent implements OnInit {
     { label: '4. Datos del Medio de Transporte', command: (event: any) => this.gotoStep(3) }
   ];
 
-  activeStep: number = 0; // Establecer el paso activo inicial
+  public activeStep: number = 0; // Establecer el paso activo inicial
 
+
+  onStepChange(event: any): void {
+    console.log(event);
+    if (!this.isStepValid(this.activeStep)) {
+      event.preventDefault(); // Evita que el paso cambie si no es válido
+      alert('Por favor, completa el paso actual.');
+    }
+  }
 // Función para ir al siguiente paso
 nextStep() {
     if ((this.activeStep < this.steps.length - 1) && this.isStepValid(this.activeStep)) {
@@ -83,19 +106,24 @@ nextStep() {
   // Validar si los campos del paso actual son correctos
   isStepValid(stepIndex: number): boolean {
     let valid = true;
-    console.log(valid);
     switch (stepIndex) {
       case 0:
         // Validar los campos del Paso 1
         valid = this.formulario_interno.formulario.get('peso_bruto_humedo')?.valid && this.formulario_interno.formulario.get('tara')?.valid &&
-        this.formulario_interno.formulario.get('merma')?.valid && this.formulario_interno.formulario.get('humedad')?.valid &&
+        (this.formulario_interno.formulario.get('merma')?.valid || this.formulario_interno.formulario.get('merma')?.disable) && (this.formulario_interno.formulario.get('humedad')?.valid || this.formulario_interno.formulario.get('humedad')?.disable) &&
         this.formulario_interno.formulario.get('lote')?.valid && this.formulario_interno.formulario.get('presentacion')?.valid &&
-        this.formulario_interno.formulario.get('cantidad')?.valid && this.formulario_interno.formulario.get('peso_neto_seco')?.valid && this.lista_leyes_mineral.length>0;
+        (this.formulario_interno.formulario.get('cantidad')?.valid || this.formulario_interno.formulario.get('cantidad')?.disabled) && this.formulario_interno.formulario.get('peso_neto_seco')?.valid && this.lista_leyes_mineral.length>0;
         console.log(valid);
         break;
       case 1:
-        // Validar los campos del Paso 2
-        valid =true
+        valid =this.lista_municipios_origen.length>0
+        break;
+      case 2:
+        valid = this.formulario_interno.formulario.get('des_tipo')?.valid &&
+       (this.formulario_interno.formulario.get('des_comprador')?.valid ||
+        this.formulario_interno.formulario.get('des_comprador')?.disabled) &&
+       (this.formulario_interno.formulario.get('des_planta')?.valid ||
+        this.formulario_interno.formulario.get('des_planta')?.disabled);
         break;
       // Agregar validaciones para otros pasos si es necesario
     }
@@ -127,19 +155,19 @@ nextStep() {
       (error:any)=> this.error=this.mineralesService.handleError(error));
 
       this.presentaciones = [
-        { nombre: 'ENSACADO', id: '1' },
-        { nombre: 'LINGOTES', id: '2' },
-        { nombre: 'A GRANEL', id: '3' },
-        { nombre: 'CATODO DE COBRE', id: '4' },
-        { nombre: 'CONTENEDOR CILINDRICO', id: '5' },
-        { nombre: 'EMBALADAS', id: '6' },
-        { nombre: 'ENVASADO', id: '7' },
-        { nombre: 'BROZA', id: '8' },
-        { nombre: 'AMALGAMA', id: '9' },
-        { nombre: 'GRANALLA', id: '10' },
-        { nombre: 'ORO PEPA', id: '11' },
-        { nombre: 'SACOS', id: '12' },
-        { nombre: 'OTRO', id: '13' }
+        { nombre: 'ENSACADO', id: '1',humedad:1,merma:1,cantidad:1 },
+        { nombre: 'LINGOTES', id: '2',humedad:0,merma:0,cantidad:1 },
+        { nombre: 'A GRANEL', id: '3',humedad:1,merma:1,cantidad:0 },
+        { nombre: 'CATODO DE COBRE', id: '4',humedad:0,merma:0,cantidad:1 },
+        { nombre: 'CONTENEDOR CILINDRICO', id: '5',humedad:1,merma:1,cantidad:1 },
+        { nombre: 'EMBALADAS', id: '6',humedad:1,merma:1,cantidad:1 },
+        { nombre: 'ENVASADO', id: '7',humedad:1,merma:1,cantidad:1 },
+        { nombre: 'BROZA', id: '8',humedad:1,merma:1,cantidad:0 },
+        { nombre: 'AMALGAMA', id: '9',humedad:0,merma:0,cantidad:1 },
+        { nombre: 'GRANALLA', id: '10',humedad:0,merma:0,cantidad:1 },
+        { nombre: 'ORO PEPA', id: '11',humedad:0,merma:0,cantidad:1 },
+        { nombre: 'SACOS', id: '12',humedad:1,merma:1,cantidad:1 },
+        { nombre: 'OTRO', id: '13',humedad:1,merma:1,cantidad:0 }
     ];
     this.destinos = [
         { nombre: 'COMPRADOR', id: '1' },
@@ -167,6 +195,10 @@ nextStep() {
         { nombre: 'FLOTA', id: '14' },
         { nombre: 'TRAILER FURGON', id: '15' }
     ];
+    this.formulario_interno.formulario.get('cantidad')?.disable();
+    this.formulario_interno.formulario.get('humedad')?.disable();
+    this.formulario_interno.formulario.get('merma')?.disable();
+
     this.formulario_interno.formulario.get('peso_bruto_humedo')?.valueChanges.subscribe(() => {
         this.calcularPesoNeto();
       });
@@ -206,7 +238,9 @@ nextStep() {
     }
   }
 
-
+  guardar(){
+    console.log(this.formulario_interno.formulario.value);
+  }
   onSubmit(){
 
   }
@@ -281,22 +315,40 @@ nextStep() {
         this.lista_municipios_origen = this.lista_municipios_origen.filter(val => val.municipio_id !== domicilio.municipio_id);
     }
 
-    cambioDepartamento1(event){
-        this.departamento_id1=event;
-    }
     cambioMunicipio1(event){
-        this.formulario_interno.formulario.value.municipio_id=event;
+        this.formulario_interno.formulario.value.id_municipio_destino=event;
         console.log(this.formulario_interno.formulario.value);
+        this.formulario_interno.formulario.patchValue({
+            id_municipio_destino: event
+          });
     }
     declaracionJurada(event){
 
     }
 
-    pesoNetoSeco(event){
-        let peso_neto:number=0;
-        this.formulario_interno.formulario.value.peso_bruto_humedo=event;
-        let merma:number= this.formulario_interno.formulario.value.peso_bruto_humedo*this.formulario_interno.formulario.value.merma*(1/100);
-        let humedad:number= this.formulario_interno.formulario.value.peso_bruto_humedo*this.formulario_interno.formulario.value.humedad*(1/100);
-        this.formulario_interno.formulario.value.peso_neto_seco=this.formulario_interno.formulario.value.peso_bruto_humedo-this.formulario_interno.formulario.value.tara-merma-humedad;
-    }
+
+    cambioPresentacion(event:any){
+        this.presentacion=this.presentaciones.filter(val => val.id === event.value)[0];
+        console.log(event);
+        console.log(this.presentacion);
+        if (this.presentacion.cantidad==1) {
+            this.formulario_interno.formulario.get('cantidad')?.enable();
+        } else {
+        this.formulario_interno.formulario.get('cantidad')?.disable();
+        this.formulario_interno.formulario.get('cantidad')?.setValue(null);
+        }
+        if (this.presentacion.merma==1) {
+        this.formulario_interno.formulario.get('merma')?.enable();
+        } else {
+        this.formulario_interno.formulario.get('merma')?.disable();
+        this.formulario_interno.formulario.get('merma')?.setValue(0);
+        }
+        if (this.presentacion.humedad==1) {
+        this.formulario_interno.formulario.get('humedad')?.enable();
+        } else {
+        this.formulario_interno.formulario.get('humedad')?.disable();
+        this.formulario_interno.formulario.get('humedad')?.setValue(0);
+        }
+}
+
 }

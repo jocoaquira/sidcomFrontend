@@ -3,9 +3,12 @@
         inputId="dropdown"
         [autoDisplayFirst]="false"
         [options]="departamentos"
+        [loading]="true"
+        [(ngModel)]="departamento_id"
         optionLabel="nombre"
         optionValue="id"
-        (onChange)="cambioDepartamento($event)"
+        dataKey="value"
+        (onChange)="cambioDepartamentos($event)"
     ></p-dropdown>
     <label for="dropdown">Departamento</label>
     <small id="presentacion" class="p-error " *ngIf="error">

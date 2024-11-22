@@ -72,7 +72,12 @@ export class FormularioInternoFormulario {
         nro_viajes:new FormControl(this.formulario_interno.nro_viajes,[Validators.pattern('^[0-9]*$')]),
         estado:new FormControl(this.formulario_interno.estado,[Validators.required]),
     });
+    // Observar cambios en `des_tipo`
+        this.formulario.get('des_tipo')?.valueChanges.subscribe((valor: string) => {
+        this.actualizarValidacionesSegunTipo(valor);
+    });
   }
+
 
   // Método general para obtener un FormControl
   getControl(controlName: string): FormControl | null {
@@ -141,6 +146,43 @@ getErrorMessage(controlName: string): string | null {
       }
     // Otros errores personalizados aquí si son necesarios
     return null;
+  }
+
+  private actualizarValidacionesSegunTipo(valor: string): void {
+    console.log(valor);
+    const desComprador = this.formulario.get('des_comprador');
+    const desPlanta = this.formulario.get('des_planta');
+
+    if (valor === 'COMPRADOR') {
+      // Activar y hacer requerido `des_comprador`
+      desComprador?.enable();
+      desComprador?.setValidators([Validators.required]);
+      desComprador?.updateValueAndValidity();
+
+      // Deshabilitar y limpiar validaciones de `des_planta`
+      desPlanta?.disable();
+      desPlanta?.clearValidators();
+      desPlanta?.updateValueAndValidity();
+    } else if (valor === 'PLANTA DE TRATAMIENTO') {
+      // Activar y hacer requerido `des_planta`
+      desPlanta?.enable();
+      desPlanta?.setValidators([Validators.required]);
+      desPlanta?.updateValueAndValidity();
+
+      // Deshabilitar y limpiar validaciones de `des_comprador`
+      desComprador?.disable();
+      desComprador?.clearValidators();
+      desComprador?.updateValueAndValidity();
+    } else {
+      // Si no se selecciona ninguno, deshabilitar ambos
+      desComprador?.disable();
+      desComprador?.clearValidators();
+      desComprador?.updateValueAndValidity();
+
+      desPlanta?.disable();
+      desPlanta?.clearValidators();
+      desPlanta?.updateValueAndValidity();
+    }
   }
 
 }
