@@ -1,0 +1,57 @@
+  <form  (ngSubmit)="onSubmit()">
+    <div class="card-titulo">
+        <h4 class="text-center" style="color: white;">SOLICITUD DE ANULACIÓN DE FORMULARIO 101 {{id_formulario}}</h4>
+    </div>
+        <div class="card-anulado grid p-fluid">
+          <p>
+            En caso de consignar errores en la declaración de la emisión del Formulario 101, el operador minero debe solicitar autorización de anulación a la Secretaria Departamental De Minería, Metalurgia y Recursos Energéticos.
+          </p>
+            <div class=" flex ">
+              <span class="p-float-label">
+                <textarea
+                    id="observaciones"
+                    pInputTextarea
+                    formControlName="observaciones"
+                    class="ng-dirty"
+                    rows="4"
+                    cols="150"
+                ></textarea>
+                <label for="observaciones">Ingresar justificación minimo 200 caractéres</label>
+                <small id="observaciones" class="p-error" *ngIf="formulario_interno.esCampoInvalido('observaciones')">
+                    {{ formulario_interno.getErrorMessage('observaciones') }}
+                </small>
+            </span>
+            </div>
+
+            <div class="centrar-botones">
+              <div class="col-33" >
+                  <button pButton pRipple type="button" label="Anterior"
+                  class="p-button-rounded p-button-secondary boton-ajustado"
+                  
+                  icon="pi pi-arrow-left"></button>
+              </div>
+              <div class="col-33" >
+                  <button pButton pRipple type="button" label="Siguiente"
+                  class="p-button-rounded p-button-success boton-icono-derecha boton-ajustado"
+                  
+                  icon="pi pi-arrow-right">
+                  </button>
+              </div>
+              <div class="col-33" >
+                  <button pButton pRipple type="button" label="Guardar"
+                  class="p-button-rounded p-button-info  boton-ajustado"
+                  
+                  icon="pi pi-save"
+                  >
+                  </button>
+              </div>
+              <div class="col-33">
+                  <button pButton pRipple type="button" label="Cancelar"
+                  class="p-button-rounded p-button-danger boton-ajustado"
+                  
+                  icon="pi pi-trash"></button>
+              </div>
+
+          </div>
+        </div>
+    </form>
