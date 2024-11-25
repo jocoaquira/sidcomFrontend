@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MunicipioSelectComponent } from './municipioSelect.component';
 import { DropdownModule } from 'primeng/dropdown';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     exports:[
@@ -9,7 +10,8 @@ import { DropdownModule } from 'primeng/dropdown';
     ],
   imports: [
     CommonModule,
-    DropdownModule
+    DropdownModule,
+    FormsModule
   ],
   declarations: [MunicipioSelectComponent]
 })

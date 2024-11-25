@@ -67,6 +67,7 @@ export class FormularioInternoFormulario {
         nro_vagon:new FormControl(this.formulario_interno.nro_vagon),
         empresa_ferrea:new FormControl(this.formulario_interno.empresa_ferrea),
         hr_ferrea:new FormControl(this.formulario_interno.hr_ferrea),
+        fecha_ferrea:new FormControl(this.formulario_interno.fecha_ferrea),
         tara_volqueta:new FormControl(this.formulario_interno.tara_volqueta,[Validators.pattern('^[0-9]*$')]),
         traslado_mineral:new FormControl(this.formulario_interno.traslado_mineral),
         nro_viajes:new FormControl(this.formulario_interno.nro_viajes,[Validators.pattern('^[0-9]*$')]),

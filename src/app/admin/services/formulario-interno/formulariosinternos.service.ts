@@ -37,7 +37,16 @@ export class FormularioInternosService {
     let FormularioInterno:IFormularioInterno[]=data;
     return FormularioInterno
   }
+//-----------------Visualizar Formulario Interno-------------------------------------------
+verFormularioInterno(nombre:string)
+{
+  // Inicializacion de objeto params
+  let params = new HttpParams();
+  params = params.append('id', nombre);
 
+  // asignacion de parametros
+  return this.http.get(`${this.baseUrl}formularios-internos`,{params:params});
+}
   //-----------------Visualizar operadores-------------------------------------------
   verFormularioInternosSimple(nombre:string)
   {

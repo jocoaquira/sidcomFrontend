@@ -9,8 +9,9 @@ import { catchError, of } from 'rxjs';
   styleUrls: ['./municipioSelect.component.css'],
 })
 export class MunicipioSelectComponent implements OnChanges {
-  @Input() departamento_id!: number;
-  @Output() municipio_id = new EventEmitter<string>();
+  @Input() departamento_id: number | null = null;
+  @Input() municipio_id1:number | null = null; ;
+  @Output() municipio_id = new EventEmitter<number>();
   @Output() nombre_municipio = new EventEmitter<string>();
   municipios: IMunicipio[] = [];
   error: any;
@@ -49,7 +50,7 @@ export class MunicipioSelectComponent implements OnChanges {
   cambioMunicipio(event: any) {
     const municipio = this.municipios.find((element) => element.id === event.value);
     if (municipio) {
-      this.municipio_id.emit(municipio.codigo);
+      this.municipio_id.emit(municipio.id);
       this.nombre_municipio.emit(municipio.municipio);
     } else {
       console.warn('El municipio seleccionado no existe');

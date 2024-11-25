@@ -6,10 +6,13 @@
         <div class="grid p-fluid">
             <div class="card card-w-title flex flex-wrap col-12">
                 <div class="col-12">
-                    <p-steps [model]="steps" [(activeIndex)]="activeStep" styleClass="mt-1" [readonly]="false" ></p-steps>
+                    <p-steps [model]="steps" [(activeIndex)]="activeStep"
+                    styleClass="mt-1" [readonly]="false"
+                    ></p-steps>
                 </div>
-                <div class="col-12">
-                    <div *ngIf="activeStep === 0" class="card">
+                <div class="col-12" >
+                    <div *ngIf="activeStep === 0"
+                    >
                         <div class="grid p-fluid">
                             <div class="field col-12 md:col-10">
                                 <span class="p-float-label">
@@ -152,7 +155,7 @@
                                 </span>
                             </div>
                             <div class="field col-12 md:col-3 ">
-                                <app-mineralesSelect (sigla)="cambioSigla($event)" (nombre)="cambioNombreMineral($event)"></app-mineralesSelect>
+                                <app-mineralesSelect (mineral_id)="cambioMineralId($event)" (sigla)="cambioSigla($event)" (nombre)="cambioNombreMineral($event)"></app-mineralesSelect>
                             </div>
                             <div class="field col-12 md:col-3">
                                 <span class="p-float-label">
@@ -237,13 +240,14 @@
 
                         </div>
                     </div>
-                    <div *ngIf="activeStep === 1" class="card">
+                    <div *ngIf="activeStep === 1"
+                    >
                         <div class="grid p-fluid mt-2">
                             <div class="field col-12 md:col-3 ">
                                 <app-departamentoSelect [departamento_id]="departamento_id" (cambioDepartamento)="cambioDepartamento($event)" (nombre_departamento)="cambioNombreDepartemento($event)"></app-departamentoSelect>
                             </div>
                             <div class="field col-12 md:col-3 ">
-                                <app-municipioSelect [departamento_id]="departamento_id" (municipio_id)="cambioMunicipio($event)" (nombre_municipio)="cambioNombreMunicipio($event)"></app-municipioSelect>
+                                <app-municipioSelect [departamento_id]="departamento_id" [municipio_id1]="municipio_id" (municipio_id)="cambioMunicipio($event)" (nombre_municipio)="cambioNombreMunicipio($event)"></app-municipioSelect>
                             </div>
 
                             <div class="field col-12 md:col-2">
@@ -293,7 +297,8 @@
                             </div>
                         </div>
                     </div>
-                    <div *ngIf="activeStep === 2" class="card">
+                    <div *ngIf="activeStep === 2"
+                    >
                         <div class="grid p-fluid mt-2">
                             <div class="field col-12 md:col-4">
                                 <span class="p-float-label">
@@ -346,11 +351,12 @@
                                 <app-departamentoSelect [departamento_id]="departamento_id1" (cambioDepartamento)="cambioDepartamento1($event)" ></app-departamentoSelect>
                             </div>
                             <div class="field col-12 md:col-3 ">
-                                <app-municipioSelect [departamento_id]="departamento_id1" (municipio_id)="cambioMunicipio1($event)" ></app-municipioSelect>
+                                <app-municipioSelect [departamento_id]="departamento_id1" [municipio_id1]="municipio_id1" (municipio_id)="cambioMunicipio1($event)" ></app-municipioSelect>
                             </div>
                         </div>
                     </div>
-                    <div  [hidden]="activeStep === 3" class="card">
+                    <div  *ngIf="activeStep === 3"
+                    >
                         <div class="grid p-fluid mt-2">
                         <div class="field col-12 md:col-3">
                             <span class="p-float-label">
@@ -413,21 +419,7 @@
                                 </small>
                             </span>
                         </div>
-                        <div *ngIf="formulario_interno.formulario.value.tipo_transporte==='VIA FERREA'" class="field col-12 md:col-3">
-                            <span class="p-float-label">
-                                <input
-                                    type="text"
-                                    id="nro_vagon"
-                                    pInputText
-                                    formControlName="nro_vagon"
-                                    class="ng-dirty"
-                                />
-                                <label for="nro_vagon">N° de vagon(es)</label>
-                                <small id="nro_vagon" class="p-error "*ngIf="formulario_interno.esCampoInvalido('nro_vagon')">
-                                    {{formulario_interno.getErrorMessage('nro_vagon')}}
-                                </small>
-                            </span>
-                        </div>
+
                         <div *ngIf="formulario_interno.formulario.value.tipo_transporte==='VIA FERREA'" class="field col-12 md:col-3">
                             <span class="p-float-label">
                                 <input
@@ -506,16 +498,16 @@
                         <div class="field col-12 md:col-12">
                             <span class="p-float-label">
                                 <textarea
-                                    id="licencia"
+                                    id="observaciones"
                                     pInputTextarea
-                                    formControlName="licencia"
+                                    formControlName="observaciones"
                                     class="ng-dirty"
                                     rows="4"
                                     cols="150"
                                 ></textarea>
-                                <label for="licencia">Observaciones</label>
-                                <small id="licencia" class="p-error" *ngIf="formulario_interno.esCampoInvalido('licencia')">
-                                    {{ formulario_interno.getErrorMessage('licencia') }}
+                                <label for="observaciones">Observaciones</label>
+                                <small id="observaciones" class="p-error" *ngIf="formulario_interno.esCampoInvalido('observaciones')">
+                                    {{ formulario_interno.getErrorMessage('observaciones') }}
                                 </small>
                             </span>
                         </div>
@@ -533,7 +525,9 @@
                                   <input
                                     type="checkbox"
                                     id="sf"
-                                    (change)="declaracionJurada($event)"
+                                    [ngModelOptions]="{standalone: true}"
+                                    [(ngModel)]="declaracionJurada"
+                                    (change)="declaracionJuradaSwitch($event)"
                                     class="custom-checkbox"
                                   />
                                   <label for="sf">Acepto la DDJJ</label>
@@ -541,6 +535,7 @@
                         </div>
                     </div>
                     </div>
+
                     <div class="centrar-botones">
                         <div class="col-33" *ngIf="activeStep > 0">
                             <button pButton pRipple type="button" label="Anterior"
@@ -559,19 +554,20 @@
                             <button pButton pRipple type="button" label="Guardar"
                             class="p-button-rounded p-button-info  boton-ajustado"
                             (click)="guardar()"
-                            icon="pi pi-save">
+                            icon="pi pi-save"
+                            [disabled]="!declaracionJurada">
                             </button>
                         </div>
                         <div class="col-33">
                             <button pButton pRipple type="button" label="Cancelar"
                             class="p-button-rounded p-button-danger boton-ajustado"
-                            (click)="prevStep()"
+                            [routerLink]="['/admin/formulario-101/formulario-interno']"
                             icon="pi pi-trash"></button>
                         </div>
 
                     </div>
-
                 </div>
+
             </div>
 
         </div>

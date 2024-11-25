@@ -5,8 +5,9 @@ import { CanEditarFormularioInternoGuard } from 'src/app/admin/guards/formulario
 import { CanListarFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-listar-formulario-interno.guard';
 import { CanVerFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-ver-formulario-interno.guard';
 import { CanEliminarOperatorGuard } from 'src/app/admin/guards/operators/can-eliminar-operator.guard';
-import { FormularioInternosService } from 'src/app/admin/services/formulariosinternos.service';
+import { FormularioInternosService } from 'src/app/admin/services/formulario-interno/formulariosinternos.service';
 import { Table } from 'primeng/table';
+import { PdfFormularioInternoService } from 'src/app/admin/services/pdf/formulario-interno-pdf.service';
 
 @Component({
   selector: 'app-formulario-interno',
@@ -31,7 +32,8 @@ export class FormularioInternoComponent implements OnInit {
         public canCrearFormularioInterno:CanCrearFormularioInternoGuard,
         public canEditarFormularioInterno:CanEditarFormularioInternoGuard,
         public canEliminarFormularioInterno:CanEliminarOperatorGuard,
-        public formularioInternoService:FormularioInternosService
+        public formularioInternoService:FormularioInternosService,
+        public pdfFormularioInterno:PdfFormularioInternoService
 
     ) {
      }
@@ -92,6 +94,8 @@ export class FormularioInternoComponent implements OnInit {
     onGlobalFilter(table: Table, event: Event) {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
-
+    generarPDF(formulario_interno:IFormularioInternoSimple){
+        this.pdfFormularioInterno.generarPDF(formulario_interno);
+    }
 
 }

@@ -3,6 +3,7 @@
         inputId="dropdown"
         [autoDisplayFirst]="false"
         [options]="municipios"
+        [(ngModel)]="municipio_id1"
         optionLabel="municipio"
         optionValue="id"
         (onChange)="cambioMunicipio($event)"

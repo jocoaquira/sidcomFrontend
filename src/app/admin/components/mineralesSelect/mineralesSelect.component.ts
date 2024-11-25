@@ -12,6 +12,7 @@ import { catchError, retry, delay } from 'rxjs/operators';
 export class MineralesSelectComponent implements OnInit {
   @Output() sigla = new EventEmitter<string>();
   @Output() nombre = new EventEmitter<string>();
+  @Output() mineral_id = new EventEmitter<number>();
   minerales: IMineral[] = [];
   error: any;
   loading: boolean = true;
@@ -48,6 +49,7 @@ export class MineralesSelectComponent implements OnInit {
     if (mineral) {
       this.sigla.emit(mineral.sigla);
       this.nombre.emit(mineral.nombre);
+      this.mineral_id.emit(mineral.id);
     }
   }
 }

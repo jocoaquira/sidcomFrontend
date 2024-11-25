@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { IDepartamento } from '@data/departamento.metadata';
 import { DepartamentosService } from '../../services/departamentos.service';
 import { catchError, retry } from 'rxjs/operators';
@@ -9,7 +9,7 @@ import { of } from 'rxjs';
   templateUrl: './departamentoSelect.component.html',
   styleUrls: ['./departamentoSelect.component.css']
 })
-export class DepartamentoSelectComponent implements OnInit {
+export class DepartamentoSelectComponent implements OnChanges {
   @Input() departamento_id: number | null = null;  // Recibe el departamento seleccionado
   @Output() cambioDepartamento = new EventEmitter<number>();  // Emite el cambio del departamento
   @Output() nombre_departamento=new EventEmitter<string>();
@@ -18,11 +18,12 @@ export class DepartamentoSelectComponent implements OnInit {
   loading: boolean = true;
 
   constructor(public departamentosService: DepartamentosService) {
-    this.cargarDepartamentos();
+
   }
 
-  ngOnInit() {
+  ngOnChanges(changes: SimpleChanges): void {
 
+    this.cargarDepartamentos();
 
   }
 
@@ -33,12 +34,14 @@ export class DepartamentoSelectComponent implements OnInit {
         retry(3), // Reintenta 3 veces en caso de error
         catchError((error) => {
           this.error = this.departamentosService.handleError(error);
+          this.loading = false; // Asegúrate de detener la carga incluso en caso de error
           return of([]); // Devuelve un arreglo vacío si hay error
         })
       )
       .subscribe((data: any) => {
         this.departamentos = this.departamentosService.handledepartamento(data);
         this.loading = false;
+
       });
   }
 

@@ -24,8 +24,11 @@ import { InputNumberModule } from 'primeng/inputnumber';
     InputTextModule,
     InputNumberModule,
     CreateFormularioInternoModule,
-    FormularioInternoRoutingModule
+    FormularioInternoRoutingModule,
+
   ],
-  declarations: [FormularioInternoComponent]
+  declarations: [
+    FormularioInternoComponent
+]
 })
 export class FormularioInternoModule { }

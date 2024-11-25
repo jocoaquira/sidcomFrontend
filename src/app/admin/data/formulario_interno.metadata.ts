@@ -14,7 +14,7 @@ export interface IFormularioInterno {
    des_tipo:string,
    des_comprador?:string,
    des_planta: string,
-   id_municipio_destino: string,
+   id_municipio_destino: number,
    tipo_transporte: string,
    placa: string,
    nom_conductor: string,
