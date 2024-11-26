@@ -28,7 +28,7 @@ export class FormularioInternosService {
     params = params.append('nombre', nombre);
 
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}formularios-internos`,{params:params});
+    return this.http.get(`${this.baseUrl}formint`,{params:params});
   }
   handleError(error: any): any {
     return error=error.error.error;
@@ -45,7 +45,7 @@ verFormularioInterno(nombre:string)
   params = params.append('id', nombre);
 
   // asignacion de parametros
-  return this.http.get(`${this.baseUrl}formularios-internos`,{params:params});
+  return this.http.get(`${this.baseUrl}formint`,{params:params});
 }
   //-----------------Visualizar operadores-------------------------------------------
   verFormularioInternosSimple(nombre:string)
@@ -55,7 +55,7 @@ verFormularioInterno(nombre:string)
     params = params.append('nombre', nombre);
 
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}formularios-internos/lista-simple`,{params:params});
+    return this.http.get(`${this.baseUrl}formint/lista-simple`,{params:params});
   }
   handleFormularioInternoSimpleError(error: any): any {
     return error=error.error.error;
@@ -67,21 +67,22 @@ verFormularioInterno(nombre:string)
 
 
 //---------------------crear   FormularioInterno-------------------------------------------
-crearFormularioInterno(data:IFormularioInterno) {
+crearFormularioInterno(data:any) {
   this.token();
-  return this.http.post(`${this.baseUrl}formularios-internos`,data, {headers:this.headers})
+  console.log(data);
+  return this.http.post(`${this.baseUrl}formint`,data, {headers:this.headers})
 }
 handleCrearFormularioInternoError(error: any): any {
   return error=error;
 }
-handleCrearFormularioInterno(data: IFormularioInterno):IFormularioInterno {
-  let FormularioInterno:IFormularioInterno=data;
+handleCrearFormularioInterno(data: any):any {
+  let FormularioInterno:any=data;
   return FormularioInterno
 }
 //---------------------Editar   FormularioInterno-------------------------------------------
 editarFormularioInterno(data:IFormularioInterno) {
   this.token();
-  return this.http.put(`${this.baseUrl}formularios-internos/`+data.id, data)
+  return this.http.put(`${this.baseUrl}formint/`+data.id, data)
 }
 handleEditarFormularioInternoError(error: any): any {
   return error=error;

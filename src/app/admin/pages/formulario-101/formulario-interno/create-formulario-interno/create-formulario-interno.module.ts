@@ -24,7 +24,7 @@ import { RouterModule } from '@angular/router';
     InputMaskModule,
     InputNumberModule,
     ReactiveFormsModule,
-	InputTextModule,
+	  InputTextModule,
     TableModule,
     ButtonModule,
     InputTextareaModule,

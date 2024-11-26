@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IFormularioInterno } from '@data/formulario_interno.metadata';
+import { ToastrService } from 'ngx-toastr';
 import { FormularioInternosService } from 'src/app/admin/services/formulario-interno/formulariosinternos.service';
 
 @Component({
@@ -10,6 +11,8 @@ import { FormularioInternosService } from 'src/app/admin/services/formulario-int
 })
 export class AnularFormularioInternoComponent implements OnInit {
     public id!:any;
+    public valido:boolean=false;
+    public error!:any;
     public formulario_int:IFormularioInterno={
         id:null,
         user_id:null,
@@ -45,20 +48,47 @@ export class AnularFormularioInternoComponent implements OnInit {
         traslado_mineral:null,
         nro_viajes:null
     };
-  public id_formulario:string='E-12345/2024';
+  //public id_formulario:string='E-12345/2024';
   constructor(
     private actRoute:ActivatedRoute,
-    formularioInternoService:FormularioInternosService,
+    private formularioInternoService:FormularioInternosService,
+    private notify:ToastrService,
+    private router: Router,
   ) {
     this.actRoute.paramMap.subscribe(params=>{
         this.id=params.get('id');
-        console.log(this.id);
+        this.formularioInternoService.verFormularioInterno(this.id).subscribe(
+          (data:any)=>{
+          this.formulario_int=this.formularioInternoService.handleCrearFormularioInterno(data);
+          console.log(this.formulario_int);
+        },
+        (error:any)=> this.error=this.formularioInternoService.handleError(error));
       });
    }
 
   ngOnInit() {
+    
   }
   onSubmit(){
-
+    if(this.valido)
+    {
+      this.formulario_int.estado='ANULADO';
+      this.notify.success('El el formulario'+this.formulario_int.nro_formulario+' se anuló exitosamente','Anulado Correctamente',{timeOut:2500,positionClass: 'toast-bottom-right'});
+      this.router.navigate(['/admin/formulario-101/formulario-interno']);
+    }
+    else{
+      this.notify.error('Falló la anulación ...Revise el detalle de anulación y vuelva a enviar....','Error con la Anulación',{timeOut:2000,positionClass: 'toast-bottom-right'});
+    }
+    //if(this.formulario_int.justificacion_anulacion.length>)
+  }
+  longitudTexto(event:any){
+    if((event.target as HTMLInputElement).value.length>=200){
+      this.valido=true;
+      console.log(this.formulario_int);
+    }
+    else{
+      this.valido=false;
+    }
+    console.log(this.valido)
   }
 }

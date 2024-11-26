@@ -1,6 +1,6 @@
   <div>
     <div class="card-titulo">
-        <h4 class="text-center" style="color: white;">SOLICITUD DE ANULACIÓN DE FORMULARIO 101 {{id_formulario}}</h4>
+        <h4 class="text-center" style="color: white;">SOLICITUD DE ANULACIÓN DE FORMULARIO 101 {{formulario_int.nro_formulario}}</h4>
     </div>
     <div class="card-anulado grid">
         <div class="  p-fluid">
@@ -16,11 +16,12 @@
                     class="ng-dirty"
                     rows="4"
                     cols="150"
+                    (input)="longitudTexto($event)"
                 ></textarea>
                 <label for="observaciones">Ingresar justificación minimo 200 caractéres</label>
-            <!--    <small id="observaciones" class="p-error" *ngIf="formulario_interno.esCampoInvalido('observaciones')">
-                    {{ formulario_interno.getErrorMessage('observaciones') }}
-                </small>-->
+                <small id="observaciones" class="p-error" *ngIf="!valido && formulario_int.justificacion_anulacion!=null">
+                     El Minimo de caractéresdeve ser de 200 por favor verifique sus datos hasta el momento tiene {{formulario_int.justificacion_anulacion.length}} caractéres
+                </small>
             </span>
             </div>
         </div>
@@ -28,7 +29,7 @@
             <div class="centrar-botones">
                 <div class="col-33" >
                     <button pButton pRipple type="button" label="Anular el Formulario"
-                        class="p-button-rounded p-button-danger  boton-ajustado"
+                        class="p-button-rounded p-button-danger  boton-ajustado" (click)="onSubmit()"
                         icon="pi pi-ban"
                     >
                     </button>
