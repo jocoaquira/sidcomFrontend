@@ -11,6 +11,7 @@ import { CreateFormularioInternoModule } from './create-formulario-interno/creat
 import { FormularioInternoRoutingModule } from './formulario-interno.routing';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { AnularFormularioInternoModule } from './anular-formulario-interno/anular-formulario-interno.module';
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
     InputTextModule,
     InputNumberModule,
     CreateFormularioInternoModule,
+    AnularFormularioInternoModule,
     FormularioInternoRoutingModule,
 
   ],

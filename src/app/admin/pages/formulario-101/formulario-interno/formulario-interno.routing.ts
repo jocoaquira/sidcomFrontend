@@ -8,7 +8,7 @@ import { AnularFormularioInternoComponent } from './anular-formulario-interno/an
 	imports: [RouterModule.forChild([
 		{ path: '', component: FormularioInternoComponent },
 		{path:'crear',component:CreateFormularioInternoComponent},
-		{path:'anular',component:AnularFormularioInternoComponent}
+		{path:'anular/:id',component:AnularFormularioInternoComponent}
 	])],
 	exports: [RouterModule]
 })
