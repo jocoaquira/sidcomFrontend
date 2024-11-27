@@ -87,10 +87,15 @@ editarFormularioInterno(data:IFormularioInterno) {
 handleEditarFormularioInternoError(error: any): any {
   return error=error;
 }
-handleEditarFormularioInterno(data: boolean):boolean {
-  let FormularioInterno:boolean=data;
+handleEditarFormularioInterno(data: IFormularioInterno):IFormularioInterno {
+  let FormularioInterno:IFormularioInterno=data;
   return FormularioInterno
 }
+//---------------------Editar   FormularioInterno-------------------------------------------
+anularFormularioInterno(data:IFormularioInterno) {
+    this.token();
+    return this.http.put(`${this.baseUrl}formint/anulacion/`+data.id, data)
+  }
 //-----------------Listado de Empelados por Dependencia--------------------------------------------
 private token(){
   this.user=this.authService.getUser;

@@ -5,6 +5,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ButtonModule } from 'primeng/button';
 import { TabMenuModule } from 'primeng/tabmenu';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @NgModule({
   imports: [
@@ -13,8 +15,10 @@ import { TabMenuModule } from 'primeng/tabmenu';
     InputTextareaModule,
     ReactiveFormsModule,
     ButtonModule,
-    TabMenuModule
+    TabMenuModule,
+    ConfirmDialogModule
   ],
-  declarations: [AnularFormularioInternoComponent]
+  declarations: [AnularFormularioInternoComponent],
+  providers: [ConfirmationService, MessageService]
 })
 export class AnularFormularioInternoModule { }

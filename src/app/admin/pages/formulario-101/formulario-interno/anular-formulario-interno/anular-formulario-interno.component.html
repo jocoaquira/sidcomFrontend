@@ -27,9 +27,15 @@
         </div>
         <div class="col-12">
             <div class="centrar-botones">
+                <p-confirmDialog header="Confirmación" key="confirm1" icon="pi pi-exclamation-triangle" message="¿Está seguro de anular el formulario?"
+                    [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
+                    acceptLabel="Sí"
+                    rejectLabel="No"
+                ></p-confirmDialog>
+
                 <div class="col-33" >
                     <button pButton pRipple type="button" label="Anular el Formulario"
-                        class="p-button-rounded p-button-danger  boton-ajustado" (click)="onSubmit()"
+                        class="p-button-rounded p-button-danger  boton-ajustado" (click)="confirmarAnulacion()"
                         icon="pi pi-ban"
                     >
                     </button>
