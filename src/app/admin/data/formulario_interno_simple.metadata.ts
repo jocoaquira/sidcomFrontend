@@ -1,7 +1,7 @@
 export interface IFormularioInternoSimple {
     id:number,
     operator_id:number,
-    nro_formulario:number,
+    nro_formulario:string,
     razon_social:string,
     fecha_creacion:string,
     fecha_vencimiento:string,

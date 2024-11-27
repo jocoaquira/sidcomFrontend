@@ -18,6 +18,7 @@ import { OperatorsService } from 'src/app/admin/services/operators.service';
 import { FormularioInternoFormulario } from 'src/app/admin/validators/formulario-interno';
 import { IFormularioInternoMineralEnvio } from '@data/form_int_mineral_envio.metadata';
 import { IFormularioInternoMunicipioOrigenEnvio } from '@data/form_int_municipio_origen_envio.metadata';
+import { PresentacionService } from 'src/app/admin/services/presentacion.service';
 
 @Component({
   selector: 'app-create-formulario-interno',
@@ -123,7 +124,7 @@ nextStep() {
         valid = this.formulario_interno.formulario.get('peso_bruto_humedo')?.valid && this.formulario_interno.formulario.get('tara')?.valid &&
         (this.formulario_interno.formulario.get('merma')?.valid || this.formulario_interno.formulario.get('merma')?.disable) && (this.formulario_interno.formulario.get('humedad')?.valid || this.formulario_interno.formulario.get('humedad')?.disable) &&
         this.formulario_interno.formulario.get('lote')?.valid && this.formulario_interno.formulario.get('presentacion')?.valid &&
-        (this.formulario_interno.formulario.get('cantidad')?.valid || this.formulario_interno.formulario.get('cantidad')?.disabled) && this.formulario_interno.formulario.get('peso_neto_seco')?.valid && this.lista_leyes_mineral.length>0;
+        (this.formulario_interno.formulario.get('cantidad')?.valid || this.formulario_interno.formulario.get('cantidad')?.disabled) && this.formulario_interno.formulario.get('peso_neto')?.valid && this.lista_leyes_mineral.length>0;
 
         break;
       case 1:
@@ -152,7 +153,8 @@ nextStep() {
     private authService:AuthService,
     private listaLeyesMineralesService:FormularioInternoMineralService,
     private listaMunicipiosOrigenService:FormularioInternoMunicipioOrigenService,
-    private router: Router
+    private router: Router,
+    private presentacionService:PresentacionService
   ) {
    
     this.formulario_interno.formulario.patchValue({
@@ -172,8 +174,14 @@ nextStep() {
         this.minerales=this.mineralesService.handlemineral(data);
       },
       (error:any)=> this.error=this.mineralesService.handleError(error));
-
-      this.presentaciones = [
+      
+      this.presentacionService.verpresentacions('hj').subscribe(
+        (data:any)=>{
+        this.presentaciones=this.presentacionService.handlepresentacion(data);
+        console.log(this.presentaciones);
+      },
+      (error:any)=> this.error=this.presentacionService.handleError(error));
+     /* this.presentaciones = [
         { nombre: 'ENSACADO', id: '1',humedad:1,merma:1,cantidad:1 },
         { nombre: 'LINGOTES', id: '2',humedad:0,merma:0,cantidad:1 },
         { nombre: 'A GRANEL', id: '3',humedad:1,merma:1,cantidad:0 },
@@ -187,7 +195,7 @@ nextStep() {
         { nombre: 'ORO PEPA', id: '11',humedad:0,merma:0,cantidad:1 },
         { nombre: 'SACOS', id: '12',humedad:1,merma:1,cantidad:1 },
         { nombre: 'OTRO', id: '13',humedad:1,merma:1,cantidad:0 }
-    ];
+    ];*/
     this.destinos = [
         { nombre: 'COMPRADOR', id: '1' },
         { nombre: 'PLANTA DE TRATAMIENTO', id: '2' },
@@ -250,7 +258,7 @@ nextStep() {
       // Calcular el peso neto
       let pesoNeto = pesoSinTara - pesoConMerma - pesoConHumedad;
       this.formulario_interno.formulario.patchValue({
-        peso_neto_seco: pesoNeto
+        peso_neto: pesoNeto
       });
 
 
@@ -276,12 +284,15 @@ nextStep() {
         {
             this.formulario_Interno_registrado=this.formularioInternoService.handleCrearFormularioInterno(data);
          
-          if(this.formulario_Interno_registrado==null)
+          if(this.formulario_Interno_registrado!==null)
           {
             console.log(this.formulario_Interno_registrado);
             this.formulario_interno.formulario.reset();
             this.notify.success('El el formulario interno se generó exitosamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
             this.router.navigate(['/admin/formulario-101/formulario-interno']);
+          }
+          else{
+            this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
           }
         },
         (error:any) =>

@@ -9,13 +9,13 @@ export class FormularioInternoFormulario {
      this.formulario_interno={
         id:null,
         user_id:null,
-        operator_id:null,
+        operador_id:null,
         nro_formulario:null,
         lote:null,
         presentacion:null,
         cantidad:null,
         peso_bruto_humedo:0,
-        peso_neto_seco:0,
+        peso_neto:0,
         tara:0,
         humedad:0,
         merma:0,
@@ -43,12 +43,12 @@ export class FormularioInternoFormulario {
     }
     this.formulario = new FormGroup({
         user_id:new FormControl(this.formulario_interno.user_id,[Validators.required,Validators.pattern('^[0-9]*$')]),
-        operator_id:new FormControl(this.formulario_interno.operator_id,[Validators.required,Validators.pattern('^[0-9]*$')]),
+        operador_id:new FormControl(this.formulario_interno.operador_id,[Validators.required,Validators.pattern('^[0-9]*$')]),
         lote:new FormControl(this.formulario_interno.lote,[Validators.required]),
         presentacion:new FormControl(this.formulario_interno.presentacion,[Validators.required]),
         cantidad:new FormControl(this.formulario_interno.cantidad,[Validators.pattern('^[0-9]*$'),  Validators.min(0)]),
         peso_bruto_humedo:new FormControl(this.formulario_interno.peso_bruto_humedo,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
-        peso_neto_seco: new FormControl(this.formulario_interno.peso_neto_seco,[Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
+        peso_neto: new FormControl(this.formulario_interno.peso_neto,[Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
         tara:new FormControl(this.formulario_interno.tara,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'),Validators.min(0)]),
         humedad: new FormControl(this.formulario_interno.humedad,[Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0), Validators.max(100)]),
         merma:new FormControl(this.formulario_interno.merma,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0), Validators.max(100)]),
@@ -116,10 +116,10 @@ getErrorMessage(controlName: string): string | null {
           if (controlName === 'user_id') {
             return 'Solo se permiten numeros.';
           }
-          if (controlName === 'operator_id') {
+          if (controlName === 'operador_id') {
             return 'Solo se permiten numeros.';
           }
-          if (controlName === 'peso_neto_seco') {
+          if (controlName === 'peso_neto') {
             return 'Solo se permiten numeros usar punto (.) si tiene decimal.';
           }
           if (controlName === 'peso_bruto_humedo') {

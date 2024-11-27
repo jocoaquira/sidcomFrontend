@@ -36,6 +36,11 @@ export class MunicipiosService {
     let municipio:IMunicipio[]=data;
     return municipio
   }
+//-------visualizar municipio-------------------------------------------------
+  verMunicipio(nombre:string)
+{
+  return this.http.get(`${this.baseUrl}municipio/`+nombre);
+}
 //---------------------crear   municipio-------------------------------------------
 crearmunicipio(data:IMunicipio) {
   this.token();

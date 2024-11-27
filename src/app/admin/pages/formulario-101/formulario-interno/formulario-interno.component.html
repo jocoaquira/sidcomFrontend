@@ -74,8 +74,9 @@
                         </td>
                         <td>
                             <div class="flex">
-                                <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-pencil" label="Modificar" class="p-button-rounded p-button-warning mr-2" (click)="editProduct(operador)"></button>
-                                <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-lock" label="Emitir" class="p-button-rounded p-button-success mr-2" (click)="editProduct(operador)"></button>
+                                <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-pencil" label="Modificar" class="p-button-rounded p-button-warning mr-2" routerLink="/admin/formulario-101/formulario-interno/editar/{{operador?.id}}"></button>
+                                
+                                <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-lock" label="Emitir" class="p-button-rounded p-button-success mr-2" (click)="confirmarEmision(operador)"></button>
                                 <button *ngIf="operador.estado !== 'GENERADO' && operador.estado !== 'ANULADO'" pButton pRipple icon="pi pi-trash" label="Anular" class="p-button-rounded p-button-danger mr-2" routerLink="/admin/formulario-101/formulario-interno/anular/{{operador?.id}}"></button>
                                 </div>
                         </td>
@@ -87,6 +88,11 @@
                     </tr>
                 </ng-template>
             </p-table>
+            <p-confirmDialog header="Confirmación" key="confirm1" icon="pi pi-exclamation-triangle" message="¿Está seguro de anular el formulario?"
+                                    [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
+                                    acceptLabel="Sí"
+                                    rejectLabel="No"
+                                ></p-confirmDialog>
         </div>
     </div>
 </div>

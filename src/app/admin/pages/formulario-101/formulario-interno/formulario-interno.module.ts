@@ -12,6 +12,8 @@ import { FormularioInternoRoutingModule } from './formulario-interno.routing';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { AnularFormularioInternoModule } from './anular-formulario-interno/anular-formulario-interno.module';
+import { EditFormularioInternoModule } from './edit-formulario-interno/edit-formulario-interno.module';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @NgModule({
   imports: [
@@ -26,8 +28,9 @@ import { AnularFormularioInternoModule } from './anular-formulario-interno/anula
     InputNumberModule,
     CreateFormularioInternoModule,
     AnularFormularioInternoModule,
+    EditFormularioInternoModule,
     FormularioInternoRoutingModule,
-
+    ConfirmDialogModule
   ],
   declarations: [
     FormularioInternoComponent

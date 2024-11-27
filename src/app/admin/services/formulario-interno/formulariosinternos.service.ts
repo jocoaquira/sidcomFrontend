@@ -45,7 +45,7 @@ verFormularioInterno(nombre:string)
   params = params.append('id', nombre);
 
   // asignacion de parametros
-  return this.http.get(`${this.baseUrl}formint`,{params:params});
+  return this.http.get(`${this.baseUrl}formint/`+nombre,{params:params});
 }
   //-----------------Visualizar operadores-------------------------------------------
   verFormularioInternosSimple(nombre:string)
@@ -55,7 +55,7 @@ verFormularioInterno(nombre:string)
     params = params.append('nombre', nombre);
 
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}formint/lista-simple`,{params:params});
+    return this.http.get(`${this.baseUrl}formint/reducido`,{params:params});
   }
   handleFormularioInternoSimpleError(error: any): any {
     return error=error.error.error;
@@ -90,6 +90,14 @@ handleEditarFormularioInternoError(error: any): any {
 handleEditarFormularioInterno(data: IFormularioInterno):IFormularioInterno {
   let FormularioInterno:IFormularioInterno=data;
   return FormularioInterno
+}
+//---------------------------Emitir Formulario 101..-----------------------------------------
+emitirFormularioInterno(id:number) {
+  this.token();
+  let estado:any={
+    estado:'EMITIDO'
+  }
+  return this.http.put(`${this.baseUrl}formint/emitir/`+id, estado)
 }
 //---------------------Editar   FormularioInterno-------------------------------------------
 anularFormularioInterno(data:IFormularioInterno) {

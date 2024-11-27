@@ -20,13 +20,13 @@
                                         inputId="dropdown"
                                         [autoDisplayFirst]="false"
                                         [options]="operadores"
-                                        formControlName="operator_id"
+                                        formControlName="operador_id"
                                         optionLabel="razon_social"
                                         optionValue="id"
                                     ></p-dropdown>
                                     <label for="dropdown">Operadores Mineros</label>
-                                    <small id="operator_id" class="p-error " *ngIf="formulario_interno.esCampoInvalido('operator_id')">
-                                        {{formulario_interno.getErrorMessage('operator_id')}}
+                                    <small id="operador_id" class="p-error " *ngIf="formulario_interno.esCampoInvalido('operador_id')">
+                                        {{formulario_interno.getErrorMessage('operador_id')}}
                                     </small>
                                 </span>
                             </div>
@@ -142,15 +142,15 @@
                                 <span class="p-float-label">
                                     <input
                                         type="number"
-                                        id="peso_neto_seco"
+                                        id="peso_neto"
                                         pInputText
-                                        formControlName="peso_neto_seco"
+                                        formControlName="peso_neto"
                                         class="ng-dirty"
                                         readonly
                                     />
                                     <label for="Razón Social">Peso Neto Seco (Kg.)</label>
-                                    <small id="peso_neto_seco" class="p-error "*ngIf="formulario_interno.esCampoInvalido('peso_neto_seco')">
-                                        {{formulario_interno.getErrorMessage('peso_neto_seco')}}
+                                    <small id="peso_neto" class="p-error "*ngIf="formulario_interno.esCampoInvalido('peso_neto')">
+                                        {{formulario_interno.getErrorMessage('peso_neto')}}
                                     </small>
                                 </span>
                             </div>

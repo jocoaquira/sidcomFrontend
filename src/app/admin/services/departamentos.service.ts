@@ -36,6 +36,11 @@ export class DepartamentosService {
     let departamento:IDepartamento[]=data;
     return departamento
   }
+  //-----------------------------Ver Departamento---------------------------------
+  verDepartamento(nombre:string)
+{
+  return this.http.get(`${this.baseUrl}departamento/`+nombre);
+}
 //---------------------crear   departamento-------------------------------------------
 creardepartamento(data:IDepartamento) {
   this.token();

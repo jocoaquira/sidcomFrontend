@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.metadata';
-import { IMineral } from '@data/mineral.metadata';
+import { IPresentacion } from '@data/presentacion.metadata';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MineralsService {
+export class PresentacionService {
   private user!:IApiUserAuthenticated;
   private baseUrl = localStorage.getItem('url-backend');
   private headers!:HttpHeaders;
@@ -20,50 +20,45 @@ export class MineralsService {
     //this.requestOptions = { headers: headers };
   }
 //-----------------Visualizar operadores-------------------------------------------
-  verminerals(nombre:string)
+  verpresentacions(nombre:string)
   {
     // Inicializacion de objeto params
     let params = new HttpParams();
     params = params.append('id', nombre);
 
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}mineral`,{params:params});
+    return this.http.get(`${this.baseUrl}presentacion`,{params:params});
   }
   handleError(error: any): any {
     return error=error.error.error;
   }
-  handlemineral(data: IMineral[]):IMineral[] {
-    let mineral:IMineral[]=data;
-    return mineral
+  handlepresentacion(data: IPresentacion[]):IPresentacion[] {
+    let presentacion:IPresentacion[]=data;
+    return presentacion
   }
-  //-------visualizar municipio-------------------------------------------------
-  verMineral(nombre:string)
-{
-  return this.http.get(`${this.baseUrl}mineral/`+nombre);
-}
-//---------------------crear   mineral-------------------------------------------
-crearmineral(data:IMineral) {
+//---------------------crear   presentacion-------------------------------------------
+crearpresentacion(data:IPresentacion) {
   this.token();
-  return this.http.post(`${this.baseUrl}/mineral`,data, {headers:this.headers})
+  return this.http.post(`${this.baseUrl}/presentacion`,data, {headers:this.headers})
 }
-handleCrearmineralError(error: any): any {
+handleCrearpresentacionError(error: any): any {
   return error=error;
 }
-handleCrearmineral(data: IMineral):IMineral {
-  let mineral:IMineral=data;
-  return mineral
+handleCrearpresentacion(data: IPresentacion):IPresentacion {
+  let presentacion:IPresentacion=data;
+  return presentacion
 }
-//---------------------Editar   mineral-------------------------------------------
-editarmineral(data:IMineral) {
+//---------------------Editar   presentacion-------------------------------------------
+editarpresentacion(data:IPresentacion) {
   this.token();
-  return this.http.put(`${this.baseUrl}/mineral/`+data.id, data)
+  return this.http.put(`${this.baseUrl}/presentacion/`+data.id, data)
 }
-handleEditarmineralError(error: any): any {
+handleEditarpresentacionError(error: any): any {
   return error=error;
 }
-handleEditarmineral(data: boolean):boolean {
-  let mineral:boolean=data;
-  return mineral
+handleEditarpresentacion(data: boolean):boolean {
+  let presentacion:boolean=data;
+  return presentacion
 }
 //-----------------Listado de Empelados por Dependencia--------------------------------------------
 private token(){
