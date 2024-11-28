@@ -29,6 +29,12 @@ export class MunicipiosService {
     // asignacion de parametros
     return this.http.get(`${this.baseUrl}municipio`,{params:params});
   }
+  verTodosMunicipios()
+  {
+
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}municipio`);
+  }
   handleError(error: any): any {
     return error=error.error.error;
   }

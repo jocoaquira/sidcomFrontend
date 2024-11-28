@@ -69,7 +69,6 @@ verFormularioInterno(nombre:string)
 //---------------------crear   FormularioInterno-------------------------------------------
 crearFormularioInterno(data:any) {
   this.token();
-  console.log(data);
   return this.http.post(`${this.baseUrl}formint`,data, {headers:this.headers})
 }
 handleCrearFormularioInternoError(error: any): any {
@@ -80,9 +79,10 @@ handleCrearFormularioInterno(data: any):any {
   return FormularioInterno
 }
 //---------------------Editar   FormularioInterno-------------------------------------------
-editarFormularioInterno(data:IFormularioInterno) {
+editarFormularioInterno(data:IFormularioInterno,id:number) {
   this.token();
-  return this.http.put(`${this.baseUrl}formint/`+data.id, data)
+  console.log(id);
+  return this.http.put(`${this.baseUrl}formint/`+id.toString(), data)
 }
 handleEditarFormularioInternoError(error: any): any {
   return error=error;
@@ -101,8 +101,12 @@ emitirFormularioInterno(id:number) {
 }
 //---------------------Editar   FormularioInterno-------------------------------------------
 anularFormularioInterno(data:IFormularioInterno) {
+  let anulado:any={
+    estado:'ANULADO',
+    justificacion_anulacion:data.justificacion_anulacion
+  }
     this.token();
-    return this.http.put(`${this.baseUrl}formint/anulacion/`+data.id, data)
+    return this.http.put(`${this.baseUrl}formint/anular/`+data.id, anulado)
   }
 //-----------------Listado de Empelados por Dependencia--------------------------------------------
 private token(){

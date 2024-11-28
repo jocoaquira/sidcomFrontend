@@ -309,6 +309,7 @@
                                         formControlName="des_tipo"
                                         optionLabel="nombre"
                                         optionValue="nombre"
+                                        (ngChange)="cambioDestino($event)"
                                     ></p-dropdown>
                                     <label for="dropdown">Destino</label>
                                     <small id="des_tipo" class="p-error " *ngIf="formulario_interno.esCampoInvalido('des_tipo')">
