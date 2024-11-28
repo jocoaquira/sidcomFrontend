@@ -6,7 +6,6 @@ import { ToastrService } from 'ngx-toastr';
 import { SelectItem } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
 import { OperatorsService } from 'src/app/admin/services/operators.service';
-import { CountryService } from 'src/app/demo/service/country.service';
 import { tileLayer, latLng, Marker,marker, MapOptions,Map, LeafletEvent , control } from 'leaflet';
 import { MunicipiosService } from 'src/app/admin/services/municipios.service';
 import { DepartamentosService } from 'src/app/admin/services/departamentos.service';

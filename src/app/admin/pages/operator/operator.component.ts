@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from 'src/app/demo/api/product';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { IOperator } from '@data/operator.metadata';
@@ -73,13 +72,7 @@ export class OperatorComponent implements OnInit {
         this.deleteProductsDialog = true;
     }
 
-    editProduct(product: Product) {
-        this.productDialog = true;
-    }
 
-    deleteProduct(product: Product) {
-        this.deleteProductDialog = true;
-    }
 
     confirmDeleteSelected() {
         this.deleteProductsDialog = false;
