@@ -40,10 +40,17 @@ public nameUserLS:string='currentUser';
         this.setUserToSessionStorage(r.data);
         this.currentUser.next(r.data);
         if(!response.error){
-            console.log('correcto');
-          this.router.navigateByUrl('admin/operador');
-          this.notify.success('Acceso correcto bienvenido '+this.currentUser.value.nombre_completo+'!!!','Bienvenido',{timeOut:2200,positionClass: 'toast-bottom-right'});
-          }
+            console.log(this.currentUser.value);
+            if(this.currentUser.value.operator_id==null)
+            {
+                this.router.navigateByUrl('admin/operador');
+                this.notify.success('Acceso correcto bienvenido '+this.currentUser.value.nombre_completo+'!!!','Bienvenido',{timeOut:2200,positionClass: 'toast-bottom-right'});
+
+            }
+            else{
+                this.router.navigateByUrl('public');
+            }
+           }
         return response;
       }),
       catchError(

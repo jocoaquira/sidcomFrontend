@@ -6,7 +6,7 @@ import { AuthService } from '@core/authentication/services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class OperadorGuard implements CanActivate {
   constructor(
     private router:Router,
     private authService:AuthService
@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
     state:RouterStateSnapshot
   ):boolean{
     const currentUser= this.authService.getUser;
-    if(JSON.stringify(currentUser)!=='{}' && currentUser){
+    if(JSON.stringify(currentUser)!=='{}' && currentUser.operator_id!==null){
       return true;
     }
     this.router.navigate(['auth'],{

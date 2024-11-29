@@ -1,8 +1,8 @@
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 
-import { AppLayoutComponent } from "./layout/app.layout.component";
 import { NotfoundComponent } from '@core/authentication/pages/notfound/notfound.component';
+import { AppComponent } from './app.component';
 
 @NgModule({
     imports: [
@@ -18,7 +18,7 @@ import { NotfoundComponent } from '@core/authentication/pages/notfound/notfound.
                   import('@core/authentication/authentication.module').then(m=>m.AuthenticationModule)
               },
             {
-                path: '', component: AppLayoutComponent,
+                path: '',component:AppComponent,
                 children: [
 
                     { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) },

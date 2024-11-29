@@ -9,11 +9,11 @@ import { ButtonModule } from 'primeng/button';
 import { StyleClassModule } from 'primeng/styleclass';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { DashboardRoutingModule } from './dashboard.routing';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
     imports: [
         CommonModule,
-        DashboardRoutingModule,
         FormsModule,
         ChartModule,
         MenuModule,
@@ -21,6 +21,7 @@ import { DashboardRoutingModule } from './dashboard.routing';
         StyleClassModule,
         PanelMenuModule,
         ButtonModule,
+         DashboardRoutingModule,
 
     ],
     declarations: [DashboardComponent]

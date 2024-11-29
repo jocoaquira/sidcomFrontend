@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { AdminGuard } from '@core/guards/admin.guard';
 import { AuthGuard } from '@core/guards/auth.guard';
-import { AppLayoutComponent } from '@layout/app.layout.component';
+import { AppLayoutComponent } from './layout/app.layout.component';
 
 @NgModule({
     imports: [RouterModule.forChild([
         {
-        path:'',
-        canActivate:[AuthGuard],
+        path:'', component: AppLayoutComponent,
+        canActivate:[AdminGuard,AuthGuard],
         children:[
         { path: 'operador', loadChildren: () => import('./pages/operator/operator.module').then(m => m.OperatorModule) },
         { path: 'usuario', loadChildren: () => import('./pages/usuario/usuario.module').then(m => m.UsuarioModule) },

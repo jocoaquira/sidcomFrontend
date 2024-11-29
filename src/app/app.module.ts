@@ -2,21 +2,24 @@ import { NgModule } from '@angular/core';
 import { HashLocationStrategy, LocationStrategy, PathLocationStrategy, registerLocaleData } from '@angular/common';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
-import { AppLayoutModule } from './layout/app.layout.module';
+//import { AppLayoutModule } from './layout/app.layout.module';
 import localeEs from '@angular/common/locales/es';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorAuthInterceptor } from './admin/interceptors/interceptor-auth.interceptor';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NotfoundComponent } from '@core/authentication/pages/notfound/notfound.component';
+
 registerLocaleData(localeEs,'es');
 @NgModule({
-    declarations: [AppComponent, NotfoundComponent ],
+    declarations: [AppComponent, NotfoundComponent],
     imports: [
-            AppRoutingModule,
-            AppLayoutModule,
+        AppRoutingModule,
+
+           // AppLayoutModule,
             ToastrModule.forRoot(),
             BrowserAnimationsModule,
+            HttpClientModule
 
         ],
     providers: [
