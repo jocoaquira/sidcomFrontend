@@ -340,14 +340,22 @@ export class CrearOperadorComponent implements OnInit {
   submited:boolean=false;
   mapaDialogo:boolean=false;
     abrirMapa() {
-
-        let dept:any=this.departamento.find(val => val.id ===  this.operador.formulario.value.dl_departamento);
-        console.log(this.operador.formulario.value.dl_departamento);
-        if (this.map) {
-            this.map.setView(latLng(dept.latitud, dept.longitud), 13.5);
+        if(this.operador.formulario.value.dl_departamento){
+            let dept:any=this.departamento.find(val => val.id ===  this.operador.formulario.value.dl_departamento);
+            console.log(this.operador.formulario.value.dl_departamento);
+            if (this.map) {
+                this.map.setView(latLng(dept.latitud, dept.longitud), 13.5);
+            }
+            this.sw_mapa=false;
+            this.mapaDialogo = true;
         }
-        this.sw_mapa=false;
-        this.mapaDialogo = true;
+        else{
+            this.notify.error('Seleccione un departamento para abrir el mapa....','Error al Abrir el Mapa',{timeOut:2000,positionClass: 'toast-bottom-right'});
+        }
+
+
+
+        
     }
     abrirMapaSucursal() {
         let dept:any=this.departamento.find(val => val.id === this.sucursal.departamento_id);
@@ -365,18 +373,25 @@ export class CrearOperadorComponent implements OnInit {
         }
       }
     agregarPunto() {
-        const position = this.currentMarker.getLatLng();
-        if(!this.sw_mapa)
-        {
-            this.operador.formulario.patchValue({ofi_lat: position.lat, ofi_lon:position.lng});
+       
+        if(this.currentMarker!==undefined){
+            const position = this.currentMarker.getLatLng();
+            if(!this.sw_mapa)
+                {
+                    this.operador.formulario.patchValue({ofi_lat: position.lat, ofi_lon:position.lng});
+                }
+                else{
+                    this.sucursal.latitud=position.lat;
+                    this.sucursal.longitud=position.lng;
+                    this.operador.formulario.patchValue({created_at: position.lat, updated_at:position.lng});
+        
+                }
+                this.mapaDialogo = false;
         }
         else{
-            this.sucursal.latitud=position.lat;
-            this.sucursal.longitud=position.lng;
-            this.operador.formulario.patchValue({created_at: position.lat, updated_at:position.lng});
-
+            this.notify.error('Seleccione un punto en el mapa para agregar....','Error al Seleccionar un Punto',{timeOut:2000,positionClass: 'toast-bottom-right'});
         }
-        this.mapaDialogo = false;
+        
 
     }
     validarDireccion():boolean{

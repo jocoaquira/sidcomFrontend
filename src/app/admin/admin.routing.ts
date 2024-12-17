@@ -13,6 +13,7 @@ import { AppLayoutComponent } from './layout/app.layout.component';
         { path: 'operador', loadChildren: () => import('./pages/operator/operator.module').then(m => m.OperatorModule) },
         { path: 'usuario', loadChildren: () => import('./pages/usuario/usuario.module').then(m => m.UsuarioModule) },
         { path: 'formulario-101', loadChildren: () => import('./pages/formulario-101/formulario-101.module').then(m => m.Formulario101Module) },
+        { path: 'toma-de-muestra', loadChildren: () => import('./pages/toma-de-muestra/toma-de-muestra.module').then(m => m.TomaDeMuestraModule) },
         { path: '**', redirectTo: '/notfound' }
         ]
         }

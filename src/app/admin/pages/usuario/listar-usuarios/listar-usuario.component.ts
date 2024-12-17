@@ -28,7 +28,7 @@ export class ListarUsuarioComponent implements OnInit {
         ci:null,
         celular:null,
         rol_id:null,
-        operator_id:null,
+        operador_id:null,
         estado:null,
         created_at:null,
         updated_at:null,
@@ -199,11 +199,11 @@ export class ListarUsuarioComponent implements OnInit {
     }
     return '';
     }
-    userOperador(operator_id:any):string{
-        if(operator_id!=null && this.operadores!=null){
+    userOperador(operador_id:any):string{
+        if(operador_id!=null && this.operadores!=null){
         let index = -1;
         for (let i = 0; i < this.operadores.length; i++) {
-            if (this.operadores[i].id === operator_id) {
+            if (this.operadores[i].id === operador_id) {
                 index = i;
                 break;
             }

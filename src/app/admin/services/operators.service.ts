@@ -39,12 +39,8 @@ export class OperatorsService {
   //-------------------ver Operador------------------------------------------------------
   verOperator(nombre:string)
   {
-    // Inicializacion de objeto params
-    let params = new HttpParams();
-    params = params.append('id', nombre);
-
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}operator`,{params:params});
+    return this.http.get(`${this.baseUrl}operator/`+nombre);
   }
   //-----------------Visualizar Operador Hash-------------------------------------------
   hashOperador(nombre:string)

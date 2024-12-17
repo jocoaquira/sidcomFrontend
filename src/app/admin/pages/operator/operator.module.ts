@@ -15,7 +15,7 @@ import { RippleModule } from 'primeng/ripple';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
-import { OperatorRoutingModule } from './operator-routing.module';
+import { OperatorRoutingModule } from './operator.routing';
 import { OperatorComponent } from './operator.component';
 import { BadgeModule } from 'primeng/badge';
 import { TagModule } from 'primeng/tag';

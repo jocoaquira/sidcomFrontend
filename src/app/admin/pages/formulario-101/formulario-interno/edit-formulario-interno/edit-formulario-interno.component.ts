@@ -163,9 +163,6 @@ constructor(
   private router: Router,
   private presentacionService:PresentacionService,
   private actRoute:ActivatedRoute,
-  private municipioService:MunicipiosService,
-  private departamentoService:DepartamentosService,
-  private mineralesSeervice:MineralsService,
   private municipiosService:MunicipiosService,
   public departamentosService: DepartamentosService
 ) {

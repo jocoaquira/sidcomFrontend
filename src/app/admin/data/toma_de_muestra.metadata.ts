@@ -1,0 +1,28 @@
+export interface ITomaDeMuestra {
+    id?:number,
+    user_id:number,
+    operador_id:number,
+    resp_tdm_id:number,
+    resp_tdm_senarecom_id:number,
+    resp_tdm_gador_id:number,
+    nro_formulario:string,
+    lugar_verificacion:string,
+    latitud:number,
+    longitud:number,
+    municipio_id:number,
+    lote:string,
+    presentacion:string,
+    cantidad:number,
+    nro_camiones:number,
+    total_parcial
+    peso_neto_total:number,
+    peso_neto_parcial:number,
+    tipo_muetreo:string,
+    observaciones: string,
+    fecha_hora_tdm:string,
+    fecha_creacion: string,
+    fecha_aprobacion: string,
+    fecha_firma:string,
+    justificacion_anulacion: string,
+    estado:string  //'GENERADO','SOLICITADO','APROBADO','FIRMADO', 'ANULADO'
+}

@@ -16,7 +16,7 @@ export class AdminGuard implements CanActivate {
     state:RouterStateSnapshot
   ):boolean{
     const currentUser= this.authService.getUser;
-    if(JSON.stringify(currentUser)!=='{}' && currentUser.operator_id==null){
+    if(JSON.stringify(currentUser)!=='{}' && currentUser.operador_id==null){
       return true;
     }
     this.router.navigate(['auth'],{

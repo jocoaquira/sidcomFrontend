@@ -239,7 +239,22 @@ nextStep() {
         this.calcularPesoNeto();
       });
   }
-
+  cambioDestino(event){
+    if(event.value=='COMPRADOR')
+    {
+      this.formulario_interno.formulario.patchValue({
+        des_planta: null
+      });
+    }
+    else{
+      {
+        this.formulario_interno.formulario.patchValue({
+          des_comprador: null
+        });
+      }
+    }
+    console.log(event);
+  }
  // Función para calcular el peso neto
  calcularPesoNeto() {
         // Obtener los valores de cada campo individualmente

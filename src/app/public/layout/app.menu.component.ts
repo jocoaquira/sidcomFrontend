@@ -16,13 +16,6 @@ export class AppMenuComponent implements OnInit {
     ngOnInit() {
         this.model = [
             {
-                label: 'ADMINISTRACION',
-                items: [
-                    { label: 'Operador Minero', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/operador'] },
-                    { label: 'Usuarios', icon: 'pi pi-fw pi-users', routerLink: ['/admin/usuario'] }
-                ]
-            },
-            {
                 label: 'Formularios',
                 items: [
                     { label: 'Formularios Internos', icon: 'pi pi-fw pi-file-o', routerLink: ['/admin/formulario-101/formulario-interno'] },
@@ -37,14 +30,6 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Formularios Interno', icon: 'pi pi-fw pi-file-o', url: ['https://www.primefaces.org/primeblocks-ng'], target: '_blank' },
                     { label: 'Formularios Externo', icon: 'pi pi-fw pi-globe', routerLink: ['/utilities/icons'] },
                     { label: 'Formularios Cooperativas', icon: 'pi pi-fw pi-file-o', url: ['https://www.primefaces.org/primeflex/'], target: '_blank' },
-                ]
-            },
-            {
-                label: 'PERMISOS',
-                items: [
-                    { label: 'Roles', icon: 'pi pi-fw pi-shield', routerLink: ['/utilities/icons'] },
-                    { label: 'Permisos', icon: 'pi pi-fw pi-key', url: ['https://www.primefaces.org/primeflex/'], target: '_blank' },
-                    { label: 'Usuario', icon: 'pi pi-fw pi-user-edit', url: ['https://www.primefaces.org/primeflex/'], target: '_blank' },
                 ]
             },
 

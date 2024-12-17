@@ -41,7 +41,7 @@ public nameUserLS:string='currentUser';
         this.currentUser.next(r.data);
         if(!response.error){
             console.log(this.currentUser.value);
-            if(this.currentUser.value.operator_id==null)
+            if(this.currentUser.value.operador_id==null)
             {
                 this.router.navigateByUrl('admin/operador');
                 this.notify.success('Acceso correcto bienvenido '+this.currentUser.value.nombre_completo+'!!!','Bienvenido',{timeOut:2200,positionClass: 'toast-bottom-right'});

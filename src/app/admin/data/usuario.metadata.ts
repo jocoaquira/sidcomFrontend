@@ -7,7 +7,7 @@ export interface IUsuario {
     ci:string,
     celular:number,
     rol_id:number,
-    operator_id:number,
+    operador_id:number,
     estado:number,
     created_at:string,
     updated_at:string,
