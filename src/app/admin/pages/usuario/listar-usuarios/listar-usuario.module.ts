@@ -17,8 +17,8 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { BadgeModule } from 'primeng/badge';
 import { TagModule } from 'primeng/tag';
-import { ListarUsuarioComponent } from './listar-usuario.component';
 import { EditarUsuarioModule } from 'src/app/admin/components/editar-usuario/editar-usuario.module';
+import { ListarUsuarioComponent } from './listar-usuario.component';
 
 @NgModule({
     schemas: [CUSTOM_ELEMENTS_SCHEMA],

@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.metadata';
 import { ITomaDeMuestra } from '@data/toma_de_muestra.metadata';
+import { ITomaDeMuestraSimple } from '@data/toma_de_muestra_simple.metadata';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,7 @@ export class TomaDeMuestraService {
     params = params.append('nombre', nombre);
 
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}formint`,{params:params});
+    return this.http.get(`${this.baseUrl}sample`,{params:params});
   }
   handleError(error: any): any {
     return error=error.error.error;
@@ -36,6 +37,13 @@ export class TomaDeMuestraService {
     let TomaDeMuestra:ITomaDeMuestra[]=data;
     return TomaDeMuestra
   }
+  //-----------------Visualizar operadores-------------------------------------------
+  verTomaDeMuestrasOperador(id:number)
+  {
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}sample/operador/`+id);
+  }
+
 //-----------------Visualizar Formulario Interno-------------------------------------------
 verTomaDeMuestra(nombre:string)
 {
@@ -44,7 +52,7 @@ verTomaDeMuestra(nombre:string)
   params = params.append('id', nombre);
 
   // asignacion de parametros
-  return this.http.get(`${this.baseUrl}formint/`+nombre,{params:params});
+  return this.http.get(`${this.baseUrl}sample/`+nombre,{params:params});
 }
   //-----------------Visualizar operadores-------------------------------------------
   verTomaDeMuestrasSimple(nombre:string)
@@ -54,7 +62,7 @@ verTomaDeMuestra(nombre:string)
     params = params.append('nombre', nombre);
 
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}formint/reducido`,{params:params});
+    return this.http.get(`${this.baseUrl}sample/reducido`,{params:params});
   }
   handleTomaDeMuestraSimpleError(error: any): any {
     return error=error.error.error;
@@ -68,7 +76,7 @@ verTomaDeMuestra(nombre:string)
 //---------------------crear   TomaDeMuestra-------------------------------------------
 crearTomaDeMuestra(data:any) {
   this.token();
-  return this.http.post(`${this.baseUrl}formint`,data, {headers:this.headers})
+  return this.http.post(`${this.baseUrl}sample`,data, {headers:this.headers})
 }
 handleCrearTomaDeMuestraError(error: any): any {
   return error=error;
@@ -81,7 +89,7 @@ handleCrearTomaDeMuestra(data: any):any {
 editarTomaDeMuestra(data:ITomaDeMuestra,id:number) {
   this.token();
   console.log(id);
-  return this.http.put(`${this.baseUrl}formint/`+id.toString(), data)
+  return this.http.put(`${this.baseUrl}sample/`+id.toString(), data)
 }
 handleEditarTomaDeMuestraError(error: any): any {
   return error=error;
@@ -96,7 +104,7 @@ emitirTomaDeMuestra(id:number) {
   let estado:any={
     estado:'EMITIDO'
   }
-  return this.http.put(`${this.baseUrl}formint/emitir/`+id, estado)
+  return this.http.put(`${this.baseUrl}sample/emitir/`+id, estado)
 }
 //---------------------Editar   TomaDeMuestra-------------------------------------------
 anularTomaDeMuestra(data:ITomaDeMuestra) {
@@ -105,7 +113,7 @@ anularTomaDeMuestra(data:ITomaDeMuestra) {
     justificacion_anulacion:data.justificacion_anulacion
   }
     this.token();
-    return this.http.put(`${this.baseUrl}formint/anular/`+data.id, anulado)
+    return this.http.put(`${this.baseUrl}sample/anular/`+data.id, anulado)
   }
 //-----------------Listado de Empelados por Dependencia--------------------------------------------
 private token(){

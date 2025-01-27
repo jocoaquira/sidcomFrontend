@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.metadata';
-import { IFormularioInternoMunicipioOrigen } from '@data/form_int_municipio_origen.metadata';
+import { ITomaDeMuestraMunicipioOrigen } from '@data/toma_de_muestra_municipio_origen.metadata';
 
 @Injectable({
   providedIn: 'root'
 })
-export class FormularioInternoMunicipioOrigenService {
+export class TomaDeMuestraMunicipioOrigenService {
   private user!:IApiUserAuthenticated;
   private baseUrl = localStorage.getItem('url-backend');
   private headers!:HttpHeaders;
@@ -20,7 +20,7 @@ export class FormularioInternoMunicipioOrigenService {
     //this.requestOptions = { headers: headers };
   }
 //-----------------Visualizar operadores-------------------------------------------
-  verFormularioInternoMunicipioOrigen(nombre:string)
+  verTomaDeMuestraMunicipioOrigen(nombre:string)
   {
     // Inicializacion de objeto params
     let params = new HttpParams();
@@ -32,36 +32,36 @@ export class FormularioInternoMunicipioOrigenService {
   handleError(error: any): any {
     return error=error.error.error;
   }
-  handleFormularioInternoMunicipioOrigen(data: IFormularioInternoMunicipioOrigen[]):IFormularioInternoMunicipioOrigen[] {
-    let FormularioInternoMunicipioOrigen:IFormularioInternoMunicipioOrigen[]=data;
-    return FormularioInternoMunicipioOrigen
+  handleTomaDeMuestraMunicipioOrigen(data: ITomaDeMuestraMunicipioOrigen[]):ITomaDeMuestraMunicipioOrigen[] {
+    let TomaDeMuestraMunicipioOrigen:ITomaDeMuestraMunicipioOrigen[]=data;
+    return TomaDeMuestraMunicipioOrigen
   }
 
 
 
-//---------------------crear   FormularioInternoMunicipioOrigen-------------------------------------------
-crearFormularioInternoMunicipioOrigen(data:IFormularioInternoMunicipioOrigen) {
+//---------------------crear   TomaDeMuestraMunicipioOrigen-------------------------------------------
+crearTomaDeMuestraMunicipioOrigen(data:ITomaDeMuestraMunicipioOrigen) {
   this.token();
   return this.http.post(`${this.baseUrl}form-int-municipio-origen`,data, {headers:this.headers})
 }
-handleCrearFormularioInternoMunicipioOrigenError(error: any): any {
+handleCrearTomaDeMuestraMunicipioOrigenError(error: any): any {
   return error=error;
 }
-handleCrearFormularioInternoMunicipioOrigen(data: IFormularioInternoMunicipioOrigen):IFormularioInternoMunicipioOrigen {
-  let FormularioInternoMunicipioOrigen:IFormularioInternoMunicipioOrigen=data;
-  return FormularioInternoMunicipioOrigen
+handleCrearTomaDeMuestraMunicipioOrigen(data: ITomaDeMuestraMunicipioOrigen):ITomaDeMuestraMunicipioOrigen {
+  let TomaDeMuestraMunicipioOrigen:ITomaDeMuestraMunicipioOrigen=data;
+  return TomaDeMuestraMunicipioOrigen
 }
-//---------------------Editar   FormularioInternoMunicipioOrigen-------------------------------------------
-editarFormularioInternoMunicipioOrigen(data:IFormularioInternoMunicipioOrigen) {
+//---------------------Editar   TomaDeMuestraMunicipioOrigen-------------------------------------------
+editarTomaDeMuestraMunicipioOrigen(data:ITomaDeMuestraMunicipioOrigen) {
   this.token();
   return this.http.put(`${this.baseUrl}form-int-municipio-origen/`+data.id, data)
 }
-handleEditarFormularioInternoMunicipioOrigenError(error: any): any {
+handleEditarTomaDeMuestraMunicipioOrigenError(error: any): any {
   return error=error;
 }
-handleEditarFormularioInternoMunicipioOrigen(data: boolean):boolean {
-  let FormularioInternoMunicipioOrigen:boolean=data;
-  return FormularioInternoMunicipioOrigen
+handleEditarTomaDeMuestraMunicipioOrigen(data: boolean):boolean {
+  let TomaDeMuestraMunicipioOrigen:boolean=data;
+  return TomaDeMuestraMunicipioOrigen
 }
 //-----------------Listado de Empelados por Dependencia--------------------------------------------
 private token(){

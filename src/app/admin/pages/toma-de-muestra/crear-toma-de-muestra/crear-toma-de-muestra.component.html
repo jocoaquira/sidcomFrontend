@@ -1,3 +1,518 @@
-<p>
-  crear-toma-de-muestra works!
-</p>
+
+<form [formGroup]="formulario_interno.formulario" (ngSubmit)="onSubmit()">
+    <p-dialog (onShow)="actualizarMapa()" [(visible)]="mapaDialogo" [style]="{width: '800px',height:'800px'}" header="Mapa (Hacer click en el lugar que desee)" [modal]="true" class="p-fluid">
+        <div style="height: 90%;" leaflet [leafletOptions]="options" [leafletLayers]="[streetLayer,satelliteLayer]" (leafletMapReady)="onMapReady($event)"></div>
+        <div class="grid p-fluid" >
+            <div class="col-12 md:col-6">
+                <button (click)="agregarPunto()" pButton pRipple type="button" icon="pi pi-plus" label="Agregar" class="p-button-outlined p-button-info" ></button>
+            </div>
+            <div class="col-12 md:col-6">
+                <button pButton pRipple type="button" icon="pi pi-times" label="Cancelar" class="p-button-outlined p-button-danger"></button>
+            </div>
+        </div>
+    </p-dialog>
+
+
+  <div class="card-titulo">
+      <h4 class="text-center" style="color: white;">CREACION DE NUEVO ACTA DE TOMA DE MUESTRA</h4>
+  </div>
+      <div class="grid p-fluid">
+          <div class="card card-w-title flex flex-wrap col-12">
+              <div class="col-12">
+                  <p-steps [model]="steps" [(activeIndex)]="activeStep"
+                  styleClass="mt-1" [readonly]="false"
+                  ></p-steps>
+              </div>
+              <div class="col-12" >
+                  <div *ngIf="activeStep === 0"
+                  >
+                      <div class="grid p-fluid">
+                        
+                          <div class="field col-12 md:col-12">
+                              <span class="p-float-label">
+                                  <p-dropdown
+                                      inputId="dropdown"
+                                      [autoDisplayFirst]="false"
+                                      [options]="operadores"
+                                      formControlName="operador_id"
+                                      optionLabel="razon_social"
+                                      optionValue="id"
+                                  ></p-dropdown>
+                                  <label for="dropdown">Operadores Mineros</label>
+                                  <small id="operador_id" class="p-error " *ngIf="formulario_interno.esCampoInvalido('operador_id')">
+                                      {{formulario_interno.getErrorMessage('operador_id')}}
+                                  </small>
+                              </span>
+                          </div>
+
+                          <div class="field col-12 md:col-3">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                    inputId="departamento"
+                                    [autoDisplayFirst]="false"
+                                    [options]="departamento"
+                                    formControlName="departamento"
+                                    optionLabel="nombre"
+                                    optionValue="id"
+                                    (onChange)="cambioDepartamentoMapa($event)"
+                                ></p-dropdown>
+                                <label for="dropdown">Departamento</label>
+                                <small id="nit" class="p-error " *ngIf="formulario_interno.esCampoInvalido('departamento')">
+                                    {{formulario_interno.getErrorMessage('departamento')}}
+                                </small>
+                            </span>
+                        </div>
+                        <div class="field col-12 md:col-3">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                    inputId="municipio"
+                                    [autoDisplayFirst]="false"
+                                    [options]="municipio"
+                                    formControlName="dl_municipio"
+                                    optionLabel="municipio"
+                                    optionValue="codigo"
+                                    (onChange)="cambioMunicipioMapa($event)"
+                                ></p-dropdown>
+                                <label for="dropdown">Municipio</label>
+                                <small id="dl_municipio" class="p-error " *ngIf="formulario_interno.esCampoInvalido('dl_municipio')">
+                                    {{formulario_interno.getErrorMessage('dl_municipio')}}
+                                </small>
+                            </span>
+                        </div>
+
+
+                          <div class="field col-12 md:col-2">
+                            <span class="p-float-label">
+                                <input
+                                    type="number"
+                                    id="latitud"
+                                    pInputText
+                                    formControlName="latitud"
+                                />
+                                <label for="latitud">Latitud </label>
+                        <small id="latitud" class="p-error " *ngIf="formulario_interno.esCampoInvalido('latitud')">
+                                    {{formulario_interno.getErrorMessage('latitud')}}
+                                </small>
+                            </span>
+                        </div>
+                        <div class="field col-12 md:col-2">
+                            <span class="p-float-label">
+                                <input
+                                    type="number"
+                                    id="longitud"
+                                    pInputText
+                                    formControlName="longitud"
+                                />
+                                <label for="longitud">Longitud </label>
+                        <small id="longitud" class="p-error " *ngIf="formulario_interno.esCampoInvalido('longitud')">
+                                    {{formulario_interno.getErrorMessage('longitud')}}
+                                </small>
+                            </span>
+                        </div>
+                        <div class="field col-12 md:col-2">
+                            <button pButton pRipple type="button" icon="pi pi-map" label="Buscar en Mapa" class="p-button-outlined p-button-info" (click)="abrirMapa()"></button>
+                        </div>
+
+                          <div class="field col-12 md:col-12">
+                              <span class="p-float-label">
+                                  <input
+                                      type="text"
+                                      id="lugar_verificacion"
+                                      pInputText
+                                      formControlName="lugar_verificacion"
+                            class="ng-dirty"
+                            />
+                                  <label for="lugar_verificacion">Lugar de Verificación </label>
+                                <small id="lugar_verificacion" class="p-error " *ngIf="formulario_interno.esCampoInvalido('lugar_verificacion')">
+                                      {{formulario_interno.getErrorMessage('lugar_verificacion')}}
+                                </small>
+                              </span>
+                          </div>
+                          
+
+
+                      </div>
+                  </div>
+                  <div *ngIf="activeStep === 1"
+                  >
+                      <div class="grid p-fluid mt-2">
+                        <div class="field col-12 md:col-12 ">
+                            <h5>2.1 Datos del Mineral </h5>
+                        </div>
+                        <div class="field col-12 md:col-3">
+                            <span class="p-float-label">
+                                <input
+                                    type="text"
+                                    id="lote"
+                                    pInputText
+                                    formControlName="lote"
+                                    class="ng-dirty"
+                                />
+                                <label for="Razón Social">Lote</label>
+                                <small id="lote" class="p-error "*ngIf="formulario_interno.esCampoInvalido('lote')">
+                                    {{formulario_interno.getErrorMessage('lote')}}
+                                </small>
+                            </span>
+                        </div>
+                        <div class="field col-12 md:col-4">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                    inputId="dropdown"
+                                    [autoDisplayFirst]="false"
+                                    [options]="presentaciones"
+                                    formControlName="presentacion"
+                                    optionLabel="nombre"
+                                    optionValue="id"
+                                    (onChange)="cambioPresentacion($event)"
+                                ></p-dropdown>
+                                <label for="dropdown">Presentacion</label>
+                                <small id="presentacion" class="p-error " *ngIf="formulario_interno.esCampoInvalido('presentacion')">
+                                    {{formulario_interno.getErrorMessage('presentacion')}}
+                                </small>
+                            </span>
+                        </div>
+                        <div class="field col-12 md:col-3">
+                            <span class="p-float-label">
+                                <input
+                                    type="number"
+                                    id="cantidad"
+                                    pInputText
+                                    formControlName="cantidad"
+                                    class="ng-dirty"
+                                    [disabled]="presentacion.cantidad"
+                                />
+                                <label for="Razón Social">Cantidad</label>
+                                <small id="cantidad" class="p-error "*ngIf="formulario_interno.esCampoInvalido('cantidad')">
+                                    {{formulario_interno.getErrorMessage('cantidad')}}
+                                </small>
+                            </span>
+                        </div>
+                        <div class="field col-12 md:col-2">
+                            <span class="p-float-label">
+                                <input
+                                    type="number"
+                                    id="nro_camiones"
+                                    pInputText
+                                    formControlName="nro_camiones"
+                                    class="ng-dirty"
+                                />
+                                <label for="Razón Social">Nro. de Camiones/Vagones</label>
+                                <small id="nro_camiones" class="p-error "*ngIf="formulario_interno.esCampoInvalido('nro_camiones')">
+                                    {{formulario_interno.getErrorMessage('nro_camiones')}}
+                                </small>
+                            </span>
+                        </div>
+
+                        <div class="field col-12 md:col-4 ">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                    inputId="dropdown"
+                                    [autoDisplayFirst]="false"
+                                    [options]="parciales"
+                                    optionLabel="nombre"
+                                    optionValue="nombre"
+                                    (onChange)="cambioUnidad($event)"
+                                ></p-dropdown>
+                                <label for="dropdown">TIPO DE PESO</label>
+
+                            </span>
+                        </div>
+
+
+                        <div class="field col-12 md:col-4">
+                            <span class="p-float-label">
+                                <input
+                                    type="number"
+                                    id="peso_neto_total"
+                                    pInputText
+                                    formControlName="peso_neto_total"
+                                    class="ng-dirty"
+                                />
+                                <label for="Razón Social">Peso Neto Total (Kg.)</label>
+                                <small id="peso_neto_total" class="p-error "*ngIf="formulario_interno.esCampoInvalido('peso_neto_total')">
+                                    {{formulario_interno.getErrorMessage('peso_neto_total')}}
+                                </small>
+                            </span>
+                        </div>
+                        <div class="field col-12 md:col-4">
+                            <span class="p-float-label">
+                                <input
+                                    type="number"
+                                    id="peso_neto_parcial"
+                                    pInputText
+                                    formControlName="peso_neto_parcial"
+                                    class="ng-dirty"
+                                />
+                                <label for="Razón Social">Peso Neto Parcial (Kg.)</label>
+                                <small id="peso_neto_parcial" class="p-error "*ngIf="formulario_interno.esCampoInvalido('peso_neto_parcial')">
+                                    {{formulario_interno.getErrorMessage('peso_neto_parcial')}}
+                                </small>
+                            </span>
+                        </div>
+                        <div class="field col-12 md:col-3 ">
+                            <app-mineralesSelect (mineral_id)="cambioMineralId($event)" (sigla)="cambioSigla($event)" (nombre)="cambioNombreMineral($event)"></app-mineralesSelect>
+                        </div>
+                        <div class="field col-12 md:col-3">
+                            <span class="p-float-label">
+                                <input
+                                    type="number"
+                                    id="nro_viajes"
+                                    pInputText
+                                    (input)="cambioLey($event)"
+                                    class="ng-dirty"
+                                />
+                                <label for="Razón Social">Ley</label>
+                                <small id="nro_viajes" class="p-error "*ngIf="formulario_interno.esCampoInvalido('nro_viajes')">
+                                    {{formulario_interno.getErrorMessage('nro_viajes')}}
+                                </small>
+                            </span>
+                        </div>
+                        <div class="field col-12 md:col-3 ">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                    inputId="dropdown"
+                                    [autoDisplayFirst]="false"
+                                    [options]="unidades"
+                                    optionLabel="nombre"
+                                    optionValue="nombre"
+                                    (onChange)="cambioUnidad($event)"
+                                ></p-dropdown>
+                                <label for="dropdown">Unidad</label>
+
+                            </span>
+                        </div>
+                        <div class="field col-12 md:col-2">
+                            <button pButton pRipple (click)="agregarLey()" type="button" icon="pi pi-plus" label="Agregar" class="p-button-outlined p-button-success"></button>
+                        </div>
+
+                        <div class="field col-12">
+                            <p-table #dt [value]="lista_leyes_mineral"
+                            responsiveLayout="scroll" [rows]="10"
+                            [paginator]="false"  [showCurrentPageReport]="false"
+                            selectionMode="multiple"
+                            [rowHover]="true"
+                            dataKey="id">
+
+                                <ng-template pTemplate="header">
+                                    <tr>
+
+                                        <th pSortableColumn="code">Descripción <p-sortIcon field="code"></p-sortIcon></th>
+                                        <th pSortableColumn="code">Sigla <p-sortIcon field="code"></p-sortIcon></th>
+                                        <th pSortableColumn="name">Ley <p-sortIcon field="name"></p-sortIcon></th>
+                                        <th pSortableColumn="price">Unidad <p-sortIcon field="price"></p-sortIcon></th>
+                                        <th pSortableColumn="price">Acción <p-sortIcon field="price"></p-sortIcon></th>
+
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-product>
+                                    <tr>
+
+                                        <td style="width:30%; min-width:20rem;"><span class="p-column-title">Descripción</span>
+                                            {{product.descripcion}}
+                                        </td>
+                                        <td style="width:14%; min-width:8rem;">
+                                            <span class="p-column-title">Sigla</span>
+                                            {{product.sigla_mineral}}
+                                        </td>
+                                        <td style="width:14%; min-width:10rem;">
+                                            <span class="p-column-title">Ley</span>
+                                            {{product.ley}}
+                                        </td>
+                                        <td style="width:14%; min-width:8rem;">
+                                            <span class="p-column-title">Unidad</span>
+                                            {{product.unidad}}
+                                        </td>
+                                        <td>
+                                            <div class="flex">
+                                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminar(product)"></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                        <div class="field col-12 md:col-12 ">
+                            <h5>2.2 Origen del Mineral </h5>
+                        </div>
+                                                
+                          <div class="field col-12 md:col-3 ">
+                              <app-departamentoSelect [departamento_id]="departamento_id" (cambioDepartamento)="cambioDepartamento($event)" (nombre_departamento)="cambioNombreDepartemento($event)"></app-departamentoSelect>
+                          </div>
+                          <div class="field col-12 md:col-3 ">
+                              <app-municipioSelect [departamento_id]="departamento_id" [municipio_id1]="municipio_id" (municipio_id)="cambioMunicipio($event)" (nombre_municipio)="cambioNombreMunicipio($event)"></app-municipioSelect>
+                          </div>
+
+                          <div class="field col-12 md:col-2">
+                              <button pButton pRipple (click)="agregarMunicipio()" type="button" icon="pi pi-plus" label="Agregar" class="p-button-outlined p-button-success"></button>
+                          </div>
+
+                          <div class="field col-12">
+                              <p-table #dt [value]="lista_municipios_origen"
+                              responsiveLayout="scroll" [rows]="10"
+                              [paginator]="false"  [showCurrentPageReport]="false"
+                              selectionMode="multiple"
+                              [rowHover]="true"
+                              dataKey="id">
+
+                                  <ng-template pTemplate="header">
+                                      <tr>
+
+                                          <th pSortableColumn="code">Departamento <p-sortIcon field="code"></p-sortIcon></th>
+                                          <th pSortableColumn="code">Municipio <p-sortIcon field="code"></p-sortIcon></th>
+                                          <th pSortableColumn="name">ID Municipio <p-sortIcon field="name"></p-sortIcon></th>
+                                          <th pSortableColumn="price">Acción <p-sortIcon field="price"></p-sortIcon></th>
+
+                                      </tr>
+                                  </ng-template>
+                                  <ng-template pTemplate="body" let-product>
+                                      <tr>
+
+                                          <td style="width:30%; min-width:20rem;"><span class="p-column-title">Departamento</span>
+                                              {{product.departamento}}
+                                          </td>
+                                          <td style="width:14%; min-width:8rem;">
+                                              <span class="p-column-title">Municipio</span>
+                                              {{product.municipio}}
+                                          </td>
+                                          <td style="width:14%; min-width:10rem;">
+                                              <span class="p-column-title">Ley</span>
+                                              {{product.municipio_id}}
+                                          </td>
+                                          <td>
+                                              <div class="flex">
+                                                  <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminarMunicipio(product)"></button>
+                                              </div>
+                                          </td>
+                                      </tr>
+                                  </ng-template>
+                              </p-table>
+                          </div>
+                      </div>
+                  </div>
+                  <div *ngIf="activeStep === 2"
+                  >
+                      <div class="grid p-fluid mt-2">
+                        <div class="grid p-fluid col-12">
+                        <div class="field-checkbox mr-2">
+                            <input
+                              type="checkbox"
+                              id="agranel"
+                              [ngModelOptions]="{standalone: true}"
+                              [(ngModel)]="agranel"
+                              (change)="declaracionJuradaSwitch($event)"
+                              class="custom-checkbox"
+                            />
+                            <label for="agranel">A granel</label>
+                          </div>
+                          <div class="field-checkbox mr-2">
+                            <input
+                              type="checkbox"
+                              id="ensacado"
+                              [ngModelOptions]="{standalone: true}"
+                              [(ngModel)]="ensacado"
+                              (change)="declaracionJuradaSwitch($event)"
+                              class="custom-checkbox"
+                            />
+                            <label for="ensacado">Ensacado</label>
+                          </div>
+                          <div class="field-checkbox mr-2">
+                            <input
+                              type="checkbox"
+                              id="lingotes"
+                              [ngModelOptions]="{standalone: true}"
+                              [(ngModel)]="lingotes"
+                              (change)="declaracionJuradaSwitch($event)"
+                              class="custom-checkbox"
+                            />
+                            <label for="lingotes">Productos Metalicos (Lingotes)</label>
+                          </div>
+                          <div class="field-checkbox mr-2">
+                            <input
+                              type="checkbox"
+                              id="sal"
+                              [ngModelOptions]="{standalone: true}"
+                              [(ngModel)]="sal"
+                              (change)="declaracionJuradaSwitch($event)"
+                              class="custom-checkbox"
+                            />
+                            <label for="sal">Sal</label>
+                          </div>
+                          <div class="field-checkbox mr-2">
+                            <input
+                              type="checkbox"
+                              id="otro"
+                              [ngModelOptions]="{standalone: true}"
+                              [(ngModel)]="otro"
+                              (change)="declaracionJuradaSwitch($event)"
+                              class="custom-checkbox"
+                            />
+                            <label for="otro">Otro</label>
+                          </div>
+                          </div>
+                        <div class="card-procedimiento">
+                            <h5 class="text-center"><strong>PROCEDIMIENTO</strong></h5>
+                                <div [innerHTML]="procedimiento[0].descripcion" *ngIf="agranel"></div>
+                                <div [innerHTML]="procedimiento[1].descripcion" *ngIf="ensacado"></div>
+  
+                        </div>
+                        <div class="field col-12 md:col-12">
+                            <span class="p-float-label">
+                                <textarea
+                                    id="observaciones"
+                                    pInputTextarea
+                                    formControlName="observaciones"
+                                    class="ng-dirty"
+                                    rows="4"
+                                    cols="150"
+                                ></textarea>
+                                <label for="observaciones">Observaciones</label>
+                                <small id="observaciones" class="p-error" *ngIf="formulario_interno.esCampoInvalido('observaciones')">
+                                    {{ formulario_interno.getErrorMessage('observaciones') }}
+                                </small>
+                            </span>
+                        </div>
+                      </div>
+                  </div>
+                  <div  *ngIf="activeStep === 3"
+                  >
+                      <div class="grid p-fluid mt-2">
+                      
+                  </div>
+                  </div>
+
+                  <div class="centrar-botones">
+                      <div class="col-33" *ngIf="activeStep > 0">
+                          <button pButton pRipple type="button" label="Anterior"
+                          class="p-button-rounded p-button-secondary boton-ajustado"
+                          (click)="prevStep()"
+                          icon="pi pi-arrow-left"></button>
+                      </div>
+                      <div class="col-33" *ngIf="activeStep!== steps.length - 1">
+                          <button pButton pRipple type="button" label="Siguiente"
+                          class="p-button-rounded p-button-success boton-icono-derecha boton-ajustado"
+                          (click)="nextStep()"
+                          icon="pi pi-arrow-right">
+                          </button>
+                      </div>
+                      <div class="col-33" *ngIf="activeStep=== steps.length - 1">
+                          <button pButton pRipple type="button" label="Guardar"
+                          class="p-button-rounded p-button-info  boton-ajustado"
+                          (click)="guardar()"
+                          icon="pi pi-save"
+                          [disabled]="!declaracionJurada">
+                          </button>
+                      </div>
+                      <div class="col-33">
+                          <button pButton pRipple type="button" label="Cancelar"
+                          class="p-button-rounded p-button-danger boton-ajustado"
+                          [routerLink]="['/admin/formulario-101/formulario-interno']"
+                          icon="pi pi-trash"></button>
+                      </div>
+
+                  </div>
+              </div>
+
+          </div>
+
+      </div>
+</form>

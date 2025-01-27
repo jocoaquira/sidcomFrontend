@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.metadata';
-import { IFormularioInternoMineral } from '@data/form_int_mineral.metadata';
+import { ITomaDeMuestraMineral } from '@data/toma_de_muestra_mineral.metadata';
 
 @Injectable({
   providedIn: 'root'
 })
-export class FormularioInternoMineralService {
+export class TomaDeMuestraMineralService {
   private user!:IApiUserAuthenticated;
   private baseUrl = localStorage.getItem('url-backend');
   private headers!:HttpHeaders;
@@ -20,48 +20,48 @@ export class FormularioInternoMineralService {
     //this.requestOptions = { headers: headers };
   }
 //-----------------Visualizar operadores-------------------------------------------
-  verFormularioInternoMineral(nombre:string)
+  verTomaDeMuestraMineral(nombre:string)
   {
     // Inicializacion de objeto params
     let params = new HttpParams();
     params = params.append('formulario_int_id', nombre);
 
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}formulario-interno-minerales`,{params:params});
+    return this.http.get(`${this.baseUrl}toma-de-muestra-minerales`,{params:params});
   }
   handleError(error: any): any {
     return error=error.error.error;
   }
-  handleFormularioInternoMineral(data: IFormularioInternoMineral[]):IFormularioInternoMineral[] {
-    let FormularioInternoMineral:IFormularioInternoMineral[]=data;
-    return FormularioInternoMineral
+  handleTomaDeMuestraMineral(data: ITomaDeMuestraMineral[]):ITomaDeMuestraMineral[] {
+    let TomaDeMuestraMineral:ITomaDeMuestraMineral[]=data;
+    return TomaDeMuestraMineral
   }
 
 
 
-//---------------------crear   FormularioInternoMineral-------------------------------------------
-crearFormularioInternoMineral(data:IFormularioInternoMineral) {
+//---------------------crear   TomaDeMuestraMineral-------------------------------------------
+crearTomaDeMuestraMineral(data:ITomaDeMuestraMineral) {
   this.token();
-  return this.http.post(`${this.baseUrl}formulario-interno-minerales`,data, {headers:this.headers})
+  return this.http.post(`${this.baseUrl}toma-de-muestra-minerales`,data, {headers:this.headers})
 }
-handleCrearFormularioInternoMineralError(error: any): any {
+handleCrearTomaDeMuestraMineralError(error: any): any {
   return error=error;
 }
-handleCrearFormularioInternoMineral(data: IFormularioInternoMineral):IFormularioInternoMineral {
-  let FormularioInternoMineral:IFormularioInternoMineral=data;
-  return FormularioInternoMineral
+handleCrearTomaDeMuestraMineral(data: ITomaDeMuestraMineral):ITomaDeMuestraMineral {
+  let TomaDeMuestraMineral:ITomaDeMuestraMineral=data;
+  return TomaDeMuestraMineral
 }
-//---------------------Editar   FormularioInternoMineral-------------------------------------------
-editarFormularioInternoMineral(data:IFormularioInternoMineral) {
+//---------------------Editar   TomaDeMuestraMineral-------------------------------------------
+editarTomaDeMuestraMineral(data:ITomaDeMuestraMineral) {
   this.token();
-  return this.http.put(`${this.baseUrl}formulario-interno-minerales/`+data.id, data)
+  return this.http.put(`${this.baseUrl}toma-de-muestra-minerales/`+data.id, data)
 }
-handleEditarFormularioInternoMineralError(error: any): any {
+handleEditarTomaDeMuestraMineralError(error: any): any {
   return error=error;
 }
-handleEditarFormularioInternoMineral(data: boolean):boolean {
-  let FormularioInternoMineral:boolean=data;
-  return FormularioInternoMineral
+handleEditarTomaDeMuestraMineral(data: boolean):boolean {
+  let TomaDeMuestraMineral:boolean=data;
+  return TomaDeMuestraMineral
 }
 //-----------------Listado de Empelados por Dependencia--------------------------------------------
 private token(){

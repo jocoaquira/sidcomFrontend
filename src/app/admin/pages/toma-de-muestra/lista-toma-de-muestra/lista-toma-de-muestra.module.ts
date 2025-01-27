@@ -10,6 +10,7 @@ import { TagModule } from 'primeng/tag';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     TagModule,
     InputTextModule,
     InputNumberModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    RouterModule 
   ],
   declarations: [ListaTomaDeMuestraComponent]
 })

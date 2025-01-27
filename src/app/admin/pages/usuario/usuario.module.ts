@@ -17,8 +17,8 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { BadgeModule } from 'primeng/badge';
 import { TagModule } from 'primeng/tag';
-import { UsuarioRoutingModule } from './usuario-routing.module';
 import { ListarUsuarioModule } from './listar-usuarios/listar-usuario.module';
+import { UsuarioRoutingModule } from './usuario-routing.module';
 
 @NgModule({
     schemas: [CUSTOM_ELEMENTS_SCHEMA],

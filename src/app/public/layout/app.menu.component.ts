@@ -16,11 +16,19 @@ export class AppMenuComponent implements OnInit {
     ngOnInit() {
         this.model = [
             {
+                label: 'Adminsitracion',
+                items: [
+                    { label: 'Responsables de Toma de Muestra', icon: 'pi pi-fw pi-users', routerLink: ['/public/responsable-tm'] },
+                    { label: 'Usuario', icon: 'pi pi-fw pi-user', routerLink: ['/uikit/input'] },
+                ]
+            },
+            {
                 label: 'Formularios',
                 items: [
                     { label: 'Formularios Internos', icon: 'pi pi-fw pi-file-o', routerLink: ['/admin/formulario-101/formulario-interno'] },
                     { label: 'Formularios Externos', icon: 'pi pi-fw pi-globe', routerLink: ['/uikit/input'] },
-                    { label: 'Formulario Cooperativas', icon: 'pi pi-fw pi-file-o', routerLink: ['/uikit/floatlabel'] }
+                    { label: 'Formulario Cooperativas', icon: 'pi pi-fw pi-file-o', routerLink: ['/uikit/floatlabel'] },
+                    { label: 'Toma de Muestra', icon: 'pi pi-fw pi-file-o', routerLink: ['/public/toma-de-muestra'] }
                 ]
             },
             {
