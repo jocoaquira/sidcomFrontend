@@ -4,6 +4,8 @@ import { AuthService } from '@core/authentication/services/auth.service';
 import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.metadata';
 import { ITomaDeMuestra } from '@data/toma_de_muestra.metadata';
 import { ITomaDeMuestraSimple } from '@data/toma_de_muestra_simple.metadata';
+import { ITomaDeMuestraSimpleOperador } from '@data/toma_de_muestra_simple_operador.metadata';
+import { IAprobarTM } from '@data/aprobar_tm.metadata';
 
 @Injectable({
   providedIn: 'root'
@@ -21,14 +23,11 @@ export class TomaDeMuestraService {
     //this.requestOptions = { headers: headers };
   }
 //-----------------Visualizar operadores-------------------------------------------
-  verTomaDeMuestras(nombre:string)
+  verTomaDeMuestras()
   {
-    // Inicializacion de objeto params
-    let params = new HttpParams();
-    params = params.append('nombre', nombre);
-
+    
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}sample`,{params:params});
+    return this.http.get(`${this.baseUrl}sample`);
   }
   handleError(error: any): any {
     return error=error.error.error;
@@ -54,15 +53,12 @@ verTomaDeMuestra(nombre:string)
   // asignacion de parametros
   return this.http.get(`${this.baseUrl}sample/`+nombre,{params:params});
 }
-  //-----------------Visualizar operadores-------------------------------------------
-  verTomaDeMuestrasSimple(nombre:string)
+  //-----------------Visualizar TDMuestra Simple-------------------------------------------
+  verTomaDeMuestrasSimple()
   {
-    // Inicializacion de objeto params
-    let params = new HttpParams();
-    params = params.append('nombre', nombre);
 
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}sample/reducido`,{params:params});
+    return this.http.get(`${this.baseUrl}sample/reducido`);
   }
   handleTomaDeMuestraSimpleError(error: any): any {
     return error=error.error.error;
@@ -71,7 +67,20 @@ verTomaDeMuestra(nombre:string)
     let TomaDeMuestra:ITomaDeMuestraSimple[]=data;
     return TomaDeMuestra
   }
+  //-----------------Visualizar TDMuestra Simple-------------------------------------------
+  verTomaDeMuestrasSimpleOperador(id:number)
+  {
 
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}sample/operador/reducido/`+id);
+  }
+  handleTomaDeMuestraOperadorSimpleError(error: any): any {
+    return error=error.error.error;
+  }
+  handleTomaDeMuestraOperadorSimple(data: ITomaDeMuestraSimpleOperador[]):ITomaDeMuestraSimpleOperador[] {
+    let TomaDeMuestra:ITomaDeMuestraSimpleOperador[]=data;
+    return TomaDeMuestra
+  }
 
 //---------------------crear   TomaDeMuestra-------------------------------------------
 crearTomaDeMuestra(data:any) {
@@ -98,6 +107,27 @@ handleEditarTomaDeMuestra(data: ITomaDeMuestra):ITomaDeMuestra {
   let TomaDeMuestra:ITomaDeMuestra=data;
   return TomaDeMuestra
 }
+//---------------------Editar   TomaDeMuestra-------------------------------------------
+solicitarTomaDeMuestra(id:number) {
+  let sol={
+    'estado':'SOLICITADO'
+  }
+  this.token();
+  return this.http.put(`${this.baseUrl}sample/solicitar/`+id.toString(), sol)
+}
+//---------------------crear   TomaDeMuestra-------------------------------------------
+aprobarTomaDeMuestra(data:IAprobarTM,id:number) {
+  this.token();
+  return this.http.put(`${this.baseUrl}sample/aprobar/`+id.toString(), data)
+}
+handleAprobarTomaDeMuestraError(error: any): any {
+  return error=error;
+}
+handleAprobarTomaDeMuestra(data: IAprobarTM):IAprobarTM {
+  let TomaDeMuestra:IAprobarTM=data;
+  return TomaDeMuestra
+}
+
 //---------------------------Emitir Formulario 101..-----------------------------------------
 emitirTomaDeMuestra(id:number) {
   this.token();

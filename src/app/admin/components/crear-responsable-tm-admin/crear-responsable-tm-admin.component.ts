@@ -144,10 +144,11 @@ export class CrearResponsableTMAdminComponent implements OnInit {
   }
   crearResponsable() {
     
-    this.form.formulario.value.estado=this.form.formulario.value.estado.label;
-    this.form.formulario.value.celular=parseInt(this.form.formulario.value.celular);
-    console.log(this.form.formulario.value);
-    
+    this.form.formulario.patchValue({
+      celular:parseInt(this.form.formulario.value.celular),
+      estado:this.form.formulario.value.estado.label
+    });
+    console.log(this.form.formulario.value)
     if (this.form.formulario.valid) {
         this.responsableTMAdminService.crearResponsableTM(this.form.formulario.value).subscribe(
             (data:any) =>
@@ -167,7 +168,7 @@ export class CrearResponsableTMAdminComponent implements OnInit {
               this.errorUsuario=this.responsableTMAdminService.handleCrearusuarioError(error.error.data);
               if(error.error.status=='fail')
               {
-                this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
+                this.notify.error(error.error.data,'Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
               }
             }
           );

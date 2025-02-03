@@ -11,6 +11,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { RouterModule } from '@angular/router';
+import { ConfirmationService } from 'primeng/api';
+import { AprobarProcedimientoModule } from 'src/app/admin/components/aprobar-procedimiento/aprobar-procedimiento.module';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   imports: [
@@ -24,8 +27,11 @@ import { RouterModule } from '@angular/router';
     InputTextModule,
     InputNumberModule,
     ConfirmDialogModule,
-    RouterModule 
+    RouterModule,
+    DialogModule,
+    AprobarProcedimientoModule
   ],
-  declarations: [ListaTomaDeMuestraComponent]
+  declarations: [ListaTomaDeMuestraComponent],
+    providers: [ConfirmationService]
 })
 export class ListaTomaDeMuestraModule { }

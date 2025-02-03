@@ -13,7 +13,7 @@
                 --></ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="listaFormularioInternos" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['nro_formulario','razon_social','fecha_creacion','estado','fecha_vencimiento']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-table #dt [value]="listaTomaDeMuestras" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['nro_formulario','razon_social','fecha_creacion','estado','fecha_vencimiento']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Administrar Tomas de Muestra</h5>
@@ -25,10 +25,10 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="idom">Numero de Formulario <p-sortIcon field="idom"></p-sortIcon></th>
-                        <th pSortableColumn="razon_social"> Fecha Creacion <p-sortIcon field="razon_social"></p-sortIcon></th>
-                        <th pSortableColumn="price">Razon Social<p-sortIcon field="price"></p-sortIcon></th>
-                        <th pSortableColumn="price">Fecha Vencimiento <p-sortIcon field="price"></p-sortIcon></th>
+                        <th pSortableColumn="idom">Nro. de Formulario <p-sortIcon field="idom"></p-sortIcon></th>
+                        <th pSortableColumn="razon_social"> Fecha de Toma de Muestra<p-sortIcon field="razon_social"></p-sortIcon></th>
+                        <th pSortableColumn="price">Hora<p-sortIcon field="price"></p-sortIcon></th>
+                        <th pSortableColumn="price">Responsable<p-sortIcon field="price"></p-sortIcon></th>
                         <th pSortableColumn="category">Estado <p-sortIcon field="category"></p-sortIcon></th>
                         <th pSortableColumn="rating">Acciones <p-sortIcon field="rating"></p-sortIcon></th>
                         <th pSortableColumn="rating">Imprimir <p-sortIcon field="rating"></p-sortIcon></th>
@@ -41,16 +41,16 @@
                             {{operador.nro_formulario}}
                         </td>
                         <td style="width:10%; min-width:10rem;">
-                            <span class="p-column-title">Fecha Creacion</span>
-                            {{operador.fecha_creacion}}
+                            <span class="p-column-title">Fecha de Toma de Muestra</span>
+                            {{ operador.fecha_hora_tdm | date:'dd/MM/yyyy' }}
                         </td>
-                        <td style="width:24%; min-width:16rem;">
+                        <td style="width:4%; min-width:5rem;">
+                            <span class="p-column-title">Hora de Toma de Muestra</span>
+                            {{ operador.fecha_hora_tdm | date:'HH:mm' }}
+                            </td>
+                        <td style="width:25%; min-width:8rem;">
                             <span class="p-column-title">Razon Social</span>
                             {{operador.razon_social}}
-                            </td>
-                        <td style="width:14%; min-width:8rem;">
-                            <span class="p-column-title">Fecha Vencimiento</span>
-                            {{operador.fecha_vencimiento}}
                         </td>
                         <td style="width:14%; min-width:10rem;">
                             <span class="p-column-title">Estado</span>
@@ -59,12 +59,15 @@
                                     GENERADO
                                   </div>
 
-                                  <div *ngIf="operador.estado === 'EMITIDO'" class="custom-tag emitido-tag">
-                                    EMITIDO
+                                  <div *ngIf="operador.estado === 'SOLICITADO'" class="custom-tag solicitado-tag">
+                                    SOLICITADO
                                   </div>
 
-                                  <div *ngIf="operador.estado === 'VENCIDO'" class="custom-tag vencido-tag">
-                                    VENCIDO
+                                  <div *ngIf="operador.estado === 'APROBADO'" class="custom-tag aprobado-tag">
+                                    APROBADO
+                                  </div>
+                                  <div *ngIf="operador.estado === 'FIRMADO'" class="custom-tag firmado-tag">
+                                    FIRMADO
                                   </div>
 
                                   <div *ngIf="operador.estado === 'ANULADO'" class="custom-tag anulado-tag">
@@ -74,20 +77,36 @@
                         </td>
                         <td>
                             <div class="flex">
-                                <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-pencil" label="Modificar" class="p-button-rounded p-button-warning mr-2" routerLink="/admin/formulario-101/formulario-interno/editar/{{operador?.id}}"></button>
-
-                                <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-lock" label="Emitir" class="p-button-rounded p-button-success mr-2" ></button>
-                                <button *ngIf="operador.estado !== 'GENERADO' && operador.estado !== 'ANULADO'" pButton pRipple icon="pi pi-trash" label="Anular" class="p-button-rounded p-button-danger mr-2" routerLink="/admin/formulario-101/formulario-interno/anular/{{operador?.id}}"></button>
+                                <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-pencil" class="p-button-outlined p-button-warning mr-2" routerLink="/admin/toma-de-muestra/editar/{{operador?.id}}"></button>
+                                <button *ngIf="operador.estado === 'SOLICITADO'" pButton pRipple icon="pi pi-check-circle" (click)="aprobarSolicitud(operador)" label="Aprobar" class=" p-button-outlined p-button-info mr-2" ></button>
+                                <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-send" (click)="confirmarSolicitud(operador)" label="Solicitar" class="p-button-outlined p-button-success mr-2" ></button>
+                                <button *ngIf="operador.estado === 'APROBADO'" pButton pRipple icon="pi pi-send" label="Firmar" class="p-button-outlined p-button-success mr-2" ></button>
+                                <button *ngIf="operador.estado !== 'GENERADO' && operador.estado !== 'ANULADO'" pButton pRipple icon="pi pi-trash" label="Anular" class="p-button-outlined p-button-danger mr-2" routerLink="/admin/toma-de-muestra/anular/{{operador?.id}}"></button>
                                 </div>
                         </td>
                         <td>
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-print"  class="p-button-rounded p-button-info mr-2" (click)="generarPDF(operador)"></button>
+                                <button pButton pRipple icon="pi pi-print"  class="p-button-outlined p-button-info mr-2" (click)="generarPDF(operador)"></button>
                             </div>
                         </td>
                     </tr>
                 </ng-template>
             </p-table>
+            <p-confirmDialog header="Confirmación" key="confirm1" icon="pi pi-exclamation-triangle" message="¿Está seguro de anular el formulario?"
+                                    [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
+                                    acceptLabel="Sí"
+                                    rejectLabel="No"
+                                >
+            </p-confirmDialog>
+            <p-dialog [(visible)]="productDialog" [style]="{width: '700px'}" 
+          [modal]="true" header="{{isEditMode ? 'Aprobación de Toma de Muestra' : 'Agregar Responsable'}}" 
+          class="p-fluid">
+            <app-aprobar-procedimiento 
+                [tmd]="tomaDeMuestra"
+                [isEditMode]="isEditMode" 
+                (estadoDialogo)="cerrar($event)">
+            </app-aprobar-procedimiento>
+        </p-dialog>
         </div>
     </div>
 </div>

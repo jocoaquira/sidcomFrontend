@@ -16,5 +16,6 @@ import { AnularTomaDeMuestraModule } from './anular-toma-de-muestra/anular-toma-
     AnularTomaDeMuestraModule
   ],
   declarations: []
+  
 })
 export class TomaDeMuestraModule { }

@@ -1,0 +1,73 @@
+
+
+<form [formGroup]="form.formulario" (ngSubmit)="onSubmit()">
+    <app-ver-toma-de-muestra [id]="tmd.id"></app-ver-toma-de-muestra>
+    <div class="field col-12 md:col-12" *ngIf="!admin">
+        <span class="p-float-label mt-5">
+            <p-dropdown
+                inputId="dropdown"
+                [autoDisplayFirst]="false"
+                [options]="listaResponsableSenarecom"
+                formControlName="responsable_tdm_senarecom_id"
+                optionLabel="fullName"
+                optionValue="id"
+                (ngModelChange)="onChangeOperadores($event)"
+            ></p-dropdown>
+
+            <label for="dropdown">Responsable de Senarecom</label>
+        </span>
+    </div>
+    <div class="field col-12 md:col-12">
+        <span class="p-float-label">
+            <textarea
+                id="observaciones"
+                pInputTextarea
+                formControlName="observaciones"
+                class="ng-dirty"
+                rows="4"
+                cols="150"
+            ></textarea>
+            <label for="observaciones">Observaciones</label>
+            <small id="observaciones" class="p-error" *ngIf="form.esCampoInvalido('observaciones')">
+                {{ form.getErrorMessage('observaciones') }}
+            </small>
+        </span>
+    </div>
+
+    <div class="card-procedimiento">
+        <h5 class="text-center"><strong>PROCEDIMIENTO</strong></h5>
+            <div [innerHTML]="procedimiento[0].descripcion" *ngIf="agranel"></div>
+            <div [innerHTML]="procedimiento[1].descripcion" *ngIf="ensacado"></div>
+
+    </div>
+
+    <div class="field-checkbox mr-2">
+      <!-- Mostrar los checkboxes para cada procedimiento -->
+      <div *ngFor="let procedimiento of procedimientos">
+
+          <input type="checkbox"
+                  class="custom-checkbox"
+                 [ngModelOptions]="{standalone: true}"
+                 [(ngModel)]="procedimiento.selected"
+                 (change)="onCheckboxChange($event, procedimiento)" />
+                 <label>
+                  {{ procedimiento.nombre }}
+                 </label>
+      </div>
+    </div>
+
+    <!-- Mostrar la descripción del procedimiento si el checkbox está marcado -->
+    <div *ngFor="let procedimiento of procedimientos">
+      <div *ngIf="procedimiento.selected">
+        <div [innerHTML]="procedimiento.procedimiento"></div>
+      </div>
+    </div>
+
+    <div class="botones-derecha">
+        <span class="p-buttonset col-12 md:col-8 ">
+            <button pButton pRipple label="Aprobar Toma de Muestra" class="p-button-secondary" icon="pi pi-check" type="submit"></button>
+            <button pButton pRipple label="Cancelar"  class="p-button-danger" icon="pi pi-trash" (click)="ocultarDialogo()"></button>
+        </span>
+    </div>
+</form>
+

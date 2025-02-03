@@ -13,6 +13,7 @@ import { ConfirmationService } from 'primeng/api';
 import { TomaDeMuestraService } from 'src/app/admin/services/toma-de-muestra/toma-de-muestra.service';
 import { ITomaDeMuestra } from '@data/toma_de_muestra.metadata';
 import { AuthService } from '@core/authentication/services/auth.service';
+import { ITomaDeMuestraSimpleOperador } from '@data/toma_de_muestra_simple_operador.metadata';
 
 @Component({
   selector: 'app-lista-toma-de-muestra',
@@ -22,7 +23,7 @@ import { AuthService } from '@core/authentication/services/auth.service';
 export class ListaTomaDeMuestraComponent implements OnInit {
 
 
-    public listaFormularioInternos!:ITomaDeMuestra[];
+    public listaTomaDeMuestra!:ITomaDeMuestraSimpleOperador[];
     public error!:any;
     public nombre!:string;
     public buscarTexto:string='';
@@ -42,16 +43,16 @@ export class ListaTomaDeMuestraComponent implements OnInit {
         public pdfFormularioInterno:PdfFormularioInternoService,
         private notify:ToastrService,
         private authService:AuthService,
-        //private confirmationService:ConfirmationService
+        private confirmationService:ConfirmationService
     ) {
         this.operador_id= authService.getUser.operador_id;
         console.log(this.operador_id);
     }
 
     ngOnInit() {
-        this.tomaDeMuestraService.verTomaDeMuestrasOperador(this.operador_id).subscribe(
+        this.tomaDeMuestraService.verTomaDeMuestrasSimpleOperador(this.operador_id).subscribe(
             (data:any)=>{
-            this.listaFormularioInternos=this.tomaDeMuestraService.handleTomaDeMuestra(data);
+            this.listaTomaDeMuestra=this.tomaDeMuestraService.handleTomaDeMuestraOperadorSimple(data);
           },
           (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
 
@@ -59,11 +60,11 @@ export class ListaTomaDeMuestraComponent implements OnInit {
         //this.productService.getProducts().then(data => this.products = data);
 
         this.cols = [
-            { field: 'product', header: 'Product' },
-            { field: 'price', header: 'Price' },
+            { field: 'nro_formulario', header: 'Nro de Formulario' },
+            { field: 'fecha_hora_tdm', header: 'Fecha de Muestra' },
             { field: 'category', header: 'Category' },
-            { field: 'rating', header: 'Reviews' },
-            { field: 'inventoryStatus', header: 'Status' }
+            { field: 'responsable_tdm_id', header: 'Reviews' },
+            { field: 'estado', header: 'Status' }
         ];
 
     }
@@ -92,8 +93,8 @@ export class ListaTomaDeMuestraComponent implements OnInit {
     }
     findIndexById(id: string): string {
         let index = -1;
-        for (let i = 0; i < this.listaFormularioInternos.length; i++) {
-            if (this.listaFormularioInternos[i].nro_formulario === id) {
+        for (let i = 0; i < this.listaTomaDeMuestra.length; i++) {
+            if (this.listaTomaDeMuestra[i].nro_formulario === id) {
                 index = i;
                 break;
             }
@@ -107,39 +108,30 @@ export class ListaTomaDeMuestraComponent implements OnInit {
     generarPDF(formulario_interno:IFormularioInternoSimple){
         this.pdfFormularioInterno.generarPDF(formulario_interno);
     }
-    emitir(event:IFormularioInternoSimple){
-        let emitido:any=null;
-        this.tomaDeMuestraService.emitirTomaDeMuestra(event.id).subscribe(
+    
+    solicitar(event:ITomaDeMuestra){
+        console.log(event);
+        this.tomaDeMuestraService.solicitarTomaDeMuestra(event.id).subscribe(
             (data:any)=>{
-                let formulario_emitido:IFormularioInterno
-                formulario_emitido=data.form;
-                if(formulario_emitido!=null)
-                {
-                    let index = this.listaFormularioInternos.findIndex(i => i.id === formulario_emitido.id);
-                    if (index !== -1) {
-                        this.listaFormularioInternos[index].estado = formulario_emitido.estado; // Actualizamos el valor
-                        this.listaFormularioInternos[index].fecha_creacion=formulario_emitido.fecha_creacion;
-                        //this.listaFormularioInternos[index].fecha_vencimiento=formulario_emitido.fecha_vencimiento;
-                        this.listaFormularioInternos[index].nro_formulario=formulario_emitido.nro_formulario;
-                    }
-                    this.notify.success('El el formulario interno '+formulario_emitido.nro_formulario+' se emitió exitosamente','Emitido Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
-                }
+            console.log(this.tomaDeMuestraService.handleTomaDeMuestraOperadorSimple(data));
+            this.tomaDeMuestraService.verTomaDeMuestrasSimpleOperador(this.operador_id).subscribe(
+                (data:any)=>{
+                this.listaTomaDeMuestra=this.tomaDeMuestraService.handleTomaDeMuestraOperadorSimple(data);
+              },
+              (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
           },
-          (error:any) =>
-            {
-                this.notify.error('Falló...Revise los datos y vuelva a enviar....','Error con la Emisión del Formulario',{timeOut:2000,positionClass: 'toast-top-right'});
-            });
+          (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
     }
-   /* confirmarEmision(event:IFormularioInternoSimple) {
+    confirmarSolicitud(event:ITomaDeMuestra) {
         console.log
         this.confirmationService.confirm({
             key: 'confirm1',
-            message: '¿Estas seguro de Emitir el formulario '+event.nro_formulario+'?',
+            message: '¿Estas seguro de Solicitar la Toma de Muestra: '+event.nro_formulario+'?',
             accept: () => {
-                this.emitir(event); // Llama a onSubmit cuando el usuario acepta
+                this.solicitar(event); // Llama a onSubmit cuando el usuario acepta
               },
         });
     }
-    */
+    
 
 }

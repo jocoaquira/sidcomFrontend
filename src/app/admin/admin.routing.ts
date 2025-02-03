@@ -16,6 +16,8 @@ import { AppLayoutComponent } from './layout/app.layout.component';
         { path: 'toma-de-muestra', loadChildren: () => import('./pages/toma-de-muestra/toma-de-muestra.module').then(m => m.TomaDeMuestraModule) },
         { path: 'responsable-tm', loadChildren: () => import('./pages/responsable-tm/responsable-tm.module').then(m => m.ResponsableTMModule) },
         { path: 'responsable-senarecom', loadChildren: () => import('./pages/responsable-senarecom/responsable-senarecom.module').then(m => m.ResponsableSenarecomModule) },
+        { path: 'procedimiento-tm', loadChildren: () => import('./pages/procedimiento-tm/procedimiento-tm.module').then(m => m.ProcedimientoTMModule) },
+        
         { path: '**', redirectTo: '/notfound' }
         ]
         }

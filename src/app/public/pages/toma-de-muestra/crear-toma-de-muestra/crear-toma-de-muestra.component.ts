@@ -41,6 +41,10 @@ export class CrearTomaDeMuestraComponent implements OnInit {
     public lingotes:boolean=false;
     public sal:boolean=false;
     public otro:boolean=false;
+    public dept:IDepartamento={
+      longitud:null,
+      latitud:null
+    };
     departamento_id1: number | null = null;  // Guardar el ID del departamento seleccionado
   municipio_id1: number | null = null;
   // Método que se llama cuando cambia el departamento
@@ -421,11 +425,11 @@ addMarker(lat: number, lng: number) {
   this.currentMarker.bindPopup(`Latitud: ${lat}, Longitud: ${lng}`).openPopup();
 }
 abrirMapa() {
-  if(this.formulario_interno.formulario.value.departamento){
-      let dept:any=this.departamento.find(val => val.id ===  this.formulario_interno.formulario.value.departamento);
-      console.log(this.formulario_interno.formulario.value.departamento);
+  if(this.formulario_interno.formulario.value.departamento_id){
+      this.dept=this.departamento.find(val => val.id ===  this.formulario_interno.formulario.value.departamento_id);
+      console.log(this.formulario_interno.formulario.value.departamento_id);
       if (this.map) {
-          this.map.setView(latLng(dept.latitud, dept.longitud), 13.5);
+          this.map.setView(latLng(this.dept.latitud, this.dept.longitud), 13.5);
       }
       this.sw_mapa=false;
       this.mapaDialogo = true;
@@ -684,17 +688,17 @@ abrirMapa() {
             console.log(departamento_id);
     
             this.formulario_interno.formulario.value.departamento=departamento_id.value;
-            let dept:IDepartamento=this.departamento.find(element => element.id === departamento_id.value);
+            this.dept=this.departamento.find(element => element.id === departamento_id.value);
             this.municipiosService.vermunicipios( departamento_id.value.toString()).subscribe(
                 (data:any)=>{
     
                 this.municipio=this.municipiosService.handlemunicipio(data);
                 this.options = {
-                    center: latLng(dept.latitud,dept.longitud),
+                    center: latLng(this.dept.latitud,this.dept.longitud),
                     zoom: 13.5
                 };
                 if (this.map) {
-                    this.map.setView(latLng(dept.latitud, dept.longitud), 13.5);
+                    this.map.setView(latLng(this.dept.latitud, this.dept.longitud), 13.5);
                   }
               },
               (error:any)=> this.error=this.municipiosService.handleError(error)

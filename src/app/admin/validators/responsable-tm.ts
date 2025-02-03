@@ -1,5 +1,4 @@
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { passwordMatchValidator } from './igualar-password';
 import { IResponsableTM } from '@data/responsable_tm.metadata';
 
 export class ResponsableTMFormulario {
@@ -29,8 +28,7 @@ export class ResponsableTMFormulario {
         operador_id:new FormControl(this.usuario.operador_id,[Validators.required]),
         id:new FormControl(this.usuario.id),
         estado:new FormControl(this.usuario.estado,[Validators.required])
-    },
-    [passwordMatchValidator()]);
+    });
   }
 
   // Método general para obtener un FormControl
@@ -77,6 +75,20 @@ getErrorMessage(controlName: string): string | null {
       }
     // Otros errores personalizados aquí si son necesarios
     return null;
+  }
+  mostrarErrores() {
+    const errores: { [key: string]: string } = {};
+
+    this.getControlNames().forEach((controlName) => {
+      if (this.esCampoInvalido(controlName)) {
+        errores[controlName] = this.getErrorMessage(controlName) || 'Error desconocido';
+      }
+    });
+
+    console.log(errores);
+  }
+  getControlNames(): string[] {
+    return Object.keys(this.formulario.controls);
   }
 
 }

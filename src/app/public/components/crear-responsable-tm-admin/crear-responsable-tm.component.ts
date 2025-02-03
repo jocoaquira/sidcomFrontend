@@ -41,7 +41,8 @@ export class CrearResponsableTMComponent implements OnInit {
     private notify:ToastrService,
     private authService:AuthService,
         ) { 
-          
+          this.operador_id= authService.getUser.operador_id;
+        console.log('este operador: '+this.operador_id);
             
             
         }
@@ -132,11 +133,25 @@ export class CrearResponsableTMComponent implements OnInit {
       }
   }
   crearResponsable() {
-    
-    this.form.formulario.value.estado=this.form.formulario.value.estado.label;
-    this.form.formulario.value.celular=parseInt(this.form.formulario.value.celular);
-    console.log(this.form.formulario.value);
-    
+
+    this.form.formulario.patchValue({
+      operador_id: this.operador_id,
+      celular:parseInt(this.form.formulario.value.celular),
+      estado:this.form.formulario.value.estado.label
+
+    });
+    console.log(this.form.formulario.invalid);
+    console.log(this.form.mostrarErrores());
+    console.log(this.form.formulario.valid);
+    for (const controlName in this.form.formulario.controls) {
+      const control = this.form.formulario.get(controlName);
+      if (control?.invalid && (control?.touched || control?.dirty)) {
+        console.log(`El campo '${controlName}' tiene errores:`, control?.errors);
+      }
+      else {
+        console.log(`El campo '${controlName}' no tiene errores:`, control?.errors);
+      }
+    }
     if (this.form.formulario.valid) {
         this.responsableTMAdminService.crearResponsableTM(this.form.formulario.value).subscribe(
             (data:any) =>

@@ -87,7 +87,7 @@ export class ListarResponsableTMComponent implements OnInit {
     }
     cerrar(event:any){
         this.productDialog=event;
-        this.responsableTMService.verResponsableTM('nada').subscribe(
+        this.responsableTMService.verResponsableTMOperador(this.operador_id.toString()).subscribe(
             (data:any)=>{
             this.listaUsuarios=this.responsableTMService.handleusuario(data);
             
@@ -200,7 +200,7 @@ export class ListarResponsableTMComponent implements OnInit {
               if(data.error==null)
               {
                 this.notify.success('Actualizado Correctamente','Actualizado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
-                this.responsableTMService.verResponsableTM('nada').subscribe(
+                this.responsableTMService.verResponsableTMOperador(this.operador_id.toString()).subscribe(
                     (data:any)=>{
                     this.listaUsuarios=this.responsableTMService.handleusuario(data);
                     this.listaUsuarios = this.listaUsuarios.map(usuario => ({

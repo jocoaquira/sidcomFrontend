@@ -1,0 +1,104 @@
+.customer-badge,
+.usuario-badge,
+.order-badge {
+    border-radius: var(--border-radius);
+    padding: .25em .5rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .3px;
+}
+
+.usuario-badge {
+    &.estado-1 {
+        background: #C8E6C9;
+        color: #256029;
+    }
+
+    &.estado-0 {
+        background: #FFCDD2;
+        color: #C63737;
+    }
+}
+
+.customer-badge {
+    &.estado-qualified {
+        background: #C8E6C9;
+        color: #256029;
+    }
+
+    &.estado-unqualified {
+        background: #FFCDD2;
+        color: #C63737;
+    }
+
+    &.estado-negotiation {
+        background: #FEEDAF;
+        color: #8A5340;
+    }
+
+    &.estado-new {
+        background: #B3E5FC;
+        color: #23547B;
+    }
+
+    &.estado-renewal {
+        background: #ECCFFF;
+        color: #694382;
+    }
+
+    &.estado-proposal {
+        background: #FFD8B2;
+        color: #805B36;
+    }
+}
+
+.order-badge {
+    &.order-delivered {
+        background: #C8E6C9;
+        color: #256029;
+    }
+
+    &.order-cancelled {
+        background: #FFCDD2;
+        color: #C63737;
+    }
+
+    &.order-pending {
+        background: #FEEDAF;
+        color: #8A5340;
+    }
+
+    &.order-returned {
+        background: #ECCFFF;
+        color: #694382;
+    }
+}
+.botones-derecha {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.ng-invalid.ng-dirty {
+    color: red; /* Cambia el color del texto a rojo */
+  }
+
+  .ng-valid.ng-dirty {
+    color: green; /* Opcional: Cambia el color del texto a verde cuando sea válido */
+  }
+  label {
+    color: black;  /* Color por defecto para el label, puede ajustarse a cualquier color */
+}
+/* Estilos para el checkbox */
+.custom-checkbox {
+    transform: scale(1.9); /* Aumentar el tamaño del checkbox si lo deseas */
+    margin-right: 10px; /* Espacio entre el checkbox y la etiqueta */
+    accent-color: rgb(17, 84, 185); /* Cambia el color del checkbox y el estado seleccionado */
+  }
+
+  /* Estilos para la etiqueta */
+  .custom-checkbox + label {
+    color: rgb(14, 85, 177); /* Cambia el color de la etiqueta */
+    font-size: 13px;
+    font-weight: bold; /* Ajusta el tamaño de la fuente de la etiqueta */
+  }

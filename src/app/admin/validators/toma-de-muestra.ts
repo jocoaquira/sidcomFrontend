@@ -53,7 +53,7 @@ export class TomaDeMuestraFormulario {
         
         total_parcial:new FormControl(this.form_toma_de_muestra.total_parcial,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
         peso_neto_total: new FormControl(this.form_toma_de_muestra.peso_neto_total,[Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
-        peso_neto_parcial: new FormControl(this.form_toma_de_muestra.peso_neto_parcial,[Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
+        peso_neto_parcial: new FormControl(this.form_toma_de_muestra.peso_neto_parcial,[Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
         ubicacion_lat:new FormControl(this.form_toma_de_muestra.ubicacion_lat,[Validators.required,Validators.pattern('^-?\\d+(\\.\\d+)?$')]),
         ubicacion_lon:new FormControl(this.form_toma_de_muestra.ubicacion_lon,[Validators.required,Validators.pattern('^-?\\d+(\\.\\d+)?$')]),
         lugar_verificacion: new FormControl(this.form_toma_de_muestra.lugar_verificacion,[Validators.required]),

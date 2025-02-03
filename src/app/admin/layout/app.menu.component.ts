@@ -21,8 +21,8 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Operadores Mineros', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/operador'] },
                     { label: 'Usuarios', icon: 'pi pi-fw pi-users', routerLink: ['/admin/usuario'] },
                     { label: 'Responsables SENARECOM', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/responsable-senarecom'] },
-                    { label: 'Responsables Toma de Muestras', icon: 'pi pi-fw pi-users', routerLink: ['/admin/responsable-tm'] }
-                
+                    { label: 'Responsables Toma de Muestras', icon: 'pi pi-fw pi-users', routerLink: ['/admin/responsable-tm'] },
+                    { label: 'Procedimiento', icon: 'pi pi-fw pi-users', routerLink: ['/admin/procedimiento-tm'] }
                 ]
             },
             {
