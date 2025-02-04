@@ -9,7 +9,6 @@ import { ITomaDeMuestraMineralEnvio } from '@data/toma_de_muestra_mineral_envio.
 import { ITomaDeMuestraMunicipioOrigen } from '@data/toma_de_muestra_municipio_origen.metadata';
 import { ITomaDeMuestraMunicipioOrigenEnvio } from '@data/toma_de_muestra_municipio_origen_envio.metadata';
 import { ToastrService } from 'ngx-toastr';
-import { FormularioInternosService } from 'src/app/admin/services/formulario-interno/formulariosinternos.service';
 import { MineralsService } from 'src/app/admin/services/minerales.service';
 import { OperatorsService } from 'src/app/admin/services/operators.service';
 import { PresentacionService } from 'src/app/admin/services/presentacion.service';

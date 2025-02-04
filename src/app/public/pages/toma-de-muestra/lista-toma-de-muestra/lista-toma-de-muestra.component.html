@@ -13,7 +13,8 @@
                 --></ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="listaTomaDeMuestra" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['nro_formulario','fecha_hora_tdm','responsable_tdm_id','estado']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-table #dt [value]="listaTomaDeMuestra" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['nro_formulario','fecha_hora_tdm','responsable_tdm_id','estado']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id"
+            [sortField]="'fecha_hora_tdm'" [sortOrder]="-1">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Administrar Tomas de Muestra</h5>
@@ -77,11 +78,12 @@
                         </td>
                         <td>
                             <div class="flex">
+                                <button  pButton pRipple icon="pi pi-eye" (click)="verSolicitud(operador)"  class="p-button-outlined p-button-info mr-2" ></button>
                                 <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-pencil" class="p-button-outlined p-button-warning mr-2" routerLink="/admin/formulario-101/formulario-interno/editar/{{operador?.id}}"></button>
 
                                 <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-send" (click)="confirmarSolicitud(operador)" label="Solicitar" class="p-button-outlined p-button-success mr-2" ></button>
-                                <button *ngIf="operador.estado === 'APROBADO'" pButton pRipple icon="pi pi-send" label="Firmar" class="p-button-outlined p-button-success mr-2" ></button>
-                                <button *ngIf="operador.estado !== 'ANULADO' && operador.estado !== 'FIRMADO' && operador.estado !== 'APROBADO'" pButton pRipple icon="pi pi-trash" label="Anular" class="p-button-outlined p-button-danger mr-2" routerLink="/admin/formulario-101/formulario-interno/anular/{{operador?.id}}"></button>
+                                <button *ngIf="operador.estado === 'APROBADO'" pButton pRipple icon="pi pi-send" (click)="firmarTDM(operador)" label="Firmar" class="p-button-outlined p-button-success mr-2" ></button>
+                                <button *ngIf="operador.estado !== 'ANULADO' && operador.estado !== 'FIRMADO' && operador.estado !== 'APROBADO'" pButton pRipple icon="pi pi-trash" label="Anular" class="p-button-outlined p-button-danger mr-2" routerLink="/public/toma-de-muestra/anular/{{operador?.id}}"></button>
                                 </div>
                         </td>
                         <td>
@@ -96,7 +98,16 @@
                                     [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
                                     acceptLabel="Sí"
                                     rejectLabel="No"
-                                ></p-confirmDialog>
+            >
+            </p-confirmDialog>
+            <p-dialog [(visible)]="verDialog" [style]="{width: '700px'}" 
+            [modal]="true" header="Estado de Toma de Muestra" 
+            class="p-fluid">
+            <app-ver-toma-de-muestra 
+                [id]="toma_de_muestra_id"
+                (estadoDialogo)="cerrar($event)">
+            </app-ver-toma-de-muestra>
+        </p-dialog>
         </div>
     </div>
 </div>

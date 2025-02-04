@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.metadata';
-import { ITomaDeMuestra } from '@data/toma_de_muestra.metadata';
+import { IAnulacionTomaDeMuestra, ITomaDeMuestra } from '@data/toma_de_muestra.metadata';
 import { ITomaDeMuestraSimple } from '@data/toma_de_muestra_simple.metadata';
 import { ITomaDeMuestraSimpleOperador } from '@data/toma_de_muestra_simple_operador.metadata';
 import { IAprobarTM } from '@data/aprobar_tm.metadata';
@@ -115,6 +115,13 @@ solicitarTomaDeMuestra(id:number) {
   this.token();
   return this.http.put(`${this.baseUrl}sample/solicitar/`+id.toString(), sol)
 }
+firmarTomaDeMuestra(id:number) {
+  let sol={
+    'estado':'FIRMADO'
+  }
+  this.token();
+  return this.http.put(`${this.baseUrl}sample/firmar/`+id.toString(), sol)
+}
 //---------------------crear   TomaDeMuestra-------------------------------------------
 aprobarTomaDeMuestra(data:IAprobarTM,id:number) {
   this.token();
@@ -137,13 +144,9 @@ emitirTomaDeMuestra(id:number) {
   return this.http.put(`${this.baseUrl}sample/emitir/`+id, estado)
 }
 //---------------------Editar   TomaDeMuestra-------------------------------------------
-anularTomaDeMuestra(data:ITomaDeMuestra) {
-  let anulado:any={
-    estado:'ANULADO',
-    justificacion_anulacion:data.justificacion_anulacion
-  }
+anularTomaDeMuestra(data:IAnulacionTomaDeMuestra) {
     this.token();
-    return this.http.put(`${this.baseUrl}sample/anular/`+data.id, anulado)
+    return this.http.put(`${this.baseUrl}sample/anular/`+data.id, data)
   }
 //-----------------Listado de Empelados por Dependencia--------------------------------------------
 private token(){

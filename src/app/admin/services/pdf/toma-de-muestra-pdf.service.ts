@@ -1,8 +1,7 @@
 
 import { style } from '@angular/animations';
 import { Injectable } from '@angular/core';
-import { IFormularioInterno } from '@data/formulario_interno.metadata';
-import { IFormularioInternoSimple } from '@data/formulario_interno_simple.metadata';
+import { ITomaDeMuestra } from '@data/toma_de_muestra.metadata';
 import { IOperator } from '@data/operator.metadata';
 import { fontStyle } from 'html2canvas/dist/types/css/property-descriptors/font-style';
 import jsPDF from 'jspdf';
@@ -10,7 +9,7 @@ import autoTable from 'jspdf-autotable'
 import * as QRCode from 'qrcode';
 import { FormularioInternoMineralService } from '../formulario-interno/formulariointerno-mineral.service';
 import { FormularioInternoMunicipioOrigenService } from '../formulario-interno/formulariointerno-municipioorigen.service';
-import { FormularioInternosService } from '../formulario-interno/formulariosinternos.service';
+
 import { OperatorsService } from '../operators.service';
 import { ImageToBase64Service } from './image-to-base64.service';
 import { IFormularioInternoMineral } from '@data/form_int_mineral.metadata';
@@ -22,17 +21,18 @@ import { catchError, forkJoin, of, retry } from 'rxjs';
 import { IMineral } from '@data/mineral.metadata';
 import { IMunicipio } from '@data/municipio.metadata';
 import { IDepartamento } from '@data/departamento.metadata';
+import { TomaDeMuestraService } from '../toma-de-muestra/toma-de-muestra.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class PdfFormularioInternoService {
+export class PdfTomaDeMuestraService {
 
    public error:any=null;
   constructor(
     private imageToBase64Service: ImageToBase64Service,
     private operadorService:OperatorsService,
-    private formularioInternoService:FormularioInternosService,
+    private tomaDeMuestraService:TomaDeMuestraService,
     private mineralesService:MineralsService,
     private municipiosService:MunicipiosService,
     public departamentosService: DepartamentosService,
@@ -61,7 +61,7 @@ export class PdfFormularioInternoService {
   
     return `${day}/${month}/${year} a Hrs.: ${hours}:${minutes}`; // Formato final
   }
-    generarPDF(formulario_interno: IFormularioInternoSimple) {
+    generarPDF(toma_de_muestra: ITomaDeMuestra) {
         let minerales!:IMineral[];
         let municipios: IMunicipio[] = [];
         let departamentos: IDepartamento[] = [];
@@ -76,13 +76,13 @@ export class PdfFormularioInternoService {
          let lista_leyes_mineral:IFormularioInternoMineral[]=[];
          let lista_municipios_origen:IFormularioInternoMunicipioOrigen[]=[];
 
-        let formulario_int_completo!: IFormularioInterno;
+        let formulario_int_completo!: ITomaDeMuestra;
         let operator!: IOperator;
         let error: any = null;
         let departamentosObs,mineralesObs,municipiosObs;
         // Obtener datos del formulario interno y el operador
-        const formularioInternoObs = this.formularioInternoService
-          .verFormularioInterno(formulario_interno.id.toString())
+        const formularioInternoObs = this.tomaDeMuestraService
+          .verTomaDeMuestra(toma_de_muestra.id.toString())
           .toPromise()
           .then((data: any) => {
 
@@ -102,7 +102,7 @@ export class PdfFormularioInternoService {
                 id: destino.municipioId,
               };
             });
-            formulario_int_completo = this.formularioInternoService.handleCrearFormularioInterno(data);
+            formulario_int_completo = data;
 
             this.municipiosService.verTodosMunicipios()
             .pipe(
@@ -172,7 +172,7 @@ export class PdfFormularioInternoService {
                     });
                       ///--------------------------------------------------------------------------------------------------------
                       const operatorObs = this.operadorService
-                      .verOperator(formulario_interno.operador_id.toString())
+                      .verOperator(toma_de_muestra.operador_id.toString())
                       .toPromise()
                       .then((data: any) => {
 
@@ -193,15 +193,15 @@ export class PdfFormularioInternoService {
                       const doc = new jsPDF('p', 'pt', 'letter');
 
                       const logo = new Image();
-                      logo.src = 'assets/sidcom/form-int-cabecera.jpg';
+                      logo.src = 'assets/sidcom/form-tdm-cabecera.jpg';
 
                       logo.onload = () => {
                         doc.addImage(logo, 'JPEG', 30, 10, 565, 75);
 
                         QRCode.toDataURL(
                           localStorage.getItem('url-frontend') +
-                            'formulario_interno/verificacion/' +
-                            formulario_interno.nro_formulario,
+                            'toma_de_muestra/verificacion/' +
+                            toma_de_muestra.nro_formulario,
                           (err, url) => {
                             if (err) {
 
@@ -223,9 +223,9 @@ export class PdfFormularioInternoService {
                                     { content: '',  styles: { halign: 'center',fillColor: [255, 255, 255] } },
                                     { content: '', colSpan:6, styles: { halign: 'center',fillColor: [255, 255, 255] } },
                                   {content: 'N° DE FORMULARIO:',styles:{halign:'right',fillColor: [255, 255, 255], }},
-                                  {content:formulario_interno.estado === 'GENERADO' ? formulario_interno.estado : formulario_interno.nro_formulario,
+                                  {content:toma_de_muestra.estado === 'GENERADO' ? toma_de_muestra.estado : toma_de_muestra.nro_formulario,
 
-                                  styles:{halign:'center', fontSize: 14,fontStyle: 'bold',fillColor:formulario_interno.estado === 'GENERADO' ?[255,255,0]:[255,255,255]}
+                                  styles:{halign:'center', fontSize: 14,fontStyle: 'bold',fillColor:toma_de_muestra.estado === 'GENERADO' ?[255,255,0]:[255,255,255]}
                                     }],
 
                                 ],
@@ -250,7 +250,7 @@ export class PdfFormularioInternoService {
                                 startY: 80, // Posición inicial de la tabla
                               });
 
-                        const mostrarDato2 = formulario_interno.estado === 'GENERADO'; // Verifica si el estado es 'GENERADO'
+                        const mostrarDato2 = toma_de_muestra.estado === 'GENERADO'; // Verifica si el estado es 'GENERADO'
 
                         // Crear las celdas basadas en la condición
                         const celdas = [];
@@ -260,10 +260,9 @@ export class PdfFormularioInternoService {
                         celdas.push({ content: 'ESTE FORMULARIO NO SE EMITIO, ESTA EN MODO GENERADO Y NO ES VALIDO PARA CIRCULACIÓN.', colSpan: 2, styles: { halign: 'center', fillColor: [255, 255, 0] } });
                         } else {
                         // Si no es 'GENERADO', agregar la segunda celda
-                        celdas.push({ content: 'FECHA DE EMISIÓN:', styles: { halign: 'right',fontSize:10,fontStyle:'bold',fillColor: [255, 255, 255] } });
-                        celdas.push({ content: this.formatFecha(formulario_interno.fecha_creacion), styles: { halign: 'left' ,fillColor: [255, 255, 255] } });
-                        celdas.push({ content: 'FECHA DE VENCIMIENTO:', styles: { halign: 'right',fontSize:10,fontStyle:'bold' ,fillColor: [255, 255, 255] } });
-                        celdas.push({ content: this.formatFecha(formulario_interno.fecha_vencimiento), styles: { halign: 'left' ,fillColor: [255, 255, 255] } });
+                        celdas.push({ content: 'FECHA DE EMISIÓN:', styles: { halign: 'left',fontSize:10,fontStyle:'bold',fillColor: [255, 255, 255] } });
+                        celdas.push({ content: this.formatFecha(toma_de_muestra.fecha_aprobacion), styles: { halign: 'left' ,fillColor: [255, 255, 255] } });
+                        
                     }
                         autoTable(doc, {
                             body: [celdas],
@@ -281,13 +280,56 @@ export class PdfFormularioInternoService {
 
                             head: [
                               [
-                                { content: '1. OPERADOR MINERO', colSpan: 6, styles: { halign: 'left', fillColor: [161, 216, 158], fontStyle: 'bold' } },
+                                { content: '1. DATOS GENERALES', colSpan: 6, styles: { halign: 'left', fillColor:[255,204,204], fontStyle: 'bold' } },
+                              ],
+                            ],
+                            body: [
+                              [
+                                { content: 'FECHA DE EMISIÓN:',colSpan: 1, styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                { content: this.formatFecha(toma_de_muestra.fecha_aprobacion),colSpan: 5, styles: { halign: 'left' , fillColor: [255, 255, 255]} },
+                              ],
+                              [
+                                { content: 'LUGAR DE VERIFICACIÓN:', colSpan: 2, styles: { halign: 'left', fontStyle: 'bold' } },
+                                { content: toma_de_muestra.lugar_verificacion, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                
+                              ],
+                            ],
+
+                            styles: {
+                              fillColor: [255, 255, 255], // Color de fondo por defecto
+                              textColor: [0, 0, 0], // Color de texto negro
+                              halign: 'left', // Alineación horizontal izquierda por defecto
+                              valign: 'middle', // Alineación vertical centrada
+                              fontSize: 9, // Tamaño de fuente
+                              cellPadding: 2, // Espaciado interno de las celdas
+                            },
+                            headStyles: {
+                              fillColor:[255,204,204], // Fondo verde para el encabezado
+                              textColor: [0, 0, 0], // Texto negro para el encabezado
+                              fontStyle: 'bold', // Texto en negrita
+                            },
+                            columnStyles: {
+                              0: { cellWidth: 100 }, // Primera columna
+                              1: { cellWidth: 80 }, // Segunda columna
+                              2: { cellWidth: 'auto' }, // Ajusta automáticamente
+                              3: { cellWidth: 'auto' }, // Ajusta automáticamente
+                              4: { cellWidth: 'auto' }, // Ajusta automáticamente
+                              5: { cellWidth: 80 }, // Última columna
+                            },
+                          });
+
+                          autoTable(doc, {
+                            startY: (doc as any).lastAutoTable?.finalY || 10,
+
+                            head: [
+                              [
+                                { content: '2. DATOS DEL OPERADOR MINERO', colSpan: 6, styles: { halign: 'left', fillColor:[255,204,204], fontStyle: 'bold' } },
                               ],
                             ],
                             body: [
                               [
                                 { content: 'RAZÓN SOCIAL:', styles: { halign: 'right', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: formulario_interno.razon_social, colSpan: 5, styles: { halign: 'left' , fillColor: [255, 255, 255]} },
+                                { content: operator.razon_social, colSpan: 5, styles: { halign: 'left' , fillColor: [255, 255, 255]} },
                               ],
                               [
                                 { content: 'NIT:', styles: { halign: 'right', fontStyle: 'bold' } },
@@ -308,7 +350,7 @@ export class PdfFormularioInternoService {
                               cellPadding: 2, // Espaciado interno de las celdas
                             },
                             headStyles: {
-                              fillColor: [161, 216, 158], // Fondo verde para el encabezado
+                              fillColor:[255,204,204], // Fondo verde para el encabezado
                               textColor: [0, 0, 0], // Texto negro para el encabezado
                               fontStyle: 'bold', // Texto en negrita
                             },
@@ -327,16 +369,16 @@ export class PdfFormularioInternoService {
 
                             head: [
                               [
-                                { content: '2. DATOS DEL MINERAL Y/O METAL TRANSPORTADO', colSpan: 5, styles: { halign: 'left', fillColor: [161, 216, 158], fontStyle: 'bold' } },
+                                { content: '3. DATOS DEL MINERAL', colSpan: 5, styles: { halign: 'left', fillColor:[255,204,204], fontStyle: 'bold' } },
                               ],
                             ],
                             body: [
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: 'LOTE:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: 'PRESENTACIÓN:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: formulario_int_completo.lote, styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                                { content: 'MERMA:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_int_completo.merma+' %', styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: 'LOTE:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: formulario_int_completo.lote+' %', styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
 
@@ -347,36 +389,9 @@ export class PdfFormularioInternoService {
                               cellPadding: 2, // Espaciado interno de las celdas
                             },
                             headStyles: {
-                              fillColor: [161, 216, 158], // Fondo verde para el encabezado
+                              fillColor:[255,204,204], // Fondo verde para el encabezado
                               textColor: [0, 0, 0], // Texto negro para el encabezado
                               fontStyle: 'bold', // Texto en negrita
-                            },
-                            columnStyles: {
-                              0: { cellWidth: 20 }, // Primera columna
-                              1: { cellWidth: 40 }, // Primera columna
-                              2: { cellWidth: 200 }, // Segunda columna
-                              3: { cellWidth:40 }, // Ajusta automáticamente
-                              4: { cellWidth:230 }, // Ajusta automáticamente
-                            },
-                          });
-
-                          autoTable(doc, {
-                            startY: (doc as any).lastAutoTable?.finalY || 10,
-
-                            body: [
-                              [
-                                {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: 'PRESENTACION:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_int_completo.presentacion, styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                                { content: 'PESO NETO SECO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_int_completo.peso_neto+' Kg.', styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                              ],
-                            ],
-                            styles: {
-                              textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
-                              cellPadding: 2, // Espaciado interno de las celdas
                             },
                             columnStyles: {
                               0: { cellWidth: 20 }, // Primera columna
@@ -392,10 +407,10 @@ export class PdfFormularioInternoService {
                             body: [
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: 'PESO BRUTO HÚMEDO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_int_completo.peso_bruto_humedo+' Kg.', styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                 { content: 'MINERAL Y/O METAL:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: mineralesString, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: 'COMPUESTO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: formulario_int_completo.peso_neto_total+' Kg.', styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
                             styles: {
@@ -418,10 +433,10 @@ export class PdfFormularioInternoService {
                             body: [
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: 'TARA:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_int_completo.tara+' Kg.', styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                                { content: 'LEY:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: leyesString, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: 'PESO NETO SECO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: formulario_int_completo.peso_neto_total+' [Kgs.]', styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: 'N° DE CAMIONES:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: formulario_int_completo.nro_camiones, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
                             styles: {
@@ -432,46 +447,20 @@ export class PdfFormularioInternoService {
                             },
                             columnStyles: {
                               0: { cellWidth: 20 }, // Primera columna
-                              1: { cellWidth: 40 }, // Primera columna
-                              2: { cellWidth: 200 }, // Segunda columna
-                              3: { cellWidth:30 }, // Ajusta automáticamente
-                              4: { cellWidth:240 }, // Ajusta automáticamente
+                              1: { cellWidth: 110 }, // Primera columna
+                              2: { cellWidth: 130 }, // Segunda columna
+                              3: { cellWidth:105 }, // Ajusta automáticamente
+                              4: { cellWidth:185 }, // Ajusta automáticamente
                             },
-                           });
-
-                           autoTable(doc, {
-                            startY: (doc as any).lastAutoTable?.finalY || 10,
-
-                            body: [
-                              [
-                                {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: 'HUMEDAD:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_int_completo.humedad+' %', styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                                {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                              ],
-                            ],
-                            styles: {
-                              textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
-                              cellPadding: 2, // Espaciado interno de las celdas
-                            },
-                            columnStyles: {
-                              0: { cellWidth: 20 }, // Primera columna
-                              1: { cellWidth: 60 }, // Primera columna
-                              2: { cellWidth: 180 }, // Segunda columna
-                              3: { cellWidth:30 }, // Ajusta automáticamente
-                              4: { cellWidth:260 }, // Ajusta automáticamente
-                            },
-                           });
+                          });
+                          
 
                            autoTable(doc, {
                             startY: (doc as any).lastAutoTable?.finalY || 10,
 
                             head: [
                               [
-                                { content: '3. ORIGEN DEL MINERAL Y/0 METAL', colSpan: 5, styles: { halign: 'left', fillColor: [161, 216, 158], fontStyle: 'bold' } },
+                                { content: '4. ORIGEN DEL MINERAL Y/0 METAL', colSpan: 5, styles: { halign: 'left', fillColor:[255,204,204], fontStyle: 'bold' } },
                               ],
                             ],
                             body: [
@@ -491,7 +480,7 @@ export class PdfFormularioInternoService {
                               cellPadding: 2, // Espaciado interno de las celdas
                             },
                             headStyles: {
-                              fillColor: [161, 216, 158], // Fondo verde para el encabezado
+                              fillColor:[255,204,204], // Fondo verde para el encabezado
                               textColor: [0, 0, 0], // Texto negro para el encabezado
                               fontStyle: 'bold', // Texto en negrita
                             },
@@ -509,16 +498,16 @@ export class PdfFormularioInternoService {
 
                             head: [
                               [
-                                { content:  '4. DESTINO DEL MINERAL Y/O METAL', colSpan: 5, styles: { halign: 'left', fillColor: [161, 216, 158], fontStyle: 'bold' } },
+                                { content:  '5. ENCARGADO DE LA TOMA DE MUESTRA - SENARECOM', colSpan: 5, styles: { halign: 'left', fillColor:[255,204,204], fontStyle: 'bold' } },
                               ],
                             ],
                             body: [
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: formulario_int_completo.des_tipo+':', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_int_completo.des_tipo === 'COMPRADOR' ? formulario_int_completo.des_comprador : formulario_int_completo.des_planta, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: formulario_int_completo.tipo_muestra+':', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: formulario_int_completo.tipo_muestra === 'COMPRADOR' ? formulario_int_completo.municipio_id : formulario_int_completo.departamento_id, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                 { content: 'DESTINO FINAL (MUNICIPIO):', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_int_completo.id_municipio_destino+' %', styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: formulario_int_completo.lugar_verificacion+' %', styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
 
@@ -529,7 +518,7 @@ export class PdfFormularioInternoService {
                               cellPadding: 2, // Espaciado interno de las celdas
                             },
                             headStyles: {
-                              fillColor: [161, 216, 158], // Fondo verde para el encabezado
+                              fillColor:[255,204,204], // Fondo verde para el encabezado
                               textColor: [0, 0, 0], // Texto negro para el encabezado
                               fontStyle: 'bold', // Texto en negrita
 
@@ -542,22 +531,22 @@ export class PdfFormularioInternoService {
                               4: { cellWidth:135 }, // Ajusta automáticamente
                             },
                           });
-                          if(formulario_int_completo.tipo_transporte=='VIA FERREA'){
+                          if(formulario_int_completo.tipo_muestra=='VIA FERREA'){
                             autoTable(doc, {
                                 startY: (doc as any).lastAutoTable?.finalY || 10,
 
                                 head: [
                                   [
-                                    { content:  ' 5. MEDIO DE TRANSPORTE', colSpan: 5, styles: { halign: 'left', fillColor: [161, 216, 158], fontStyle: 'bold' } },
+                                    { content:  ' 6. PROCEDIMIENTO', colSpan: 5, styles: { halign: 'left', fillColor:[255,204,204], fontStyle: 'bold' } },
                                   ],
                                 ],
                                 body: [
                                   [
                                     {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                     { content: 'TIPO DE TRANSPORTE:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                    { content: formulario_int_completo.tipo_transporte, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    { content: formulario_int_completo.cantidad, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                     { content: 'EMPRESA:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                    { content: formulario_int_completo.empresa_ferrea, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    { content: formulario_int_completo.created_at, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                   ],
                                 ],
 
@@ -568,7 +557,7 @@ export class PdfFormularioInternoService {
                                   cellPadding: 2, // Espaciado interno de las celdas
                                 },
                                 headStyles: {
-                                  fillColor: [161, 216, 158], // Fondo verde para el encabezado
+                                  fillColor:[255,204,204], // Fondo verde para el encabezado
                                   textColor: [0, 0, 0], // Texto negro para el encabezado
                                   fontStyle: 'bold', // Texto en negrita
 
@@ -588,9 +577,9 @@ export class PdfFormularioInternoService {
                                   [
                                     {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                     { content: 'Nro. DE VAGON(ES):', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                    { content: formulario_int_completo.nro_vagon, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    { content: formulario_int_completo.nro_camiones, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                     {content:'FECHA DE SALIDA: ',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                    {content:formulario_int_completo.fecha_ferrea,  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                    {content:formulario_int_completo.nro_camiones,  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                   ],
                                 ],
                                 styles: {
@@ -615,7 +604,7 @@ export class PdfFormularioInternoService {
                                   [
                                     {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                     { content: 'HORA DE SALIDA: ', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                    { content: formulario_int_completo.hr_ferrea, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    { content: formulario_int_completo.lote, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                     {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                     {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                   ],
@@ -641,16 +630,16 @@ export class PdfFormularioInternoService {
 
                                 head: [
                                   [
-                                    { content:  ' 5. MEDIO DE TRANSPORTE', colSpan: 5, styles: { halign: 'left', fillColor: [161, 216, 158], fontStyle: 'bold' } },
+                                    { content:  ' 6. PROCEDIMIENTO', colSpan: 5, styles: { halign: 'left', fillColor:[255,204,204], fontStyle: 'bold' } },
                                   ],
                                 ],
                                 body: [
                                   [
                                     {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                     { content: 'TIPO DE TRANSPORTE:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                    { content: formulario_int_completo.tipo_transporte, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    { content: formulario_int_completo.lugar_verificacion, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                     { content: 'CONDUCTOR:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                    { content: formulario_int_completo.nom_conductor, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    { content: formulario_int_completo.estado, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                   ],
                                 ],
 
@@ -661,7 +650,7 @@ export class PdfFormularioInternoService {
                                   cellPadding: 2, // Espaciado interno de las celdas
                                 },
                                 headStyles: {
-                                  fillColor: [161, 216, 158], // Fondo verde para el encabezado
+                                  fillColor:[255,204,204], // Fondo verde para el encabezado
                                   textColor: [0, 0, 0], // Texto negro para el encabezado
                                   fontStyle: 'bold', // Texto en negrita
 
@@ -681,9 +670,9 @@ export class PdfFormularioInternoService {
                                   [
                                     {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                     { content: 'PLACA: ', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                    { content: formulario_int_completo.placa, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    { content: formulario_int_completo.responsable_tdm_gador_id, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                     {content:'LICENCIA DE CONDUCIR:',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                    {content:formulario_int_completo.licencia,  styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    {content:formulario_int_completo.responsable_tdm_senarecom_id,  styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                   ],
                                 ],
                                 styles: {
@@ -706,7 +695,7 @@ export class PdfFormularioInternoService {
 
                             head: [
                               [
-                                { content:  ' 6. OBSERVACIONES',colSpan:2, styles: { halign: 'left', fillColor: [161, 216, 158], fontStyle: 'bold' } },
+                                { content:  ' 7. OBSERVACIONES',colSpan:2, styles: { halign: 'left', fillColor:[255,204,204], fontStyle: 'bold' } },
                               ],
                             ],
                             body: [
@@ -723,7 +712,7 @@ export class PdfFormularioInternoService {
                               cellPadding: 2, // Espaciado interno de las celdas
                             },
                             headStyles: {
-                              fillColor: [161, 216, 158], // Fondo verde para el encabezado
+                              fillColor:[255,204,204], // Fondo verde para el encabezado
                               textColor: [0, 0, 0], // Texto negro para el encabezado
                               fontStyle: 'bold', // Texto en negrita
 
@@ -761,7 +750,7 @@ export class PdfFormularioInternoService {
                               lineColor: [0, 0, 0], // Color de la línea del borde
                             },
                             headStyles: {
-                              fillColor: [161, 216, 158], // Fondo verde para el encabezado
+                              fillColor:[255,204,204], // Fondo verde para el encabezado
                               textColor: [0, 0, 0], // Texto negro para el encabezado
                               fontStyle: 'bold', // Texto en negrita
                               cellPadding: 7, // Espaciado interno de las celdas
@@ -792,7 +781,7 @@ export class PdfFormularioInternoService {
                             sello_autorizado.src = 'assets/sidcom/sello.jpg';
 
                             sello_autorizado.onload = () => {
-                                if(formulario_interno.estado!=='GENERADO')
+                                if(toma_de_muestra.estado!=='GENERADO')
                                 {
                                     doc.addImage(url, 'PNG', 475, (doc as any).lastAutoTable?.finalY-99, 81, 81);
                                     doc.addImage(sello_autorizado, 'JPEG',321, (doc as any).lastAutoTable?.finalY-98, 127,86);
@@ -835,7 +824,7 @@ export class PdfFormularioInternoService {
                                 },
                                 headStyles: {
                                   fontSize: 9, // Tamaño de fuente
-                                  fillColor: [161, 216, 158], // Fondo verde para el encabezado
+                                  fillColor:[255,204,204], // Fondo verde para el encabezado
                                   textColor: [0, 0, 0], // Texto negro para el encabezado
                                   cellPadding: 7, // Espaciado interno de las celdas
                                 },
@@ -874,7 +863,7 @@ export class PdfFormularioInternoService {
             });
           })
           .catch((err) => {
-            error = this.formularioInternoService.handleError(err);
+            error = this.tomaDeMuestraService.handleError(err);
 
           });
 

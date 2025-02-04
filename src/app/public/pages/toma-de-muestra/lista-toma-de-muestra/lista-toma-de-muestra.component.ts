@@ -14,6 +14,7 @@ import { TomaDeMuestraService } from 'src/app/admin/services/toma-de-muestra/tom
 import { ITomaDeMuestra } from '@data/toma_de_muestra.metadata';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { ITomaDeMuestraSimpleOperador } from '@data/toma_de_muestra_simple_operador.metadata';
+import { ITomaDeMuestraSimple } from '@data/toma_de_muestra_simple.metadata';
 
 @Component({
   selector: 'app-lista-toma-de-muestra',
@@ -32,6 +33,22 @@ export class ListaTomaDeMuestraComponent implements OnInit {
     public productDialog=false;
     public submitted = true;
     public operador_id:number=0;
+    public tomaDeMuestra:ITomaDeMuestraSimple={
+        id:null,
+        nro_formulario:null,
+        fecha_hora_tdm:null,
+        razon_social:null,
+        estado:null,
+        fecha_aprobacion:null,
+        fecha_firma:null,
+        lugar_verificacion:null,
+        ubicacion_lat:null,
+        ubicacion_lon:null,
+        created_at:null,
+        updated_at:null
+    }
+    public toma_de_muestra_id:number=null;
+    public verDialog:boolean=false;
 
     constructor(
         public canListarFormularioInterno:CanListarFormularioInternoGuard,
@@ -53,7 +70,8 @@ export class ListaTomaDeMuestraComponent implements OnInit {
         this.tomaDeMuestraService.verTomaDeMuestrasSimpleOperador(this.operador_id).subscribe(
             (data:any)=>{
             this.listaTomaDeMuestra=this.tomaDeMuestraService.handleTomaDeMuestraOperadorSimple(data);
-          },
+                console.log(this.listaTomaDeMuestra);
+        },
           (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
 
 
@@ -122,6 +140,19 @@ export class ListaTomaDeMuestraComponent implements OnInit {
           },
           (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
     }
+    firmar(event:ITomaDeMuestra){
+        console.log(event);
+        this.tomaDeMuestraService.firmarTomaDeMuestra(event.id).subscribe(
+            (data:any)=>{
+            console.log(this.tomaDeMuestraService.handleTomaDeMuestraOperadorSimple(data));
+            this.tomaDeMuestraService.verTomaDeMuestrasSimpleOperador(this.operador_id).subscribe(
+                (data:any)=>{
+                this.listaTomaDeMuestra=this.tomaDeMuestraService.handleTomaDeMuestraOperadorSimple(data);
+              },
+              (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
+          },
+          (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
+    }
     confirmarSolicitud(event:ITomaDeMuestra) {
         console.log
         this.confirmationService.confirm({
@@ -132,6 +163,28 @@ export class ListaTomaDeMuestraComponent implements OnInit {
               },
         });
     }
-    
+    firmarTDM(event:ITomaDeMuestra){
+        console.log
+        this.confirmationService.confirm({
+            key: 'confirm1',
+            message: '¿Estas seguro de Firmar la Toma de Muestra: '+event.nro_formulario+'?',
+            accept: () => {
+                this.firmar(event); // Llama a onSubmit cuando el usuario acepta
+              },
+        });
+    }
+    verSolicitud(event:ITomaDeMuestraSimple){   
+            this.tomaDeMuestra=event;
+            this.verDialog = true;
+            this.toma_de_muestra_id=event.id;
+        }
+    cerrar(event:any){
+        this.productDialog=event;
+        this.tomaDeMuestraService.verTomaDeMuestrasSimple().subscribe(
+            (data:any)=>{
+                this.listaTomaDeMuestra=this.tomaDeMuestraService.handleTomaDeMuestraOperadorSimple(data);
+            },
+            (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
+    }
 
 }

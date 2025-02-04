@@ -42,4 +42,9 @@ export interface ITomaDeMuestraProcedimiento {
     nombre:string,
     procedimiento:string
 }
+export interface IAnulacionTomaDeMuestra {
+    id:number,
+    estado:string,
+    justificacion_anulacion: string
+}
 

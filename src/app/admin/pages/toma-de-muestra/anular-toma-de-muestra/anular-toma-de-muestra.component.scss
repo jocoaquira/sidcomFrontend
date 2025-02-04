@@ -1,0 +1,156 @@
+.card {
+    background: linear-gradient(to bottom, #ffffff, #ffffff); /* Fondo con gradiente */
+    border-radius: 4px; /* Bordes redondeados */
+    padding: 25px; /* Espaciado interno */
+    box-shadow: 0 4px 12px rgba(12, 104, 39, 0.1); /* Sombra suave */
+    margin-bottom: 1px; /* Espaciado inferior */
+}
+.card-titulo {
+    background: #680542; /* Fondo con gradiente */
+    border-radius: 4px; /* Bordes redondeados */
+     /* Espaciado interno */
+    box-shadow: 0 4px 12px rgba(12, 104, 39, 0.1); /* Sombra suave */
+    margin-bottom: 10px; /* Espaciado inferior */
+    padding-top: 20px;
+    padding-right: 50px;
+    padding-left: 50px;
+    padding-bottom: 30;
+    height: 5rem;
+    color: #eafaec;
+}
+
+
+.card-cuerpo {
+    background: linear-gradient(to bottom, #ffffff, #e9baf0); /* Fondo con gradiente */
+    border-radius: 15px; /* Bordes redondeados */
+    box-shadow: 0 4px 12px rgba(12, 104, 39, 0.1); /* Sombra suave */
+    margin-left: 20px;
+    margin-right: 30px;
+    padding-left: 50px;
+    margin-bottom: 1px; /* Espaciado inferior */
+}
+
+.card-declaracion {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to bottom, #f4fbd3, #d6f36e); /* Fondo con gradiente */
+    border-radius: 15px; /* Bordes redondeados */
+    padding: 20px; /* Espaciado interno */
+    box-shadow: 0 4px 12px rgba(12, 104, 39, 0.1); /* Sombra suave */
+    margin-bottom: 20px; /* Espaciado inferior */
+    margin: 0 auto;  /* Centra el card horizontalmente */
+  }
+
+.card-vencido {
+    background-color: #add8e6; /* Azul claro */
+    color: #333;
+}
+
+.card-anulado {
+    background-color: #fceffa; /* Rojo claro */
+    border-radius: 5px; /* Bordes redondeados */
+    color: #333;
+    padding-top: 20px;
+    padding-right: 25px;
+    padding-left: 25px;
+    padding-bottom: 20px;
+}
+
+
+/* Centrar el contenido del card */
+.card-declaracion.text-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #131111;
+    height: 100%; /* Ajusta la altura según sea necesario */
+  }
+/* Estilos para el checkbox */
+.custom-checkbox {
+    transform: scale(1.9); /* Aumentar el tamaño del checkbox si lo deseas */
+    margin-right: 10px; /* Espacio entre el checkbox y la etiqueta */
+    accent-color: red; /* Cambia el color del checkbox y el estado seleccionado */
+  }
+
+  /* Estilos para la etiqueta */
+  .custom-checkbox + label {
+    color: red; /* Cambia el color de la etiqueta */
+    font-size: 18px;
+    font-weight: bold; /* Ajusta el tamaño de la fuente de la etiqueta */
+  }
+
+/* Contenedor de los botones */
+.card-botones {
+    display: flex;  /* Utiliza Flexbox para alinearlos en fila */
+    justify-content: flex-end;  /* Alinea los botones a la derecha */
+    gap: 15px;  /* Espacio entre los botones */
+    margin-top: 20px;  /* Espaciado superior */
+    padding: 10px;  /* Relleno alrededor de los botones */
+  }
+
+  /* Estilo general para los botones */
+  .card-botones .p-button {
+    padding: 10px 20px;  /* Ajusta el espaciado dentro de los botones */
+    border-radius: 9px;  /* Bordes redondeados */
+    font-weight: bold; /* Convierte el texto a mayúsculas */
+    font-size: 18px;  /* Tamaño de fuente más legible */
+  }
+
+  /* Personalización para el botón de éxito (Guardar) */
+  .card-botones .p-button-success {
+    background-color: #28a745;  /* Color verde personalizado */
+    border: none;  /* Quita el borde */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  /* Sombra sutil */
+  }
+
+
+
+  /* Efecto al pasar el mouse */
+  .card-botones .p-button:hover {
+    opacity: 0.9;  /* Le da un efecto de suavizado al pasar el mouse */
+    transition: all 0.3s ease;  /* Transición suave */
+  }
+
+
+  label[type="text"] {
+    font-size: 2rem !important; // Forzar el tamaño de texto
+  }
+
+
+  .centrar-botones {
+    display: flex;          /* Activa flexbox */
+    justify-content: center; /* Centra horizontalmente */
+    //align-items: center;    /* Centra verticalmente (si es necesario) */
+    margin-top: 7px;
+    gap: 10px;              /* Espacio entre los botones */
+    //height: 10;           /* Ajusta si necesitas centrar en un contenedor más grande */
+}
+
+.col-33 {
+    display: flex;          /* Asegura que los hijos directos también respeten el centrado */
+}
+
+
+.boton-ajustado {
+    padding: 1em; /* Controla el espacio interno según prefieras */
+    min-width: unset; /* Elimina el tamaño mínimo predeterminado */
+    width: auto; /* Permite que el ancho se ajuste al contenido */
+    font-size: 1em; /* Ajusta el tamaño de la fuente si es necesario */
+    display: inline-flex;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.p-button-rounded {
+    border-radius: 50px; /* Mantén el diseño redondeado */
+}
+.boton-icono-derecha {
+    flex-direction: row-reverse;
+    margin-right: 8px; /* Coloca el ícono después del texto */
+    font-size: 1em;
+}
+
+

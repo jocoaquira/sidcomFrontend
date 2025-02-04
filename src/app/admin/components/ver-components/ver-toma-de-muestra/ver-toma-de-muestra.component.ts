@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IDepartamento } from '@data/departamento.metadata';
 import { IMineral } from '@data/mineral.metadata';
 import { IMunicipio } from '@data/municipio.metadata';
@@ -18,6 +18,7 @@ import { TomaDeMuestraService } from 'src/app/admin/services/toma-de-muestra/tom
 })
 export class VerTomaDeMuestraComponent implements OnInit {
   @Input() id!: number;
+   @Output() estadoDialogo = new EventEmitter<boolean>();
   public tomaDM: any = null;
   public error: any = null;
   public municipios: IMunicipio[] = [];
@@ -28,6 +29,7 @@ export class VerTomaDeMuestraComponent implements OnInit {
   public elementos:string='';
   public responsable:string=null;
   public empresa:string=null;
+  public presentacion:string=null;
 
   constructor(
     private tomaDeMuestraService: TomaDeMuestraService,

@@ -12,6 +12,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { RouterModule } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
+import { DialogModule } from 'primeng/dialog';
+import { VerTomaDeMuestraModule } from 'src/app/admin/components/ver-components/ver-toma-de-muestra/ver-toma-de-muestra.module';
 
 @NgModule({
   imports: [
@@ -25,7 +27,9 @@ import { ConfirmationService } from 'primeng/api';
     InputTextModule,
     InputNumberModule,
     ConfirmDialogModule,
-    RouterModule
+    RouterModule,
+    DialogModule,
+    VerTomaDeMuestraModule
   ],
   declarations: [ListaTomaDeMuestraComponent],
   providers: [ConfirmationService]

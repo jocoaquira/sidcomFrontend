@@ -6,7 +6,6 @@ import { CanListarFormularioInternoGuard } from 'src/app/admin/guards/formulario
 import { CanVerFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-ver-formulario-interno.guard';
 import { CanEliminarOperatorGuard } from 'src/app/admin/guards/operators/can-eliminar-operator.guard';
 import { Table } from 'primeng/table';
-import { PdfFormularioInternoService } from 'src/app/admin/services/pdf/formulario-interno-pdf.service';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmationService } from 'primeng/api';
 import { TomaDeMuestraService } from 'src/app/admin/services/toma-de-muestra/toma-de-muestra.service';
@@ -14,6 +13,7 @@ import { ITomaDeMuestra } from '@data/toma_de_muestra.metadata';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { ITomaDeMuestraSimple } from '@data/toma_de_muestra_simple.metadata';
 import { IAprobarTM } from '@data/aprobar_tm.metadata';
+import { PdfTomaDeMuestraService } from 'src/app/admin/services/pdf/toma-de-muestra-pdf.service';
 
 @Component({
   selector: 'app-lista-toma-de-muestra',
@@ -54,6 +54,9 @@ export class ListaTomaDeMuestraComponent implements OnInit {
         responsable_tdm_senarecom_id:null,
         procedimiento:[]
     }
+    public verDialog:boolean=false;
+    public toma_de_muestra_id:number=null;
+    public tdm_completo:ITomaDeMuestra;
 
     constructor(
         public canListarFormularioInterno:CanListarFormularioInternoGuard,
@@ -62,7 +65,7 @@ export class ListaTomaDeMuestraComponent implements OnInit {
         public canEditarFormularioInterno:CanEditarFormularioInternoGuard,
         public canEliminarFormularioInterno:CanEliminarOperatorGuard,
         public tomaDeMuestraService:TomaDeMuestraService,
-        public pdfFormularioInterno:PdfFormularioInternoService,
+        public pdfTomaDemuestra:PdfTomaDeMuestraService,
         private notify:ToastrService,
         private authService:AuthService,
         private confirmationService:ConfirmationService
@@ -127,8 +130,15 @@ export class ListaTomaDeMuestraComponent implements OnInit {
     onGlobalFilter(table: Table, event: Event) {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
-    generarPDF(formulario_interno:IFormularioInternoSimple){
-        this.pdfFormularioInterno.generarPDF(formulario_interno);
+    generarPDF(tdm:IFormularioInternoSimple){
+        console.log(tdm);
+        this.tomaDeMuestraService.verTomaDeMuestra(tdm.id.toString()).subscribe(
+            (data:any)=>{
+            this.tdm_completo=data;
+            this.pdfTomaDemuestra.generarPDF(this.tdm_completo);
+          },
+          (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
+        
     }
    
     solicitar(event:ITomaDeMuestra){
@@ -161,6 +171,11 @@ export class ListaTomaDeMuestraComponent implements OnInit {
             this.listaTomaDeMuestras=this.tomaDeMuestraService.handleTomaDeMuestraSimple(data);
           },
           (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
+    }
+    verSolicitud(event:ITomaDeMuestraSimple){   
+        this.tomaDeMuestra=event;
+        this.verDialog = true;
+        this.toma_de_muestra_id=event.id;
     }
     
 

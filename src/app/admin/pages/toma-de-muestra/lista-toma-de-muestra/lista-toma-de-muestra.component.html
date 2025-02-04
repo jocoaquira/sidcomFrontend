@@ -13,7 +13,8 @@
                 --></ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="listaTomaDeMuestras" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['nro_formulario','razon_social','fecha_creacion','estado','fecha_vencimiento']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-table #dt [value]="listaTomaDeMuestras" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['nro_formulario','razon_social','fecha_hora_tdm','estado']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id"
+            [sortField]="'fecha_hora_tdm'" [sortOrder]="-1">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Administrar Tomas de Muestra</h5>
@@ -25,11 +26,11 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="idom">Nro. de Formulario <p-sortIcon field="idom"></p-sortIcon></th>
-                        <th pSortableColumn="razon_social"> Fecha de Toma de Muestra<p-sortIcon field="razon_social"></p-sortIcon></th>
-                        <th pSortableColumn="price">Hora<p-sortIcon field="price"></p-sortIcon></th>
-                        <th pSortableColumn="price">Responsable<p-sortIcon field="price"></p-sortIcon></th>
-                        <th pSortableColumn="category">Estado <p-sortIcon field="category"></p-sortIcon></th>
+                        <th pSortableColumn="nro_formulario">Nro. de Formulario <p-sortIcon field="nro_formulario"></p-sortIcon></th>
+                        <th pSortableColumn="fecha_hora_tdm"> Fecha de Toma de Muestra<p-sortIcon field="fecha_hora_tdm"></p-sortIcon></th>
+                        <th pSortableColumn="fecha_hora_tdm">Hora<p-sortIcon field="fecha_hora_tdm"></p-sortIcon></th>
+                        <th pSortableColumn="razon_social">Operador Minero<p-sortIcon field="razon_social"></p-sortIcon></th>
+                        <th pSortableColumn="estado">Estado <p-sortIcon field="estado"></p-sortIcon></th>
                         <th pSortableColumn="rating">Acciones <p-sortIcon field="rating"></p-sortIcon></th>
                         <th pSortableColumn="rating">Imprimir <p-sortIcon field="rating"></p-sortIcon></th>
                       </tr>
@@ -77,11 +78,12 @@
                         </td>
                         <td>
                             <div class="flex">
+                                <button  pButton pRipple icon="pi pi-eye" (click)="verSolicitud(operador)"  class="p-button-outlined p-button-info mr-2" ></button>
                                 <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-pencil" class="p-button-outlined p-button-warning mr-2" routerLink="/admin/toma-de-muestra/editar/{{operador?.id}}"></button>
                                 <button *ngIf="operador.estado === 'SOLICITADO'" pButton pRipple icon="pi pi-check-circle" (click)="aprobarSolicitud(operador)" label="Aprobar" class=" p-button-outlined p-button-info mr-2" ></button>
                                 <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-send" (click)="confirmarSolicitud(operador)" label="Solicitar" class="p-button-outlined p-button-success mr-2" ></button>
                                 <button *ngIf="operador.estado === 'APROBADO'" pButton pRipple icon="pi pi-send" label="Firmar" class="p-button-outlined p-button-success mr-2" ></button>
-                                <button *ngIf="operador.estado !== 'GENERADO' && operador.estado !== 'ANULADO'" pButton pRipple icon="pi pi-trash" label="Anular" class="p-button-outlined p-button-danger mr-2" routerLink="/admin/toma-de-muestra/anular/{{operador?.id}}"></button>
+                                <button *ngIf="operador.estado !== 'APROBADO' && operador.estado !== 'FIRMADO' && operador.estado !== 'ANULADO'" pButton pRipple icon="pi pi-trash" label="Anular" class="p-button-outlined p-button-danger mr-2" routerLink="/admin/toma-de-muestra/anular/{{operador?.id}}"></button>
                                 </div>
                         </td>
                         <td>
@@ -98,7 +100,7 @@
                                     rejectLabel="No"
                                 >
             </p-confirmDialog>
-            <p-dialog [(visible)]="productDialog" [style]="{width: '700px'}" 
+        <p-dialog [(visible)]="productDialog" [style]="{width: '700px'}" 
           [modal]="true" header="{{isEditMode ? 'Aprobación de Toma de Muestra' : 'Agregar Responsable'}}" 
           class="p-fluid">
             <app-aprobar-procedimiento 
@@ -107,6 +109,16 @@
                 (estadoDialogo)="cerrar($event)">
             </app-aprobar-procedimiento>
         </p-dialog>
+
+        <p-dialog [(visible)]="verDialog" [style]="{width: '700px'}" 
+            [modal]="true" header="Estado de Toma de Muestra" 
+            class="p-fluid">
+            <app-ver-toma-de-muestra 
+                [id]="toma_de_muestra_id"
+                (estadoDialogo)="cerrar($event)">
+            </app-ver-toma-de-muestra>
+        </p-dialog>
+
         </div>
     </div>
 </div>

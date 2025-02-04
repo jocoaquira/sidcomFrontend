@@ -14,6 +14,8 @@ import { RouterModule } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { AprobarProcedimientoModule } from 'src/app/admin/components/aprobar-procedimiento/aprobar-procedimiento.module';
 import { DialogModule } from 'primeng/dialog';
+import { VerTomaDeMuestraModule } from 'src/app/admin/components/ver-components/ver-toma-de-muestra/ver-toma-de-muestra.module';
+import { AnularTomaDeMuestraModule } from '../anular-toma-de-muestra/anular-toma-de-muestra.module';
 
 @NgModule({
   imports: [
@@ -29,7 +31,9 @@ import { DialogModule } from 'primeng/dialog';
     ConfirmDialogModule,
     RouterModule,
     DialogModule,
-    AprobarProcedimientoModule
+    AprobarProcedimientoModule,
+    VerTomaDeMuestraModule,
+    AnularTomaDeMuestraModule
   ],
   declarations: [ListaTomaDeMuestraComponent],
     providers: [ConfirmationService]
