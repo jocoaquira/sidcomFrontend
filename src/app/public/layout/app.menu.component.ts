@@ -25,7 +25,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Formularios',
                 items: [
-                    { label: 'Formularios Internos', icon: 'pi pi-fw pi-file-o', routerLink: ['/admin/formulario-101/formulario-interno'] },
+                    { label: 'Formularios Internos', icon: 'pi pi-fw pi-file-o', routerLink: ['/public/formulario-101/formulario-interno'] },
                     { label: 'Formularios Externos', icon: 'pi pi-fw pi-globe', routerLink: ['/uikit/input'] },
                     { label: 'Formulario Cooperativas', icon: 'pi pi-fw pi-file-o', routerLink: ['/uikit/floatlabel'] },
                     { label: 'Toma de Muestra', icon: 'pi pi-fw pi-file-o', routerLink: ['/public/toma-de-muestra'] }

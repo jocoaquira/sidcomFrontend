@@ -2,35 +2,35 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { IDepartamento } from '@data/departamento.metadata';
-import { IFormularioExternoMineral } from '@data/form_ext_mineral.metadata';
-import { IFormularioExternoMineralEnvio } from '@data/form_ext_mineral_envio.metadata';
-import { IFormularioExternoMunicipioOrigen } from '@data/form_ext_municipio_origen.metadata';
-import { IFormularioExternoMunicipioOrigenEnvio } from '@data/form_ext_municipio_origen_envio.metadata';
-import { IFormularioExterno } from '@data/formulario_externo.metadata';
+import { IFormularioInternoMineral } from '@data/form_int_mineral.metadata';
+import { IFormularioInternoMineralEnvio } from '@data/form_int_mineral_envio.metadata';
+import { IFormularioInternoMunicipioOrigen } from '@data/form_int_municipio_origen.metadata';
+import { IFormularioInternoMunicipioOrigenEnvio } from '@data/form_int_municipio_origen_envio.metadata';
+import { IFormularioInterno } from '@data/formulario_interno.metadata';
 import { IMineral } from '@data/mineral.metadata';
 import { IMunicipio } from '@data/municipio.metadata';
 import { IOperatorSimple } from '@data/operador_simple.metadata';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, of, retry } from 'rxjs';
 import { DepartamentosService } from 'src/app/admin/services/departamentos.service';
-import { FormularioExternoMineralService } from 'src/app/admin/services/formulario-externo/formularioexterno-mineral.service';
-import { FormularioExternoMunicipioOrigenService } from 'src/app/admin/services/formulario-externo/formularioexterno-municipioorigen.service';
-import { FormularioExternosService } from 'src/app/admin/services/formulario-externo/formulariosexternos.service';
+import { FormularioInternoMineralService } from 'src/app/admin/services/formulario-interno/formulariointerno-mineral.service';
+import { FormularioInternoMunicipioOrigenService } from 'src/app/admin/services/formulario-interno/formulariointerno-municipioorigen.service';
+import { FormularioInternosService } from 'src/app/admin/services/formulario-interno/formulariosinternos.service';
 import { MineralsService } from 'src/app/admin/services/minerales.service';
 import { MunicipiosService } from 'src/app/admin/services/municipios.service';
 import { OperatorsService } from 'src/app/admin/services/operators.service';
 import { PresentacionService } from 'src/app/admin/services/presentacion.service';
-import { FormularioExternoFormulario } from 'src/app/admin/validators/formulario-externo';
+import { FormularioInternoFormulario } from 'src/app/admin/validators/formulario-interno';
 
 @Component({
-  selector: 'app-edit-formulario-externo',
-  templateUrl: './edit-formulario-externo.component.html',
-  styleUrls: ['./edit-formulario-externo.component.scss']
+  selector: 'app-edit-formulario-interno',
+  templateUrl: './edit-formulario-interno.component.html',
+  styleUrls: ['./edit-formulario-interno.component.scss']
 })
-export class EditFormularioExternoComponent implements OnInit {
+export class EditFormularioInternoComponent implements OnInit {
   public id:number=null;
   public num_form!:any;
-  public formulario_interno=new FormularioExternoFormulario();
+  public formulario_interno=new FormularioInternoFormulario();
   public departamento_id:number=0;
   public municipio_id:number=0;
   public declaracionJurada:boolean=false;
@@ -43,7 +43,7 @@ cambioDepartamento1(departamentoId: number): void {
   this.departamento_id1 = departamentoId;
   // Aquí puedes hacer cualquier acción extra cuando el departamento cambie
 }
-  public formulario_Interno_registrado:IFormularioExterno=null;
+  public formulario_Interno_registrado:IFormularioInterno=null;
   public operadores!:IOperatorSimple[];
   public minerales!:IMineral[];
   public municipios: IMunicipio[] = [];
@@ -61,10 +61,10 @@ cambioDepartamento1(departamentoId: number): void {
   public unidades!:any;
   public error!:any;
   public nombre:string='';
-  public lista_leyes_mineral:IFormularioExternoMineral[]=[];
-  public formulario_mineral:IFormularioExternoMineral={
+  public lista_leyes_mineral:IFormularioInternoMineral[]=[];
+  public formulario_mineral:IFormularioInternoMineral={
       id:null,
-      formulario_ext_id:null,
+      formulario_int_id:null,
       sigla_mineral:'',
       descripcion:'',
       ley:'',
@@ -72,11 +72,11 @@ cambioDepartamento1(departamentoId: number): void {
    };
    public minerales_envio:any=[];
    public municipio_origen_envio:any=[];
-   public lista_municipios_origen:IFormularioExternoMunicipioOrigen[]=[];
-   public municipio_origen:IFormularioExternoMunicipioOrigen={
+   public lista_municipios_origen:IFormularioInternoMunicipioOrigen[]=[];
+   public municipio_origen:IFormularioInternoMunicipioOrigen={
       id:null,
-      formulario_ext_id:null,
-      departamento_id:null,
+      formulario_int_id:null,
+      departamento:null,
       municipio:null,
       municipio_id:null
    }
@@ -154,12 +154,12 @@ isStepValid(stepIndex: number): boolean {
 
 constructor(
   private operadoresService:OperatorsService,
-  private formularioInternoService:FormularioExternosService,
+  private formularioInternoService:FormularioInternosService,
   private mineralesService:MineralsService,
   private notify:ToastrService,
   private authService:AuthService,
-  private listaLeyesMineralesService:FormularioExternoMineralService,
-  private listaMunicipiosOrigenService:FormularioExternoMunicipioOrigenService,
+  private listaLeyesMineralesService:FormularioInternoMineralService,
+  private listaMunicipiosOrigenService:FormularioInternoMunicipioOrigenService,
   private router: Router,
   private presentacionService:PresentacionService,
   private actRoute:ActivatedRoute,
@@ -168,7 +168,7 @@ constructor(
 ) {
   this.actRoute.paramMap.subscribe(params=>{
      this.id=parseInt(params.get('id'));
-    this.formularioInternoService.verFormularioExterno(this.id.toString()).subscribe(
+    this.formularioInternoService.verFormularioInterno(this.id.toString()).subscribe(
       (data:any)=>{
       let formulario_int=data;
       this.num_form=formulario_int.nro_formulario;
@@ -280,9 +280,9 @@ cargar_datos(form:any){
             let index = this.municipios.findIndex(i => i.id === item.id);
             let departamento=this.departamentos.find(dat=>dat.id===this.municipios[index].departamento_id);
             
-            let  origen_mun:IFormularioExternoMunicipioOrigen={
+            let  origen_mun:IFormularioInternoMunicipioOrigen={
               municipio:this.municipios[index].municipio,
-              departamento_id:departamento.nombre,
+              departamento:departamento.nombre,
               municipio_id:this.municipios[index].id,
             }
             this.lista_municipios_origen.push({...origen_mun});
@@ -292,7 +292,7 @@ cargar_datos(form:any){
             let index = this.minerales.findIndex(i => i.id === item.mineralId);
             //let mineral=this.minerales.find(dat=>dat.id===this.minerales[index].id);
             
-            let  origen_min:IFormularioExternoMineral={
+            let  origen_min:IFormularioInternoMineral={
               sigla_mineral:this.minerales[index].sigla,
               descripcion:this.minerales[index].nombre,
               ley:item.ley,
@@ -414,23 +414,23 @@ guardar(){
     }
     console.log(this.id);
     
-    this.formularioInternoService.editarFormularioExterno(formularioEnvio,this.id).subscribe(
+    this.formularioInternoService.editarFormularioInterno(formularioEnvio,this.id).subscribe(
       (data:any) =>
       {
-          this.formulario_Interno_registrado=this.formularioInternoService.handleCrearFormularioExterno(data);
+          this.formulario_Interno_registrado=this.formularioInternoService.handleCrearFormularioInterno(data);
           console.log(this.formulario_Interno_registrado);
         if(this.formulario_Interno_registrado!==null)
         {
           
           this.formulario_interno.formulario.reset();
           this.notify.success('El el formulario interno se generó exitosamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
-          this.router.navigate(['/admin/formulario-101/formulario-externo']);
+          this.router.navigate(['/admin/formulario-101/formulario-interno']);
         }
       },
       (error:any) =>
       {
        
-        this.error=this.formularioInternoService.handleCrearFormularioExternoError(error.error.data);
+        this.error=this.formularioInternoService.handleCrearFormularioInternoError(error.error.data);
         if(error.error.status=='fail')
         {
           this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
@@ -444,14 +444,14 @@ guardar(){
  }
  
 }
-guardarMinerales(formulario_ext_id:any) {
+guardarMinerales(formulario_int_id:any) {
   this.lista_leyes_mineral.forEach((item) => {
      
-      item.formulario_ext_id=formulario_ext_id;
-    this.listaLeyesMineralesService.crearFormularioExternoMineral(item).subscribe((data:any) =>
+      item.formulario_int_id=formulario_int_id;
+    this.listaLeyesMineralesService.crearFormularioInternoMineral(item).subscribe((data:any) =>
     {
 
-       this.listaLeyesMineralesService.handleCrearFormularioExternoMineral(data);
+       this.listaLeyesMineralesService.handleCrearFormularioInternoMineral(data);
 
      
       if(data.error==null)
@@ -462,7 +462,7 @@ guardarMinerales(formulario_ext_id:any) {
     (error:any) =>
     {
      
-      this.error=this.listaLeyesMineralesService.handleCrearFormularioExternoMineralError(error.error.data);
+      this.error=this.listaLeyesMineralesService.handleCrearFormularioInternoMineralError(error.error.data);
       if(error.error.status=='fail')
       {
         this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
@@ -470,13 +470,13 @@ guardarMinerales(formulario_ext_id:any) {
     });
   });
 }
-guardarMunicipiosOrigen(formulario_ext_id:any) {
+guardarMunicipiosOrigen(formulario_int_id:any) {
   this.lista_municipios_origen.forEach((item) => {
      
-      item.formulario_ext_id=formulario_ext_id;
-    this.listaMunicipiosOrigenService.crearFormularioExternoMunicipioOrigen(item).subscribe((data:any) =>
+      item.formulario_int_id=formulario_int_id;
+    this.listaMunicipiosOrigenService.crearFormularioInternoMunicipioOrigen(item).subscribe((data:any) =>
     {
-       this.listaMunicipiosOrigenService.handleCrearFormularioExternoMunicipioOrigen(data);
+       this.listaMunicipiosOrigenService.handleCrearFormularioInternoMunicipioOrigen(data);
 
      
       if(data.error==null)
@@ -487,7 +487,7 @@ guardarMunicipiosOrigen(formulario_ext_id:any) {
     (error:any) =>
     {
      
-      this.error=this.listaMunicipiosOrigenService.handleCrearFormularioExternoMunicipioOrigenError(error.error.data);
+      this.error=this.listaMunicipiosOrigenService.handleCrearFormularioInternoMunicipioOrigenError(error.error.data);
       if(error.error.status=='fail')
       {
         this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
@@ -508,7 +508,7 @@ agregarLey(){
       else{
           // Si no existe, agrega el registro
           this.notify.success('Agregado Exitosamente','Exito',{timeOut:2000,positionClass: 'toast-bottom-right'});
-          let envio_minerales:IFormularioExternoMineralEnvio={
+          let envio_minerales:IFormularioInternoMineralEnvio={
               mineralId:this.formulario_mineral.mineral_id,
               ley:this.formulario_mineral.ley,
               unidad:this.formulario_mineral.unidad
@@ -529,13 +529,13 @@ agregarLey(){
   cambioUnidad(event:any){
       this.formulario_mineral.unidad=event.value;
   }
-  eliminar(domicilio:IFormularioExternoMineral) {
+  eliminar(domicilio:IFormularioInternoMineral) {
     this.minerales_envio=this.minerales_envio.filter(val => val.mineralId !== domicilio.mineral_id)
     this.lista_leyes_mineral = this.lista_leyes_mineral.filter(val => val.sigla_mineral !== domicilio.sigla_mineral);
   }
 
   agregarMunicipio(){
-      if (this.municipio_origen.departamento_id && this.municipio_origen.municipio && this.municipio_origen.municipio_id) {
+      if (this.municipio_origen.departamento && this.municipio_origen.municipio && this.municipio_origen.municipio_id) {
           // Verifica si el registro ya existe en la lista
           const existe = this.lista_municipios_origen.some(municipio => municipio.municipio_id === this.municipio_origen.municipio_id);
 
@@ -545,7 +545,7 @@ agregarLey(){
           else{
               // Si no existe, agrega el registro
               this.notify.success('Agregado Exitosamente','Exito',{timeOut:2000,positionClass: 'toast-bottom-right'});
-              let envio_origen:IFormularioExternoMunicipioOrigenEnvio={
+              let envio_origen:IFormularioInternoMunicipioOrigenEnvio={
                 id:this.municipio_origen.municipio_id
               }
               this.municipio_origen_envio.push({...envio_origen});
@@ -561,7 +561,7 @@ agregarLey(){
   }
   cambioNombreDepartemento(event){
 
-      this.municipio_origen.departamento_id=event;
+      this.municipio_origen.departamento=event;
   }
   cambioMunicipio(event){
       this.municipio_id=event;
@@ -580,7 +580,7 @@ agregarLey(){
       this.formulario_mineral.mineral_id=event;
   }
 
-  eliminarMunicipio(domicilio:IFormularioExternoMunicipioOrigen) {
+  eliminarMunicipio(domicilio:IFormularioInternoMunicipioOrigen) {
       this.municipio_origen_envio=this.municipio_origen_envio.filter(val => val.id !== domicilio.municipio_id)
       this.lista_municipios_origen = this.lista_municipios_origen.filter(val => val.municipio_id !== domicilio.municipio_id);
   
@@ -638,7 +638,7 @@ agregarLey(){
       this.formulario_interno.formulario.get('humedad')?.setValue(0);
       }
 }
-private mostrarErrorFormularios(formGroup: FormularioExternoFormulario): void {
+private mostrarErrorFormularios(formGroup: FormularioInternoFormulario): void {
   const errores: any[] = [];
 Object.keys(formGroup.formulario.controls).forEach((campo) => {
   const control = formGroup.formulario.get(campo);

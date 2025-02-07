@@ -12,7 +12,7 @@ export class EditarProcedimientoComponent implements OnInit {
   @Input() lista!:IProcedimiento;
   @Input() isEditMode: boolean = false;
   @Output() estadoDialogo = new EventEmitter<boolean>();
-  
+  public listaProcedimientos:any[]=[];
   quill: any;
   // Configuración de las columnas
   cols: any[] = [

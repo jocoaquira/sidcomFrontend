@@ -1,4 +1,4 @@
-<p-table #dt [value]="lista" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['id', 'nombre', 'detalles']" [paginator]="true" [rowsPerPageOptions]="[10, 20, 30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros" selectionMode="multiple" [rowHover]="true" dataKey="id">
+<p-table #dt [value]="listaProcedimientos" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['id', 'nombre', 'detalles']" [paginator]="true" [rowsPerPageOptions]="[10, 20, 30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros" selectionMode="multiple" [rowHover]="true" dataKey="id">
   <ng-template pTemplate="caption">
       <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
           <h5 class="m-0">Administrar Procedimiento de Toma de Muestras</h5>

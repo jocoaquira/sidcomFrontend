@@ -1,4 +1,4 @@
-export interface ITomaDeMuestraPDF {
+export interface IFormularioExternoPDF {
     id: number,
 	fecha_aprobacion: string,
 	hora_aprobacion: string,

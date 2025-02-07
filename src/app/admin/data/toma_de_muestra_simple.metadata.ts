@@ -11,5 +11,7 @@ export interface ITomaDeMuestraSimple {
     fecha_firma:string,
     estado:string,
     razon_social:string,
+    responsable_tdm_id:number,
+    operador_id:number
 }
 

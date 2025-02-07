@@ -1,16 +1,16 @@
 
 import { style } from '@angular/animations';
 import { Injectable } from '@angular/core';
+import { IFormularioExternoPDF } from '@data/tformulario_externo_pdf.metadata';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable'
 import * as QRCode from 'qrcode';
 
-import { ITomaDeMuestraPDF } from '@data/toma_de_muestra_pdf.metadata';
 
 @Injectable({
   providedIn: 'root',
 })
-export class PdfTomaDeMuestraService {
+export class PdfFormularioExternoService {
 
    public error:any=null;
   constructor(
@@ -73,7 +73,7 @@ convertirHTMLATextoConViñetas(html) {
   return texto;
 }
 
-    generarPDF(toma_de_muestra: ITomaDeMuestraPDF) {
+    generarPDF(toma_de_muestra: any) {
         
                      const doc = new jsPDF('p', 'pt', 'letter');
 

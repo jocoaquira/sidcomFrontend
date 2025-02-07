@@ -1,0 +1,56 @@
+  <div>
+    <div class="card-titulo">
+        <h4 class="text-center" style="color: white;">SOLICITUD DE ANULACIÓN DE FORMULARIO 101 {{formulario_int.nro_formulario}}</h4>
+    </div>
+    <div class="card-anulado grid">
+        <div class="  p-fluid">
+          <h6>
+            En caso de consignar errores en la declaración de la emisión del Formulario 101, el operador minero debe solicitar autorización de anulación a la Secretaria Departamental De Minería, Metalurgia y Recursos Energéticos.
+          </h6>
+            <div class=" col-12 md:col-12 ">
+              <span class="p-float-label">
+                <textarea
+                    id="observaciones"
+                    pInputTextarea
+                    [(ngModel)]="formulario_int.justificacion_anulacion"
+                    class="ng-dirty"
+                    rows="4"
+                    cols="150"
+                    (input)="longitudTexto($event)"
+                ></textarea>
+                <label for="observaciones">Ingresar justificación minimo 200 caractéres</label>
+                <small id="observaciones" class="p-error" *ngIf="!valido && formulario_int.justificacion_anulacion!=null">
+                     El Minimo de caractéresdeve ser de 200 por favor verifique sus datos hasta el momento tiene {{formulario_int.justificacion_anulacion.length}} caractéres
+                </small>
+            </span>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="centrar-botones">
+                <p-confirmDialog header="Confirmación" key="confirm1" icon="pi pi-exclamation-triangle" message="¿Está seguro de anular el formulario?"
+                    [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
+                    acceptLabel="Sí"
+                    rejectLabel="No"
+                ></p-confirmDialog>
+
+                <div class="col-33" >
+                    <button pButton pRipple type="button" label="Anular el Formulario"
+                        class="p-button-rounded p-button-danger  boton-ajustado" (click)="confirmarAnulacion()"
+                        icon="pi pi-ban"
+                    >
+                    </button>
+                </div>
+                <div class="col-33">
+                    <button pButton pRipple type="button" label="Volver"
+                        class="p-button-rounded p-button-info boton-ajustado"
+                        icon="pi pi-undo"
+                        [routerLink]="['/admin/formulario-101/formulario-interno']"
+                    >
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        </div>
+</div>

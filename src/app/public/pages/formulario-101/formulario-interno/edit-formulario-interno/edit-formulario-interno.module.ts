@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { EditFormularioInternoComponent } from './edit-formulario-interno.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputMaskModule } from 'primeng/inputmask';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -14,7 +15,6 @@ import { MineralesSelectModule } from 'src/app/admin/components/mineralesSelect/
 import { CheckboxModule } from 'primeng/checkbox';
 import { StepsModule } from 'primeng/steps';
 import { TabMenuModule } from 'primeng/tabmenu';
-import { EditFormularioExternoComponent } from './edit-formulario-externo.component';
 
 @NgModule({
   imports: [
@@ -35,6 +35,6 @@ import { EditFormularioExternoComponent } from './edit-formulario-externo.compon
     TabMenuModule,
     FormsModule,
   ],
-  declarations: [EditFormularioExternoComponent]
+  declarations: [EditFormularioInternoComponent]
 })
-export class EditFormularioExternoModule { }
+export class EditFormularioInternoModule { }

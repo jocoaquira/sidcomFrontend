@@ -47,6 +47,8 @@ export class ListaTomaDeMuestraComponent implements OnInit {
         lugar_verificacion:null,
         ubicacion_lat:null,
         ubicacion_lon:null,
+        responsable_tdm_id:null,
+        operador_id:null,
         created_at:null,
         updated_at:null
     }
