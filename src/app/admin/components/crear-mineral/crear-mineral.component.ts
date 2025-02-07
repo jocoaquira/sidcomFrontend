@@ -5,20 +5,19 @@ import { OperatorsService } from '../../services/operators.service';
 import { IRol } from '@data/rol.metadata';
 import { IOperatorSimple } from '@data/operador_simple.metadata';
 import { ToastrService } from 'ngx-toastr';
-import { TextoAleatorio } from '../../functions/texto-aleatorio';
 import { AuthService } from '@core/authentication/services/auth.service';
-import { ProcedimientoFormulario } from '../../validators/procedimiento';
-import { ProcedimientoService } from '../../services/toma-de-muestra/procedimiento-tm.service';
-import { IProcedimiento } from '@data/procedimiento_tm.metadata';
+import { IMineral } from '@data/mineral.metadata';
+import { MineralsService } from '../../services/minerales.service';
+import { MineralFormulario } from '../../validators/mineral';
 
 @Component({
-  selector: 'app-crear-procedimiento',
-  templateUrl: './crear-procedimiento.html',
-  styleUrls: ['./crear-procedimiento.scss']
+  selector: 'app-crear-mineral',
+  templateUrl: './crear-mineral.component.html',
+  styleUrls: ['./crear-mineral.component.scss']
 })
-export class CrearProcedimientoComponent implements OnInit {
+export class CrearMineralComponent implements OnInit {
 
-  @Input() usuario!:IProcedimiento;
+  @Input() mineral!:IMineral;
   @Input() isEditMode: boolean = false;
   @Output() estadoDialogo = new EventEmitter<boolean>();
   public error!:any;
@@ -26,29 +25,28 @@ export class CrearProcedimientoComponent implements OnInit {
   public errorVerificarEmail:boolean=false;
   public roles!:IRol[];
   public operadores!:IOperatorSimple[];
-  public descripcion:string='';
+  public nombre:string='';
   public sw1:any;
   public sw:any;
   public sw2:any;
   public submitted:boolean=false;
   public estados:any;
+  public tipos:any;
   public admin:boolean=false;
-  public form=new ProcedimientoFormulario();
+  public form=new MineralFormulario();
   public errorUsuario:any={};
   public operador_id:number=0;
-  public lista_procedimientos:any[]=[];
-
 
   constructor(
     private rolesServices:RolesService,
     private operadoresService:OperatorsService,
-    private procedimientoService:ProcedimientoService,
+    private mineralService:MineralsService,
     private notify:ToastrService,
     private authService:AuthService,
         ) { 
           
             
-            console.log(this.usuario);
+            console.log(this.mineral);
         }
 
   ngOnInit(): void {
@@ -64,14 +62,22 @@ export class CrearProcedimientoComponent implements OnInit {
       { label: 'ACTIVO', value: '1' },
       { label: 'INACTIVO', value: '0' }
   ];
+  this.tipos = [
+    { label: 'METALICO', value: '0' },
+    { label: 'NO METALICO', value: '1' },
+    { label: 'COMPUESTO', value: '2' }
+];
   }
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes && this.usuario && this.isEditMode) {
+    if (changes && this.mineral && this.isEditMode) {
       this.form.formulario.patchValue({
-        id:this.usuario.id,
-        nombre: this.usuario.nombre,
-        procedimiento: this.usuario.procedimiento,
-        estado: this.estados.find((e: any) => e.label === this.usuario.estado) || null,
+        id:this.mineral.id,
+        nombre: this.mineral.nombre,
+        sigla: this.mineral.sigla,
+        descripcion: this.mineral.descripcion,
+        tipo: this.tipos.find((e: any) => e.label === this.mineral.tipo) || null,
+        //operador_id: this.operadores.find((op: any) => op.id === this.usuario.operador_id).id || null, // Buscar el operador en la lista
+        estado: this.estados.find((e: any) => e.label === this.mineral.estado) || null,
       });
     }
     console.log(this.form.formulario.value);
@@ -107,14 +113,14 @@ export class CrearProcedimientoComponent implements OnInit {
   actualizarResponsable() {
     
     this.form.formulario.value.estado=this.form.formulario.value.estado.label;
-    this.form.formulario.value.celular=parseInt(this.form.formulario.value.celular);
-    
+    this.form.formulario.value.tipo=this.form.formulario.value.tipo.label;
+
     if (this.form.formulario.valid) {
         console.log(this.form.formulario.value);
-        this.procedimientoService.editarProcedimientoTM(this.form.formulario.value).subscribe(
+        this.mineralService.editarmineral(this.form.formulario.value).subscribe(
             (data:any) =>
             {
-              this.procedimientoService.handleCrearProcedimiento(data);
+              this.mineralService.handleCrearmineral(data);
               console.log(data);
               if(data.error==null)
               {
@@ -126,7 +132,7 @@ export class CrearProcedimientoComponent implements OnInit {
             (error:any) =>
             {
               console.log(error);
-              this.errorUsuario=this.procedimientoService.handleCrearProcedimiento(error.error.data);
+              this.errorUsuario=this.mineralService.handleCrearmineralError(error.error.data);
               if(error.error.status=='fail')
               {
                 this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
@@ -138,16 +144,15 @@ export class CrearProcedimientoComponent implements OnInit {
       }
   }
   crearResponsable() {
-    let hmtlConvertido=this.generarHTML(this.form.formulario.value.nombre,this.lista_procedimientos);
-    console.log(hmtlConvertido);
-    this.form.formulario.patchValue({
-      procedimiento: hmtlConvertido,
-    });
+    
+    this.form.formulario.value.estado=this.form.formulario.value.estado.label;
+    this.form.formulario.value.tipo=this.form.formulario.value.tipo.label;
+    console.log(this.form.formulario.value);
     if (this.form.formulario.valid) {
-        this.procedimientoService.crearProcedimientoTM(this.form.formulario.value).subscribe(
+        this.mineralService.crearmineral(this.form.formulario.value).subscribe(
             (data:any) =>
             {
-              this.procedimientoService.handleCrearProcedimiento(data);
+              this.mineralService.handleCrearmineral(data);
               console.log(data);
               if(data.error==null)
               {
@@ -159,7 +164,7 @@ export class CrearProcedimientoComponent implements OnInit {
             (error:any) =>
             {
               console.log(error);
-              this.errorUsuario=this.procedimientoService.handleCrearProcedimientoError(error.error.data);
+              this.errorUsuario=this.mineralService.handleCrearmineralError(error.error.data);
               if(error.error.status=='fail')
               {
                 this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
@@ -170,33 +175,14 @@ export class CrearProcedimientoComponent implements OnInit {
         this.notify.error('Revise los datos e intente nuevamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
       }
   }
-  agregarProcedimiento() {
-      // Verificamos si 'descripcion' no está vacío antes de agregarlo
-    if (this.descripcion) {
-      console.log(this.descripcion);  // Muestra la descripcion en la consola
-      this.lista_procedimientos.push(this.descripcion);
-      this.descripcion = '';  // Vaciamos la descripcion después de agregarla
+  verificar(event:Event){
+    const input = (event.target as HTMLInputElement).value;
+    if(this.form.formulario.value.repetir_password==this.form.formulario.value.password){
+      this.errorVerificarContraseña=false;
+    }
+    else{
+      this.errorVerificarContraseña=true;
     }
   }
-  cambioProcedimiento(event:any){
-    this.descripcion =(event.target as HTMLInputElement).value;
-  }
-  eliminar(domicilio:any) {
-        this.lista_procedimientos=this.lista_procedimientos.filter(val => val !== domicilio)
-      }
 
-  generarHTML(titulo, descripciones) {
-      // Crear el HTML deseado
-      let html = `<h6>${titulo}</h6>\r\n  <ul>\r\n`;
-  
-      // Iterar sobre las descripciones y crear los elementos <li>
-      descripciones.forEach(descripcion => {
-          html += `    <li>${descripcion}</li>\r\n`;
-      });
-  
-      html += "  </ul>";
-  
-      // Retornar el HTML generado
-      return html;
-  }
 }

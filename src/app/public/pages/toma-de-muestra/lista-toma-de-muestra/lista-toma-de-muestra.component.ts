@@ -15,6 +15,8 @@ import { ITomaDeMuestra } from '@data/toma_de_muestra.metadata';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { ITomaDeMuestraSimpleOperador } from '@data/toma_de_muestra_simple_operador.metadata';
 import { ITomaDeMuestraSimple } from '@data/toma_de_muestra_simple.metadata';
+import { ITomaDeMuestraPDF } from '@data/toma_de_muestra_pdf.metadata';
+import { PdfTomaDeMuestraService } from 'src/app/admin/services/pdf/toma-de-muestra-pdf.service';
 
 @Component({
   selector: 'app-lista-toma-de-muestra',
@@ -33,6 +35,7 @@ export class ListaTomaDeMuestraComponent implements OnInit {
     public productDialog=false;
     public submitted = true;
     public operador_id:number=0;
+    public tdm_completo:ITomaDeMuestraPDF;
     public tomaDeMuestra:ITomaDeMuestraSimple={
         id:null,
         nro_formulario:null,
@@ -57,7 +60,7 @@ export class ListaTomaDeMuestraComponent implements OnInit {
         public canEditarFormularioInterno:CanEditarFormularioInternoGuard,
         public canEliminarFormularioInterno:CanEliminarOperatorGuard,
         public tomaDeMuestraService:TomaDeMuestraService,
-        public pdfFormularioInterno:PdfFormularioInternoService,
+        private pdfTomaDemuestra:PdfTomaDeMuestraService,
         private notify:ToastrService,
         private authService:AuthService,
         private confirmationService:ConfirmationService
@@ -78,7 +81,7 @@ export class ListaTomaDeMuestraComponent implements OnInit {
         //this.productService.getProducts().then(data => this.products = data);
 
         this.cols = [
-            { field: 'nro_formulario', header: 'Nro de Formulario' },
+            { field: 'nro_formulario', header: 'Nro. de Formulario' },
             { field: 'fecha_hora_tdm', header: 'Fecha de Muestra' },
             { field: 'category', header: 'Category' },
             { field: 'responsable_tdm_id', header: 'Reviews' },
@@ -92,13 +95,10 @@ export class ListaTomaDeMuestraComponent implements OnInit {
         //this.submitted = false;
         this.productDialog = true;
     }
-
-
     hideDialog() {
         this.productDialog = false;
         this.submitted = false;
     }
-
     diasActivos(fecha1:string):number{
         let dias:any;
         let fechas1 = new Date(fecha1);
@@ -123,8 +123,16 @@ export class ListaTomaDeMuestraComponent implements OnInit {
     onGlobalFilter(table: Table, event: Event) {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
-    generarPDF(formulario_interno:IFormularioInternoSimple){
-        this.pdfFormularioInterno.generarPDF(formulario_interno);
+    generarPDF(tdm:IFormularioInternoSimple){
+        console.log(tdm);
+        this.tomaDeMuestraService.verTomaDeMuestraPDF(tdm.id.toString()).subscribe(
+            (data:any)=>{
+            this.tdm_completo=this.tomaDeMuestraService.handleTomaDeMuestraPDF(data);
+            console.log(this.tdm_completo);
+            this.pdfTomaDemuestra.generarPDF(this.tdm_completo);
+          },
+          (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
+        
     }
     
     solicitar(event:ITomaDeMuestra){

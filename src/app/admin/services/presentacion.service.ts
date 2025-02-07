@@ -29,6 +29,12 @@ export class PresentacionService {
     // asignacion de parametros
     return this.http.get(`${this.baseUrl}presentacion`,{params:params});
   }
+//-----------------Visualizar operadores-------------------------------------------
+verpresentacion(nombre:string)
+{
+  // asignacion de parametros
+  return this.http.get(`${this.baseUrl}presentacion/`+nombre);
+}
   handleError(error: any): any {
     return error=error.error.error;
   }

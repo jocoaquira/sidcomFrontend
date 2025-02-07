@@ -17,9 +17,10 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { BadgeModule } from 'primeng/badge';
 import { TagModule } from 'primeng/tag';
-import { CrearProcedimientoModule } from 'src/app/admin/components/crear-procedimiento/crear-procedimiento.module';
-import { ListarProcedimientoTMComponent } from './listar-procedimiento-tm.component';
-import { EditarProcedimientoModule } from 'src/app/admin/components/editar-procedimiento/editar-procedimiento.module';
+import { ListarMineralComponent } from './listar-minerales.component';
+import { CrearMineralModule } from 'src/app/admin/components/crear-mineral/crear-mineral.module';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 
 @NgModule({
@@ -44,9 +45,10 @@ import { EditarProcedimientoModule } from 'src/app/admin/components/editar-proce
         RadioButtonModule,
         InputNumberModule,
         DialogModule,
-        CrearProcedimientoModule,
-        EditarProcedimientoModule
+        CrearMineralModule,
+        ConfirmDialogModule
     ],
-    declarations: [ListarProcedimientoTMComponent],
+    declarations: [ListarMineralComponent],
+    providers: [ConfirmationService]
 })
-export class ListarProcedimientoTMModule { }
+export class ListarMineralModule { }

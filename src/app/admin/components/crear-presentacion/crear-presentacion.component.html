@@ -1,0 +1,57 @@
+<form [formGroup]="form.formulario" (ngSubmit)="onSubmit()">
+    
+    <div class="field">
+        <label>Nombre:</label>
+        <input type="text" pInputText id="nombre" formControlName="nombre"  autofocus />
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('nombre')">{{form.getErrorMessage('nombre')}}</small>
+    </div>
+    <div class="field">
+        <label for="sigla">Sigla</label>
+        <input type="text" pInputText id="sigla" formControlName="sigla" autofocus/>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('sigla')">{{form.getErrorMessage('sigla')}}</small>
+    </div>
+    <div class="field">
+        <label for="descripcion">Descripción</label>
+        <input type="text" pInputText id="descripcion" formControlName="descripcion" autofocus/>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('descripcion')">{{form.getErrorMessage('descripcion')}}</small>
+    </div>
+    <div class="field">
+        <span class="p-float-label mt-5">
+            <p-dropdown
+                inputId="dropdown"
+                [autoDisplayFirst]="false"
+                [options]="tipos"
+                formControlName="tipo"
+                optionLabel="label"
+            ></p-dropdown>
+
+            <label for="dropdown">Tipo</label>
+        </span>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('tipo')">{{form.getErrorMessage('tipo')}}</small>
+    </div>
+    <div class="field">
+        <span class="p-float-label mt-5">
+            <p-dropdown
+                inputId="dropdown"
+                [autoDisplayFirst]="false"
+                [options]="estados"
+                formControlName="estado"
+                optionLabel="label"
+                (ngModelChange)="onChangeEstado($event)"
+            >
+                <ng-template let-option pTemplate="item">
+                    <span [class]="'usuario-badge estado-' + option.value">{{option.label}}</span>
+                </ng-template>
+            </p-dropdown>
+            <label for="dropdown">Estado</label>
+        </span>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('estado')">{{form.getErrorMessage('estado')}}</small>
+    </div>
+    <div class="botones-derecha">
+        <span class="p-buttonset col-12 md:col-6 ">
+            <button pButton pRipple label="Guardar" class="p-button-secondary" icon="pi pi-check" type="submit"></button>
+            <button pButton pRipple label="Cancelar"  class="p-button-danger" icon="pi pi-trash" (click)="ocultarDialogo()"></button>
+        </span>
+    </div>
+</form>
+

@@ -29,6 +29,11 @@ export class UsuariosService {
     // asignacion de parametros
     return this.http.get(`${this.baseUrl}user`,{params:params});
   }
+  verusuario(nombre:string)
+  {
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}user/`+nombre);
+  }
   handleError(error: any): any {
     return error=error.error.error;
   }

@@ -18,6 +18,7 @@ export interface ITomaDeMuestra {
     total_parcial:number,
     peso_neto_total:number,
     peso_neto_parcial:number,
+    humedad:number,
     nro_parciales:number
     tipo_muestra:string,
     observaciones: string,

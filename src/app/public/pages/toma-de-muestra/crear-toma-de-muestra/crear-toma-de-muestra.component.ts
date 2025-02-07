@@ -447,6 +447,7 @@ abrirMapa() {
       // Primero, asegúrate de que el formulario está listo antes de modificar los datos
       this.formulario_interno.formulario.patchValue({
         estado: 'GENERADO',
+        tipo_muestra:'TOTAL',
         fecha_hora_tdm: this.formatFechaCompleta(this.formulario_interno.formulario.value.fecha_hora_tdm)
       });
     
@@ -476,6 +477,7 @@ abrirMapa() {
           peso_neto_parcial: formularioEnvio.peso_neto_parcial,
           presentacion: formularioEnvio.presentacion,
           cantidad: formularioEnvio.cantidad,
+          humedad:formularioEnvio.humedad,
           nro_camiones: formularioEnvio.nro_camiones,
           peso_neto_total: formularioEnvio.peso_neto_total,
           observaciones: formularioEnvio.observaciones,

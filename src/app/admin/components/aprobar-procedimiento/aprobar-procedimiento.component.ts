@@ -48,7 +48,7 @@ export class AprobarProcedimientoComponent implements OnInit {
     public otro:boolean=false;
     public procedimientosSeleccionados: any[] = []; // Procedimientos seleccionados
     public listaResponsableSenarecom:IResponsableSenarecom[]=[];
-
+    public selectedFile: File | null = null;
   constructor(
     private operadoresService:OperatorsService,
     private tomaDeMuestraService:TomaDeMuestraService,
@@ -90,11 +90,12 @@ export class AprobarProcedimientoComponent implements OnInit {
     ];
   }
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('estoes: '+this.tmd);
+    console.log(this.tmd);
     if (changes && this.tmd && this.isEditMode) {
       this.form.formulario.patchValue({
         id:this.tmd.id,
         estado: 'APROBADO',
+        operador_id:2,
         procedimiento: [],
       });
       
@@ -142,7 +143,7 @@ export class AprobarProcedimientoComponent implements OnInit {
       //this.crearResponsable();
     }
   }
-  aprobarResponsable() {
+  aprobarResponsableOriginal() {
     this.form.formulario.patchValue({
       procedimiento: this.procedimientosSeleccionados,
     });
@@ -175,6 +176,74 @@ export class AprobarProcedimientoComponent implements OnInit {
         this.notify.error('Revise los datos e intente nuevamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
       }
   }
+
+  aprobarResponsable() {
+    // Verifica si hay un archivo seleccionado
+    console.log(this.form.formulario.value);
+    if (this.selectedFile) {
+      // Crear un nuevo FormData para agregar tanto los datos del formulario como el archivo
+      let formData = new FormData();
+
+      // Agregar los datos del formulario al FormData
+      this.form.formulario.patchValue({
+        procedimiento: this.procedimientosSeleccionados,
+      });
+
+      formData.append('foto_link', this.selectedFile); // Agrega el archivo
+      formData.append("estado", "APROBADO");
+      formData.append("responsable_tdm_senarecom_id",this.form.formulario.value.responsable_tdm_senarecom_id);
+     // formData.append("foto_link", file);
+      formData.append("observaciones", this.form.formulario.value.observaciones);
+      formData.append("operador_id", '1');
+      formData.append("responsable_tdm_id", '4');
+    
+      // Extraer el ID del array "procedimiento"
+      if (this.form.formulario.value.procedimiento && this.form.formulario.value.procedimiento.length > 0) {
+        formData.append("procedimiento[]", this.form.formulario.value.procedimiento[0].id.toString());
+      }
+
+
+
+      // Verificar si todos los valores se agregaron correctamente
+formData.forEach((value, key) => {
+  console.log(`${key}: ${value}`);
+});
+
+      // Verifica si el formulario es válido antes de enviar
+      if (this.form.formulario.valid) {
+        this.tomaDeMuestraService.aprobarTomaDeMuestra(formData,this.form.formulario.value.id).subscribe(
+          (data: any) => {
+            this.tomaDeMuestraService.handleAprobarTomaDeMuestra(data);
+            console.log(data);
+            if (data.error == null) {
+              this.form.formulario.reset();
+              this.estadoDialogo.emit(false);
+              this.notify.success('Creado Correctamente', 'Creado Correctamente', { timeOut: 2500, positionClass: 'toast-top-right' });
+            }
+          },
+          (error: any) => {
+            console.log(error);
+            this.errorUsuario = this.tomaDeMuestraService.handleAprobarTomaDeMuestraError(error.error.data);
+            if (error.error.status == 'fail') {
+              this.notify.error('Falló...Revise los campos y vuelva a enviar....', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
+            }
+          }
+        );
+      } else {
+        this.notify.error('Revise los datos e intente nuevamente', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
+      }
+    } else {
+      this.notify.error('Debe seleccionar un archivo antes de enviar', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
+    }
+  }
+  // Método para capturar el archivo seleccionado
+  onFileSelect(event: any) {
+    const file: File = event.files[0]; // Aquí capturamos el primer archivo seleccionado
+    this.selectedFile = file; // Lo guardamos en la propiedad selectedFile
+    console.log('Archivo seleccionado:', file);
+  }
+
+
   declaracionJuradaSwitch(event:any){
     const checkbox = event.target as HTMLInputElement;
     //this.lingotes=checkbox.checked;

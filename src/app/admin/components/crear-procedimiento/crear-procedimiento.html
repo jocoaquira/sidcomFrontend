@@ -1,47 +1,58 @@
 <form [formGroup]="form.formulario" (ngSubmit)="onSubmit()">
     
-    <div class="field">
-        <label for="ci">Cedula de Identidad</label>
-        <input type="text" pInputText id="ci" formControlName="ci" autofocus/>
-        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('ci')">{{form.getErrorMessage('ci')}}</small>
-    </div>
-    <div class="field">
+    <div class="card card-w-title flex flex-wrap col-12"> 
+    <div class="field col-12 md:col-12">
         <label>Nombre:</label>
         <input type="text" pInputText id="nombre" formControlName="nombre"  autofocus />
         <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('nombre')">{{form.getErrorMessage('nombre')}}</small>
     </div>
-    <div class="field">
-        <label for="apellidos">Apellidos</label>
-        <input type="text" pInputText id="apellidos" formControlName="apellidos" autofocus/>
-        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('apellidos')">{{form.getErrorMessage('apellidos')}}</small>
+    <div class="form-control col-12 md:col-8">
+        
+        <input 
+          pInputText
+          [ngModelOptions]="{standalone: true}"
+          type="text" 
+          id="descripcion" 
+          [(ngModel)]="descripcion" 
+          (input)="cambioProcedimiento($event)" 
+          placeholder="Descripción del procedimiento"
+        />
     </div>
-    <div class="field">
-        <label for="celular">Celular</label>
-        <input type="text" pInputText id="celular" formControlName="celular" autofocus/>
-        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('celular')">{{form.getErrorMessage('celular')}}</small>
+    <div class="field col-12 md:col-4">
+        <button pButton pRipple (click)="agregarProcedimiento()" type="button" icon="pi pi-plus" label="Agregar" class="p-button-outlined p-button-success"></button>
     </div>
-    <div class="field">
-        <label for="cargo">Cargo</label>
-        <input type="text" pInputText id="cargo" formControlName="cargo" autofocus/>
-        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('cargo')">{{form.getErrorMessage('cargo')}}</small>
-    </div>
-    <div class="field">
-        <span class="p-float-label mt-5">
-            <p-dropdown
-                inputId="dropdown"
-                [autoDisplayFirst]="false"
-                [options]="estados"
-                formControlName="estado"
-                optionLabel="label"
-                (ngModelChange)="onChangeEstado($event)"
-            >
-                <ng-template let-option pTemplate="item">
-                    <span [class]="'usuario-badge estado-' + option.value">{{option.label}}</span>
-                </ng-template>
-            </p-dropdown>
 
-            <label for="dropdown">Estado</label>
-        </span>
+    <div class="field col-12">
+        <p-table #dt [value]="lista_procedimientos"
+        responsiveLayout="scroll" [rows]="10"
+        [paginator]="false"  [showCurrentPageReport]="false"
+        selectionMode="multiple"
+        [rowHover]="true"
+        dataKey="id">
+
+            <ng-template pTemplate="header">
+                <tr>
+
+                    <th pSortableColumn="code">Procedimiento <p-sortIcon field="code"></p-sortIcon></th>
+                    <th pSortableColumn="price">Acción <p-sortIcon field="price"></p-sortIcon></th>
+
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product>
+                <tr>
+
+                    <td style="width:60%; min-width:30rem;"><span class="p-column-title">Procedimiento</span>
+                        {{product}}
+                    </td>
+                    <td>
+                        <div class="flex">
+                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminar(product)"></button>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
     </div>
     <div class="botones-derecha">
         <span class="p-buttonset col-12 md:col-6 ">

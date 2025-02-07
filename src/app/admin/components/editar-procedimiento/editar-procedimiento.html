@@ -1,0 +1,39 @@
+<p-table #dt [value]="lista" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['id', 'nombre', 'detalles']" [paginator]="true" [rowsPerPageOptions]="[10, 20, 30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros" selectionMode="multiple" [rowHover]="true" dataKey="id">
+  <ng-template pTemplate="caption">
+      <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+          <h5 class="m-0">Administrar Procedimiento de Toma de Muestras</h5>
+          <span class="block mt-2 md:mt-0 p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..." class="w-full sm:w-auto"/>
+          </span>
+      </div>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+      <tr>
+          <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+          <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
+          <th pSortableColumn="detalles">Detalles <p-sortIcon field="detalles"></p-sortIcon></th>
+          <th pSortableColumn="acciones">Acciones <p-sortIcon field="acciones"></p-sortIcon></th>
+      </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-procedimiento>
+      <tr>
+          <td>{{procedimiento}}</td>
+          <td>{{procedimiento}}</td>
+          
+          <!-- Mostrar los detalles en una lista -->
+          <td>
+              <ul>
+                  <li *ngFor="let detalle of procedimiento.detalles">{{detalle}}</li>
+              </ul>
+          </td>
+
+          <td>
+              <button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="edit(procedimiento)"></button>
+              <button pButton pRipple icon="pi pi-trash" class="p-button-text p-button-plain p-button-rounded p-button-danger" (click)="eliminarProcedimiento(procedimiento.id)"></button>
+          </td>
+      </tr>
+  </ng-template>
+</p-table>

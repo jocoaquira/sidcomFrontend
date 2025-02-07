@@ -9,6 +9,7 @@ export class AprobarTMFormulario {
     this.aprobarTM = {
         id: null,
         responsable_tdm_senarecom_id:null,
+        operador_id:null,
         procedimiento:null,
         observaciones:null,
         estado:null
@@ -19,7 +20,8 @@ export class AprobarTMFormulario {
         responsable_tdm_senarecom_id:new FormControl(this.aprobarTM.responsable_tdm_senarecom_id,[Validators.required]),
         procedimiento:new FormControl(this.aprobarTM.procedimiento,[Validators.required]),
         estado:new FormControl(this.aprobarTM.estado),
-        observaciones:new FormControl(this.aprobarTM.observaciones)
+        observaciones:new FormControl(this.aprobarTM.observaciones),
+        operador_id:new FormControl(this.aprobarTM.operador_id)
     });
   }
 

@@ -15,15 +15,15 @@ import { DropdownModule } from 'primeng/dropdown';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TableModule } from 'primeng/table';
-import { CrearProcedimientoComponent } from './crear-procedimiento.component';
+import { CrearMineralComponent } from './crear-mineral.component';
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
-    CrearProcedimientoComponent,
+    CrearMineralComponent,
   ],
   exports:[
-    CrearProcedimientoComponent
+    CrearMineralComponent
   ],
 
   imports: [
@@ -31,7 +31,6 @@ import { CrearProcedimientoComponent } from './crear-procedimiento.component';
     FormsModule,
     FileUploadModule,
     FormsModule,
-    TableModule,
     ButtonModule,
     BadgeModule,
     TagModule,
@@ -49,4 +48,4 @@ import { CrearProcedimientoComponent } from './crear-procedimiento.component';
   ],
   providers:[],
 })
-export class CrearProcedimientoModule { }
+export class CrearMineralModule { }

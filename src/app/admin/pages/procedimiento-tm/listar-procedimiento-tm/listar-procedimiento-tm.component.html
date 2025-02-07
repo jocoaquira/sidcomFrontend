@@ -62,34 +62,23 @@
         </div>
 
         <p-dialog [(visible)]="productDialog" [style]="{width: '700px'}" 
-          [modal]="true" header="{{isEditMode ? 'Editar Responsable' : 'Agregar Responsable'}}" 
+          [modal]="true" header="{{isEditMode ? 'Editar Procedimiento' : 'Agregar Procedimiento'}}" 
           class="p-fluid">
-            <app-crear-responsable-senarecom 
+            <app-crear-procedimiento 
                 [usuario]="responsable" 
                 [isEditMode]="isEditMode" 
                 (estadoDialogo)="cerrar($event)">
-            </app-crear-responsable-senarecom>
+            </app-crear-procedimiento>
+        </p-dialog>
+        <p-dialog [(visible)]="productDialog1" [style]="{width: '700px'}" 
+          [modal]="true" header="Editar Procedimiento" 
+          class="p-fluid">
+            <app-editar-procedimiento 
+                [lista]="responsable" 
+                [isEditMode]="isEditMode" 
+                (estadoDialogo)="cerrar($event)">
+            </app-editar-procedimiento>
         </p-dialog>
 
-        <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
-            <div class="flex align-items-center justify-content-center">
-                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-               </div>
-            <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
-            </ng-template>
-        </p-dialog>
-
-        <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
-            <div class="flex align-items-center justify-content-center">
-                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span>Are you sure you want to delete selected products?</span>
-            </div>
-            <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
-            </ng-template>
-        </p-dialog>
     </div>
 </div>

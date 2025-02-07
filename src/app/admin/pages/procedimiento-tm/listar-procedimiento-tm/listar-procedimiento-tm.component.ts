@@ -35,6 +35,7 @@ export class ListarProcedimientoTMComponent implements OnInit {
     public cols!:any;
     public statuses!:any;
     public productDialog=false;
+    public productDialog1=false;
     public isEditMode: boolean = false;
     public responsable:IProcedimiento={
         id: null,
@@ -98,11 +99,11 @@ export class ListarProcedimientoTMComponent implements OnInit {
         this.productDialog = true;
         this.isEditMode = false;
     }
-    edit(responsable:IProcedimiento) {
+    edit(responsable:any) {
         this.responsable = { ...responsable }; 
-        
+        console.log('respo:'+responsable.nombre)
         //this.submitted = false;
-        this.productDialog = true;
+        this.productDialog1 = true;
         this.isEditMode = true;
     }
 

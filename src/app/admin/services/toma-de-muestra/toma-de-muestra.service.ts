@@ -6,6 +6,8 @@ import { IAnulacionTomaDeMuestra, ITomaDeMuestra } from '@data/toma_de_muestra.m
 import { ITomaDeMuestraSimple } from '@data/toma_de_muestra_simple.metadata';
 import { ITomaDeMuestraSimpleOperador } from '@data/toma_de_muestra_simple_operador.metadata';
 import { IAprobarTM } from '@data/aprobar_tm.metadata';
+import { ITomaDeMuestraPDF } from '@data/toma_de_muestra_pdf.metadata';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -43,7 +45,7 @@ export class TomaDeMuestraService {
     return this.http.get(`${this.baseUrl}sample/operador/`+id);
   }
 
-//-----------------Visualizar Formulario Interno-------------------------------------------
+//-----------------Visualizar Toma de Muestra-------------------------------------------
 verTomaDeMuestra(nombre:string)
 {
   // Inicializacion de objeto params
@@ -52,6 +54,16 @@ verTomaDeMuestra(nombre:string)
 
   // asignacion de parametros
   return this.http.get(`${this.baseUrl}sample/`+nombre,{params:params});
+}
+//-----------------Visualizar Toma de Muestra-------------------------------------------
+verTomaDeMuestraPDF(nombre:string)
+{
+  // asignacion de parametros
+  return this.http.get(`${this.baseUrl}sample/print/`+nombre);
+}
+handleTomaDeMuestraPDF(data: ITomaDeMuestraPDF):ITomaDeMuestraPDF {
+  let TomaDeMuestra:ITomaDeMuestraPDF=data;
+  return TomaDeMuestra
 }
   //-----------------Visualizar TDMuestra Simple-------------------------------------------
   verTomaDeMuestrasSimple()
@@ -122,10 +134,13 @@ firmarTomaDeMuestra(id:number) {
   this.token();
   return this.http.put(`${this.baseUrl}sample/firmar/`+id.toString(), sol)
 }
-//---------------------crear   TomaDeMuestra-------------------------------------------
-aprobarTomaDeMuestra(data:IAprobarTM,id:number) {
-  this.token();
-  return this.http.put(`${this.baseUrl}sample/aprobar/`+id.toString(), data)
+
+// Función para aprobar la toma de muestra
+aprobarTomaDeMuestra(formData: FormData,id:number): Observable<any> {
+  this.token(); // Si es necesario, agrega la lógica para obtener el token
+
+  // Llamamos a la API con el FormData
+  return this.http.put(`${this.baseUrl}sample/aprobar/`+id, formData);
 }
 handleAprobarTomaDeMuestraError(error: any): any {
   return error=error;

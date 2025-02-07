@@ -22,6 +22,7 @@ export class TomaDeMuestraFormulario {
         presentacion:null,//
         cantidad:0,//
         nro_camiones:0,
+        humedad:0,
         nro_parciales:0,
         total_parcial:0,
         peso_neto_total:0,
@@ -50,7 +51,7 @@ export class TomaDeMuestraFormulario {
         presentacion:new FormControl(this.form_toma_de_muestra.presentacion,[Validators.required]),
         cantidad:new FormControl(this.form_toma_de_muestra.cantidad,[Validators.pattern('^[0-9]*$'),  Validators.min(0)]),
         nro_camiones:new FormControl(this.form_toma_de_muestra.nro_camiones,[Validators.pattern('^[0-9]*$'),  Validators.min(0)]),
-        
+        humedad:new FormControl(this.form_toma_de_muestra.humedad,[Validators.pattern('^[0-9]*$'),  Validators.min(0)]),
         total_parcial:new FormControl(this.form_toma_de_muestra.total_parcial,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
         peso_neto_total: new FormControl(this.form_toma_de_muestra.peso_neto_total,[Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
         peso_neto_parcial: new FormControl(this.form_toma_de_muestra.peso_neto_parcial,[Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
@@ -122,6 +123,9 @@ getErrorMessage(controlName: string): string | null {
             return 'Solo se permiten numeros usar punto (.) si tiene decimal.';
           }
           if (controlName === 'cantidad') {
+            return 'Solo se permiten numeros.';
+          }
+          if (controlName === 'humedad') {
             return 'Solo se permiten numeros.';
           }
           if (controlName === 'municipio_id') {

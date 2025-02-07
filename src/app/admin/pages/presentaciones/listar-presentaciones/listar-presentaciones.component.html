@@ -1,0 +1,82 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button pButton pRipple label="Nueva Presentacion" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #dt [value]="listaPresentaciones" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['id','nombre','humedad','merma','cantidad']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros" selectionMode="multiple" [rowHover]="true" dataKey="id" [sortField]="'nombre'" [sortOrder]="-1">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Administrar Presentaciones</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."  class="w-full sm:w-auto"/>
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                        <th pSortableColumn="nombre">Nombre de Presentación <p-sortIcon field="nombre"></p-sortIcon></th>
+                        <th pSortableColumn="humedad">Humedad <p-sortIcon field="humedad"></p-sortIcon></th>
+                        <th pSortableColumn="merma">Merma <p-sortIcon field="merma"></p-sortIcon></th>
+                        <th pSortableColumn="cantidad">Cantidad <p-sortIcon field="cantidad"></p-sortIcon></th>
+                        <th pSortableColumn="inventoryStatus">Acciones <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-mineral>
+                    <tr>
+                        <td style="width:3%; min-width:5rem;">
+                            <span class="p-column-title">ID</span>
+                            {{mineral.id}}
+                        </td>
+                        <td style="width:25%; min-width:15rem;">
+                            <span class="p-column-title">Nombres</span>
+                            {{mineral.nombre}}
+                        </td>
+                        <td style="width:5%; min-width:5rem;">
+                            <span class="p-column-title">Humedad</span>
+                            {{mineral.humedad}}
+                        </td>
+                        <td style="width:5%; min-width:5rem;">
+                            <span class="p-column-title">Merma</span>
+                            {{mineral.merma}}
+                        </td>
+                        <td style="width:5%; min-width:5rem;">
+                            <span class="p-column-title">Cantidad</span>
+                            {{mineral.cantidad}}
+                        </td>
+                        <td style="width:5%; min-width: 10rem;">
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="edit(mineral)"></button>
+                                <button pButton pRipple icon="pi pi-lock" *ngIf="mineral.estado=='ACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-danger mr-1" (click)="bloquearDialogo(mineral)"></button>
+                                <button pButton pRipple icon="pi pi-unlock" *ngIf="mineral.estado=='INACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="bloquearDialogo(mineral)"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-dialog [(visible)]="productDialog" [style]="{width: '700px'}" 
+                  [modal]="true" header="{{isEditMode ? 'Editar Presentacion' : 'Nueva Presentacion'}}" 
+                  class="p-fluid">
+        </p-dialog>
+
+        <p-confirmDialog header="Confirmación" key="confirm1" icon="pi pi-exclamation-triangle" message="¿Está seguro de Realizar esta operación?"
+            [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
+            acceptLabel="Sí"
+            rejectLabel="No">
+        </p-confirmDialog>
+    </div>
+</div>

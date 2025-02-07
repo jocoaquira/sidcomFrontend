@@ -15,15 +15,15 @@ import { DropdownModule } from 'primeng/dropdown';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TableModule } from 'primeng/table';
-import { CrearProcedimientoComponent } from './crear-procedimiento.component';
+import { EditarProcedimientoComponent } from './editar-procedimiento.component';
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
-    CrearProcedimientoComponent,
+    EditarProcedimientoComponent,
   ],
   exports:[
-    CrearProcedimientoComponent
+    EditarProcedimientoComponent
   ],
 
   imports: [
@@ -49,4 +49,4 @@ import { CrearProcedimientoComponent } from './crear-procedimiento.component';
   ],
   providers:[],
 })
-export class CrearProcedimientoModule { }
+export class EditarProcedimientoModule { }

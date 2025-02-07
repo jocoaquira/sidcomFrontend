@@ -17,7 +17,8 @@ import { AppLayoutComponent } from './layout/app.layout.component';
         { path: 'responsable-tm', loadChildren: () => import('./pages/responsable-tm/responsable-tm.module').then(m => m.ResponsableTMModule) },
         { path: 'responsable-senarecom', loadChildren: () => import('./pages/responsable-senarecom/responsable-senarecom.module').then(m => m.ResponsableSenarecomModule) },
         { path: 'procedimiento-tm', loadChildren: () => import('./pages/procedimiento-tm/procedimiento-tm.module').then(m => m.ProcedimientoTMModule) },
-        
+        { path: 'mineral', loadChildren: () => import('./pages/minerales/mineral.module').then(m => m.MineralModule) },
+        { path: 'presentacion', loadChildren: () => import('./pages/presentaciones/presentacion.module').then(m => m.PresentacionModule) },
         { path: '**', redirectTo: '/notfound' }
         ]
         }

@@ -18,6 +18,23 @@
         </span>
     </div>
     <div class="field col-12 md:col-12">
+        <p-fileUpload
+          #fileUploadComponent
+          mode="advanced"
+          accept=".pdf,.jpg,.jpeg,.png"
+          [maxFileSize]="1000000"
+          label="Cargar SEPREC"
+          chooseLabel="Subir Foto de "
+          class="w-full inline-block"
+          [auto]="true"
+          [showUploadButton]="true"
+          [showCancelButton]="true"
+          (onSelect)="onFileSelect($event)"
+        >
+        </p-fileUpload>
+      </div>
+      
+    <div class="field col-12 md:col-12">
         <span class="p-float-label">
             <textarea
                 id="observaciones"

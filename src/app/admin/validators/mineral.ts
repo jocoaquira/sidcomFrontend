@@ -1,22 +1,28 @@
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { passwordMatchValidator } from './igualar-password';
-import { IProcedimiento } from '@data/procedimiento_tm.metadata';
+import { IMineral } from '@data/mineral.metadata';
 
-export class ProcedimientoFormulario {
-  procedimiento!: IProcedimiento;
+export class MineralFormulario {
+  mineral!: IMineral;
   formulario: FormGroup;
 
   constructor() {
-    this.procedimiento = {
+    this.mineral = {
         id: null,
         nombre:null,
-        procedimiento:null
+        sigla:null,
+        descripcion:null,
+        tipo:null,
+        estado:null
     };
 
     this.formulario = new FormGroup({
-        id: new FormControl(this.procedimiento.id),
-        nombre:new FormControl(this.procedimiento.nombre,[Validators.required,Validators.pattern('^[a-zA-ZÀ-ÿ\\s]+$')]),
-        procedimiento:new FormControl(this.procedimiento.procedimiento,[Validators.required]),
+        id: new FormControl(this.mineral.id),
+        nombre:new FormControl(this.mineral.nombre,[Validators.required,Validators.pattern('^[a-zA-ZÀ-ÿ\\s(),]+$')]),
+        sigla:new FormControl(this.mineral.sigla,[Validators.required, Validators.pattern('^[a-zA-ZÀ-ÿ\\s(),]+$')]),
+        descripcion:new FormControl(this.mineral.descripcion),
+        tipo:new FormControl(this.mineral.tipo,[Validators.required]),
+        estado:new FormControl(this.mineral.estado,[Validators.required])
     });
   }
 
@@ -45,12 +51,11 @@ getErrorMessage(controlName: string): string | null {
       return `No puede exceder ${control.errors?.['maxlength']?.requiredLength} caracteres.`;
     }
     if (control?.hasError('pattern')) {
-        
           if (controlName === 'nombre') {
-            return 'Solo se permiten letras y espacios.';
+            return 'Solo se permiten letras, espacios, parentecis y comas.';
           }
-          if (controlName === 'procedimiento') {
-            return 'Se requiere procedimiento.';
+          if (controlName === 'sigla') {
+            return 'Solo se permiten letras, espacios, parentecis y comas.';
           }
           return 'Formato no válido.';
       }

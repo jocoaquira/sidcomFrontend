@@ -14,6 +14,7 @@ import { AuthService } from '@core/authentication/services/auth.service';
 import { ITomaDeMuestraSimple } from '@data/toma_de_muestra_simple.metadata';
 import { IAprobarTM } from '@data/aprobar_tm.metadata';
 import { PdfTomaDeMuestraService } from 'src/app/admin/services/pdf/toma-de-muestra-pdf.service';
+import { ITomaDeMuestraPDF } from '@data/toma_de_muestra_pdf.metadata';
 
 @Component({
   selector: 'app-lista-toma-de-muestra',
@@ -56,7 +57,7 @@ export class ListaTomaDeMuestraComponent implements OnInit {
     }
     public verDialog:boolean=false;
     public toma_de_muestra_id:number=null;
-    public tdm_completo:ITomaDeMuestra;
+    public tdm_completo:ITomaDeMuestraPDF;
 
     constructor(
         public canListarFormularioInterno:CanListarFormularioInternoGuard,
@@ -132,9 +133,10 @@ export class ListaTomaDeMuestraComponent implements OnInit {
     }
     generarPDF(tdm:IFormularioInternoSimple){
         console.log(tdm);
-        this.tomaDeMuestraService.verTomaDeMuestra(tdm.id.toString()).subscribe(
+        this.tomaDeMuestraService.verTomaDeMuestraPDF(tdm.id.toString()).subscribe(
             (data:any)=>{
-            this.tdm_completo=data;
+            this.tdm_completo=this.tomaDeMuestraService.handleTomaDeMuestraPDF(data);
+            console.log(this.tdm_completo);
             this.pdfTomaDemuestra.generarPDF(this.tdm_completo);
           },
           (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));

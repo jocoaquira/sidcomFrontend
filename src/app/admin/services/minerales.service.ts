@@ -44,7 +44,7 @@ export class MineralsService {
 //---------------------crear   mineral-------------------------------------------
 crearmineral(data:IMineral) {
   this.token();
-  return this.http.post(`${this.baseUrl}/mineral`,data, {headers:this.headers})
+  return this.http.post(`${this.baseUrl}mineral`,data, {headers:this.headers})
 }
 handleCrearmineralError(error: any): any {
   return error=error;
@@ -56,7 +56,7 @@ handleCrearmineral(data: IMineral):IMineral {
 //---------------------Editar   mineral-------------------------------------------
 editarmineral(data:IMineral) {
   this.token();
-  return this.http.put(`${this.baseUrl}/mineral/`+data.id, data)
+  return this.http.put(`${this.baseUrl}mineral/`+data.id, data)
 }
 handleEditarmineralError(error: any): any {
   return error=error;
