@@ -16,6 +16,8 @@ import { StepsModule } from 'primeng/steps';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { RouterModule } from '@angular/router';
 import { CreateFormularioExternoComponent } from './create-formulario-externo.component';
+import { PaisSelectModule } from 'src/app/admin/components/paisSelect/paisSelect.module';
+import { AduanaSelectModule } from 'src/app/admin/components/aduanaSelect/aduanaSelect.module';
 
 @NgModule({
   imports: [
@@ -29,6 +31,8 @@ import { CreateFormularioExternoComponent } from './create-formulario-externo.co
     ButtonModule,
     InputTextareaModule,
     DepartamentoSelectModule,
+    PaisSelectModule,
+    AduanaSelectModule,
     MunicipioSelectModule,
     MineralesSelectModule,
     CheckboxModule,

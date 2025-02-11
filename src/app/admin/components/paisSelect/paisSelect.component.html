@@ -1,0 +1,17 @@
+<span class="p-float-label">
+    <p-dropdown
+        inputId="dropdown"
+        [autoDisplayFirst]="false"
+        [options]="paises"
+        [loading]="true"
+        [(ngModel)]="pais_id"
+        optionLabel="nombre"
+        optionValue="id"
+        dataKey="value"
+        (onChange)="cambioPaises($event)"
+    ></p-dropdown>
+    <label for="dropdown">Pais de Dastino</label>
+    <small id="pais" class="p-error " *ngIf="error">
+        {{error}}
+    </small>
+</span>

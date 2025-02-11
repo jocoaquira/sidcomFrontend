@@ -36,7 +36,7 @@ export class FormularioExternoFormulario {
       fecha_vencimiento: null,
       justificacion_anulacion: null,
       estado:null, //'GENERADO','EMITIDO','VENCIDO', 'ANULADO'
-   
+
       nro_vagon:null,
       empresa_ferrea:null,
       fecha_ferrea:null,
@@ -71,11 +71,11 @@ export class FormularioExternoFormulario {
         hr_ferrea:new FormControl(this.formulario_interno.hr_ferrea),
         fecha_ferrea:new FormControl(this.formulario_interno.fecha_ferrea),
         tara_volqueta:new FormControl(this.formulario_interno.tara_volqueta,[Validators.pattern('^[0-9]*$')]),
-        nro_factura_exportacion:new FormControl(this.formulario_interno.nro_factura_exportacion),
-        laboratorio:new FormControl(this.formulario_interno.laboratorio,[Validators.pattern('^[0-9]*$')]),
+        nro_factura_exportacion:new FormControl(this.formulario_interno.nro_factura_exportacion,[Validators.required]),
+        laboratorio:new FormControl(this.formulario_interno.laboratorio,[Validators.required]),
         estado:new FormControl(this.formulario_interno.estado,[Validators.required]),
-        codigo_analisis:new FormControl(this.formulario_interno.codigo_analisis),
-        nro_formulario_tm:new FormControl(this.formulario_interno.nro_formulario_tm),
+        codigo_analisis:new FormControl(this.formulario_interno.codigo_analisis,[Validators.required]),
+        nro_formulario_tm:new FormControl(this.formulario_interno.nro_formulario_tm,[Validators.required]),
     });
     // Observar cambios en `des_tipo`
         this.formulario.get('des_tipo')?.valueChanges.subscribe((valor: string) => {
