@@ -1,7 +1,8 @@
 export interface IAduana {
-    id:number,
+    id?:number,
     nombre:string,
     codigo_aduana:string,
     latitud:number,
-    longitud:number
+    longitud:number,
+    estado?:string,
 }

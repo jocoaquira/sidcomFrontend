@@ -1,0 +1,49 @@
+<form [formGroup]="form.formulario" (ngSubmit)="onSubmit()">
+    
+    <div class="field">
+        <label>Nombre:</label>
+        <input type="text" pInputText id="nombre" formControlName="nombre"  autofocus />
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('nombre')">{{form.getErrorMessage('nombre')}}</small>
+    </div>
+    <div class="field">
+        <label for="codigo_aduana">Código de Aduana</label>
+        <input type="text" pInputText id="codigo_aduana" formControlName="codigo_aduana" autofocus/>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('codigo_aduana')">{{form.getErrorMessage('codigo_aduana')}}</small>
+    </div>
+    <div class="field">
+        <label for="latitud">Latitud</label>
+        <input type="text" pInputText id="latitud" formControlName="latitud" autofocus/>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('latitud')">{{form.getErrorMessage('latitud')}}</small>
+    </div>
+    <div class="field">
+        <label for="longitud">Longitud</label>
+        <input type="text" pInputText id="longitud" formControlName="longitud" autofocus/>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('longitud')">{{form.getErrorMessage('longitud')}}</small>
+    </div>
+    
+    <div class="field">
+        <span class="p-float-label mt-5">
+            <p-dropdown
+                inputId="dropdown"
+                [autoDisplayFirst]="false"
+                [options]="estados"
+                formControlName="estado"
+                optionLabel="label"
+                (ngModelChange)="onChangeEstado($event)"
+            >
+                <ng-template let-option pTemplate="item">
+                    <span [class]="'usuario-badge estado-' + option.value">{{option.label}}</span>
+                </ng-template>
+            </p-dropdown>
+            <label for="dropdown">Estado</label>
+        </span>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('estado')">{{form.getErrorMessage('estado')}}</small>
+    </div>
+    <div class="botones-derecha">
+        <span class="p-buttonset col-12 md:col-6 ">
+            <button pButton pRipple label="Guardar" class="p-button-secondary" icon="pi pi-check" type="submit"></button>
+            <button pButton pRipple label="Cancelar"  class="p-button-danger" icon="pi pi-trash" (click)="ocultarDialogo()"></button>
+        </span>
+    </div>
+</form>
+

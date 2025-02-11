@@ -85,7 +85,19 @@ export class ListarProcedimientoTMComponent implements OnInit {
     }
     cerrar(event:any){
         this.productDialog=event;
-        this.procedimientoService.verProcedimiento('nada').subscribe(
+        console.log(event);
+        this.procedimientoService.verProcedimientos().subscribe(
+            (data:any)=>{
+            this.listaProcedimientos=this.procedimientoService.handleProcedimientos(data);
+            console.log(this.listaProcedimientos);
+
+          },
+          (error:any)=> this.error=this.procedimientoService.handleError(error));
+    }
+    cerrar1(event:any){
+        this.productDialog1=event;
+        console.log(event);
+        this.procedimientoService.verProcedimientos().subscribe(
             (data:any)=>{
             this.listaProcedimientos=this.procedimientoService.handleProcedimientos(data);
             console.log(this.listaProcedimientos);

@@ -18,6 +18,8 @@ import { AppLayoutComponent } from './layout/app.layout.component';
         { path: 'responsable-senarecom', loadChildren: () => import('./pages/responsable-senarecom/responsable-senarecom.module').then(m => m.ResponsableSenarecomModule) },
         { path: 'procedimiento-tm', loadChildren: () => import('./pages/procedimiento-tm/procedimiento-tm.module').then(m => m.ProcedimientoTMModule) },
         { path: 'mineral', loadChildren: () => import('./pages/minerales/mineral.module').then(m => m.MineralModule) },
+        { path: 'pais', loadChildren: () => import('./pages/paises/pais.module').then(m => m.PaisModule) },
+        { path: 'aduana', loadChildren: () => import('./pages/aduanas/aduana.module').then(m => m.AduanaModule) },
         { path: 'presentacion', loadChildren: () => import('./pages/presentaciones/presentacion.module').then(m => m.PresentacionModule) },
         { path: '**', redirectTo: '/notfound' }
         ]

@@ -1,0 +1,54 @@
+/* Estilos para pantallas pequeñas */
+@media (max-width: 767px) {
+    .p-table {
+        font-size: 12px; /* Reducir el tamaño de la fuente en pantallas pequeñas */
+    }
+    
+    .p-column-title {
+        display: none; /* Ocultar los títulos de las columnas en pantallas pequeñas */
+    }
+    
+    .p-table .p-tag {
+        font-size: 10px; /* Reducir el tamaño de las etiquetas */
+    }
+
+    .p-table td {
+        font-size: 12px; /* Reducir el tamaño de los textos de las celdas */
+        padding: 5px; /* Ajustar el padding para no recargar la vista */
+    }
+
+    /* Establecer un ancho dinámico para las celdas */
+    .p-table .p-column {
+        min-width: 100px;
+        max-width: 150px;
+    }
+    
+    /* Mostrar la tabla en un formato más legible */
+    .p-table {
+        overflow-x: auto;
+    }
+
+    /* Si deseas ocultar algunas columnas en móvil */
+    .p-table td:nth-child(4),
+    .p-table td:nth-child(5) {
+        display: none; /* Ocultar las columnas "Descripción" y "Tipo" */
+    }
+    
+    /* Estilos específicos para los botones en móviles */
+    .p-button {
+        font-size: 14px; /* Reducir el tamaño de los botones en pantallas pequeñas */
+    }
+}
+
+/* Estilos para pantallas medianas a grandes */
+@media (min-width: 768px) {
+    .p-table {
+        font-size: 14px;
+    }
+    
+    .p-table td {
+        font-size: 14px;
+    }
+
+    /* Puedes agregar estilos específicos aquí si es necesario */
+}

@@ -23,8 +23,10 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Responsables SENARECOM', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/responsable-senarecom'] },
                     { label: 'Responsables Toma de Muestras', icon: 'pi pi-fw pi-users', routerLink: ['/admin/responsable-tm'] },
                     { label: 'Procedimiento', icon: 'pi pi-fw pi-directions', routerLink: ['/admin/procedimiento-tm'] },
-                    { label: 'Mineral', icon: 'pi pi-fw pi-compass', routerLink: ['/admin/mineral'] },
-                    { label: 'Presentación', icon: 'pi pi-fw pi-compass', routerLink: ['/admin/presentacion'] }
+                    { label: 'Mineral', icon: 'pi pi-fw pi-prime', routerLink: ['/admin/mineral'] },
+                    { label: 'Presentación', icon: 'pi pi-fw pi-shopping-bag', routerLink: ['/admin/presentacion'] },
+                    { label: 'Pais', icon: 'pi pi-fw pi-flag-fill', routerLink: ['/admin/pais'] },
+                    { label: 'Aduana', icon: 'pi pi-fw pi-truck', routerLink: ['/admin/aduana'] },
                 ]
             },
             {

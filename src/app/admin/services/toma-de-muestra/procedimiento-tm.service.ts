@@ -55,6 +55,9 @@ handleCrearProcedimiento(data: IProcedimiento):IProcedimiento {
 //---------------------Editar   Procedimiento-------------------------------------------
 editarProcedimientoTM(data:IProcedimiento) {
   this.token();
+  let id=data.id;
+  //delete data.id; 
+  console.log(data);
   return this.http.put(`${this.baseUrl}procedimiento/`+data.id, data)
 }
 handleEditarProcedimientoError(error: any): any {

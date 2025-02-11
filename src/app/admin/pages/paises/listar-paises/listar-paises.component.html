@@ -5,7 +5,7 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="Nuevo Mineral" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+                        <button pButton pRipple label="Nuevo Pais" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
                     </div>
                 </ng-template>
 
@@ -14,7 +14,7 @@
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="listaMinerales" [columns]="cols" responsiveLayout="scroll" [rows]="30" 
+            <p-table #dt [value]="listaPaises" [columns]="cols" responsiveLayout="scroll" [rows]="30" 
                     [globalFilterFields]="['id','sigla','nombre','descripcion','tipo','estado']"
                     [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" 
                     currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros" 
@@ -22,7 +22,7 @@
                     [sortOrder]="-1">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <h5 class="m-0">Administrar Minerales</h5>
+                        <h5 class="m-0">Administrar Paises</h5>
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..." class="w-full sm:w-auto"/>
@@ -33,7 +33,7 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
-                        <th pSortableColumn="nombre">Nombre de Mineral <p-sortIcon field="nombre"></p-sortIcon></th>
+                        <th pSortableColumn="nombre">Nombre de Pais <p-sortIcon field="nombre"></p-sortIcon></th>
                         <th pSortableColumn="sigla">Sigla <p-sortIcon field="sigla"></p-sortIcon></th>
                         <th pSortableColumn="descripcion">Descripcion <p-sortIcon field="descripcion"></p-sortIcon></th>
                         <th pSortableColumn="tipo">Tipo <p-sortIcon field="tipo"></p-sortIcon></th>
@@ -43,22 +43,22 @@
                 </ng-template>
                 
                 <!-- Cuerpo de la tabla -->
-                <ng-template pTemplate="body" let-mineral>
+                <ng-template pTemplate="body" let-pais>
                     <tr>
-                        <td>{{mineral.id}}</td>
-                        <td>{{mineral.nombre}}</td>
-                        <td>{{mineral.sigla}}</td>
-                        <td>{{mineral.descripcion}}</td>
-                        <td>{{mineral.tipo}}</td>
+                        <td>{{pais.id}}</td>
+                        <td>{{pais.nombre}}</td>
+                        <td>{{pais.sigla}}</td>
+                        <td>{{pais.descripcion}}</td>
+                        <td>{{pais.tipo}}</td>
                         <td>
-                            <p-tag *ngIf="mineral.estado === 'ACTIVO'" severity="success" value="ACTIVO"></p-tag>
-                            <p-tag *ngIf="mineral.estado === 'INACTIVO'" severity="danger" value="INACTIVO"></p-tag>
+                            <p-tag *ngIf="pais.estado === 'ACTIVO'" severity="success" value="ACTIVO"></p-tag>
+                            <p-tag *ngIf="pais.estado === 'INACTIVO'" severity="danger" value="INACTIVO"></p-tag>
                         </td>
                         <td>
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="edit(mineral)"></button>
-                                <button pButton pRipple icon="pi pi-lock" *ngIf="mineral.estado === 'ACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-danger mr-1" (click)="bloquearDialogo(mineral)"></button>
-                                <button pButton pRipple icon="pi pi-unlock" *ngIf="mineral.estado === 'INACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="bloquearDialogo(mineral)"></button>
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="edit(pais)"></button>
+                                <button pButton pRipple icon="pi pi-lock" *ngIf="pais.estado === 'ACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-danger mr-1" (click)="bloquearDialogo(pais)"></button>
+                                <button pButton pRipple icon="pi pi-unlock" *ngIf="pais.estado === 'INACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="bloquearDialogo(pais)"></button>
                             </div>
                         </td>
                     </tr>
@@ -66,13 +66,13 @@
             </p-table>
         </div>
         <p-dialog [(visible)]="productDialog" [style]="{width: '700px'}" 
-          [modal]="true" header="{{isEditMode ? 'Editar Mineral' : 'Agregar Mineral'}}" 
+          [modal]="true" header="{{isEditMode ? 'Editar Pais' : 'Agregar Pais'}}" 
           class="p-fluid">
-            <app-crear-mineral 
-                [mineral]="mineral" 
+            <app-crear-pais 
+                [pais]="pais" 
                 [isEditMode]="isEditMode" 
                 (estadoDialogo)="cerrar($event)">
-            </app-crear-mineral>
+            </app-crear-pais>
         </p-dialog>
         <p-confirmDialog header="Confirmación" key="confirm1" icon="pi pi-exclamation-triangle" message="¿Está seguro de anular el formulario?"
                 [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
@@ -81,4 +81,3 @@
             ></p-confirmDialog>
     </div>
 </div>
-
