@@ -1,17 +1,18 @@
 <span class="p-float-label">
     <p-dropdown
-        inputId="dropdown"
-        [autoDisplayFirst]="false"
-        [options]="aduanas"
-        [loading]="true"
-        [(ngModel)]="aduana_id"
-        optionLabel="nombre"
-        optionValue="id"
-        dataKey="value"
-        (onChange)="cambioAduanas($event)"
+      inputId="dropdown"
+      [autoDisplayFirst]="false"
+      [options]="aduanas"
+      [loading]="loading"
+      [(ngModel)]="aduana_id"
+      optionLabel="nombre"
+      optionValue="id"
+      dataKey="value"
+      (onChange)="cambioAduanas($event)"
     ></p-dropdown>
     <label for="dropdown">Aduana de Salida</label>
     <small id="presentacion" class="p-error " *ngIf="error">
-        {{error}}
+      {{error}}
     </small>
-</span>
+  </span>
+  

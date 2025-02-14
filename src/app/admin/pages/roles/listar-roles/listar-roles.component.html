@@ -1,0 +1,175 @@
+<div class="grid">
+  <div class="col-12">
+      <div class="card px-6 py-6">
+          <p-toast></p-toast>
+          <p-toolbar styleClass="mb-4">
+              <ng-template pTemplate="left">
+                  <div class="my-2">
+                      <button pButton pRipple label="Nuevo Rol" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+                  </div>
+              </ng-template>
+
+              <ng-template pTemplate="right">
+                  <button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+              </ng-template>
+          </p-toolbar>
+
+          <p-table #dt [value]="roles"  responsiveLayout="scroll" [rows]="30" 
+                  [globalFilterFields]="['id','nombre','permisions']"
+                  [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" 
+                  currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros" 
+                  selectionMode="multiple" [rowHover]="true" dataKey="id" [sortField]="'nombre'" 
+                  [sortOrder]="-1">
+              <ng-template pTemplate="caption">
+                  <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                      <h5 class="m-0">Administrar Roles</h5>
+                      <span class="block mt-2 md:mt-0 p-input-icon-left">
+                          <i class="pi pi-search"></i>
+                          <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..." class="w-full sm:w-auto"/>
+                      </span>
+                  </div>
+              </ng-template>
+
+              <ng-template pTemplate="header">
+                  <tr>
+                      <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                      <th pSortableColumn="nombre">Nombre de Rol <p-sortIcon field="nombre"></p-sortIcon></th>
+                      <th pSortableColumn="permissions">Permisos <p-sortIcon field="permissions"></p-sortIcon></th>
+                      <th pSortableColumn="inventoryStatus">Acciones <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
+                  </tr>
+              </ng-template>
+              
+              <!-- Cuerpo de la tabla -->
+              <ng-template pTemplate="body" let-rol>
+                  <tr>
+                      <td style="width:5%; min-width:5rem;">
+                        {{rol.id}}
+                      </td>
+                      <td style="width:5%; min-width:5rem;">
+                        {{rol.nombre}}
+                      </td>
+                      <td style="width: 40%; min-width: 50rem; word-wrap: break-word;">
+                        <div *ngIf="dimension(rol.permissions); else elseBlock" style="display: flex; flex-wrap: wrap; gap: 5px;">
+                          
+                          <div *ngFor="let permission of rol.permissions">
+                            <p-tag severity="info" value="{{ permission.name }}"></p-tag>
+                          </div>
+                        </div>
+                        <ng-template #elseBlock>
+                          <span class="badge rounded-pill bg-danger">No hay permisos</span>
+                        </ng-template>
+                      </td>
+                      <td>
+                          <div class="flex">
+                              <button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="edit(rol)"></button>
+                              <button pButton pRipple icon="pi pi-trash"  class="p-button-text p-button-plain p-button-rounded p-button-danger mr-1" (click)="bloquearDialogo(rol)"></button>
+                              </div>
+                      </td>
+                  </tr>
+              </ng-template>
+          </p-table>
+      </div>
+      <!--
+      <p-dialog [(visible)]="productDialog" [style]="{width: '700px'}" 
+        [modal]="true" header="{{isEditMode ? 'Editar Rol' : 'Agregar Rol'}}" 
+        class="p-fluid">
+          <app-crear-rol 
+              [rol]="rol" 
+              [isEditMode]="isEditMode" 
+              (estadoDialogo)="cerrar($event)">
+          </app-crear-rol>
+      </p-dialog>
+      <p-confirmDialog header="Confirmación" key="confirm1" icon="pi pi-exclamation-triangle" message="¿Está seguro de anular el formulario?"
+              [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
+              acceptLabel="Sí"
+              rejectLabel="No"
+          ></p-confirmDialog> -->
+  </div>
+</div>
+
+
+
+
+<!--
+
+
+
+
+<div  *ngIf="roles;else cargando">
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-primary">
+              <h2 class="card-title">Roles</h2>
+              <p class="card-category">Lista de roles registrados en la base de datos</p>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-12 alinearderecha">
+                  <button class="btn button-24 float-right m-2" routerLink="/admin/rol/crear" *ngIf="canCrearRol.canActivate()">
+                    <i class="fa-solid fa-plus"></i>
+                      Añadir Nuevo Rol
+                  </button>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <div *ngIf="dimension(roles);else elseBlocke">
+                <table class="table ">
+                  <thead class="text-primary text-center">
+                    <th> ID </th>
+                    <th> Nombre </th>
+                    <th> Fecha de creación </th>
+                    <th> Permisos </th>
+                    <th class="text-right" colspan="2" > Acciones </th>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let rol of roles  | paginate: { itemsPerPage: 10, currentPage: p }">
+                        <td>{{ rol.id }}</td>
+                        <td>{{ rol.name }}</td>
+                        <td class="text-primary">{{ rol.created_at | date:'fullDate' }}</td>
+                        <td >
+                          <div *ngIf="dimension(rol.permissions); else elseBlock" >
+                            <span class="badge rounded-pill bg-primary m-1" *ngFor="let permission of rol.permissions" >{{ permission.name }}</span>
+                          </div>
+                          <ng-template #elseBlock >
+                            <span class="badge rounded-pill bg-danger">No hay permisos</span>
+                          </ng-template>
+
+                        </td>
+                        <td>
+                          <button class="btn button-24 float-right" routerLink="/admin/rol/editar/{{rol?.id}}" *ngIf="canEditarRol.canActivate()">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                          </button>
+                        </td>
+                        <td>
+                          <button class="btn button-danger float-right" (click)="delete(rol?.id)" *ngIf="canEliminarRol.canActivate()">
+                            <i class="fa-solid fa-trash-can"></i>
+                          </button>
+                        </td>
+                      </tr>
+                  </tbody>
+                </table>
+              </div>
+                <ng-template #elseBlocke >
+                    <div>Sin registros.</div>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #cargando>
+  <div class="jc-card">
+    <div class="centrar-img-load">
+      <div class="img-load " >
+        <img  src="../../../../assets/spinner.gif" >
+      </div>
+    </div>
+  </div>
+</ng-template>
+-->

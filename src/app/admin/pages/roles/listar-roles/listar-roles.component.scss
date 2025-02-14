@@ -1,0 +1,133 @@
+.alinearderecha{
+  text-align: right;
+}
+.btn-azul-claro{
+  background-color: rgb(68, 118, 199);
+}
+/* CSS */
+.button-24 {
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+  box-sizing: border-box;
+  color: #3f6bfa;
+  cursor: pointer;
+  display: inline-block;
+  font-family: nunito,roboto,proxima-nova,"proxima nova",sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 16px;
+  min-height: 30px;
+  outline: 0;
+  padding: 2px 2px;
+  text-align: center;
+  text-rendering: geometricprecision;
+  text-transform: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+}
+.button-24:hover,
+.button-24:active {
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+  border-color:2px solid #4465da;
+  background-position: 0 0;
+}
+
+.button-24:active {
+  opacity: .5;
+}
+
+.button-success {
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+  box-sizing: border-box;
+  color: #28813f;
+  cursor: pointer;
+  display: inline-block;
+  font-family: nunito,roboto,proxima-nova,"proxima nova",sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 16px;
+  min-height: 30px;
+  outline: 0;
+  padding: 2px 2px;
+  text-align: center;
+  text-rendering: geometricprecision;
+  text-transform: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+}
+.button-success:hover,
+.button-success:active {
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+  border-color:2px solid #28813f;
+  background-position: 0 0;
+}
+
+.button-success:active {
+  opacity: .5;
+}
+
+.button-danger {
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+  box-sizing: border-box;
+  color: #b03434;
+  cursor: pointer;
+  display: inline-block;
+  font-family: nunito,roboto,proxima-nova,"proxima nova",sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 16px;
+  min-height: 30px;
+  outline: 0;
+  padding: 2px 2px;
+  text-align: center;
+  text-rendering: geometricprecision;
+  text-transform: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+}
+.button-danger:hover,
+.button-danger:active {
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+  border-color:2px solid #b03434;
+  background-position: 0 0;
+}
+
+.button-danger:active {
+  opacity: .5;
+}
+
+// head
+  .my-pagination ::ng-deep .ngx-pagination .current {
+    background: rgb(255, 255, 255);
+    border: 2px solid #2e56ac;
+    border-radius: 6px;
+    color: rgb(7, 47, 99);
+    font-size: 16px;
+    font-weight: 400;
+  }
+  .my-pagination ::ng-deep .ngx-pagination.hover {
+    background: rgb(255, 255, 255);
+    border: 2px solid #1e59b3dc;
+    border-radius: 6px;
+    color: rgb(9, 80, 173);
+    font-size: 16px;
+    font-weight: 400;
+  }
+  .my-pagination::ng-deep .ngx-pagination {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #2e56ac;
+    border-radius: 6px;
+
+    list-style: none;
+    margin-top: 0;
+    padding: 4px;
+    display: flex;
+    column-gap: 8px;
+  }

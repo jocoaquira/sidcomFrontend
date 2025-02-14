@@ -22,19 +22,19 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Usuarios', icon: 'pi pi-fw pi-users', routerLink: ['/admin/usuario'] },
                     { label: 'Responsables SENARECOM', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/responsable-senarecom'] },
                     { label: 'Responsables Toma de Muestras', icon: 'pi pi-fw pi-users', routerLink: ['/admin/responsable-tm'] },
-                    { label: 'Procedimiento', icon: 'pi pi-fw pi-directions', routerLink: ['/admin/procedimiento-tm'] },
-                    { label: 'Mineral', icon: 'pi pi-fw pi-prime', routerLink: ['/admin/mineral'] },
-                    { label: 'Presentación', icon: 'pi pi-fw pi-shopping-bag', routerLink: ['/admin/presentacion'] },
-                    { label: 'Pais', icon: 'pi pi-fw pi-flag-fill', routerLink: ['/admin/pais'] },
-                    { label: 'Aduana', icon: 'pi pi-fw pi-truck', routerLink: ['/admin/aduana'] },
+                    { label: 'Procedimientos', icon: 'pi pi-fw pi-directions', routerLink: ['/admin/procedimiento-tm'] },
+                    { label: 'Minerales', icon: 'pi pi-fw pi-prime', routerLink: ['/admin/mineral'] },
+                    { label: 'Presentaciónes', icon: 'pi pi-fw pi-shopping-bag', routerLink: ['/admin/presentacion'] },
+                    { label: 'Paises', icon: 'pi pi-fw pi-flag-fill', routerLink: ['/admin/pais'] },
+                    { label: 'Aduanas', icon: 'pi pi-fw pi-truck', routerLink: ['/admin/aduana'] },
                 ]
             },
             {
                 label: 'Formularios',
                 items: [
-                    { label: 'Formularios Internos', icon: 'pi pi-fw pi-file-edit', routerLink: ['/admin/formulario-101/formulario-interno'] },
+                    { label: 'Formularios Internos', icon: 'pi pi-fw pi-book', routerLink: ['/admin/formulario-101/formulario-interno'] },
                     { label: 'Formularios Externos', icon: 'pi pi-fw pi-globe', routerLink: ['/admin/formulario-101/formulario-externo'] },
-                    { label: 'Formulario Cooperativas', icon: 'pi pi-fw pi-users', routerLink: ['/admin/formulario-101/formulario-cooperativa'] },
+                    { label: 'Formulario Cooperativas', icon: 'pi pi-fw pi-slack', routerLink: ['/admin/formulario-101/formulario-cooperativa'] },
                     { label: 'Toma de Muestra', icon: 'pi pi-fw pi-briefcase', routerLink: ['/admin/toma-de-muestra'] }
                 ]
             },
@@ -50,7 +50,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'PERMISOS',
                 items: [
-                    { label: 'Roles', icon: 'pi pi-fw pi-shield', routerLink: ['/utilities/icons'] },
+                    { label: 'Roles', icon: 'pi pi-fw pi-shield', routerLink: ['/admin/roles'] },
                     { label: 'Permisos', icon: 'pi pi-fw pi-key', url: ['https://www.primefaces.org/primeflex/'], target: '_blank' },
                     { label: 'Usuario', icon: 'pi pi-fw pi-user-edit', url: ['https://www.primefaces.org/primeflex/'], target: '_blank' },
                 ]

@@ -190,7 +190,7 @@ cargar_datos(form:any){
       operador_id: form.operador_id,
       nro_formulario: form.nro_formulario,
       lote: form.lote,
-      presentacion: form.presentacion,
+      presentacion_id: form.presentacion_id,
       cantidad: form.cantidad,
       peso_bruto_humedo: form.peso_bruto_humedo,
       peso_neto: form.peso_neto,

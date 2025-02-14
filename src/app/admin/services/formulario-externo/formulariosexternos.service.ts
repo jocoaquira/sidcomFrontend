@@ -4,6 +4,7 @@ import { AuthService } from '@core/authentication/services/auth.service';
 import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.metadata';
 import { IFormularioExterno } from '@data/formulario_externo.metadata';
 import { IFormularioExternoSimple } from '@data/formulario_externo_simple.metadata';
+import { IFormularioExternoPDF } from '@data/formulario_externo_pdf.metadata';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,7 @@ export class FormularioExternosService {
     params = params.append('nombre', nombre);
 
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}formint`,{params:params});
+    return this.http.get(`${this.baseUrl}formext`,{params:params});
   }
   handleError(error: any): any {
     return error=error.error.error;
@@ -45,7 +46,7 @@ verFormularioExterno(nombre:string)
   params = params.append('id', nombre);
 
   // asignacion de parametros
-  return this.http.get(`${this.baseUrl}formint/`+nombre,{params:params});
+  return this.http.get(`${this.baseUrl}formext/`+nombre,{params:params});
 }
   //-----------------Visualizar operadores-------------------------------------------
   verFormularioExternosSimple(nombre:string)
@@ -55,7 +56,12 @@ verFormularioExterno(nombre:string)
     params = params.append('nombre', nombre);
 
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}formint/reducido`,{params:params});
+    return this.http.get(`${this.baseUrl}formext/reducido`,{params:params});
+  }
+  verFormularioExternosOperadorSimple(nombre:string)
+  {
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}formext/operador/reducido/`+nombre);
   }
   handleFormularioExternoSimpleError(error: any): any {
     return error=error.error.error;
@@ -65,11 +71,20 @@ verFormularioExterno(nombre:string)
     return FormularioExterno
   }
 
-
+//-----------------Visualizar Toma de Muestra-------------------------------------------
+verFormularioExternoPDF(nombre:string)
+{
+  // asignacion de parametros
+  return this.http.get(`${this.baseUrl}formext/print/`+nombre);
+}
+handleFormularioExternoPDF(data: IFormularioExternoPDF):IFormularioExternoPDF {
+  let TomaDeMuestra:IFormularioExternoPDF=data;
+  return TomaDeMuestra
+}
 //---------------------crear   FormularioExterno-------------------------------------------
 crearFormularioExterno(data:any) {
   this.token();
-  return this.http.post(`${this.baseUrl}formint`,data, {headers:this.headers})
+  return this.http.post(`${this.baseUrl}formext`,data, {headers:this.headers})
 }
 handleCrearFormularioExternoError(error: any): any {
   return error=error;
@@ -82,7 +97,7 @@ handleCrearFormularioExterno(data: any):any {
 editarFormularioExterno(data:IFormularioExterno,id:number) {
   this.token();
   console.log(id);
-  return this.http.put(`${this.baseUrl}formint/`+id.toString(), data)
+  return this.http.put(`${this.baseUrl}formext/`+id.toString(), data)
 }
 handleEditarFormularioExternoError(error: any): any {
   return error=error;
@@ -97,7 +112,7 @@ emitirFormularioExterno(id:number) {
   let estado:any={
     estado:'EMITIDO'
   }
-  return this.http.put(`${this.baseUrl}formint/emitir/`+id, estado)
+  return this.http.put(`${this.baseUrl}formext/emitir/`+id, estado)
 }
 //---------------------Editar   FormularioExterno-------------------------------------------
 anularFormularioExterno(data:IFormularioExterno) {
@@ -106,7 +121,7 @@ anularFormularioExterno(data:IFormularioExterno) {
     justificacion_anulacion:data.justificacion_anulacion
   }
     this.token();
-    return this.http.put(`${this.baseUrl}formint/anular/`+data.id, anulado)
+    return this.http.put(`${this.baseUrl}formext/anular/`+data.id, anulado)
   }
 //-----------------Listado de Empelados por Dependencia--------------------------------------------
 private token(){

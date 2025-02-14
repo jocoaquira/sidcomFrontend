@@ -133,14 +133,14 @@
                                         inputId="dropdown"
                                         [autoDisplayFirst]="false"
                                         [options]="presentaciones"
-                                        formControlName="presentacion"
+                                        formControlName="presentacion_id"
                                         optionLabel="nombre"
                                         optionValue="id"
                                         (onChange)="cambioPresentacion($event)"
                                     ></p-dropdown>
                                     <label for="dropdown">Presentacion</label>
-                                    <small id="presentacion" class="p-error " *ngIf="formulario_externo.esCampoInvalido('presentacion')">
-                                        {{formulario_externo.getErrorMessage('presentacion')}}
+                                    <small id="presentacion_id" class="p-error " *ngIf="formulario_externo.esCampoInvalido('presentacion_id')">
+                                        {{formulario_externo.getErrorMessage('presentacion_id')}}
                                     </small>
                                 </span>
                             </div>
@@ -394,10 +394,10 @@
                                 </span>
                             </div>
                             <div class="field col-12 md:col-3 ">
-                                <app-paisSelect [pais_id]="departamento_id1" (cambioDepartamento)="cambioDepartamento1($event)" ></app-paisSelect>
+                                <app-paisSelect [pais_id]="pais_id" (cambioPais)="cambioPais($event)" ></app-paisSelect>
                             </div>
                             <div class="field col-12 md:col-3 ">
-                                <app-aduanaSelect [departamento_id]="departamento_id1" [municipio_id1]="municipio_id1" (municipio_id)="cambioMunicipio1($event)" ></app-aduanaSelect>
+                                <app-aduanaSelect [aduana_id]="aduana_id" (cambioAduana)="cambioAduana($event)" ></app-aduanaSelect>
                             </div>
                         </div>
                     </div>

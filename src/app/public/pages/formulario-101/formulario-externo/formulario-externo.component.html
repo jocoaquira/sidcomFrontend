@@ -1,0 +1,98 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button pButton pRipple label="Nuevo Formulario Externo" icon="pi pi-plus" class="p-button-success mr-2" routerLink="/public/formulario-101/formulario-externo/crear"></button>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                <!--    <button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-help" (click)="generarIDOM(usuario)"></button>
+                --></ng-template>
+            </p-toolbar>
+
+            <p-table #dt [value]="listaFormularioExternos" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['nro_formulario','razon_social','fecha_creacion','estado','fecha_vencimiento']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Administrar Formularios Externo</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."  class="w-full sm:w-auto"/>
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="idom">Numero de Formulario <p-sortIcon field="idom"></p-sortIcon></th>
+                        <th pSortableColumn="razon_social"> Fecha Creacion <p-sortIcon field="razon_social"></p-sortIcon></th>
+                        <th pSortableColumn="price">Razon Social<p-sortIcon field="price"></p-sortIcon></th>
+                        <th pSortableColumn="price">Fecha Vencimiento <p-sortIcon field="price"></p-sortIcon></th>
+                        <th pSortableColumn="category">Estado <p-sortIcon field="category"></p-sortIcon></th>
+                        <th pSortableColumn="rating">Acciones <p-sortIcon field="rating"></p-sortIcon></th>
+                        <th pSortableColumn="rating">Imprimir <p-sortIcon field="rating"></p-sortIcon></th>
+                      </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-operador>
+                    <tr>
+
+                        <td style="width:10%; min-width:6rem;"><span class="p-column-title">Numero de Formulario</span>
+                            {{operador.nro_formulario}}
+                        </td>
+                        <td style="width:10%; min-width:10rem;">
+                            <span class="p-column-title">Fecha Creacion</span>
+                            {{operador.fecha_creacion}}
+                        </td>
+                        <td style="width:24%; min-width:16rem;">
+                            <span class="p-column-title">Razon Social</span>
+                            {{operador.razon_social}}
+                            </td>
+                        <td style="width:14%; min-width:8rem;">
+                            <span class="p-column-title">Fecha Vencimiento</span>
+                            {{operador.fecha_vencimiento}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Estado</span>
+                            <div class="flex">
+                                <div *ngIf="operador.estado === 'GENERADO'" class="custom-tag generado-tag">
+                                    GENERADO
+                                  </div>
+
+                                  <div *ngIf="operador.estado === 'EMITIDO'" class="custom-tag emitido-tag">
+                                    EMITIDO
+                                  </div>
+
+                                  <div *ngIf="operador.estado === 'VENCIDO'" class="custom-tag vencido-tag">
+                                    VENCIDO
+                                  </div>
+
+                                  <div *ngIf="operador.estado === 'ANULADO'" class="custom-tag anulado-tag">
+                                    ANULADO
+                                  </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="flex">
+                                <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-pencil" label="Modificar" class="p-button-rounded p-button-warning mr-2" routerLink="/public/formulario-101/formulario-externo/editar/{{operador?.id}}"></button>
+
+                                <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-lock" label="Emitir" class="p-button-rounded p-button-success mr-2" (click)="confirmarEmision(operador)"></button>
+                                <button *ngIf="operador.estado !== 'GENERADO' && operador.estado !== 'ANULADO'" pButton pRipple icon="pi pi-trash" label="Anular" class="p-button-rounded p-button-danger mr-2" routerLink="/public/formulario-101/formulario-externo/anular/{{operador?.id}}"></button>
+                                </div>
+                        </td>
+                        <td>
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-print"  class="p-button-rounded p-button-info mr-2" (click)="generarPDF(operador)"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-confirmDialog header="Confirmación" key="confirm1" icon="pi pi-exclamation-triangle" message="¿Está seguro de anular el formulario?"
+                                    [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
+                                    acceptLabel="Sí"
+                                    rejectLabel="No"
+                                ></p-confirmDialog>
+        </div>
+    </div>
+</div>

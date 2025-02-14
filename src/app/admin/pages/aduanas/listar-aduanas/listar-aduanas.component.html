@@ -5,7 +5,7 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="Nuevo Aduana" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+                        <button pButton pRipple label="Nuevo Aduana" icon="pi pi-plus" class="p-button-success mr-2" (click)="navigateToCrear()"></button>
                     </div>
                 </ng-template>
 
@@ -14,7 +14,7 @@
                 </ng-template>
             </p-toolbar>
             <p-table #dt [value]="listaAduanas" [columns]="cols" responsiveLayout="scroll" [rows]="30" 
-                    [globalFilterFields]="['id','sigla','nombre','descripcion','tipo','estado']"
+                    [globalFilterFields]="['id','codigo_aduana','nombre','latitud','longitud','estado']"
                     [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" 
                     currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros" 
                     selectionMode="multiple" [rowHover]="true" dataKey="id" [sortField]="'nombre'" 
@@ -31,11 +31,10 @@
 
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                        <th pSortableColumn="codigo_aduana">Codigo de Aduana <p-sortIcon field="codigo_aduana"></p-sortIcon></th>
                         <th pSortableColumn="nombre">Nombre de Aduana <p-sortIcon field="nombre"></p-sortIcon></th>
-                        <th pSortableColumn="sigla">Sigla <p-sortIcon field="sigla"></p-sortIcon></th>
-                        <th pSortableColumn="descripcion">Descripcion <p-sortIcon field="descripcion"></p-sortIcon></th>
-                        <th pSortableColumn="tipo">Tipo <p-sortIcon field="tipo"></p-sortIcon></th>
+                        <th pSortableColumn="latitud">Latitud <p-sortIcon field="latitud"></p-sortIcon></th>
+                        <th pSortableColumn="longitud">Longitud <p-sortIcon field="longitud"></p-sortIcon></th>
                         <th pSortableColumn="estado">Estado <p-sortIcon field="estado"></p-sortIcon></th>
                         <th pSortableColumn="inventoryStatus">Acciones <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
                     </tr>
@@ -44,18 +43,31 @@
                 <!-- Cuerpo de la tabla -->
                 <ng-template pTemplate="body" let-aduana>
                     <tr>
-                        <td>{{aduana.id}}</td>
-                        <td>{{aduana.nombre}}</td>
-                        <td>{{aduana.sigla}}</td>
-                        <td>{{aduana.descripcion}}</td>
-                        <td>{{aduana.tipo}}</td>
+                        <td style="width:5%; min-width:5rem;">
+                            <span class="p-column-title">Codigo</span>
+                            {{aduana.codigo_aduana}}
+                        </td>
+                        <td style="width:30%; min-width:25rem;">
+                            <span class="p-column-title">Nombre</span>
+                            {{aduana.nombre}}
+                        </td>
+                        
+                        <td style="width:5%; min-width:4rem;">
+                            <span class="p-column-title">Latitud</span>
+                            {{aduana.latitud}}
+                        </td>
+                        <td style="width:5%; min-width:4rem;">
+                            <span class="p-column-title">Longitud</span>
+                            {{aduana.longitud}}
+                        </td>
                         <td>
                             <p-tag *ngIf="aduana.estado === 'ACTIVO'" severity="success" value="ACTIVO"></p-tag>
                             <p-tag *ngIf="aduana.estado === 'INACTIVO'" severity="danger" value="INACTIVO"></p-tag>
                         </td>
                         <td>
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="edit(aduana)"></button>
+                                <button pButton pRipple icon="pi pi-map-marker" class="p-button-text p-button-plain p-button-rounded p-button-success mr-1" (click)="mapa(aduana)"></button>
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1"  (click)="navigateToEditar(aduana)"></button>
                                 <button pButton pRipple icon="pi pi-lock" *ngIf="aduana.estado === 'ACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-danger mr-1" (click)="bloquearDialogo(aduana)"></button>
                                 <button pButton pRipple icon="pi pi-unlock" *ngIf="aduana.estado === 'INACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="bloquearDialogo(aduana)"></button>
                             </div>
@@ -73,6 +85,15 @@
                 (estadoDialogo)="cerrar($event)">
             </app-crear-aduana>
         </p-dialog>
+
+        <p-dialog [(visible)]="verMapa" [style]="{width: '800px', height: '800px'}"
+            header="Mapa (Hacer click en el lugar que desee)" [modal]="true" class="p-fluid">
+            <app-ver-mapa [latitud]="12.34" [longitud]="56.78" [isInsideDialog]="true"></app-ver-mapa>
+        </p-dialog>
+
+
+
+
         <p-confirmDialog header="Confirmación" key="confirm1" icon="pi pi-exclamation-triangle" message="¿Está seguro de anular el formulario?"
                 [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
                 acceptLabel="Sí"

@@ -30,19 +30,15 @@ import { FormularioExternoFormulario } from 'src/app/admin/validators/formulario
 export class EditFormularioExternoComponent implements OnInit {
   public id:number=null;
   public num_form!:any;
-  public formulario_interno=new FormularioExternoFormulario();
+  public formulario_externo=new FormularioExternoFormulario();
   public departamento_id:number=0;
   public municipio_id:number=0;
   public declaracionJurada:boolean=false;
   //public minerales:IMineral[]=[];
 
-  departamento_id1: number | null = null;  // Guardar el ID del departamento seleccionado
-municipio_id1: number | null = null;
-// Método que se llama cuando cambia el departamento
-cambioDepartamento1(departamentoId: number): void {
-  this.departamento_id1 = departamentoId;
-  // Aquí puedes hacer cualquier acción extra cuando el departamento cambie
-}
+ public pais_id1: number | null = null;  // Guardar el ID del departamento seleccionado
+ public aduana_id1: number | null = null;
+
   public formulario_Interno_registrado:IFormularioExterno=null;
   public operadores!:IOperatorSimple[];
   public minerales!:IMineral[];
@@ -76,15 +72,15 @@ cambioDepartamento1(departamentoId: number): void {
    public municipio_origen:IFormularioExternoMunicipioOrigen={
       id:null,
       formulario_ext_id:null,
-      departamento_id:null,
+      departamento:null,
       municipio:null,
       municipio_id:null
    }
 
     // Definir los pasos para Steps
 steps = [
-  { label: '1. Datos del mineral y/o Metal', command: (event: any) => this.gotoStep(0)},
-  { label: '2. Origen del mineral y/o Metal',command: (event: any) => this.gotoStep(1) },
+  { label: '1. Datos de la Exportación', command: (event: any) => this.gotoStep(0)},
+  { label: '2. Datos del mineral y/o Metal',command: (event: any) => this.gotoStep(1) },
   { label: '3. Destino del mineral y/o Metal', command: (event: any) => this.gotoStep(2) },
   { label: '4. Datos del Medio de Transporte', command: (event: any) => this.gotoStep(3) }
 ];
@@ -105,7 +101,7 @@ nextStep() {
           this.activeStep++;
   }
   else{
-      this.formulario_interno.formulario.markAllAsTouched();
+      this.formulario_externo.formulario.markAllAsTouched();
       this.notify.error('Por favor, complete todos los campos','Error con el Registro',{timeOut:2000,positionClass: 'toast-bottom-right'});
   }
 }
@@ -128,21 +124,21 @@ isStepValid(stepIndex: number): boolean {
   switch (stepIndex) {
     case 0:
       // Validar los campos del Paso 1
-      valid = this.formulario_interno.formulario.get('peso_bruto_humedo')?.valid && this.formulario_interno.formulario.get('tara')?.valid &&
-      (this.formulario_interno.formulario.get('merma')?.valid || this.formulario_interno.formulario.get('merma')?.disable) && (this.formulario_interno.formulario.get('humedad')?.valid || this.formulario_interno.formulario.get('humedad')?.disable) &&
-      this.formulario_interno.formulario.get('lote')?.valid && this.formulario_interno.formulario.get('presentacion')?.valid &&
-      (this.formulario_interno.formulario.get('cantidad')?.valid || this.formulario_interno.formulario.get('cantidad')?.disabled) && this.formulario_interno.formulario.get('peso_neto')?.valid && this.lista_leyes_mineral.length>0;
+      valid = this.formulario_externo.formulario.get('peso_bruto_humedo')?.valid && this.formulario_externo.formulario.get('tara')?.valid &&
+      (this.formulario_externo.formulario.get('merma')?.valid || this.formulario_externo.formulario.get('merma')?.disable) && (this.formulario_externo.formulario.get('humedad')?.valid || this.formulario_externo.formulario.get('humedad')?.disable) &&
+      this.formulario_externo.formulario.get('lote')?.valid && this.formulario_externo.formulario.get('presentacion')?.valid &&
+      (this.formulario_externo.formulario.get('cantidad')?.valid || this.formulario_externo.formulario.get('cantidad')?.disabled) && this.formulario_externo.formulario.get('peso_neto')?.valid && this.lista_leyes_mineral.length>0;
 
       break;
     case 1:
       valid =this.lista_municipios_origen.length>0
       break;
     case 2:
-      valid = this.formulario_interno.formulario.get('des_tipo')?.valid &&
-     (this.formulario_interno.formulario.get('des_comprador')?.valid ||
-      this.formulario_interno.formulario.get('des_comprador')?.disabled) &&
-     (this.formulario_interno.formulario.get('des_planta')?.valid ||
-      this.formulario_interno.formulario.get('des_planta')?.disabled);
+      valid = this.formulario_externo.formulario.get('des_tipo')?.valid &&
+     (this.formulario_externo.formulario.get('des_comprador')?.valid ||
+      this.formulario_externo.formulario.get('des_comprador')?.disabled) &&
+     (this.formulario_externo.formulario.get('des_planta')?.valid ||
+      this.formulario_externo.formulario.get('des_planta')?.disabled);
       break;
     // Agregar validaciones para otros pasos si es necesario
   }
@@ -174,33 +170,37 @@ constructor(
       this.num_form=formulario_int.nro_formulario;
       
       this.cargar_datos(formulario_int);
-      this.formulario_interno.formulario.get('operador_id')?.disable(); // Para desactivar
+      this.formulario_externo.formulario.get('operador_id')?.disable(); // Para desactivar
       
     },
     (error:any)=> this.error=this.formularioInternoService.handleError(error));
   });
-  this.formulario_interno.formulario.patchValue({
+  this.formulario_externo.formulario.patchValue({
       user_id: authService.getUser.id
     });
  }
 cargar_datos(form:any){
-  this.formulario_interno.formulario.patchValue({
+  this.formulario_externo.formulario.patchValue({
       id: form.id,
       user_id: form.user_id,
       operador_id: form.operador_id,
       nro_formulario: form.nro_formulario,
+      m03_id:form.m03_id,
+      nro_factura_exportacion:form.nro_factura_exportacion,
+      laboratorio:form.laboratorio,
+      codigo_analisis:form.codigo_analisis,
+      nro_formulario_tm:form.nro_formulario_tm,
       lote: form.lote,
-      presentacion: form.presentacion,
+      presentacion_id: form.presentacion_id,
       cantidad: form.cantidad,
       peso_bruto_humedo: form.peso_bruto_humedo,
       peso_neto: form.peso_neto,
       tara: form.tara,
       humedad: form.humedad,
       merma: form.merma,
-      des_tipo: form.des_tipo,
-      des_comprador: form.des_comprador,
-      des_planta: form.des_planta,
-      id_municipio_destino: form.id_municipio_destino,
+      comprador: form.comprador,
+      aduana_id: form.aduana_id,
+      pais_destino_id: form.pais_destino_id,
       tipo_transporte: form.tipo_transporte,
       placa: form.placa,
       nom_conductor:form.nom_conductor ,
@@ -282,7 +282,7 @@ cargar_datos(form:any){
             
             let  origen_mun:IFormularioExternoMunicipioOrigen={
               municipio:this.municipios[index].municipio,
-              departamento_id:departamento.nombre,
+              departamento:departamento.nombre,
               municipio_id:this.municipios[index].id,
             }
             this.lista_municipios_origen.push({...origen_mun});
@@ -301,8 +301,8 @@ cargar_datos(form:any){
             }
             this.lista_leyes_mineral.push({...origen_min});
           }); 
-          this.municipio_id1=this.formulario_interno.formulario.value.id_municipio_destino;
-          this.departamento_id1=this.municipios.find(dat=>dat.id===this.municipio_id1).departamento_id;
+          this.pais_id1=this.formulario_externo.formulario.value.pais_destino_id;
+          this.aduana_id1=this.formulario_externo.formulario.value.aduana_id;;
             
         }
       );
@@ -356,20 +356,20 @@ ngOnInit() {
       { nombre: 'FLOTA', id: '14' },
       { nombre: 'TRAILER FURGON', id: '15' }
   ];
-  this.formulario_interno.formulario.get('cantidad')?.disable();
-  this.formulario_interno.formulario.get('humedad')?.disable();
-  this.formulario_interno.formulario.get('merma')?.disable();
+  this.formulario_externo.formulario.get('cantidad')?.disable();
+  this.formulario_externo.formulario.get('humedad')?.disable();
+  this.formulario_externo.formulario.get('merma')?.disable();
 
-  this.formulario_interno.formulario.get('peso_bruto_humedo')?.valueChanges.subscribe(() => {
+  this.formulario_externo.formulario.get('peso_bruto_humedo')?.valueChanges.subscribe(() => {
       this.calcularPesoNeto();
     });
-    this.formulario_interno.formulario.get('tara')?.valueChanges.subscribe(() => {
+    this.formulario_externo.formulario.get('tara')?.valueChanges.subscribe(() => {
       this.calcularPesoNeto();
     });
-    this.formulario_interno.formulario.get('merma')?.valueChanges.subscribe(() => {
+    this.formulario_externo.formulario.get('merma')?.valueChanges.subscribe(() => {
       this.calcularPesoNeto();
     });
-    this.formulario_interno.formulario.get('humedad')?.valueChanges.subscribe(() => {
+    this.formulario_externo.formulario.get('humedad')?.valueChanges.subscribe(() => {
       this.calcularPesoNeto();
     });
 }
@@ -377,10 +377,10 @@ ngOnInit() {
 // Función para calcular el peso neto
 calcularPesoNeto() {
       // Obtener los valores de cada campo individualmente
-  const peso_bruto_humedo = this.formulario_interno.formulario.get('peso_bruto_humedo')?.value;
-  const tara = this.formulario_interno.formulario.get('tara')?.value;
-  const merma = this.formulario_interno.formulario.get('merma')?.value;
-  const humedad = this.formulario_interno.formulario.get('humedad')?.value;
+  const peso_bruto_humedo = this.formulario_externo.formulario.get('peso_bruto_humedo')?.value;
+  const tara = this.formulario_externo.formulario.get('tara')?.value;
+  const merma = this.formulario_externo.formulario.get('merma')?.value;
+  const humedad = this.formulario_externo.formulario.get('humedad')?.value;
 
 
   // Validar que los campos necesarios tengan valores
@@ -391,22 +391,32 @@ calcularPesoNeto() {
 
     // Calcular el peso neto
     let pesoNeto = pesoSinTara - pesoConMerma - pesoConHumedad;
-    this.formulario_interno.formulario.patchValue({
+    this.formulario_externo.formulario.patchValue({
       peso_neto: pesoNeto
     });
 
 
   }
 }
+cambioPais(paisId: number): void {
+  this.pais_id1 = paisId;
+  // Aquí puedes hacer cualquier acción extra cuando el departamento cambie
+}
+cambioAduana(aduanaId: number): void {
+  this.aduana_id1 = aduanaId;
+  // Aquí puedes hacer cualquier acción extra cuando el departamento cambie
+}
+
 onSubmit(){
 
 }
 guardar(){
- /* this.formulario_interno.formulario.patchValue({
-      estado: 'GENERADO'
-    });*/
-  if(this.formulario_interno.formulario.valid){
-    let formularioEnvio=this.formulario_interno.formulario.value;
+  this.formulario_externo.formulario.patchValue({
+    aduana_id:this.aduana_id1,
+    pais_destino_id:this.pais_id1
+  });
+  if(this.formulario_externo.formulario.valid){
+    let formularioEnvio=this.formulario_externo.formulario.value;
     formularioEnvio={
       ...formularioEnvio,
       minerales:this.minerales_envio,
@@ -422,7 +432,7 @@ guardar(){
         if(this.formulario_Interno_registrado!==null)
         {
           
-          this.formulario_interno.formulario.reset();
+          this.formulario_externo.formulario.reset();
           this.notify.success('El el formulario interno se generó exitosamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
           this.router.navigate(['/admin/formulario-101/formulario-externo']);
         }
@@ -438,7 +448,7 @@ guardar(){
   } );
   }
   else{
-      this.mostrarErrorFormularios(this.formulario_interno);
+      this.mostrarErrorFormularios(this.formulario_externo);
       this.notify.error('Revise los datos e intente nuevamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
 
  }
@@ -535,7 +545,7 @@ agregarLey(){
   }
 
   agregarMunicipio(){
-      if (this.municipio_origen.departamento_id && this.municipio_origen.municipio && this.municipio_origen.municipio_id) {
+      if (this.municipio_origen.departamento && this.municipio_origen.municipio && this.municipio_origen.municipio_id) {
           // Verifica si el registro ya existe en la lista
           const existe = this.lista_municipios_origen.some(municipio => municipio.municipio_id === this.municipio_origen.municipio_id);
 
@@ -561,7 +571,7 @@ agregarLey(){
   }
   cambioNombreDepartemento(event){
 
-      this.municipio_origen.departamento_id=event;
+      this.municipio_origen.departamento=event;
   }
   cambioMunicipio(event){
       this.municipio_id=event;
@@ -585,15 +595,15 @@ agregarLey(){
       this.lista_municipios_origen = this.lista_municipios_origen.filter(val => val.municipio_id !== domicilio.municipio_id);
   
     }
-
+/*
   cambioMunicipio1(event){
       this.municipio_id1=event;
-      this.formulario_interno.formulario.value.id_municipio_destino=event;
+      this.formulario_externo.formulario.value.id_municipio_destino=event;
 
-      this.formulario_interno.formulario.patchValue({
+      this.formulario_externo.formulario.patchValue({
           id_municipio_destino: event
         });
-  }
+  }*/
   declaracionJuradaSwitch(event:any){
       const checkbox = event.target as HTMLInputElement;
       this.declaracionJurada=checkbox.checked;
@@ -601,13 +611,13 @@ agregarLey(){
   cambioDestino(event){
     if(event.value=='COMPRADOR')
     {
-      this.formulario_interno.formulario.patchValue({
+      this.formulario_externo.formulario.patchValue({
         des_planta: null
       });
     }
     else{
       {
-        this.formulario_interno.formulario.patchValue({
+        this.formulario_externo.formulario.patchValue({
           des_comprador: null
         });
       }
@@ -620,22 +630,22 @@ agregarLey(){
 
 
       if (this.presentacion.cantidad==1) {
-          this.formulario_interno.formulario.get('cantidad')?.enable();
+          this.formulario_externo.formulario.get('cantidad')?.enable();
       } else {
-      this.formulario_interno.formulario.get('cantidad')?.disable();
-      this.formulario_interno.formulario.get('cantidad')?.setValue(null);
+      this.formulario_externo.formulario.get('cantidad')?.disable();
+      this.formulario_externo.formulario.get('cantidad')?.setValue(null);
       }
       if (this.presentacion.merma==1) {
-      this.formulario_interno.formulario.get('merma')?.enable();
+      this.formulario_externo.formulario.get('merma')?.enable();
       } else {
-      this.formulario_interno.formulario.get('merma')?.disable();
-      this.formulario_interno.formulario.get('merma')?.setValue(0);
+      this.formulario_externo.formulario.get('merma')?.disable();
+      this.formulario_externo.formulario.get('merma')?.setValue(0);
       }
       if (this.presentacion.humedad==1) {
-      this.formulario_interno.formulario.get('humedad')?.enable();
+      this.formulario_externo.formulario.get('humedad')?.enable();
       } else {
-      this.formulario_interno.formulario.get('humedad')?.disable();
-      this.formulario_interno.formulario.get('humedad')?.setValue(0);
+      this.formulario_externo.formulario.get('humedad')?.disable();
+      this.formulario_externo.formulario.get('humedad')?.setValue(0);
       }
 }
 private mostrarErrorFormularios(formGroup: FormularioExternoFormulario): void {

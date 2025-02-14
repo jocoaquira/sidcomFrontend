@@ -39,7 +39,9 @@ export class VerTomaDeMuestraComponent implements OnInit {
     private presentacionService: PresentacionService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes && this.id) {

@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-
 import { catchError, retry } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { IAduana } from '@data/aduana.metadata';
@@ -13,19 +12,16 @@ import { AduanasService } from '../../services/aduanas.service';
 export class AduanaSelectComponent implements OnChanges {
   @Input() aduana_id: number | null = null;  // Recibe el aduana seleccionado
   @Output() cambioAduana = new EventEmitter<number>();  // Emite el cambio del aduana
-  @Output() nombre_aduana=new EventEmitter<string>();
+  @Output() nombre_aduana = new EventEmitter<string>();
   aduanas: IAduana[] = [];
   error: any;
   loading: boolean = true;
 
-  constructor(public aduanasService: AduanasService) {
-
-  }
+  constructor(public aduanasService: AduanasService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-
+    // Cargar aduanas si aduana_id cambia
     this.cargarAduanas();
-
   }
 
   cargarAduanas() {
@@ -41,8 +37,16 @@ export class AduanaSelectComponent implements OnChanges {
       )
       .subscribe((data: any) => {
         this.aduanas = this.aduanasService.handleaduana(data);
+        console.log(this.aduanas);
         this.loading = false;
 
+        // Si aduana_id está definido y es válido, intenta seleccionar el valor correcto
+        if (this.aduana_id) {
+          const selectedAduana = this.aduanas.find(a => a.id === this.aduana_id);
+          if (selectedAduana) {
+            this.aduana_id = selectedAduana.id; // Asegura que el valor esté correcto
+          }
+        }
       });
   }
 

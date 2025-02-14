@@ -12,6 +12,7 @@ import { IFormularioExternoSimple } from '@data/formulario_externo_simple.metada
 import { IFormularioExterno } from '@data/formulario_externo.metadata';
 import { PdfFormularioExternoService } from 'src/app/admin/services/pdf/formulario-externo-pdf.service';
 
+
 @Component({
   selector: 'app-formulario-externo',
   templateUrl: './formulario-externo.component.html',
@@ -35,19 +36,20 @@ export class FormularioExternoComponent implements OnInit {
         public canCrearFormularioExterno:CanCrearFormularioExternoGuard,
         public canEditarFormularioExterno:CanEditarFormularioExternoGuard,
         public canEliminarFormularioExterno:CanEliminarOperatorGuard,
-        public formularioInternoService:FormularioExternosService,
+        public formularioExternoService:FormularioExternosService,
         public pdfFormularioExterno:PdfFormularioExternoService,
         private notify:ToastrService,
-        private confirmationService:ConfirmationService
+        private confirmationService:ConfirmationService,
+        private formularioExternoPDF:PdfFormularioExternoService,
     ) {
      }
 
     ngOnInit() {
-        this.formularioInternoService.verFormularioExternosSimple(this.nombre).subscribe(
+        this.formularioExternoService.verFormularioExternosSimple(this.nombre).subscribe(
             (data:any)=>{
-            this.listaFormularioExternos=this.formularioInternoService.handleFormularioExternoSimple(data);
+            this.listaFormularioExternos=this.formularioExternoService.handleFormularioExternoSimple(data);
           },
-          (error:any)=> this.error=this.formularioInternoService.handleError(error));
+          (error:any)=> this.error=this.formularioExternoService.handleError(error));
 
 
         //this.productService.getProducts().then(data => this.products = data);
@@ -98,12 +100,20 @@ export class FormularioExternoComponent implements OnInit {
     onGlobalFilter(table: Table, event: Event) {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
-    generarPDF(formulario_interno:IFormularioExternoSimple){
-        this.pdfFormularioExterno.generarPDF(formulario_interno);
+    generarPDF(tdm:IFormularioExternoSimple){
+            console.log(tdm);
+            this.formularioExternoService.verFormularioExternoPDF(tdm.id.toString()).subscribe(
+                (data:any)=>{
+                let tdm_completo=this.formularioExternoService.handleFormularioExternoPDF(data);
+                console.log(tdm_completo);
+                this.formularioExternoPDF.generarPDF(tdm_completo);
+              },
+              (error:any)=> this.error=this.formularioExternoService.handleError(error));
+            
     }
     emitir(event:IFormularioExternoSimple){
         let emitido:any=null;
-        this.formularioInternoService.emitirFormularioExterno(event.id).subscribe(
+        this.formularioExternoService.emitirFormularioExterno(event.id).subscribe(
             (data:any)=>{
                 let formulario_emitido:IFormularioExterno
                 formulario_emitido=data.form;

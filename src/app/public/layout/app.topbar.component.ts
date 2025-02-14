@@ -9,6 +9,27 @@ import { LayoutService } from "./service/app.layout.service";
 export class AppTopBarComponent {
 
     items!: MenuItem[];
+    overlayMenuItems = [
+        {
+            label: 'Save',
+            icon: 'pi pi-save'
+        },
+        {
+            label: 'Update',
+            icon: 'pi pi-refresh'
+        },
+        {
+            label: 'Delete',
+            icon: 'pi pi-trash'
+        },
+        {
+            separator: true
+        },
+        {
+            label: 'Home',
+            icon: 'pi pi-home'
+        }
+    ];
 
     @ViewChild('menubutton') menuButton!: ElementRef;
 
@@ -16,5 +37,7 @@ export class AppTopBarComponent {
 
     @ViewChild('topbarmenu') menu!: ElementRef;
 
-    constructor(public layoutService: LayoutService) { }
+    constructor(public layoutService: LayoutService) {
+        
+     }
 }

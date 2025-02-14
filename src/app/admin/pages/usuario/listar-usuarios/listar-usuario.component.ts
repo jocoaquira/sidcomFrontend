@@ -68,7 +68,7 @@ export class ListarUsuarioComponent implements OnInit {
           },
           (error:any)=> this.error=this.usuariosService.handleError(error));
 
-        this.rolesServices.verRoles(this.nombre).subscribe(
+        this.rolesServices.verRoles().subscribe(
             (data:any)=>{
             this.roles=this.rolesServices.handlerol(data);
 

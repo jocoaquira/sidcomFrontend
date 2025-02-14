@@ -19,9 +19,9 @@ export class AduanaFormulario {
     this.formulario = new FormGroup({
         id: new FormControl(this.aduana.id),
         nombre:new FormControl(this.aduana.nombre,[Validators.required,Validators.pattern('^[a-zA-ZÀ-ÿ\\s(),]+$')]),
-        codigo_aduana:new FormControl(this.aduana.codigo_aduana,[Validators.required, Validators.pattern('^[a-zA-ZÀ-ÿ\\s(),]+$')]),
+        codigo_aduana:new FormControl(this.aduana.codigo_aduana,[Validators.required]),
         latitud:new FormControl(this.aduana.latitud),
-        longitud:new FormControl(this.aduana.longitud,[Validators.required]),
+        longitud:new FormControl(this.aduana.longitud),
         estado:new FormControl(this.aduana.estado,[Validators.required])
     });
   }

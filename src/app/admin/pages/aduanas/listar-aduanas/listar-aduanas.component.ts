@@ -13,6 +13,7 @@ import { AuthService } from '@core/authentication/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { IAduana } from '@data/aduana.metadata';
 import { AduanasService } from 'src/app/admin/services/aduanas.service';
+import { Router } from '@angular/router';
 
 
 
@@ -34,6 +35,9 @@ export class ListarAduanaComponent implements OnInit {
     public statuses!:any;
     public productDialog=false;
     public isEditMode: boolean = false;
+    public verMapa:boolean=false;
+    public latitud:number=null;
+    public longitud:number=null;
     public aduana:IAduana={
         id: null,
         nombre:null,
@@ -50,8 +54,7 @@ export class ListarAduanaComponent implements OnInit {
     constructor(
         private messageService: MessageService,
         private aduanaService:AduanasService,
-        private rolesServices:RolesService,
-        private operadoresService:OperatorsService,
+        private router: Router,
         public canCrearUsuario:CanCrearUsuarioGuard,
         public canEditarUsuario:CanEditarUsuarioGuard,
         public canEliminarUsuario:CanEliminarUsuarioGuard,
@@ -71,13 +74,6 @@ export class ListarAduanaComponent implements OnInit {
 
           },
           (error:any)=> this.error=this.aduanaService.handleError(error));
-
-        this.operadoresService.verOperatorsSimple(this.nombre).subscribe(
-            (data:any)=>{
-            this.operadores=this.operadoresService.handleOperatorSimple(data.data);
-        },
-        (error:any)=> this.error=this.operadoresService.handleOperatorSimpleError(error));
-        //this.productService.getProducts().then(data => this.products = data);
 
         this.cols = [
             { field: 'product', header: 'Product' },
@@ -115,6 +111,14 @@ export class ListarAduanaComponent implements OnInit {
         //this.submitted = false;
         this.productDialog = true;
         this.isEditMode = true;
+    }
+    mapa(aduana:IAduana) {
+        this.aduana = { ...aduana }; 
+        this.latitud=this.aduana.latitud;
+        this.longitud=this.aduana.longitud;
+        console.log(this.aduana);
+        //this.submitted = false;
+        this.verMapa = true;
     }
 
     hideDialog() {
@@ -204,5 +208,11 @@ export class ListarAduanaComponent implements OnInit {
                   );
               },
         });
+    }
+    navigateToCrear() {
+        this.router.navigate(['/admin/aduana/crear']);
+      }
+    navigateToEditar(editar:any) {
+    this.router.navigate(['/admin/aduana/editar/'+editar.id]);
     }
 }

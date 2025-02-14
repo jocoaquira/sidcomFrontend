@@ -544,26 +544,42 @@ convertirHTMLATextoConViñetas(html) {
 
                             sello_autorizado.onload = () => {
                               const nueva_imagen = new Image();
-                              const correctedPath = toma_de_muestra.foto_link.replace(/\\/g, "/");
-                              nueva_imagen.src = localStorage.getItem('url-backend')+correctedPath; // Imagen desde el backend
+                          
+                              // Verifica si toma_de_muestra.foto_link es válido
+                              let correctedPath = '';
+                              if (toma_de_muestra.foto_link) {
+                                  // Si existe el foto_link, procesa la ruta
+                                  correctedPath = toma_de_muestra.foto_link.replace(/\\/g, "/");
+                                  nueva_imagen.src = localStorage.getItem('url-backend') + correctedPath; // Imagen desde el backend
+                              } else {
+                                  // Si no hay foto, asigna una imagen por defecto
+                                  console.log('No hay foto disponible, se usará una imagen por defecto.');
+                                  nueva_imagen.src = 'ruta/a/tu/imagen/por/defecto.png'; // Aquí colocas la URL de tu imagen por defecto
+                              }
+                          
                               const extension = correctedPath.split('.').pop().toUpperCase();
+                          
                               nueva_imagen.onload = () => {
-                                if (toma_de_muestra.estado !== 'GENERADO') {
-                                  doc.addImage(url, 'PNG', 490, (doc as any).lastAutoTable?.finalY - 110, 81, 81);
-                                } else {
-                                  doc.addImage(sello_auth, 'JPEG', 470, (doc as any).lastAutoTable?.finalY - 110, 127, 86);
-                                }
-
-                                // Agregar la nueva imagen en una posición específica
-                                doc.addImage(nueva_imagen, extension, 350, (doc as any).lastAutoTable?.finalY - 100, 100, 85);
-
-                                window.open(doc.output('bloburl'), '_blank');
+                                  if (toma_de_muestra.estado !== 'GENERADO') {
+                                      doc.addImage(url, 'PNG', 490, (doc as any).lastAutoTable?.finalY - 110, 81, 81);
+                                  } else {
+                                      doc.addImage(sello_auth, 'JPEG', 470, (doc as any).lastAutoTable?.finalY - 110, 127, 86);
+                                  }
+                          
+                                  // Agregar la nueva imagen en una posición específica (si la imagen se carga correctamente)
+                                  doc.addImage(nueva_imagen, extension, 350, (doc as any).lastAutoTable?.finalY - 100, 100, 85);
+                          
+                                  // Generar el PDF y abrirlo
+                                  window.open(doc.output('bloburl'), '_blank');
                               };
-
+                          
                               nueva_imagen.onerror = () => {
-                                console.error('Error cargando la nueva imagen desde el backend.');
+                                  console.error('Error cargando la imagen desde el backend o la imagen por defecto.');
+                                  // En caso de error, puedes continuar generando el PDF sin la imagen
+                                  window.open(doc.output('bloburl'), '_blank');
                               };
-                            };
+                          };
+                          
 
                             sello_autorizado.onerror = () => {
                               console.error('Error cargando sello_autorizado.');

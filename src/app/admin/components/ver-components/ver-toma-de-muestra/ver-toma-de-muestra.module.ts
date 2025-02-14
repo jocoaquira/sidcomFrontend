@@ -4,7 +4,7 @@ import { VerTomaDeMuestraComponent } from './ver-toma-de-muestra.component';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
   ],
   exports:[
     VerTomaDeMuestraComponent

@@ -11,6 +11,7 @@ import { PdfFormularioInternoService } from 'src/app/admin/services/pdf/formular
 import { ToastrService } from 'ngx-toastr';
 import { IFormularioInterno } from '@data/formulario_interno.metadata';
 import { ConfirmationService } from 'primeng/api';
+import { AuthService } from '@core/authentication/services/auth.service';
 
 @Component({
   selector: 'app-formulario-interno',
@@ -28,6 +29,7 @@ export class FormularioInternoComponent implements OnInit {
     public statuses!:any;
     public productDialog=false;
     public submitted = true;
+    public operador_id:number=null;
 
     constructor(
         public canListarFormularioInterno:CanListarFormularioInternoGuard,
@@ -38,12 +40,15 @@ export class FormularioInternoComponent implements OnInit {
         public formularioInternoService:FormularioInternosService,
         public pdfFormularioInterno:PdfFormularioInternoService,
         private notify:ToastrService,
-        private confirmationService:ConfirmationService
+        private confirmationService:ConfirmationService,
+        private authService:AuthService,
     ) {
+        this.operador_id= authService.getUser.operador_id;
+        console.log(this.operador_id);
      }
 
     ngOnInit() {
-        this.formularioInternoService.verFormularioInternosSimple(this.nombre).subscribe(
+        this.formularioInternoService.verFormularioInternosOperadorSimple(this.operador_id.toString()).subscribe(
             (data:any)=>{
             this.listaFormularioInternos=this.formularioInternoService.handleFormularioInternoSimple(data);
           },

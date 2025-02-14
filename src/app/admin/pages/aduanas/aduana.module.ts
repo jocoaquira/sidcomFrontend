@@ -19,6 +19,8 @@ import { BadgeModule } from 'primeng/badge';
 import { TagModule } from 'primeng/tag';
 import { AduanaRoutingModule } from './aduana.routing';
 import { ListarAduanaModule } from './listar-aduanas/listar-aduanas.module';
+import { CrearAduanaModule } from './crear-aduana/crear-aduana.module';
+import { EditarAduanaModule } from './editar-aduana/editar-aduana.module';
 
 @NgModule({
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -41,6 +43,8 @@ import { ListarAduanaModule } from './listar-aduanas/listar-aduanas.module';
         InputNumberModule,
         DialogModule,
         ListarAduanaModule,
+        CrearAduanaModule,
+        EditarAduanaModule,
         AduanaRoutingModule
     ],
     declarations: [],

@@ -13,7 +13,8 @@ import { HttpClientModule } from '@angular/common/http';
         HttpClientModule,
         CommonModule,
         AdminRoutingModule,
-        AppLayoutModule
+        AppLayoutModule,
+        
     ]
 })
 export class AdminModule { }

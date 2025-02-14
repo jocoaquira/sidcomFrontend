@@ -15,7 +15,7 @@
             </p-toolbar>
 
             <p-table #dt [value]="listaPaises" [columns]="cols" responsiveLayout="scroll" [rows]="30" 
-                    [globalFilterFields]="['id','sigla','nombre','descripcion','tipo','estado']"
+                    [globalFilterFields]="['id','sigla','nombre','continente']"
                     [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" 
                     currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros" 
                     selectionMode="multiple" [rowHover]="true" dataKey="id" [sortField]="'nombre'" 
@@ -35,9 +35,7 @@
                         <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
                         <th pSortableColumn="nombre">Nombre de Pais <p-sortIcon field="nombre"></p-sortIcon></th>
                         <th pSortableColumn="sigla">Sigla <p-sortIcon field="sigla"></p-sortIcon></th>
-                        <th pSortableColumn="descripcion">Descripcion <p-sortIcon field="descripcion"></p-sortIcon></th>
-                        <th pSortableColumn="tipo">Tipo <p-sortIcon field="tipo"></p-sortIcon></th>
-                        <th pSortableColumn="estado">Estado <p-sortIcon field="estado"></p-sortIcon></th>
+                        <th pSortableColumn="continente">Continente <p-sortIcon field="continente"></p-sortIcon></th>
                         <th pSortableColumn="inventoryStatus">Acciones <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
                     </tr>
                 </ng-template>
@@ -48,18 +46,12 @@
                         <td>{{pais.id}}</td>
                         <td>{{pais.nombre}}</td>
                         <td>{{pais.sigla}}</td>
-                        <td>{{pais.descripcion}}</td>
-                        <td>{{pais.tipo}}</td>
-                        <td>
-                            <p-tag *ngIf="pais.estado === 'ACTIVO'" severity="success" value="ACTIVO"></p-tag>
-                            <p-tag *ngIf="pais.estado === 'INACTIVO'" severity="danger" value="INACTIVO"></p-tag>
-                        </td>
+                        <td>{{pais.continente}}</td>
                         <td>
                             <div class="flex">
                                 <button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="edit(pais)"></button>
-                                <button pButton pRipple icon="pi pi-lock" *ngIf="pais.estado === 'ACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-danger mr-1" (click)="bloquearDialogo(pais)"></button>
-                                <button pButton pRipple icon="pi pi-unlock" *ngIf="pais.estado === 'INACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="bloquearDialogo(pais)"></button>
-                            </div>
+                                <button pButton pRipple icon="pi pi-trash"  class="p-button-text p-button-plain p-button-rounded p-button-danger mr-1" (click)="bloquearDialogo(pais)"></button>
+                                </div>
                         </td>
                     </tr>
                 </ng-template>

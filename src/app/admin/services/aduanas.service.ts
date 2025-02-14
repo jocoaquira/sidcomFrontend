@@ -44,7 +44,7 @@ export class AduanasService {
 //---------------------crear   aduana-------------------------------------------
 crearaduana(data:IAduana) {
   this.token();
-  return this.http.post(`${this.baseUrl}/aduana`,data, {headers:this.headers})
+  return this.http.post(`${this.baseUrl}aduana`,data, {headers:this.headers})
 }
 handleCrearaduanaError(error: any): any {
   return error=error;
@@ -56,7 +56,7 @@ handleCrearaduana(data: IAduana):IAduana {
 //---------------------Editar   aduana-------------------------------------------
 editaraduana(data:IAduana) {
   this.token();
-  return this.http.put(`${this.baseUrl}/aduana`+data.id, data)
+  return this.http.put(`${this.baseUrl}aduana/`+data.id, data)
 }
 handleEditaraduanaError(error: any): any {
   return error=error;

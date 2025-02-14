@@ -48,17 +48,17 @@
                           <div class="field col-12 md:col-3">
                             <span class="p-float-label">
                                 <p-dropdown
-                                    inputId="departamento"
+                                    inputId="departamento_id"
                                     [autoDisplayFirst]="false"
                                     [options]="departamento"
-                                    formControlName="departamento"
+                                    formControlName="departamento_id"
                                     optionLabel="nombre"
                                     optionValue="id"
                                     (onChange)="cambioDepartamentoMapa($event)"
                                 ></p-dropdown>
                                 <label for="dropdown">Departamento</label>
-                                <small id="nit" class="p-error " *ngIf="formulario_interno.esCampoInvalido('departamento')">
-                                    {{formulario_interno.getErrorMessage('departamento')}}
+                                <small id="nit" class="p-error " *ngIf="formulario_interno.esCampoInvalido('departamento_id')">
+                                    {{formulario_interno.getErrorMessage('departamento_id')}}
                                 </small>
                             </span>
                         </div>
@@ -68,14 +68,14 @@
                                     inputId="municipio"
                                     [autoDisplayFirst]="false"
                                     [options]="municipio"
-                                    formControlName="dl_municipio"
+                                    formControlName="municipio_id"
                                     optionLabel="municipio"
                                     optionValue="codigo"
                                     (onChange)="cambioMunicipioMapa($event)"
                                 ></p-dropdown>
                                 <label for="dropdown">Municipio</label>
-                                <small id="dl_municipio" class="p-error " *ngIf="formulario_interno.esCampoInvalido('dl_municipio')">
-                                    {{formulario_interno.getErrorMessage('dl_municipio')}}
+                                <small id="municipio_id" class="p-error " *ngIf="formulario_interno.esCampoInvalido('municipio_id')">
+                                    {{formulario_interno.getErrorMessage('municipio_id')}}
                                 </small>
                             </span>
                         </div>
@@ -85,13 +85,13 @@
                             <span class="p-float-label">
                                 <input
                                     type="number"
-                                    id="latitud"
+                                    id="ubicacion_lat"
                                     pInputText
-                                    formControlName="latitud"
+                                    formControlName="ubicacion_lat"
                                 />
-                                <label for="latitud">Latitud </label>
-                        <small id="latitud" class="p-error " *ngIf="formulario_interno.esCampoInvalido('latitud')">
-                                    {{formulario_interno.getErrorMessage('latitud')}}
+                                <label for="ubicacion_lat">Latitud </label>
+                        <small id="ubicacion_lat" class="p-error " *ngIf="formulario_interno.esCampoInvalido('ubicacion_lat')">
+                                    {{formulario_interno.getErrorMessage('ubicacion_lat')}}
                                 </small>
                             </span>
                         </div>
@@ -99,13 +99,13 @@
                             <span class="p-float-label">
                                 <input
                                     type="number"
-                                    id="longitud"
+                                    id="ubicacion_lon"
                                     pInputText
-                                    formControlName="longitud"
+                                    formControlName="ubicacion_lon"
                                 />
-                                <label for="longitud">Longitud </label>
-                        <small id="longitud" class="p-error " *ngIf="formulario_interno.esCampoInvalido('longitud')">
-                                    {{formulario_interno.getErrorMessage('longitud')}}
+                                <label for="ubicacion_lon">Longitud </label>
+                        <small id="ubicacion_lon" class="p-error " *ngIf="formulario_interno.esCampoInvalido('ubicacion_lon')">
+                                    {{formulario_interno.getErrorMessage('ubicacion_lon')}}
                                 </small>
                             </span>
                         </div>

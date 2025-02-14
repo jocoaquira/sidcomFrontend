@@ -45,7 +45,7 @@ export class PaisesService {
 //---------------------crear   pais-------------------------------------------
 crearpais(data:IPais) {
   this.token();
-  return this.http.post(`${this.baseUrl}/pais`,data, {headers:this.headers})
+  return this.http.post(`${this.baseUrl}pais`,data, {headers:this.headers})
 }
 handleCrearpaisError(error: any): any {
   return error=error;
@@ -57,7 +57,7 @@ handleCrearpais(data: IPais):IPais {
 //---------------------Editar   pais-------------------------------------------
 editarpais(data:IPais) {
   this.token();
-  return this.http.put(`${this.baseUrl}/pais`+data.id, data)
+  return this.http.put(`${this.baseUrl}pais/`+data.id, data)
 }
 handleEditarpaisError(error: any): any {
   return error=error;

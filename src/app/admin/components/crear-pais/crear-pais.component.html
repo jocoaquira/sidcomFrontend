@@ -10,6 +10,11 @@
         <input type="text" pInputText id="sigla" formControlName="sigla" autofocus/>
         <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('sigla')">{{form.getErrorMessage('sigla')}}</small>
     </div>
+    <div class="field">
+        <label for="continente">Continente</label>
+        <input type="text" pInputText id="continente" formControlName="continente" autofocus/>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('continente')">{{form.getErrorMessage('continente')}}</small>
+    </div>
     <div class="botones-derecha">
         <span class="p-buttonset col-12 md:col-6 ">
             <button pButton pRipple label="Guardar" class="p-button-secondary" icon="pi pi-check" type="submit"></button>

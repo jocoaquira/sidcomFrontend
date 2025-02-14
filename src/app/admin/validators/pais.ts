@@ -3,20 +3,22 @@ import { passwordMatchValidator } from './igualar-password';
 import { IPais } from '@data/pais.metadata';
 
 export class PaisFormulario {
-  mineral!: IPais;
+  pais!: IPais;
   formulario: FormGroup;
 
   constructor() {
-    this.mineral = {
+    this.pais = {
         id: null,
         nombre:null,
-        sigla:null
+        sigla:null,
+        continente:null
     };
 
     this.formulario = new FormGroup({
-        id: new FormControl(this.mineral.id),
-        nombre:new FormControl(this.mineral.nombre,[Validators.required,Validators.pattern('^[a-zA-ZÀ-ÿ\\s(),]+$')]),
-        sigla:new FormControl(this.mineral.sigla,[Validators.required, Validators.pattern('^[a-zA-ZÀ-ÿ\\s(),]+$')])
+        id: new FormControl(this.pais.id),
+        nombre:new FormControl(this.pais.nombre,[Validators.required,Validators.pattern('^[a-zA-ZÀ-ÿ\\s(),]+$')]),
+        sigla:new FormControl(this.pais.sigla,[Validators.required, Validators.pattern('^[a-zA-ZÀ-ÿ\\s(),]+$')]),
+        continente: new FormControl(this.pais.continente),
     });
   }
 

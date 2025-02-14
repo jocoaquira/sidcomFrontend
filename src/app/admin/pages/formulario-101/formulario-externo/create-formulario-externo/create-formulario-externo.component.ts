@@ -31,11 +31,15 @@ export class CreateFormularioExternoComponent implements OnInit {
     public departamento_id:number=0;
     public municipio_id:number=0;
     public declaracionJurada:boolean=false;
-    departamento_id1: number | null = null;  // Guardar el ID del departamento seleccionado
-  municipio_id1: number | null = null;
+    pais_id: number | null = null;  // Guardar el ID del departamento seleccionado
+    aduana_id: number | null = null;  // Guardar el ID del departamento seleccionado
   // Método que se llama cuando cambia el departamento
-  cambioDepartamento1(departamentoId: number): void {
-    this.departamento_id1 = departamentoId;
+  cambioPais(paisId: number): void {
+    this.pais_id = paisId;
+    // Aquí puedes hacer cualquier acción extra cuando el departamento cambie
+  }
+  cambioAduana(aduanaId: number): void {
+    this.aduana_id = aduanaId;
     // Aquí puedes hacer cualquier acción extra cuando el departamento cambie
   }
     public formulario_Interno_registrado:IFormularioExterno=null;
@@ -69,7 +73,7 @@ export class CreateFormularioExternoComponent implements OnInit {
      public municipio_origen:IFormularioExternoMunicipioOrigen={
         id:null,
         formulario_ext_id:null,
-        departamento_id:null,
+        departamento:null,
         municipio:null,
         municipio_id:null
      }
@@ -121,21 +125,23 @@ nextStep() {
     switch (stepIndex) {
       case 0:
         // Validar los campos del Paso 1
-        valid = this.formulario_externo.formulario.get('peso_bruto_humedo')?.valid && this.formulario_externo.formulario.get('tara')?.valid &&
-        (this.formulario_externo.formulario.get('merma')?.valid || this.formulario_externo.formulario.get('merma')?.disable) && (this.formulario_externo.formulario.get('humedad')?.valid || this.formulario_externo.formulario.get('humedad')?.disable) &&
-        this.formulario_externo.formulario.get('lote')?.valid && this.formulario_externo.formulario.get('presentacion')?.valid &&
-        (this.formulario_externo.formulario.get('cantidad')?.valid || this.formulario_externo.formulario.get('cantidad')?.disabled) && this.formulario_externo.formulario.get('peso_neto')?.valid && this.lista_leyes_mineral.length>0;
-
+        valid = this.formulario_externo.formulario.get('operador_id')?.valid && this.formulario_externo.formulario.get('m03_id')?.valid &&
+        this.formulario_externo.formulario.get('nro_factura_exportacion')?.valid && this.formulario_externo.formulario.get('laboratorio')?.valid && 
+        this.formulario_externo.formulario.get('codigo_analisis')?.valid && this.formulario_externo.formulario.get('nro_formulario_tm')?.valid;
         break;
       case 1:
-        valid =this.lista_municipios_origen.length>0
+        valid = this.formulario_externo.formulario.get('peso_bruto_humedo')?.valid && this.formulario_externo.formulario.get('tara')?.valid &&
+        (this.formulario_externo.formulario.get('merma')?.valid || this.formulario_externo.formulario.get('merma')?.disable) && 
+        (this.formulario_externo.formulario.get('humedad')?.valid || this.formulario_externo.formulario.get('humedad')?.disable) &&
+        this.formulario_externo.formulario.get('lote')?.valid && this.formulario_externo.formulario.get('presentacion_id')?.valid &&
+        (this.formulario_externo.formulario.get('cantidad')?.valid || this.formulario_externo.formulario.get('cantidad')?.disabled) 
+        && this.formulario_externo.formulario.get('peso_neto')?.valid && this.lista_leyes_mineral.length>0;
+        
         break;
       case 2:
-        valid = this.formulario_externo.formulario.get('des_tipo')?.valid &&
-       (this.formulario_externo.formulario.get('des_comprador')?.valid ||
-        this.formulario_externo.formulario.get('des_comprador')?.disabled) &&
-       (this.formulario_externo.formulario.get('des_planta')?.valid ||
-        this.formulario_externo.formulario.get('des_planta')?.disabled);
+        valid = this.formulario_externo.formulario.get('comprador')?.valid &&
+        this.formulario_externo.formulario.get('aduana_id')?.valid &&
+        this.formulario_externo.formulario.get('pais_destino_id')?.valid ;
         break;
       // Agregar validaciones para otros pasos si es necesario
     }
@@ -284,7 +290,9 @@ nextStep() {
   }
   guardar(){
     this.formulario_externo.formulario.patchValue({
-        estado: 'GENERADO'
+        estado: 'GENERADO',
+        aduana_id:this.aduana_id,
+        pais_destino_id:this.pais_id
       });
     if(this.formulario_externo.formulario.valid){
       let formularioEnvio=this.formulario_externo.formulario.value;
@@ -304,7 +312,7 @@ nextStep() {
             console.log(this.formulario_Interno_registrado);
             this.formulario_externo.formulario.reset();
             this.notify.success('El el formulario interno se generó exitosamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
-            this.router.navigate(['/admin/formulario-101/externo']);
+            this.router.navigate(['/admin/formulario-101/formulario-externo']);
           }
           else{
             this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
@@ -443,7 +451,7 @@ nextStep() {
     }
 
     agregarMunicipio(){
-        if (this.municipio_origen.departamento_id && this.municipio_origen.municipio && this.municipio_origen.municipio_id) {
+        if (this.municipio_origen.departamento && this.municipio_origen.municipio && this.municipio_origen.municipio_id) {
             // Verifica si el registro ya existe en la lista
             const existe = this.lista_municipios_origen.some(municipio => municipio.municipio_id === this.municipio_origen.municipio_id);
 
@@ -469,7 +477,7 @@ nextStep() {
     }
     cambioNombreDepartemento(event){
 
-        this.municipio_origen.departamento_id=event;
+        this.municipio_origen.departamento=event;
     }
     cambioMunicipio(event){
         this.municipio_id=event;
@@ -494,14 +502,6 @@ nextStep() {
 
       }
 
-    cambioMunicipio1(event){
-        this.municipio_id1=event;
-        this.formulario_externo.formulario.value.id_municipio_destino=event;
-
-        this.formulario_externo.formulario.patchValue({
-            id_municipio_destino: event
-          });
-    }
     declaracionJuradaSwitch(event:any){
         const checkbox = event.target as HTMLInputElement;
         this.declaracionJurada=checkbox.checked;

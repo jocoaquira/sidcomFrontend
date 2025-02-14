@@ -21,6 +21,7 @@ import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CrearAduanaModule } from 'src/app/admin/components/crear-aduana/crear-aduana.module';
 import { ListarAduanaComponent } from './listar-aduanas.component';
+import { VerMapaModule } from 'src/app/admin/components/ver-components/ver-mapa/ver-mapa.module';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { ListarAduanaComponent } from './listar-aduanas.component';
         InputNumberModule,
         DialogModule,
         CrearAduanaModule,
-        ConfirmDialogModule
+        ConfirmDialogModule,
+        VerMapaModule
     ],
     declarations: [ListarAduanaComponent],
     providers: [ConfirmationService]

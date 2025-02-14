@@ -38,6 +38,7 @@ export class ListarPaisComponent implements OnInit {
         id: null,
         nombre:null,
         sigla:null,
+        continente:null
     };
     public submitted = true;
     public deleteProductsDialog = false;
@@ -159,9 +160,9 @@ export class ListarPaisComponent implements OnInit {
     }
     return '';
     }
-/*
+
     bloquearDialogo(pais:IPais){
-        
+        /*
         this.confirmationService.confirm({
             key: 'confirm1',
             message: '¿Estas seguro de Realizar esta Operación?',
@@ -200,6 +201,6 @@ export class ListarPaisComponent implements OnInit {
                     }
                   );
               },
-        });
-    }*/
+        });*/
+    }
 }

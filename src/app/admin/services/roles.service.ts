@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { IRol } from '../data/rol.metadata';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.metadata';
+import { IPermisoRol } from '@data/permisos-por-rol.metadata';
 
 @Injectable({
   providedIn: 'root'
@@ -20,21 +21,31 @@ export class RolesService {
     //this.requestOptions = { headers: headers };
   }
 //-----------------Visualizar operadores-------------------------------------------
-  verRoles(nombre:string)
+  verRoles()
   {
-    // Inicializacion de objeto params
-    let params = new HttpParams();
-    params = params.append('nombre', nombre);
+
 
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}roles`,{params:params});
+    return this.http.get(`${this.baseUrl}roles`);
   }
-  handleError(error: any): any {
+   handleError(error: any): any {
     return error=error.error.error;
   }
-  handlerol(data: IRol[]):IRol[] {
-    let rol:IRol[]=data;
+  handlerol(data: IPermisoRol[]):IPermisoRol[] {
+    let rol:IPermisoRol[]=data;
     return rol
+  }
+//-----------------Ver de Roles-------------------------------------------
+  verRole(data:any)
+  {
+    return this.http.get(`${this.baseUrl}/role/`+data);
+  }
+  handleErrorRole(error: any): any {
+    return error=error.error.error;
+  }
+  handleRole(data: IPermisoRol):IPermisoRol {
+    let empleado:IPermisoRol=data;
+    return empleado
   }
 //---------------------crear   rol-------------------------------------------
 crearrol(data:IRol) {
@@ -44,8 +55,8 @@ crearrol(data:IRol) {
 handleCrearrolError(error: any): any {
   return error=error;
 }
-handleCrearrol(data: IRol):IRol {
-  let rol:IRol=data;
+handleCrearrol(data: IPermisoRol):IPermisoRol {
+  let rol:IPermisoRol=data;
   return rol
 }
 //---------------------Editar   rol-------------------------------------------
@@ -59,6 +70,17 @@ handleEditarrolError(error: any): any {
 handleEditarrol(data: boolean):boolean {
   let rol:boolean=data;
   return rol
+}
+//---------------------Eliminar Role-------------------------------------------
+eliminarRole(id:any) {
+  return this.http.delete(`${this.baseUrl}/role/`+id)
+}
+handleEliminarRoleError(error: any): any {
+  return error=error;
+}
+handleEliminarRole(data: boolean):boolean {
+  let Role:boolean=data;
+  return Role
 }
 //-----------------Listado de Empelados por Dependencia--------------------------------------------
 private token(){

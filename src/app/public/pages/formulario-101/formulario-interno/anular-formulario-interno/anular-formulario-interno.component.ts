@@ -22,7 +22,7 @@ export class AnularFormularioInternoComponent implements OnInit {
         operador_id:null,
         nro_formulario:null,
         lote:null,
-        presentacion:null,
+        presentacion_id:null,
         cantidad:null,
         peso_bruto_humedo:0,
         peso_neto:0,

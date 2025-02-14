@@ -1,0 +1,13 @@
+<p-menu appendTo="body" [popup]="true" [style]="{ width: '250px', 'z-index': '9999' }">
+    <button class="p-link layout-topbar-button">
+        <i class="pi pi-bell"></i>
+        <span>Notificaciones</span>
+        <i class="pi pi-chevron-down"></i>
+    </button>
+    <ng-template pTemplate="item" let-item>
+        <div class="notification-item">
+            <i class="pi pi-info-circle"></i>
+            <span>{{ item }}</span>
+        </div>
+    </ng-template>
+</p-menu>

@@ -9,7 +9,7 @@ export interface IFormularioExterno {
    codigo_analisis:string,
    nro_formulario_tm?:string,
    lote:string,
-   presentacion:string,
+   presentacion_id:number,
    cantidad?:number,
    peso_bruto_humedo:number,
    peso_neto:number,

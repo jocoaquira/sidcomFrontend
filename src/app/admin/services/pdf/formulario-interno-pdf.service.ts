@@ -367,7 +367,7 @@ export class PdfFormularioInternoService {
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                 { content: 'PRESENTACION:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_int_completo.presentacion, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: formulario_int_completo.presentacion_id, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                 { content: 'PESO NETO SECO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: formulario_int_completo.peso_neto+' Kg.', styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],

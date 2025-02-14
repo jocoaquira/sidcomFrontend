@@ -57,6 +57,11 @@ verFormularioInterno(nombre:string)
     // asignacion de parametros
     return this.http.get(`${this.baseUrl}formint/reducido`,{params:params});
   }
+  verFormularioInternosOperadorSimple(nombre:string)
+  {
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}formint/operador/reducido/`+nombre);
+  }
   handleFormularioInternoSimpleError(error: any): any {
     return error=error.error.error;
   }

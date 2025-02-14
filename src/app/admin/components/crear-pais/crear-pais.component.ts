@@ -2,8 +2,6 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 
 import { RolesService } from '../../services/roles.service';
 import { OperatorsService } from '../../services/operators.service';
-import { IRol } from '@data/rol.metadata';
-import { IOperatorSimple } from '@data/operador_simple.metadata';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { PaisesService } from '../../services/paises.service';
@@ -21,21 +19,13 @@ export class CrearPaisComponent implements OnInit {
   @Input() isEditMode: boolean = false;
   @Output() estadoDialogo = new EventEmitter<boolean>();
   public error!:any;
-  public errorVerificarContraseña:boolean=true;
-  public errorVerificarEmail:boolean=false;
-  public roles!:IRol[];
-  public operadores!:IOperatorSimple[];
   public nombre:string='';
   public sw1:any;
   public sw:any;
   public sw2:any;
   public submitted:boolean=false;
-  public estados:any;
-  public tipos:any;
-  public admin:boolean=false;
   public form=new PaisFormulario();
   public errorUsuario:any={};
-  public operador_id:number=0;
 
   constructor(
     private rolesServices:RolesService,
@@ -52,43 +42,19 @@ export class CrearPaisComponent implements OnInit {
   ngOnInit(): void {
     
 
-    this.operadoresService.verOperatorsSimple('hj').subscribe(
-      (data:any)=>{
-      this.operadores=this.operadoresService.handleOperatorSimple(data);
-    },
-    (error:any)=> this.error=this.operadoresService.handleOperatorSimpleError(error));
-
-    this.estados = [
-      { label: 'ACTIVO', value: '1' },
-      { label: 'INACTIVO', value: '0' }
-  ];
-  this.tipos = [
-    { label: 'METALICO', value: '0' },
-    { label: 'NO METALICO', value: '1' },
-    { label: 'COMPUESTO', value: '2' }
-];
   }
   ngOnChanges(changes: SimpleChanges): void {
     if (changes && this.pais && this.isEditMode) {
       this.form.formulario.patchValue({
         id:this.pais.id,
         nombre: this.pais.nombre,
-        sigla: this.pais.sigla
+        sigla: this.pais.sigla,
+        continente:this.pais.continente
       });
     }
     console.log(this.form.formulario.value);
   }
-  onChangeRol(rol_id:any){
-    let id=rol_id.value;
-    let rol:IRol=this.roles.find(element => element.id === id);
-    if(rol.nombre.search('Operador')!=-1)
-    {
-      this.admin=false;
-    }
-    else{
-      this.admin=true;
-    }
-  }
+  
   onChangeEstado(operator_id:any){
 
    // this.form.formulario.value.estado=operator_id.value
@@ -101,15 +67,13 @@ export class CrearPaisComponent implements OnInit {
   }
   onSubmit(){
     if (this.isEditMode) {
-      this.actualizarResponsable();
+      this.actualizarPais();
     } else {
-      this.crearResponsable();
+      this.crearPais();
     }
   }
-  actualizarResponsable() {
+  actualizarPais() {
     
-    this.form.formulario.value.estado=this.form.formulario.value.estado.label;
-    this.form.formulario.value.tipo=this.form.formulario.value.tipo.label;
 
     if (this.form.formulario.valid) {
         console.log(this.form.formulario.value);
@@ -139,10 +103,8 @@ export class CrearPaisComponent implements OnInit {
         this.notify.error('Revise los datos e intente nuevamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
       }
   }
-  crearResponsable() {
+  crearPais() {
     
-    this.form.formulario.value.estado=this.form.formulario.value.estado.label;
-    this.form.formulario.value.tipo=this.form.formulario.value.tipo.label;
     console.log(this.form.formulario.value);
     if (this.form.formulario.valid) {
         this.paisService.crearpais(this.form.formulario.value).subscribe(
@@ -171,14 +133,6 @@ export class CrearPaisComponent implements OnInit {
         this.notify.error('Revise los datos e intente nuevamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
       }
   }
-  verificar(event:Event){
-    const input = (event.target as HTMLInputElement).value;
-    if(this.form.formulario.value.repetir_password==this.form.formulario.value.password){
-      this.errorVerificarContraseña=false;
-    }
-    else{
-      this.errorVerificarContraseña=true;
-    }
-  }
+
 
 }

@@ -4,7 +4,7 @@ export interface IFormularioInterno {
    operador_id:number,
    nro_formulario:string,
    lote:string,
-   presentacion:string,
+   presentacion_id:number,
    cantidad:number,
    peso_bruto_humedo:number,
    peso_neto:number,

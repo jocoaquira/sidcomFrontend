@@ -45,7 +45,7 @@ export class EditarUsuarioComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.rolesServices.verRoles('hj').subscribe(
+    this.rolesServices.verRoles().subscribe(
       (data:any)=>{
         console.log(data);
       this.roles=this.rolesServices.handlerol(data);
