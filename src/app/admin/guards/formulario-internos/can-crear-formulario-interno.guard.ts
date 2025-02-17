@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { PermissionHelperService } from '../../helpers/permission.helper.service';
 
-const canPermiso='create-formulario-interno-101';
+const canPermiso='create_formint';
 
 @Injectable({
   providedIn: 'root'

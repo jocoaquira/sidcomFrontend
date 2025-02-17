@@ -14,11 +14,11 @@
               </ng-template>
           </p-toolbar>
 
-          <p-table #dt [value]="roles"  responsiveLayout="scroll" [rows]="30" 
+          <p-table #dt [value]="roles"  responsiveLayout="scroll" [rows]="30"
                   [globalFilterFields]="['id','nombre','permisions']"
-                  [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" 
-                  currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros" 
-                  selectionMode="multiple" [rowHover]="true" dataKey="id" [sortField]="'nombre'" 
+                  [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                  currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"
+                  selectionMode="multiple" [rowHover]="true" dataKey="id" [sortField]="'nombre'"
                   [sortOrder]="-1">
               <ng-template pTemplate="caption">
                   <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
@@ -38,7 +38,7 @@
                       <th pSortableColumn="inventoryStatus">Acciones <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
                   </tr>
               </ng-template>
-              
+
               <!-- Cuerpo de la tabla -->
               <ng-template pTemplate="body" let-rol>
                   <tr>
@@ -50,13 +50,13 @@
                       </td>
                       <td style="width: 40%; min-width: 50rem; word-wrap: break-word;">
                         <div *ngIf="dimension(rol.permissions); else elseBlock" style="display: flex; flex-wrap: wrap; gap: 5px;">
-                          
+
                           <div *ngFor="let permission of rol.permissions">
-                            <p-tag severity="info" value="{{ permission.name }}"></p-tag>
+                            <div class="custom-tag primary"> {{ permission.name }}</div>
                           </div>
                         </div>
                         <ng-template #elseBlock>
-                          <span class="badge rounded-pill bg-danger">No hay permisos</span>
+                          <span class="custom-tag danger">No hay permisos</span>
                         </ng-template>
                       </td>
                       <td>
@@ -70,12 +70,12 @@
           </p-table>
       </div>
       <!--
-      <p-dialog [(visible)]="productDialog" [style]="{width: '700px'}" 
-        [modal]="true" header="{{isEditMode ? 'Editar Rol' : 'Agregar Rol'}}" 
+      <p-dialog [(visible)]="productDialog" [style]="{width: '700px'}"
+        [modal]="true" header="{{isEditMode ? 'Editar Rol' : 'Agregar Rol'}}"
         class="p-fluid">
-          <app-crear-rol 
-              [rol]="rol" 
-              [isEditMode]="isEditMode" 
+          <app-crear-rol
+              [rol]="rol"
+              [isEditMode]="isEditMode"
               (estadoDialogo)="cerrar($event)">
           </app-crear-rol>
       </p-dialog>

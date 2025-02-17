@@ -12,7 +12,7 @@ export class PermissionService {
 //-----------------Listado de Permission-------------------------------------------
   Permissions() {
 
-    return this.http.get(`${this.baseUrl}/permisos`);
+    return this.http.get(`${this.baseUrl}permisos`);
   }
   handlePermissions(data:IPermiso[]):IPermiso[]{
     let Permission:IPermiso[]=data;
@@ -26,7 +26,7 @@ export class PermissionService {
 //-----------------Ver de Permission-------------------------------------------
   verPermission(data:any)
   {
-    return this.http.get(`${this.baseUrl}/permiso/`+data);
+    return this.http.get(`${this.baseUrl}permiso/`+data);
   }
   handleErrorPermission(error: any): any {
     return error=error.error.error;
@@ -38,7 +38,7 @@ export class PermissionService {
 //-----------------Ver de Permission-------------------------------------------
  //-----------------Creacion de permiso -------------------------------------------
  crearPermission(data:IPermiso) {
-  return this.http.post(`${this.baseUrl}/permiso`, data)
+  return this.http.post(`${this.baseUrl}permiso`, data)
 }
 handleCrearPermissionError(error: any): any {
   return error=error;
@@ -50,7 +50,7 @@ handleCrearPermission(data: IPermiso):IPermiso {
 //-----------------Creacion de permiso --------------------------------------------
 //---------------------Editar permiso-------------------------------------------
 editarPermission(data:IPermiso) {
-  return this.http.put(`${this.baseUrl}/permiso/`+data.id, data)
+  return this.http.put(`${this.baseUrl}permiso/`+data.id, data)
 }
 handleEditarPermissionError(error: any): any {
   return error=error;
@@ -62,7 +62,7 @@ handleEditarPermission(data: boolean):boolean {
 //---------------------Editar Permission-------------------------------------------
 //---------------------Eliminar Permission-------------------------------------------
 eliminarPermission(id:any) {
-  return this.http.delete(`${this.baseUrl}/permiso/`+id)
+  return this.http.delete(`${this.baseUrl}permiso/`+id)
 }
 handleEliminarPermissionError(error: any): any {
   return error=error;

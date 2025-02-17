@@ -22,6 +22,8 @@ import { RadioButtonModule } from "primeng/radiobutton";
 import { InputNumberModule } from "primeng/inputnumber";
 import { DialogModule } from "primeng/dialog";
 import { ListarRolesModule } from "./listar-roles/listar-roles.module";
+import { CreateRolModule } from "./crear-rol/crear-rol.module";
+import { EditarRolModule } from "./editar-rol/editar-rol.module";
 
 @NgModule({
   exports:[
@@ -47,6 +49,8 @@ import { ListarRolesModule } from "./listar-roles/listar-roles.module";
     FormsModule,
     RolRoutes,
     ListarRolesModule,
+    CreateRolModule,
+    EditarRolModule
   ],
   declarations:[
   ],

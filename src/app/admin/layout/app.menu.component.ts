@@ -1,6 +1,19 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { AuthService } from '@core/authentication/services/auth.service';
+import { CanVerAduanaGuard } from '../guards/aduanas/can-ver-aduana.guard';
+import { CanVerFormularioExternoGuard } from '../guards/formulario-externos/can-ver-formulario-externo.guard';
+import { CanVerFormularioInternoGuard } from '../guards/formulario-internos/can-ver-formulario-interno.guard';
+import { CanVerMineralGuard } from '../guards/minerales/can-ver-mineral.guard';
+import { CanVerOperatorGuard } from '../guards/operators/can-ver-operator.guard';
+import { CanVerPaisGuard } from '../guards/paises/can-ver-pais.guard';
+import { CanVerPermisoGuard } from '../guards/permisos/can-ver-permiso.guard';
+import { CanVerPresentacionGuard } from '../guards/presentaciones/can-ver-presentacion.guard';
+import { CanVerProcedimientoGuard } from '../guards/procedimientos/can-ver-procedimiento.guard';
+import { CanVerResponsableSenarecomGuard } from '../guards/responsable-senarecom/can-ver-responsable-senarecom.guard';
+import { CanVerResponsableTMGuard } from '../guards/responsable-tm/can-ver-responsable-tm.guard';
+import { CanVerRolGuard } from '../guards/roles/can-ver-rol.guard';
+import { CanVerUsuarioGuard } from '../guards/usuarios/can-ver-usuario.guard';
 import { LayoutService } from './service/app.layout.service';
 
 @Component({
@@ -11,30 +24,47 @@ export class AppMenuComponent implements OnInit {
 
     model: any[] = [];
 
-    constructor(public layoutService: LayoutService,private authService:AuthService) { }
+    constructor(
+        public layoutService: LayoutService,
+        private authService:AuthService,
+        private canVerOperatorGuard:CanVerOperatorGuard,
+        private canVerUsuarioGuard:CanVerUsuarioGuard,
+        private canVerResponsableTMGuard:CanVerResponsableTMGuard,
+        private canVerResponsableSenarecomGuard:CanVerResponsableSenarecomGuard,
+        private canVerPresentacionGuard:CanVerPresentacionGuard,
+        private canVerProcedimientoGuard:CanVerProcedimientoGuard,
+        private canVerAduanaGuard:CanVerAduanaGuard,
+        private canVerPaisGuard:CanVerPaisGuard,
+        private canVerMineralGuard:CanVerMineralGuard,
+        private canVerFormExtGuard:CanVerFormularioExternoGuard,
+        private canVerFormIntGuard:CanVerFormularioInternoGuard,
+        private canVerFormCooperativaGuard:CanVerFormularioInternoGuard,
+        private canVerRolGuard:CanVerRolGuard,
+        private canVerPermisoGuard:CanVerPermisoGuard,
+        ) { }
 
     ngOnInit() {
         this.model = [
             {
                 label: 'ADMINISTRACION',
                 items: [
-                    { label: 'Operadores Mineros', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/operador'] },
-                    { label: 'Usuarios', icon: 'pi pi-fw pi-users', routerLink: ['/admin/usuario'] },
-                    { label: 'Responsables SENARECOM', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/responsable-senarecom'] },
-                    { label: 'Responsables Toma de Muestras', icon: 'pi pi-fw pi-users', routerLink: ['/admin/responsable-tm'] },
-                    { label: 'Procedimientos', icon: 'pi pi-fw pi-directions', routerLink: ['/admin/procedimiento-tm'] },
-                    { label: 'Minerales', icon: 'pi pi-fw pi-prime', routerLink: ['/admin/mineral'] },
-                    { label: 'Presentaciónes', icon: 'pi pi-fw pi-shopping-bag', routerLink: ['/admin/presentacion'] },
-                    { label: 'Paises', icon: 'pi pi-fw pi-flag-fill', routerLink: ['/admin/pais'] },
-                    { label: 'Aduanas', icon: 'pi pi-fw pi-truck', routerLink: ['/admin/aduana'] },
+                    { label: 'Operadores Mineros', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/operador'], visible: this.canVerOperatorGuard.canActivate() },
+                    { label: 'Usuarios', icon: 'pi pi-fw pi-users', routerLink: ['/admin/usuario'], visible: this.canVerUsuarioGuard.canActivate() },
+                    { label: 'Responsables SENARECOM', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/responsable-senarecom'],visible: this.canVerResponsableSenarecomGuard.canActivate() },
+                    { label: 'Responsables Toma de Muestras', icon: 'pi pi-fw pi-users', routerLink: ['/admin/responsable-tm'],visible: this.canVerResponsableTMGuard.canActivate() },
+                    { label: 'Procedimientos', icon: 'pi pi-fw pi-directions', routerLink: ['/admin/procedimiento-tm'],visible: this.canVerProcedimientoGuard.canActivate() },
+                    { label: 'Minerales', icon: 'pi pi-fw pi-prime', routerLink: ['/admin/mineral'],visible: this.canVerMineralGuard.canActivate() },
+                    { label: 'Presentaciónes', icon: 'pi pi-fw pi-shopping-bag', routerLink: ['/admin/presentacion'],visible: this.canVerPresentacionGuard.canActivate() },
+                    { label: 'Paises', icon: 'pi pi-fw pi-flag-fill', routerLink: ['/admin/pais'],visible: this.canVerPaisGuard.canActivate() },
+                    { label: 'Aduanas', icon: 'pi pi-fw pi-truck', routerLink: ['/admin/aduana'],visible: this.canVerAduanaGuard.canActivate() },
                 ]
             },
             {
                 label: 'Formularios',
                 items: [
-                    { label: 'Formularios Internos', icon: 'pi pi-fw pi-book', routerLink: ['/admin/formulario-101/formulario-interno'] },
-                    { label: 'Formularios Externos', icon: 'pi pi-fw pi-globe', routerLink: ['/admin/formulario-101/formulario-externo'] },
-                    { label: 'Formulario Cooperativas', icon: 'pi pi-fw pi-slack', routerLink: ['/admin/formulario-101/formulario-cooperativa'] },
+                    { label: 'Formularios Internos', icon: 'pi pi-fw pi-book', routerLink: ['/admin/formulario-101/formulario-interno'],visible: this.canVerFormIntGuard.canActivate() },
+                    { label: 'Formularios Externos', icon: 'pi pi-fw pi-globe', routerLink: ['/admin/formulario-101/formulario-externo'],visible: this.canVerFormExtGuard.canActivate() },
+                    { label: 'Formulario Cooperativas', icon: 'pi pi-fw pi-slack', routerLink: ['/admin/formulario-101/formulario-cooperativa'],visible: this.canVerFormCooperativaGuard.canActivate() },
                     { label: 'Toma de Muestra', icon: 'pi pi-fw pi-briefcase', routerLink: ['/admin/toma-de-muestra'] }
                 ]
             },
@@ -50,13 +80,20 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'PERMISOS',
                 items: [
-                    { label: 'Roles', icon: 'pi pi-fw pi-shield', routerLink: ['/admin/roles'] },
-                    { label: 'Permisos', icon: 'pi pi-fw pi-key', url: ['https://www.primefaces.org/primeflex/'], target: '_blank' },
-                    { label: 'Usuario', icon: 'pi pi-fw pi-user-edit', url: ['https://www.primefaces.org/primeflex/'], target: '_blank' },
+                    { label: 'Roles', icon: 'pi pi-fw pi-shield', routerLink: ['/admin/roles'], visible: this.canVerRolGuard.canActivate() },
+                    { label: 'Permisos', icon: 'pi pi-fw pi-key',  routerLink: ['/admin/roles'], visible: this.canVerPermisoGuard.canActivate() },
+                    { label: 'Usuario', icon: 'pi pi-fw pi-user-edit', routerLink: ['/admin/roles'], visible: this.canVerRolGuard.canActivate() },
                 ]
             },
 
         ];
+        // FILTRAR ELEMENTOS VISIBLES
+        this.model.forEach(section => {
+            section.items = section.items.filter(item => item.visible);
+        });
+
+        // FILTRAR SECCIONES VACÍAS
+        this.model = this.model.filter(section => section.items.length > 0);
     }
     cerrarSesion(){
         this.authService.logout();

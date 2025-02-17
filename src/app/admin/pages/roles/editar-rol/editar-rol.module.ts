@@ -24,11 +24,12 @@ import { EditarRolComponent } from './editar-rol.component';
     TableModule,
     ButtonModule,
     InputTextareaModule,
-    
+
     CheckboxModule,
     StepsModule,
     TabMenuModule,
     FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [EditarRolComponent]
 })

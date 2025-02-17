@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { PermissionHelperService } from '../../helpers/permission.helper.service';
 
-const canPermiso='create-operator';
+const canPermiso='create_operator';
 
 @Injectable({
   providedIn: 'root'

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router} from '@angular/router';
 import { PermissionHelperService } from '../../helpers/permission.helper.service';
-const canEliminar='delete-operator';
+const canEliminar='delete_operator';
 
 @Injectable({
   providedIn: 'root'

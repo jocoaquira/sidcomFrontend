@@ -5,7 +5,10 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="Nuevo Operador Minero" icon="pi pi-plus" class="p-button-success mr-2" routerLink="/admin/operador/crear"></button>
+                        <button pButton pRipple label="Nuevo Operador Minero"
+                        icon="pi pi-plus" class="p-button-success mr-2"
+                        routerLink="/admin/operador/crear"
+                        *ngIf="canCrearOperator.canActivate()"></button>
                     </div>
                 </ng-template>
 
@@ -78,7 +81,7 @@
                             </td>
                         <td>
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editProduct(operador)"></button>
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editProduct(operador)" *ngIf="canEditarOperator.canActivate()"></button>
                             </div>
                         </td>
                     </tr>

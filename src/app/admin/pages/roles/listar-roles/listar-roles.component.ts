@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { IPermisoRol } from '@data/permisos-por-rol.metadata';
 import { CanCrearRolGuard } from 'src/app/admin/guards/roles/can-crear-rol.guard';
 import { CanEditarRolGuard } from 'src/app/admin/guards/roles/can-editar-rol.guard';
@@ -18,7 +19,7 @@ p: number = 1;
 
   constructor(
     private roleService:RolesService,
-    
+    private router: Router,
     public canCrearRol:CanCrearRolGuard,
     public canEditarRol:CanEditarRolGuard,
     public canEliminarRol:CanEliminarRolGuard,
@@ -33,6 +34,13 @@ p: number = 1;
       (error:any)=>this.error=this.roleService.handleErrorRole(error.error.data)
     );
   }
+  openNew(){
+    this.router.navigate(['/admin/roles/crear']);
+  }
+  edit(rol:IPermisoRol){
+    this.router.navigate(['/admin/roles/editar/'+rol.id]);
+  }
+
   dimension(permissions:any):boolean{
 
     if(permissions.length>0)
@@ -84,10 +92,10 @@ p: number = 1;
                               (data:any)=>{
                               this.listaPaises=this.paisService.handlepais(data);
                               console.log(this.listaPaises);
-                  
+
                             },
                             (error:any)=> this.error=this.paisService.handleError(error));
-          
+
                           this.notify.success('Actualizado Correctamente','Actualizado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
                         }
                       },

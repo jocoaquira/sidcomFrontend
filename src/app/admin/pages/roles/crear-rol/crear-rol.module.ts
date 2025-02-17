@@ -29,6 +29,7 @@ import { CrearRolComponent } from './crear-rol.component';
     TabMenuModule,
     FormsModule,
     ReactiveFormsModule
+    
   ],
   declarations: [CrearRolComponent]
 })

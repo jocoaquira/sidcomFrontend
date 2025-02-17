@@ -38,7 +38,7 @@ export class RolesService {
 //-----------------Ver de Roles-------------------------------------------
   verRole(data:any)
   {
-    return this.http.get(`${this.baseUrl}/role/`+data);
+    return this.http.get(`${this.baseUrl}roles/`+data);
   }
   handleErrorRole(error: any): any {
     return error=error.error.error;
@@ -48,7 +48,7 @@ export class RolesService {
     return empleado
   }
 //---------------------crear   rol-------------------------------------------
-crearrol(data:IRol) {
+crearrol(data:any) {
   this.token();
   return this.http.post(`${this.baseUrl}roles`,data, {headers:this.headers})
 }
@@ -60,9 +60,9 @@ handleCrearrol(data: IPermisoRol):IPermisoRol {
   return rol
 }
 //---------------------Editar   rol-------------------------------------------
-editarrol(data:IRol) {
+editarrol(data:any) {
   this.token();
-  return this.http.put(`${this.baseUrl}/roles/`+data.id, data)
+  return this.http.put(`${this.baseUrl}roles/`+data.id, data)
 }
 handleEditarrolError(error: any): any {
   return error=error;
@@ -73,7 +73,7 @@ handleEditarrol(data: boolean):boolean {
 }
 //---------------------Eliminar Role-------------------------------------------
 eliminarRole(id:any) {
-  return this.http.delete(`${this.baseUrl}/role/`+id)
+  return this.http.delete(`${this.baseUrl}roles/`+id)
 }
 handleEliminarRoleError(error: any): any {
   return error=error;

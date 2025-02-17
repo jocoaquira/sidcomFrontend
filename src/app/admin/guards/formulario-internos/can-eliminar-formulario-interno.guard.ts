@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router} from '@angular/router';
 import { PermissionHelperService } from '../../helpers/permission.helper.service';
-const canEliminar='delete-formulario-interno-101';
+const canEliminar='delete_formint';
 
 @Injectable({
   providedIn: 'root'

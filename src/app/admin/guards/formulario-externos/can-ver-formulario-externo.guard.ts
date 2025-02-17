@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {CanActivate, Router} from '@angular/router';
 import { PermissionHelperService } from '../../helpers/permission.helper.service';
-const canVer='view-formulario-externo-101';
+const canVer='view_formext';
 @Injectable({
   providedIn: 'root'
 })

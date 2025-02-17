@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {CanActivate, Router} from '@angular/router';
 import { PermissionHelperService } from '../../helpers/permission.helper.service';
-const canVer='view-operator';
+const canVer='view_operator';
 @Injectable({
   providedIn: 'root'
 })
