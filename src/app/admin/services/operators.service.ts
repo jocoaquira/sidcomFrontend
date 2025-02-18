@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { IOperator } from '../data/operator.metadata';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.metadata';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -77,7 +78,14 @@ export class OperatorsService {
 
 
 //---------------------crear   operator-------------------------------------------
-crearoperator(data:IOperator) {
+crearoperator(formData: FormData): Observable<any> {
+  //this.token(); // Si es necesario, agrega la lógica para obtener el token
+  // Llamamos a la API con el FormData
+
+  console.log('llego hasta aqui');
+  return this.http.post(`${this.baseUrl}operator`, formData);
+}
+crearoperatore(data:IOperator) {
   this.token();
   return this.http.post(`${this.baseUrl}operator`,data, {headers:this.headers})
 }
@@ -110,6 +118,7 @@ private token(){
         'Authorization': `Bearer ${auth_token}`
       });
 }
+
 }
 
 

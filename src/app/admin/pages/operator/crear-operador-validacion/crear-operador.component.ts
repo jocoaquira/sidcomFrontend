@@ -25,6 +25,17 @@ export class CrearOperadorComponent implements OnInit {
     public errorOperator:any={};
     public operador_registrado!:IOperator;
     @ViewChild('fileUpload') fileUpload: FileUpload;
+
+    public fileNit: File | null = null;
+    public fileNim: File | null = null;
+    public fileSeprec: File | null = null;
+    public fileDocExplotacion: File | null = null;
+    public fileRuex: File | null = null;
+    public fileResolucion: File | null = null;
+    public filePersoneria: File | null = null;
+    public fileDocCreacion: File | null = null;
+    public fileCi: File | null = null;
+
     nimniar: any[];
     tipoOperador: any[]=[];
     tipoSucursal: any[]=[];
@@ -189,44 +200,137 @@ export class CrearOperadorComponent implements OnInit {
         }
         else return null;
     }
-    onSubmit(){
-        let formData = { ...this.operador.formulario.value };
 
-    // Convertir las fechas al formato correcto
-        formData.fecha_exp_nim = this.formatDate(formData.fecha_exp_nim);
-        formData.fecha_exp_seprec = this.formatDate(formData.fecha_exp_seprec);
-        formData.vencimiento_ruex = this.formatDate(formData.vencimiento_ruex);
-        console.log(formData);
-        if (this.operador.formulario.valid)
-        {
-            this.operadorService.crearoperator(formData).subscribe(
-                (data:any) =>
-                {
-                  this.operador_registrado=this.operadorService.handleCrearoperator(data);
+// Función para convertir true/false en 1/0
+ convertBooleansToNumbers = (data: any) => {
+    const convertedData = { ...data }; // Copiar el objeto para no mutar el original
+    for (const key in convertedData) {
+      if (typeof convertedData[key] === 'boolean') {
+        convertedData[key] = convertedData[key] ? 1 : 0;
+      }
+    }
+    return convertedData;
+  };
+// Función para eliminar las propiedades con valores 0 o 1
+ removeZeroOneProperties = (data: any) => {
+    const filteredData = { ...data }; // Copiar el objeto para no mutar el original
+  
+    for (const key in filteredData) {
+      if (filteredData[key] === 0 || filteredData[key] === 1) {
+        delete filteredData[key]; // Eliminar las propiedades con 0 o 1
+      }
+    }
+  
+    return filteredData;
+  };
+    onSubmit() {
+        let formData = new FormData();
+    
+        // Agregar todos los valores del formulario a formData
+        let datos=this.convertBooleansToNumbers(this.operador.formulario.value)
+        let datofin=this.removeZeroOneProperties(datos);
+       /*Object.keys(datofin).forEach(key => {
+            if (datofin[key] !== null && datofin[key] !== undefined) {
+                formData.append(key, datofin[key]);
+            }
+        });*/
 
-                  if(data.error==null)
-                  {
-                    this.notify.success('Guardado Correctamente');
-                    //this.router.navigate(['admin/operador/ver/'+this.operador.formulario.value.id]);
-                  }
-                },
-                (error:any) =>
-                {
-                  this.errorOperator=this.operadorService.handleCrearoperatorError(error.data);
-                  console.log(error);
-                  this.status=error.status;
-                  if(this.status=='fail')
-                  {
-                    this.notify.error('Error...Revise los campos y vuelva a enviar....');
-                  }
-                }
-              );
+        for (const key in datofin) {
+            const value = datofin[key];
+          
+            // Verificar el tipo de dato y convertir si es necesario
+            if (typeof value === 'boolean') {
+              // Convertir el valor booleano a número (1 o 0)
+              formData.append(key, value ? '1' : '0');
+            } else if (typeof value === 'number') {
+              // Si es un número, agregarlo tal cual
+              formData.append(key, value.toString()); // Aunque FormData convierte, es recomendable asegurarse de que sea un string
+            } else {
+              // Para cadenas de texto o cualquier otro tipo, agregar como está
+              formData.append(key, value);
+            }
+          }
+
+
+       /* formData.append('fecha_exp_nim', '2025-12-1');
+        formData.append('razon_social','EMPRESA MINDEOR');
+        formData.append('nit','543543543');
+        formData.append('fecha_exp_seprec', '2025-12-1');*/
+        // Convertir fechas al formato adecuado antes de enviarlas
+        //formData.set('fecha_exp_nim', this.formatDate(this.operador.formulario.value.fecha_exp_nim));
+       // formData.set('fecha_exp_seprec', this.formatDate(this.operador.formulario.value.fecha_exp_seprec));
+        //formData.set('vencimiento_ruex', this.formatDate(this.operador.formulario.value.vencimiento_ruex));
+    
+        // Agregar archivos (debes tener referencias a los archivos en tu formulario)
+        // Agregar los archivos si existen
+        if (this.fileNit) { 
+            console.log('Añadiendo archivo Nit:', this.fileNit);
+            formData.append('nit_link', this.fileNit);
         }
-        else{
-             this.notify.error('Revise los datos e intente nuevamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
+        if (this.fileNim) { 
+            console.log('Añadiendo archivo Nim:', this.fileNim);
+            formData.append('nim_link', this.fileNim);
+        }
+        if (this.fileSeprec) { 
+            console.log('Añadiendo archivo SEPREC:', this.fileSeprec);
+            formData.append('seprec_link', this.fileSeprec);
+        }
+        if (this.fileDocExplotacion) { 
+            console.log('Añadiendo archivo Doc Explotación:', this.fileDocExplotacion);
+            formData.append('doc_explotacion_link', this.fileDocExplotacion);
+        }
+        if (this.fileRuex) { 
+            console.log('Añadiendo archivo RUEX:', this.fileRuex);
+            formData.append('ruex_link', this.fileRuex);
+        }
+        if (this.fileResolucion) { 
+            console.log('Añadiendo archivo Resolución:', this.fileResolucion);
+            formData.append('resolucion_min_fundind_link', this.fileResolucion);
+        }
+        if (this.filePersoneria) { 
+            console.log('Añadiendo archivo Personería:', this.filePersoneria);
+            formData.append('personeria_juridica_link', this.filePersoneria);
+        }
+        if (this.fileDocCreacion) { 
+            console.log('Añadiendo archivo Creación Estatal:', this.fileDocCreacion);
+            formData.append('doc_creacion_estatal_link', this.fileDocCreacion);
+        }
+        if (this.fileCi) { 
+            console.log('Añadiendo archivo CI:', this.fileCi);
+            formData.append('ci_link', this.fileCi);
+        }
+        // Verificar si todos los valores se agregaron correctamente
+        console.log("Valores en FormData:");
+        formData.forEach((value, key) => console.log(`${key}: ${value}`));
+        console.log('ver si hay errores',this.operador.formulario.valid);
+        console.log(this.operador.formulario.errors); // Muestra errores a nivel de formulario
+        console.log(this.operador.formulario.controls); // Muestra todos los controles
 
+        // Verificar si el formulario es válido antes de enviar
+        if (true) {
+            this.operadorService.crearoperator(formData).subscribe(
+                (data: any) => {
+                    console.log("Respuesta del servidor:", data);
+                    this.operador_registrado = this.operadorService.handleCrearoperator(data);
+                    if (data) {
+                        this.notify.success('Guardado Correctamente');
+                    }
+                    else{
+                        this.notify.success('nada de nada');
+                    }
+                },
+                (error: any) => {
+                    this.errorOperator = this.operadorService.handleCrearoperatorError(error);
+                    console.log(error);
+                    this.status = error.status;
+                    this.notify.error(error.message);
+                }
+            );
+        } else {
+            this.notify.error('Revise los datos e intente nuevamente', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
         }
     }
+    
     private mostrarErrorFormularios(formGroup: FormGroup): void {
         Object.keys(formGroup.controls).forEach((key) => {
         const control = formGroup.get(key);
@@ -300,12 +404,29 @@ export class CrearOperadorComponent implements OnInit {
 
     }
 
-    onFileSelect() {
-        // Limpiar el archivo seleccionado para permitir la selección del mismo archivo
-        setTimeout(() => {
-          this.fileUpload.clear();
-        }, 0);
-      }
+    onFileSelected(event: any, field: string) {
+        console.log('Evento de archivo:', event); // Verifica si el evento se está activando
+    
+        if (event.files && event.files.length > 0) {
+            const file = event.files[0]; // PrimeNG usa `event.files`
+            console.log(`Archivo seleccionado para ${field}:`, file);
+    
+            switch (field) {
+                case 'nit_link': this.fileNit = file; break;
+                case 'nim_link': this.fileNim = file; break;
+                case 'seprec_link': this.fileSeprec = file; break;
+                case 'doc_explotacion_link': this.fileDocExplotacion = file; break;
+                case 'ruex_link': this.fileRuex = file; break;
+                case 'resolucion_min_fundind_link': this.fileResolucion = file; break;
+                case 'personeria_juridica_link': this.filePersoneria = file; break;
+                case 'doc_creacion_estatal_link': this.fileDocCreacion = file; break;
+                case 'ci_link': this.fileCi = file; break;
+            }
+        } else {
+            console.warn(`No se seleccionó ningún archivo para ${field}`);
+        }
+    }
+    
 
 
       options: any;

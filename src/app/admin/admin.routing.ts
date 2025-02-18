@@ -22,6 +22,7 @@ import { AppLayoutComponent } from './layout/app.layout.component';
         { path: 'aduana', loadChildren: () => import('./pages/aduanas/aduana.module').then(m => m.AduanaModule) },
         { path: 'presentacion', loadChildren: () => import('./pages/presentaciones/presentacion.module').then(m => m.PresentacionModule) },
         { path: 'roles', loadChildren: () => import('./pages/roles/rol.module').then(m => m.RolModule) },
+        { path: 'permisos', loadChildren: () => import('./pages/permisos/permiso.module').then(m => m.PermisoModule) },
         { path: '**', redirectTo: '/notfound' }
         ]
         }

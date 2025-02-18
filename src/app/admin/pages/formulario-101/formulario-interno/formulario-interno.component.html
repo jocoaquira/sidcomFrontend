@@ -4,7 +4,12 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="Nuevo Formulario Interno" icon="pi pi-plus" class="p-button-success mr-2" routerLink="/admin/formulario-101/formulario-interno/crear"></button>
+                        <button pButton pRipple 
+                        label="Nuevo Formulario Interno" 
+                        icon="pi pi-plus" class="p-button-success mr-2" 
+                        routerLink="/admin/formulario-101/formulario-interno/crear"
+                        *ngIf="canCrearFormularioInterno.canActivate()"
+                        ></button>
                     </div>
                 </ng-template>
 
@@ -74,15 +79,26 @@
                         </td>
                         <td>
                             <div class="flex">
-                                <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-pencil" label="Modificar" class="p-button-rounded p-button-warning mr-2" routerLink="/admin/formulario-101/formulario-interno/editar/{{operador?.id}}"></button>
+                                <button *ngIf="operador.estado === 'GENERADO' && canEditarFormularioInterno.canActivate()" 
+                                pButton pRipple icon="pi pi-pencil" label="Modificar" 
+                                class="p-button-rounded p-button-warning mr-2" 
+                                routerLink="/admin/formulario-101/formulario-interno/editar/{{operador?.id}}"
+                                ></button>
                                 
                                 <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-lock" label="Emitir" class="p-button-rounded p-button-success mr-2" (click)="confirmarEmision(operador)"></button>
-                                <button *ngIf="operador.estado !== 'GENERADO' && operador.estado !== 'ANULADO'" pButton pRipple icon="pi pi-trash" label="Anular" class="p-button-rounded p-button-danger mr-2" routerLink="/admin/formulario-101/formulario-interno/anular/{{operador?.id}}"></button>
+                                <button *ngIf="operador.estado !== 'GENERADO' && operador.estado !== 'ANULADO' && canAnularFormularioInterno.canActivate()" 
+                                pButton pRipple icon="pi pi-trash" label="Anular" 
+                                class="p-button-rounded p-button-danger mr-2" 
+                                routerLink="/admin/formulario-101/formulario-interno/anular/{{operador?.id}}"></button>
                                 </div>
                         </td>
                         <td>
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-print"  class="p-button-rounded p-button-info mr-2" (click)="generarPDF(operador)"></button>
+                                <button pButton pRipple icon="pi pi-print"  
+                                class="p-button-rounded p-button-info mr-2" (click)="generarPDF(operador)
+                                "
+                                *ngIf="canImprimirFormularioInterno.canActivate()" 
+                                ></button>
                             </div>
                         </td>
                     </tr>

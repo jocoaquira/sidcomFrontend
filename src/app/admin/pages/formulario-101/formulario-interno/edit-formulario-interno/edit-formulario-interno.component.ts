@@ -190,7 +190,7 @@ cargar_datos(form:any){
       operador_id: form.operador_id,
       nro_formulario: form.nro_formulario,
       lote: form.lote,
-      presentacion: form.presentacion,
+      presentacion_id: form.presentacion_id,
       cantidad: form.cantidad,
       peso_bruto_humedo: form.peso_bruto_humedo,
       peso_neto: form.peso_neto,
@@ -405,6 +405,7 @@ guardar(){
  /* this.formulario_interno.formulario.patchValue({
       estado: 'GENERADO'
     });*/
+    console.log(this.formulario_interno.formulario.value)
   if(this.formulario_interno.formulario.valid){
     let formularioEnvio=this.formulario_interno.formulario.value;
     formularioEnvio={
@@ -412,7 +413,7 @@ guardar(){
       minerales:this.minerales_envio,
       municipio_origen:this.municipio_origen_envio
     }
-    console.log(this.id);
+    console.log(formularioEnvio);
     
     this.formularioInternoService.editarFormularioInterno(formularioEnvio,this.id).subscribe(
       (data:any) =>

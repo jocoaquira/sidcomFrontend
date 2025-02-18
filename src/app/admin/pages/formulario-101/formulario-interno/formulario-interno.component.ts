@@ -11,6 +11,8 @@ import { PdfFormularioInternoService } from 'src/app/admin/services/pdf/formular
 import { ToastrService } from 'ngx-toastr';
 import { IFormularioInterno } from '@data/formulario_interno.metadata';
 import { ConfirmationService } from 'primeng/api';
+import { CanAnularFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-anular-formulario-interno.guard';
+import { CanImprimirFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-imprimir-formulario-interno.guard';
 
 @Component({
   selector: 'app-formulario-interno',
@@ -35,6 +37,8 @@ export class FormularioInternoComponent implements OnInit {
         public canCrearFormularioInterno:CanCrearFormularioInternoGuard,
         public canEditarFormularioInterno:CanEditarFormularioInternoGuard,
         public canEliminarFormularioInterno:CanEliminarOperatorGuard,
+        public canAnularFormularioInterno:CanAnularFormularioInternoGuard,
+        public canImprimirFormularioInterno:CanImprimirFormularioInternoGuard,
         public formularioInternoService:FormularioInternosService,
         public pdfFormularioInterno:PdfFormularioInternoService,
         private notify:ToastrService,

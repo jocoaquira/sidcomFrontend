@@ -11,6 +11,8 @@ import { FormularioExternosService } from 'src/app/admin/services/formulario-ext
 import { IFormularioExternoSimple } from '@data/formulario_externo_simple.metadata';
 import { IFormularioExterno } from '@data/formulario_externo.metadata';
 import { PdfFormularioExternoService } from 'src/app/admin/services/pdf/formulario-externo-pdf.service';
+import { CanAnularFormularioExternoGuard } from 'src/app/admin/guards/formulario-externos/can-anular-formulario-externo.guard';
+import { CanEliminarFormularioExternoGuard } from 'src/app/admin/guards/formulario-externos/can-eliminar-formulario-externo.guard';
 
 
 @Component({
@@ -35,7 +37,8 @@ export class FormularioExternoComponent implements OnInit {
         public canVerFormularioExterno:CanVerFormularioExternoGuard,
         public canCrearFormularioExterno:CanCrearFormularioExternoGuard,
         public canEditarFormularioExterno:CanEditarFormularioExternoGuard,
-        public canEliminarFormularioExterno:CanEliminarOperatorGuard,
+        public canEliminarFormularioExterno:CanEliminarFormularioExternoGuard,
+        public canAnularFormularioExterno:CanAnularFormularioExternoGuard,
         public formularioExternoService:FormularioExternosService,
         public pdfFormularioExterno:PdfFormularioExternoService,
         private notify:ToastrService,

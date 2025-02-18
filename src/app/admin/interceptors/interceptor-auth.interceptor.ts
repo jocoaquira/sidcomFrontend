@@ -33,7 +33,7 @@ export class InterceptorAuthInterceptor implements HttpInterceptor {
                 setHeaders: isFormData
                     ? { 'Authorization': `Bearer ${auth_token}` } // No agrega Content-Type
                     : { 
-                        'Content-Type': 'application/json', 
+                        //'Content-Type': 'application/json', 
                         'Authorization': `Bearer ${auth_token}` 
                     }
             });

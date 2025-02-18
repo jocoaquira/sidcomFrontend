@@ -53,14 +53,14 @@
 				</small>
             </span>
         </div>
-		<div class="field col-12 md:col-2">
-			<p-fileUpload
-			mode="basic" accept=".pdf,.jpg,.jpeg,.png"
-			[maxFileSize]="1000000" label="Cargar NIT"
-			chooseLabel="Subir NIT" class="mr-2 inline-block"
-			(onClick)="onFileSelect()"
-			></p-fileUpload>
-		</div>
+		<div class="field col-12 md:col-3">
+            <p-fileUpload mode="basic" accept=".pdf,.jpg,.jpeg,.png"
+                [maxFileSize]="1000000"
+                chooseLabel="Subir NIT"
+                class="mr-2 inline-block"
+                (onSelect)="onFileSelected($event, 'nit_link')">
+            </p-fileUpload>
+        </div>
 
 		<div class="field col-12 md:col-3">
             <span class="p-float-label">
@@ -108,12 +108,16 @@
             </span>
         </div>
 		<div class="field col-12 md:col-3">
-			<p-fileUpload
-			mode="basic" accept=".pdf,.jpg,.jpeg,.png"
-			[maxFileSize]="1000000" label="Cargar NIM/NIAR"
-			chooseLabel="Subir NIM/NIAR" class="mr-2 inline-block"
-			></p-fileUpload>
-		</div>
+            <p-fileUpload
+                mode="basic"
+                accept=".pdf,.jpg,.jpeg,.png"
+                [maxFileSize]="1000000"
+                chooseLabel="Subir NIM/NIAR"
+                class="mr-2 inline-block"
+                (onSelect)="onFileSelected($event, 'nim_link')">
+            </p-fileUpload>
+        </div>
+        
 
         <div class="field col-12 md:col-3">
             <span class="p-float-label">
@@ -154,12 +158,13 @@
 				</small>
             </span>
         </div>
-        <div class="field col-12 md:col-4">
-            <p-fileUpload
-            mode="basic" accept=".pdf,.jpg,.jpeg,.png"
-            [maxFileSize]="1000000" label="Cargar PERSONERIA JURÍDICA"
-            chooseLabel="Subir PERSONERIA JURÍDICA" class="mr-2 inline-block"
-            ></p-fileUpload>
+        <div class="field col-12 md:col-3">
+            <p-fileUpload mode="basic" accept=".pdf,.jpg,.jpeg,.png"
+                [maxFileSize]="1000000"
+                chooseLabel="Subir Personería Jurídica"
+                class="mr-2 inline-block"
+                (onSelect)="onFileSelected($event, 'personeria_juridica_link')">
+            </p-fileUpload>
         </div>
     </div>
 </div>
@@ -199,12 +204,13 @@
                 {{operador.getErrorMessage('fecha_exp_seprec')}}
             </small>
         </div>
-        <div class="field col-12 md:col-4">
-            <p-fileUpload
-            mode="basic" accept=".pdf,.jpg,.jpeg,.png"
-            [maxFileSize]="1000000" label="Cargar SEPREC"
-            chooseLabel="Subir SEPREC" class="mr-2 inline-block"
-            ></p-fileUpload>
+        <div class="field col-12 md:col-3">
+            <p-fileUpload mode="basic" accept=".pdf,.jpg,.jpeg,.png"
+                [maxFileSize]="1000000"
+                chooseLabel="Subir SEPREC"
+                class="mr-2 inline-block"
+                (onSelect)="onFileSelected($event, 'seprec_link')">
+            </p-fileUpload>
         </div>
     </div>
 </div>
@@ -239,7 +245,7 @@
                     pInputText
                     formControlName="doc_creacion"
 					class="ng-dirty"
-                    [style.border]="errorOperator.doc_creacion ? '1px solid red' : ''"
+                    [style.border]="errorOperator?.doc_creacion ? '1px solid red' : ''"
                 />
                 <label for="doc_creacion">Documento de Creacion de la Empresa </label>
 				<small id="nit" class="p-error " *ngIf="operador.esCampoInvalido('doc_creacion')">
@@ -247,12 +253,13 @@
                 </small>
             </span>
         </div>
-        <div class="field col-12 md:col-4">
-            <p-fileUpload
-            mode="basic" accept=".pdf,.jpg,.jpeg,.png"
-            [maxFileSize]="1000000" label="Cargar DOCUMENTO DE RESPALDO"
-            chooseLabel="Subir DOCUMENTO DE RESPALDO" class="mr-2 inline-block"
-            ></p-fileUpload>
+        <div class="field col-12 md:col-3">
+            <p-fileUpload mode="basic" accept=".pdf,.jpg,.jpeg,.png"
+                [maxFileSize]="1000000"
+                chooseLabel="Subir Documento de Creación Estatal"
+                class="mr-2 inline-block"
+                (onSelect)="onFileSelected($event, 'doc_creacion_estatal_link')">
+            </p-fileUpload>
         </div>
     </div>
 </div>
@@ -304,7 +311,7 @@
                     id="ofi_lat"
                     pInputText
                     formControlName="ofi_lat"
-					[style.border]="errorOperator.ofi_lat ? '1px solid red' : ''"
+					[style.border]="errorOperator?.ofi_lat ? '1px solid red' : ''"
                 />
                 <label for="ofi_lat">Latitud </label>
 				<small id="ofi_lat" class="p-error " *ngIf="operador.esCampoInvalido('ofi_lat')">
@@ -319,7 +326,7 @@
                     id="ofi_lon"
                     pInputText
                     formControlName="ofi_lon"
-					[style.border]="errorOperator.ofi_lon ? '1px solid red' : ''"
+					[style.border]="errorOperator?.ofi_lon ? '1px solid red' : ''"
                 />
                 <label for="ofi_lon">Longitud </label>
 				<small id="ofi_lon" class="p-error " *ngIf="operador.esCampoInvalido('ofi_lon')">
@@ -338,7 +345,7 @@
                     pInputText
                     formControlName="dl_direccion"
 					class="ng-dirty"
-                    [style.border]="errorOperator.dl_direccion ? '1px solid red' : ''"
+                    [style.border]="errorOperator?.dl_direccion ? '1px solid red' : ''"
                 />
                 <label for="dl_direccion">Dirección </label>
 				<small id="dl_direccion" class="p-error " *ngIf="operador.esCampoInvalido('dl_direccion')">
@@ -354,7 +361,7 @@
                     pInputText
                     formControlName="correo_inst"
 					class="ng-dirty"
-                    [style.border]="errorOperator.correo_inst ? '1px solid red' : ''"
+                    [style.border]="errorOperator?.correo_inst ? '1px solid red' : ''"
                 />
                 <label for="correo_inst">Correo Electrónico </label>
 				<small id="correo_inst" class="p-error " *ngIf="operador.esCampoInvalido('correo_inst')">
@@ -370,7 +377,7 @@
                     pInputText
                     formControlName="tel_fijo"
 					class="ng-dirty"
-                    [style.border]="errorOperator.tel_fijo ? '1px solid red' : ''"
+                    [style.border]="errorOperator?.tel_fijo ? '1px solid red' : ''"
                 />
                 <label for="tel_fijo">Teléfono Fijo </label>
 				<small id="tel_fijo" class="p-error " *ngIf="operador.esCampoInvalido('tel_fijo')">
@@ -386,7 +393,7 @@
                     pInputText
                     formControlName="celular"
 					class="ng-dirty "
-                    [style.border]="errorOperator.celular ? '1px solid red' : ''"
+                    [style.border]="errorOperator?.celular ? '1px solid red' : ''"
                 />
                 <label for="celular">Celular </label>
 				<small id="celular" class="p-error " *ngIf="operador.esCampoInvalido('celular')">
@@ -402,7 +409,7 @@
                     pInputText
                     formControlName="otro_celular"
 					class="ng-dirty"
-                    [style.border]="errorOperator.celular ? '1px solid red' : ''"
+                    [style.border]="errorOperator?.celular ? '1px solid red' : ''"
                 />
                 <label for="otro_celular">Otro Celular </label>
 				<small id="otro_celular" class="p-error " *ngIf="operador.esCampoInvalido('otro_celular')">
@@ -689,12 +696,13 @@
             </h5>
         </div>
 
-        <div class="field col-12 md:col-6">
-            <p-fileUpload
-            mode="basic" accept=".pdf,.jpg,.jpeg,.png"
-            [maxFileSize]="1000000" label="Cargar DOCUMENTO DE RESPALDO"
-            chooseLabel="Subir Documento de Respaldo" class="mr-2 inline-block"
-            ></p-fileUpload>
+        <div class="field col-12 md:col-3">
+            <p-fileUpload mode="basic" accept=".pdf,.jpg,.jpeg,.png"
+                [maxFileSize]="1000000"
+                chooseLabel="Subir Documento de Explotación"
+                class="mr-2 inline-block"
+                (onSelect)="onFileSelected($event, 'doc_explotacion_link')">
+            </p-fileUpload>
         </div>
     </div>
     <div class="grid p-fluid mt-3">
@@ -882,12 +890,13 @@
                 {{operador.getErrorMessage('vencimiento_ruex')}}
             </small>
         </div>
-        <div class="field col-12 md:col-4">
-            <p-fileUpload
-            mode="basic" accept=".pdf,.jpg,.jpeg,.png"
-            [maxFileSize]="10000000" label="Cargar RUEX"
-            chooseLabel="Subir RUEX" class="mr-2 inline-block"
-            ></p-fileUpload>
+        <div class="field col-12 md:col-3">
+            <p-fileUpload mode="basic" accept=".pdf,.jpg,.jpeg,.png"
+                [maxFileSize]="1000000"
+                chooseLabel="Subir RUEX"
+                class="mr-2 inline-block"
+                (onSelect)="onFileSelected($event, 'ruex_link')">
+            </p-fileUpload>
         </div>
     </div>
 </div>
@@ -926,12 +935,13 @@
                 </small>
             </span>
         </div>
-        <div class="field col-12 md:col-6">
-            <p-fileUpload
-            mode="basic" accept=".pdf,.jpg,.jpeg,.png"
-            [maxFileSize]="10000000" label="Cargar Certificado de Respaldo"
-            chooseLabel="Subir Certificado de Respaldo" class="mr-2 inline-block"
-            ></p-fileUpload>
+        <div class="field col-12 md:col-3">
+            <p-fileUpload mode="basic" accept=".pdf,.jpg,.jpeg,.png"
+                [maxFileSize]="1000000"
+                chooseLabel="Subir Resolución Ministerial"
+                class="mr-2 inline-block"
+                (onSelect)="onFileSelected($event, 'resolucion_min_fundind_link')">
+            </p-fileUpload>
         </div>
     </div>
 </div>
@@ -949,7 +959,7 @@
                     pInputText
                     formControlName="rep_nombre_completo"
 					class="ng-dirty"
-                    [style.border]="errorOperator.rep_nombre_completo ? '1px solid red' : ''"
+                    [style.border]="errorOperator?.rep_nombre_completo ? '1px solid red' : ''"
                 />
                 <label for="rep_nombre_completo">Nombre Completo </label>
 				<small id="rep_nombre_completo" class="p-error " *ngIf="operador.esCampoInvalido('rep_nombre_completo')">
@@ -965,7 +975,7 @@
                     pInputText
                     formControlName="rep_ci"
 					class="ng-dirty"
-                    [style.border]="errorOperator.rep_ci ? '1px solid red' : ''"
+                    [style.border]="errorOperator?.rep_ci ? '1px solid red' : ''"
                 />
                 <label for="rep_ci">Cedula de Identidad </label>
 				<small id="rep_ci" class="p-error " *ngIf="operador.esCampoInvalido('rep_ci')">
@@ -973,12 +983,13 @@
                 </small>
             </span>
         </div>
-        <div class="field col-12 md:col-4">
-            <p-fileUpload
-            mode="basic" accept=".pdf,.jpg,.jpeg,.png"
-            [maxFileSize]="10000000" label="Cargar CI"
-            chooseLabel="Subir CI" class="mr-2 inline-block"
-            ></p-fileUpload>
+        <div class="field col-12 md:col-3">
+            <p-fileUpload mode="basic" accept=".pdf,.jpg,.jpeg,.png"
+                [maxFileSize]="1000000"
+                chooseLabel="Subir Cédula de Identidad"
+                class="mr-2 inline-block"
+                (onSelect)="onFileSelected($event, 'ci_link')">
+            </p-fileUpload>
         </div>
         <div class="field col-12 md:col-3">
             <span class="p-float-label">
@@ -1022,7 +1033,7 @@
                     pInputText
                     formControlName="rep_telefono"
 					class="ng-dirty"
-                    [style.border]="errorOperator.rep_telefono ? '1px solid red' : ''"
+                    [style.border]="errorOperator?.rep_telefono ? '1px solid red' : ''"
                 />
                 <label for="rep_telefono">Teléfono Fijo </label>
 				<small id="rep_telefono" class="p-error " *ngIf="operador.esCampoInvalido('rep_telefono')">
@@ -1038,7 +1049,7 @@
                     pInputText
                     formControlName="rep_celular"
 					class="ng-dirty"
-                    [style.border]="errorOperator.rep_celular ? '1px solid red' : ''"
+                    [style.border]="errorOperator?.rep_celular ? '1px solid red' : ''"
                 />
                 <label for="rep_celular">Celular </label>
 				<small id="rep_celular" class="p-error " *ngIf="operador.esCampoInvalido('rep_celular')">
@@ -1054,7 +1065,7 @@
                     pInputText
                     formControlName="rep_direccion"
 					class="ng-dirty"
-                    [style.border]="errorOperator.rep_direccion ? '1px solid red' : ''"
+                    [style.border]="errorOperator?.rep_direccion ? '1px solid red' : ''"
                 />
                 <label for="rep_direccion">Dirección </label>
 				<small id="rep_direccion" class="p-error " *ngIf="operador.esCampoInvalido('rep_direccion')">
@@ -1070,7 +1081,7 @@
                     pInputText
                     formControlName="rep_correo"
 					class="ng-dirty"
-                    [style.border]="errorOperator.rep_correo ? '1px solid red' : ''"
+                    [style.border]="errorOperator?.rep_correo ? '1px solid red' : ''"
                 />
                 <label for="rep_correo">Correo Electrónico </label>
 				<small id="rep_correo" class="p-error " *ngIf="operador.esCampoInvalido('rep_correo')">
@@ -1161,7 +1172,7 @@
                     pInputText
                     formControlName="observaciones"
                     class="ng-dirty"
-                    [style.border]="errorOperator.observaciones ? '1px solid red' : ''"
+                    [style.border]="errorOperator?.observaciones ? '1px solid red' : ''"
                 />
                 <label for="observaciones">Observaciones </label>
                 <small id="observaciones" class="p-error " *ngIf="operador.esCampoInvalido('observaciones')">
