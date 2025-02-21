@@ -82,7 +82,7 @@
                                 pButton pRipple icon="pi pi-pencil" label="Modificar" class="p-button-rounded p-button-warning mr-2" 
                                 routerLink="/admin/formulario-101/formulario-externo/editar/{{operador?.id}}"></button>
 
-                                <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-lock" label="Emitir" class="p-button-rounded p-button-success mr-2" (click)="confirmarEmision(operador)"></button>
+                                <button *ngIf="operador.estado === 'GENERADO' && canImprimirFormularioExterno.canActivate()" pButton pRipple icon="pi pi-lock" label="Emitir" class="p-button-rounded p-button-success mr-2" (click)="confirmarEmision(operador)"></button>
                                 <button *ngIf="operador.estado !== 'GENERADO' && operador.estado !== 'ANULADO' && canAnularFormularioExterno.canActivate()"
                                  pButton pRipple icon="pi pi-trash" label="Anular" class="p-button-rounded p-button-danger mr-2" 
                                  routerLink="/admin/formulario-101/formulario-externo/anular/{{operador?.id}}"></button>
@@ -90,10 +90,12 @@
                         </td>
                         <td>
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-print"  
+                                <button 
+                                *ngIf="canImprimirFormularioExterno.canActivate()"
+                                pButton pRipple icon="pi pi-print"  
                                 class="p-button-rounded p-button-info mr-2" 
                                 (click)="generarPDF(operador)"
-                                *ngIf="canImprimirFormularioExterno.canActivate()" ></button>
+                                 ></button>
                             </div>
                         </td>
                     </tr>

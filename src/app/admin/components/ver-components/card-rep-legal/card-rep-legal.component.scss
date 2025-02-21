@@ -1,0 +1,157 @@
+/* Estilo de la tarjeta */
+.card {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    height: 100%;
+    max-width: 450px;  /* Reducimos el tamaño máximo */
+    width: 100%; /* Ocupa el 100% del contenedor, pero no más que el máximo */
+    margin: 0 auto; /* Centrar en el contenedor */
+}
+
+/* Estilo de la parte superior del card (Título) */
+.header {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    color: #5f5e5e;
+}
+
+/* Estilo del contenido del card */
+.content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap; /* Permitir que las columnas se apilen si es necesario */
+}
+
+/* Columna izquierda: texto, días, fecha, estado */
+.left {
+    flex: 1;
+    min-width: 180px; /* Reducir el ancho mínimo */
+}
+
+/* Columna derecha: archivo y botón */
+.right {
+    width: 45%; /* Reducir el tamaño de la columna derecha */
+    padding-left: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    gap: 10px;
+}
+
+/* Separador entre columnas */
+.divider {
+    width: 2px;
+    background-color: #9da0a0;
+    min-height: 200px; /* Asegura que la línea divisora se vea, incluso si el contenido es pequeño */
+    align-self: center; /* Asegura que la línea divisora se alinee verticalmente en el centro */
+}
+
+/* Estilos del iframe y el botón */
+iframe {
+    width: 100%;
+    height: 200px;
+    border: none;
+}
+
+/* Iconos */
+.pi {
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+.bg-yellow-100 {
+    background-color: #f7ea36;
+    color: #857418;
+}
+
+/* Aseguramos que el diseño sea responsivo */
+@media (max-width:400px) {
+    .content {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .left, .right {
+        width: 100%;
+    }
+
+    /* Asegurar que la línea divisora se vea correctamente en pantallas pequeñas */
+    .divider {
+        width: 1px;  /* Reducir el grosor de la línea divisora */
+        min-height: 1px; /* Asegurar que la línea divisora no sea demasiado alta en pantallas pequeñas */
+        margin-top: 10px; /* Agregar un margen superior para separar un poco la línea divisora */
+        margin-bottom: 10px; /* Agregar un margen inferior para no estar tan pegada al contenido */
+    }
+    /* Ajustar tamaño de los botones en pantallas pequeñas */
+    button {
+        width: 100%;  /* Aseguramos que el botón ocupe el ancho completo */
+        padding: 12px;
+        font-size: 1rem;
+    }
+}
+
+/* Estilo general del botón */
+button {
+    width: 100%;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 7px; /* Borde cuadrado */
+    border: 3px solid transparent; /* Sin borde por defecto */
+    outline: none; /* Quitamos outline por defecto */
+    cursor: pointer;
+    background-color: #ffffff;
+    color: rgb(4, 53, 145);
+    border-color: #033796; /* Borde amarillo cuando está por vencer */
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Transición suave */
+}
+
+button:hover {
+    background-color: #e8edf8;
+    border-color: #022b68; /* Borde más oscuro cuando el estado es por vencer */
+}
+
+/* Efecto focus (al hacer click) */
+.bg-green-100 button:focus,
+.bg-yellow-100 button:focus,
+.bg-red-200 button:focus {
+    outline: 2px solid white; /* Cuando se hace focus, se agrega un borde blanco */
+}
+
+/* Estilo de los subtítulos (labels) */
+.label {
+    font-weight: 700 !important;  /* Aseguramos que el texto sea en negrita (con !important para forzar el estilo) */
+    color: #333333;  /* Color oscuro para los subtítulos */
+    margin-right: 10px;  /* Añadir espacio entre el subtítulo y el contenido */
+}
+
+/* Estilo para los contenidos de las direcciones */
+.direccion {
+    margin-bottom: 12px;  /* Aumentamos el margen para separar más las filas */
+    padding-left: 5px; /* Añadir un pequeño padding en el lado izquierdo para un mejor espaciado */
+}
+
+.direccion span {
+    color: #7a7a7a; /* Color ligeramente más oscuro para los contenidos */
+    font-weight: normal;  /* Dejamos el contenido sin negrita */
+    display: inline-block; /* Aseguramos que cada contenido esté alineado correctamente */
+    word-wrap: break-word;  /* Permite que el texto largo se divida y se ajuste en la siguiente línea */
+    word-break: break-word; /* Rompe palabras largas en lugar de desbordarse */
+}
+
+/* Separación adicional entre las filas de datos */
+.direccion:last-child {
+    margin-bottom: 0; /* Evitar espacio innecesario al final */
+}

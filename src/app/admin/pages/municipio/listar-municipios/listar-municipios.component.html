@@ -1,0 +1,81 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button pButton pRipple label="Nuevo Municipio" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #dt [value]="listaMunicipios" [columns]="cols" responsiveLayout="scroll" [rows]="30" 
+                    [globalFilterFields]="['id','codigo','municipio','provincia','departamento_id']"
+                    [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" 
+                    currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros" 
+                    selectionMode="multiple" [rowHover]="true" dataKey="id" [sortField]="'codigo'" 
+                    [sortOrder]="-1">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Administrar Municipios</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..." class="w-full sm:w-auto"/>
+                        </span>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                        <th pSortableColumn="codigo"> Código <p-sortIcon field="codigo"></p-sortIcon></th>
+                        <th pSortableColumn="municipio">Nombre de Municipio <p-sortIcon field="municipio"></p-sortIcon></th>
+                        <th pSortableColumn="provincia">Provincia <p-sortIcon field="provincia"></p-sortIcon></th>
+                        <th pSortableColumn="departamento_id">Departamento <p-sortIcon field="departamento_id"></p-sortIcon></th>
+                        
+                        <th pSortableColumn="inventoryStatus">Acciones <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
+                    </tr>
+                </ng-template>
+                
+                <!-- Cuerpo de la tabla -->
+                <ng-template pTemplate="body" let-municipio>
+                    <tr>
+                        <td>{{municipio.id}}</td>
+                        <td>{{municipio.codigo}}</td>
+                        <td>{{municipio.municipio}}</td>
+                        <td>{{municipio.provincia}}</td>
+                        <td>{{municipio.departamento_id}}</td>
+                        
+                        <td>
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="edit(municipio)"></button>
+                                <button pButton pRipple icon="pi pi-lock" *ngIf="municipio.estado === 'ACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-danger mr-1" (click)="bloquearDialogo(municipio)"></button>
+                                <button pButton pRipple icon="pi pi-unlock" *ngIf="municipio.estado === 'INACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="bloquearDialogo(municipio)"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <p-dialog [(visible)]="productDialog" [style]="{width: '700px'}" 
+          [modal]="true" header="{{isEditMode ? 'Editar Municipio' : 'Agregar Municipio'}}" 
+          class="p-fluid">
+            <app-crear-municipio 
+                [municipio]="municipio" 
+                [isEditMode]="isEditMode" 
+                (estadoDialogo)="cerrar($event)">
+            </app-crear-municipio>
+        </p-dialog>
+        <p-confirmDialog header="Confirmación" key="confirm1" icon="pi pi-exclamation-triangle" message="¿Está seguro de anular el formulario?"
+                [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
+                acceptLabel="Sí"
+                rejectLabel="No"
+            ></p-confirmDialog>
+    </div>
+</div>
+

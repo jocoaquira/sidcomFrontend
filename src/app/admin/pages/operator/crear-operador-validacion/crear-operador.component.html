@@ -68,13 +68,13 @@
                     inputId="dropdown"
                     [autoDisplayFirst]="false"
                     [options]="nimniar"
-                    formControlName="nim_niar"
+                    formControlName="tipo_nim_niar"
                     optionLabel="name"
-                    optionValue="id"
+                    optionValue="name"
                 ></p-dropdown>
                 <label for="dropdown">NIM/NIAR</label>
-                <small id="nit" class="p-error " *ngIf="operador.esCampoInvalido('nim_niar')">
-					{{operador.getErrorMessage('nim_niar')}}
+                <small id="nit" class="p-error " *ngIf="operador.esCampoInvalido('tipo_nim_niar')">
+					{{operador.getErrorMessage('tipo_nim_niar')}}
 				</small>
             </span>
         </div>
@@ -276,14 +276,14 @@
                     inputId="departamento"
                     [autoDisplayFirst]="false"
                     [options]="departamento"
-                    formControlName="dl_departamento"
+                    formControlName="dl_departamento_id"
                     optionLabel="nombre"
                     optionValue="id"
                     (onChange)="cambioDepartamento($event)"
                 ></p-dropdown>
                 <label for="dropdown">Departamento</label>
-                <small id="nit" class="p-error " *ngIf="operador.esCampoInvalido('dl_departamento')">
-                    {{operador.getErrorMessage('dl_departamento')}}
+                <small id="nit" class="p-error " *ngIf="operador.esCampoInvalido('dl_departamento_id')">
+                    {{operador.getErrorMessage('dl_departamento_id')}}
                 </small>
             </span>
         </div>
@@ -293,14 +293,14 @@
                     inputId="municipio"
                     [autoDisplayFirst]="false"
                     [options]="municipio"
-                    formControlName="dl_municipio"
+                    formControlName="dl_municipio_id"
                     optionLabel="municipio"
-                    optionValue="codigo"
+                    optionValue="id"
                     (onChange)="cambioMunicipio($event)"
                 ></p-dropdown>
                 <label for="dropdown">Municipio</label>
-                <small id="dl_municipio" class="p-error " *ngIf="operador.esCampoInvalido('dl_municipio')">
-                    {{operador.getErrorMessage('dl_municipio')}}
+                <small id="dl_municipio_id" class="p-error " *ngIf="operador.esCampoInvalido('dl_municipio_id')">
+                    {{operador.getErrorMessage('dl_municipio_id')}}
                 </small>
             </span>
         </div>
@@ -879,15 +879,15 @@
         <div class="field col-12 md:col-4">
             <span class="p-float-label">
                 <p-calendar
-                    inputId="vencimiento_ruex"
+                    inputId="fecha_exp_ruex"
 					[locale]="es"
   					dateFormat="yy-mm-dd"
-                    formControlName="vencimiento_ruex"
+                    formControlName="fecha_exp_ruex"
                 ></p-calendar>
-                <label for="vencimiento_ruex">Fecha Expiracion RUEX</label>
+                <label for="fecha_exp_ruex">Fecha Expiracion RUEX</label>
             </span>
-            <small id="vencimiento_ruex" class="p-error " *ngIf="operador.esCampoInvalido('vencimiento_ruex')">
-                {{operador.getErrorMessage('vencimiento_ruex')}}
+            <small id="fecha_exp_ruex" class="p-error " *ngIf="operador.esCampoInvalido('fecha_exp_ruex')">
+                {{operador.getErrorMessage('fecha_exp_ruex')}}
             </small>
         </div>
         <div class="field col-12 md:col-3">
@@ -1016,7 +1016,7 @@
                     [options]="municipio"
                     formControlName="rep_municipio_id"
                     optionLabel="municipio"
-                    optionValue="codigo"
+                    optionValue="id"
                     (onChange)="cambioMunicipio($event)"
                 ></p-dropdown>
                 <label for="dropdown">Municipio</label>

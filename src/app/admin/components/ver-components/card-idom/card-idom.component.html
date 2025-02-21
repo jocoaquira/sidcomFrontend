@@ -1,0 +1,77 @@
+<div class="card" [ngClass]="cardClass">
+    <!-- Título -->
+    <div class="header">
+        <span>{{ empresa?.razon_social }}</span>
+    </div>
+
+    <!-- Contenido -->
+    <div class="content">
+        <!-- Columna única -->
+        <div class="left">
+            <!-- Razon social, NIM, NIT, Dirección -->
+            <div class="nro-nim">
+                <span class="label">N° IDOM:</span>
+                <span>{{' SDMMRE - '+empresa?.id}}</span>
+            </div>
+            <div class="nro-nim">
+                <span class="label">N° NIM: </span>
+                <span>{{empresa?.nro_nim}}</span>
+            </div>
+            <div class="nro-nit">
+                <span class="label">N° NIT: </span>
+                <span>{{ empresa?.nit }}</span>
+            </div>
+            <!-- Actividades -->
+            <div class="direccion">
+                <span class="label">Actividades:</span>
+                <span>{{ getActividades() }}</span>
+            </div>
+            <div class="direccion">
+                <span class="label">Dirección: </span>
+                <span>{{ empresa?.dl_direccion }}</span>
+            </div>
+
+            <!-- Fechas de Registro y Actualización -->
+            <div class="fecha-registro">
+                <span class="label">Fecha de Registro: </span>
+                <span>{{ empresa?.fecha_creacion | date: 'dd/MM/yyyy' }}</span>
+            </div>
+            <div class="fecha-actualizacion">
+                <span class="label">Fecha de Actualización: </span>
+                <span>{{ empresa?.fecha_actualizacion | date: 'dd/MM/yyyy' }}</span>
+            </div>
+
+            <!-- Fecha de Vencimiento con color dinámico -->
+            <div class="fecha-vencimiento">
+                <span class="label">Fecha de Vencimiento: </span>
+                <span 
+                    [ngClass]="{
+                        'text-green-500': estado === 'Vigente',
+                        'text-yellow-500': estado === 'Por Vencer',
+                        'text-red-500': estado === 'Vencido'
+                    }">
+                    {{ empresa?.fecha_expiracion | date: 'dd/MM/yyyy' }}
+                </span>
+            </div>
+
+            
+        </div>
+    </div>
+
+    <!-- Estado en la parte inferior centrado -->
+    <div class="estado">
+        <div class="estado-icon">
+            <i *ngIf="estado === 'Vigente'" class="pi pi-check-circle text-green-500"></i>
+            <i *ngIf="estado === 'Por Vencer'" class="pi pi-exclamation-circle text-yellow-500"></i>
+            <i *ngIf="estado === 'Vencido'" class="pi pi-times-circle text-red-500"></i>
+        </div>
+        <span class="estado-text" 
+            [ngClass]="{
+                'text-green-500': estado === 'Vigente',
+                'text-yellow-500': estado === 'Por Vencer',
+                'text-red-500': estado === 'Vencido'
+            }">
+            {{ estado }}
+        </span>
+    </div>
+</div>

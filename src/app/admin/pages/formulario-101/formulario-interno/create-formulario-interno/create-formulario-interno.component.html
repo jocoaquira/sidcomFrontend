@@ -51,14 +51,14 @@
                                         inputId="dropdown"
                                         [autoDisplayFirst]="false"
                                         [options]="presentaciones"
-                                        formControlName="presentacion"
+                                        formControlName="presentacion_id"
                                         optionLabel="nombre"
                                         optionValue="id"
                                         (onChange)="cambioPresentacion($event)"
                                     ></p-dropdown>
                                     <label for="dropdown">Presentacion</label>
-                                    <small id="presentacion" class="p-error " *ngIf="formulario_interno.esCampoInvalido('presentacion')">
-                                        {{formulario_interno.getErrorMessage('presentacion')}}
+                                    <small id="presentacion_id" class="p-error " *ngIf="formulario_interno.esCampoInvalido('presentacion_id')">
+                                        {{formulario_interno.getErrorMessage('presentacion_id')}}
                                     </small>
                                 </span>
                             </div>

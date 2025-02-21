@@ -1,0 +1,40 @@
+<form [formGroup]="form.formulario" (ngSubmit)="onSubmit()">
+    
+    <div class="field">
+        <label>Código:</label>
+        <input type="text" pInputText id="codigo" formControlName="codigo"  autofocus />
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('codigo')">{{form.getErrorMessage('codigo')}}</small>
+    </div>
+    <div class="field">
+        <label for="municipio">Municipio</label>
+        <input type="text" pInputText id="municipio" formControlName="municipio" autofocus/>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('municipio')">{{form.getErrorMessage('municipio')}}</small>
+    </div>
+    <div class="field">
+        <label for="provincia">Provincia</label>
+        <input type="text" pInputText id="provincia" formControlName="provincia" autofocus/>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('provincia')">{{form.getErrorMessage('provincia')}}</small>
+    </div>
+    <div class="field">
+        <span class="p-float-label mt-5">
+            <p-dropdown
+                inputId="dropdown"
+                [autoDisplayFirst]="false"
+                [options]="tipos"
+                formControlName="tipo"
+                optionLabel="label"
+            ></p-dropdown>
+
+            <label for="dropdown">Departamento</label>
+        </span>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('tipo')">{{form.getErrorMessage('tipo')}}</small>
+    </div>
+
+    <div class="botones-derecha">
+        <span class="p-buttonset col-12 md:col-6 ">
+            <button pButton pRipple label="Guardar" class="p-button-secondary" icon="pi pi-check" type="submit"></button>
+            <button pButton pRipple label="Cancelar"  class="p-button-danger" icon="pi pi-trash" (click)="ocultarDialogo()"></button>
+        </span>
+    </div>
+</form>
+

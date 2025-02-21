@@ -15,6 +15,9 @@ import { CanVerResponsableTMGuard } from '../guards/responsable-tm/can-ver-respo
 import { CanVerRolGuard } from '../guards/roles/can-ver-rol.guard';
 import { CanVerUsuarioGuard } from '../guards/usuarios/can-ver-usuario.guard';
 import { LayoutService } from './service/app.layout.service';
+import { CanVerDepartamentoGuard } from '../guards/departamentos/can-ver-departamento.guard';
+import { CanVerMunicipioGuard } from '../guards/municipios/can-ver-municipio.guard';
+import { CanVerTomaDeMuestraGuard } from '../guards/toma-de-muestra/can-ver-toma-de-muestra.guard';
 
 @Component({
     selector: 'app-menu',
@@ -41,6 +44,9 @@ export class AppMenuComponent implements OnInit {
         private canVerFormCooperativaGuard:CanVerFormularioInternoGuard,
         private canVerRolGuard:CanVerRolGuard,
         private canVerPermisoGuard:CanVerPermisoGuard,
+        private canVerDepartamentoGuard:CanVerDepartamentoGuard,
+        private canVerMunicipioGuard:CanVerMunicipioGuard,
+        private canVerTomaDeMuestraGuard:CanVerTomaDeMuestraGuard,
         ) { }
 
     ngOnInit() {
@@ -56,6 +62,8 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Minerales', icon: 'pi pi-fw pi-prime', routerLink: ['/admin/mineral'],visible: this.canVerMineralGuard.canActivate() },
                     { label: 'Presentaciónes', icon: 'pi pi-fw pi-shopping-bag', routerLink: ['/admin/presentacion'],visible: this.canVerPresentacionGuard.canActivate() },
                     { label: 'Paises', icon: 'pi pi-fw pi-flag-fill', routerLink: ['/admin/pais'],visible: this.canVerPaisGuard.canActivate() },
+                    { label: 'Departamentos', icon: 'pi pi-fw pi-flag-fill', routerLink: ['/admin/departamento'],visible: this.canVerDepartamentoGuard.canActivate() },
+                    { label: 'Municipios', icon: 'pi pi-fw pi-flag-fill', routerLink: ['/admin/municipio'],visible: this.canVerMunicipioGuard.canActivate() },
                     { label: 'Aduanas', icon: 'pi pi-fw pi-truck', routerLink: ['/admin/aduana'],visible: this.canVerAduanaGuard.canActivate() },
                 ]
             },
@@ -65,7 +73,7 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Formularios Internos', icon: 'pi pi-fw pi-book', routerLink: ['/admin/formulario-101/formulario-interno'],visible: this.canVerFormIntGuard.canActivate() },
                     { label: 'Formularios Externos', icon: 'pi pi-fw pi-globe', routerLink: ['/admin/formulario-101/formulario-externo'],visible: this.canVerFormExtGuard.canActivate() },
                     { label: 'Formulario Cooperativas', icon: 'pi pi-fw pi-slack', routerLink: ['/admin/formulario-101/formulario-cooperativa'],visible: this.canVerFormCooperativaGuard.canActivate() },
-                    { label: 'Toma de Muestra', icon: 'pi pi-fw pi-briefcase', routerLink: ['/admin/toma-de-muestra'] }
+                    { label: 'Toma de Muestra', icon: 'pi pi-fw pi-briefcase', routerLink: ['/admin/toma-de-muestra'],visible: this.canVerTomaDeMuestraGuard.canActivate() }
                 ]
             },
             {

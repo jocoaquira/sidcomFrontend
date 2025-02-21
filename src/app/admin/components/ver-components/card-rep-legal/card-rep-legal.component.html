@@ -1,0 +1,50 @@
+<div class="col-12" *ngIf="operador">
+  <div class="card mb-0" [ngClass]="cardClass">
+      <!-- Título -->
+      <div class="header">
+          <span>{{ title }}</span>
+      </div>
+
+      <!-- Estado de Vigencia -->
+      <div class="content">
+          <div class="left">
+            <!-- Actividades -->
+            <div class="direccion">
+                <span class="label">CI: </span>
+                <span>{{ operador.rep_ci }}</span>
+            </div>
+            <div class="direccion">
+                <span class="label">Nombre: </span>
+                <span>{{ operador.rep_nombre_completo }}</span>
+            </div>
+            <div class="direccion">
+                <span class="label">Dirección: </span>
+                <span>{{ operador?.rep_direccion }}</span>
+            </div>
+            <div class="direccion">
+                <span class="label">Celular: </span>
+                <span>{{ operador?.rep_celular }}</span>
+            </div>
+            <div class="direccion">
+                <span class="label">Correo Electrónico: </span>
+                <span>{{ operador?.rep_correo }}</span>
+            </div>
+              
+          </div>
+          <div class="divider"></div>
+          <!-- Enlace para mostrar el archivo -->
+          <div class="right">
+              <iframe *ngIf="nimLink" [src]="link | safeUrl" style="width: 100%; height: 100%; border: none;"></iframe>
+              <i *ngIf="!nimLink" class="pi pi-map-marker text-orange-500 text-xl"></i>
+              <button *ngIf="nimLink" (click)="downloadFile(link)" 
+                [ngClass]="{
+                  'bg-green-100': estado === 'Vigente',
+                  'bg-yellow-100': estado === 'Por Vencer',
+                  'bg-red-200': estado === 'Vencido'
+                }">
+                Descargar {{title}}
+              </button>
+          </div>
+      </div>
+  </div>
+</div>

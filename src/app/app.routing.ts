@@ -22,9 +22,11 @@ import { AppComponent } from './app.component';
                 children: [
 
                     { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) },
-                    { path: 'public', loadChildren: () => import('./public/public.module').then(m => m.PublicModule) }
+                    { path: 'public', loadChildren: () => import('./public/public.module').then(m => m.PublicModule) },
+                    
                 ]
             },
+            { path: 'solicitud', loadChildren: () => import('./public/pages/solicitar-registro/solicitar-registro.module').then(m => m.SolicitarRegistroModule) },
             { path: 'operador/verificacion', loadChildren: () => import('./admin/pages/operator/verificacion-operador/verificacion-operador.module').then(m => m.VerificacionOperadorModule) },
             { path: 'notfound', component: NotfoundComponent },
             { path: '**', redirectTo: '/notfound' },

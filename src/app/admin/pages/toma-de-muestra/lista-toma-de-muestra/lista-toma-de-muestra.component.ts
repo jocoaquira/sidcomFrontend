@@ -15,6 +15,13 @@ import { ITomaDeMuestraSimple } from '@data/toma_de_muestra_simple.metadata';
 import { IAprobarTM } from '@data/aprobar_tm.metadata';
 import { PdfTomaDeMuestraService } from 'src/app/admin/services/pdf/toma-de-muestra-pdf.service';
 import { ITomaDeMuestraPDF } from '@data/toma_de_muestra_pdf.metadata';
+import { CanVerTomaDeMuestraGuard } from 'src/app/admin/guards/toma-de-muestra/can-ver-toma-de-muestra.guard';
+import { CanCrearTomaDeMuestraGuard } from 'src/app/admin/guards/toma-de-muestra/can-crear-toma-de-muestra.guard';
+import { CanEditarTomaDeMuestraGuard } from 'src/app/admin/guards/toma-de-muestra/can-editar-toma-de-muestra.guard';
+import { CanEliminarTomaDeMuestraGuard } from 'src/app/admin/guards/toma-de-muestra/can-eliminar-toma-de-muestra.guard';
+import { CanImprimirTomaDeMuestraGuard } from 'src/app/admin/guards/toma-de-muestra/can-imprimir-toma-de-muestra.guard';
+import { CanSolicitarTomaDeMuestraGuard } from 'src/app/admin/guards/toma-de-muestra/can-solicitar-toma-de-muestra.guard';
+import { CanAprobarTomaDeMuestraGuard } from 'src/app/admin/guards/toma-de-muestra/can-aprobar-toma-de-muestra.guard';
 
 @Component({
   selector: 'app-lista-toma-de-muestra',
@@ -63,10 +70,13 @@ export class ListaTomaDeMuestraComponent implements OnInit {
 
     constructor(
         public canListarFormularioInterno:CanListarFormularioInternoGuard,
-        public canVerFormularioInterno:CanVerFormularioInternoGuard,
-        public canCrearFormularioInterno:CanCrearFormularioInternoGuard,
-        public canEditarFormularioInterno:CanEditarFormularioInternoGuard,
-        public canEliminarFormularioInterno:CanEliminarOperatorGuard,
+        public canVerTomaDeMuestra:CanVerTomaDeMuestraGuard,
+        public canCrearTomaDeMuestra:CanCrearTomaDeMuestraGuard,
+        public canEditarTomaDeMuestra:CanEditarTomaDeMuestraGuard,
+        public canEliminarTomaDeMuestra:CanEliminarTomaDeMuestraGuard,
+        public canPrintTomaDeMuestra:CanImprimirTomaDeMuestraGuard,
+        public canSolicitarTomaDeMuestra:CanSolicitarTomaDeMuestraGuard,
+        public canAprobarTomaDeMuestraGuard:CanAprobarTomaDeMuestraGuard,
         public tomaDeMuestraService:TomaDeMuestraService,
         public pdfTomaDemuestra:PdfTomaDeMuestraService,
         private notify:ToastrService,

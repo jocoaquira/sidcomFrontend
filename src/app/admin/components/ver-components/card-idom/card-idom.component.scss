@@ -1,0 +1,83 @@
+/* Estilo de la tarjeta */
+.card {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    height: 100%;
+    max-width: 450px;  /* Reducir el tamaño máximo */
+    width: 100%; /* Ocupa el 100% del contenedor, pero no más que el máximo */
+    margin: 10px; /* Centrar en el contenedor */
+}
+
+/* Título */
+.header {
+    text-align: center;
+    font-size: 1.6rem; /* Título más grande */
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    color: #3a3a3a; /* Color más oscuro para el título */
+}
+
+/* Subtítulos */
+.label {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #444; /* Subtítulos más oscuros */
+}
+
+/* Contenido */
+.content {
+    display: flex;
+    flex-direction: column; /* Una sola columna */
+    gap: 15px;
+}
+
+/* Columna única */
+.left {
+    flex: 1;
+    min-width: 180px;
+}
+
+/* Información de contenido */
+.nro-nim, .nro-nit, .direccion, .fecha-registro, .fecha-actualizacion, .actividades {
+    margin-bottom: 12px;
+}
+
+span {
+    color: #777; /* Texto más claro para contenido */
+}
+
+/* Estado en la parte inferior */
+.estado {
+    margin-top: 5px;
+    text-align: center; /* Centrado */
+}
+
+.estado-icon {
+    font-size: 2rem;
+}
+
+.estado-text {
+    font-size: 1.2rem;
+    font-weight: bold;
+    display: block;
+    margin-top: 4px;
+}
+
+/* Estilos para el icono de estado */
+.text-green-500 {
+    color: #4caf50;
+}
+
+.text-yellow-500 {
+    color: #ff9800;
+}
+
+.text-red-500 {
+    color: #f44336;
+}

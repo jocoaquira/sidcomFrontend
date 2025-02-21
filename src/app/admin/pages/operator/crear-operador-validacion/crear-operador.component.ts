@@ -223,6 +223,19 @@ export class CrearOperadorComponent implements OnInit {
   
     return filteredData;
   };
+  removeNullProperties = (data: any) => {
+    const filteredData = { ...data }; // Copiar el objeto para no mutar el original
+  
+    for (const key in filteredData) {
+      if (filteredData[key] === null) {
+        delete filteredData[key]; // Eliminar solo las propiedades con null
+      }
+    }
+  
+    return filteredData;
+  };
+  
+
     onSubmit() {
         let formData = new FormData();
     
@@ -234,7 +247,7 @@ export class CrearOperadorComponent implements OnInit {
                 formData.append(key, datofin[key]);
             }
         });*/
-
+        datofin=this.removeNullProperties(datofin);
         for (const key in datofin) {
             const value = datofin[key];
           
@@ -257,9 +270,9 @@ export class CrearOperadorComponent implements OnInit {
         formData.append('nit','543543543');
         formData.append('fecha_exp_seprec', '2025-12-1');*/
         // Convertir fechas al formato adecuado antes de enviarlas
-        //formData.set('fecha_exp_nim', this.formatDate(this.operador.formulario.value.fecha_exp_nim));
-       // formData.set('fecha_exp_seprec', this.formatDate(this.operador.formulario.value.fecha_exp_seprec));
-        //formData.set('vencimiento_ruex', this.formatDate(this.operador.formulario.value.vencimiento_ruex));
+        formData.set('fecha_exp_nim', this.formatDate(this.operador.formulario.value.fecha_exp_nim));
+        formData.set('fecha_exp_seprec', this.formatDate(this.operador.formulario.value.fecha_exp_seprec));
+        formData.set('fecha_exp_ruex', this.formatDate(this.operador.formulario.value.fecha_exp_ruex));
     
         // Agregar archivos (debes tener referencias a los archivos en tu formulario)
         // Agregar los archivos si existen
@@ -341,7 +354,7 @@ export class CrearOperadorComponent implements OnInit {
     cambioDepartamento(departamento_id:any){
         console.log(departamento_id);
 
-        //this.operador.formulario.value.dl_departamento=departamento_id.value;
+        //this.operador.formulario.value.dl_departamento_id=departamento_id.value;
         let dept:IDepartamento=this.departamento.find(element => element.id === departamento_id.value);
         this.municipiosService.vermunicipios( departamento_id.value.toString()).subscribe(
             (data:any)=>{
@@ -379,7 +392,7 @@ export class CrearOperadorComponent implements OnInit {
         );
     }
     cambioMunicipio(municipio:any){
-         console.log(this.operador.formulario.value.dl_municipio=municipio.value);
+         console.log(this.operador.formulario.value.dl_municipio_id=municipio.value);
     }
     cambioMunicipio1(municipio:any){
         this.sucursal.municipio_id=municipio.value.codigo;
@@ -461,9 +474,9 @@ export class CrearOperadorComponent implements OnInit {
   submited:boolean=false;
   mapaDialogo:boolean=false;
     abrirMapa() {
-        if(this.operador.formulario.value.dl_departamento){
-            let dept:any=this.departamento.find(val => val.id ===  this.operador.formulario.value.dl_departamento);
-            console.log(this.operador.formulario.value.dl_departamento);
+        if(this.operador.formulario.value.dl_departamento_id){
+            let dept:any=this.departamento.find(val => val.id ===  this.operador.formulario.value.dl_departamento_id);
+            console.log(this.operador.formulario.value.dl_departamento_id);
             if (this.map) {
                 this.map.setView(latLng(dept.latitud, dept.longitud), 13.5);
             }

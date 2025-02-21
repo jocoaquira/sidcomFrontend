@@ -75,11 +75,12 @@ export class EditarUsuarioComponent implements OnInit {
       this.admin=true;
     }
   }
-  onChangeEstado(operator_id:any){
+  onChangeEstado(operador_id:any){
 
-   // this.form.formulario.value.estado=operator_id.value
+   // this.form.formulario.value.estado=operador_id.value
   }
-  onChangeOperadores(operator_id:any){
+  onChangeOperadores(operador_id:any){
+    console.log(operador_id);
   }
   ocultarDialogo(){
     this.form.formulario.reset();
@@ -122,10 +123,13 @@ export class EditarUsuarioComponent implements OnInit {
       }
     }
     else{
-      if (this.form.formulario.valid && !this.errorVerificarEmail && this.form.formulario.value.operator_id!=null) {
+      console.log(this.form.formulario.valid);
+      console.log(this.errorVerificarEmail);
+      console.log(this.form.formulario.value.operador_id);
+      if (this.form.formulario.valid && !this.errorVerificarEmail && this.form.formulario.value.operador_id!=null) {
         let pass_gen=TextoAleatorio.generarCadenaSegura(8);
-        this.form.formulario.value.password=pass_gen;
-        this.form.formulario.value.pass_gen=pass_gen;
+        this.form.formulario.value.password='12345678';
+        this.form.formulario.value.pass_gen='12345678';
         this.usuarioService.crearusuario(this.form.formulario.value).subscribe(
             (data:any) =>
             {

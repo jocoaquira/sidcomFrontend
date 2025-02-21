@@ -32,5 +32,8 @@ export class LoginComponent implements OnInit {
 
     });
   }
+  onSolicitar(){
+    this.router.navigate(['/solicitud']);
+  }
 
 }

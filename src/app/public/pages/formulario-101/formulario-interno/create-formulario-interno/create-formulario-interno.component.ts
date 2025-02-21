@@ -124,7 +124,7 @@ nextStep() {
         // Validar los campos del Paso 1
         valid = this.formulario_interno.formulario.get('peso_bruto_humedo')?.valid && this.formulario_interno.formulario.get('tara')?.valid &&
         (this.formulario_interno.formulario.get('merma')?.valid || this.formulario_interno.formulario.get('merma')?.disable) && (this.formulario_interno.formulario.get('humedad')?.valid || this.formulario_interno.formulario.get('humedad')?.disable) &&
-        this.formulario_interno.formulario.get('lote')?.valid && this.formulario_interno.formulario.get('presentacion')?.valid &&
+        this.formulario_interno.formulario.get('lote')?.valid && this.formulario_interno.formulario.get('presentacion_id')?.valid &&
         (this.formulario_interno.formulario.get('cantidad')?.valid || this.formulario_interno.formulario.get('cantidad')?.disabled) && this.formulario_interno.formulario.get('peso_neto')?.valid && this.lista_leyes_mineral.length>0;
 
         break;

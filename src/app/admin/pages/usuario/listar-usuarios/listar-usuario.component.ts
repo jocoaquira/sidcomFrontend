@@ -97,6 +97,12 @@ export class ListarUsuarioComponent implements OnInit {
     }
     cerrar(event:any){
         this.productDialog=event;
+        this.usuariosService.verusuarios(this.nombre).subscribe(
+            (data:any)=>{
+            this.listaUsuarios=this.usuariosService.handleusuario(data);
+
+          },
+          (error:any)=> this.error=this.usuariosService.handleError(error));
     }
     openNew() {
         //this.product = {};

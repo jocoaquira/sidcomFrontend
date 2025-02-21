@@ -1,28 +1,72 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Pipe } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Subscription, debounceTime } from 'rxjs';
 import { LayoutService } from '../../layout/service/app.layout.service';
-
+import { OperatorsService } from 'src/app/admin/services/operators.service';
+import { AuthService } from '@core/authentication/services/auth.service';
+import { IOperator } from '@data/operator.metadata';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
     templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
 
 
     chartData: any;
-
+    public operador:IOperator;
+    
     chartOptions: any;
-
+    error:any;
     subscription!: Subscription;
+    public baseUrl = localStorage.getItem('url-backend');
+    public nimLinkTransformado:any;
+    public vigenciaNim:number=0;
+    public seprecLinkTransformado:any;
+    public vigenciaSeprec:number=0;
+    public ruexLinkTransformado:any;
+    public vigenciaRuex:number=0;
 
-    constructor( public layoutService: LayoutService) {
+    constructor( 
+        public layoutService: LayoutService,
+        private operatorService:OperatorsService,
+        private authService:AuthService,
+        private sanitizer: DomSanitizer
+            
+    ) {
         this.subscription = this.layoutService.configUpdate$
         .pipe(debounceTime(25))
         .subscribe((config) => {
             this.initChart();
         });
+
+        const user = this.authService.getUser.operador_id;
+        if (user) {
+            this.operatorService.verOperator(user.toString()).subscribe(
+                (data: any) => {
+                    console.log(data);
+                    this.operador = this.operatorService.handleOperador(data);
+                    this.nimLinkTransformado = this.baseUrl + (this.operador.nim_link ? this.operador.nim_link.replace(/\\/g, '/') : '');
+                    this.seprecLinkTransformado = this.baseUrl + (this.operador.seprec_link ? this.operador.seprec_link.replace(/\\/g, '/') : '');                    
+                    this.ruexLinkTransformado = this.baseUrl + (this.operador.ruex_link ? this.operador.ruex_link.replace(/\\/g, '/') : '');                    
+                    
+                    this.vigenciaNim = this.diasActivos(this.operador.fecha_exp_nim);
+                    this.vigenciaSeprec = this.diasActivos(this.operador.fecha_exp_seprec);
+                    this.vigenciaRuex = this.diasActivos(this.operador.fecha_exp_ruex);
+                },
+                (error: any) => this.error = this.operatorService.handleError(error)
+            );
+        } else {
+            console.error('Usuario no válido');
+        }
+
+
+
     }
+    transform(url: string): SafeResourceUrl {
+        return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+      }
 
     ngOnInit() {
 
@@ -92,4 +136,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.subscription.unsubscribe();
         }
     }
+    diasActivos(fecha1:string):number{
+        let dias:any;
+        let fechas1 = new Date(fecha1);
+        const tiempoTranscurrido = Date.now();
+        const hoy = new Date(tiempoTranscurrido);
+        dias=fechas1.getTime()-hoy.getTime();
+        dias=dias / 1000 / 60 / 60 / 24;
+        dias=Math.round (dias);
+        return dias+1;
+    }
+    downloadNimFile(operador_link:string) {
+        const fileUrl = this.baseUrl + operador_link.replace(/\\/g, '/');
+  
+  // Abre el archivo en una nueva pestaña
+         window.open(fileUrl, '_blank');  // '_blank' indica que se abrirá en una nueva pestaña
+}
+
+getFileName(filePath: string): string {
+    const segments = filePath.split('/');
+    return segments[segments.length - 1]; // Devuelve el nombre del archivo
+  }
 }

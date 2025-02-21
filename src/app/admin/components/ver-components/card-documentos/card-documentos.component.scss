@@ -1,0 +1,202 @@
+/* Estilo de la tarjeta */
+.card {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    height: 100%;
+    max-width: 450px;  /* Reducimos el tamaño máximo */
+    width: 100%; /* Ocupa el 100% del contenedor, pero no más que el máximo */
+    margin: 0 auto; /* Centrar en el contenedor */
+}
+
+/* Estilo de la parte superior del card (Título) */
+.header {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    color: #5f5e5e;
+}
+
+/* Estilo del contenido del card */
+.content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap; /* Permitir que las columnas se apilen si es necesario */
+}
+
+/* Columna izquierda: texto, días, fecha, estado */
+.left {
+    flex: 1;
+    min-width: 180px; /* Reducir el ancho mínimo */
+}
+
+/* Días de vencimiento */
+.vigencia {
+    margin-bottom: 10px;
+}
+
+.vigencia-days {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Estado (Vigente, Por vencer, Vencido) */
+.estado {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.estado-text {
+    font-size: 1.2rem;
+    margin-left: 8px;
+    font-weight: bold;
+}
+
+/* Fecha de vencimiento */
+.fecha-vencimiento {
+    font-size: 1.1rem;
+    margin-top: 15px;
+}
+
+/* Columna derecha: archivo y botón */
+.right {
+    width: 45%; /* Reducir el tamaño de la columna derecha */
+    padding-left: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    gap: 10px;
+}
+
+/* Separador entre columnas */
+.divider {
+    width: 2px;
+    background-color: #9da0a0;
+    min-height: 200px; /* Asegura que la línea divisora se vea, incluso si el contenido es pequeño */
+    align-self: center; /* Asegura que la línea divisora se alinee verticalmente en el centro */
+}
+
+/* Estilos del iframe y el botón */
+iframe {
+    width: 100%;
+    height: 200px;
+    border: none;
+}
+
+/* Iconos */
+.pi {
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+/* Fondo y colores según estado */
+.bg-green-100 {
+    background-color: #d1f7d1;
+    color: #4caf50;
+}
+
+.bg-yellow-100 {
+    background-color: #f7ea36;
+    color: #857418;
+}
+
+.bg-red-200 {
+    background-color: #9e2020;
+    color: #aa160b;
+}
+
+/* Aseguramos que el diseño sea responsivo */
+@media (max-width:400px) {
+    .content {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .left, .right {
+        width: 100%;
+    }
+
+    /* Asegurar que la línea divisora se vea correctamente en pantallas pequeñas */
+    .divider {
+        width: 1px;  /* Reducir el grosor de la línea divisora */
+        min-height: 1px; /* Asegurar que la línea divisora no sea demasiado alta en pantallas pequeñas */
+        margin-top: 10px; /* Agregar un margen superior para separar un poco la línea divisora */
+        margin-bottom: 10px; /* Agregar un margen inferior para no estar tan pegada al contenido */
+    }
+    /* Ajustar tamaño de los botones en pantallas pequeñas */
+    button {
+        width: 100%;  /* Aseguramos que el botón ocupe el ancho completo */
+        padding: 12px;
+        font-size: 1rem;
+    }
+}
+
+
+/* Estilo general del botón */
+button {
+    width: 100%;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 7px; /* Borde cuadrado */
+    border: 3px solid transparent; /* Sin borde por defecto */
+    outline: none; /* Quitamos outline por defecto */
+    cursor: pointer;
+    background: #d1f7d1;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Transición suave */
+  }
+  
+  /* Estilos según el estado */
+  .bg-green-100 button {
+    background-color: #c6dfc7;
+    color: rgb(5, 63, 25);
+    border-color: #4caf50; /* Borde verde cuando está vigente */
+  }
+  
+  .bg-yellow-100 button {
+    background-color: #fbff00;
+    color: rgb(124, 77, 5);
+    border-color: #ff9800; /* Borde amarillo cuando está por vencer */
+  }
+  
+  .bg-red-200 button {
+    background-color: #f44336;
+    color: rgb(95, 3, 3);
+    border-color: #f44336; /* Borde rojo cuando está vencido */
+  }
+  
+  /* Efecto hover */
+  .bg-green-100 button:hover {
+    background-color: #d5f3d6;
+    border-color: #054909; /* Borde más oscuro cuando el estado es vigente */
+  }
+  
+  .bg-yellow-100 button:hover {
+    background-color: #c57b0b;
+    border-color: #814f05; /* Borde más oscuro cuando el estado es por vencer */
+  }
+  
+  .bg-red-200 button:hover {
+    background-color: #d32f2f;
+    border-color: #7e0a0a; /* Borde más oscuro cuando el estado es vencido */
+  }
+  
+  /* Efecto focus (al hacer click) */
+  .bg-green-100 button:focus,
+  .bg-yellow-100 button:focus,
+  .bg-red-200 button:focus {
+    outline: 2px solid white; /* Cuando se hace focus, se agrega un borde blanco */
+  }
+  

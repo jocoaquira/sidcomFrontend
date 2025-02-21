@@ -4,3 +4,6 @@ export interface IDepartamento {
   latitud:string,
   longitud:string
 }
+
+
+
