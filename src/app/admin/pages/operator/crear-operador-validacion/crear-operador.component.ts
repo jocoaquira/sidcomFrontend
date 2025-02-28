@@ -216,7 +216,7 @@ export class CrearOperadorComponent implements OnInit {
     const filteredData = { ...data }; // Copiar el objeto para no mutar el original
   
     for (const key in filteredData) {
-      if (filteredData[key] === 0 || filteredData[key] === 1) {
+      if (filteredData[key] === 0) {
         delete filteredData[key]; // Eliminar las propiedades con 0 o 1
       }
     }

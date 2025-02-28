@@ -52,6 +52,13 @@ export class AppMenuComponent implements OnInit {
     ngOnInit() {
         this.model = [
             {
+                label: 'CUENTA',
+                items: [
+                    { label: 'Operador Minero', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/info/operador'], visible: this.canVerOperatorGuard.canActivate() },
+                    { label: 'Datos de Usuario', icon: 'pi pi-fw pi-user', routerLink: ['/admin/info/usuario'], visible: true },
+                ]
+            },
+            {
                 label: 'ADMINISTRACION',
                 items: [
                     { label: 'Operadores Mineros', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/operador'], visible: this.canVerOperatorGuard.canActivate() },

@@ -56,13 +56,15 @@
                         <td style="width:10%; min-width: 10rem;"><span class="p-column-title">Estado</span>
 
                             <p-tag severity="success" *ngIf="usuario.estado=='ACTIVO'" value="ACTIVO"></p-tag>
-                            <p-tag severity="danger" *ngIf="usuario.estado==0" value="INACTIVO"></p-tag>
+                            <p-tag severity="danger" *ngIf="usuario.estado=='INACTIVO'" value="INACTIVO"></p-tag>
                         </td>
 
                         <td>
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editProduct(usuario)"></button>
-                                <button pButton pRipple icon="pi pi-lock" class="p-button-rounded p-button-danger mr-2" (click)="bloquearDialogo(usuario)"></button>
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="edit(usuario)"></button>
+                                <button pButton pRipple  label="Resetear Contraseña" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="resetPassword(usuario)"></button>
+                                <button pButton pRipple icon="pi pi-lock" *ngIf="usuario.estado === 'ACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-danger mr-1" (click)="bloquearDialogo(usuario)"></button>
+                                <button pButton pRipple icon="pi pi-unlock" *ngIf="usuario.estado === 'INACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="bloquearDialogo(usuario)"></button>
                             </div>
                         </td>
                     </tr>
@@ -71,28 +73,13 @@
         </div>
 
         <p-dialog [(visible)]="productDialog" [style]="{width: '700px'}" header="Crear Usuario" [modal]="true" class="p-fluid">
-            <app-editar-usuario [usuario]="usuario"  (estadoDialogo)="cerrar($event)"></app-editar-usuario>
+            <app-editar-usuario [usuario]="usuario" [isEditMode]="isEditMode" (estadoDialogo)="cerrar($event)"></app-editar-usuario>
         </p-dialog>
+        <p-confirmDialog header="Confirmación" key="confirm1" icon="pi pi-exclamation-triangle" message="¿Está seguro de anular el formulario?"
+            [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
+            acceptLabel="Sí"
+            rejectLabel="No"
+        ></p-confirmDialog>
 
-        <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
-            <div class="flex align-items-center justify-content-center">
-                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-               </div>
-            <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
-            </ng-template>
-        </p-dialog>
-
-        <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
-            <div class="flex align-items-center justify-content-center">
-                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span>Are you sure you want to delete selected products?</span>
-            </div>
-            <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
-            </ng-template>
-        </p-dialog>
     </div>
 </div>

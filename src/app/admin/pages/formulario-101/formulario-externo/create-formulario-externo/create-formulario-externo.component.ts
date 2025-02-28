@@ -290,10 +290,15 @@ nextStep() {
   }
   guardar(){
     this.formulario_externo.formulario.patchValue({
-        estado: 'GENERADO',
-        aduana_id:this.aduana_id,
-        pais_destino_id:this.pais_id
-      });
+      estado: 'GENERADO',
+      aduana_id: this.aduana_id,
+      pais_destino_id: this.pais_id,
+      ...(this.formulario_externo.formulario.value.tara_volqueta !== null &&
+         this.formulario_externo.formulario.value.tara_volqueta !== undefined
+        ? { tara_volqueta: this.formulario_externo.formulario.value.tara_volqueta.toString() }
+        : {}),
+    });
+    
     if(this.formulario_externo.formulario.valid){
       let formularioEnvio=this.formulario_externo.formulario.value;
       formularioEnvio={
@@ -327,30 +332,6 @@ nextStep() {
             this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
           }
         }
-
-        /*this.formularioExternoService.crearFormularioExterno(this.formulario_externo.formulario.value).subscribe(
-            (data:any) =>
-            {
-                this.formulario_Interno_registrado=this.formularioExternoService.handleCrearFormularioExterno(data);
-                this.guardarMinerales(this.formulario_Interno_registrado.id);
-                this.guardarMunicipiosOrigen(this.formulario_Interno_registrado.id);
-
-              if(data.error==null)
-              {
-                this.formulario_externo.formulario.reset();
-                this.notify.success('El el formulario interno se generó exitosamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
-                this.router.navigate(['/admin/formulario-101/externo']);
-              }
-            },
-            (error:any) =>
-            {
-
-              this.error=this.formularioExternoService.handleCrearFormularioExternoError(error.error.data);
-              if(error.error.status=='fail')
-              {
-                this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
-              }
-            }*/
           );
     }
     else{

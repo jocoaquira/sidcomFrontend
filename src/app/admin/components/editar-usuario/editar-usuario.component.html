@@ -40,7 +40,7 @@
         <input type="text" pInputText id="celular" formControlName="celular" autofocus/>
         <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('celular')">{{form.getErrorMessage('celular')}}</small>
     </div>
-    <div *ngIf="admin">
+    <div *ngIf="admin && !isEditMode">
         <div class="field">
             <label for="password">Contraseña</label>
             <input type="password" pInputText id="password" formControlName="password" autofocus/>
@@ -61,7 +61,6 @@
                 formControlName="operador_id"
                 optionLabel="razon_social"
                 optionValue="id"
-                (ngModelChange)="onChangeOperadores($event)"
             ></p-dropdown>
 
             <label for="dropdown">Operador Minero</label>
@@ -75,7 +74,6 @@
                 [options]="estados"
                 formControlName="estado"
                 optionLabel="label"
-                (ngModelChange)="onChangeEstado($event)"
             >
                 <ng-template let-option pTemplate="item">
                     <span [class]="'usuario-badge estado-' + option.value">{{option.label}}</span>

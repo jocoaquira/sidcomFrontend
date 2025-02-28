@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { IUsuario } from '@data/usuario.metadata';
 import { UsuariosService } from 'src/app/admin/services/usuarios.service';
@@ -10,15 +10,18 @@ import { RolesService } from 'src/app/admin/services/roles.service';
 import { IRol } from '@data/rol.metadata';
 import { IOperatorSimple } from '@data/operador_simple.metadata';
 import { OperatorsService } from 'src/app/admin/services/operators.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
     templateUrl: './listar-usuario.component.html',
+    styleUrls: ['./listar-usuario.component.scss'],
     providers: [MessageService]
 })
 export class ListarUsuarioComponent implements OnInit {
 
     public listaUsuarios!:IUsuario[];
+    public isEditMode: boolean = false;
     public usuario:IUsuario={
         id: null,
         email: null,
@@ -57,6 +60,8 @@ export class ListarUsuarioComponent implements OnInit {
         public canCrearUsuario:CanCrearUsuarioGuard,
         public canEditarUsuario:CanEditarUsuarioGuard,
         public canEliminarUsuario:CanEliminarUsuarioGuard,
+        private confirmationService:ConfirmationService,
+        private notify:ToastrService
 
     ) { }
 
@@ -107,8 +112,16 @@ export class ListarUsuarioComponent implements OnInit {
     openNew() {
         //this.product = {};
         //this.submitted = false;
+        this.isEditMode = false;
         this.productDialog = true;
     }
+    edit(usuario:IUsuario) {
+            this.usuario = { ...usuario }; 
+            console.log(this.usuario);
+            //this.submitted = false;
+            this.productDialog = true;
+            this.isEditMode = true;
+        }
 
     deleteSelectedProducts() {
         this.deleteProductsDialog = true;
@@ -133,29 +146,9 @@ export class ListarUsuarioComponent implements OnInit {
         this.submitted = false;
     }
 
-    saveProduct() {
+    saveUser() {
         this.submitted = true;
-/*
-        if (this.product.name?.trim()) {
-            if (this.product.id) {
-                // @ts-ignore
-                this.product.inventoryStatus = this.product.inventoryStatus.value ? this.product.inventoryStatus.value : this.product.inventoryStatus;
-                this.products[this.findIndexById(this.product.id)] = this.product;
-                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
-            } else {
-                this.product.id = this.createId();
-                this.product.code = this.createId();
-                this.product.image = 'product-placeholder.svg';
-                // @ts-ignore
-                this.product.inventoryStatus = this.product.inventoryStatus ? this.product.inventoryStatus.value : 'INSTOCK';
-                this.products.push(this.product);
-                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
-            }
 
-            this.products = [...this.products];
-            this.productDialog = false;
-            this.product = {};
-        }*/
     }
     diasActivos(fecha1:string):number{
         let dias:any;
@@ -220,7 +213,80 @@ export class ListarUsuarioComponent implements OnInit {
 
 
     }
-    bloquearDialogo(){
-
+    bloquearDialogo(usuario:IUsuario){
+        
+        this.confirmationService.confirm({
+            key: 'confirm1',
+            message: '¿Estas seguro de Realizar esta Operación?',
+            accept: () => {
+                if(usuario.estado=='ACTIVO')
+                    {
+                        usuario.estado='INACTIVO';
+                    }
+                    else{
+                        usuario.estado='ACTIVO';
+                    }
+                this.usuariosService.editarusuario(usuario).subscribe(
+                    (data:any) =>
+                    {
+                      this.usuariosService.handleCrearusuario(data);
+                      console.log(data);
+                      if(data.error==null)
+                      {
+                        this.usuariosService.verusuarios('nada').subscribe(
+                            (data:any)=>{
+                            this.listaUsuarios=this.usuariosService.handleusuario(data);
+                
+                          },
+                          (error:any)=> this.error=this.usuariosService.handleError(error));
+        
+                        this.notify.success('Actualizado Correctamente','Actualizado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
+                      }
+                    },
+                    (error:any) =>
+                    {
+                      if(error.error.status=='fail')
+                      {
+                        this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con la Actualizacion',{timeOut:2000,positionClass: 'toast-top-right'});
+                      }
+                    }
+                  );
+              },
+        });
+    }
+    resetPassword(usuario:IUsuario){
+        
+        this.confirmationService.confirm({
+            key: 'confirm1',
+            message: '¿Estas seguro de Resetear Password?',
+            accept: () => {
+                usuario.password='12345678'
+                this.usuariosService.editarusuario(usuario).subscribe(
+                    (data:any) =>
+                    {
+                      this.usuariosService.handleCrearusuario(data);
+                      console.log(data);
+                      if(data.error==null)
+                      {
+                        this.usuariosService.verusuarios('nada').subscribe(
+                            (data:any)=>{
+                            this.listaUsuarios=this.usuariosService.handleusuario(data);
+                
+                          },
+                          (error:any)=> this.error=this.usuariosService.handleError(error));
+        
+                        this.notify.success('Se reseteo la COntraseña','Operación realizada Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
+                      }
+                    },
+                    (error:any) =>
+                    {
+                      if(error.error.status=='fail')
+                      {
+                        this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con la Actualizacion',{timeOut:2000,positionClass: 'toast-top-right'});
+                      }
+                    }
+                  );
+              },
+        });
     }
 }

@@ -33,7 +33,7 @@ export class AuthService {
   get getUser(): IApiUserAuthenticated {
     return this.currentUser.value;
   }
-
+/*
   login(data: ILogin): Observable<IAuth> {
     const response = { error: true, msg: 'error usuario no existe', data: null };
     return this.http.post<{ error: boolean, msg: string, data: any }>(this.baseUrl + 'auth/login', data).pipe(
@@ -61,7 +61,54 @@ export class AuthService {
         return of(response);
       })
     );
+  } */
+
+  login(data: ILogin): Observable<IAuth> {
+    const response = { error: true, msg: 'Error: usuario no existe', data: null };
+  
+    return this.http.post<{ error: boolean; msg: string; data: any }>(this.baseUrl + 'auth/login', data).pipe(
+      map(r => {
+        response.msg = r.msg;
+        response.error = r.error;
+        response.data = r.data;
+        
+        this.setUserToSessionStorage(r.data);
+        this.currentUser.next(r.data);
+        this.resetInactivityTimer();
+  
+        if (!response.error) {
+          console.log(this.currentUser.value);
+  
+          // 🔴 Verificar si la contraseña ingresada es la predeterminada
+          if (data.password === '12345678') {
+            localStorage.setItem('mustChangePassword', 'true');
+            this.router.navigateByUrl('auth/cambiar-password');
+            this.notify.warning('Debes cambiar tu contraseña antes de continuar.', 'Cambio requerido', { timeOut: 2500, positionClass: 'toast-bottom-right' });
+            return response;
+          } else {
+            localStorage.removeItem('mustChangePassword'); // Eliminar flag si ya cambió su contraseña
+          }
+  
+          // 🔹 Redirección según condición
+          if (this.currentUser.value.operador_id == null) {
+            this.router.navigateByUrl('admin/operador');
+            this.notify.success('Acceso correcto, bienvenido ' + this.currentUser.value.nombre_completo + '!!!', 'Bienvenido', { timeOut: 2200, positionClass: 'toast-bottom-right' });
+          } else {
+            this.router.navigateByUrl('public');
+          }
+        }
+  
+        return response;
+      }),
+      catchError(e => {
+        this.notify.error('Email o contraseña incorrectos, verifique e intente nuevamente!!!!', 'Error', { timeOut: 2000, positionClass: 'toast-bottom-right' });
+        return of(response);
+      })
+    );
   }
+  
+
+
 
   public logout() {
     if (sessionStorage.getItem(this.nameUserLS) != null) {

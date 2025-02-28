@@ -1,0 +1,12 @@
+<div class="p-grid p-fluid" style="display: flex; justify-content: center;">
+    
+    <div class="p-col-12" style="max-width: 800px; width: 100%;">
+        <h3 style="text-align: center;">Datos del Usuario</h3>
+        <app-cambiar-password-usuario 
+            [usuario]="usuario" 
+            [isEditMode]="isEditMode" 
+            (estadoDialogo)="cerrar($event)">
+        </app-cambiar-password-usuario>
+    </div>
+</div>
+

@@ -17,15 +17,16 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { BadgeModule } from 'primeng/badge';
 import { TagModule } from 'primeng/tag';
-import { EditarUsuarioModule } from 'src/app/admin/components/editar-usuario/editar-usuario.module';
-import { ListarUsuarioComponent } from './listar-usuario.component';
+import { CrearMineralModule } from 'src/app/admin/components/crear-mineral/crear-mineral.module';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { InfoOperadorComponent } from './info-operador..component';
+import { CambiarPasswordModule } from 'src/app/admin/components/cambiar-password-usuario/cambiar-password-usuario.module';
+
 
 @NgModule({
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     exports:[
-        EditarUsuarioModule
     ],
     imports: [
         CommonModule,
@@ -45,10 +46,10 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
         RadioButtonModule,
         InputNumberModule,
         DialogModule,
-        EditarUsuarioModule,
+        CambiarPasswordModule,
         ConfirmDialogModule
     ],
-    declarations: [ListarUsuarioComponent],
+    declarations: [InfoOperadorComponent],
     providers: [ConfirmationService]
 })
-export class ListarUsuarioModule { }
+export class InfoOperadorModule { }

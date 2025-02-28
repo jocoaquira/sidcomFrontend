@@ -17,16 +17,12 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { BadgeModule } from 'primeng/badge';
 import { TagModule } from 'primeng/tag';
-import { EditarUsuarioModule } from 'src/app/admin/components/editar-usuario/editar-usuario.module';
-import { ListarUsuarioComponent } from './listar-usuario.component';
-import { ConfirmationService } from 'primeng/api';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { InfoCuentaRoutingModule } from './info-cuenta.routing';
+import { InfoOperadorModule } from './info-operador/info-operador.module';
+import { InfoUsuarioModule } from './info-usuario/info-usuario.module';
 
 @NgModule({
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    exports:[
-        EditarUsuarioModule
-    ],
     imports: [
         CommonModule,
         TableModule,
@@ -45,10 +41,10 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
         RadioButtonModule,
         InputNumberModule,
         DialogModule,
-        EditarUsuarioModule,
-        ConfirmDialogModule
+        InfoOperadorModule,
+        InfoUsuarioModule,
+        InfoCuentaRoutingModule
     ],
-    declarations: [ListarUsuarioComponent],
-    providers: [ConfirmationService]
+    declarations: [],
 })
-export class ListarUsuarioModule { }
+export class InfoCuentaModule { }

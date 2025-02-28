@@ -2,11 +2,11 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { IFormularioExterno } from '@data/formulario_externo.metadata';
 
 export class FormularioExternoFormulario {
-  formulario_interno!: IFormularioExterno;
+  formulario_externo!: IFormularioExterno;
   formulario: FormGroup;
 
   constructor() {
-     this.formulario_interno={
+     this.formulario_externo={
       id:null,
       user_id:null,
       operador_id:null,
@@ -44,38 +44,38 @@ export class FormularioExternoFormulario {
       tara_volqueta:null,
     }
     this.formulario = new FormGroup({
-        user_id:new FormControl(this.formulario_interno.user_id,[Validators.required,Validators.pattern('^[0-9]*$')]),
-        operador_id:new FormControl(this.formulario_interno.operador_id,[Validators.required,Validators.pattern('^[0-9]*$')]),
-        lote:new FormControl(this.formulario_interno.lote,[Validators.required]),
-        presentacion_id:new FormControl(this.formulario_interno.presentacion_id,[Validators.required]),
-        cantidad:new FormControl(this.formulario_interno.cantidad,[Validators.pattern('^[0-9]*$'),  Validators.min(0)]),
-        peso_bruto_humedo:new FormControl(this.formulario_interno.peso_bruto_humedo,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
-        peso_neto: new FormControl(this.formulario_interno.peso_neto,[Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
-        tara:new FormControl(this.formulario_interno.tara,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'),Validators.min(0)]),
-        humedad: new FormControl(this.formulario_interno.humedad,[Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0), Validators.max(100)]),
-        merma:new FormControl(this.formulario_interno.merma,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0), Validators.max(100)]),
-        comprador: new FormControl(this.formulario_interno.comprador,[Validators.required]),
-        aduana_id:new FormControl(this.formulario_interno.aduana_id),
-        pais_destino_id: new FormControl(this.formulario_interno.pais_destino_id),
-        m03_id:new FormControl(this.formulario_interno.m03_id,[Validators.required]),
-        tipo_transporte:new FormControl(this.formulario_interno.tipo_transporte,[Validators.required]),
-        placa:new FormControl(this.formulario_interno.placa),
-        nom_conductor:new FormControl(this.formulario_interno.nom_conductor,Validators.pattern('^[a-zA-ZÀ-ÿ\\s]+$')),
-        licencia:new FormControl(this.formulario_interno.licencia),
-        observaciones:new FormControl(this.formulario_interno.observaciones),
-        fecha_creacion:new FormControl(this.formulario_interno.fecha_creacion),
-        fecha_vencimiento:new FormControl(this.formulario_interno.fecha_vencimiento),
-        justificacion_anulacion:new FormControl(this.formulario_interno.justificacion_anulacion),
-        nro_vagon:new FormControl(this.formulario_interno.nro_vagon),
-        empresa_ferrea:new FormControl(this.formulario_interno.empresa_ferrea),
-        hr_ferrea:new FormControl(this.formulario_interno.hr_ferrea),
-        fecha_ferrea:new FormControl(this.formulario_interno.fecha_ferrea),
-        tara_volqueta:new FormControl(this.formulario_interno.tara_volqueta,[Validators.pattern('^[0-9]*$')]),
-        nro_factura_exportacion:new FormControl(this.formulario_interno.nro_factura_exportacion,[Validators.required]),
-        laboratorio:new FormControl(this.formulario_interno.laboratorio,[Validators.required]),
-        estado:new FormControl(this.formulario_interno.estado,[Validators.required]),
-        codigo_analisis:new FormControl(this.formulario_interno.codigo_analisis,[Validators.required]),
-        nro_formulario_tm:new FormControl(this.formulario_interno.nro_formulario_tm,[Validators.required]),
+        user_id:new FormControl(this.formulario_externo.user_id,[Validators.required,Validators.pattern('^[0-9]*$')]),
+        operador_id:new FormControl(this.formulario_externo.operador_id,[Validators.required,Validators.pattern('^[0-9]*$')]),
+        lote:new FormControl(this.formulario_externo.lote,[Validators.required]),
+        presentacion_id:new FormControl(this.formulario_externo.presentacion_id,[Validators.required]),
+        cantidad:new FormControl(this.formulario_externo.cantidad,[Validators.pattern('^[0-9]*$'),  Validators.min(0)]),
+        peso_bruto_humedo:new FormControl(this.formulario_externo.peso_bruto_humedo,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
+        peso_neto: new FormControl(this.formulario_externo.peso_neto,[Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
+        tara:new FormControl(this.formulario_externo.tara,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'),Validators.min(0)]),
+        humedad: new FormControl(this.formulario_externo.humedad,[Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0), Validators.max(100)]),
+        merma:new FormControl(this.formulario_externo.merma,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0), Validators.max(100)]),
+        comprador: new FormControl(this.formulario_externo.comprador,[Validators.required]),
+        aduana_id:new FormControl(this.formulario_externo.aduana_id),
+        pais_destino_id: new FormControl(this.formulario_externo.pais_destino_id),
+        m03_id:new FormControl(this.formulario_externo.m03_id,[Validators.required]),
+        tipo_transporte:new FormControl(this.formulario_externo.tipo_transporte,[Validators.required]),
+        placa:new FormControl(this.formulario_externo.placa),
+        nom_conductor:new FormControl(this.formulario_externo.nom_conductor,Validators.pattern('^[a-zA-ZÀ-ÿ\\s]+$')),
+        licencia:new FormControl(this.formulario_externo.licencia),
+        observaciones:new FormControl(this.formulario_externo.observaciones),
+        fecha_creacion:new FormControl(this.formulario_externo.fecha_creacion),
+        fecha_vencimiento:new FormControl(this.formulario_externo.fecha_vencimiento),
+        justificacion_anulacion:new FormControl(this.formulario_externo.justificacion_anulacion),
+        nro_vagon:new FormControl(this.formulario_externo.nro_vagon),
+        empresa_ferrea:new FormControl(this.formulario_externo.empresa_ferrea),
+        hr_ferrea:new FormControl(this.formulario_externo.hr_ferrea),
+        fecha_ferrea:new FormControl(this.formulario_externo.fecha_ferrea),
+        tara_volqueta:new FormControl(this.formulario_externo.tara_volqueta,[Validators.pattern('^[0-9]*$')]),
+        nro_factura_exportacion:new FormControl(this.formulario_externo.nro_factura_exportacion,[Validators.required]),
+        laboratorio:new FormControl(this.formulario_externo.laboratorio,[Validators.required]),
+        estado:new FormControl(this.formulario_externo.estado,[Validators.required]),
+        codigo_analisis:new FormControl(this.formulario_externo.codigo_analisis,[Validators.required]),
+        nro_formulario_tm:new FormControl(this.formulario_externo.nro_formulario_tm,[Validators.required]),
     });
     // Observar cambios en `des_tipo`
         this.formulario.get('des_tipo')?.valueChanges.subscribe((valor: string) => {

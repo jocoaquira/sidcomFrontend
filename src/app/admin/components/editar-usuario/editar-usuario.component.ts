@@ -1,10 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IUsuario } from '@data/usuario.metadata';
 import { RolesService } from '../../services/roles.service';
 import { OperatorsService } from '../../services/operators.service';
 import { IRol } from '@data/rol.metadata';
 import { IOperatorSimple } from '@data/operador_simple.metadata';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UsuarioFormulario } from '../../validators/usuario';
 import { UsuariosService } from '../../services/usuarios.service';
 import { ToastrService } from 'ngx-toastr';
@@ -18,6 +17,7 @@ import { TextoAleatorio } from '../../functions/texto-aleatorio';
 export class EditarUsuarioComponent implements OnInit {
 
   @Input() usuario!:IUsuario;
+  @Input() isEditMode: boolean = false;
   @Output() estadoDialogo = new EventEmitter<boolean>();
   public error!:any;
   public errorVerificarContraseña:boolean=true;
@@ -64,6 +64,25 @@ export class EditarUsuarioComponent implements OnInit {
       { label: 'INACTIVO', value: '0' }
   ];
   }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes && this.usuario && this.isEditMode) {
+      this.form.formulario.patchValue({
+        id:this.usuario.id,
+        nombre: this.usuario.nombre,
+        apellidos: this.usuario.apellidos,
+        ci: this.usuario.ci,
+        email: this.usuario.email,
+        celular: this.usuario.celular,
+        rol_id: this.usuario.rol_id,
+        operador_id: this.usuario.operador_id,
+        estado: this.estados.find((e: any) => e.label === this.usuario.estado) || null,
+      });
+      let rolcito:any={value:this.usuario.rol_id};
+      this.onChangeRol(rolcito);
+      this.errorVerificarEmail=false;
+    }
+    console.log(this.form.formulario.value);
+  }
   onChangeRol(rol_id:any){
     let id=rol_id.value;
     let rol:IRol=this.roles.find(element => element.id === id);
@@ -73,25 +92,20 @@ export class EditarUsuarioComponent implements OnInit {
     }
     else{
       this.admin=true;
+      this.form.formulario.value.operador_id=null
     }
   }
-  onChangeEstado(operador_id:any){
 
-   // this.form.formulario.value.estado=operador_id.value
-  }
-  onChangeOperadores(operador_id:any){
-    console.log(operador_id);
-  }
   ocultarDialogo(){
-    this.form.formulario.reset();
     this.estadoDialogo.emit(false);
+    this.form.formulario.reset();
   }
-  guardarusuario(){
-
-  }
-  onSubmit() {
-    this.form.formulario.value.estado=this.form.formulario.value.estado.label;
+  crearUsuario(){
+    this.form.formulario.patchValue({
+      estado: this.form.formulario.value.estado.label || null,
+    });
     this.form.formulario.value.celular=parseInt(this.form.formulario.value.celular);
+    console.log(this.form.formulario.value);
     if(this.admin && this.form.formulario.value.password!=null){
       if (this.form.formulario.valid && !this.errorVerificarContraseña && !this.errorVerificarEmail) {
         console.log(this.form.formulario.value);
@@ -157,17 +171,74 @@ export class EditarUsuarioComponent implements OnInit {
       }
     }
   }
+  onSubmit() {
+    if (this.isEditMode) {
+      this.actualizarUsuario();
+    } else {
+      this.crearUsuario();
+    }
+  }
+  actualizarUsuario() {
+    this.form.formulario.patchValue({
+      estado: this.form.formulario.value.estado.label || null,
+    });
+    this.form.formulario.value.celular=parseInt(this.form.formulario.value.celular);
+    
+    console.log(this.form.formulario.valid);
+    Object.keys(this.form.formulario.controls).forEach(field => {
+      const control = this.form.formulario.get(field);
+      if (control?.errors) {
+        console.log(`Errores en ${field}:`, control.errors);
+      }
+    });
+    if (this.form.formulario.valid) {
+        console.log(this.form.formulario.value);
+        this.usuarioService.editarusuario(this.form.formulario.value).subscribe(
+            (data:any) =>
+            {
+              this.usuarioService.handleEditarusuario(data);
+              console.log(data);
+              if(data.error==null)
+              {
+                this.form.formulario.reset();
+                this.estadoDialogo.emit(false);
+                this.notify.success('Creado Correctamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
+              }
+            },
+            (error:any) =>
+            {
+              console.log(error);
+              this.errorUsuario=this.usuarioService.handleCrearusuarioError(error.error.data);
+              if(error.error.status=='fail')
+              {
+                this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
+              }
+            }
+          );
+      } else {
+        this.notify.error('Revise los datos e intente nuevamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
+      }
+  }
+
   errorEmailRepetido(event:any){
     const email = (event.target as HTMLInputElement).value;
+    
     this.usuarioService.verificarEmail(email).subscribe(
       (data:any)=>{
         console.log(data)
-        if(data==true)
+        if(data==true && this.isEditMode==false)
         {
           this.errorVerificarEmail=true;
         }
         else{
-          this.errorVerificarEmail=false;
+          if(this.isEditMode && data==true && this.usuario.email!=this.form.formulario.value.email)
+          {
+            this.errorVerificarEmail=true;
+          }
+          else{
+            this.errorVerificarEmail=false;
+          }
+          
         }
     },
     (error:any)=> this.error=this.usuarioService.handleError(error));

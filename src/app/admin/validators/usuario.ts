@@ -26,6 +26,7 @@ export class UsuarioFormulario {
     };
 
     this.formulario = new FormGroup({
+        id:new FormControl(this.usuario.id),
         email: new FormControl(this.usuario.email,[Validators.required,  Validators.email]),
         nombre:new FormControl(this.usuario.nombre,[Validators.required,Validators.pattern('^[a-zA-ZÀ-ÿ\\s]+$')]),
         apellidos:new FormControl(this.usuario.apellidos,[Validators.required, Validators.pattern('^[a-zA-ZÀ-ÿ\\s]+$')]),

@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { IUsuario } from '../data/usuario.metadata';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.metadata';
+import { IUsuarioCompleto } from '@data/usuario_completo.metadata';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,32 @@ export class UsuariosService {
     // asignacion de parametros
     return this.http.get(`${this.baseUrl}user`,{params:params});
   }
+  verUsuarioCompleto()
+  {
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}user/completo`);
+  }
+  handleErrorUsuariosCompleto(error: any): any {
+    return error=error.error.error;
+  }
+  handleUsuariosCompleto(data: IUsuarioCompleto[]):IUsuarioCompleto[] {
+    let usuario:IUsuarioCompleto[]=data;
+    return usuario
+  }
+  verusuarioCompleto(nombre:number)
+  {
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}user/completo/`+nombre);
+  }
+  handleErrorUsuarioCompleto(error: any): any {
+    return error=error.error.error;
+  }
+  handleUsuarioCompleto(data: IUsuarioCompleto):IUsuarioCompleto {
+    let usuario:IUsuarioCompleto=data;
+    return usuario
+  }
+
+
   verusuario(nombre:string)
   {
     // asignacion de parametros
@@ -66,9 +93,11 @@ handleCrearusuario(data: IUsuario):IUsuario {
   return usuario
 }
 //---------------------Editar   usuario-------------------------------------------
-editarusuario(data:IUsuario) {
+editarusuario(data:any) {
+  let { id, ...dataSinId } = data;
+  console.log(dataSinId);
   this.token();
-  return this.http.put(`${this.baseUrl}user/`+data.id, data)
+  return this.http.put(`${this.baseUrl}user/`+data.id, this.limpiarObjeto(dataSinId));
 }
 handleEditarusuarioError(error: any): any {
   return error=error;
@@ -77,6 +106,13 @@ handleEditarusuario(data: boolean):boolean {
   let usuario:boolean=data;
   return usuario
 }
+ limpiarObjeto = (obj: any) => 
+  Object.entries(obj).reduce((acc, [key, value]) => {
+    if (value !== null && value !== undefined) {
+      acc[key] = value;
+    }
+    return acc;
+  }, {} as any);
 //-----------------Listado de Empelados por Dependencia--------------------------------------------
 private token(){
   this.user=this.authService.getUser;
