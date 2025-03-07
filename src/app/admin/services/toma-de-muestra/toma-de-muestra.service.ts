@@ -8,6 +8,7 @@ import { ITomaDeMuestraSimpleOperador } from '@data/toma_de_muestra_simple_opera
 import { IAprobarTM } from '@data/aprobar_tm.metadata';
 import { ITomaDeMuestraPDF } from '@data/toma_de_muestra_pdf.metadata';
 import { Observable } from 'rxjs';
+import { ITDMNroForm } from '@data/toma_de_muestra_nroform.metadata';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +56,16 @@ verTomaDeMuestra(nombre:string)
   // asignacion de parametros
   return this.http.get(`${this.baseUrl}sample/`+nombre,{params:params});
 }
+verTomaDeMuestraForm(form:string,id_operador:number)
+{
+  // asignacion de parametros
+  return this.http.get(`${this.baseUrl}sample/print_nro_form/`+form+`/`+id_operador);
+}
+handleTomaDeMuestraNroForm(data: ITDMNroForm):ITDMNroForm {
+  let TomaDeMuestra:ITDMNroForm=data;
+  return TomaDeMuestra
+}
+
 //-----------------Visualizar Toma de Muestra-------------------------------------------
 verTomaDeMuestraPDF(nombre:string)
 {

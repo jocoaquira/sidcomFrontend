@@ -1,6 +1,8 @@
-export interface IPais {
+export interface ICOmprador {
   id?:number,
-  nombre:string,
-  sigla:string,
+  nit:string,
+  nim:string,
+  razon_social:string,
+  municipio:string,
   continente?:string,
 }

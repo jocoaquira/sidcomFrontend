@@ -10,6 +10,7 @@ import { AppLayoutComponent } from './layout/app.layout.component';
         path:'', component: AppLayoutComponent,
         canActivate:[AdminGuard,AuthGuard],
         children:[
+        { path: '', loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule) },
         { path: 'info', loadChildren: () => import('../core/info-cuenta/info-cuenta.module').then(m => m.InfoCuentaModule) },
         { path: 'operador', loadChildren: () => import('./pages/operator/operator.module').then(m => m.OperatorModule) },
         { path: 'usuario', loadChildren: () => import('./pages/usuario/usuario.module').then(m => m.UsuarioModule) },

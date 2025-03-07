@@ -18,6 +18,7 @@ import { LayoutService } from './service/app.layout.service';
 import { CanVerDepartamentoGuard } from '../guards/departamentos/can-ver-departamento.guard';
 import { CanVerMunicipioGuard } from '../guards/municipios/can-ver-municipio.guard';
 import { CanVerTomaDeMuestraGuard } from '../guards/toma-de-muestra/can-ver-toma-de-muestra.guard';
+import { CanVerFormularioCooperativaGuard } from '../guards/formulario-cooperativas/can-ver-formulario-cooperativa.guard';
 
 @Component({
     selector: 'app-menu',
@@ -41,7 +42,7 @@ export class AppMenuComponent implements OnInit {
         private canVerMineralGuard:CanVerMineralGuard,
         private canVerFormExtGuard:CanVerFormularioExternoGuard,
         private canVerFormIntGuard:CanVerFormularioInternoGuard,
-        private canVerFormCooperativaGuard:CanVerFormularioInternoGuard,
+        private canVerFormCooperativaGuard:CanVerFormularioCooperativaGuard,
         private canVerRolGuard:CanVerRolGuard,
         private canVerPermisoGuard:CanVerPermisoGuard,
         private canVerDepartamentoGuard:CanVerDepartamentoGuard,

@@ -1,7 +1,7 @@
 
-<form [formGroup]="formulario_externo.formulario" (ngSubmit)="onSubmit()">
+<form [formGroup]="formulario_interno.formulario" (ngSubmit)="onSubmit()">
     <div class="card-titulo">
-        <h4 class="text-center" style="color: white;">CREACION DE NUEVO FORMULARIO 101 EXTERNO</h4>
+        <h4 class="text-center" style="color: white;">CREACION DE NUEVO FORMULARIO 101 INTERNO COOPERATIVA</h4>
     </div>
         <div class="grid p-fluid">
             <div class="card card-w-title flex flex-wrap col-12">
@@ -14,93 +14,36 @@
                     <div *ngIf="activeStep === 0"
                     >
                         <div class="grid p-fluid">
-                            
-                            <div class="field col-12 md:col-4">
+                            <div class="field col-12 md:col-10">
                                 <span class="p-float-label">
-                                    <input
-                                        type="text"
-                                        id="m03_id"
-                                        pInputText
-                                        formControlName="m03_id"
-                                        class="ng-dirty"
-                                    />
-                                    <label for="ID M-03">ID M-03</label>
-                                    <small id="m03_id" class="p-error "*ngIf="formulario_externo.esCampoInvalido('m03_id')">
-                                        {{formulario_externo.getErrorMessage('m03_id')}}
+                                    <p-dropdown
+                                        inputId="dropdown"
+                                        [autoDisplayFirst]="false"
+                                        [options]="operadores"
+                                        formControlName="operador_id"
+                                        optionLabel="razon_social"
+                                        optionValue="id"
+                                    ></p-dropdown>
+                                    <label for="dropdown">Operadores Mineros</label>
+                                    <small id="operador_id" class="p-error " *ngIf="formulario_interno.esCampoInvalido('operador_id')">
+                                        {{formulario_interno.getErrorMessage('operador_id')}}
                                     </small>
                                 </span>
                             </div>
-                            <div class="field col-12 md:col-4">
+                            <div class="field col-12 md:col-3 ">
                                 <span class="p-float-label">
-                                    <input
-                                        type="text"
-                                        id="nro_factura_exportacion"
-                                        pInputText
-                                        formControlName="nro_factura_exportacion"
-                                        class="ng-dirty"
-                                    />
-                                    <label for="Factura">N° Factura Comercial de Exportación</label>
-                                    <small id="nro_factura_exportacion" class="p-error "*ngIf="formulario_externo.esCampoInvalido('nro_factura_exportacion')">
-                                        {{formulario_externo.getErrorMessage('nro_factura_exportacion')}}
-                                    </small>
-                                </span>
-                            </div>
-                            <div class="field col-12 md:col-4">
-                                <span class="p-float-label">
-                                    <input
-                                        type="text"
-                                        id="laboratorio"
-                                        pInputText
-                                        formControlName="laboratorio"
-                                        class="ng-dirty"
-                                    />
-                                    <label for="Laboratorio">Laboratorio</label>
-                                    <small id="laboratorio" class="p-error "*ngIf="formulario_externo.esCampoInvalido('laboratorio')">
-                                        {{formulario_externo.getErrorMessage('laboratorio')}}
-                                    </small>
-                                </span>
-                            </div>
-                            <div class="field col-12 md:col-4">
-                                <span class="p-float-label">
-                                    <input
-                                        type="text"
-                                        id="codigo_analisis"
-                                        pInputText
-                                        formControlName="codigo_analisis"
-                                        class="ng-dirty"
-                                    />
-                                    <label for="Código de Analisis">Código de Analisis</label>
-                                    <small id="codigo_analisis" class="p-error "*ngIf="formulario_externo.esCampoInvalido('codigo_analisis')">
-                                        {{formulario_externo.getErrorMessage('codigo_analisis')}}
-                                    </small>
-                                </span>
-                            </div>
-                            <div class="field col-12 md:col-4" *ngIf="canVerTomaDeMuestra.canActivate()">
-                                <span class="p-float-label">
-                                    <input
-                                        type="text"
-                                        id="nro_formulario_tm"
-                                        pInputText
-                                        formControlName="nro_formulario_tm"
-                                        class="ng-dirty"
-                                        (input)="cambioNroFormulario($event)"
-                                    />
-                                    <label for="Acta de Verificación">Acta de Verificacion Toma de Muestra</label>
-                                    <small id="nro_formulario_tm" class="p-error" *ngIf="formulario_externo.esCampoInvalido('nro_formulario_tm')">
-                                        {{formulario_externo.getErrorMessage('nro_formulario_tm')}}
-                                    </small>
-                                    <small id="nro_formulario_tm" class="p-error "*ngIf="!acta_TDM">
-                                        Se requiere un formulario de Toma de Muestra Firmado
-                                    </small>
-                                </span>
-                            </div>
+                                    <p-dropdown
+                                        inputId="dropdown"
+                                        [autoDisplayFirst]="false"
+                                        [options]="tipo_traslado"
+                                        formControlName="traslado_mineral"
+                                        optionLabel="nombre"
+                                        optionValue="nombre"
+                                    ></p-dropdown>
+                                    <label for="dropdown">Traslado del Mineral</label>
 
-
-                        </div>
-                    </div>
-                    <div *ngIf="activeStep === 1"
-                    >
-                        <div class="grid p-fluid mt-2">
+                                </span>
+                            </div>
                             <div class="field col-12 md:col-3">
                                 <span class="p-float-label">
                                     <input
@@ -110,9 +53,9 @@
                                         formControlName="lote"
                                         class="ng-dirty"
                                     />
-                                    <label for="Razón Social">Lote</label>
-                                    <small id="lote" class="p-error "*ngIf="formulario_externo.esCampoInvalido('lote')">
-                                        {{formulario_externo.getErrorMessage('lote')}}
+                                    <label for="Razón Social">Lote/ N° de Tornaguia</label>
+                                    <small id="lote" class="p-error "*ngIf="formulario_interno.esCampoInvalido('lote')">
+                                        {{formulario_interno.getErrorMessage('lote')}}
                                     </small>
                                 </span>
                             </div>
@@ -128,8 +71,8 @@
                                         (onChange)="cambioPresentacion($event)"
                                     ></p-dropdown>
                                     <label for="dropdown">Presentacion</label>
-                                    <small id="presentacion_id" class="p-error " *ngIf="formulario_externo.esCampoInvalido('presentacion_id')">
-                                        {{formulario_externo.getErrorMessage('presentacion_id')}}
+                                    <small id="presentacion_id" class="p-error " *ngIf="formulario_interno.esCampoInvalido('presentacion_id')">
+                                        {{formulario_interno.getErrorMessage('presentacion_id')}}
                                     </small>
                                 </span>
                             </div>
@@ -144,8 +87,8 @@
                                         [disabled]="presentacion.cantidad"
                                     />
                                     <label for="Razón Social">Cantidad</label>
-                                    <small id="cantidad" class="p-error "*ngIf="formulario_externo.esCampoInvalido('cantidad')">
-                                        {{formulario_externo.getErrorMessage('cantidad')}}
+                                    <small id="cantidad" class="p-error "*ngIf="formulario_interno.esCampoInvalido('cantidad')">
+                                        {{formulario_interno.getErrorMessage('cantidad')}}
                                     </small>
                                 </span>
                             </div>
@@ -159,57 +102,14 @@
                                         class="ng-dirty"
                                     />
                                     <label for="Razón Social">Peso bruto humedo (Kg.)</label>
-                                    <small id="peso_bruto_humedo" class="p-error "*ngIf="formulario_externo.esCampoInvalido('peso_bruto_humedo')">
-                                        {{formulario_externo.getErrorMessage('peso_bruto_humedo')}}
+                                    <small id="peso_bruto_humedo" class="p-error "*ngIf="formulario_interno.esCampoInvalido('peso_bruto_humedo')">
+                                        {{formulario_interno.getErrorMessage('peso_bruto_humedo')}}
                                     </small>
                                 </span>
                             </div>
-                            <div class="field col-12 md:col-2">
-                                <span class="p-float-label">
-                                    <input
-                                        type="number"
-                                        id="tara"
-                                        pInputText
-                                        formControlName="tara"
-                                        class="ng-dirty"
-                                    />
-                                    <label for="Razón Social">Tara (Kg.)</label>
-                                    <small id="tara" class="p-error "*ngIf="formulario_externo.esCampoInvalido('tara')">
-                                        {{formulario_externo.getErrorMessage('tara')}}
-                                    </small>
-                                </span>
-                            </div>
-                            <div class="field col-12 md:col-2">
-                                <span class="p-float-label">
-                                    <input
-                                        type="number"
-                                        id="humedad"
-                                        pInputText
-                                        formControlName="humedad"
-                                        class="ng-dirty"
-                                    />
-                                    <label for="Razón Social">Humedad (%)</label>
-                                    <small id="humedad" class="p-error "*ngIf="formulario_externo.esCampoInvalido('humedad')">
-                                        {{formulario_externo.getErrorMessage('humedad')}}
-                                    </small>
-                                </span>
-                            </div>
-                            <div class="field col-12 md:col-2">
-                                <span class="p-float-label">
-                                    <input
-                                        type="number"
-                                        id="merma"
-                                        pInputText
-                                        formControlName="merma"
-                                        class="ng-dirty"
-                                    />
-                                    <label for="Razón Social">Merma (%)</label>
-                                    <small id="merma" class="p-error "*ngIf="formulario_externo.esCampoInvalido('merma')">
-                                        {{formulario_externo.getErrorMessage('merma')}}
-                                    </small>
-                                </span>
-                            </div>
-                            <div class="field col-12 md:col-3">
+                            
+                            
+                            <div *ngIf="false" class="field col-12 md:col-3">
                                 <span class="p-float-label">
                                     <input
                                         type="number"
@@ -220,40 +120,26 @@
                                         readonly
                                     />
                                     <label for="Razón Social">Peso Neto Seco (Kg.)</label>
-                                    <small id="peso_neto" class="p-error "*ngIf="formulario_externo.esCampoInvalido('peso_neto')">
-                                        {{formulario_externo.getErrorMessage('peso_neto')}}
+                                    <small id="peso_neto" class="p-error "*ngIf="formulario_interno.esCampoInvalido('peso_neto')">
+                                        {{formulario_interno.getErrorMessage('peso_neto')}}
                                     </small>
                                 </span>
                             </div>
                             <div class="field col-12 md:col-3 ">
                                 <app-mineralesSelect (mineral_id)="cambioMineralId($event)" (sigla)="cambioSigla($event)" (nombre)="cambioNombreMineral($event)"></app-mineralesSelect>
                             </div>
-                            <div class="field col-12 md:col-3">
-                                <span class="p-float-label">
-                                    <input
-                                        type="number"
-                                        id="nro_viajes"
-                                        pInputText
-                                        (input)="cambioLey($event)"
-                                        class="ng-dirty"
-                                    />
-                                    <label for="Razón Social">Ley</label>
-                                    <small id="nro_viajes" class="p-error "*ngIf="formulario_externo.esCampoInvalido('nro_viajes')">
-                                        {{formulario_externo.getErrorMessage('nro_viajes')}}
-                                    </small>
-                                </span>
-                            </div>
+                            
                             <div class="field col-12 md:col-3 ">
                                 <span class="p-float-label">
                                     <p-dropdown
                                         inputId="dropdown"
                                         [autoDisplayFirst]="false"
-                                        [options]="unidades"
+                                        [options]="ley"
                                         optionLabel="nombre"
                                         optionValue="nombre"
                                         (onChange)="cambioUnidad($event)"
                                     ></p-dropdown>
-                                    <label for="dropdown">Unidad</label>
+                                    <label for="dropdown">Ley (Aprox)</label>
 
                                 </span>
                             </div>
@@ -275,7 +161,6 @@
                                             <th pSortableColumn="code">Descripción <p-sortIcon field="code"></p-sortIcon></th>
                                             <th pSortableColumn="code">Sigla <p-sortIcon field="code"></p-sortIcon></th>
                                             <th pSortableColumn="name">Ley <p-sortIcon field="name"></p-sortIcon></th>
-                                            <th pSortableColumn="price">Unidad <p-sortIcon field="price"></p-sortIcon></th>
                                             <th pSortableColumn="price">Acción <p-sortIcon field="price"></p-sortIcon></th>
 
                                         </tr>
@@ -292,10 +177,6 @@
                                             </td>
                                             <td style="width:14%; min-width:10rem;">
                                                 <span class="p-column-title">Ley</span>
-                                                {{product.ley}}
-                                            </td>
-                                            <td style="width:14%; min-width:8rem;">
-                                                <span class="p-column-title">Unidad</span>
                                                 {{product.unidad}}
                                             </td>
                                             <td>
@@ -309,14 +190,19 @@
                             </div>
 
 
-                            <div class="field col-12 md:col-3 ">
+                        </div>
+                    </div>
+                    <div *ngIf="activeStep === 1"
+                    >
+                        <div class="grid p-fluid mt-2">
+                            <div class="field col-12 md:col-4 ">
                                 <app-departamentoSelect [departamento_id]="departamento_id" (cambioDepartamento)="cambioDepartamento($event)" (nombre_departamento)="cambioNombreDepartemento($event)"></app-departamentoSelect>
                             </div>
-                            <div class="field col-12 md:col-3 ">
+                            <div class="field col-12 md:col-4 ">
                                 <app-municipioSelect [departamento_id]="departamento_id" [municipio_id1]="municipio_id" (municipio_id)="cambioMunicipio($event)" (nombre_municipio)="cambioNombreMunicipio($event)"></app-municipioSelect>
                             </div>
 
-                            <div class="field col-12 md:col-2">
+                            <div class="field col-12 md:col-4">
                                 <button pButton pRipple (click)="agregarMunicipio()" type="button" icon="pi pi-plus" label="Agregar" class="p-button-outlined p-button-success"></button>
                             </div>
 
@@ -366,34 +252,66 @@
                     <div *ngIf="activeStep === 2"
                     >
                         <div class="grid p-fluid mt-2">
-
-                            <div  class="field col-12 md:col-3">
+                            <div class="field col-12 md:col-4">
                                 <span class="p-float-label">
-                                    <input
-                                        type="text"
-                                        id="comprador"
-                                        pInputText
-                                        formControlName="comprador"
-                                        class="ng-dirty"
-                                    />
-                                    <label for="comprador">Comprador</label>
-                                    <small id="comprador" class="p-error "*ngIf="formulario_externo.esCampoInvalido('comprador')">
-                                        {{formulario_externo.getErrorMessage('comprador')}}
+                                    <p-dropdown
+                                        inputId="dropdown"
+                                        [autoDisplayFirst]="false"
+                                        [options]="destinos"
+                                        formControlName="des_tipo"
+                                        optionLabel="nombre"
+                                        optionValue="nombre"
+                                        (ngChange)="cambioDestino($event)"
+                                    ></p-dropdown>
+                                    <label for="dropdown">Destino</label>
+                                    <small id="des_tipo" class="p-error " *ngIf="formulario_interno.esCampoInvalido('des_tipo')">
+                                        {{formulario_interno.getErrorMessage('des_tipo')}}
                                     </small>
                                 </span>
                             </div>
-                            <div class="field col-12 md:col-3 ">
-                                <app-paisSelect [pais_id]="pais_id" (cambioPais)="cambioPais($event)" ></app-paisSelect>
+                            <div *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR'" class="field col-12 md:col-4">
+                                <span class="p-float-label">
+                                    <input
+                                        type="text"
+                                        id="des_comprador"
+                                        pInputText
+                                        formControlName="des_comprador"
+                                        class="ng-dirty"
+                                    />
+                                    <label for="des_comprador">Comprador</label>
+                                    <small id="des_comprador" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_comprador')">
+                                        {{formulario_interno.getErrorMessage('des_comprador')}}
+                                    </small>
+                                </span>
                             </div>
-                            <div class="field col-12 md:col-3 ">
-                                <app-aduanaSelect [aduana_id]="aduana_id" (cambioAduana)="cambioAduana($event)" ></app-aduanaSelect>
+                            <div *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO'" class="field col-12 md:col-4">
+                                <span class="p-float-label">
+                                    <input
+                                        type="text"
+                                        id="des_planta"
+                                        pInputText
+                                        formControlName="des_planta"
+                                        class="ng-dirty"
+                                    />
+                                    <label for="des_planta">Planta de Tratamiento</label>
+                                    <small id="des_planta" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_planta')">
+                                        {{formulario_interno.getErrorMessage('des_planta')}}
+                                    </small>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-4 ">
+                                <app-departamentoSelect [departamento_id]="departamento_id1" (cambioDepartamento)="cambioDepartamento1($event)" ></app-departamentoSelect>
+                            </div>
+                            <div class="field col-12 md:col-4 ">
+                                <app-municipioSelect [departamento_id]="departamento_id1" [municipio_id1]="municipio_id1" (municipio_id)="cambioMunicipio1($event)" ></app-municipioSelect>
                             </div>
                         </div>
                     </div>
                     <div  *ngIf="activeStep === 3"
                     >
                         <div class="grid p-fluid mt-2">
-                        <div class="field col-12 md:col-3">
+                        <div class="field col-12 md:col-4">
                             <span class="p-float-label">
                                 <p-dropdown
                                     inputId="dropdown"
@@ -404,12 +322,12 @@
                                     optionValue="nombre"
                                 ></p-dropdown>
                                 <label for="dropdown">Tipo de Transporte</label>
-                                <small id="tipo_transporte" class="p-error " *ngIf="formulario_externo.esCampoInvalido('tipo_transporte')">
-                                    {{formulario_externo.getErrorMessage('tipo_transporte')}}
+                                <small id="tipo_transporte" class="p-error " *ngIf="formulario_interno.esCampoInvalido('tipo_transporte')">
+                                    {{formulario_interno.getErrorMessage('tipo_transporte')}}
                                 </small>
                             </span>
                         </div>
-                        <div *ngIf="formulario_externo.formulario.value.tipo_transporte==='VOLQUETA'" class="field col-12 md:col-2">
+                        <div *ngIf="formulario_interno.formulario.value.tipo_transporte==='VOLQUETA'" class="field col-12 md:col-3">
                             <span class="p-float-label">
                                 <input
                                     type="number"
@@ -419,73 +337,28 @@
                                     class="ng-dirty"
                                 />
                                 <label for="tara_volqueta">Tara(Volqueta)</label>
-                                <small id="tara_volqueta" class="p-error "*ngIf="formulario_externo.esCampoInvalido('tara_volqueta')">
-                                    {{formulario_externo.getErrorMessage('tara_volqueta')}}
+                                <small id="tara_volqueta" class="p-error "*ngIf="formulario_interno.esCampoInvalido('tara_volqueta')">
+                                    {{formulario_interno.getErrorMessage('tara_volqueta')}}
                                 </small>
                             </span>
                         </div>
-                        <div *ngIf="formulario_externo.formulario.value.tipo_transporte==='VIA FERREA'" class="field col-12 md:col-3">
+                        <div  class="field col-12 md:col-2">
                             <span class="p-float-label">
                                 <input
-                                    type="text"
-                                    id="empresa_ferrea"
+                                    type="number"
+                                    id="nro_viajes"
                                     pInputText
-                                    formControlName="empresa_ferrea"
+                                    formControlName="nro_viajes"
                                     class="ng-dirty"
                                 />
-                                <label for="empresa_ferrea">Empresa Transoprtadora</label>
-                                <small id="empresa_ferrea" class="p-error "*ngIf="formulario_externo.esCampoInvalido('empresa_ferrea')">
-                                    {{formulario_externo.getErrorMessage('empresa_ferrea')}}
-                                </small>
-                            </span>
-                        </div>
-                        <div *ngIf="formulario_externo.formulario.value.tipo_transporte==='VIA FERREA'" class="field col-12 md:col-3">
-                            <span class="p-float-label">
-                                <input
-                                    type="text"
-                                    id="nro_vagon"
-                                    pInputText
-                                    formControlName="nro_vagon"
-                                    class="ng-dirty"
-                                />
-                                <label for="nro_vagon">N° de vagon(es)</label>
-                                <small id="nro_vagon" class="p-error "*ngIf="formulario_externo.esCampoInvalido('nro_vagon')">
-                                    {{formulario_externo.getErrorMessage('nro_vagon')}}
+                                <label for="nro_viajes">N° de Viajes</label>
+                                <small id="nro_viajes" class="p-error "*ngIf="formulario_interno.esCampoInvalido('nro_viajes')">
+                                    {{formulario_interno.getErrorMessage('nro_viajes')}}
                                 </small>
                             </span>
                         </div>
 
-                        <div *ngIf="formulario_externo.formulario.value.tipo_transporte==='VIA FERREA'" class="field col-12 md:col-3">
-                            <span class="p-float-label">
-                                <input
-                                    type="date"
-                                    id="fecha_ferrea"
-                                    pInputText
-                                    formControlName="fecha_ferrea"
-                                    class="ng-dirty"
-                                />
-                                <label for="fecha_ferrea">Fecha de Salida</label>
-                                <small id="fecha_ferrea" class="p-error "*ngIf="formulario_externo.esCampoInvalido('fecha_ferrea')">
-                                    {{formulario_externo.getErrorMessage('fecha_ferrea')}}
-                                </small>
-                            </span>
-                        </div>
-                        <div *ngIf="formulario_externo.formulario.value.tipo_transporte==='VIA FERREA'" class="field col-12 md:col-3">
-                            <span class="p-float-label">
-                                <input
-                                    type="time"
-                                    id="hr_ferrea"
-                                    pInputText
-                                    formControlName="hr_ferrea"
-                                    class="ng-dirty"
-                                />
-                                <label for="hr_ferrea">Hora de Salida</label>
-                                <small id="hr_ferrea" class="p-error "*ngIf="formulario_externo.esCampoInvalido('hr_ferrea')">
-                                    {{formulario_externo.getErrorMessage('hr_ferrea')}}
-                                </small>
-                            </span>
-                        </div>
-                        <div *ngIf="formulario_externo.formulario.value.tipo_transporte!=='VIA FERREA'" class="field col-12 md:col-2">
+                        <div *ngIf="formulario_interno.formulario.value.tipo_transporte!=='VIA FERREA'" class="field col-12 md:col-2">
                             <span class="p-float-label">
                                 <input
                                     type="text"
@@ -495,12 +368,12 @@
                                     class="ng-dirty"
                                 />
                                 <label for="placa">Placa</label>
-                                <small id="placa" class="p-error "*ngIf="formulario_externo.esCampoInvalido('placa')">
-                                    {{formulario_externo.getErrorMessage('placa')}}
+                                <small id="placa" class="p-error "*ngIf="formulario_interno.esCampoInvalido('placa')">
+                                    {{formulario_interno.getErrorMessage('placa')}}
                                 </small>
                             </span>
                         </div>
-                        <div *ngIf="formulario_externo.formulario.value.tipo_transporte!=='VIA FERREA'" class="field col-12 md:col-3">
+                        <div *ngIf="formulario_interno.formulario.value.tipo_transporte!=='VIA FERREA'" class="field col-12 md:col-4">
                             <span class="p-float-label">
                                 <input
                                     type="text"
@@ -510,12 +383,12 @@
                                     class="ng-dirty"
                                 />
                                 <label for="nom_conductor">Nombre del Conductor</label>
-                                <small id="nom_conductor" class="p-error "*ngIf="formulario_externo.esCampoInvalido('nom_conductor')">
-                                    {{formulario_externo.getErrorMessage('nom_conductor')}}
+                                <small id="nom_conductor" class="p-error "*ngIf="formulario_interno.esCampoInvalido('nom_conductor')">
+                                    {{formulario_interno.getErrorMessage('nom_conductor')}}
                                 </small>
                             </span>
                         </div>
-                        <div *ngIf="formulario_externo.formulario.value.tipo_transporte!=='VIA FERREA'" class="field col-12 md:col-2">
+                        <div *ngIf="formulario_interno.formulario.value.tipo_transporte!=='VIA FERREA'" class="field col-12 md:col-4">
                             <span class="p-float-label">
                                 <input
                                     type="text"
@@ -525,8 +398,8 @@
                                     class="ng-dirty"
                                 />
                                 <label for="licencia">Licencia de Conducir</label>
-                                <small id="licencia" class="p-error "*ngIf="formulario_externo.esCampoInvalido('licencia')">
-                                    {{formulario_externo.getErrorMessage('licencia')}}
+                                <small id="licencia" class="p-error "*ngIf="formulario_interno.esCampoInvalido('licencia')">
+                                    {{formulario_interno.getErrorMessage('licencia')}}
                                 </small>
                             </span>
                         </div>
@@ -541,8 +414,8 @@
                                     cols="150"
                                 ></textarea>
                                 <label for="observaciones">Observaciones</label>
-                                <small id="observaciones" class="p-error" *ngIf="formulario_externo.esCampoInvalido('observaciones')">
-                                    {{ formulario_externo.getErrorMessage('observaciones') }}
+                                <small id="observaciones" class="p-error" *ngIf="formulario_interno.esCampoInvalido('observaciones')">
+                                    {{ formulario_interno.getErrorMessage('observaciones') }}
                                 </small>
                             </span>
                         </div>
@@ -596,7 +469,7 @@
                         <div class="col-33">
                             <button pButton pRipple type="button" label="Cancelar"
                             class="p-button-rounded p-button-danger boton-ajustado"
-                            [routerLink]="['/public/formulario-101/formulario-externo']"
+                            [routerLink]="['/admin/formulario-101/formulario-interno']"
                             icon="pi pi-trash"></button>
                         </div>
 

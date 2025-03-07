@@ -20,17 +20,17 @@ import { MineralsService } from 'src/app/admin/services/minerales.service';
 import { MunicipiosService } from 'src/app/admin/services/municipios.service';
 import { OperatorsService } from 'src/app/admin/services/operators.service';
 import { PresentacionService } from 'src/app/admin/services/presentacion.service';
-import { FormularioInternoFormulario } from 'src/app/admin/validators/formulario-interno';
+import { FormularioCooperativaFormulario } from 'src/app/admin/validators/formulario-cooperativa';
 
 @Component({
-  selector: 'app-edit-formulario-interno',
-  templateUrl: './edit-formulario-interno.component.html',
-  styleUrls: ['./edit-formulario-interno.component.scss']
+  selector: 'app-edit-formulario-interno-cooperativa',
+  templateUrl: './edit-formulario-interno-cooperativa.component.html',
+  styleUrls: ['./edit-formulario-interno-cooperativa.component.scss']
 })
-export class EditFormularioInternoComponent implements OnInit {
+export class EditFormularioInternoCooperativaComponent implements OnInit {
   public id:number=null;
   public num_form!:any;
-  public formulario_interno=new FormularioInternoFormulario();
+  public formulario_interno=new FormularioCooperativaFormulario();
   public departamento_id:number=0;
   public municipio_id:number=0;
   public declaracionJurada:boolean=false;
@@ -56,6 +56,8 @@ cambioDepartamento1(departamentoId: number): void {
       merma:0,
       cantidad:0
   }
+  public tipo_traslado!:any;
+  public ley!:any;
   public tipo_transporte!:any;
   public destinos!:any;
   public unidades!:any;
@@ -124,15 +126,16 @@ gotoStep(index: number) {
 
 // Validar si los campos del paso actual son correctos
 isStepValid(stepIndex: number): boolean {
-  let valid = true;
+  let valid:boolean = true;
   switch (stepIndex) {
     case 0:
       // Validar los campos del Paso 1
-      valid = this.formulario_interno.formulario.get('peso_bruto_humedo')?.valid && this.formulario_interno.formulario.get('tara')?.valid &&
-      (this.formulario_interno.formulario.get('merma')?.valid || this.formulario_interno.formulario.get('merma')?.disable) && (this.formulario_interno.formulario.get('humedad')?.valid || this.formulario_interno.formulario.get('humedad')?.disable) &&
+      valid = this.formulario_interno.formulario.get('peso_bruto_humedo')?.valid &&
+      
       this.formulario_interno.formulario.get('lote')?.valid && this.formulario_interno.formulario.get('presentacion_id')?.valid &&
-      (this.formulario_interno.formulario.get('cantidad')?.valid || this.formulario_interno.formulario.get('cantidad')?.disabled) && this.formulario_interno.formulario.get('peso_neto')?.valid && this.lista_leyes_mineral.length>0;
-
+      (this.formulario_interno.formulario.get('cantidad')?.valid || this.formulario_interno.formulario.get('cantidad')?.disabled) && 
+      this.formulario_interno.formulario.get('peso_neto')?.valid && this.lista_leyes_mineral.length>0;
+      console.log(valid);
       break;
     case 1:
       valid =this.lista_municipios_origen.length>0
@@ -184,6 +187,7 @@ constructor(
     });
  }
 cargar_datos(form:any){
+  console.log(form);
   this.formulario_interno.formulario.patchValue({
       id: form.id,
       user_id: form.user_id,
@@ -218,7 +222,7 @@ cargar_datos(form:any){
       nro_viajes: form.nro_viajes,
       estado: form.estado
   });
-
+  console.log(this.formulario_interno.formulario.value);
   this.minerales_envio=form.minerales//.push({...envio_minerales});
   // Crear una nueva lista excluyendo ciertos campos
     this.minerales_envio = form.minerales.map(mineral => {
@@ -339,6 +343,15 @@ ngOnInit() {
       { nombre: 'DM', id: '2' },
       { nombre: 'g/TM', id: '3' },
   ];
+  this.tipo_traslado = [
+    { nombre: 'BROZA', id: '1' },
+    { nombre: 'CONCENTRADO', id: '2' },
+  ];
+  this.ley = [
+    { nombre: 'Baja', id: '1' },
+    { nombre: 'Media', id: '2' },
+    { nombre: 'Alta', id: '3' },
+  ];
   this.tipo_transporte = [
       { nombre: 'TRAILER', id: '1' },
       { nombre: 'CAMION', id: '2' },
@@ -425,7 +438,7 @@ guardar(){
           
           this.formulario_interno.formulario.reset();
           this.notify.success('El el formulario interno se generó exitosamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
-          this.router.navigate(['/admin/formulario-101/formulario-interno']);
+          this.router.navigate(['/admin/formulario-101/formulario-cooperativa']);
         }
       },
       (error:any) =>
@@ -528,7 +541,8 @@ agregarLey(){
 
   }
   cambioUnidad(event:any){
-      this.formulario_mineral.unidad=event.value;
+    this.formulario_mineral.unidad=event.value;
+    this.formulario_mineral.ley='0';
   }
   eliminar(domicilio:IFormularioInternoMineral) {
     this.minerales_envio=this.minerales_envio.filter(val => val.mineralId !== domicilio.mineral_id)
@@ -639,7 +653,7 @@ agregarLey(){
       this.formulario_interno.formulario.get('humedad')?.setValue(0);
       }
 }
-private mostrarErrorFormularios(formGroup: FormularioInternoFormulario): void {
+private mostrarErrorFormularios(formGroup: FormularioCooperativaFormulario): void {
   const errores: any[] = [];
 Object.keys(formGroup.formulario.controls).forEach((campo) => {
   const control = formGroup.formulario.get(campo);

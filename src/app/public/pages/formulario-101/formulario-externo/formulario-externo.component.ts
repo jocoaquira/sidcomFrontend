@@ -12,6 +12,7 @@ import { IFormularioExternoSimple } from '@data/formulario_externo_simple.metada
 import { IFormularioExterno } from '@data/formulario_externo.metadata';
 import { PdfFormularioExternoService } from 'src/app/admin/services/pdf/formulario-externo-pdf.service';
 import { AuthService } from '@core/authentication/services/auth.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-formulario-externo',
@@ -147,5 +148,17 @@ export class FormularioExternoComponent implements OnInit {
               },
         });
     }
+    vigenteAnulacion(form:any): boolean {
+        /*
+        const fechaCreacion = new Date(form.fecha_creacion);
+        const fechaLimite = new Date(fechaCreacion);
+        fechaLimite.setDate(fechaLimite.getDate() + environment.DIAS_ANULACION);
+      */
+        const fecha_vencimiento:Date = new Date(form.fecha_vencimiento);
+        const fechaLimite = new Date();
+        let sw:boolean=fechaLimite <= fecha_vencimiento;
+        console.log(sw);
+        return sw; // Se muestra solo después de DIAS_ANULACION días
+      }
 
 }

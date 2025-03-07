@@ -16,7 +16,7 @@ export class AuthService {
   public currentUser: BehaviorSubject<any>;
   public nameUserLS: string = 'currentUser';
   private inactivityTimeout: any;
-  private readonly INACTIVITY_TIME = 10 * 60 * 1000; // 10 minutos
+  private readonly INACTIVITY_TIME = environment.TIEMPO_AUTH * 60 * 1000; // 10 minutos
   //private readonly INACTIVITY_TIME = 30 * 1000; // 30 segundos
   constructor(
     private http: HttpClient,
@@ -91,7 +91,7 @@ export class AuthService {
   
           // 🔹 Redirección según condición
           if (this.currentUser.value.operador_id == null) {
-            this.router.navigateByUrl('admin/operador');
+            this.router.navigateByUrl('admin');
             this.notify.success('Acceso correcto, bienvenido ' + this.currentUser.value.nombre_completo + '!!!', 'Bienvenido', { timeOut: 2200, positionClass: 'toast-bottom-right' });
           } else {
             this.router.navigateByUrl('public');
