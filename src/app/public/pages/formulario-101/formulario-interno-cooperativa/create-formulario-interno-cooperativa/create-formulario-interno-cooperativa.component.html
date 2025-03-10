@@ -14,22 +14,7 @@
                     <div *ngIf="activeStep === 0"
                     >
                         <div class="grid p-fluid">
-                            <div class="field col-12 md:col-10">
-                                <span class="p-float-label">
-                                    <p-dropdown
-                                        inputId="dropdown"
-                                        [autoDisplayFirst]="false"
-                                        [options]="operadores"
-                                        formControlName="operador_id"
-                                        optionLabel="razon_social"
-                                        optionValue="id"
-                                    ></p-dropdown>
-                                    <label for="dropdown">Operadores Mineros</label>
-                                    <small id="operador_id" class="p-error " *ngIf="formulario_interno.esCampoInvalido('operador_id')">
-                                        {{formulario_interno.getErrorMessage('operador_id')}}
-                                    </small>
-                                </span>
-                            </div>
+                            
                             <div class="field col-12 md:col-3 ">
                                 <span class="p-float-label">
                                     <p-dropdown

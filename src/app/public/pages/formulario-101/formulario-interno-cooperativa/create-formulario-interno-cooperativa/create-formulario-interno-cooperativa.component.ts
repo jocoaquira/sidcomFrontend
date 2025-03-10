@@ -12,13 +12,13 @@ import { ToastrService } from 'ngx-toastr';
 import { first } from 'rxjs';
 import { FormularioInternoMineralService } from 'src/app/admin/services/formulario-interno/formulariointerno-mineral.service';
 import { FormularioInternoMunicipioOrigenService } from 'src/app/admin/services/formulario-interno/formulariointerno-municipioorigen.service';
-import { FormularioInternosService } from 'src/app/admin/services/formulario-interno/formulariosinternos.service';
 import { MineralsService } from 'src/app/admin/services/minerales.service';
 import { OperatorsService } from 'src/app/admin/services/operators.service';
 import { IFormularioInternoMineralEnvio } from '@data/form_int_mineral_envio.metadata';
 import { IFormularioInternoMunicipioOrigenEnvio } from '@data/form_int_municipio_origen_envio.metadata';
 import { PresentacionService } from 'src/app/admin/services/presentacion.service';
 import { FormularioCooperativaFormulario } from 'src/app/admin/validators/formulario-cooperativa';
+import { FormularioCooperativaService } from 'src/app/admin/services/formulario-interno-cooperativa/formulario-cooperativa.service';
 
 @Component({
   selector: 'app-create-formulario-interno-cooperativa',
@@ -151,7 +151,7 @@ nextStep() {
 
   constructor(
     private operadoresService:OperatorsService,
-    private formularioInternoService:FormularioInternosService,
+    private formularioCooperativaService:FormularioCooperativaService,
     private mineralesService:MineralsService,
     private notify:ToastrService,
     private authService:AuthService,
@@ -162,7 +162,8 @@ nextStep() {
   ) {
 
     this.formulario_interno.formulario.patchValue({
-        user_id: authService.getUser.id
+        user_id: authService.getUser.id,
+        operador_id:authService.getUser.operador_id
       });
    }
 
@@ -291,17 +292,17 @@ nextStep() {
         municipio_origen:this.municipio_origen_envio
       }
       console.log(formularioEnvio);
-      this.formularioInternoService.crearFormularioInterno(formularioEnvio).subscribe(
+      this.formularioCooperativaService.crearFormularioInterno(formularioEnvio).subscribe(
         (data:any) =>
         {
-            this.formulario_Interno_registrado=this.formularioInternoService.handleCrearFormularioInterno(data);
+            this.formulario_Interno_registrado=this.formularioCooperativaService.handleCrearFormularioInterno(data);
 
           if(this.formulario_Interno_registrado!==null)
           {
             console.log(this.formulario_Interno_registrado);
             this.formulario_interno.formulario.reset();
             this.notify.success('El el formulario interno se generó exitosamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
-            this.router.navigate(['/admin/formulario-101/formulario-cooperativa']);
+            this.router.navigate(['/public/formulario-101/formulario-cooperativa']);
           }
           else{
             this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
@@ -310,7 +311,7 @@ nextStep() {
         (error:any) =>
         {
 
-          this.error=this.formularioInternoService.handleCrearFormularioInternoError(error.error.data);
+          this.error=this.formularioCooperativaService.handleCrearFormularioInternoError(error.error.data);
           if(error.error.status=='fail')
           {
             this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});

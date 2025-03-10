@@ -40,7 +40,7 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: 'Formularios Internos', icon: 'pi pi-fw pi-book', routerLink: ['/public/formulario-101/formulario-interno'],visible: this.canVerFormIntGuard.canActivate() },
                     { label: 'Formularios Externos', icon: 'pi pi-fw pi-globe', routerLink: ['/public/formulario-101/formulario-externo'],visible: this.canVerFormExtGuard.canActivate() },
-                    { label: 'Formulario Cooperativas', icon: 'pi pi-fw pi-slack', routerLink: ['/uikit/floatlabel'],visible: this.canVerFormCooperativaGuard.canActivate() },
+                    { label: 'Formulario Cooperativas', icon: 'pi pi-fw pi-slack', routerLink: ['/public/formulario-101/formulario-cooperativa'],visible: this.canVerFormCooperativaGuard.canActivate() },
                     { label: 'Toma de Muestra', icon: 'pi pi-fw pi-file-o', routerLink: ['/public/toma-de-muestra'],visible: this.canVerTomaDeMuestraGuard.canActivate() }
                 ]
             },

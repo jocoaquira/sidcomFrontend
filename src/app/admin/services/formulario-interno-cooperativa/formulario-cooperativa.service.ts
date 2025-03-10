@@ -28,7 +28,7 @@ export class FormularioCooperativaService {
     params = params.append('nombre', nombre);
 
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}formint/`,{params:params});
+    return this.http.get(`${this.baseUrl}formcooperativa/`,{params:params});
   }
   handleError(error: any): any {
     return error=error.error.error;
@@ -45,7 +45,7 @@ verFormularioInterno(nombre:string)
   params = params.append('id', nombre);
 
   // asignacion de parametros
-  return this.http.get(`${this.baseUrl}formint/`+nombre,{params:params});
+  return this.http.get(`${this.baseUrl}formcooperativa/`+nombre,{params:params});
 }
   //-----------------Visualizar operadores-------------------------------------------
   verFormularioCooperativaSimple(nombre:string)
@@ -55,12 +55,12 @@ verFormularioInterno(nombre:string)
     params = params.append('nombre', nombre);
 
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}formint/cooperativas`,{params:params});
+    return this.http.get(`${this.baseUrl}formcooperativa/cooperativas`,{params:params});
   }
   verFormularioCooperativaOperadorSimple(nombre:string)
   {
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}formint/operador/reducido/`+nombre);
+    return this.http.get(`${this.baseUrl}formcooperativa/operador/reducido/`+nombre);
   }
   handleFormularioInternoSimpleError(error: any): any {
     return error=error.error.error;
@@ -74,7 +74,7 @@ verFormularioInterno(nombre:string)
 //---------------------crear   FormularioInterno-------------------------------------------
 crearFormularioInterno(data:any) {
   this.token();
-  return this.http.post(`${this.baseUrl}formint`,data, {headers:this.headers})
+  return this.http.post(`${this.baseUrl}formcooperativa`,data, {headers:this.headers})
 }
 handleCrearFormularioInternoError(error: any): any {
   return error=error;
@@ -87,7 +87,7 @@ handleCrearFormularioInterno(data: any):any {
 editarFormularioInterno(data:IFormularioInterno,id:number) {
   this.token();
   console.log(id);
-  return this.http.put(`${this.baseUrl}formint/`+id.toString(), data)
+  return this.http.put(`${this.baseUrl}formcooperativa/`+id.toString(), data)
 }
 handleEditarFormularioInternoError(error: any): any {
   return error=error;
@@ -102,7 +102,7 @@ emitirFormularioInterno(id:number) {
   let estado:any={
     estado:'EMITIDO'
   }
-  return this.http.put(`${this.baseUrl}formint/emitir/`+id, estado)
+  return this.http.put(`${this.baseUrl}formcooperativa/emitir/`+id, estado)
 }
 //---------------------Editar   FormularioInterno-------------------------------------------
 anularFormularioInterno(data:IFormularioInterno) {
@@ -111,7 +111,7 @@ anularFormularioInterno(data:IFormularioInterno) {
     justificacion_anulacion:data.justificacion_anulacion
   }
     this.token();
-    return this.http.put(`${this.baseUrl}formint/anular/`+data.id, anulado)
+    return this.http.put(`${this.baseUrl}formcooperativa/anular/`+data.id, anulado)
   }
 //-----------------Listado de Empelados por Dependencia--------------------------------------------
 private token(){

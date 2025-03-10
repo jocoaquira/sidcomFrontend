@@ -1,23 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { IFormularioInternoSimple } from '@data/formulario_interno_simple.metadata';
-import { CanCrearFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-crear-formulario-interno.guard';
-import { CanEditarFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-editar-formulario-interno.guard';
-import { CanListarFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-listar-formulario-interno.guard';
-import { CanVerFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-ver-formulario-interno.guard';
-import { CanEliminarOperatorGuard } from 'src/app/admin/guards/operators/can-eliminar-operator.guard';
-import { FormularioInternosService } from 'src/app/admin/services/formulario-interno/formulariosinternos.service';
 import { Table } from 'primeng/table';
 import { PdfFormularioInternoService } from 'src/app/admin/services/pdf/formulario-interno-pdf.service';
 import { ToastrService } from 'ngx-toastr';
 import { IFormularioInterno } from '@data/formulario_interno.metadata';
 import { ConfirmationService } from 'primeng/api';
-import { CanAnularFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-anular-formulario-interno.guard';
-import { CanImprimirFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-imprimir-formulario-interno.guard';
 import { FormularioCooperativaService } from 'src/app/admin/services/formulario-interno-cooperativa/formulario-cooperativa.service';
 import { CanListarFormularioCooperativaGuard } from 'src/app/admin/guards/formulario-cooperativas/can-listar-formulario-cooperativa.guard';
 import { CanVerFormularioCooperativaGuard } from 'src/app/admin/guards/formulario-cooperativas/can-ver-formulario-cooperativa.guard';
 import { CanCrearFormularioCooperativaGuard } from 'src/app/admin/guards/formulario-cooperativas/can-crear-formulario-cooperativa.guard';
 import { CanEditarFormularioCooperativaGuard } from 'src/app/admin/guards/formulario-cooperativas/can-editar-formulario-cooperativa.guard';
+import { CanEliminarFormularioCooperativaGuard } from 'src/app/admin/guards/formulario-cooperativas/can-eliminar-formulario-cooperativa.guard';
 import { CanAnularFormularioCooperativaGuard } from 'src/app/admin/guards/formulario-cooperativas/can-anular-formulario-cooperativa.guard';
 import { CanImprimirFormularioCooperativaGuard } from 'src/app/admin/guards/formulario-cooperativas/can-imprimir-formulario-cooperativa.guard';
 
@@ -43,9 +36,10 @@ export class FormularioInternoCooperativaComponent implements OnInit {
         public canVerFormularioCooperativa:CanVerFormularioCooperativaGuard,
         public canCrearFormularioCooperativa:CanCrearFormularioCooperativaGuard,
         public canEditarFormularioCooperativa:CanEditarFormularioCooperativaGuard,
-        public canEliminarFormularioCooperativa:CanEliminarOperatorGuard,
+        public canEliminarFormularioCooperativa:CanEliminarFormularioCooperativaGuard,
         public canAnularFormularioCooperativa:CanAnularFormularioCooperativaGuard,
         public canImprimirFormularioCooperativa:CanImprimirFormularioCooperativaGuard,
+
         public formularioInternoService:FormularioCooperativaService,
         public pdfFormularioInterno:PdfFormularioInternoService,
         private notify:ToastrService,
