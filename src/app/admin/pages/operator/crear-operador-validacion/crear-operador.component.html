@@ -757,15 +757,15 @@
             <span class="p-float-label">
                 <input
                     type="text"
-                    id="denominacion_areas"
+                    id="denominacion_area"
                     pInputText
                     (input)="denominacionAreas($event)"
 					class="ng-dirty"
-                    [style.border]="errorArrendamiento.denominacion_areas ? '1px solid red' : ''"
+                    [style.border]="errorArrendamiento.denominacion_area ? '1px solid red' : ''"
                 />
-                <label for="denominacion_areas">Denominacion de Áreas</label>
-				<small id="denominacion_areas" class="p-error " [hidden]="!errorArrendamiento.denominacion_areas">
-					{{errorArrendamiento.denominacion_areas}}
+                <label for="denominacion_area">Denominacion de Áreas</label>
+				<small id="denominacion_area" class="p-error " [hidden]="!errorArrendamiento.denominacion_area">
+					{{errorArrendamiento.denominacion_area}}
 				</small>
             </span>
         </div>
@@ -832,7 +832,7 @@
                     </td>
                     <td style="width:14%; min-width:8rem;">
                         <span class="p-column-title">Municipio</span>
-                        {{product.denominacion_areas}}
+                        {{product.denominacion_area}}
                     </td>
                     <td style="width:14%; min-width:8rem;">
                         <span class="p-column-title">Tipo</span>

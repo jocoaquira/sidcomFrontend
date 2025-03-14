@@ -76,7 +76,7 @@ export class SolicitarRegistroComponent implements OnInit {
         operator_id:null,
         codigo_unico:null,
         nro_cuadricula:null,
-        denominacion_areas:'',
+        denominacion_area:'',
         municipio_id:null,
         tipo_explotacion:null
     };
@@ -85,7 +85,7 @@ export class SolicitarRegistroComponent implements OnInit {
         operator_id:null,
         codigo_unico:null,
         nro_cuadricula:null,
-        denominacion_areas:null,
+        denominacion_area:null,
         municipio_id:null,
         tipo_explotacion:null
     };
@@ -544,7 +544,7 @@ export class SolicitarRegistroComponent implements OnInit {
         this.arrendamiento.nro_cuadricula =parseInt((event.target as HTMLInputElement).value);
     }
     denominacionAreas(event){
-        this.arrendamiento.denominacion_areas =(event.target as HTMLInputElement).value;
+        this.arrendamiento.denominacion_area =(event.target as HTMLInputElement).value;
     }
 
     sucursalLatitud(event){

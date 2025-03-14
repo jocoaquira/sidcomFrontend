@@ -76,7 +76,7 @@ export class CrearOperadorComponent implements OnInit {
         operator_id:null,
         codigo_unico:null,
         nro_cuadricula:null,
-        denominacion_areas:'',
+        denominacion_area:'',
         municipio_id:null,
         tipo_explotacion:null
     };
@@ -85,7 +85,7 @@ export class CrearOperadorComponent implements OnInit {
         operator_id:null,
         codigo_unico:null,
         nro_cuadricula:null,
-        denominacion_areas:null,
+        denominacion_area:null,
         municipio_id:null,
         tipo_explotacion:null
     };
@@ -263,12 +263,18 @@ export class CrearOperadorComponent implements OnInit {
               formData.append(key, value);
             }
           }
+          const listaArrendamientoLimpia = this.lista_arrendamiento.map((item: any) => {
+            const { id, operator_id, ...resto } = item; // Extraer los campos no deseados
+            return resto; // Retornar el objeto sin id y operator_id
+          });
+          const listaOficinaLimpia = this.oficina.map((item: any) => {
+            const { id, operator_id, ...resto } = item; // Extraer los campos no deseados
+            return resto; // Retornar el objeto sin id y operator_id
+          });
 
-
-       /* formData.append('fecha_exp_nim', '2025-12-1');
-        formData.append('razon_social','EMPRESA MINDEOR');
-        formData.append('nit','543543543');
-        formData.append('fecha_exp_seprec', '2025-12-1');*/
+        formData.append('arrendamientos', JSON.stringify(listaArrendamientoLimpia));
+        formData.append('oficinas',JSON.stringify(listaOficinaLimpia));
+        
         // Convertir fechas al formato adecuado antes de enviarlas
         formData.set('fecha_exp_nim', this.formatDate(this.operador.formulario.value.fecha_exp_nim));
         formData.set('fecha_exp_seprec', this.formatDate(this.operador.formulario.value.fecha_exp_seprec));
@@ -318,8 +324,10 @@ export class CrearOperadorComponent implements OnInit {
         console.log('ver si hay errores',this.operador.formulario.valid);
         console.log(this.operador.formulario.errors); // Muestra errores a nivel de formulario
         console.log(this.operador.formulario.controls); // Muestra todos los controles
-
+        console.log(this.lista_arrendamiento);
+        console.log(this.oficina);
         // Verificar si el formulario es válido antes de enviar
+        
         if (true) {
             this.operadorService.crearoperator(formData).subscribe(
                 (data: any) => {
@@ -342,6 +350,7 @@ export class CrearOperadorComponent implements OnInit {
         } else {
             this.notify.error('Revise los datos e intente nuevamente', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
         }
+        
     }
     
     private mostrarErrorFormularios(formGroup: FormGroup): void {
@@ -439,8 +448,6 @@ export class CrearOperadorComponent implements OnInit {
             console.warn(`No se seleccionó ningún archivo para ${field}`);
         }
     }
-    
-
 
       options: any;
       satelliteLayer: any;
@@ -557,7 +564,7 @@ export class CrearOperadorComponent implements OnInit {
         this.arrendamiento.nro_cuadricula =parseInt((event.target as HTMLInputElement).value);
     }
     denominacionAreas(event){
-        this.arrendamiento.denominacion_areas =(event.target as HTMLInputElement).value;
+        this.arrendamiento.denominacion_area =(event.target as HTMLInputElement).value;
     }
 
     sucursalLatitud(event){

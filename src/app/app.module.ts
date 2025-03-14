@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { HashLocationStrategy, LocationStrategy, PathLocationStrategy, registerLocaleData } from '@angular/common';
+import { APP_BASE_HREF, HashLocationStrategy, LocationStrategy, PathLocationStrategy, registerLocaleData } from '@angular/common';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
 //import { AppLayoutModule } from './layout/app.layout.module';
@@ -29,6 +29,10 @@ registerLocaleData(localeEs,'es');
             multi:true
         },
         { provide: LocationStrategy, useClass: PathLocationStrategy },
+        { 
+            provide: APP_BASE_HREF, 
+            useValue: document.querySelector('base')?.getAttribute('href') || '/' 
+          }
 
 
     ],

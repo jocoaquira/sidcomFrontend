@@ -3,7 +3,7 @@ export interface IArrendamiento{
     operator_id?:number,
     codigo_unico?:number,
     nro_cuadricula:number,
-    denominacion_areas?:string,
+    denominacion_area?:string,
     municipio_id:number,
     tipo_explotacion:string
 }
