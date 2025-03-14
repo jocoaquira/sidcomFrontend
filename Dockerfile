@@ -1,28 +1,16 @@
-# Utiliza una imagen de Node.js para compilar la aplicación Angular
+# Fase de construcción
 FROM node:20-alpine AS build
-
-# Establece el directorio de trabajo
 WORKDIR /app
-
-# Copia los archivos package.json y package-lock.json e instala las dependencias
 COPY package.json package-lock.json ./
 RUN npm install --force
-
-# Copia el resto del código fuente y construye la aplicación Angular
 COPY . .
-RUN npm run build --prod
+RUN npm run build --configuration=production
+RUN ls -la dist/sidcom-v2  
 
-# Utiliza una imagen ligera de Nginx para servir la aplicación
+# Fase de despliegue
 FROM nginx:stable-alpine
-
-# Copia la aplicación Angular construida desde la fase anterior al directorio de Nginx
-COPY --from=build /app/dist/sidcom /usr/share/nginx/html
-
-# Copia un archivo de configuración de Nginx optimizado (opcional)
+WORKDIR /usr/share/nginx/html
+COPY --from=build /app/dist/sidcom-v2 .
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expone el puerto 80 para servir la aplicación
 EXPOSE 80
-
-# Inicia Nginx
 CMD ["nginx", "-g", "daemon off;"]
