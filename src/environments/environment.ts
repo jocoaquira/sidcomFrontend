@@ -8,7 +8,7 @@ export const environment = {
   //FRONTEND_URL:'https://mineria.oruro.gob.bo/sidcom/',
   //API_URL:'http://localhost/sidcom_v2/sidcom_backend/public/api/'
  //API_URL: 'http://192.168.100.188:5000/',
- API_URL: 'https://sidcomv2api.min.oruro.gob.bo',
+ API_URL: 'https://sidcomv2api.min.oruro.gob.bo/',
  DIAS_ANULACION:4,
  TIEMPO_AUTH:30,
   //API_URL: 'http://192.168.1.13:5000/'
