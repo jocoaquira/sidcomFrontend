@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import {CanActivate, Router} from '@angular/router';
 import { PermissionHelperService } from '../../helpers/permission.helper.service';
-const canVer='print_formcooperativa_id';
+const canVer='view_formcola_operator_reduced';
 @Injectable({
   providedIn: 'root'
 })
-export class CanImprimirFormularioCooperativaGuard implements CanActivate {
+export class CanVerOperadorReducidoFormularioColasGuard implements CanActivate {
 
   constructor(
     private router:Router,

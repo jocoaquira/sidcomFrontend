@@ -4,6 +4,7 @@ import { AuthService } from '@core/authentication/services/auth.service';
 import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.metadata';
 import { IFormularioInternoSimple } from '@data/formulario_interno_simple.metadata';
 import { IFormularioInterno } from '@data/formulario_interno.metadata';
+import { IFormularioInternoCooperativaPDF } from '@data/formulario_interno_cooperativa_pdf.metadata';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,7 @@ export class FormularioCooperativaService {
     params = params.append('nombre', nombre);
 
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}formcooperativa/`,{params:params});
+    return this.http.get(`${this.baseUrl}formintcooperativa/`,{params:params});
   }
   handleError(error: any): any {
     return error=error.error.error;
@@ -45,7 +46,7 @@ verFormularioInterno(nombre:string)
   params = params.append('id', nombre);
 
   // asignacion de parametros
-  return this.http.get(`${this.baseUrl}formcooperativa/`+nombre,{params:params});
+  return this.http.get(`${this.baseUrl}formintcooperativa/`+nombre,{params:params});
 }
   //-----------------Visualizar operadores-------------------------------------------
   verFormularioCooperativaSimple(nombre:string)
@@ -55,12 +56,12 @@ verFormularioInterno(nombre:string)
     params = params.append('nombre', nombre);
 
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}formcooperativa/cooperativas`,{params:params});
+    return this.http.get(`${this.baseUrl}formintcooperativa/reducido`,{params:params});
   }
   verFormularioCooperativaOperadorSimple(nombre:string)
   {
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}formcooperativa/operador/reducido/`+nombre);
+    return this.http.get(`${this.baseUrl}formintcooperativa/operador/reducido/`+nombre);
   }
   handleFormularioInternoSimpleError(error: any): any {
     return error=error.error.error;
@@ -70,11 +71,28 @@ verFormularioInterno(nombre:string)
     return FormularioInterno
   }
 
-
+//-----------------Visualizar Toma de Muestra-------------------------------------------
+verFormularioInternoCooperativaHash(nombre:string)
+{
+    // Inicializacion de objeto params
+    let params = new HttpParams();
+    params = params.append('hash', nombre);
+  // asignacion de parametros
+    return this.http.get(`${this.baseUrl}formintcooperativa/verificacion/`,{params:params});
+}
+verFormularioInternoCooperativaPDF(nombre:string)
+{
+  // asignacion de parametros
+  return this.http.get(`${this.baseUrl}formintcooperativa/print/`+nombre);
+}
+handleFormularioInternoCooperativaPDF(data: IFormularioInternoCooperativaPDF):IFormularioInternoCooperativaPDF {
+  let TomaDeMuestra:IFormularioInternoCooperativaPDF=data;
+  return TomaDeMuestra
+}
 //---------------------crear   FormularioInterno-------------------------------------------
 crearFormularioInterno(data:any) {
   this.token();
-  return this.http.post(`${this.baseUrl}formcooperativa`,data, {headers:this.headers})
+  return this.http.post(`${this.baseUrl}formintcooperativa`,data, {headers:this.headers})
 }
 handleCrearFormularioInternoError(error: any): any {
   return error=error;
@@ -87,7 +105,7 @@ handleCrearFormularioInterno(data: any):any {
 editarFormularioInterno(data:IFormularioInterno,id:number) {
   this.token();
   console.log(id);
-  return this.http.put(`${this.baseUrl}formcooperativa/`+id.toString(), data)
+  return this.http.put(`${this.baseUrl}formintcooperativa/`+id.toString(), data)
 }
 handleEditarFormularioInternoError(error: any): any {
   return error=error;
@@ -102,7 +120,7 @@ emitirFormularioInterno(id:number) {
   let estado:any={
     estado:'EMITIDO'
   }
-  return this.http.put(`${this.baseUrl}formcooperativa/emitir/`+id, estado)
+  return this.http.put(`${this.baseUrl}formintcooperativa/emitir/`+id, estado)
 }
 //---------------------Editar   FormularioInterno-------------------------------------------
 anularFormularioInterno(data:IFormularioInterno) {
@@ -111,7 +129,7 @@ anularFormularioInterno(data:IFormularioInterno) {
     justificacion_anulacion:data.justificacion_anulacion
   }
     this.token();
-    return this.http.put(`${this.baseUrl}formcooperativa/anular/`+data.id, anulado)
+    return this.http.put(`${this.baseUrl}formintcooperativa/anular/`+data.id, anulado)
   }
 //-----------------Listado de Empelados por Dependencia--------------------------------------------
 private token(){

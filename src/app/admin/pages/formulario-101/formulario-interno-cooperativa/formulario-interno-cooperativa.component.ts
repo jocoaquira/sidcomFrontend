@@ -1,18 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { IFormularioInternoSimple } from '@data/formulario_interno_simple.metadata';
-import { CanCrearFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-crear-formulario-interno.guard';
-import { CanEditarFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-editar-formulario-interno.guard';
-import { CanListarFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-listar-formulario-interno.guard';
-import { CanVerFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-ver-formulario-interno.guard';
 import { CanEliminarOperatorGuard } from 'src/app/admin/guards/operators/can-eliminar-operator.guard';
-import { FormularioInternosService } from 'src/app/admin/services/formulario-interno/formulariosinternos.service';
 import { Table } from 'primeng/table';
-import { PdfFormularioInternoService } from 'src/app/admin/services/pdf/formulario-interno-pdf.service';
 import { ToastrService } from 'ngx-toastr';
 import { IFormularioInterno } from '@data/formulario_interno.metadata';
 import { ConfirmationService } from 'primeng/api';
-import { CanAnularFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-anular-formulario-interno.guard';
-import { CanImprimirFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-imprimir-formulario-interno.guard';
 import { FormularioCooperativaService } from 'src/app/admin/services/formulario-interno-cooperativa/formulario-cooperativa.service';
 import { CanListarFormularioCooperativaGuard } from 'src/app/admin/guards/formulario-cooperativas/can-listar-formulario-cooperativa.guard';
 import { CanVerFormularioCooperativaGuard } from 'src/app/admin/guards/formulario-cooperativas/can-ver-formulario-cooperativa.guard';
@@ -20,6 +12,7 @@ import { CanCrearFormularioCooperativaGuard } from 'src/app/admin/guards/formula
 import { CanEditarFormularioCooperativaGuard } from 'src/app/admin/guards/formulario-cooperativas/can-editar-formulario-cooperativa.guard';
 import { CanAnularFormularioCooperativaGuard } from 'src/app/admin/guards/formulario-cooperativas/can-anular-formulario-cooperativa.guard';
 import { CanImprimirFormularioCooperativaGuard } from 'src/app/admin/guards/formulario-cooperativas/can-imprimir-formulario-cooperativa.guard';
+import { PdfFormularioInternoCooperativaService } from 'src/app/admin/services/pdf/formulario-cooperativa-pdf.service';
 
 @Component({
   selector: 'app-formulario-interno-cooperativa',
@@ -47,7 +40,7 @@ export class FormularioInternoCooperativaComponent implements OnInit {
         public canAnularFormularioCooperativa:CanAnularFormularioCooperativaGuard,
         public canImprimirFormularioCooperativa:CanImprimirFormularioCooperativaGuard,
         public formularioInternoService:FormularioCooperativaService,
-        public pdfFormularioInterno:PdfFormularioInternoService,
+        public pdfFormularioInternoCooperativa:PdfFormularioInternoCooperativaService,
         private notify:ToastrService,
         private confirmationService:ConfirmationService
     ) {
@@ -57,6 +50,7 @@ export class FormularioInternoCooperativaComponent implements OnInit {
         this.formularioInternoService.verFormularioCooperativaSimple(this.nombre).subscribe(
             (data:any)=>{
             this.listaFormularioInternos=this.formularioInternoService.handleFormularioInternoSimple(data);
+            console.log(this.listaFormularioInternos);
           },
           (error:any)=> this.error=this.formularioInternoService.handleError(error));
 
@@ -110,7 +104,13 @@ export class FormularioInternoCooperativaComponent implements OnInit {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
     generarPDF(formulario_interno:IFormularioInternoSimple){
-        this.pdfFormularioInterno.generarPDF(formulario_interno);
+        this.formularioInternoService.verFormularioInternoCooperativaPDF(formulario_interno.id.toString()).subscribe(
+            (data:any)=>{
+            let tdm_completo=this.formularioInternoService.handleFormularioInternoCooperativaPDF(data);
+            console.log(tdm_completo);
+            this.pdfFormularioInternoCooperativa.generarPDF(tdm_completo);
+          },
+          (error:any)=> this.error=this.formularioInternoService.handleError(error));
     }
     emitir(event:IFormularioInternoSimple){
         let emitido:any=null;

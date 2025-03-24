@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import {CanActivate, Router} from '@angular/router';
+import { CanActivate, Router} from '@angular/router';
 import { PermissionHelperService } from '../../helpers/permission.helper.service';
-const canVer='print_formcooperativa_id';
+const canEditar='update_formcola';
+
 @Injectable({
   providedIn: 'root'
 })
-export class CanImprimirFormularioCooperativaGuard implements CanActivate {
-
+export class CanEditarFormularioColasGuard implements CanActivate {
   constructor(
     private router:Router,
     private permissionHelperService:PermissionHelperService,
@@ -14,7 +14,7 @@ export class CanImprimirFormularioCooperativaGuard implements CanActivate {
   public canActivate(
   ):boolean{
     if(this.permissionHelperService.existeUsuarioPermisos()){
-      return this.permissionHelperService.existePermiso(canVer);
+      return this.permissionHelperService.existePermiso(canEditar);
     }
     this.router.navigate(['auth']);
     return false;

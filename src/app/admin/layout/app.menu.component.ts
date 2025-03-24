@@ -81,7 +81,9 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Formularios Internos', icon: 'pi pi-fw pi-book', routerLink: ['/admin/formulario-101/formulario-interno'],visible: this.canVerFormIntGuard.canActivate() },
                     { label: 'Formularios Externos', icon: 'pi pi-fw pi-globe', routerLink: ['/admin/formulario-101/formulario-externo'],visible: this.canVerFormExtGuard.canActivate() },
                     { label: 'Formulario Cooperativas', icon: 'pi pi-fw pi-slack', routerLink: ['/admin/formulario-101/formulario-cooperativa'],visible: this.canVerFormCooperativaGuard.canActivate() },
-                    { label: 'Toma de Muestra', icon: 'pi pi-fw pi-briefcase', routerLink: ['/admin/toma-de-muestra'],visible: this.canVerTomaDeMuestraGuard.canActivate() }
+                    { label: 'Toma de Muestra', icon: 'pi pi-fw pi-briefcase', routerLink: ['/admin/toma-de-muestra'],visible: this.canVerTomaDeMuestraGuard.canActivate() },
+                    { label: 'Traslado de Colas', icon: 'pi pi-fw pi-truck', routerLink: ['/admin/toma-de-muestra'],visible: this.canVerTomaDeMuestraGuard.canActivate() }
+                
                 ]
             },
             {
