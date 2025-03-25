@@ -1,3 +1,3 @@
-export interface IFormularioColaMunicipioOrigenEnvio {
+export interface IFormularioTrasladoColaMunicipioOrigenEnvio {
    id:number
 }

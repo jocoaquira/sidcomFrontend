@@ -1,3 +1,3 @@
-export interface IFormularioColaMineralEnvio {
+export interface IFormularioTrasladoColaMineralEnvio {
    mineralId:number,
 }

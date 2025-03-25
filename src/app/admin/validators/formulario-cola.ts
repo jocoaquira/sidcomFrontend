@@ -1,8 +1,8 @@
+import { IFormularioTrasladoCola } from '@data/formulario_cola.metadata';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { IFormularioCola } from '@data/formulario_cola.metadata';
 
-export class FormularioColaFormulario {
-  formulario_interno!: IFormularioCola;
+export class FormularioTrasladoColaFormulario {
+  formulario_interno!: IFormularioTrasladoCola;
   formulario: FormGroup;
 
   constructor() {
@@ -17,7 +17,7 @@ export class FormularioColaFormulario {
         destino:null,
         almacen:null,
         dique_de_colas: null,
-   
+
         tipo_transporte: null,
         placa: null,
         nom_conductor: null,

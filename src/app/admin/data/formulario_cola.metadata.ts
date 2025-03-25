@@ -1,4 +1,4 @@
-export interface IFormularioCola {
+export interface IFormularioTrasladoCola {
    id?:number,
    user_id:number,
    operador_id:number,
@@ -6,11 +6,11 @@ export interface IFormularioCola {
    lote:string,
    peso_bruto:number,
    tara:number,
-   
+
    destino:string,
    almacen?:string,
    dique_de_colas: string,
-   
+
    tipo_transporte: string,
    placa: string,
    nom_conductor: string,

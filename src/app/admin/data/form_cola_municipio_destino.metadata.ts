@@ -1,4 +1,4 @@
-export interface IFormularioColaMunicipioDestino {
+export interface IFormularioTrasladoColaMunicipioDestino {
    id?:number,
    formulario_cola_id?:number,
    departamento:string,
