@@ -132,11 +132,11 @@ nextStep() {
         valid =this.lista_municipios_origen.length>0
         break;
       case 2:
-        valid = this.formulario_interno.formulario.get('des_tipo')?.valid &&
-       (this.formulario_interno.formulario.get('des_comprador')?.valid ||
-        this.formulario_interno.formulario.get('des_comprador')?.disabled) &&
-       (this.formulario_interno.formulario.get('des_planta')?.valid ||
-        this.formulario_interno.formulario.get('des_planta')?.disabled);
+        valid = this.formulario_interno.formulario.get('destino')?.valid &&
+       (this.formulario_interno.formulario.get('almacen')?.valid ||
+        this.formulario_interno.formulario.get('almacen')?.disabled) &&
+       (this.formulario_interno.formulario.get('dique_cola')?.valid ||
+        this.formulario_interno.formulario.get('dique_cola')?.disabled);
         break;
       // Agregar validaciones para otros pasos si es necesario
     }
@@ -184,8 +184,8 @@ nextStep() {
       (error:any)=> this.error=this.presentacionService.handleError(error));
 
     this.destinos = [
-        { nombre: 'COMPRADOR', id: '1' },
-        { nombre: 'PLANTA DE TRATAMIENTO', id: '2' },
+        { nombre: 'ALMACEN', id: '1' },
+        { nombre: 'DIQUE DE COLAS', id: '2' },
     ];
     this.unidades = [
         { nombre: '%', id: '1' },
@@ -227,16 +227,16 @@ nextStep() {
       });
   }
   cambioDestino(event){
-    if(event.value=='COMPRADOR')
+    if(event.value=='ALMACEN')
     {
       this.formulario_interno.formulario.patchValue({
-        des_planta: null
+        dique_cola: null
       });
     }
     else{
       {
         this.formulario_interno.formulario.patchValue({
-          des_comprador: null
+          almacen: null
         });
       }
     }
@@ -247,18 +247,15 @@ nextStep() {
         // Obtener los valores de cada campo individualmente
     const peso_bruto_humedo = this.formulario_interno.formulario.get('peso_bruto_humedo')?.value;
     const tara = this.formulario_interno.formulario.get('tara')?.value;
-    const merma = this.formulario_interno.formulario.get('merma')?.value;
-    const humedad = this.formulario_interno.formulario.get('humedad')?.value;
+
 
 
     // Validar que los campos necesarios tengan valores
-    if (peso_bruto_humedo && tara !== null && merma !== null && humedad !== null) {
+    if (peso_bruto_humedo && tara !== null) {
       const pesoSinTara = peso_bruto_humedo - tara;
-      const pesoConMerma = peso_bruto_humedo * (merma / 100);
-      const pesoConHumedad = peso_bruto_humedo * (humedad / 100);
 
       // Calcular el peso neto
-      let pesoNeto = pesoSinTara - pesoConMerma - pesoConHumedad;
+      let pesoNeto = pesoSinTara;
       this.formulario_interno.formulario.patchValue({
         peso_neto: pesoNeto
       });
@@ -270,6 +267,7 @@ nextStep() {
 
   }
   guardar(){
+
     this.formulario_interno.formulario.patchValue({
         estado: 'GENERADO'
       });
@@ -391,10 +389,10 @@ nextStep() {
       });
     });
   }*/
-  /*
+
   agregarLey(){
     // Verifica si el formulario tiene datos completos
-    if (this.formulario_mineral.descripcion && this.formulario_mineral.sigla_mineral && this.formulario_mineral.ley && this.formulario_mineral.unidad) {
+    if (this.formulario_mineral.descripcion && this.formulario_mineral.sigla_mineral) {
         // Verifica si el registro ya existe en la lista
         const existe = this.lista_leyes_mineral.some(ley => ley.sigla_mineral === this.formulario_mineral.sigla_mineral);
 
@@ -415,7 +413,7 @@ nextStep() {
         this.notify.error('Por favor, complete todos los campos','Error con el Registro',{timeOut:2000,positionClass: 'toast-bottom-right'});
     }
   }
-
+  /*
     cambioLey(event:any)
     {
         this.formulario_mineral.ley =(event.target as HTMLInputElement).value;

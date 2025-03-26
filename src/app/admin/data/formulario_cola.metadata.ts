@@ -4,8 +4,9 @@ export interface IFormularioTrasladoCola {
    operador_id:number,
    nro_formulario:string,
    lote:string,
-   peso_bruto:number,
+   peso_bruto_humedo:number,
    tara:number,
+   peso_neto:number,
 
    destino:string,
    almacen?:string,
