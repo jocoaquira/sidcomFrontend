@@ -64,8 +64,17 @@ export class CreateFormularioTrasladoColaComponent implements OnInit {
      };
      public minerales_envio:any=[];
      public municipio_origen_envio:any=[];
+     public municipio_destino_envio:any=[];
      public lista_municipios_origen:IFormularioTrasladoColaMunicipioOrigen[]=[];
+     public lista_municipios_destino:IFormularioTrasladoColaMunicipioOrigen[]=[];
      public municipio_origen:IFormularioTrasladoColaMunicipioOrigen={
+        id:null,
+        formulario_cola_id:null,
+        departamento:null,
+        municipio:null,
+        municipio_id:null
+     }
+     public municipio_destino:IFormularioTrasladoColaMunicipioOrigen={
         id:null,
         formulario_cola_id:null,
         departamento:null,
@@ -121,10 +130,7 @@ nextStep() {
       case 0:
         // Validar los campos del Paso 1
         valid = this.formulario_interno.formulario.get('peso_bruto_humedo')?.valid && this.formulario_interno.formulario.get('tara')?.valid &&
-        (this.formulario_interno.formulario.get('merma')?.valid || this.formulario_interno.formulario.get('merma')?.disable) &&
-        (this.formulario_interno.formulario.get('humedad')?.valid || this.formulario_interno.formulario.get('humedad')?.disable) &&
-        this.formulario_interno.formulario.get('lote')?.valid && this.formulario_interno.formulario.get('presentacion_id')?.valid &&
-        (this.formulario_interno.formulario.get('cantidad')?.valid || this.formulario_interno.formulario.get('cantidad')?.disabled) &&
+        this.formulario_interno.formulario.get('lote')?.valid  &&
         this.formulario_interno.formulario.get('peso_neto')?.valid && this.lista_leyes_mineral.length>0;
 
         break;
@@ -276,7 +282,8 @@ nextStep() {
       formularioEnvio={
         ...formularioEnvio,
         minerales:this.minerales_envio,
-        municipio_origen:this.municipio_origen_envio
+        municipio_origen:this.municipio_origen_envio,
+        municipio_destino:this.municipio_destino_envio
       }
       console.log(formularioEnvio);
       this.formularioTrasladoColaService.crearFormularioTrasladoCola(formularioEnvio).subscribe(
@@ -289,7 +296,7 @@ nextStep() {
             console.log(this.formulario_Interno_registrado);
             this.formulario_interno.formulario.reset();
             this.notify.success('El el formulario interno se generó exitosamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
-            this.router.navigate(['/admin/formulario-101/formulario-interno']);
+            this.router.navigate(['/admin/formulario-101/formulario-traslado-cola/']);
           }
           else{
             this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
@@ -305,29 +312,6 @@ nextStep() {
           }
         }
 
-        /*this.formularioTrasladoColaService.crearFormularioTrasladoCola(this.formulario_interno.formulario.value).subscribe(
-            (data:any) =>
-            {
-                this.formulario_Interno_registrado=this.formularioTrasladoColaService.handleCrearFormularioTrasladoCola(data);
-                this.guardarMinerales(this.formulario_Interno_registrado.id);
-                this.guardarMunicipiosOrigen(this.formulario_Interno_registrado.id);
-
-              if(data.error==null)
-              {
-                this.formulario_interno.formulario.reset();
-                this.notify.success('El el formulario interno se generó exitosamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
-                this.router.navigate(['/admin/formulario-101/formulario-interno']);
-              }
-            },
-            (error:any) =>
-            {
-
-              this.error=this.formularioTrasladoColaService.handleCrearFormularioTrasladoColaError(error.error.data);
-              if(error.error.status=='fail')
-              {
-                this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
-              }
-            }*/
           );
     }
     else{
@@ -337,58 +321,6 @@ nextStep() {
    }
 
   }
-  /*
-  guardarMinerales(formulario_int_id:any) {
-    this.lista_leyes_mineral.forEach((item) => {
-
-        item.formulario_int_id=formulario_int_id;
-      this.listaLeyesMineralesService.crearFormularioTrasladoColaMineral(item).subscribe((data:any) =>
-      {
-
-         this.listaLeyesMineralesService.handleCrearFormularioTrasladoColaMineral(data);
-
-
-        if(data.error==null)
-        {
-          this.notify.success('Minerales Agregados Correctamente','Creado Correctamente',{timeOut:500,positionClass: 'toast-top-right'});
-        }
-      },
-      (error:any) =>
-      {
-
-        this.error=this.listaLeyesMineralesService.handleCrearFormularioTrasladoColaMineralError(error.error.data);
-        if(error.error.status=='fail')
-        {
-          this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
-        }
-      });
-    });
-  }
-  guardarMunicipiosOrigen(formulario_int_id:any) {
-    this.lista_municipios_origen.forEach((item) => {
-
-        item.formulario_int_id=formulario_int_id;
-      this.listaMunicipiosOrigenService.crearFormularioTrasladoColaMunicipioOrigen(item).subscribe((data:any) =>
-      {
-         this.listaMunicipiosOrigenService.handleCrearFormularioTrasladoColaMunicipioOrigen(data);
-
-
-        if(data.error==null)
-        {
-          this.notify.success('Municios Origen Agregados Correctamente','Creado Correctamente',{timeOut:500,positionClass: 'toast-top-right'});
-        }
-      },
-      (error:any) =>
-      {
-
-        this.error=this.listaMunicipiosOrigenService.handleCrearFormularioTrasladoColaMunicipioOrigenError(error.error.data);
-        if(error.error.status=='fail')
-        {
-          this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
-        }
-      });
-    });
-  }*/
 
   agregarLey(){
     // Verifica si el formulario tiene datos completos
@@ -413,15 +345,7 @@ nextStep() {
         this.notify.error('Por favor, complete todos los campos','Error con el Registro',{timeOut:2000,positionClass: 'toast-bottom-right'});
     }
   }
-  /*
-    cambioLey(event:any)
-    {
-        this.formulario_mineral.ley =(event.target as HTMLInputElement).value;
 
-    }
-    cambioUnidad(event:any){
-        this.formulario_mineral.unidad=event.value;
-    }*/
     eliminar(domicilio:IFormularioTrasladoColaMineral) {
       this.minerales_envio=this.minerales_envio.filter(val => val.mineralId !== domicilio.mineral_id)
       this.lista_leyes_mineral = this.lista_leyes_mineral.filter(val => val.sigla_mineral !== domicilio.sigla_mineral);
@@ -448,6 +372,29 @@ nextStep() {
             this.notify.error('Por favor, complete todos los campos','Error con el Registro',{timeOut:2000,positionClass: 'toast-bottom-right'});
         }
     }
+
+    agregarMunicipioDestino(){
+        if (this.municipio_destino.departamento && this.municipio_destino.municipio && this.municipio_destino.municipio_id) {
+            // Verifica si el registro ya existe en la lista
+            const existe = this.lista_municipios_destino.some(municipio => municipio.municipio_id === this.municipio_destino.municipio_id);
+
+            if (existe) {
+                this.notify.error('Ya existe el registro verifique los datos e intente nuevamente....','Error con el Registro',{timeOut:2000,positionClass: 'toast-bottom-right'});
+            }
+            else{
+                // Si no existe, agrega el registro
+                this.notify.success('Agregado Exitosamente','Exito',{timeOut:2000,positionClass: 'toast-bottom-right'});
+                let envio_origen:IFormularioTrasladoColaMunicipioOrigenEnvio={
+                  id:this.municipio_destino.municipio_id
+                }
+                this.municipio_destino_envio.push({...envio_origen});
+                this.lista_municipios_destino.push({...this.municipio_destino});
+            }
+        } else {
+            this.notify.error('Por favor, complete todos los campos','Error con el Registro',{timeOut:2000,positionClass: 'toast-bottom-right'});
+        }
+    }
+
     cambioDepartamento(event){
         this.departamento_id=event;
 
@@ -456,12 +403,19 @@ nextStep() {
 
         this.municipio_origen.departamento=event;
     }
+    cambioNombreDepartemento1(event){
+
+        this.municipio_destino.departamento=event;
+    }
     cambioMunicipio(event){
         this.municipio_id=event;
         this.municipio_origen.municipio_id=event;
     }
     cambioNombreMunicipio(event){
         this.municipio_origen.municipio=event;
+    }
+    cambioNombreMunicipio1(event){
+        this.municipio_destino.municipio=event;
     }
     cambioSigla(event){
         this.formulario_mineral.sigla_mineral=event;
@@ -481,41 +435,13 @@ nextStep() {
 
     cambioMunicipio1(event){
         this.municipio_id1=event;
-        this.formulario_interno.formulario.value.id_municipio_destino=event;
-
-        this.formulario_interno.formulario.patchValue({
-            id_municipio_destino: event
-          });
+        this.municipio_destino.municipio_id=event
     }
     declaracionJuradaSwitch(event:any){
         const checkbox = event.target as HTMLInputElement;
         this.declaracionJurada=checkbox.checked;
     }
 
-
-    cambioPresentacion(event:any){
-        this.presentacion=this.presentaciones.filter(val => val.id === event.value)[0];
-
-
-        if (this.presentacion.cantidad==1) {
-            this.formulario_interno.formulario.get('cantidad')?.enable();
-        } else {
-        this.formulario_interno.formulario.get('cantidad')?.disable();
-        this.formulario_interno.formulario.get('cantidad')?.setValue(null);
-        }
-        if (this.presentacion.merma==1) {
-        this.formulario_interno.formulario.get('merma')?.enable();
-        } else {
-        this.formulario_interno.formulario.get('merma')?.disable();
-        this.formulario_interno.formulario.get('merma')?.setValue(0);
-        }
-        if (this.presentacion.humedad==1) {
-        this.formulario_interno.formulario.get('humedad')?.enable();
-        } else {
-        this.formulario_interno.formulario.get('humedad')?.disable();
-        this.formulario_interno.formulario.get('humedad')?.setValue(0);
-        }
-}
 private mostrarErrorFormularios(formGroup: FormularioTrasladoColaFormulario): void {
     const errores: any[] = [];
   Object.keys(formGroup.formulario.controls).forEach((campo) => {

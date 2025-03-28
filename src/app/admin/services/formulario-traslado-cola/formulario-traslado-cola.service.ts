@@ -4,6 +4,7 @@ import { AuthService } from '@core/authentication/services/auth.service';
 import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.metadata';
 import { IFormularioTrasladoColaSimple } from '@data/formulario_cola_simple.metadata';
 import { IFormularioTrasladoCola } from '@data/formulario_cola.metadata';
+import { IFormularioTrasladoColaPDF } from '@data/formulario_cola_pdf.metadata';
 
 
 @Injectable({
@@ -47,6 +48,16 @@ verFormularioTrasladoColas(nombre:string)
 
   // asignacion de parametros
   return this.http.get(`${this.baseUrl}formcola/`+nombre,{params:params});
+}
+//-----------------Visualizar Toma de Muestra-------------------------------------------
+verFormularioTrasladoColaPDF(nombre:string)
+{
+  // asignacion de parametros
+  return this.http.get(`${this.baseUrl}formcola/print/`+nombre);
+}
+handleFormularioTrasladoColaPDF(data: IFormularioTrasladoColaPDF):IFormularioTrasladoColaPDF {
+  let TomaDeMuestra:IFormularioTrasladoColaPDF=data;
+  return TomaDeMuestra
 }
   //-----------------Visualizar operadores-------------------------------------------
   verFormularioTrasladoColaSimple(nombre:string)

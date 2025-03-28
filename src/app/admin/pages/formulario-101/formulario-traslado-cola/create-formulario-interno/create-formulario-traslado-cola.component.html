@@ -250,12 +250,65 @@
                                 </span>
                             </div>
 
-                            <div class="field col-12 md:col-3 ">
-                                <app-departamentoSelect [departamento_id]="departamento_id1" (cambioDepartamento)="cambioDepartamento1($event)" ></app-departamentoSelect>
+
+                            <div class="grid p-fluid mt-2">
+                                <div class="field col-12 md:col-3 ">
+                                    <app-departamentoSelect [departamento_id]="departamento_id1" (cambioDepartamento)="cambioDepartamento1($event)" (nombre_departamento)="cambioNombreDepartemento1($event)"></app-departamentoSelect>
+                                </div>
+                                <div class="field col-12 md:col-3 ">
+                                    <app-municipioSelect [departamento_id]="departamento_id1" [municipio_id1]="municipio_id1" (municipio_id)="cambioMunicipio1($event)" (nombre_municipio)="cambioNombreMunicipio1($event)"></app-municipioSelect>
+                                </div>
+
+                                <div class="field col-12 md:col-2">
+                                    <button pButton pRipple (click)="agregarMunicipioDestino()" type="button" icon="pi pi-plus" label="Agregar" class="p-button-outlined p-button-success"></button>
+                                </div>
+
+                                <div class="field col-12">
+                                    <p-table #dt [value]="lista_municipios_destino"
+                                    responsiveLayout="scroll" [rows]="10"
+                                    [paginator]="false"  [showCurrentPageReport]="false"
+                                    selectionMode="multiple"
+                                    [rowHover]="true"
+                                    dataKey="id">
+
+                                        <ng-template pTemplate="header">
+                                            <tr>
+
+                                                <th pSortableColumn="code">Departamento <p-sortIcon field="code"></p-sortIcon></th>
+                                                <th pSortableColumn="code">Municipio <p-sortIcon field="code"></p-sortIcon></th>
+                                                <th pSortableColumn="name">ID Municipio <p-sortIcon field="name"></p-sortIcon></th>
+                                                <th pSortableColumn="price">Acción <p-sortIcon field="price"></p-sortIcon></th>
+
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-product>
+                                            <tr>
+
+                                                <td style="width:30%; min-width:20rem;"><span class="p-column-title">Departamento</span>
+                                                    {{product.departamento}}
+                                                </td>
+                                                <td style="width:14%; min-width:8rem;">
+                                                    <span class="p-column-title">Municipio</span>
+                                                    {{product.municipio}}
+                                                </td>
+                                                <td style="width:14%; min-width:10rem;">
+                                                    <span class="p-column-title">Ley</span>
+                                                    {{product.municipio_id}}
+                                                </td>
+                                                <td>
+                                                    <div class="flex">
+                                                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminarMunicipio(product)"></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
                             </div>
-                            <div class="field col-12 md:col-3 ">
-                                <app-municipioSelect [departamento_id]="departamento_id1" [municipio_id1]="municipio_id1" (municipio_id)="cambioMunicipio1($event)" ></app-municipioSelect>
-                            </div>
+
+
+
+
                         </div>
                     </div>
                     <div  *ngIf="activeStep === 3"

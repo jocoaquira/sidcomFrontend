@@ -10,7 +10,7 @@ export interface IFormularioTrasladoCola {
 
    destino:string,
    almacen?:string,
-   dique_de_colas: string,
+   dique_cola: string,
 
    tipo_transporte: string,
    placa: string,

@@ -17,7 +17,7 @@ export class FormularioTrasladoColaFormulario {
         tara:0,
         destino:null,
         almacen:null,
-        dique_de_colas: null,
+        dique_cola: null,
 
         tipo_transporte: null,
         placa: null,
@@ -46,7 +46,7 @@ export class FormularioTrasladoColaFormulario {
         destino:new FormControl(this.formulario_interno.destino,[Validators.required]),
         tipo_transporte:new FormControl(this.formulario_interno.tipo_transporte,[Validators.required]),
         almacen:new FormControl(this.formulario_interno.almacen),
-        dique_de_colas:new FormControl(this.formulario_interno.dique_de_colas),
+        dique_cola:new FormControl(this.formulario_interno.dique_cola),
         placa:new FormControl(this.formulario_interno.placa),
         nom_conductor:new FormControl(this.formulario_interno.nom_conductor,Validators.pattern('^[a-zA-ZÀ-ÿ\\s]+$')),
         licencia:new FormControl(this.formulario_interno.licencia),
@@ -133,7 +133,7 @@ getErrorMessage(controlName: string): string | null {
   private actualizarValidacionesSegunTipo(valor: string): void {
     console.log(valor);
     const almacen = this.formulario.get('almacen');
-    const dique_de_colas = this.formulario.get('dique_de_colas');
+    const dique_cola = this.formulario.get('dique_cola');
 
     if (valor === 'ALMACEN') {
       // Activar y hacer requerido `des_comprador`
@@ -142,14 +142,14 @@ getErrorMessage(controlName: string): string | null {
       almacen?.updateValueAndValidity();
 
       // Deshabilitar y limpiar validaciones de `des_planta`
-      dique_de_colas?.disable();
-      dique_de_colas?.clearValidators();
-      dique_de_colas?.updateValueAndValidity();
+      dique_cola?.disable();
+      dique_cola?.clearValidators();
+      dique_cola?.updateValueAndValidity();
     } else if (valor === 'DIQUE DE COLAS') {
       // Activar y hacer requerido `des_planta`
-      dique_de_colas?.enable();
-      dique_de_colas?.setValidators([Validators.required]);
-      dique_de_colas?.updateValueAndValidity();
+      dique_cola?.enable();
+      dique_cola?.setValidators([Validators.required]);
+      dique_cola?.updateValueAndValidity();
 
       // Deshabilitar y limpiar validaciones de `des_comprador`
       almacen?.disable();
@@ -161,9 +161,9 @@ getErrorMessage(controlName: string): string | null {
       almacen?.clearValidators();
       almacen?.updateValueAndValidity();
 
-      dique_de_colas?.disable();
-      dique_de_colas?.clearValidators();
-      dique_de_colas?.updateValueAndValidity();
+      dique_cola?.disable();
+      dique_cola?.clearValidators();
+      dique_cola?.updateValueAndValidity();
     }
   }
 

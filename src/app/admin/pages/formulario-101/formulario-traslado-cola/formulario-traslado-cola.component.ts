@@ -103,9 +103,17 @@ export class FormularioTrasladoColaComponent implements OnInit {
     onGlobalFilter(table: Table, event: Event) {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
-    generarPDF(formulario_interno:IFormularioTrasladoColaSimple){
-        //this.pdfFormularioTrasladoCola.generarPDF(formulario_interno);
-    }
+    generarPDF(tdm:IFormularioTrasladoColaSimple){
+                console.log(tdm);
+                this.formularioTrasladoColaService.verFormularioTrasladoColaPDF(tdm.id.toString()).subscribe(
+                    (data:any)=>{
+                    let tdm_completo=this.formularioTrasladoColaService.handleFormularioTrasladoColaPDF(data);
+                    console.log(tdm_completo);
+                    this.pdfFormularioTrasladoCola.generarPDF(tdm_completo);
+                  },
+                  (error:any)=> this.error=this.formularioTrasladoColaService.handleError(error));
+
+        }
     emitir(event:IFormularioTrasladoColaSimple){
         let emitido:any=null;
         this.formularioTrasladoColaService.emitirFormularioTrasladoCola(event.id).subscribe(
