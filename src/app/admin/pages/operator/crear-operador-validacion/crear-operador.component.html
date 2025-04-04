@@ -117,7 +117,7 @@
                 (onSelect)="onFileSelected($event, 'nim_link')">
             </p-fileUpload>
         </div>
-        
+
 
         <div class="field col-12 md:col-3">
             <span class="p-float-label">
@@ -427,8 +427,8 @@
 
 </div>
 </div>
-<div class="card">
-    <div class="grid p-fluid mt-3" *ngIf="valSwitch">
+<div class="card" *ngIf="valSwitch">
+    <div class="grid p-fluid mt-3" >
         <div class="col-12">
             <p>
                 Sucursales de la Empresa
@@ -741,17 +741,32 @@
             <span class="p-float-label">
                 <input
                     type="number"
-                    id="nro_cuadricula"
+                    id="extension"
                     pInputText
                     (input)="nroCuadricula($event)"
 					class="ng-dirty"
-                    [style.border]="errorArrendamiento.nro_cuadricula ? '1px solid red' : ''"
+                    [style.border]="errorArrendamiento.extension ? '1px solid red' : ''"
                 />
-                <label for="nro_cuadricula">Nro. de Cuadricula</label>
-				<small id="nro_cuadricula" class="p-error " [hidden]="!errorArrendamiento.nro_cuadricula">
-					{{errorArrendamiento.nro_cuadricula}}
+                <label for="extension">Extensión</label>
+				<small id="extension" class="p-error " [hidden]="!errorArrendamiento.extension">
+					{{errorArrendamiento.extension}}
 				</small>
             </span>
+        </div>
+        <div class="field col-12 md:col-3">
+            <span class="p-float-label">
+                <p-dropdown
+                    inputId="dropdown"
+                    [autoDisplayFirst]="false"
+                    [options]="tipoExtension"
+
+                    optionLabel="name"
+                    optionvalue="id"
+                    (onChange)="onChangeTipoExtension($event)"
+                ></p-dropdown>
+                <label for="dropdown">Unidad de Extensión</label>
+            </span>
+
         </div>
         <div class="field col-12 md:col-3">
             <span class="p-float-label">
@@ -813,7 +828,8 @@
                 <tr>
 
                     <th pSortableColumn="code">Código Único <p-sortIcon field="code"></p-sortIcon></th>
-                    <th pSortableColumn="name">Nro. de Cuadriculas <p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="name">Extensión <p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="name">Tipo de Extensión <p-sortIcon field="name"></p-sortIcon></th>
                     <th pSortableColumn="price">Denominacion de Areas <p-sortIcon field="price"></p-sortIcon></th>
                     <th pSortableColumn="category">Municipio <p-sortIcon field="category"></p-sortIcon></th>
                     <th pSortableColumn="rating">Tipo de Explotacion <p-sortIcon field="rating"></p-sortIcon></th>
@@ -828,7 +844,11 @@
                     </td>
                     <td style="width:14%; min-width:10rem;">
                         <span class="p-column-title">Departamento</span>
-                        {{product.nro_cuadricula}}
+                        {{product.extension}}
+                    </td>
+                    <td style="width:14%; min-width:10rem;">
+                        <span class="p-column-title">Departamento</span>
+                        {{product.unidad_extension}}
                     </td>
                     <td style="width:14%; min-width:8rem;">
                         <span class="p-column-title">Municipio</span>

@@ -1,38 +1,35 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IFormularioInterno } from '@data/formulario_interno.metadata';
+import { IFormularioTrasladoCola } from '@data/formulario_cola.metadata';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { FormularioInternosService } from 'src/app/admin/services/formulario-interno/formulariosinternos.service';
+import { FormularioTrasladoColaService } from 'src/app/admin/services/formulario-traslado-cola/formulario-traslado-cola.service';
 
 @Component({
-  selector: 'app-anular-formulario-interno',
-  templateUrl: './anular-formulario-interno.component.html',
-  styleUrls: ['./anular-formulario-interno.component.scss'],
+  selector: 'app-anular-formulario-traslado-cola',
+  templateUrl: './anular-formulario-traslado-cola.component.html',
+  styleUrls: ['./anular-formulario-traslado-cola.component.scss'],
 
 })
-export class AnularFormularioInternoComponent implements OnInit {
+export class AnularFormularioTrasladoColaComponent implements OnInit {
     public id!:any;
     public valido:boolean=false;
     public status:string='';
     public error!:any;
-    public formulario_int:IFormularioInterno={
+    public formulario_int:IFormularioTrasladoCola={
         id:null,
         user_id:null,
         operador_id:null,
         nro_formulario:null,
         lote:null,
-        presentacion_id:null,
-        cantidad:null,
+
         peso_bruto_humedo:0,
         peso_neto:0,
         tara:0,
-        humedad:0,
-        merma:0,
-        des_tipo:'',
-        des_comprador:null,
-        des_planta: null,
-        id_municipio_destino: null,
+
+        destino:'',
+        almacen:null,
+        dique_cola: null,
         tipo_transporte: null,
         placa: null,
         nom_conductor: null,
@@ -48,13 +45,12 @@ export class AnularFormularioInternoComponent implements OnInit {
         hr_ferrea:null,
         tara_volqueta:null,
         //copes
-        traslado_mineral:null,
         nro_viajes:null
     };
   //public id_formulario:string='E-12345/2024';
   constructor(
     private actRoute:ActivatedRoute,
-    private formularioInternoService:FormularioInternosService,
+    private formularioInternoService:FormularioTrasladoColaService,
     private notify:ToastrService,
     private router: Router,
     private confirmationService: ConfirmationService,
@@ -62,9 +58,10 @@ export class AnularFormularioInternoComponent implements OnInit {
   ) {
     this.actRoute.paramMap.subscribe(params=>{
         this.id=params.get('id');
-        this.formularioInternoService.verFormularioInterno(this.id).subscribe(
+        this.formularioInternoService.verFormularioTrasladoCola(this.id).subscribe(
           (data:any)=>{
-          this.formulario_int=this.formularioInternoService.handleCrearFormularioInterno(data);
+            console.log(data);
+          this.formulario_int=this.formularioInternoService.handleCrearFormularioTrasladoCola(data);
 
         },
         (error:any)=> this.error=this.formularioInternoService.handleError(error));
@@ -79,21 +76,21 @@ export class AnularFormularioInternoComponent implements OnInit {
     if(this.valido)
     {
         this.formulario_int.estado='ANULADO';
-        this.formularioInternoService.anularFormularioInterno(this.formulario_int).subscribe(
+        this.formularioInternoService.anularFormularioTrasladoCola(this.formulario_int).subscribe(
             (data:any) =>
             {
               //let sw:boolean=
-              this.formulario_int= this.formularioInternoService.handleEditarFormularioInterno(data);
+              this.formulario_int= this.formularioInternoService.handleEditarFormularioTrasladoCola(data);
 
               if(this.formulario_int)
               {
-                this.router.navigate(['/public/formulario-101/formulario-interno']);
+                this.router.navigate(['/public/formulario-101/formulario-traslado-cola']);
                 this.notify.success('El el formulario'+this.formulario_int.nro_formulario+' se anuló exitosamente','Anulado Correctamente',{timeOut:2500,positionClass: 'toast-bottom-right'});
               }
             },
             (error:any) =>
             {
-              this.error=this.formularioInternoService.handleCrearFormularioInternoError(error.data);
+              this.error=this.formularioInternoService.handleCrearFormularioTrasladoColaError(error.data);
               this.status=error.error.status;
               if(this.status=='fail')
               {

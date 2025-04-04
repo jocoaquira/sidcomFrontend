@@ -53,7 +53,7 @@ export class FormularioExternoFormulario {
         peso_neto: new FormControl(this.formulario_externo.peso_neto,[Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
         tara:new FormControl(this.formulario_externo.tara,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'),Validators.min(0)]),
         humedad: new FormControl(this.formulario_externo.humedad,[Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0), Validators.max(100)]),
-        merma:new FormControl(this.formulario_externo.merma,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0), Validators.max(100)]),
+        merma:new FormControl(this.formulario_externo.merma,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0), Validators.max(1)]),
         comprador: new FormControl(this.formulario_externo.comprador,[Validators.required]),
         aduana_id:new FormControl(this.formulario_externo.aduana_id),
         pais_destino_id: new FormControl(this.formulario_externo.pais_destino_id),

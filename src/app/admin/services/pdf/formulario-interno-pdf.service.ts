@@ -58,7 +58,7 @@ export class PdfFormularioInternoService {
     const year = date.getFullYear(); // Año
     const hours = String(date.getHours()).padStart(2, '0'); // Hora con 2 dígitos
     const minutes = String(date.getMinutes()).padStart(2, '0'); // Minutos con 2 dígitos
-  
+
     return `${day}/${month}/${year} a Hrs.: ${hours}:${minutes}`; // Formato final
   }
     generarPDF(formulario_interno: IFormularioInternoSimple) {

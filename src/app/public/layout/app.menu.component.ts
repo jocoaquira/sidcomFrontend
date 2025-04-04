@@ -7,6 +7,7 @@ import { CanVerFormularioExternoGuard } from 'src/app/admin/guards/formulario-ex
 import { CanVerFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-ver-formulario-interno.guard';
 import { CanVerTomaDeMuestraGuard } from 'src/app/admin/guards/toma-de-muestra/can-ver-toma-de-muestra.guard';
 import { CanVerFormularioCooperativaGuard } from 'src/app/admin/guards/formulario-cooperativas/can-ver-formulario-cooperativa.guard';
+import { CanVerReducidoFormularioColasGuard } from 'src/app/admin/guards/formulario-colas/can-ver-reducido-formulario-cola.guard';
 
 @Component({
     selector: 'app-menu-public',
@@ -23,6 +24,7 @@ export class AppMenuComponent implements OnInit {
         private canVerFormIntGuard:CanVerFormularioInternoGuard,
         private canVerFormCooperativaGuard:CanVerFormularioCooperativaGuard,
         private canVerTomaDeMuestraGuard:CanVerTomaDeMuestraGuard,
+        private canVerFormTrasladoColaGuard:CanVerReducidoFormularioColasGuard,
         private authService:AuthService
     ) { }
 
@@ -32,7 +34,7 @@ export class AppMenuComponent implements OnInit {
                 label: 'Adminsitracion',
                 items: [
                     { label: 'Responsables de Toma de Muestra', icon: 'pi pi-fw pi-users', routerLink: ['/public/responsable-tm'],visible: this.canVerResponsableTMGuard.canActivate() },
-                    { label: 'Usuario', icon: 'pi pi-fw pi-user', routerLink: ['/uikit/input'] },
+                    { label: 'Usuario', icon: 'pi pi-fw pi-user', routerLink: ['/public/info/usuario'] },
                 ]
             },
             {
@@ -41,17 +43,14 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Formularios Internos', icon: 'pi pi-fw pi-book', routerLink: ['/public/formulario-101/formulario-interno'],visible: this.canVerFormIntGuard.canActivate() },
                     { label: 'Formularios Externos', icon: 'pi pi-fw pi-globe', routerLink: ['/public/formulario-101/formulario-externo'],visible: this.canVerFormExtGuard.canActivate() },
                     { label: 'Formulario Cooperativas', icon: 'pi pi-fw pi-slack', routerLink: ['/public/formulario-101/formulario-cooperativa'],visible: this.canVerFormCooperativaGuard.canActivate() },
+                    { label: 'Formulario Traslado Colas', icon: 'pi pi-fw pi-slack', routerLink: ['/public/formulario-101/formulario-traslado-cola'],visible: this.canVerFormTrasladoColaGuard.canActivate() },
                     { label: 'Toma de Muestra', icon: 'pi pi-fw pi-file-o', routerLink: ['/public/toma-de-muestra'],visible: this.canVerTomaDeMuestraGuard.canActivate() }
                 ]
             },
             {
                 label: 'REPORTES',
                 items: [
-                    { label: 'Operadores Mineros', icon: 'pi pi-fw pi-id-card', routerLink: ['/blocks'], badge: 'NEW' },
-                    { label: 'Formularios Interno', icon: 'pi pi-fw pi-file-o', url: ['https://www.primefaces.org/primeblocks-ng'], target: '_blank' },
-                    { label: 'Formularios Externo', icon: 'pi pi-fw pi-globe', routerLink: ['/utilities/icons'] },
-                    { label: 'Formularios Cooperativas', icon: 'pi pi-fw pi-file-o', url: ['https://www.primefaces.org/primeflex/'], target: '_blank' },
-                ]
+                    ]
             },
 
         ];

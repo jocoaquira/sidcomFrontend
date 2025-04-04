@@ -140,5 +140,13 @@ export class FormularioInternoComponent implements OnInit {
               },
         });
     }
+    vigenteAnulacion(form:any): boolean {
+
+        const fecha_vencimiento:Date = new Date(form.fecha_vencimiento);
+        const fechaLimite = new Date();
+        let sw:boolean=fechaLimite <= fecha_vencimiento;
+        console.log(sw);
+        return sw; // Se muestra solo después de DIAS_ANULACION días
+      }
 
 }

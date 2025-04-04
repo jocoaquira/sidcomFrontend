@@ -46,7 +46,7 @@ export class AnularFormularioExternoComponent implements OnInit {
       fecha_vencimiento: null,
       justificacion_anulacion: null,
       estado:null, //'GENERADO','EMITIDO','VENCIDO', 'ANULADO'
-   
+
       nro_vagon:null,
       empresa_ferrea:null,
       fecha_ferrea:null,
@@ -70,7 +70,7 @@ export class AnularFormularioExternoComponent implements OnInit {
         this.formularioExternoService.verFormularioExterno(this.id).subscribe(
           (data:any)=>{
           this.formulario_ext=this.formularioExternoService.handleCrearFormularioExterno(data);
-          
+
         },
         (error:any)=> this.error=this.formularioExternoService.handleError(error));
       });
@@ -80,7 +80,7 @@ export class AnularFormularioExternoComponent implements OnInit {
 
   }
   onSubmit(){
-    
+
     if(this.valido)
     {
         this.formulario_ext.estado='ANULADO';
@@ -92,7 +92,7 @@ export class AnularFormularioExternoComponent implements OnInit {
 
               if(this.formulario_ext)
               {
-                this.router.navigate(['/admin/formulario-101/formulario-externo']);
+                this.router.navigate(['/public/formulario-101/formulario-externo']);
                 this.notify.success('El el formulario'+this.formulario_ext.nro_formulario+' se anuló exitosamente','Anulado Correctamente',{timeOut:2500,positionClass: 'toast-bottom-right'});
               }
             },
@@ -116,12 +116,12 @@ export class AnularFormularioExternoComponent implements OnInit {
   longitudTexto(event:any){
     if((event.target as HTMLInputElement).value.length>=200){
       this.valido=true;
-      
+
     }
     else{
       this.valido=false;
     }
-    
+
   }
   confirmarAnulacion() {
     this.confirmationService.confirm({

@@ -113,7 +113,7 @@ export class FormularioExternoComponent implements OnInit {
             this.formularioExternoPDF.generarPDF(tdm_completo);
           },
           (error:any)=> this.error=this.formularioExternoService.handleError(error));
-        
+
 }
     emitir(event:IFormularioExternoSimple){
         let emitido:any=null;
@@ -149,11 +149,7 @@ export class FormularioExternoComponent implements OnInit {
         });
     }
     vigenteAnulacion(form:any): boolean {
-        /*
-        const fechaCreacion = new Date(form.fecha_creacion);
-        const fechaLimite = new Date(fechaCreacion);
-        fechaLimite.setDate(fechaLimite.getDate() + environment.DIAS_ANULACION);
-      */
+        
         const fecha_vencimiento:Date = new Date(form.fecha_vencimiento);
         const fechaLimite = new Date();
         let sw:boolean=fechaLimite <= fecha_vencimiento;

@@ -28,7 +28,7 @@ export interface IFormularioExternoPDF{
 	aduana:string,
 	codigo_aduana:string,
 	pais:string,
-	tipo_transpote:string,
+	tipo_transporte:string,
 	conductor:string,
 	placa:string,
 	licencia:string,

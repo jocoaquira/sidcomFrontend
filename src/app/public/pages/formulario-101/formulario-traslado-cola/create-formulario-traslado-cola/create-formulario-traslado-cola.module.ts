@@ -7,14 +7,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
-import { InputTextareaModule } from 'primeng/inputtextarea';
 import { DepartamentoSelectModule } from 'src/app/admin/components/departamentoSelect/departamentoSelect.module';
 import { MunicipioSelectModule } from 'src/app/admin/components/municipioSelect/municipioSelect.module';
 import { MineralesSelectModule } from 'src/app/admin/components/mineralesSelect/mineralesSelect.module';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CheckboxModule } from 'primeng/checkbox';
 import { StepsModule } from 'primeng/steps';
 import { TabMenuModule } from 'primeng/tabmenu';
-import { EditFormularioTrasladoColaComponent } from './edit-formulario-traslado-cola.component';
+import { RouterModule } from '@angular/router';
+import { CreateFormularioTrasladoColaComponent } from './create-formulario-traslado-cola.component';
 
 @NgModule({
   imports: [
@@ -35,6 +36,6 @@ import { EditFormularioTrasladoColaComponent } from './edit-formulario-traslado-
     TabMenuModule,
     FormsModule,
   ],
-  declarations: [EditFormularioTrasladoColaComponent]
+  declarations: [CreateFormularioTrasladoColaComponent]
 })
-export class EditFormularioTrasladoColaModule { }
+export class CreateFormularioTrasladoColaModule { }

@@ -4,7 +4,12 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="Nuevo Formulario Interno" icon="pi pi-plus" class="p-button-success mr-2" routerLink="/public/formulario-101/formulario-interno/crear"></button>
+                        <button pButton pRipple
+                        label="Nuevo Formulario de Traslado de Cola"
+                        icon="pi pi-plus" class="p-button-success mr-2"
+                        routerLink="/public/formulario-101/formulario-traslado-cola/crear"
+                        *ngIf="canCrearFormularioTrasladoCola.canActivate()"
+                        ></button>
                     </div>
                 </ng-template>
 
@@ -13,10 +18,10 @@
                 --></ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="listaFormularioInternos" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['nro_formulario','razon_social','fecha_creacion','estado','fecha_vencimiento']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-table #dt [value]="listaFormularioTrasladoColas" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['nro_formulario','razon_social','fecha_creacion','estado','fecha_vencimiento']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <h5 class="m-0">Administrar Formularios Interno</h5>
+                        <h5 class="m-0">Administrar Formulario de Traslado de Colas</h5>
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."  class="w-full sm:w-auto"/>
@@ -42,7 +47,7 @@
                         </td>
                         <td style="width:10%; min-width:10rem;">
                             <span class="p-column-title">Fecha Creacion</span>
-                            {{operador.fecha_creacion}}
+                            {{operador.fecha_creacion | date: 'HH:mm:ss dd/MM/yyyy'}}
                         </td>
                         <td style="width:24%; min-width:16rem;">
                             <span class="p-column-title">Razon Social</span>
@@ -50,7 +55,7 @@
                             </td>
                         <td style="width:14%; min-width:8rem;">
                             <span class="p-column-title">Fecha Vencimiento</span>
-                            {{operador.fecha_vencimiento}}
+                            {{operador.fecha_vencimiento | date: 'HH:mm:ss dd/MM/yyyy'}}
                         </td>
                         <td style="width:14%; min-width:10rem;">
                             <span class="p-column-title">Estado</span>
@@ -74,25 +79,35 @@
                         </td>
                         <td>
                             <div class="flex">
-                                <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-pencil" label="Modificar" class="p-button-rounded p-button-warning mr-2" routerLink="/public/formulario-101/formulario-interno/editar/{{operador?.id}}"></button>
+                                <button *ngIf="operador.estado === 'GENERADO' && canEditarFormularioTrasladoCola.canActivate()"
+                                pButton pRipple icon="pi pi-pencil" label="Modificar"
+                                class="p-button-rounded p-button-warning mr-2"
+                                routerLink="/public/formulario-101/formulario-traslado-cola/editar/{{operador?.id}}"
+                                ></button>
 
                                 <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-lock" label="Emitir" class="p-button-rounded p-button-success mr-2" (click)="confirmarEmision(operador)"></button>
-                                <button *ngIf="operador.estado !== 'GENERADO' && operador.estado !== 'ANULADO' && vigenteAnulacion(operador)" pButton pRipple icon="pi pi-trash" label="Anular" class="p-button-rounded p-button-danger mr-2" routerLink="/public/formulario-101/formulario-interno/anular/{{operador?.id}}"></button>
+                                <button *ngIf="operador.estado !== 'GENERADO' && operador.estado !== 'ANULADO' && canAnularFormularioTrasladoCola.canActivate()"
+                                pButton pRipple icon="pi pi-trash" label="Anular"
+                                class="p-button-rounded p-button-danger mr-2"
+                                routerLink="/public/formulario-101/formulario-traslado-cola/anular/{{operador?.id}}"></button>
                                 </div>
                         </td>
                         <td>
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-print"  class="p-button-rounded p-button-info mr-2" (click)="generarPDF(operador)"></button>
+                                <button pButton pRipple icon="pi pi-print"
+                                    class="p-button-rounded p-button-info mr-2" (click)="generarPDF(operador)"
+                                    *ngIf="canImprimirFormularioTrasladoCola.canActivate()"
+                                ></button>
                             </div>
                         </td>
                     </tr>
                 </ng-template>
             </p-table>
             <p-confirmDialog header="Confirmación" key="confirm1" icon="pi pi-exclamation-triangle" message="¿Está seguro de anular el formulario?"
-                                    [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
-                                    acceptLabel="Sí"
-                                    rejectLabel="No"
-                                ></p-confirmDialog>
+                [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
+                acceptLabel="Sí"
+                rejectLabel="No"
+            ></p-confirmDialog>
         </div>
     </div>
 </div>

@@ -59,7 +59,7 @@ export class PdfFormularioExternoService {
     const year = date.getFullYear(); // Año
     const hours = String(date.getHours()).padStart(2, '0'); // Hora con 2 dígitos
     const minutes = String(date.getMinutes()).padStart(2, '0'); // Minutos con 2 dígitos
-  
+
     return `${day}/${month}/${year} a Hrs.: ${hours}:${minutes}`; // Formato final
   }
     generarPDF(formulario_externo: IFormularioExternoPDF) {
@@ -94,7 +94,7 @@ export class PdfFormularioExternoService {
                         QRCode.toDataURL(
                           localStorage.getItem('url-frontend') +
                             'formulario_externo/verificacion/' +
-                            formulario_externo.nro_formulario,
+                            formulario_externo.hash,
                           (err, url) => {
                             if (err) {
 
@@ -551,7 +551,7 @@ export class PdfFormularioExternoService {
                             },
                           });
 
-                          if(formulario_externo.tipo_transpote=='VIA FERREA'){
+                          if(formulario_externo.tipo_transporte=='VIA FERREA'){
                             autoTable(doc, {
                                 startY: (doc as any).lastAutoTable?.finalY || 10,
 
@@ -564,7 +564,7 @@ export class PdfFormularioExternoService {
                                   [
                                     {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                     { content: 'TIPO DE TRANSPORTE:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                    { content: formulario_externo.tipo_transpote, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    { content: formulario_externo.tipo_transporte, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                     { content: 'EMPRESA:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                     { content: formulario_externo.empresa_ferrea, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                   ],
@@ -657,7 +657,7 @@ export class PdfFormularioExternoService {
                                   [
                                     {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                     { content: 'TIPO DE TRANSPORTE:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                    { content: formulario_externo.tipo_transpote, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    { content: formulario_externo.tipo_transporte, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                     { content: 'CONDUCTOR:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                     { content: formulario_externo.conductor, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                   ],
@@ -874,6 +874,6 @@ export class PdfFormularioExternoService {
                       logo.onerror = () => {
 
                       };
-          
+
       }
 }

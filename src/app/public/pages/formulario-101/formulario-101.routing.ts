@@ -10,6 +10,7 @@ import { AuthGuard } from '@core/guards/auth.guard';
             { path: 'formulario-interno', loadChildren: () => import('./formulario-interno/formulario-interno.module').then(m => m.FormularioInternoModule) },
             { path: 'formulario-externo', loadChildren: () => import('./formulario-externo/formulario-externo.module').then(m => m.FormularioExternoModule) },
             { path: 'formulario-cooperativa', loadChildren: () => import('./formulario-interno-cooperativa/formulario-interno-cooperativa.module').then(m => m.FormularioInternoCooperativaModule) },
+            { path: 'formulario-traslado-cola', loadChildren: () => import('./formulario-traslado-cola/formulario-traslado-cola.module').then(m => m.FormularioTrasladoColaModule) },
             { path: '**', redirectTo: '/notfound' }
             ]
         }])],

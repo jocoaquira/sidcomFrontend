@@ -11,6 +11,7 @@ import { AppLayoutComponent } from './layout/app.layout.component';
         canActivate:[OperadorGuard,AuthGuard],
         children:[
         { path: '', loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule) },
+        { path: 'info', loadChildren: () => import('../core/info-cuenta/info-cuenta.module').then(m => m.InfoCuentaModule) },
         { path: 'responsable-tm', loadChildren: () => import('./pages/responsable-tm/responsable-tm.module').then(m => m.ResponsableTMModule) },
         { path: 'toma-de-muestra', loadChildren: () => import('./pages/toma-de-muestra/toma-de-muestra.module').then(m => m.TomaDeMuestraModule) },
         { path: 'formulario-101', loadChildren: () => import('./pages/formulario-101/formulario-101.module').then(m => m.Formulario101Module) },

@@ -23,7 +23,7 @@ export class FormularioTrasladoColaService {
     //this.requestOptions = { headers: headers };
   }
 //-----------------Visualizar operadores-------------------------------------------
-  verFormularioTrasladoCola(nombre:string)
+  verFormularioTrasladoColas(nombre:string)
   {
     // Inicializacion de objeto params
     let params = new HttpParams();
@@ -40,7 +40,7 @@ export class FormularioTrasladoColaService {
     return FormularioTrasladoCola
   }
 //-----------------Visualizar Formulario Interno-------------------------------------------
-verFormularioTrasladoColas(nombre:string)
+verFormularioTrasladoCola(nombre:string)
 {
   // Inicializacion de objeto params
   let params = new HttpParams();

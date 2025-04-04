@@ -406,7 +406,7 @@ export class PdfFormularioInternoCooperativaService {
                               4: { cellWidth:130 }, // Ajusta automáticamente
                             },
                           });
-                          if(formulario_cooperativa.tipo_transpote=='VIA FERREA'){
+                          if(formulario_cooperativa.tipo_transporte=='VIA FERREA'){
                             autoTable(doc, {
                                 startY: (doc as any).lastAutoTable?.finalY || 10,
 
@@ -419,7 +419,7 @@ export class PdfFormularioInternoCooperativaService {
                                   [
                                     {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                     { content: 'TIPO DE TRANSPORTE:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                    { content: formulario_cooperativa.tipo_transpote, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    { content: formulario_cooperativa.tipo_transporte, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                     { content: 'EMPRESA:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                     { content: formulario_cooperativa.empresa_ferrea, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                   ],
@@ -512,7 +512,7 @@ export class PdfFormularioInternoCooperativaService {
                                   [
                                     {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                     { content: 'TIPO DE TRANSPORTE:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                    { content: formulario_cooperativa.tipo_transpote, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    { content: formulario_cooperativa.tipo_transporte, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                     { content: 'CONDUCTOR:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                     { content: formulario_cooperativa.conductor, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                   ],

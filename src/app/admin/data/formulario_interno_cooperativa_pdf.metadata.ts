@@ -10,7 +10,7 @@ export interface IFormularioInternoCooperativaPDF{
 	nro_nim:string,
 	tipo_nim_niar:string,
 	operador_id:string,
-	
+
 	lote:string,
 	presentacion:number,
 	merma:number,
@@ -26,7 +26,7 @@ export interface IFormularioInternoCooperativaPDF{
 	comprador:string,
 	munipio_destino:string
 	departamento_destino:string,
-	tipo_transpote:string,
+	tipo_transporte:string,
 	conductor:string,
 	placa:string,
 	licencia:string,

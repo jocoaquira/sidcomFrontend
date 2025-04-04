@@ -6,21 +6,21 @@
     margin-bottom: 1px; /* Espaciado inferior */
 }
 .card-titulo {
-    background: #006414; /* Fondo con gradiente */
+    background: #960b06; /* Fondo con gradiente */
     border-radius: 4px; /* Bordes redondeados */
      /* Espaciado interno */
     box-shadow: 0 4px 12px rgba(12, 104, 39, 0.1); /* Sombra suave */
-    margin-bottom: 1px; /* Espaciado inferior */
+    margin-bottom: 10px; /* Espaciado inferior */
     padding-top: 20px;
     padding-right: 50px;
     padding-left: 50px;
-    padding-bottom: 0;
+    padding-bottom: 30;
     height: 5rem;
     color: #eafaec;
 }
 
 
-.card-declaracion {
+.card-cuerpo {
     background: linear-gradient(to bottom, #f4fbd3, #d6f36e); /* Fondo con gradiente */
     border-radius: 15px; /* Bordes redondeados */
     box-shadow: 0 4px 12px rgba(12, 104, 39, 0.1); /* Sombra suave */
@@ -49,8 +49,13 @@
 }
 
 .card-anulado {
-    background-color: #f8d7da; /* Rojo claro */
+    background-color: #fcd6d9; /* Rojo claro */
+    border-radius: 5px; /* Bordes redondeados */
     color: #333;
+    padding-top: 20px;
+    padding-right: 25px;
+    padding-left: 25px;
+    padding-bottom: 20px;
 }
 
 

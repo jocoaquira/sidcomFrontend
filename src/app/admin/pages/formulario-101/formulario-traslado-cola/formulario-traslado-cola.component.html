@@ -47,7 +47,7 @@
                         </td>
                         <td style="width:10%; min-width:10rem;">
                             <span class="p-column-title">Fecha Creacion</span>
-                            {{operador.fecha_creacion}}
+                            {{operador.fecha_creacion | date: 'HH:mm:ss dd/MM/yyyy'}}
                         </td>
                         <td style="width:24%; min-width:16rem;">
                             <span class="p-column-title">Razon Social</span>
@@ -55,7 +55,7 @@
                             </td>
                         <td style="width:14%; min-width:8rem;">
                             <span class="p-column-title">Fecha Vencimiento</span>
-                            {{operador.fecha_vencimiento}}
+                            {{operador.fecha_vencimiento | date: 'HH:mm:ss dd/MM/yyyy'}}
                         </td>
                         <td style="width:14%; min-width:10rem;">
                             <span class="p-column-title">Estado</span>
@@ -82,7 +82,7 @@
                                 <button *ngIf="operador.estado === 'GENERADO' && canEditarFormularioTrasladoCola.canActivate()"
                                 pButton pRipple icon="pi pi-pencil" label="Modificar"
                                 class="p-button-rounded p-button-warning mr-2"
-                                routerLink="/admin/formulario-101/formulario-interno/editar/{{operador?.id}}"
+                                routerLink="/admin/formulario-101/formulario-traslado-cola/editar/{{operador?.id}}"
                                 ></button>
 
                                 <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-lock" label="Emitir" class="p-button-rounded p-button-success mr-2" (click)="confirmarEmision(operador)"></button>

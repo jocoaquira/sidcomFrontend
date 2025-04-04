@@ -42,6 +42,7 @@ export class CrearOperadorComponent implements OnInit {
     tipoCreacion:any[]=[];
     estados:any[]=[];
     tipoExplotacion:any[]=[];
+    tipoExtension:any[]=[];
     filteredCountries: any[] = [];
     departamento:IDepartamento[]=[];
     departamento_id:any=0;
@@ -75,19 +76,25 @@ export class CrearOperadorComponent implements OnInit {
         id:null,
         operator_id:null,
         codigo_unico:null,
-        nro_cuadricula:null,
+        extension:null,
+        unidad_extension:null,
+        departamento_id:null,
         denominacion_area:'',
         municipio_id:null,
-        tipo_explotacion:null
+        tipo_explotacion:null,
+        estado:null
     };
     errorArrendamiento:IArrendamiento={
         id:null,
         operator_id:null,
         codigo_unico:null,
-        nro_cuadricula:null,
+        extension:null,
+        unidad_extension:null,
+        departamento_id:null,
         denominacion_area:null,
         municipio_id:null,
-        tipo_explotacion:null
+        tipo_explotacion:null,
+        estado:null
     };
     oficinaSelecionadas:IOficina[]=[];
     sw1:number=0;
@@ -120,6 +127,11 @@ export class CrearOperadorComponent implements OnInit {
         this.tipoExplotacion = [
             {name: 'PATENTE MINERA', id: '1'},
             {name: 'CONTRATO DE ARRENDAMIENTO', id: '2'}
+        ];
+        this.tipoExtension = [
+            {name: 'CUADRICULAS', id: '1'},
+            {name: 'HECTAREAS', id: '2'},
+            {name: 'METROS CUADRADOS', id: '3'}
         ];
         this.tipoSucursal = [
             {name: 'SUCURSAL', id: '3'},
@@ -214,31 +226,31 @@ export class CrearOperadorComponent implements OnInit {
 // Función para eliminar las propiedades con valores 0 o 1
  removeZeroOneProperties = (data: any) => {
     const filteredData = { ...data }; // Copiar el objeto para no mutar el original
-  
+
     for (const key in filteredData) {
       if (filteredData[key] === 0) {
         delete filteredData[key]; // Eliminar las propiedades con 0 o 1
       }
     }
-  
+
     return filteredData;
   };
   removeNullProperties = (data: any) => {
     const filteredData = { ...data }; // Copiar el objeto para no mutar el original
-  
+
     for (const key in filteredData) {
       if (filteredData[key] === null) {
         delete filteredData[key]; // Eliminar solo las propiedades con null
       }
     }
-  
+
     return filteredData;
   };
-  
+
 
     onSubmit() {
         let formData = new FormData();
-    
+
         // Agregar todos los valores del formulario a formData
         let datos=this.convertBooleansToNumbers(this.operador.formulario.value)
         let datofin=this.removeZeroOneProperties(datos);
@@ -250,7 +262,7 @@ export class CrearOperadorComponent implements OnInit {
         datofin=this.removeNullProperties(datofin);
         for (const key in datofin) {
             const value = datofin[key];
-          
+
             // Verificar el tipo de dato y convertir si es necesario
             if (typeof value === 'boolean') {
               // Convertir el valor booleano a número (1 o 0)
@@ -274,47 +286,47 @@ export class CrearOperadorComponent implements OnInit {
 
         formData.append('arrendamientos', JSON.stringify(listaArrendamientoLimpia));
         formData.append('oficinas',JSON.stringify(listaOficinaLimpia));
-        
+
         // Convertir fechas al formato adecuado antes de enviarlas
         formData.set('fecha_exp_nim', this.formatDate(this.operador.formulario.value.fecha_exp_nim));
         formData.set('fecha_exp_seprec', this.formatDate(this.operador.formulario.value.fecha_exp_seprec));
         formData.set('fecha_exp_ruex', this.formatDate(this.operador.formulario.value.fecha_exp_ruex));
-    
+
         // Agregar archivos (debes tener referencias a los archivos en tu formulario)
         // Agregar los archivos si existen
-        if (this.fileNit) { 
+        if (this.fileNit) {
             console.log('Añadiendo archivo Nit:', this.fileNit);
             formData.append('nit_link', this.fileNit);
         }
-        if (this.fileNim) { 
+        if (this.fileNim) {
             console.log('Añadiendo archivo Nim:', this.fileNim);
             formData.append('nim_link', this.fileNim);
         }
-        if (this.fileSeprec) { 
+        if (this.fileSeprec) {
             console.log('Añadiendo archivo SEPREC:', this.fileSeprec);
             formData.append('seprec_link', this.fileSeprec);
         }
-        if (this.fileDocExplotacion) { 
+        if (this.fileDocExplotacion) {
             console.log('Añadiendo archivo Doc Explotación:', this.fileDocExplotacion);
             formData.append('doc_explotacion_link', this.fileDocExplotacion);
         }
-        if (this.fileRuex) { 
+        if (this.fileRuex) {
             console.log('Añadiendo archivo RUEX:', this.fileRuex);
             formData.append('ruex_link', this.fileRuex);
         }
-        if (this.fileResolucion) { 
+        if (this.fileResolucion) {
             console.log('Añadiendo archivo Resolución:', this.fileResolucion);
             formData.append('resolucion_min_fundind_link', this.fileResolucion);
         }
-        if (this.filePersoneria) { 
+        if (this.filePersoneria) {
             console.log('Añadiendo archivo Personería:', this.filePersoneria);
             formData.append('personeria_juridica_link', this.filePersoneria);
         }
-        if (this.fileDocCreacion) { 
+        if (this.fileDocCreacion) {
             console.log('Añadiendo archivo Creación Estatal:', this.fileDocCreacion);
             formData.append('doc_creacion_estatal_link', this.fileDocCreacion);
         }
-        if (this.fileCi) { 
+        if (this.fileCi) {
             console.log('Añadiendo archivo CI:', this.fileCi);
             formData.append('ci_link', this.fileCi);
         }
@@ -327,7 +339,7 @@ export class CrearOperadorComponent implements OnInit {
         console.log(this.lista_arrendamiento);
         console.log(this.oficina);
         // Verificar si el formulario es válido antes de enviar
-        
+
         if (true) {
             this.operadorService.crearoperator(formData).subscribe(
                 (data: any) => {
@@ -350,9 +362,9 @@ export class CrearOperadorComponent implements OnInit {
         } else {
             this.notify.error('Revise los datos e intente nuevamente', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
         }
-        
+
     }
-    
+
     private mostrarErrorFormularios(formGroup: FormGroup): void {
         Object.keys(formGroup.controls).forEach((key) => {
         const control = formGroup.get(key);
@@ -421,18 +433,17 @@ export class CrearOperadorComponent implements OnInit {
          this.operador.formulario.value.tipo_doc_creacion=dependencia_id.value.id;
     }
     onChangeExplotacion(dependencia_id:any){
-        console.log(dependencia_id.value);
         this.arrendamiento.tipo_explotacion=dependencia_id.value.name;
 
     }
 
     onFileSelected(event: any, field: string) {
         console.log('Evento de archivo:', event); // Verifica si el evento se está activando
-    
+
         if (event.files && event.files.length > 0) {
             const file = event.files[0]; // PrimeNG usa `event.files`
             console.log(`Archivo seleccionado para ${field}:`, file);
-    
+
             switch (field) {
                 case 'nit_link': this.fileNit = file; break;
                 case 'nim_link': this.fileNim = file; break;
@@ -496,7 +507,7 @@ export class CrearOperadorComponent implements OnInit {
 
 
 
-        
+
     }
     abrirMapaSucursal() {
         let dept:any=this.departamento.find(val => val.id === this.sucursal.departamento_id);
@@ -514,7 +525,7 @@ export class CrearOperadorComponent implements OnInit {
         }
       }
     agregarPunto() {
-       
+
         if(this.currentMarker!==undefined){
             const position = this.currentMarker.getLatLng();
             if(!this.sw_mapa)
@@ -525,14 +536,14 @@ export class CrearOperadorComponent implements OnInit {
                     this.sucursal.latitud=position.lat;
                     this.sucursal.longitud=position.lng;
                     this.operador.formulario.patchValue({created_at: position.lat, updated_at:position.lng});
-        
+
                 }
                 this.mapaDialogo = false;
         }
         else{
             this.notify.error('Seleccione un punto en el mapa para agregar....','Error al Seleccionar un Punto',{timeOut:2000,positionClass: 'toast-bottom-right'});
         }
-        
+
 
     }
     validarDireccion():boolean{
@@ -561,7 +572,10 @@ export class CrearOperadorComponent implements OnInit {
         this.arrendamiento.codigo_unico =parseInt((event.target as HTMLInputElement).value);
     }
     nroCuadricula(event){
-        this.arrendamiento.nro_cuadricula =parseInt((event.target as HTMLInputElement).value);
+        this.arrendamiento.extension =parseInt((event.target as HTMLInputElement).value);
+    }
+    onChangeTipoExtension(event){
+        this.arrendamiento.unidad_extension=event.value.name;
     }
     denominacionAreas(event){
         this.arrendamiento.denominacion_area =(event.target as HTMLInputElement).value;

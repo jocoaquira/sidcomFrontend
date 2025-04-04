@@ -1,6 +1,6 @@
   <div>
     <div class="card-titulo">
-        <h4 class="text-center" style="color: white;">SOLICITUD DE ANULACIÓN DE FORMULARIO 101 {{formulario_ext.nro_formulario}}</h4>
+        <h4 class="text-center" style="color: white;">SOLICITUD DE ANULACIÓN DE FORMULARIO 101 {{formulario_int.nro_formulario}}</h4>
     </div>
     <div class="card-anulado grid">
         <div class="  p-fluid">
@@ -12,15 +12,15 @@
                 <textarea
                     id="observaciones"
                     pInputTextarea
-                    [(ngModel)]="formulario_ext.justificacion_anulacion"
+                    [(ngModel)]="formulario_int.justificacion_anulacion"
                     class="ng-dirty"
                     rows="4"
                     cols="150"
                     (input)="longitudTexto($event)"
                 ></textarea>
                 <label for="observaciones">Ingresar justificación minimo 200 caractéres</label>
-                <small id="observaciones" class="p-error" *ngIf="!valido && formulario_ext.justificacion_anulacion!=null">
-                     El Minimo de caractéresdeve ser de 200 por favor verifique sus datos hasta el momento tiene {{formulario_ext.justificacion_anulacion.length}} caractéres
+                <small id="observaciones" class="p-error" *ngIf="!valido && formulario_int.justificacion_anulacion!=null">
+                     El Minimo de caractéresdeve ser de 200 por favor verifique sus datos hasta el momento tiene {{formulario_int.justificacion_anulacion.length}} caractéres
                 </small>
             </span>
             </div>
@@ -44,7 +44,7 @@
                     <button pButton pRipple type="button" label="Volver"
                         class="p-button-rounded p-button-info boton-ajustado"
                         icon="pi pi-undo"
-                        [routerLink]="['/public/formulario-101/formulario-interno']"
+                        [routerLink]="['/public/formulario-101/formulario-traslado-cola']"
                     >
                     </button>
                 </div>

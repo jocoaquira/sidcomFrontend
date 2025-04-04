@@ -1,7 +1,7 @@
 
-<form [formGroup]="formulario_interno.formulario" (ngSubmit)="onSubmit()">
+<form [formGroup]="formulario_traslado_cola.formulario" (ngSubmit)="onSubmit()">
     <div class="card-titulo">
-        <h4 class="text-center" style="color: white;">CREACION DE NUEVO FORMULARIO TRASLADO DE COLA</h4>
+        <h4 class="text-center" style="color: white;">EDITAR FORMULARIO TRASLADO DE COLA: {{num_form}}</h4>
     </div>
         <div class="grid p-fluid">
             <div class="card card-w-title flex flex-wrap col-12">
@@ -14,22 +14,7 @@
                     <div *ngIf="activeStep === 0"
                     >
                         <div class="grid p-fluid">
-                            <div class="field col-12 md:col-10">
-                                <span class="p-float-label">
-                                    <p-dropdown
-                                        inputId="dropdown"
-                                        [autoDisplayFirst]="false"
-                                        [options]="operadores"
-                                        formControlName="operador_id"
-                                        optionLabel="razon_social"
-                                        optionValue="id"
-                                    ></p-dropdown>
-                                    <label for="dropdown">Operadores Mineros</label>
-                                    <small id="operador_id" class="p-error " *ngIf="formulario_interno.esCampoInvalido('operador_id')">
-                                        {{formulario_interno.getErrorMessage('operador_id')}}
-                                    </small>
-                                </span>
-                            </div>
+
                             <div class="field col-12 md:col-3">
                                 <span class="p-float-label">
                                     <input
@@ -40,8 +25,8 @@
                                         class="ng-dirty"
                                     />
                                     <label for="Razón Social">Lote</label>
-                                    <small id="lote" class="p-error "*ngIf="formulario_interno.esCampoInvalido('lote')">
-                                        {{formulario_interno.getErrorMessage('lote')}}
+                                    <small id="lote" class="p-error "*ngIf="formulario_traslado_cola.esCampoInvalido('lote')">
+                                        {{formulario_traslado_cola.getErrorMessage('lote')}}
                                     </small>
                                 </span>
                             </div>
@@ -56,8 +41,8 @@
                                         class="ng-dirty"
                                     />
                                     <label for="Razón Social">Peso bruto humedo (Kg.)</label>
-                                    <small id="peso_bruto_humedo" class="p-error "*ngIf="formulario_interno.esCampoInvalido('peso_bruto_humedo')">
-                                        {{formulario_interno.getErrorMessage('peso_bruto_humedo')}}
+                                    <small id="peso_bruto_humedo" class="p-error "*ngIf="formulario_traslado_cola.esCampoInvalido('peso_bruto_humedo')">
+                                        {{formulario_traslado_cola.getErrorMessage('peso_bruto_humedo')}}
                                     </small>
                                 </span>
                             </div>
@@ -71,8 +56,8 @@
                                         class="ng-dirty"
                                     />
                                     <label for="Razón Social">Tara (Kg.)</label>
-                                    <small id="tara" class="p-error "*ngIf="formulario_interno.esCampoInvalido('tara')">
-                                        {{formulario_interno.getErrorMessage('tara')}}
+                                    <small id="tara" class="p-error "*ngIf="formulario_traslado_cola.esCampoInvalido('tara')">
+                                        {{formulario_traslado_cola.getErrorMessage('tara')}}
                                     </small>
                                 </span>
                             </div>
@@ -88,8 +73,8 @@
                                         readonly
                                     />
                                     <label for="Razón Social">Peso Neto Seco (Kg.)</label>
-                                    <small id="peso_neto" class="p-error "*ngIf="formulario_interno.esCampoInvalido('peso_neto')">
-                                        {{formulario_interno.getErrorMessage('peso_neto')}}
+                                    <small id="peso_neto" class="p-error "*ngIf="formulario_traslado_cola.esCampoInvalido('peso_neto')">
+                                        {{formulario_traslado_cola.getErrorMessage('peso_neto')}}
                                     </small>
                                 </span>
                             </div>
@@ -214,12 +199,12 @@
                                         (ngChange)="cambioDestino($event)"
                                     ></p-dropdown>
                                     <label for="dropdown">Destino</label>
-                                    <small id="destino" class="p-error " *ngIf="formulario_interno.esCampoInvalido('destino')">
-                                        {{formulario_interno.getErrorMessage('destino')}}
+                                    <small id="destino" class="p-error " *ngIf="formulario_traslado_cola.esCampoInvalido('destino')">
+                                        {{formulario_traslado_cola.getErrorMessage('destino')}}
                                     </small>
                                 </span>
                             </div>
-                            <div *ngIf="formulario_interno.formulario.value.destino==='ALMACEN'" class="field col-12 md:col-3">
+                            <div *ngIf="formulario_traslado_cola.formulario.value.destino==='ALMACEN'" class="field col-12 md:col-3">
                                 <span class="p-float-label">
                                     <input
                                         type="text"
@@ -229,12 +214,12 @@
                                         class="ng-dirty"
                                     />
                                     <label for="almacen">Almacen</label>
-                                    <small id="almacen" class="p-error "*ngIf="formulario_interno.esCampoInvalido('almacen')">
-                                        {{formulario_interno.getErrorMessage('almacen')}}
+                                    <small id="almacen" class="p-error "*ngIf="formulario_traslado_cola.esCampoInvalido('almacen')">
+                                        {{formulario_traslado_cola.getErrorMessage('almacen')}}
                                     </small>
                                 </span>
                             </div>
-                            <div *ngIf="formulario_interno.formulario.value.destino==='DIQUE DE COLAS'" class="field col-12 md:col-3">
+                            <div *ngIf="formulario_traslado_cola.formulario.value.destino==='DIQUE DE COLAS'" class="field col-12 md:col-3">
                                 <span class="p-float-label">
                                     <input
                                         type="text"
@@ -244,12 +229,14 @@
                                         class="ng-dirty"
                                     />
                                     <label for="dique_cola">Dique de Colas</label>
-                                    <small id="dique_cola" class="p-error "*ngIf="formulario_interno.esCampoInvalido('dique_cola')">
-                                        {{formulario_interno.getErrorMessage('dique_cola')}}
+                                    <small id="dique_cola" class="p-error "*ngIf="formulario_traslado_cola.esCampoInvalido('dique_cola')">
+                                        {{formulario_traslado_cola.getErrorMessage('dique_cola')}}
                                     </small>
                                 </span>
                             </div>
-
+                            <div class="grid col-12">
+                                    <p>Detino del Mineral</p>
+                            </div>
 
                             <div class="grid p-fluid mt-2">
                                 <div class="field col-12 md:col-3 ">
@@ -297,7 +284,7 @@
                                                 </td>
                                                 <td>
                                                     <div class="flex">
-                                                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminarMunicipio(product)"></button>
+                                                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminarMunicipioDestino(product)"></button>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -325,12 +312,12 @@
                                     optionValue="nombre"
                                 ></p-dropdown>
                                 <label for="dropdown">Tipo de Transporte</label>
-                                <small id="tipo_transporte" class="p-error " *ngIf="formulario_interno.esCampoInvalido('tipo_transporte')">
-                                    {{formulario_interno.getErrorMessage('tipo_transporte')}}
+                                <small id="tipo_transporte" class="p-error " *ngIf="formulario_traslado_cola.esCampoInvalido('tipo_transporte')">
+                                    {{formulario_traslado_cola.getErrorMessage('tipo_transporte')}}
                                 </small>
                             </span>
                         </div>
-                        <div *ngIf="formulario_interno.formulario.value.tipo_transporte==='VOLQUETA'" class="field col-12 md:col-2">
+                        <div *ngIf="formulario_traslado_cola.formulario.value.tipo_transporte==='VOLQUETA'" class="field col-12 md:col-2">
                             <span class="p-float-label">
                                 <input
                                     type="number"
@@ -340,12 +327,12 @@
                                     class="ng-dirty"
                                 />
                                 <label for="tara_volqueta">Tara(Volqueta)</label>
-                                <small id="tara_volqueta" class="p-error "*ngIf="formulario_interno.esCampoInvalido('tara_volqueta')">
-                                    {{formulario_interno.getErrorMessage('tara_volqueta')}}
+                                <small id="tara_volqueta" class="p-error "*ngIf="formulario_traslado_cola.esCampoInvalido('tara_volqueta')">
+                                    {{formulario_traslado_cola.getErrorMessage('tara_volqueta')}}
                                 </small>
                             </span>
                         </div>
-                        <div *ngIf="formulario_interno.formulario.value.tipo_transporte==='VIA FERREA'" class="field col-12 md:col-3">
+                        <div *ngIf="formulario_traslado_cola.formulario.value.tipo_transporte==='VIA FERREA'" class="field col-12 md:col-3">
                             <span class="p-float-label">
                                 <input
                                     type="text"
@@ -355,12 +342,12 @@
                                     class="ng-dirty"
                                 />
                                 <label for="empresa_ferrea">Empresa Transoprtadora</label>
-                                <small id="empresa_ferrea" class="p-error "*ngIf="formulario_interno.esCampoInvalido('empresa_ferrea')">
-                                    {{formulario_interno.getErrorMessage('empresa_ferrea')}}
+                                <small id="empresa_ferrea" class="p-error "*ngIf="formulario_traslado_cola.esCampoInvalido('empresa_ferrea')">
+                                    {{formulario_traslado_cola.getErrorMessage('empresa_ferrea')}}
                                 </small>
                             </span>
                         </div>
-                        <div *ngIf="formulario_interno.formulario.value.tipo_transporte==='VIA FERREA'" class="field col-12 md:col-3">
+                        <div *ngIf="formulario_traslado_cola.formulario.value.tipo_transporte==='VIA FERREA'" class="field col-12 md:col-3">
                             <span class="p-float-label">
                                 <input
                                     type="text"
@@ -370,13 +357,13 @@
                                     class="ng-dirty"
                                 />
                                 <label for="nro_vagon">N° de vagon(es)</label>
-                                <small id="nro_vagon" class="p-error "*ngIf="formulario_interno.esCampoInvalido('nro_vagon')">
-                                    {{formulario_interno.getErrorMessage('nro_vagon')}}
+                                <small id="nro_vagon" class="p-error "*ngIf="formulario_traslado_cola.esCampoInvalido('nro_vagon')">
+                                    {{formulario_traslado_cola.getErrorMessage('nro_vagon')}}
                                 </small>
                             </span>
                         </div>
 
-                        <div *ngIf="formulario_interno.formulario.value.tipo_transporte==='VIA FERREA'" class="field col-12 md:col-3">
+                        <div *ngIf="formulario_traslado_cola.formulario.value.tipo_transporte==='VIA FERREA'" class="field col-12 md:col-3">
                             <span class="p-float-label">
                                 <input
                                     type="date"
@@ -386,12 +373,12 @@
                                     class="ng-dirty"
                                 />
                                 <label for="fecha_ferrea">Fecha de Salida</label>
-                                <small id="fecha_ferrea" class="p-error "*ngIf="formulario_interno.esCampoInvalido('fecha_ferrea')">
-                                    {{formulario_interno.getErrorMessage('fecha_ferrea')}}
+                                <small id="fecha_ferrea" class="p-error "*ngIf="formulario_traslado_cola.esCampoInvalido('fecha_ferrea')">
+                                    {{formulario_traslado_cola.getErrorMessage('fecha_ferrea')}}
                                 </small>
                             </span>
                         </div>
-                        <div *ngIf="formulario_interno.formulario.value.tipo_transporte==='VIA FERREA'" class="field col-12 md:col-3">
+                        <div *ngIf="formulario_traslado_cola.formulario.value.tipo_transporte==='VIA FERREA'" class="field col-12 md:col-3">
                             <span class="p-float-label">
                                 <input
                                     type="time"
@@ -401,12 +388,12 @@
                                     class="ng-dirty"
                                 />
                                 <label for="hr_ferrea">Hora de Salida</label>
-                                <small id="hr_ferrea" class="p-error "*ngIf="formulario_interno.esCampoInvalido('hr_ferrea')">
-                                    {{formulario_interno.getErrorMessage('hr_ferrea')}}
+                                <small id="hr_ferrea" class="p-error "*ngIf="formulario_traslado_cola.esCampoInvalido('hr_ferrea')">
+                                    {{formulario_traslado_cola.getErrorMessage('hr_ferrea')}}
                                 </small>
                             </span>
                         </div>
-                        <div *ngIf="formulario_interno.formulario.value.tipo_transporte!=='VIA FERREA'" class="field col-12 md:col-2">
+                        <div *ngIf="formulario_traslado_cola.formulario.value.tipo_transporte!=='VIA FERREA'" class="field col-12 md:col-2">
                             <span class="p-float-label">
                                 <input
                                     type="text"
@@ -416,12 +403,12 @@
                                     class="ng-dirty"
                                 />
                                 <label for="placa">Placa</label>
-                                <small id="placa" class="p-error "*ngIf="formulario_interno.esCampoInvalido('placa')">
-                                    {{formulario_interno.getErrorMessage('placa')}}
+                                <small id="placa" class="p-error "*ngIf="formulario_traslado_cola.esCampoInvalido('placa')">
+                                    {{formulario_traslado_cola.getErrorMessage('placa')}}
                                 </small>
                             </span>
                         </div>
-                        <div *ngIf="formulario_interno.formulario.value.tipo_transporte!=='VIA FERREA'" class="field col-12 md:col-3">
+                        <div *ngIf="formulario_traslado_cola.formulario.value.tipo_transporte!=='VIA FERREA'" class="field col-12 md:col-3">
                             <span class="p-float-label">
                                 <input
                                     type="text"
@@ -431,12 +418,12 @@
                                     class="ng-dirty"
                                 />
                                 <label for="nom_conductor">Nombre del Conductor</label>
-                                <small id="nom_conductor" class="p-error "*ngIf="formulario_interno.esCampoInvalido('nom_conductor')">
-                                    {{formulario_interno.getErrorMessage('nom_conductor')}}
+                                <small id="nom_conductor" class="p-error "*ngIf="formulario_traslado_cola.esCampoInvalido('nom_conductor')">
+                                    {{formulario_traslado_cola.getErrorMessage('nom_conductor')}}
                                 </small>
                             </span>
                         </div>
-                        <div *ngIf="formulario_interno.formulario.value.tipo_transporte!=='VIA FERREA'" class="field col-12 md:col-2">
+                        <div *ngIf="formulario_traslado_cola.formulario.value.tipo_transporte!=='VIA FERREA'" class="field col-12 md:col-2">
                             <span class="p-float-label">
                                 <input
                                     type="text"
@@ -446,12 +433,12 @@
                                     class="ng-dirty"
                                 />
                                 <label for="licencia">Licencia de Conducir</label>
-                                <small id="licencia" class="p-error "*ngIf="formulario_interno.esCampoInvalido('licencia')">
-                                    {{formulario_interno.getErrorMessage('licencia')}}
+                                <small id="licencia" class="p-error "*ngIf="formulario_traslado_cola.esCampoInvalido('licencia')">
+                                    {{formulario_traslado_cola.getErrorMessage('licencia')}}
                                 </small>
                             </span>
                         </div>
-                        <div *ngIf="formulario_interno.formulario.value.tipo_transporte!=='VIA FERREA'" class="field col-12 md:col-2">
+                        <div *ngIf="formulario_traslado_cola.formulario.value.tipo_transporte!=='VIA FERREA'" class="field col-12 md:col-2">
                             <span class="p-float-label">
                                 <input
                                     type="number"
@@ -462,8 +449,8 @@
                                     [disabled]="presentacion.nro_viajes"
                                 />
                                 <label for="Razón Social">Nro. de Viajes</label>
-                                <small id="nro_viajes" class="p-error "*ngIf="formulario_interno.esCampoInvalido('nro_viajes')">
-                                    {{formulario_interno.getErrorMessage('nro_viajes')}}
+                                <small id="nro_viajes" class="p-error "*ngIf="formulario_traslado_cola.esCampoInvalido('nro_viajes')">
+                                    {{formulario_traslado_cola.getErrorMessage('nro_viajes')}}
                                 </small>
                             </span>
                         </div>
@@ -478,8 +465,8 @@
                                     cols="150"
                                 ></textarea>
                                 <label for="observaciones">Observaciones</label>
-                                <small id="observaciones" class="p-error" *ngIf="formulario_interno.esCampoInvalido('observaciones')">
-                                    {{ formulario_interno.getErrorMessage('observaciones') }}
+                                <small id="observaciones" class="p-error" *ngIf="formulario_traslado_cola.esCampoInvalido('observaciones')">
+                                    {{ formulario_traslado_cola.getErrorMessage('observaciones') }}
                                 </small>
                             </span>
                         </div>
@@ -533,7 +520,7 @@
                         <div class="col-33">
                             <button pButton pRipple type="button" label="Cancelar"
                             class="p-button-rounded p-button-danger boton-ajustado"
-                            [routerLink]="['/admin/formulario-101/formulario-interno']"
+                            [routerLink]="['/public/formulario-101/formulario-traslado-cola']"
                             icon="pi pi-trash"></button>
                         </div>
 

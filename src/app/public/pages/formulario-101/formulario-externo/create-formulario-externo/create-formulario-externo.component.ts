@@ -136,18 +136,18 @@ nextStep() {
       case 0:
         // Validar los campos del Paso 1
         valid = this.formulario_externo.formulario.get('operador_id')?.valid && this.formulario_externo.formulario.get('m03_id')?.valid &&
-        this.formulario_externo.formulario.get('nro_factura_exportacion')?.valid && this.formulario_externo.formulario.get('laboratorio')?.valid && 
+        this.formulario_externo.formulario.get('nro_factura_exportacion')?.valid && this.formulario_externo.formulario.get('laboratorio')?.valid &&
         this.formulario_externo.formulario.get('codigo_analisis')?.valid && this.formulario_externo.formulario.get('nro_formulario_tm')?.valid &&
         this.acta_TDM!=null;
         break;
       case 1:
         valid = this.formulario_externo.formulario.get('peso_bruto_humedo')?.valid && this.formulario_externo.formulario.get('tara')?.valid &&
-        (this.formulario_externo.formulario.get('merma')?.valid || this.formulario_externo.formulario.get('merma')?.disable) && 
+        (this.formulario_externo.formulario.get('merma')?.valid || this.formulario_externo.formulario.get('merma')?.disable) &&
         (this.formulario_externo.formulario.get('humedad')?.valid || this.formulario_externo.formulario.get('humedad')?.disable) &&
-        this.formulario_externo.formulario.get('lote')?.valid && this.formulario_externo.formulario.get('presentacion')?.valid &&
-        (this.formulario_externo.formulario.get('cantidad')?.valid || this.formulario_externo.formulario.get('cantidad')?.disabled) 
+        this.formulario_externo.formulario.get('lote')?.valid && this.formulario_externo.formulario.get('presentacion_id')?.valid &&
+        (this.formulario_externo.formulario.get('cantidad')?.valid || this.formulario_externo.formulario.get('cantidad')?.disabled)
         && this.formulario_externo.formulario.get('peso_neto')?.valid && this.lista_leyes_mineral.length>0;
-        
+
         break;
       case 2:
         valid = this.formulario_externo.formulario.get('comprador')?.valid &&
@@ -163,7 +163,7 @@ nextStep() {
 
 
   constructor(
-    
+
     private formularioExternoService:FormularioExternosService,
     private mineralesService:MineralsService,
     private notify:ToastrService,
@@ -187,7 +187,7 @@ nextStep() {
 
   ngOnInit() {
     this.departamento_id=0;
-    
+
       this.mineralesService.verminerals('hj').subscribe(
         (data:any)=>{
         this.minerales=this.mineralesService.handlemineral(data);
@@ -200,7 +200,7 @@ nextStep() {
         console.log(this.presentaciones);
       },
       (error:any)=> this.error=this.presentacionService.handleError(error));
-     
+
     this.destinos = [
         { nombre: 'COMPRADOR', id: '1' },
         { nombre: 'PLANTA DE TRATAMIENTO', id: '2' },
@@ -565,9 +565,9 @@ cargarDatosTDM(form:ITDMNroForm){
         unidad: mineral.unidad
       };
     });
-  
+
   //this.lista_leyes_mineral.push({...this.formulario_mineral});
-  
+
   this.municipio_origen_envio=form.municipio_origen;
   // Crear una nueva lista excluyendo ciertos campos
   this.municipio_origen_envio = form.municipio_origen.map(destino => {
@@ -598,7 +598,7 @@ cargarDatosTDM(form:ITDMNroForm){
     )
     .subscribe((data: any) => {
       this.departamentos = this.departamentosService.handledepartamento(data);
-      
+
       this.mineralesService.verminerals('gh')
       .pipe(
         retry(3), // Intenta 3 veces si hay un error
@@ -610,24 +610,24 @@ cargarDatosTDM(form:ITDMNroForm){
       .subscribe(
         (data: any) => {
           this.minerales = this.mineralesService.handlemineral(data);
-          
-          
+
+
           this.municipio_origen_envio.forEach((item) => {
             let index = this.municipios.findIndex(i => i.id === item.id);
             let departamento=this.departamentos.find(dat=>dat.id===this.municipios[index].departamento_id);
-            
+
             let  origen_mun:IFormularioExternoMunicipioOrigen={
               municipio:this.municipios[index].municipio,
               departamento:departamento.nombre,
               municipio_id:this.municipios[index].id,
             }
             this.lista_municipios_origen.push({...origen_mun});
-          }); 
+          });
 
           this.minerales_envio.forEach((item) => {
             let index = this.minerales.findIndex(i => i.id === item.mineralId);
             //let mineral=this.minerales.find(dat=>dat.id===this.minerales[index].id);
-            
+
             let  origen_min:IFormularioExternoMineral={
               sigla_mineral:this.minerales[index].sigla,
               descripcion:this.minerales[index].nombre,
@@ -636,10 +636,10 @@ cargarDatosTDM(form:ITDMNroForm){
               mineral_id:this.minerales[index].id
             }
             this.lista_leyes_mineral.push({...origen_min});
-          });    
+          });
         }
       );
-      
+
     });
   });
 

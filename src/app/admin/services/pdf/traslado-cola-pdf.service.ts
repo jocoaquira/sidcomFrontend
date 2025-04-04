@@ -48,6 +48,9 @@ export class PdfFormularioTrasladoColaService {
   unirMunicipios(municipios): string {
     return municipios.map(municipio => municipio.municipio_origen).join(', ');
   }
+  unirMunicipiosDestino(municipios): string {
+    return municipios.map(municipio => municipio.municipio_destino).join(', ');
+  }
   unirMunicipiosCodigo(municipios): string {
     return municipios.map(municipio => municipio.codigo).join(', ');
   }
@@ -92,8 +95,8 @@ export class PdfFormularioTrasladoColaService {
 
                         QRCode.toDataURL(
                           localStorage.getItem('url-frontend') +
-                            'formulario_externo/verificacion/' +
-                            formulario_externo.nro_formulario,
+                            'formulario-tralado-cola/verificacion/' +
+                            formulario_externo.hash,
                           (err, url) => {
                             if (err) {
 
@@ -219,96 +222,7 @@ export class PdfFormularioTrasladoColaService {
 
                             head: [
                               [
-                                { content: '2. DATOS DE LA EXPORTACIÓN', colSpan: 5, styles: { halign: 'left', fillColor: [250, 211, 88]  , fontStyle: 'bold' } },
-                              ],
-                            ],
-                            body: [
-                              [
-                                {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: 'ID M-03:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_externo.hash, styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                                { content: 'CÓDIGO DE ANALISIS:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_externo.hash, styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                              ],
-                            ],
-
-                            styles: {
-                              textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
-                              cellPadding: 2, // Espaciado interno de las celdas
-                            },
-                            headStyles: {
-                              fillColor: [250, 211, 88]   , // Fondo verde para el encabezado
-                              textColor: [0, 0, 0], // Texto negro para el encabezado
-                              fontStyle: 'bold', // Texto en negrita
-                            },
-                            columnStyles: {
-                              0: { cellWidth: 20 }, // Primera columna
-                              1: { cellWidth: 40 }, // Primera columna
-                              2: { cellWidth: 200 }, // Segunda columna
-                              3: { cellWidth:120 }, // Ajusta automáticamente
-                              4: { cellWidth:150 }, // Ajusta automáticamente
-                            },
-                          });
-                          autoTable(doc, {
-                            startY: (doc as any).lastAutoTable?.finalY || 10,
-
-                            body: [
-                              [
-                                {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: 'N° FACTURA:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_externo.hash, styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                                { content: 'ACTA DE VERIFICACIÓN:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_externo.hash+' Kg.', styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                              ],
-                            ],
-                            styles: {
-                              textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
-                              cellPadding: 2, // Espaciado interno de las celdas
-                            },
-                            columnStyles: {
-                              0: { cellWidth:20 }, // Primera columna
-                              1: { cellWidth:65 }, // Primera columna
-                              2: { cellWidth:175 }, // Segunda columna
-                              3: { cellWidth:120 }, // Ajusta automáticamente
-                              4: { cellWidth:150 }, // Ajusta automáticamente
-                            },
-                          });autoTable(doc, {
-                            startY: (doc as any).lastAutoTable?.finalY || 10,
-
-                            body: [
-                              [
-                                {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: 'LABORATORIO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_externo.hash, styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                                {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                              ],
-                            ],
-                            styles: {
-                              textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
-                              cellPadding: 2, // Espaciado interno de las celdas
-                            },
-                            columnStyles: {
-                              0: { cellWidth: 20 }, // Primera columna
-                              1: { cellWidth: 75 }, // Primera columna
-                              2: { cellWidth: 165 }, // Segunda columna
-                              3: { cellWidth:30 }, // Ajusta automáticamente
-                              4: { cellWidth:260 }, // Ajusta automáticamente
-                            },
-                           });
-
-                          autoTable(doc, {
-                            startY: (doc as any).lastAutoTable?.finalY || 10,
-
-                            head: [
-                              [
-                                { content: '3. DATOS DEL MINERAL Y/O METAL TRANSPORTADO', colSpan: 5, styles: { halign: 'left', fillColor: [250, 211, 88]   , fontStyle: 'bold' } },
+                                { content: '2. DATOS DEL MINERAL Y/O METAL TRANSPORTADO', colSpan: 5, styles: { halign: 'left', fillColor: [250, 211, 88]   , fontStyle: 'bold' } },
                               ],
                             ],
                             body: [
@@ -316,8 +230,8 @@ export class PdfFormularioTrasladoColaService {
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                 { content: 'LOTE:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: formulario_externo.lote, styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                                { content: 'MERMA:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_externo.hash+' %', styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: 'TARA:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: formulario_externo.tara+' Kg.', styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
 
@@ -347,8 +261,8 @@ export class PdfFormularioTrasladoColaService {
                             body: [
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: 'PRESENTACION:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_externo.hash, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: 'PESO BRUTO HÚMEDO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: formulario_externo.peso_bruto_humedo+' Kg.', styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                 { content: 'PESO NETO SECO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: formulario_externo.peso_neto+' Kg.', styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
@@ -361,8 +275,8 @@ export class PdfFormularioTrasladoColaService {
                             },
                             columnStyles: {
                               0: { cellWidth:20 }, // Primera columna
-                              1: { cellWidth:80 }, // Primera columna
-                              2: { cellWidth:160 }, // Segunda columna
+                              1: { cellWidth:120 }, // Primera columna
+                              2: { cellWidth:120 }, // Segunda columna
                               3: { cellWidth:90 }, // Ajusta automáticamente
                               4: { cellWidth:180 }, // Ajusta automáticamente
                             },
@@ -373,10 +287,10 @@ export class PdfFormularioTrasladoColaService {
                             body: [
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: 'PESO BRUTO HÚMEDO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_externo.peso_bruto_humedo+' Kg.', styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                 { content: 'MINERAL Y/O METAL:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: this.mostrarMinerales(formulario_externo.minerales), styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: '', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: '', styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
                             styles: {
@@ -393,59 +307,7 @@ export class PdfFormularioTrasladoColaService {
                               4: { cellWidth:185 }, // Ajusta automáticamente
                             },
                           });
-                          autoTable(doc, {
-                            startY: (doc as any).lastAutoTable?.finalY || 10,
 
-                            body: [
-                              [
-                                {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: 'TARA:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_externo.tara+' Kg.', styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                                { content: 'LEY:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: this.mostrarDetalles(formulario_externo.minerales), styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                              ],
-                            ],
-                            styles: {
-                              textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
-                              cellPadding: 2, // Espaciado interno de las celdas
-                            },
-                            columnStyles: {
-                              0: { cellWidth: 20 }, // Primera columna
-                              1: { cellWidth: 40 }, // Primera columna
-                              2: { cellWidth: 200 }, // Segunda columna
-                              3: { cellWidth:30 }, // Ajusta automáticamente
-                              4: { cellWidth:240 }, // Ajusta automáticamente
-                            },
-                           });
-
-                           autoTable(doc, {
-                            startY: (doc as any).lastAutoTable?.finalY || 10,
-
-                            body: [
-                              [
-                                {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: 'HUMEDAD:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_externo.humedad+' %', styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                                {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                              ],
-                            ],
-                            styles: {
-                              textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
-                              cellPadding: 2, // Espaciado interno de las celdas
-                            },
-                            columnStyles: {
-                              0: { cellWidth: 20 }, // Primera columna
-                              1: { cellWidth: 60 }, // Primera columna
-                              2: { cellWidth: 180 }, // Segunda columna
-                              3: { cellWidth:30 }, // Ajusta automáticamente
-                              4: { cellWidth:260 }, // Ajusta automáticamente
-                            },
-                           });
 
                            autoTable(doc, {
                             startY: (doc as any).lastAutoTable?.finalY || 10,
@@ -461,7 +323,7 @@ export class PdfFormularioTrasladoColaService {
                                 { content: 'MUNICIPIO PRODUCTOR:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: this.unirMunicipios(formulario_externo.municipio_origen), styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                 { content: ' CODIGO MUNICIPIO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: this.unirMunicipios(formulario_externo.municipio_origen), styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: this.unirMunicipiosCodigo(formulario_externo.municipio_origen), styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
 
@@ -485,54 +347,101 @@ export class PdfFormularioTrasladoColaService {
                             },
                           });
 
-                          autoTable(doc, {
-                            startY: (doc as any).lastAutoTable?.finalY || 10,
+                        // Comenzamos con el primer autoTable si el destino es "ALMACÉN"
+                        if (formulario_externo.destino === 'ALMACEN') {
+                            autoTable(doc, {
+                            startY: (doc as any).lastAutoTable?.finalY || 10, // Ajuste la posición Y
 
                             head: [
-                              [
-                                { content:  '5. DESTINO DEL MINERAL Y/O METAL', colSpan: 5, styles: { halign: 'left', fillColor: [250, 211, 88]   , fontStyle: 'bold' } },
-                              ],
+                                [
+                                { content: '5. DESTINO DEL MINERAL Y/O METAL', colSpan: 5, styles: { halign: 'left', fillColor: [250, 211, 88], fontStyle: 'bold' } },
+                                ],
                             ],
+
                             body: [
-                              [
+                                [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: 'COMPRADOR:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_externo.hash, styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                                { content: 'ADUANA DE SALIDA:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_externo.hash, styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                              ],
+                                { content: 'DESTINO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                { content: 'ALMACÉN', styles: { halign: 'left', fontStyle: 'normal', fillColor: [255, 255, 255] } },
+                                { content: 'ALMACÉN:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                { content: formulario_externo.almacen || '', styles: { halign: 'left', fontStyle: 'normal', fillColor: [255, 255, 255] } },
+                                ],
                             ],
 
                             styles: {
-                              textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
-                              cellPadding: 2, // Espaciado interno de las celdas
+                                textColor: [0, 0, 0], // Color de texto negro
+                                valign: 'middle', // Alineación vertical centrada
+                                fontSize: 9, // Tamaño de fuente
+                                cellPadding: 2, // Espaciado interno de las celdas
                             },
                             headStyles: {
-                              fillColor: [250, 211, 88]   , // Fondo verde para el encabezado
-                              textColor: [0, 0, 0], // Texto negro para el encabezado
-                              fontStyle: 'bold', // Texto en negrita
-
+                                fillColor: [250, 211, 88], // Fondo amarillo para el encabezado
+                                textColor: [0, 0, 0], // Texto negro para el encabezado
+                                fontStyle: 'bold', // Texto en negrita
                             },
                             columnStyles: {
-                              0: { cellWidth: 20 }, // Primera columna
-                              1: { cellWidth: 70 }, // Primera columna
-                              2: { cellWidth: 170 }, // Segunda columna
-                              3: { cellWidth:100 }, // Ajusta automáticamente
-                              4: { cellWidth:170 }, // Ajusta automáticamente
+                                0: { cellWidth: 20 }, // Primera columna
+                                1: { cellWidth: 90 }, // Primera columna
+                                2: { cellWidth: 150 }, // Segunda columna
+                                3: { cellWidth:90 }, // Ajusta automáticamente
+                                4: { cellWidth:150 }, // Ajusta automáticamente
                             },
-                          });
+                            });
+                        }
+
+                        // Comenzamos con el segundo autoTable si el destino es "DIQUE DE COLAS"
+                        if (formulario_externo.destino === 'DIQUE DE COLAS') {
+                            autoTable(doc, {
+                            startY: (doc as any).lastAutoTable?.finalY || 10, // Ajuste la posición Y
+
+                            head: [
+                                [
+                                { content: '5. DESTINO DEL MINERAL Y/O METAL', colSpan: 5, styles: { halign: 'left', fillColor: [250, 211, 88], fontStyle: 'bold' } },
+                                ],
+                            ],
+
+                            body: [
+                                [
+                                {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                { content: 'DESTINO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                { content: 'DIQUE DE COLAS', styles: { halign: 'left', fontStyle: 'normal', fillColor: [255, 255, 255] } },
+                                { content: 'DIQUE DE COLAS:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                { content: formulario_externo.dique_cola || '', styles: { halign: 'left', fontStyle: 'normal', fillColor: [255, 255, 255] } },
+                                ],
+                            ],
+
+                            styles: {
+                                textColor: [0, 0, 0], // Color de texto negro
+                                valign: 'middle', // Alineación vertical centrada
+                                fontSize: 9, // Tamaño de fuente
+                                cellPadding: 2, // Espaciado interno de las celdas
+                            },
+                            headStyles: {
+                                fillColor: [250, 211, 88], // Fondo amarillo para el encabezado
+                                textColor: [0, 0, 0], // Texto negro para el encabezado
+                                fontStyle: 'bold', // Texto en negrita
+                            },
+                            columnStyles: {
+                                0: { cellWidth: 20 }, // Primera columna
+                                1: { cellWidth: 90 }, // Primera columna
+                                2: { cellWidth: 150 }, // Segunda columna
+                                3: { cellWidth:90 }, // Ajusta automáticamente
+                                4: { cellWidth:150 }, // Ajusta automáticamente
+                            },
+                            });
+                        }
+
+
                           autoTable(doc, {
                             startY: (doc as any).lastAutoTable?.finalY || 10,
 
                             body: [
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: 'PAIS DE DESTINO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_externo.hash, styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                                { content: 'CÓDIGO ADUANA:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_externo.hash, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: 'MUNICIPIO DE DESTINO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: this.unirMunicipiosDestino(formulario_externo.municipio_destino), styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: 'CÓDIGO DE MUNICIPIO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: this.unirMunicipiosCodigo(formulario_externo.municipio_destino), styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
                             styles: {
@@ -543,14 +452,14 @@ export class PdfFormularioTrasladoColaService {
                             },
                             columnStyles: {
                               0: { cellWidth: 20 }, // Primera columna
-                              1: { cellWidth: 90 }, // Primera columna
-                              2: { cellWidth: 150 }, // Segunda columna
-                              3: { cellWidth:90 }, // Ajusta automáticamente
-                              4: { cellWidth:200 }, // Ajusta automáticamente
+                              1: { cellWidth: 120 }, // Primera columna
+                              2: { cellWidth: 120 }, // Segunda columna
+                              3: { cellWidth:110 }, // Ajusta automáticamente
+                              4: { cellWidth:180 }, // Ajusta automáticamente
                             },
                           });
 
-                          if(formulario_externo.hash=='VIA FERREA'){
+                          if(formulario_externo.tipo_transporte=='VIA FERREA'){
                             autoTable(doc, {
                                 startY: (doc as any).lastAutoTable?.finalY || 10,
 
@@ -563,7 +472,7 @@ export class PdfFormularioTrasladoColaService {
                                   [
                                     {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                     { content: 'TIPO DE TRANSPORTE:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                    { content: formulario_externo.hash, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    { content: formulario_externo.tipo_transporte, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                     { content: 'EMPRESA:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                     { content: formulario_externo.empresa_ferrea, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                   ],

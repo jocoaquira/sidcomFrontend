@@ -51,7 +51,7 @@ export class FormularioInternoFormulario {
         peso_neto: new FormControl(this.formulario_interno.peso_neto,[Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
         tara:new FormControl(this.formulario_interno.tara,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'),Validators.min(0)]),
         humedad: new FormControl(this.formulario_interno.humedad,[Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0), Validators.max(100)]),
-        merma:new FormControl(this.formulario_interno.merma,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0), Validators.max(100)]),
+        merma:new FormControl(this.formulario_interno.merma,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0), Validators.max(1)]),
         des_tipo: new FormControl(this.formulario_interno.des_tipo,[Validators.required]),
         des_comprador:new FormControl(this.formulario_interno.des_comprador),
         des_planta: new FormControl(this.formulario_interno.des_planta),
