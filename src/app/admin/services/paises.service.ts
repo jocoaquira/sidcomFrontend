@@ -43,7 +43,7 @@ export class PaisesService {
   return this.http.get(`${this.baseUrl}pais/`+nombre);
 }
 //---------------------crear   pais-------------------------------------------
-crearpais(data:IPais) {
+crearpais(data:any) {
   this.token();
   return this.http.post(`${this.baseUrl}pais`,data, {headers:this.headers})
 }

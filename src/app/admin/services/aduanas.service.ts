@@ -42,7 +42,7 @@ export class AduanasService {
   return this.http.get(`${this.baseUrl}aduana/`+nombre);
 }
 //---------------------crear   aduana-------------------------------------------
-crearaduana(data:IAduana) {
+crearaduana(data:any) {
   this.token();
   return this.http.post(`${this.baseUrl}aduana`,data, {headers:this.headers})
 }

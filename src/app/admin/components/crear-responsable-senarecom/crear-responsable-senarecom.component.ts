@@ -43,14 +43,14 @@ export class CrearResponsableSenarecomComponent implements OnInit {
     private responsableSenarecomService:ResponsableSenarecomService,
     private notify:ToastrService,
     private authService:AuthService,
-        ) { 
-          
-            
+        ) {
+
+
             console.log(this.usuario);
         }
 
   ngOnInit(): void {
-    
+
 
     this.operadoresService.verOperatorsSimple('hj').subscribe(
       (data:any)=>{
@@ -107,10 +107,10 @@ export class CrearResponsableSenarecomComponent implements OnInit {
     }
   }
   actualizarResponsable() {
-    
+
     this.form.formulario.value.estado=this.form.formulario.value.estado.label;
     this.form.formulario.value.celular=parseInt(this.form.formulario.value.celular);
-    
+
     if (this.form.formulario.valid) {
         console.log(this.form.formulario.value);
         this.responsableSenarecomService.editarResponsableSenarecom(this.form.formulario.value).subscribe(
@@ -140,12 +140,15 @@ export class CrearResponsableSenarecomComponent implements OnInit {
       }
   }
   crearResponsable() {
-    
+
     this.form.formulario.value.estado=this.form.formulario.value.estado.label;
     this.form.formulario.value.celular=parseInt(this.form.formulario.value.celular);
-    
+
     if (this.form.formulario.valid) {
-        this.responsableSenarecomService.crearResponsableSenarecom(this.form.formulario.value).subscribe(
+        let limpio:any= Object.fromEntries(
+            Object.entries(this.form.formulario.value).filter(([_, v]) => v !== null)
+          );
+        this.responsableSenarecomService.crearResponsableSenarecom(limpio).subscribe(
             (data:any) =>
             {
               this.responsableSenarecomService.handleCrearusuario(data);

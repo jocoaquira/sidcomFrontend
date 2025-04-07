@@ -40,11 +40,11 @@ export class CrearResponsableTMComponent implements OnInit {
     private responsableTMAdminService:ResponsableTMService,
     private notify:ToastrService,
     private authService:AuthService,
-        ) { 
+        ) {
           this.operador_id= authService.getUser.operador_id;
         console.log('este operador: '+this.operador_id);
-            
-            
+
+
         }
 
   ngOnInit(): void {
@@ -100,13 +100,16 @@ export class CrearResponsableTMComponent implements OnInit {
     }
   }
   actualizarResponsable() {
-    
+
     this.form.formulario.value.estado=this.form.formulario.value.estado.label;
     this.form.formulario.value.celular=parseInt(this.form.formulario.value.celular);
-    
+
     if (this.form.formulario.valid) {
         console.log(this.form.formulario.value);
-        this.responsableTMAdminService.editarResponsableTM(this.form.formulario.value).subscribe(
+        let limpio:any= Object.fromEntries(
+            Object.entries(this.form.formulario.value).filter(([_, v]) => v !== null)
+          );
+        this.responsableTMAdminService.editarResponsableTM(limpio).subscribe(
             (data:any) =>
             {
               this.responsableTMAdminService.handleCrearusuario(data);
@@ -153,7 +156,10 @@ export class CrearResponsableTMComponent implements OnInit {
       }
     }
     if (this.form.formulario.valid) {
-        this.responsableTMAdminService.crearResponsableTM(this.form.formulario.value).subscribe(
+        let limpio:any= Object.fromEntries(
+            Object.entries(this.form.formulario.value).filter(([_, v]) => v !== null)
+          );
+        this.responsableTMAdminService.crearResponsableTM(limpio).subscribe(
             (data:any) =>
             {
               this.responsableTMAdminService.handleCrearusuario(data);

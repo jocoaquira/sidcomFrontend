@@ -43,14 +43,14 @@ export class CrearMineralComponent implements OnInit {
     private mineralService:MineralsService,
     private notify:ToastrService,
     private authService:AuthService,
-        ) { 
-          
-            
+        ) {
+
+
             console.log(this.mineral);
         }
 
   ngOnInit(): void {
-    
+
 
     this.operadoresService.verOperatorsSimple('hj').subscribe(
       (data:any)=>{
@@ -111,7 +111,7 @@ export class CrearMineralComponent implements OnInit {
     }
   }
   actualizarResponsable() {
-    
+
     this.form.formulario.value.estado=this.form.formulario.value.estado.label;
     this.form.formulario.value.tipo=this.form.formulario.value.tipo.label;
 
@@ -144,12 +144,15 @@ export class CrearMineralComponent implements OnInit {
       }
   }
   crearResponsable() {
-    
+
     this.form.formulario.value.estado=this.form.formulario.value.estado.label;
     this.form.formulario.value.tipo=this.form.formulario.value.tipo.label;
     console.log(this.form.formulario.value);
     if (this.form.formulario.valid) {
-        this.mineralService.crearmineral(this.form.formulario.value).subscribe(
+        let limpio:any= Object.fromEntries(
+            Object.entries(this.form.formulario.value).filter(([_, v]) => v !== null)
+          );
+        this.mineralService.crearmineral(limpio).subscribe(
             (data:any) =>
             {
               this.mineralService.handleCrearmineral(data);

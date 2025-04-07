@@ -33,14 +33,14 @@ export class CrearPaisComponent implements OnInit {
     private paisService:PaisesService,
     private notify:ToastrService,
     private authService:AuthService,
-        ) { 
-          
-            
+        ) {
+
+
             console.log(this.pais);
         }
 
   ngOnInit(): void {
-    
+
 
   }
   ngOnChanges(changes: SimpleChanges): void {
@@ -54,7 +54,7 @@ export class CrearPaisComponent implements OnInit {
     }
     console.log(this.form.formulario.value);
   }
-  
+
   onChangeEstado(operator_id:any){
 
    // this.form.formulario.value.estado=operator_id.value
@@ -73,7 +73,7 @@ export class CrearPaisComponent implements OnInit {
     }
   }
   actualizarPais() {
-    
+
 
     if (this.form.formulario.valid) {
         console.log(this.form.formulario.value);
@@ -104,10 +104,13 @@ export class CrearPaisComponent implements OnInit {
       }
   }
   crearPais() {
-    
+
     console.log(this.form.formulario.value);
     if (this.form.formulario.valid) {
-        this.paisService.crearpais(this.form.formulario.value).subscribe(
+        let limpio = Object.fromEntries(
+            Object.entries(this.form.formulario.value).filter(([_, v]) => v !== null)
+          );
+        this.paisService.crearpais(limpio).subscribe(
             (data:any) =>
             {
               this.paisService.handleCrearpais(data);

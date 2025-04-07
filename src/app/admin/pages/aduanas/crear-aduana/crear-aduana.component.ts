@@ -190,8 +190,10 @@ abrirMapa() {
       });
     if(this.aduana.formulario.valid){
       console.log(this.aduana.formulario.value);
-
-      this.aduanasService.crearaduana(this.aduana.formulario.value).subscribe(
+      let limpio = Object.fromEntries(
+        Object.entries(this.aduana.formulario.value).filter(([_, v]) => v !== null)
+      );
+      this.aduanasService.crearaduana(limpio).subscribe(
         (data:any) =>
         {
             this.aduana_registrado=this.aduanasService.handleCrearaduana(data);
