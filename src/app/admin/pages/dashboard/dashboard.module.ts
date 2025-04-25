@@ -10,6 +10,7 @@ import { StyleClassModule } from 'primeng/styleclass';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { DashboardRoutingModule } from './dashboard.routing';
 import { SafeUrlPipe } from './safe-url.pipe';
+import { DropdownModule } from 'primeng/dropdown';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { SafeUrlPipe } from './safe-url.pipe';
         StyleClassModule,
         PanelMenuModule,
         ButtonModule,
-         DashboardRoutingModule,
+        DropdownModule,
+        DashboardRoutingModule,
 
 
     ],

@@ -1,11 +1,14 @@
 import { Component, OnInit, OnDestroy, Pipe } from '@angular/core';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, PrimeNGConfig } from 'primeng/api';
 import { Subscription, debounceTime } from 'rxjs';
 import { LayoutService } from '../../layout/service/app.layout.service';
 import { OperatorsService } from 'src/app/admin/services/operators.service';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { IOperator } from '@data/operator.metadata';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { IFormularioInternoEmitidos } from '@data/formulario_interno_emitidos.metadata';
+import { FormularioInternosService } from 'src/app/admin/services/formulario-interno/formulariosinternos.service';
+import { FormularioExternosService } from 'src/app/admin/services/formulario-externo/formulariosexternos.service';
 
 @Component({
     templateUrl: './dashboard.component.html',
@@ -16,7 +19,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     chartData: any;
     public operador:IOperator;
-    
+
+    public reporteFornIntCantOperador:IFormularioInternoEmitidos;
+    public reporteFormExtCantOperador:IFormularioInternoEmitidos;
+    fechaActual: Date = new Date();
+    inicioSemana: Date;
+    finSemana: Date;
+
     chartOptions: any;
     error:any;
     subscription!: Subscription;
@@ -28,12 +37,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     public ruexLinkTransformado:any;
     public vigenciaRuex:number=0;
 
-    constructor( 
+    constructor(
         public layoutService: LayoutService,
         private operatorService:OperatorsService,
+        private formInterno:FormularioInternosService,
+        private formExterno:FormularioExternosService,
         private authService:AuthService,
-        private sanitizer: DomSanitizer
-            
+        private sanitizer: DomSanitizer,
+        private primengConfig: PrimeNGConfig
+
     ) {
         this.subscription = this.layoutService.configUpdate$
         .pipe(debounceTime(25))
@@ -45,15 +57,34 @@ export class DashboardComponent implements OnInit, OnDestroy {
         if (user) {
             this.operatorService.verOperator(user.toString()).subscribe(
                 (data: any) => {
-                    console.log(data);
                     this.operador = this.operatorService.handleOperador(data);
                     this.nimLinkTransformado = this.baseUrl + (this.operador.nim_link ? this.operador.nim_link.replace(/\\/g, '/') : '');
-                    this.seprecLinkTransformado = this.baseUrl + (this.operador.seprec_link ? this.operador.seprec_link.replace(/\\/g, '/') : '');                    
-                    this.ruexLinkTransformado = this.baseUrl + (this.operador.ruex_link ? this.operador.ruex_link.replace(/\\/g, '/') : '');                    
-                    
+                    this.seprecLinkTransformado = this.baseUrl + (this.operador.seprec_link ? this.operador.seprec_link.replace(/\\/g, '/') : '');
+                    this.ruexLinkTransformado = this.baseUrl + (this.operador.ruex_link ? this.operador.ruex_link.replace(/\\/g, '/') : '');
+
                     this.vigenciaNim = this.diasActivos(this.operador.fecha_exp_nim);
                     this.vigenciaSeprec = this.diasActivos(this.operador.fecha_exp_seprec);
                     this.vigenciaRuex = this.diasActivos(this.operador.fecha_exp_ruex);
+
+
+                    this.formInterno.verReporteFormIntCantidadesOperador(user.toString()).subscribe(
+                        (data: any) => {
+                            this.reporteFornIntCantOperador = this.formInterno.handleReporteFormIntCantidades(data);
+                            console.log(this.reporteFornIntCantOperador);
+
+                        },
+                        (error: any) => this.error = this.formInterno.handleError(error)
+                    );
+                    this.formExterno.verReporteFormExtCantidadesOperador(user.toString()).subscribe(
+                        (data: any) => {
+                            this.reporteFormExtCantOperador = this.formExterno.handleReporteFormExtCantidades(data);
+                            console.log(this.reporteFornIntCantOperador);
+
+                        },
+                        (error: any) => this.error = this.formExterno.handleError(error)
+                    );
+
+
                 },
                 (error: any) => this.error = this.operatorService.handleError(error)
             );
@@ -69,7 +100,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
 
     ngOnInit() {
-
+        this.calcularRangoSemana();
+        this.primengConfig.setTranslation({
+            dayNames: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+            dayNamesShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sab"],
+            dayNamesMin: ["Do","Lu","Ma","Mi","Ju","Vi","Sa"],
+            monthNames: ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"],
+            monthNamesShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun","Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+            today: 'Hoy',
+            clear: 'Limpiar'
+          });
     }
 
     initChart() {
@@ -148,7 +188,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
     downloadNimFile(operador_link:string) {
         const fileUrl = this.baseUrl + operador_link.replace(/\\/g, '/');
-  
+
   // Abre el archivo en una nueva pestaña
          window.open(fileUrl, '_blank');  // '_blank' indica que se abrirá en una nueva pestaña
 }
@@ -157,4 +197,23 @@ getFileName(filePath: string): string {
     const segments = filePath.split('/');
     return segments[segments.length - 1]; // Devuelve el nombre del archivo
   }
+  calcularRangoSemana(): void {
+    // Ajuste para semana de sábado a domingo
+    const hoy = new Date();
+    const dia = hoy.getDay(); // 0 (domingo) a 6 (sábado)
+
+    // Si es domingo (0), restamos 1 día para ir al sábado anterior
+    // Si no, restamos (dia + 1) días para ir al sábado anterior
+    const diff = dia === 0 ? 1 : dia + 1;
+
+    this.inicioSemana = new Date(hoy);
+    this.inicioSemana.setDate(hoy.getDate() - diff);
+    this.inicioSemana.setHours(0, 0, 0, 0);
+
+    this.finSemana = new Date(this.inicioSemana);
+    this.finSemana.setDate(this.inicioSemana.getDate() + 6); // +6 días para llegar al domingo
+    this.finSemana.setHours(23, 59, 59, 999);
+  }
+
+
 }

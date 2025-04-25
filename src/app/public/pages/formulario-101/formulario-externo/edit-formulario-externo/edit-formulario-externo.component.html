@@ -14,7 +14,7 @@
                   <div *ngIf="activeStep === 0"
                   >
                       <div class="grid p-fluid">
-                          
+
                         <div class="field col-12 md:col-4">
                             <span class="p-float-label">
                                 <input
@@ -75,7 +75,7 @@
                                 </small>
                             </span>
                         </div>
-                        <div class="field col-12 md:col-4">
+                        <div class="field col-12 md:col-4" *ngIf="canCrearActaTomaDeMuestra.canActivate()">
                             <span class="p-float-label">
                                 <input
                                     type="text"
@@ -97,7 +97,7 @@
                   <div *ngIf="activeStep === 1"
                   >
                       <div class="grid p-fluid mt-2">
-                        
+
 
 
                         <div class="field col-12 md:col-3">

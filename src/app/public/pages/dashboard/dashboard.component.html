@@ -1,10 +1,104 @@
-   
-        <div class="card-container">
-        
-        </div>
+
 
 <div class="grid">
-        <app-card-idom 
+    <div class="col-12 lg:col-6 xl:col-4" *ngIf="reporteFornIntCantOperador">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-3">
+                <div>
+                    <div class="text-900 font-medium text-xl">Formularios Internos</div>
+
+                    <!-- HOY con fecha actual -->
+                    <span class="text-green-500 font-medium mb-3 mt-3">
+                        HOY - {{fechaActual | date:'dd/MM/yyyy'}}
+                    </span>
+                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFornIntCantOperador.hoy?.emitidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFornIntCantOperador.hoy?.vencidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFornIntCantOperador.hoy?.generados || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFornIntCantOperador.hoy?.anulados || 0}}</span>
+
+                    <!-- SEMANA (sábado a domingo) -->
+                    <span class="text-green-500 font-medium mb-3 mt-3">
+                        SEMANA - {{inicioSemana | date:'dd/MM'}} al {{finSemana | date:'dd/MM'}} del {{finSemana | date:'yyyy'}}
+                    </span>
+                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFornIntCantOperador.semana?.emitidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFornIntCantOperador.semana?.vencidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFornIntCantOperador.semana?.generados || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFornIntCantOperador.semana?.anulados || 0}}</span>
+
+                    <!-- MES vigente -->
+                    <span class="text-green-500 font-medium mb-3 mt-3">
+                        MES - {{fechaActual | date:'MMMM yyyy' | titlecase}}
+                    </span>
+                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFornIntCantOperador.mes?.emitidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFornIntCantOperador.mes?.vencidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFornIntCantOperador.mes?.generados || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFornIntCantOperador.mes?.anulados || 0}}</span>
+
+                    <!-- AÑO vigente -->
+                    <span class="text-green-500 font-medium mb-3 mt-3">
+                        AÑO - {{fechaActual | date:'yyyy'}}
+                    </span>
+                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFornIntCantOperador.anio?.emitidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFornIntCantOperador.anio?.vencidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFornIntCantOperador.anio?.generados || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFornIntCantOperador.anio?.anulados || 0}}</span>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-green-100 border-round" [ngStyle]="{width: '3rem', height: '3rem'}">
+                    <i class="pi pi-fw pi-book text-green-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 lg:col-6 xl:col-4" *ngIf="reporteFormExtCantOperador">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-3">
+                <div>
+                    <div class="text-900 font-medium text-xl">Formularios Externos</div>
+
+                    <!-- HOY con fecha actual -->
+                    <span class="text-blue-500 font-medium mb-3 mt-3">
+                        HOY - {{fechaActual | date:'dd/MM/yyyy'}}
+                    </span>
+                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFormExtCantOperador.hoy?.emitidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFormExtCantOperador.hoy?.vencidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFormExtCantOperador.hoy?.generados || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFormExtCantOperador.hoy?.anulados || 0}}</span>
+
+                    <!-- SEMANA (sábado a domingo) -->
+                    <span class="text-blue-500 font-medium mb-3 mt-3">
+                        SEMANA - {{inicioSemana | date:'dd/MM'}} al {{finSemana | date:'dd/MM'}} del {{finSemana | date:'yyyy'}}
+                    </span>
+                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFormExtCantOperador.semana?.emitidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFormExtCantOperador.semana?.vencidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFormExtCantOperador.semana?.generados || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFormExtCantOperador.semana?.anulados || 0}}</span>
+
+                    <!-- MES vigente -->
+                    <span class="text-blue-500 font-medium mb-3 mt-3">
+                        MES - {{fechaActual | date:'MMMM yyyy' | titlecase}}
+                    </span>
+                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFormExtCantOperador.mes?.emitidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFormExtCantOperador.mes?.vencidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFormExtCantOperador.mes?.generados || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFormExtCantOperador.mes?.anulados || 0}}</span>
+
+                    <!-- AÑO vigente -->
+                    <span class="text-blue-500 font-medium mb-3 mt-3">
+                        AÑO - {{fechaActual | date:'yyyy'}}
+                    </span>
+                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFormExtCantOperador.anio?.emitidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFormExtCantOperador.anio?.vencidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFormExtCantOperador.anio?.generados || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFormExtCantOperador.anio?.anulados || 0}}</span>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-blue-100 border-round" [ngStyle]="{width: '3rem', height: '3rem'}">
+                    <i class="pi pi-fw pi-globe text-blue-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+        <app-card-idom
             [empresa]="operador"
             [title]="'Empresa'"
         >
@@ -14,7 +108,7 @@
             [operador]="operador"
             [nimLink]="operador?.ci_link">
         </app-card-rep-legal>
-        <app-card-documentos 
+        <app-card-documentos
             [title]="operador?.tipo_nim_niar"
             [fechaExpiracion]="operador?.fecha_exp_nim"
             [nimLink]="operador?.nim_link">
@@ -31,22 +125,7 @@
             [fechaExpiracion]="operador?.fecha_exp_ruex"
             [nimLink]="operador?.ruex_link">
         </app-card-documentos>
-        <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block text-500 font-medium mb-3">Formularios Externos Emitidos Esta Semana</span>
-                        <div class="text-900 font-medium text-xl">435</div>
-                    </div>
-                    <div class="flex align-items-center justify-content-center bg-orange-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                        <i class="pi pi-map-marker text-orange-500 text-xl"></i>
-                    </div>
 
-                </div>
-                <span class="text-green-500 font-medium">24 nuevos </span>
-                <span class="text-500">Hoy</span>
-            </div>
-        </div>
         <div class="col-12 lg:col-6 xl:col-3">
             <div class="card mb-0">
                 <div class="flex justify-content-between mb-3">
@@ -136,62 +215,7 @@
                 <p-chart type="line" [data]="" [options]="chartOptions"></p-chart>
             </div>
 
-            <div class="card">
-                <div class="flex align-items-center justify-content-between mb-4">
-                    <h5>Notifications</h5>
-                    <div>
 
-                    </div>
-                </div>
-
-                <span class="block text-600 font-medium mb-3">TODAY</span>
-                <ul class="p-0 mx-0 mt-0 mb-4 list-none">
-                    <li class="flex align-items-center py-2 border-bottom-1 surface-border">
-                        <div class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-100 border-circle mr-3 flex-shrink-0">
-                            <i class="pi pi-dollar text-xl text-blue-500"></i>
-                        </div>
-                        <span class="text-900 line-height-3">Richard Jones
-                    <span class="text-700"> has purchased a blue t-shirt for <span class="text-blue-500">79$</span></span>
-                </span>
-                    </li>
-                    <li class="flex align-items-center py-2">
-                        <div class="w-3rem h-3rem flex align-items-center justify-content-center bg-orange-100 border-circle mr-3 flex-shrink-0">
-                            <i class="pi pi-download text-xl text-orange-500"></i>
-                        </div>
-                        <span class="text-700 line-height-3">Your request for withdrawal of <span class="text-blue-500 font-medium">2500$</span> has been initiated.</span>
-                    </li>
-                </ul>
-
-                <span class="block text-600 font-medium mb-3">YESTERDAY</span>
-                <ul class="p-0 m-0 list-none">
-                    <li class="flex align-items-center py-2 border-bottom-1 surface-border">
-                        <div class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-100 border-circle mr-3 flex-shrink-0">
-                            <i class="pi pi-dollar text-xl text-blue-500"></i>
-                        </div>
-                        <span class="text-900 line-height-3">Keyser Wick
-                    <span class="text-700"> has purchased a black jacket for <span class="text-blue-500">59$</span></span>
-                </span>
-                    </li>
-                    <li class="flex align-items-center py-2 border-bottom-1 surface-border">
-                        <div class="w-3rem h-3rem flex align-items-center justify-content-center bg-pink-100 border-circle mr-3 flex-shrink-0">
-                            <i class="pi pi-question text-xl text-pink-500"></i>
-                        </div>
-                        <span class="text-900 line-height-3">Jane Davis<span class="text-700"> has posted a new questions about your product.</span></span>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="px-4 py-5 shadow-2 flex flex-column md:flex-row md:align-items-center justify-content-between mb-3" [ngStyle]="{borderRadius: '1rem', background: 'linear-gradient(0deg, rgba(0, 123, 255, 0.5), rgba(0, 123, 255, 0.5)), linear-gradient(92.54deg, #1C80CF 47.88%, #FFFFFF 100.01%)'}">
-           <div>
-               <div class="text-blue-100 font-medium text-xl mt-2 mb-3">TAKE THE NEXT STEP</div>
-               <div class="text-white font-medium text-5xl">Try PrimeBlocks</div>
-           </div>
-           <div class="mt-4 mr-auto md:mt-0 md:mr-0">
-               <a target="_blank" href="https://www.primefaces.org/primeblocks-ng" class="p-button font-bold px-5 py-3 p-button-warning p-button-rounded p-button-raised">
-                   Get Started
-               </a>
-           </div>
-        </div>
     </div>
 </div>
 

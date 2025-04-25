@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { IFormularioInterno } from '@data/formulario_interno.metadata';
 import { ConfirmationService } from 'primeng/api';
 import { AuthService } from '@core/authentication/services/auth.service';
+import { IFormularioInternoPDF } from '@data/formulario_interno_pdf.metadata';
 
 @Component({
   selector: 'app-formulario-interno',
@@ -104,8 +105,15 @@ export class FormularioInternoComponent implements OnInit {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
     generarPDF(formulario_interno:IFormularioInternoSimple){
-        console.log(formulario_interno);
-        this.pdfFormularioInterno.generarPDF(formulario_interno);
+
+        this.formularioInternoService.verFormularioInternoPDF(formulario_interno.id.toString()).subscribe(
+            (data:any)=>{
+            let tdm_completo:IFormularioInternoPDF=this.formularioInternoService.handleFormularioInternoPDF(data);
+            console.log(tdm_completo);
+            this.pdfFormularioInterno.generarPDF(tdm_completo);
+          },
+          (error:any)=> this.error=this.formularioInternoService.handleError(error));
+
     }
     emitir(event:IFormularioInternoSimple){
         let emitido:any=null;
@@ -131,7 +139,7 @@ export class FormularioInternoComponent implements OnInit {
             });
     }
     confirmarEmision(event:IFormularioInternoSimple) {
-        console.log
+
         this.confirmationService.confirm({
             key: 'confirm1',
             message: '¿Estas seguro de Emitir el formulario '+event.nro_formulario+'?',
@@ -145,7 +153,7 @@ export class FormularioInternoComponent implements OnInit {
         const fecha_vencimiento:Date = new Date(form.fecha_vencimiento);
         const fechaLimite = new Date();
         let sw:boolean=fechaLimite <= fecha_vencimiento;
-        console.log(sw);
+
         return sw; // Se muestra solo después de DIAS_ANULACION días
       }
 

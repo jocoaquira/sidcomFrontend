@@ -85,12 +85,12 @@
                                         class="ng-dirty"
                                     />
                                     <label for="Código de Analisis">Código de Analisis</label>
-                                    <small id="codigo_analisis" class="p-error "*ngIf="formulario_externo.esCampoInvalido('codigo_analisis')">
+                                    <small id="codigo_analisis" class="p-error " *ngIf="formulario_externo.esCampoInvalido('codigo_analisis')">
                                         {{formulario_externo.getErrorMessage('codigo_analisis')}}
                                     </small>
                                 </span>
                             </div>
-                            <div class="field col-12 md:col-4">
+                            <div class="field col-12 md:col-4" *ngIf="canCrearActaTomaDeMuestra.canActivate()">
                                 <span class="p-float-label">
                                     <input
                                         type="text"
@@ -100,7 +100,7 @@
                                         class="ng-dirty"
                                     />
                                     <label for="Acta de Verificación">Acta de Verificacion Toma de Muestra</label>
-                                    <small id="nro_formulario_tm" class="p-error "*ngIf="formulario_externo.esCampoInvalido('nro_formulario_tm')">
+                                    <small id="nro_formulario_tm" class="p-error " *ngIf="formulario_externo.esCampoInvalido('nro_formulario_tm')">
                                         {{formulario_externo.getErrorMessage('nro_formulario_tm')}}
                                     </small>
                                 </span>

@@ -1,15 +1,11 @@
-
-import { style } from '@angular/animations';
 import { Injectable } from '@angular/core';
 import { IOperator } from '@data/operator.metadata';
-import { fontStyle } from 'html2canvas/dist/types/css/property-descriptors/font-style';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable'
 import * as QRCode from 'qrcode';
 import { ImageToBase64Service } from './image-to-base64.service';
 import { IFormularioInternoMineral } from '@data/form_int_mineral.metadata';
 import { IFormularioInternoMunicipioOrigen } from '@data/form_int_municipio_origen.metadata';
-import { catchError, forkJoin, of, retry } from 'rxjs';
 import { IMineral } from '@data/mineral.metadata';
 import { IMunicipio } from '@data/municipio.metadata';
 import { IDepartamento } from '@data/departamento.metadata';
@@ -261,7 +257,7 @@ export class PdfFormularioExternoService {
                                 { content: 'N° FACTURA:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: formulario_externo.nro_factura_exportacion, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                 { content: 'ACTA DE VERIFICACIÓN:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_externo.acta_verificacion+' Kg.', styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: formulario_externo.acta_verificacion, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
                             styles: {

@@ -13,6 +13,7 @@ import { IFormularioInterno } from '@data/formulario_interno.metadata';
 import { ConfirmationService } from 'primeng/api';
 import { CanAnularFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-anular-formulario-interno.guard';
 import { CanImprimirFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-imprimir-formulario-interno.guard';
+import { IFormularioInternoPDF } from '@data/formulario_interno_pdf.metadata';
 
 @Component({
   selector: 'app-formulario-interno',
@@ -103,7 +104,13 @@ export class FormularioInternoComponent implements OnInit {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
     generarPDF(formulario_interno:IFormularioInternoSimple){
-        this.pdfFormularioInterno.generarPDF(formulario_interno);
+        this.formularioInternoService.verFormularioInternoPDF(formulario_interno.id.toString()).subscribe(
+                    (data:any)=>{
+                    let tdm_completo:IFormularioInternoPDF=this.formularioInternoService.handleFormularioInternoPDF(data);
+                    console.log(tdm_completo);
+                    this.pdfFormularioInterno.generarPDF(tdm_completo);
+                  },
+                  (error:any)=> this.error=this.formularioInternoService.handleError(error));
     }
     emitir(event:IFormularioInternoSimple){
         let emitido:any=null;

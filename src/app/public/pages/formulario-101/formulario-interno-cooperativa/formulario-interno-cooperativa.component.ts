@@ -13,6 +13,7 @@ import { CanEditarFormularioCooperativaGuard } from 'src/app/admin/guards/formul
 import { CanEliminarFormularioCooperativaGuard } from 'src/app/admin/guards/formulario-cooperativas/can-eliminar-formulario-cooperativa.guard';
 import { CanAnularFormularioCooperativaGuard } from 'src/app/admin/guards/formulario-cooperativas/can-anular-formulario-cooperativa.guard';
 import { CanImprimirFormularioCooperativaGuard } from 'src/app/admin/guards/formulario-cooperativas/can-imprimir-formulario-cooperativa.guard';
+import { PdfFormularioInternoCooperativaService } from 'src/app/admin/services/pdf/formulario-cooperativa-pdf.service';
 
 @Component({
   selector: 'app-formulario-interno-cooperativa',
@@ -41,7 +42,7 @@ export class FormularioInternoCooperativaComponent implements OnInit {
         public canImprimirFormularioCooperativa:CanImprimirFormularioCooperativaGuard,
 
         public formularioInternoService:FormularioCooperativaService,
-        public pdfFormularioInterno:PdfFormularioInternoService,
+        public pdfFormularioInterno:PdfFormularioInternoCooperativaService,
         private notify:ToastrService,
         private confirmationService:ConfirmationService
     ) {
@@ -104,7 +105,13 @@ export class FormularioInternoCooperativaComponent implements OnInit {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
     generarPDF(formulario_interno:IFormularioInternoSimple){
-        this.pdfFormularioInterno.generarPDF(formulario_interno);
+        this.formularioInternoService.verFormularioInternoCooperativaPDF(formulario_interno.id.toString()).subscribe(
+            (data:any)=>{
+            let tdm_completo=this.formularioInternoService.handleFormularioInternoCooperativaPDF(data);
+            console.log(tdm_completo);
+            this.pdfFormularioInterno.generarPDF(tdm_completo);
+          },
+          (error:any)=> this.error=this.formularioInternoService.handleError(error));
     }
     emitir(event:IFormularioInternoSimple){
         let emitido:any=null;

@@ -1,27 +1,10 @@
-
-import { style } from '@angular/animations';
 import { Injectable } from '@angular/core';
-import { IFormularioInterno } from '@data/formulario_interno.metadata';
-import { IFormularioInternoSimple } from '@data/formulario_interno_simple.metadata';
-import { IOperator } from '@data/operator.metadata';
-import { fontStyle } from 'html2canvas/dist/types/css/property-descriptors/font-style';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable'
 import * as QRCode from 'qrcode';
-import { FormularioInternoMineralService } from '../formulario-interno/formulariointerno-mineral.service';
-import { FormularioInternoMunicipioOrigenService } from '../formulario-interno/formulariointerno-municipioorigen.service';
-import { FormularioInternosService } from '../formulario-interno/formulariosinternos.service';
-import { OperatorsService } from '../operators.service';
 import { ImageToBase64Service } from './image-to-base64.service';
-import { IFormularioInternoMineral } from '@data/form_int_mineral.metadata';
-import { IFormularioInternoMunicipioOrigen } from '@data/form_int_municipio_origen.metadata';
-import { MunicipiosService } from '../municipios.service';
-import { DepartamentosService } from '../departamentos.service';
-import { MineralsService } from '../minerales.service';
-import { catchError, forkJoin, of, retry } from 'rxjs';
-import { IMineral } from '@data/mineral.metadata';
-import { IMunicipio } from '@data/municipio.metadata';
-import { IDepartamento } from '@data/departamento.metadata';
+
+import { IFormularioInternoPDF } from '@data/formulario_interno_pdf.metadata';
 
 @Injectable({
   providedIn: 'root',
@@ -31,13 +14,7 @@ export class PdfFormularioInternoService {
    public error:any=null;
   constructor(
     private imageToBase64Service: ImageToBase64Service,
-    private operadorService:OperatorsService,
-    private formularioInternoService:FormularioInternosService,
-    private mineralesService:MineralsService,
-    private municipiosService:MunicipiosService,
-    public departamentosService: DepartamentosService,
-    private formularioInternoMineralService:FormularioInternoMineralService,
-    private formularioInternoMunicipioOrigenService:FormularioInternoMunicipioOrigenService
+
     ) {}
 // Función para generar el código QR sin bordes blancos
  generateQRCode(data: string): Promise<string> {
@@ -51,6 +28,21 @@ export class PdfFormularioInternoService {
       },
     });
   }
+    // Función para mostrar los nombres de los minerales
+    mostrarMinerales(mineral_tdm): string {
+        return mineral_tdm.map(mineral => mineral.mineral).join(', ');
+      }
+
+      // Función para mostrar los detalles de los minerales
+      mostrarDetalles(mineral_tdm): string {
+        return mineral_tdm.map(mineral => `${mineral.sigla} (${mineral.ley} ${mineral.unidad})`).join(', ');
+      }
+  unirMunicipios(municipios): string {
+    return municipios.map(municipio => municipio.municipio_origen).join(', ');
+  }
+  unirMunicipiosCodigo(municipios): string {
+    return municipios.map(municipio => municipio.codigo).join(', ');
+  }
   formatFecha(fecha: string): string {
     const date = new Date(fecha); // Convierte la fecha en un objeto Date
     const day = String(date.getDate()).padStart(2, '0'); // Día con 2 dígitos
@@ -61,134 +53,7 @@ export class PdfFormularioInternoService {
 
     return `${day}/${month}/${year} a Hrs.: ${hours}:${minutes}`; // Formato final
   }
-    generarPDF(formulario_interno: IFormularioInternoSimple) {
-        let minerales!:IMineral[];
-        let municipios: IMunicipio[] = [];
-        let departamentos: IDepartamento[] = [];
-
-        let mineralesString:string='';
-        let leyesString:string='';
-        let municipiosString:string='';
-        let codigosMunicipioString:string='';
-
-        let minerales_envio:any=[];
-         let municipio_origen_envio:any=[];
-         let lista_leyes_mineral:IFormularioInternoMineral[]=[];
-         let lista_municipios_origen:IFormularioInternoMunicipioOrigen[]=[];
-
-        let formulario_int_completo!: IFormularioInterno;
-        let operator!: IOperator;
-        let error: any = null;
-        let departamentosObs,mineralesObs,municipiosObs;
-        // Obtener datos del formulario interno y el operador
-        const formularioInternoObs = this.formularioInternoService
-          .verFormularioInterno(formulario_interno.id.toString())
-          .toPromise()
-          .then((data: any) => {
-
-
-             minerales_envio = data.minerales.map(mineral => {
-                // Devuelve solo los campos necesarios
-                return {
-                  mineralId: mineral.mineralId,
-                  ley: mineral.ley,
-                  unidad: mineral.unidad
-                };
-              });
-
-              municipio_origen_envio = data.municipio_origen.map(destino => {
-              // Devuelve solo los campos necesarios
-              return {
-                id: destino.municipioId,
-              };
-            });
-            formulario_int_completo = this.formularioInternoService.handleCrearFormularioInterno(data);
-
-            this.municipiosService.verTodosMunicipios()
-            .pipe(
-              catchError((error) => {
-                this.error = this.municipiosService.handleError(error);
-                municipios = [];
-
-                return of([]);
-              })
-            )
-            .subscribe((data: any) => {
-            municipiosObs= municipios = this.municipiosService.handlemunicipio(data);
-             departamentosObs=this.departamentosService.verdepartamentos('ds')
-              .pipe(
-                catchError((error) => {
-                  this.error = this.departamentosService.handleError(error);
-                  departamentos = [];
-                  return of([]);
-                })
-              )
-              .subscribe((data: any) => {
-                departamentos = this.departamentosService.handledepartamento(data);
-
-                this.mineralesService.verminerals('gh')
-                .pipe(
-                  retry(3), // Intenta 3 veces si hay un error
-                  catchError((error) => {
-                    this.error = this.mineralesService.handleError(error);
-                    return of([]); // Retorna un arreglo vacío en caso de error
-                  })
-                )
-                .subscribe(
-                  (data: any) => {
-                    minerales = this.mineralesService.handlemineral(data);
-
-
-                    mineralesObs=municipio_origen_envio.forEach((item) => {
-                      let index = municipios.findIndex(i => i.id === item.id);
-
-                      let departamento=departamentos.find(dat=>dat.id===municipios[index].departamento_id);
-
-                      let  origen_mun:IFormularioInternoMunicipioOrigen={
-                        municipio:municipios[index].municipio,
-                        departamento:departamento.nombre,
-                        municipio_id:municipios[index].id,
-                      }
-                      municipiosString=municipiosString+', '+origen_mun.municipio;
-                      codigosMunicipioString=codigosMunicipioString+', '+ municipios[index].codigo;
-                      lista_municipios_origen.push({...origen_mun});
-
-                    });
-
-                    minerales_envio.forEach((item) => {
-                      let index = minerales.findIndex(i => i.id === item.mineralId);
-                      //let mineral=minerales.find(dat=>dat.id===minerales[index].id);
-
-                      let  origen_min:IFormularioInternoMineral={
-                        sigla_mineral:minerales[index].sigla,
-                        descripcion:minerales[index].nombre,
-                        ley:item.ley,
-                        unidad:item.unidad,
-                        mineral_id:minerales[index].id
-                      }
-                      mineralesString=mineralesString+origen_min.descripcion+', ';
-                      leyesString=leyesString+''+ origen_min.ley+' '+origen_min.unidad+', ';
-                      lista_leyes_mineral.push({...origen_min});
-                    });
-                      ///--------------------------------------------------------------------------------------------------------
-                      const operatorObs = this.operadorService
-                      .verOperator(formulario_interno.operador_id.toString())
-                      .toPromise()
-                      .then((data: any) => {
-
-                        operator = this.operadorService.handleCrearoperator(data);
-                      })
-                      .catch((err) => {
-                        error = this.operadorService.handleError(err);
-
-                      });
-
-                    // Esperar a que ambas promesas se resuelvan
-                    Promise.all([formularioInternoObs, operatorObs,mineralesObs,municipiosObs,departamentosObs]).then(() => {
-                      if (error) {
-
-                        return; // No generar el PDF si hay errores
-                      }
+    generarPDF(formulario_interno: IFormularioInternoPDF) {
 
                       const doc = new jsPDF('p', 'pt', 'letter');
 
@@ -261,9 +126,9 @@ export class PdfFormularioInternoService {
                         } else {
                         // Si no es 'GENERADO', agregar la segunda celda
                         celdas.push({ content: 'FECHA DE EMISIÓN:', styles: { halign: 'right',fontSize:10,fontStyle:'bold',fillColor: [255, 255, 255] } });
-                        celdas.push({ content: this.formatFecha(formulario_interno.fecha_creacion), styles: { halign: 'left' ,fillColor: [255, 255, 255] } });
+                        celdas.push({ content: formulario_interno.fecha_emision+' a Hrs.:'+ formulario_interno.hora_emision, styles: { halign: 'left' ,fillColor: [255, 255, 255] } });
                         celdas.push({ content: 'FECHA DE VENCIMIENTO:', styles: { halign: 'right',fontSize:10,fontStyle:'bold' ,fillColor: [255, 255, 255] } });
-                        celdas.push({ content: this.formatFecha(formulario_interno.fecha_vencimiento), styles: { halign: 'left' ,fillColor: [255, 255, 255] } });
+                        celdas.push({ content:formulario_interno.fecha_vencimiento+' a Hrs.:'+ formulario_interno.hora_vencimiento, styles: { halign: 'left' ,fillColor: [255, 255, 255] } });
                     }
                         autoTable(doc, {
                             body: [celdas],
@@ -291,11 +156,11 @@ export class PdfFormularioInternoService {
                               ],
                               [
                                 { content: 'NIT:', styles: { halign: 'right', fontStyle: 'bold' } },
-                                { content: operator.nit, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: formulario_interno.nit, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                 { content: 'NIM/NIAR:', styles: { halign: 'right', fontStyle: 'bold' } },
-                                { content: operator.nro_nim, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: formulario_interno.nro_nim, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                 { content: 'IDOM:', styles: { halign: 'right', fontStyle: 'bold' } },
-                                { content: 'SDMMRE-'+operator.id, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: 'SDMMRE-'+formulario_interno.id, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
 
@@ -334,9 +199,9 @@ export class PdfFormularioInternoService {
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                 { content: 'LOTE:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_int_completo.lote, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: formulario_interno.lote, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                 { content: 'MERMA:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_int_completo.merma+' %', styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: (formulario_interno.merma ?? 0)+' %', styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
 
@@ -367,9 +232,9 @@ export class PdfFormularioInternoService {
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                 { content: 'PRESENTACION:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_int_completo.presentacion_id, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: formulario_interno.presentacion, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                 { content: 'PESO NETO SECO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_int_completo.peso_neto+' Kg.', styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: formulario_interno.peso_neto+' Kg.', styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
                             styles: {
@@ -393,9 +258,9 @@ export class PdfFormularioInternoService {
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                 { content: 'PESO BRUTO HÚMEDO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_int_completo.peso_bruto_humedo+' Kg.', styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: formulario_interno.peso_bruto_humedo+' Kg.', styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                 { content: 'MINERAL Y/O METAL:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: mineralesString, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: this.mostrarMinerales(formulario_interno.minerales), styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
                             styles: {
@@ -419,9 +284,9 @@ export class PdfFormularioInternoService {
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                 { content: 'TARA:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_int_completo.tara+' Kg.', styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: (formulario_interno.tara ?? 0)+' Kg.', styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                 { content: 'LEY:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: leyesString, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: this.mostrarDetalles(formulario_interno.minerales), styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
                             styles: {
@@ -446,7 +311,7 @@ export class PdfFormularioInternoService {
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                 { content: 'HUMEDAD:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_int_completo.humedad+' %', styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: (formulario_interno.humedad ?? 0)+' %', styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                               ],
@@ -478,9 +343,9 @@ export class PdfFormularioInternoService {
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                 { content: 'MUNICIPIO PRODUCTOR:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: municipiosString, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: this.unirMunicipios(formulario_interno.municipio_origen), styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                 { content: ' CODIGO MUNICIPIO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: codigosMunicipioString, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: this.unirMunicipiosCodigo(formulario_interno.municipio_origen), styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
 
@@ -515,10 +380,10 @@ export class PdfFormularioInternoService {
                             body: [
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: formulario_int_completo.des_tipo+':', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_int_completo.des_tipo === 'COMPRADOR' ? formulario_int_completo.des_comprador : formulario_int_completo.des_planta, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: formulario_interno.des_tipo+':', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: formulario_interno.des_tipo === 'COMPRADOR' ? formulario_interno.des_comprador : formulario_interno.des_planta, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                 { content: 'DESTINO FINAL (MUNICIPIO):', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_int_completo.id_municipio_destino+' %', styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: formulario_interno.municipio_destino+', '+formulario_interno.departamento_destino, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
 
@@ -542,7 +407,7 @@ export class PdfFormularioInternoService {
                               4: { cellWidth:135 }, // Ajusta automáticamente
                             },
                           });
-                          if(formulario_int_completo.tipo_transporte=='VIA FERREA'){
+                          if(formulario_interno.tipo_transporte=='VIA FERREA'){
                             autoTable(doc, {
                                 startY: (doc as any).lastAutoTable?.finalY || 10,
 
@@ -555,9 +420,9 @@ export class PdfFormularioInternoService {
                                   [
                                     {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                     { content: 'TIPO DE TRANSPORTE:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                    { content: formulario_int_completo.tipo_transporte, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    { content: formulario_interno.tipo_transporte, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                     { content: 'EMPRESA:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                    { content: formulario_int_completo.empresa_ferrea, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    { content: formulario_interno.empresa_ferrea, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                   ],
                                 ],
 
@@ -588,9 +453,9 @@ export class PdfFormularioInternoService {
                                   [
                                     {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                     { content: 'Nro. DE VAGON(ES):', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                    { content: formulario_int_completo.nro_vagon, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    { content: formulario_interno.nro_vagon, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                     {content:'FECHA DE SALIDA: ',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                    {content:formulario_int_completo.fecha_ferrea,  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                    {content:formulario_interno.fecha_ferrea,  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                   ],
                                 ],
                                 styles: {
@@ -615,7 +480,7 @@ export class PdfFormularioInternoService {
                                   [
                                     {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                     { content: 'HORA DE SALIDA: ', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                    { content: formulario_int_completo.hr_ferrea, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    { content: formulario_interno.hr_ferrea, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                     {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                     {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                   ],
@@ -648,9 +513,9 @@ export class PdfFormularioInternoService {
                                   [
                                     {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                     { content: 'TIPO DE TRANSPORTE:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                    { content: formulario_int_completo.tipo_transporte, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    { content: formulario_interno.tipo_transporte, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                     { content: 'CONDUCTOR:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                    { content: formulario_int_completo.nom_conductor, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    { content: formulario_interno.conductor, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                   ],
                                 ],
 
@@ -681,9 +546,9 @@ export class PdfFormularioInternoService {
                                   [
                                     {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                     { content: 'PLACA: ', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                    { content: formulario_int_completo.placa, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    { content: formulario_interno.placa, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                     {content:'LICENCIA DE CONDUCIR:',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                    {content:formulario_int_completo.licencia,  styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    {content:formulario_interno.licencia,  styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                   ],
                                 ],
                                 styles: {
@@ -712,7 +577,7 @@ export class PdfFormularioInternoService {
                             body: [
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                {content:formulario_int_completo.observaciones!=null?formulario_int_completo.observaciones:'',  styles: { halign: 'justify', fillColor: [255, 255, 255] } },
+                                {content:formulario_interno.observacion!=null?formulario_interno.observacion:'',  styles: { halign: 'justify', fillColor: [255, 255, 255] } },
                               ],
                             ],
 
@@ -865,23 +730,6 @@ export class PdfFormularioInternoService {
                       logo.onerror = () => {
 
                       };
-                    });
-                      ///--------------------------------------------------------------------------------------------------------
-                  }
-                );
-
-              });
-            });
-          })
-          .catch((err) => {
-            error = this.formularioInternoService.handleError(err);
-
-          });
-
-
-
-
-
-
+                    ///--------------------------------------------------------------------------------------------------------
       }
 }

@@ -1,63 +1,166 @@
-   
-        <div class="card-container">
-        
-        </div>
-
 <div class="grid">
+    <div class="col-12 lg:col-6 xl:col-4" *ngIf="reporteFornIntCantOperador">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-3">
+                <div>
+                    <div class="text-900 font-medium text-xl">Formularios Internos</div>
 
-        <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block text-500 font-medium mb-3">Formularios Externos Emitidos Esta Semana</span>
-                        <div class="text-900 font-medium text-xl">435</div>
-                    </div>
-                    <div class="flex align-items-center justify-content-center bg-orange-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                        <i class="pi pi-map-marker text-orange-500 text-xl"></i>
-                    </div>
+                    <!-- HOY con fecha actual -->
+                    <span class="text-green-500 font-medium mb-3 mt-3">
+                        HOY - {{fechaActual | date:'dd/MM/yyyy'}}
+                    </span>
+                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFornIntCantOperador.hoy?.emitidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFornIntCantOperador.hoy?.vencidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFornIntCantOperador.hoy?.generados || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFornIntCantOperador.hoy?.anulados || 0}}</span>
 
+                    <!-- SEMANA (sábado a domingo) -->
+                    <span class="text-green-500 font-medium mb-3 mt-3">
+                        SEMANA - {{inicioSemana | date:'dd/MM'}} al {{finSemana | date:'dd/MM'}} del {{finSemana | date:'yyyy'}}
+                    </span>
+                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFornIntCantOperador.semana?.emitidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFornIntCantOperador.semana?.vencidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFornIntCantOperador.semana?.generados || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFornIntCantOperador.semana?.anulados || 0}}</span>
+
+                    <!-- MES vigente -->
+                    <span class="text-green-500 font-medium mb-3 mt-3">
+                        MES - {{fechaActual | date:'MMMM yyyy' | titlecase}}
+                    </span>
+                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFornIntCantOperador.mes?.emitidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFornIntCantOperador.mes?.vencidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFornIntCantOperador.mes?.generados || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFornIntCantOperador.mes?.anulados || 0}}</span>
+
+                    <!-- AÑO vigente -->
+                    <span class="text-green-500 font-medium mb-3 mt-3">
+                        AÑO - {{fechaActual | date:'yyyy'}}
+                    </span>
+                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFornIntCantOperador.anio?.emitidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFornIntCantOperador.anio?.vencidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFornIntCantOperador.anio?.generados || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFornIntCantOperador.anio?.anulados || 0}}</span>
                 </div>
-                <span class="text-green-500 font-medium">24 nuevos </span>
-                <span class="text-500">Hoy</span>
+                <div class="flex align-items-center justify-content-center bg-green-100 border-round" [ngStyle]="{width: '3rem', height: '3rem'}">
+                    <i class="pi pi-fw pi-book text-green-500 text-xl"></i>
+                </div>
             </div>
         </div>
-        <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block text-500 font-medium mb-3">Formularios Internos Emitidos en el Año 2024</span>
-                        <div class="text-900 font-medium text-xl">20254</div>
-                    </div>
-                    <div class="flex align-items-center justify-content-center bg-orange-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                        <i class="pi pi-map-marker text-orange-500 text-xl"></i>
-                    </div>
+    </div>
 
+    <div class="col-12 lg:col-6 xl:col-4" *ngIf="reporteFormExtCantOperador">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-3">
+                <div>
+                    <div class="text-900 font-medium text-xl">Formularios Externos</div>
+
+                    <!-- HOY con fecha actual -->
+                    <span class="text-blue-500 font-medium mb-3 mt-3">
+                        HOY - {{fechaActual | date:'dd/MM/yyyy'}}
+                    </span>
+                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFormExtCantOperador.hoy?.emitidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFormExtCantOperador.hoy?.vencidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFormExtCantOperador.hoy?.generados || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFormExtCantOperador.hoy?.anulados || 0}}</span>
+
+                    <!-- SEMANA (sábado a domingo) -->
+                    <span class="text-blue-500 font-medium mb-3 mt-3">
+                        SEMANA - {{inicioSemana | date:'dd/MM'}} al {{finSemana | date:'dd/MM'}} del {{finSemana | date:'yyyy'}}
+                    </span>
+                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFormExtCantOperador.semana?.emitidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFormExtCantOperador.semana?.vencidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFormExtCantOperador.semana?.generados || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFormExtCantOperador.semana?.anulados || 0}}</span>
+
+                    <!-- MES vigente -->
+                    <span class="text-blue-500 font-medium mb-3 mt-3">
+                        MES - {{fechaActual | date:'MMMM yyyy' | titlecase}}
+                    </span>
+                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFormExtCantOperador.mes?.emitidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFormExtCantOperador.mes?.vencidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFormExtCantOperador.mes?.generados || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFormExtCantOperador.mes?.anulados || 0}}</span>
+
+                    <!-- AÑO vigente -->
+                    <span class="text-blue-500 font-medium mb-3 mt-3">
+                        AÑO - {{fechaActual | date:'yyyy'}}
+                    </span>
+                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFormExtCantOperador.anio?.emitidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFormExtCantOperador.anio?.vencidos || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFormExtCantOperador.anio?.generados || 0}}</span>
+                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFormExtCantOperador.anio?.anulados || 0}}</span>
                 </div>
-                <span class="text-green-500 font-medium">24 nuevos </span>
-                <span class="text-500">este mes</span>
+                <div class="flex align-items-center justify-content-center bg-blue-100 border-round" [ngStyle]="{width: '3rem', height: '3rem'}">
+                    <i class="pi pi-fw pi-globe text-blue-500 text-xl"></i>
+                </div>
             </div>
         </div>
-        <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block text-500 font-medium mb-3">Formularios Externos Emitidos en el Año 2024</span>
-                        <div class="text-900 font-medium text-xl">6654</div>
-                    </div>
-                    <div class="flex align-items-center justify-content-center bg-orange-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                        <i class="pi pi-map-marker text-orange-500 text-xl"></i>
-                    </div>
+    </div>
 
-                </div>
-                <span class="text-green-500 font-medium">24 nuevos </span>
-                <span class="text-500">este mes</span>
+    <div class="col-12 xl:col-6">
+        <div class="card">
+          <div class="flex justify-content-between align-items-center mb-5">
+            <h5>Minerales</h5>
+            <div>
+              <p-dropdown [options]="periodos" [(ngModel)]="periodoSeleccionado"
+                         (onChange)="cambiarPeriodo($event)" optionLabel="nombre"
+                         [disabled]="loading"></p-dropdown>
             </div>
+          </div>
+
+          <small class="text-500">
+            Fórmula: {{metadata.calculo}} |
+            Actualizado: {{metadata.generado_en | date:'short'}}
+          </small>
+
+          <div *ngIf="loading" class="my-3 p-2 text-center">
+            <i class="pi pi-spin pi-spinner mr-2"></i>Cargando datos...
+          </div>
+
+          <div *ngIf="errorMessage" class="p-3 my-2 border-round bg-red-100 text-red-700">
+            <i class="pi pi-exclamation-circle mr-2"></i>{{errorMessage}}
+          </div>
+
+          <ul *ngIf="!loading && minerales.length > 0" class="list-none p-0 m-0">
+            <li *ngFor="let mineral of minerales; let i = index"
+                class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4">
+              <div>
+                <span class="text-900 font-medium mr-2 mb-1 md:mb-0">
+                  {{mineral.nombre}} ({{mineral.sigla}})
+                </span>
+                <div class="text-600 text-sm">
+                  <span class="mr-2">📋 {{mineral.cantidad_formularios}} form.</span>
+                  <span class="mr-2">🧪 {{mineral.ley_promedio | number:'1.0-2'}}% ley</span>
+                  <span>🏆 #{{mineral.ranking}}</span>
+                </div>
+              </div>
+              <div class="mt-2 md:mt-0 flex align-items-center">
+                <div class="surface-300 border-round overflow-hidden w-10rem lg:w-6rem" style="height: 8px">
+                  <div class="h-full"
+                       [class]="'bg-' + getColor(i) + '-500'"
+                       [style.width.%]="mineral.porcentaje_total"></div>
+                </div>
+                <span class="ml-3 font-medium"
+                      [class]="'text-' + getColor(i) + '-600'">
+                  {{mineral.peso_neto_total | number:'1.0-0'}} kg
+                </span>
+              </div>
+            </li>
+          </ul>
+
+          <div *ngIf="!loading && minerales.length === 0 && !errorMessage"
+               class="p-4 text-center text-500 border-round bg-gray-100">
+            <i class="pi pi-database mr-2"></i>No se encontraron registros
+          </div>
         </div>
+      </div>
+
+
         <div class="col-12 xl:col-6">
 
             <div class="card">
                 <div class="flex justify-content-between align-items-center mb-5">
-                    <h5>Minerales Exportados</h5>
+                    <h5>Minerales </h5>
                     <div>
 
                     </div>

@@ -403,7 +403,7 @@ export class CrearOperadorComponent implements OnInit {
         );
     }
     cambioDepartamentoArrendamiento(departamento:any){
-
+        this.arrendamiento.departamento_id=departamento.value.id;
         this.municipiosService.vermunicipios(departamento.value.id.toString()).subscribe(
             (data:any)=>{
             this.municipio_arrendamiento=this.municipiosService.handlemunicipio(data);
@@ -419,7 +419,7 @@ export class CrearOperadorComponent implements OnInit {
         this.sucursal.municipio_id=municipio.value.codigo;
     }
     cambioMunicipioArrendamiento(municipio:any){
-        this.arrendamiento.municipio_id=municipio.value.codigo;
+        this.arrendamiento.municipio_id=municipio.value.id;
     }
 
 

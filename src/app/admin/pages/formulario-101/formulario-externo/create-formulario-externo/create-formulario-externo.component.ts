@@ -12,6 +12,7 @@ import { IMineral } from '@data/mineral.metadata';
 import { IOperatorSimple } from '@data/operador_simple.metadata';
 import { ToastrService } from 'ngx-toastr';
 import { first } from 'rxjs';
+import { CanCrearTomaDeMuestraGuard } from 'src/app/admin/guards/toma-de-muestra/can-crear-toma-de-muestra.guard';
 import { FormularioExternoMineralService } from 'src/app/admin/services/formulario-externo/formularioexterno-mineral.service';
 import { FormularioExternoMunicipioOrigenService } from 'src/app/admin/services/formulario-externo/formularioexterno-municipioorigen.service';
 import { FormularioExternosService } from 'src/app/admin/services/formulario-externo/formulariosexternos.service';
@@ -27,7 +28,7 @@ import { FormularioExternoFormulario } from 'src/app/admin/validators/formulario
 })
 export class CreateFormularioExternoComponent implements OnInit {
 
-    public formulario_externo=new FormularioExternoFormulario();
+    public formulario_externo=new FormularioExternoFormulario(this.canCrearActaTomaDeMuestra);
     public departamento_id:number=0;
     public municipio_id:number=0;
     public declaracionJurada:boolean=false;
@@ -126,17 +127,17 @@ nextStep() {
       case 0:
         // Validar los campos del Paso 1
         valid = this.formulario_externo.formulario.get('operador_id')?.valid && this.formulario_externo.formulario.get('m03_id')?.valid &&
-        this.formulario_externo.formulario.get('nro_factura_exportacion')?.valid && this.formulario_externo.formulario.get('laboratorio')?.valid && 
+        this.formulario_externo.formulario.get('nro_factura_exportacion')?.valid && this.formulario_externo.formulario.get('laboratorio')?.valid &&
         this.formulario_externo.formulario.get('codigo_analisis')?.valid && this.formulario_externo.formulario.get('nro_formulario_tm')?.valid;
         break;
       case 1:
         valid = this.formulario_externo.formulario.get('peso_bruto_humedo')?.valid && this.formulario_externo.formulario.get('tara')?.valid &&
-        (this.formulario_externo.formulario.get('merma')?.valid || this.formulario_externo.formulario.get('merma')?.disable) && 
+        (this.formulario_externo.formulario.get('merma')?.valid || this.formulario_externo.formulario.get('merma')?.disable) &&
         (this.formulario_externo.formulario.get('humedad')?.valid || this.formulario_externo.formulario.get('humedad')?.disable) &&
         this.formulario_externo.formulario.get('lote')?.valid && this.formulario_externo.formulario.get('presentacion_id')?.valid &&
-        (this.formulario_externo.formulario.get('cantidad')?.valid || this.formulario_externo.formulario.get('cantidad')?.disabled) 
+        (this.formulario_externo.formulario.get('cantidad')?.valid || this.formulario_externo.formulario.get('cantidad')?.disabled)
         && this.formulario_externo.formulario.get('peso_neto')?.valid && this.lista_leyes_mineral.length>0;
-        
+
         break;
       case 2:
         valid = this.formulario_externo.formulario.get('comprador')?.valid &&
@@ -152,6 +153,7 @@ nextStep() {
 
 
   constructor(
+    private canCrearActaTomaDeMuestra:CanCrearTomaDeMuestraGuard,
     private operadoresService:OperatorsService,
     private formularioExternoService:FormularioExternosService,
     private mineralesService:MineralsService,
@@ -298,7 +300,7 @@ nextStep() {
         ? { tara_volqueta: this.formulario_externo.formulario.value.tara_volqueta.toString() }
         : {}),
     });
-    
+
     if(this.formulario_externo.formulario.valid){
       let formularioEnvio=this.formulario_externo.formulario.value;
       formularioEnvio={

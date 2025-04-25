@@ -5,6 +5,7 @@ import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.
 import { IFormularioExterno } from '@data/formulario_externo.metadata';
 import { IFormularioExternoSimple } from '@data/formulario_externo_simple.metadata';
 import { IFormularioExternoPDF } from '@data/formulario_externo_pdf.metadata';
+import { IFormularioInternoEmitidos } from '@data/formulario_interno_emitidos.metadata';
 
 @Injectable({
   providedIn: 'root'
@@ -133,6 +134,23 @@ private token(){
         'Authorization': `Bearer ${auth_token}`
       });
 }
+  //-----------------Visualizar Reportes-------------------------------------------
+  verReporteFormExtCantidades()
+  {
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}formext/reporte/emitidos`);
+  }
+  verReporteFormExtCantidadesOperador(nombre:string)
+  {
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}formext/reporte/emitidos/`+nombre);
+  }
+
+  handleReporteFormExtCantidades(data: IFormularioInternoEmitidos):IFormularioInternoEmitidos {
+    let FormularioInterno:IFormularioInternoEmitidos=data;
+    return FormularioInterno
+  }
+
 }
 
 

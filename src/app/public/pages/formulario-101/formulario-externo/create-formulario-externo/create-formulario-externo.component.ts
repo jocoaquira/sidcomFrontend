@@ -15,6 +15,7 @@ import { IOperatorSimple } from '@data/operador_simple.metadata';
 import { ITDMNroForm } from '@data/toma_de_muestra_nroform.metadata';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, first, of, retry } from 'rxjs';
+import { CanCrearTomaDeMuestraGuard } from 'src/app/admin/guards/toma-de-muestra/can-crear-toma-de-muestra.guard';
 import { CanVerTomaDeMuestraGuard } from 'src/app/admin/guards/toma-de-muestra/can-ver-toma-de-muestra.guard';
 import { DepartamentosService } from 'src/app/admin/services/departamentos.service';
 import { FormularioExternoMineralService } from 'src/app/admin/services/formulario-externo/formularioexterno-mineral.service';
@@ -34,7 +35,7 @@ import { FormularioExternoFormulario } from 'src/app/admin/validators/formulario
 })
 export class CreateFormularioExternoComponent implements OnInit {
 
-    public formulario_externo=new FormularioExternoFormulario();
+    public formulario_externo;
     public departamento_id:number=0;
     public municipio_id:number=0;
     public declaracionJurada:boolean=false;
@@ -137,8 +138,8 @@ nextStep() {
         // Validar los campos del Paso 1
         valid = this.formulario_externo.formulario.get('operador_id')?.valid && this.formulario_externo.formulario.get('m03_id')?.valid &&
         this.formulario_externo.formulario.get('nro_factura_exportacion')?.valid && this.formulario_externo.formulario.get('laboratorio')?.valid &&
-        this.formulario_externo.formulario.get('codigo_analisis')?.valid && this.formulario_externo.formulario.get('nro_formulario_tm')?.valid &&
-        this.acta_TDM!=null;
+        this.formulario_externo.formulario.get('codigo_analisis')?.valid &&
+        (this.formulario_externo.formulario.get('nro_formulario_tm')?.valid || this.formulario_externo.formulario.get('nro_formulario_tm')?.disabled);
         break;
       case 1:
         valid = this.formulario_externo.formulario.get('peso_bruto_humedo')?.valid && this.formulario_externo.formulario.get('tara')?.valid &&
@@ -175,14 +176,16 @@ nextStep() {
     private tomaDeMuestraService:TomaDeMuestraService,
     private municipiosService:MunicipiosService,
     private departamentosService:DepartamentosService,
-    public canVerTomaDeMuestra:CanVerTomaDeMuestraGuard,
+    public canCrearTomaDeMuestra:CanCrearTomaDeMuestraGuard,
   ) {
-
+    this.formulario_externo=new FormularioExternoFormulario(this.canCrearTomaDeMuestra);
     this.formulario_externo.formulario.patchValue({
         user_id: authService.getUser.id,
         operador_id:authService.getUser.operador_id
       });
-      console.log(this.formulario_externo.formulario.value)
+      if(!canCrearTomaDeMuestra){
+        this.formulario_externo.formulario.get('nro_formulario_tm')?.disable();
+      }
    }
 
   ngOnInit() {

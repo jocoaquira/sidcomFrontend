@@ -4,6 +4,8 @@ import { AuthService } from '@core/authentication/services/auth.service';
 import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.metadata';
 import { IFormularioInternoSimple } from '@data/formulario_interno_simple.metadata';
 import { IFormularioInterno } from '@data/formulario_interno.metadata';
+import { IFormularioInternoPDF } from '@data/formulario_interno_pdf.metadata';
+import { IFormularioInternoEmitidos } from '@data/formulario_interno_emitidos.metadata';
 
 @Injectable({
   providedIn: 'root'
@@ -70,7 +72,15 @@ verFormularioInterno(nombre:string)
     return FormularioInterno
   }
 
-
+verFormularioInternoPDF(nombre:string)
+{
+  // asignacion de parametros
+  return this.http.get(`${this.baseUrl}formint/print/`+nombre);
+}
+handleFormularioInternoPDF(data: IFormularioInternoPDF):IFormularioInternoPDF {
+  let TomaDeMuestra:IFormularioInternoPDF=data;
+  return TomaDeMuestra
+}
 //---------------------crear   FormularioInterno-------------------------------------------
 crearFormularioInterno(data:any) {
   this.token();
@@ -123,6 +133,29 @@ private token(){
         'Authorization': `Bearer ${auth_token}`
       });
 }
+  //-----------------Visualizar Reportes-------------------------------------------
+  verReporteFormIntCantidades()
+  {
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}formint/reporte/emitidos`);
+  }
+  verReporteFormIntCantidadesOperador(nombre:string)
+  {
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}formint/reporte/emitidos/`+nombre);
+  }
+
+  handleReporteFormIntCantidades(data: IFormularioInternoEmitidos):IFormularioInternoEmitidos {
+    let FormularioInterno:IFormularioInternoEmitidos=data;
+    return FormularioInterno
+  }
+  verReporteTopMinerales()
+  {
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}formint/reporte/minerales`);
+  }
+
+
 }
 
 
