@@ -25,11 +25,11 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="idom">Numero de Formulario <p-sortIcon field="idom"></p-sortIcon></th>
-                        <th pSortableColumn="razon_social"> Fecha Creacion <p-sortIcon field="razon_social"></p-sortIcon></th>
-                        <th pSortableColumn="price">Razon Social<p-sortIcon field="price"></p-sortIcon></th>
-                        <th pSortableColumn="price">Fecha Vencimiento <p-sortIcon field="price"></p-sortIcon></th>
-                        <th pSortableColumn="category">Estado <p-sortIcon field="category"></p-sortIcon></th>
+                        <th pSortableColumn="nro_formulario">Numero de Formulario <p-sortIcon field="nro_formulario"></p-sortIcon></th>
+                        <th pSortableColumn="fecha_creacion"> Fecha Creacion <p-sortIcon field="fecha_creacion"></p-sortIcon></th>
+                        <th pSortableColumn="razon_social">Razon Social<p-sortIcon field="razon_social"></p-sortIcon></th>
+                        <th pSortableColumn="fecha_vencimiento">Fecha Vencimiento <p-sortIcon field="fecha_vencimiento"></p-sortIcon></th>
+                        <th pSortableColumn="estado">Estado <p-sortIcon field="estado"></p-sortIcon></th>
                         <th pSortableColumn="rating">Acciones <p-sortIcon field="rating"></p-sortIcon></th>
                         <th pSortableColumn="rating">Imprimir <p-sortIcon field="rating"></p-sortIcon></th>
                       </tr>
@@ -42,7 +42,7 @@
                         </td>
                         <td style="width:10%; min-width:10rem;">
                             <span class="p-column-title">Fecha Creacion</span>
-                            {{operador.fecha_creacion}}
+                            {{operador.fecha_creacion | date:'dd/MM/yyyy HH:mm:ss'}}
                         </td>
                         <td style="width:24%; min-width:16rem;">
                             <span class="p-column-title">Razon Social</span>
@@ -50,7 +50,7 @@
                             </td>
                         <td style="width:14%; min-width:8rem;">
                             <span class="p-column-title">Fecha Vencimiento</span>
-                            {{operador.fecha_vencimiento}}
+                            {{operador.fecha_vencimiento | date:'dd/MM/yyyy HH:mm:ss'}}
                         </td>
                         <td style="width:14%; min-width:10rem;">
                             <span class="p-column-title">Estado</span>
@@ -77,12 +77,12 @@
                                 <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-pencil" label="Modificar" class="p-button-rounded p-button-warning mr-2" routerLink="/public/formulario-101/formulario-externo/editar/{{operador?.id}}"></button>
 
                                 <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-lock" label="Emitir" class="p-button-rounded p-button-success mr-2" (click)="confirmarEmision(operador)"></button>
-                                <button *ngIf="operador.estado !== 'GENERADO' && operador.estado !== 'ANULADO' && vigenteAnulacion(operador)" 
-                                    pButton 
-                                    pRipple 
-                                    icon="pi pi-trash" 
-                                    label="Anular" 
-                                    class="p-button-rounded p-button-danger mr-2" 
+                                <button *ngIf="operador.estado !== 'GENERADO' && operador.estado !== 'ANULADO' && vigenteAnulacion(operador)"
+                                    pButton
+                                    pRipple
+                                    icon="pi pi-trash"
+                                    label="Anular"
+                                    class="p-button-rounded p-button-danger mr-2"
                                     [routerLink]="'/public/formulario-101/formulario-externo/anular/' + operador?.id">
                                 </button>
                             </div>
