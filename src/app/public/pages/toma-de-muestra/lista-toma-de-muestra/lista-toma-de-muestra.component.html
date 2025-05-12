@@ -79,7 +79,7 @@
                         <td>
                             <div class="flex">
                                 <button  pButton pRipple icon="pi pi-eye" (click)="verSolicitud(operador)"  class="p-button-outlined p-button-info mr-2" ></button>
-                                <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-pencil" class="p-button-outlined p-button-warning mr-2" routerLink="/admin/formulario-101/formulario-interno/editar/{{operador?.id}}"></button>
+                                <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-pencil" class="p-button-outlined p-button-warning mr-2" routerLink="/public/toma-de-muestra/editar/{{operador?.id}}"></button>
 
                                 <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-send" (click)="confirmarSolicitud(operador)" label="Solicitar" class="p-button-outlined p-button-success mr-2" ></button>
                                 <button *ngIf="operador.estado === 'APROBADO'" pButton pRipple icon="pi pi-send" (click)="firmarTDM(operador)" label="Firmar" class="p-button-outlined p-button-success mr-2" ></button>
@@ -100,10 +100,10 @@
                                     rejectLabel="No"
             >
             </p-confirmDialog>
-            <p-dialog [(visible)]="verDialog" [style]="{width: '700px'}" 
-            [modal]="true" header="Estado de Toma de Muestra" 
+            <p-dialog [(visible)]="verDialog" [style]="{width: '700px'}"
+            [modal]="true" header="Estado de Toma de Muestra"
             class="p-fluid">
-            <app-ver-toma-de-muestra 
+            <app-ver-toma-de-muestra
                 [id]="toma_de_muestra_id"
                 (estadoDialogo)="cerrar($event)">
             </app-ver-toma-de-muestra>
