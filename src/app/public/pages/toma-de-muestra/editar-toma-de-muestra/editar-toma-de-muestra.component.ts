@@ -206,30 +206,28 @@ cargar_datos(form:any){
       user_id: form.user_id,
       operador_id: form.operador_id,
       nro_formulario: form.nro_formulario,
+      cantidad: form.cantidad,
+      humedad: form.humedad,
       lote: form.lote,
-      peso_bruto_humedo: form.peso_bruto_humedo,
-      peso_neto: form.peso_neto,
-      tara: form.tara,
-      destino: form.destino,
-      almacen: form.almacen,
-      dique_cola: form.dique_cola,
-      tipo_transporte: form.tipo_transporte,
-      placa: form.placa,
-      nom_conductor:form.nom_conductor ,
-      licencia: form.licencia,
+      peso_neto_parcial: form.peso_neto_parcial,
+      peso_neto_total: form.peso_neto_total,
+      presentacion_id:form.presentacion_id,
       observaciones: form.observaciones,
-      fecha_creacion: form.fecha_creacion,
-      fecha_vencimiento: form.fecha_vencimiento,
+      fecha_hora_tdm: form.fecha_hora_tdm,
+      fecha_aprobacion: form.fecha_aprobacion,
+      fecha_firma: form.fecha_firma,
       justificacion_anulacion: form.justificacion_anulacion,
-      nro_vagon: form.nro_vagon,
-      empresa_ferrea: form.empresa_ferrea,
-      fecha_ferrea: form.fecha_ferrea,
-      hr_ferrea: form.hr_ferrea,
-      tara_volqueta: form.tara_volqueta,
-      nro_viajes: form.nro_viajes,
+      lugar_verificacion: form.lugar_verificacion,
+      nro_camiones: form.nro_camiones,
+      tipo_muestra: form.tipo_muestra,
+      total_parcial:form.total_parcial,
+      ubicacion_lat: form.ubicacion_lat,
+      ubicacion_lon: form.ubicacion_lon,
+      responsable_tdm_id: form.responsable_tdm_id,
+      responsable_tdm_senarecom_id:form.responsable_tdm_senarecom_id,
       estado: form.estado
   });
-  console.log(form);
+  console.log(this.formulario_interno.formulario.value);
   this.minerales_envio=form.minerales//.push({...envio_minerales});
   // Crear una nueva lista excluyendo ciertos campos
     this.minerales_envio = form.minerales.map(mineral => {
@@ -310,9 +308,6 @@ cargar_datos(form:any){
             }
             this.lista_leyes_mineral.push({...origen_min});
           });
-          this.municipio_id1=this.formulario_interno.formulario.value.id_municipio_destino;
-          this.departamento_id1=this.municipios.find(dat=>dat.id===this.municipio_id1).departamento_id;
-
         }
       );
 
@@ -618,7 +613,7 @@ abrirMapa() {
           tipo_muestra: formularioEnvio.tipo_muestra,
           total_parcial: formularioEnvio.total_parcial,
           peso_neto_parcial: formularioEnvio.peso_neto_parcial,
-          presentacion_id: formularioEnvio.presentacion,
+          presentacion_id: formularioEnvio.presentacion_id,
           cantidad: formularioEnvio.cantidad,
           humedad:humedadFinal,
           nro_camiones: formularioEnvio.nro_camiones,
