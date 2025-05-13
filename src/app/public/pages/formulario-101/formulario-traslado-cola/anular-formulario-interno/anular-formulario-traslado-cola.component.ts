@@ -60,7 +60,6 @@ export class AnularFormularioTrasladoColaComponent implements OnInit {
         this.id=params.get('id');
         this.formularioInternoService.verFormularioTrasladoCola(this.id).subscribe(
           (data:any)=>{
-            console.log(data);
           this.formulario_int=this.formularioInternoService.handleCrearFormularioTrasladoCola(data);
 
         },

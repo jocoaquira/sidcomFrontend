@@ -45,7 +45,6 @@ export class FormularioInternoComponent implements OnInit {
         private authService:AuthService,
     ) {
         this.operador_id= authService.getUser.operador_id;
-        console.log(this.operador_id);
      }
 
     ngOnInit() {
@@ -109,7 +108,6 @@ export class FormularioInternoComponent implements OnInit {
         this.formularioInternoService.verFormularioInternoPDF(formulario_interno.id.toString()).subscribe(
             (data:any)=>{
             let tdm_completo:IFormularioInternoPDF=this.formularioInternoService.handleFormularioInternoPDF(data);
-            console.log(tdm_completo);
             this.pdfFormularioInterno.generarPDF(tdm_completo);
           },
           (error:any)=> this.error=this.formularioInternoService.handleError(error));

@@ -22,13 +22,11 @@ export class TomaDeMuestraService {
     private authService:AuthService
   ) {
 
-
-    //this.requestOptions = { headers: headers };
   }
 //-----------------Visualizar operadores-------------------------------------------
   verTomaDeMuestras()
   {
-    
+
     // asignacion de parametros
     return this.http.get(`${this.baseUrl}sample`);
   }
@@ -120,7 +118,6 @@ handleCrearTomaDeMuestra(data: any):any {
 //---------------------Editar   TomaDeMuestra-------------------------------------------
 editarTomaDeMuestra(data:ITomaDeMuestra,id:number) {
   this.token();
-  console.log(id);
   return this.http.put(`${this.baseUrl}sample/`+id.toString(), data)
 }
 handleEditarTomaDeMuestraError(error: any): any {

@@ -95,7 +95,6 @@ handleCrearusuario(data: IUsuario):IUsuario {
 //---------------------Editar   usuario-------------------------------------------
 editarusuario(data:any) {
   let { id, ...dataSinId } = data;
-  console.log(dataSinId);
   this.token();
   return this.http.put(`${this.baseUrl}user/`+data.id, this.limpiarObjeto(dataSinId));
 }
@@ -106,7 +105,7 @@ handleEditarusuario(data: boolean):boolean {
   let usuario:boolean=data;
   return usuario
 }
- limpiarObjeto = (obj: any) => 
+ limpiarObjeto = (obj: any) =>
   Object.entries(obj).reduce((acc, [key, value]) => {
     if (value !== null && value !== undefined) {
       acc[key] = value;

@@ -150,7 +150,7 @@ getErrorMessage(controlName: string): string | null {
   }
 
   private actualizarValidacionesSegunTipo(valor: string): void {
-    console.log(valor);
+
     const desComprador = this.formulario.get('des_comprador');
     const desPlanta = this.formulario.get('des_planta');
 

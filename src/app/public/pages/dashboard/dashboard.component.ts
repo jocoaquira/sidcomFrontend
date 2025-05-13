@@ -70,15 +70,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     this.formInterno.verReporteFormIntCantidadesOperador(user.toString()).subscribe(
                         (data: any) => {
                             this.reporteFornIntCantOperador = this.formInterno.handleReporteFormIntCantidades(data);
-                            console.log(this.reporteFornIntCantOperador);
-
                         },
                         (error: any) => this.error = this.formInterno.handleError(error)
                     );
                     this.formExterno.verReporteFormExtCantidadesOperador(user.toString()).subscribe(
                         (data: any) => {
                             this.reporteFormExtCantOperador = this.formExterno.handleReporteFormExtCantidades(data);
-                            console.log(this.reporteFornIntCantOperador);
 
                         },
                         (error: any) => this.error = this.formExterno.handleError(error)
@@ -89,7 +86,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 (error: any) => this.error = this.operatorService.handleError(error)
             );
         } else {
-            console.error('Usuario no válido');
+
         }
 
 

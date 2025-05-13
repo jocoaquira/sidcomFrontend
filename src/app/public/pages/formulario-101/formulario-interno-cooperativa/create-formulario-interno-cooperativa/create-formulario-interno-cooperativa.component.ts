@@ -183,7 +183,6 @@ nextStep() {
       this.presentacionService.verpresentacions('hj').subscribe(
         (data:any)=>{
         this.presentaciones=this.presentacionService.handlepresentacion(data);
-        console.log(this.presentaciones);
       },
       (error:any)=> this.error=this.presentacionService.handleError(error));
 
@@ -193,8 +192,7 @@ nextStep() {
     ];
     this.unidades = [
         { nombre: '%', id: '1' },
-        { nombre: 'DM', id: '2' },
-        { nombre: 'g/TM', id: '3' },
+        { nombre: 'g/TM', id: '2' },
     ];
     this.tipo_traslado = [
       { nombre: 'BROZA', id: '1' },
@@ -251,7 +249,6 @@ nextStep() {
         });
       }
     }
-    console.log(event);
   }
  // Función para calcular el peso neto
  calcularPesoNeto() {
@@ -291,7 +288,6 @@ nextStep() {
         minerales:this.minerales_envio,
         municipio_origen:this.municipio_origen_envio
       }
-      console.log(formularioEnvio);
       this.formularioCooperativaService.crearFormularioInterno(formularioEnvio).subscribe(
         (data:any) =>
         {
@@ -299,7 +295,6 @@ nextStep() {
 
           if(this.formulario_Interno_registrado!==null)
           {
-            console.log(this.formulario_Interno_registrado);
             this.formulario_interno.formulario.reset();
             this.notify.success('El el formulario interno se generó exitosamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
             this.router.navigate(['/public/formulario-101/formulario-cooperativa']);

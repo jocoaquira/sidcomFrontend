@@ -82,7 +82,6 @@ crearoperator(formData: FormData): Observable<any> {
   //this.token(); // Si es necesario, agrega la lógica para obtener el token
   // Llamamos a la API con el FormData
 
-  console.log('llego hasta aqui');
   return this.http.post(`${this.baseUrl}operator`, formData);
 }
 crearoperatore(data:IOperator) {

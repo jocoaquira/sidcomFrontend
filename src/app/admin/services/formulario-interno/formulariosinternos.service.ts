@@ -96,7 +96,6 @@ handleCrearFormularioInterno(data: any):any {
 //---------------------Editar   FormularioInterno-------------------------------------------
 editarFormularioInterno(data:IFormularioInterno,id:number) {
   this.token();
-  console.log(id);
   return this.http.put(`${this.baseUrl}formint/`+id.toString(), data)
 }
 handleEditarFormularioInternoError(error: any): any {

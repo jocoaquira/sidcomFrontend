@@ -40,7 +40,6 @@ public nameUserLS:string='currentUser';
         this.setUserToSessionStorage(r.data);
         this.currentUser.next(r.data);
         if(!response.error){
-            console.log(this.currentUser.value);
             if(this.currentUser.value.operador_id==null)
             {
                 this.router.navigateByUrl('admin/operador');

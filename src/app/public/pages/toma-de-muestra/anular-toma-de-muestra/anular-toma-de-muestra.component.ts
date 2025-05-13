@@ -45,12 +45,11 @@ export class AnularTomaDeMuestraComponent implements OnInit {
 
   }
   onSubmit(){
-    
+
     if(this.valido)
     {
 
         this.anulacion_tm.estado='ANULADO';
-        console.log(this.anulacion_tm);
         this.tomaDeMuestraService.anularTomaDeMuestra(this.anulacion_tm).subscribe(
             (data:any) =>
             {
@@ -83,12 +82,12 @@ export class AnularTomaDeMuestraComponent implements OnInit {
   longitudTexto(event:any){
     if((event.target as HTMLInputElement).value.length>=200){
       this.valido=true;
-      
+
     }
     else{
       this.valido=false;
     }
-    
+
   }
   confirmarAnulacion() {
     this.confirmationService.confirm({

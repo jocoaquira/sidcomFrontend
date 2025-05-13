@@ -338,8 +338,7 @@ ngOnInit() {
   ];
   this.unidades = [
       { nombre: '%', id: '1' },
-      { nombre: 'DM', id: '2' },
-      { nombre: 'g/TM', id: '3' },
+      { nombre: 'g/TM', id: '2' },
   ];
   this.tipo_transporte = [
       { nombre: 'TRAILER', id: '1' },
@@ -414,13 +413,12 @@ guardar(){
       minerales:this.minerales_envio,
       municipio_origen:this.municipio_origen_envio
     }
-    console.log(this.id);
 
     this.formularioInternoService.editarFormularioInterno(formularioEnvio,this.id).subscribe(
       (data:any) =>
       {
           this.formulario_Interno_registrado=this.formularioInternoService.handleCrearFormularioInterno(data);
-          console.log(this.formulario_Interno_registrado);
+
         if(this.formulario_Interno_registrado!==null)
         {
 
@@ -614,7 +612,6 @@ agregarLey(){
         });
       }
     }
-    console.log(event);
   }
 
   cambioPresentacion(event:any){

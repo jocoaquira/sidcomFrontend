@@ -65,20 +65,19 @@ export class AuthService {
 
   login(data: ILogin): Observable<IAuth> {
     const response = { error: true, msg: 'Error: usuario no existe', data: null };
-  
+
     return this.http.post<{ error: boolean; msg: string; data: any }>(this.baseUrl + 'auth/login', data).pipe(
       map(r => {
         response.msg = r.msg;
         response.error = r.error;
         response.data = r.data;
-        
+
         this.setUserToSessionStorage(r.data);
         this.currentUser.next(r.data);
         this.resetInactivityTimer();
-  
+
         if (!response.error) {
-          console.log(this.currentUser.value);
-  
+
           // 🔴 Verificar si la contraseña ingresada es la predeterminada
           if (data.password === '12345678') {
             localStorage.setItem('mustChangePassword', 'true');
@@ -88,7 +87,7 @@ export class AuthService {
           } else {
             localStorage.removeItem('mustChangePassword'); // Eliminar flag si ya cambió su contraseña
           }
-  
+
           // 🔹 Redirección según condición
           if (this.currentUser.value.operador_id == null) {
             this.router.navigateByUrl('admin');
@@ -97,7 +96,7 @@ export class AuthService {
             this.router.navigateByUrl('public');
           }
         }
-  
+
         return response;
       }),
       catchError(e => {
@@ -106,7 +105,7 @@ export class AuthService {
       })
     );
   }
-  
+
 
 
 

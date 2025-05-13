@@ -34,7 +34,7 @@ export class PdfTomaDeMuestraService {
     const year = date.getFullYear(); // Año
     const hours = String(date.getHours()).padStart(2, '0'); // Hora con 2 dígitos
     const minutes = String(date.getMinutes()).padStart(2, '0'); // Minutos con 2 dígitos
-  
+
     return `${day}/${month}/${year} a Hrs.: ${hours}:${minutes}`; // Formato final
   }
   // Función para mostrar los nombres de los minerales
@@ -74,7 +74,7 @@ convertirHTMLATextoConViñetas(html) {
 }
 
     generarPDF(toma_de_muestra: ITomaDeMuestraPDF) {
-        
+
                      const doc = new jsPDF('p', 'pt', 'letter');
 
                       const logo = new Image();
@@ -110,17 +110,17 @@ convertirHTMLATextoConViñetas(html) {
                                       styles: { halign: 'right', fillColor: [255, 255, 255] }
                                     },
                                     {
-                                      content: 
+                                      content:
                                         toma_de_muestra.estado === 'GENERADO' ? toma_de_muestra.estado :
                                         toma_de_muestra.estado === 'SOLICITADO' ? 'SOLICITADO' :
                                         toma_de_muestra.estado === 'ANULADO' ? 'ANULADO' :
                                         toma_de_muestra.nro_formulario,
-                                      
+
                                       styles: {
                                         halign: 'center',
                                         fontSize: 14,
                                         fontStyle: 'bold',
-                                        fillColor: 
+                                        fillColor:
                                           toma_de_muestra.estado === 'GENERADO' ? [255, 255, 0] :
                                           toma_de_muestra.estado === 'SOLICITADO' ? [0, 255, 255] : // Cambiar color si es solicitado
                                           toma_de_muestra.estado === 'ANULADO' ? [255, 0, 0] : [255, 255, 255] // Cambiar color si es anulado
@@ -155,20 +155,20 @@ convertirHTMLATextoConViñetas(html) {
                         if (toma_de_muestra.estado === 'GENERADO') {
                         // Si el estado es 'GENERADO', agregar solo la primera celda
                         celdas.push({ content: 'ESTE FORMULARIO NO SE EMITIO, ESTA EN MODO GENERADO Y NO ES VALIDO APARA SU USO.', colSpan: 2, styles: { halign: 'center', fillColor: [255, 255, 0] } });
-                        } 
+                        }
                         if (toma_de_muestra.estado === 'SOLICITADO') {
                           // Si el estado es 'GENERADO', agregar solo la primera celda
                           celdas.push({ content: 'ESTE FORMULARIO SE ENCUENTRA EN PROCESO DE APROBACION, NO ES VALIDO APARA SU USO.', colSpan: 2, styles: { halign: 'center', fillColor: [255, 255, 0] } });
-                          } 
+                          }
                         if (toma_de_muestra.estado === 'APROBADO') {
                           // Si el estado es 'GENERADO', agregar solo la primera celda
                           celdas.push({ content: 'ESTE FORMULARIO YA SE APROBÓ, ESTA A LA ESPERA DE FIRMA PARA SU USO.', colSpan: 2, styles: { halign: 'center', fillColor: [255, 255, 0] } });
-                          } 
+                          }
                         if (toma_de_muestra.estado === 'ANULADO') {
                           // Si el estado es 'GENERADO', agregar solo la primera celda
                           celdas.push({ content: 'ESTE FORMULARIO SE ANULÓ, NO VALIDO PARA SU USO.', colSpan: 2, styles: { halign: 'center', fillColor: [255, 0, 0] } });
-                          } 
-                        
+                          }
+
                         autoTable(doc, {
                             body: [celdas],
                             startY: (doc as any).lastAutoTable.finalY,
@@ -198,7 +198,7 @@ convertirHTMLATextoConViñetas(html) {
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                 { content: 'LUGAR DE VERIFICACIÓN:', styles: { halign: 'left', fontStyle: 'bold' } },
                                 { content: toma_de_muestra.lugar_verificacion, styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                                
+
                               ],
                             ],
 
@@ -224,7 +224,7 @@ convertirHTMLATextoConViñetas(html) {
 
                           autoTable(doc, {
                             startY: (doc as any).lastAutoTable?.finalY+3 || 50, // Increased the starting Y value for more space
-                          
+
                             head: [
                               [
                                 { content: '2. DATOS DEL OPERADOR MINERO', colSpan: 6, styles: { halign: 'left', fillColor: [255, 204, 204], fontStyle: 'bold' } },
@@ -244,7 +244,7 @@ convertirHTMLATextoConViñetas(html) {
                                 { content: toma_de_muestra.municipio, styles: { halign: 'left', fillColor: [255, 255, 255] } }
                               ],
                             ],
-                          
+
                             styles: {
                               fillColor: [255, 255, 255], // Color de fondo por defecto
                               textColor: [0, 0, 0], // Color de texto negro
@@ -266,7 +266,7 @@ convertirHTMLATextoConViñetas(html) {
                               4: { cellWidth: 175 }, // Ajusta automáticamente
                             },
                           });
-                          
+
 
                           autoTable(doc, {
                             startY: (doc as any).lastAutoTable?.finalY+3 || 40,
@@ -357,7 +357,7 @@ convertirHTMLATextoConViñetas(html) {
                               4: { cellWidth:185 }, // Ajusta automáticamente
                             },
                           });
-                          
+
 
                            autoTable(doc, {
                             startY: (doc as any).lastAutoTable?.finalY+3 || 40,
@@ -432,9 +432,9 @@ convertirHTMLATextoConViñetas(html) {
                             nombre: item.nombre,
                             procedimiento: this.convertirHTMLATextoConViñetas(item.procedimiento)  // Usamos una nueva función de conversión
                           }));
-                          
-                          
-                          
+
+
+
                           // Crear la tabla
                           autoTable(doc, {
                             startY: (doc as any).lastAutoTable?.finalY+3 || 10,
@@ -499,7 +499,7 @@ convertirHTMLATextoConViñetas(html) {
 
                           autoTable(doc, {
                             startY: (doc as any).lastAutoTable?.finalY + 10 || 10,
-                          
+
                             head: [
                               [
                                 { content: 'DATOS DE VERIFICACIÓN Y APROBACIÓN', colSpan: 4, styles: { halign: 'center', fillColor: [255, 255, 255], fontStyle: 'bold' } },
@@ -513,7 +513,7 @@ convertirHTMLATextoConViñetas(html) {
                                 { content: 'Escanee el código QR para verificar la autenticidad del Formulario de Toma de Muestra', styles: { halign: 'center', fontStyle: 'bold', fillColor: [255, 255, 255], fontSize: 6 } },
                               ],
                             ],
-                          
+
                             styles: {
                               textColor: [0, 0, 0], // Color de texto negro
                               valign: 'bottom', // Alineación vertical centrada
@@ -544,7 +544,7 @@ convertirHTMLATextoConViñetas(html) {
 
                             sello_autorizado.onload = () => {
                               const nueva_imagen = new Image();
-                          
+
                               // Verifica si toma_de_muestra.foto_link es válido
                               let correctedPath = '';
                               if (toma_de_muestra.foto_link) {
@@ -553,41 +553,37 @@ convertirHTMLATextoConViñetas(html) {
                                   nueva_imagen.src = localStorage.getItem('url-backend') + correctedPath; // Imagen desde el backend
                               } else {
                                   // Si no hay foto, asigna una imagen por defecto
-                                  console.log('No hay foto disponible, se usará una imagen por defecto.');
                                   nueva_imagen.src = 'ruta/a/tu/imagen/por/defecto.png'; // Aquí colocas la URL de tu imagen por defecto
                               }
-                          
+
                               const extension = correctedPath.split('.').pop().toUpperCase();
-                          
+
                               nueva_imagen.onload = () => {
                                   if (toma_de_muestra.estado !== 'GENERADO') {
                                       doc.addImage(url, 'PNG', 490, (doc as any).lastAutoTable?.finalY - 110, 81, 81);
                                   } else {
                                       doc.addImage(sello_auth, 'JPEG', 470, (doc as any).lastAutoTable?.finalY - 110, 127, 86);
                                   }
-                          
+
                                   // Agregar la nueva imagen en una posición específica (si la imagen se carga correctamente)
                                   doc.addImage(nueva_imagen, extension, 350, (doc as any).lastAutoTable?.finalY - 100, 100, 85);
-                          
+
                                   // Generar el PDF y abrirlo
                                   window.open(doc.output('bloburl'), '_blank');
                               };
-                          
+
                               nueva_imagen.onerror = () => {
-                                  console.error('Error cargando la imagen desde el backend o la imagen por defecto.');
                                   // En caso de error, puedes continuar generando el PDF sin la imagen
                                   window.open(doc.output('bloburl'), '_blank');
                               };
                           };
-                          
+
 
                             sello_autorizado.onerror = () => {
-                              console.error('Error cargando sello_autorizado.');
                             };
                           };
 
                           sello_auth.onerror = () => {
-                            console.error('Error cargando sello_auth.');
                           };
 
                           }

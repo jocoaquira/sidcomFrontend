@@ -97,7 +97,6 @@ handleCrearFormularioExterno(data: any):any {
 //---------------------Editar   FormularioExterno-------------------------------------------
 editarFormularioExterno(data:IFormularioExterno,id:number) {
   this.token();
-  console.log(id);
   return this.http.put(`${this.baseUrl}formext/`+id.toString(), data)
 }
 handleEditarFormularioExternoError(error: any): any {

@@ -19,8 +19,8 @@ export class CambiarPasswordComponent {
   @Output() estadoDialogo = new EventEmitter<boolean>();
 
   constructor(
-    private fb: FormBuilder, 
-    private router: Router, 
+    private fb: FormBuilder,
+    private router: Router,
     private usuarioService: UsuariosService,
     private authService:AuthService
 ) {
@@ -29,7 +29,7 @@ export class CambiarPasswordComponent {
       confirmPassword: ['', [Validators.required]]
     });
     this.usuario = {
-      id: authService.getUser.id, 
+      id: authService.getUser.id,
       password: ''
     };
   }
@@ -83,7 +83,6 @@ export class CambiarPasswordComponent {
         id: this.usuario.id,
         password: this.passwordForm.get('password')?.value
       };
-      console.log(datos);
       this.usuarioService.editarusuario(datos).subscribe(
         (data: any) => {
           if (data.error == null) {

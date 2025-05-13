@@ -180,7 +180,6 @@ constructor(
     this.formularioTraladoDeCola.verFormularioTrasladoCola(this.id.toString()).subscribe(
       (data:any)=>{
       let formulario_int=data;
-      console.log('datos:', data);
       this.num_form=formulario_int.nro_formulario;
 
       this.cargar_datos(formulario_int);
@@ -223,7 +222,6 @@ cargar_datos(form:any){
       nro_viajes: form.nro_viajes,
       estado: form.estado
   });
-  console.log(form);
   this.minerales_envio=form.minerales//.push({...envio_minerales});
   // Crear una nueva lista excluyendo ciertos campos
     this.minerales_envio = form.minerales.map(mineral => {
@@ -358,8 +356,7 @@ ngOnInit() {
   ];
   this.unidades = [
       { nombre: '%', id: '1' },
-      { nombre: 'DM', id: '2' },
-      { nombre: 'g/TM', id: '3' },
+      { nombre: 'g/TM', id: '2' },
   ];
   this.tipo_transporte = [
       { nombre: 'TRAILER', id: '1' },
@@ -422,10 +419,7 @@ onSubmit(){
 
 }
 guardar(){
- /* this.formulario_traslado_cola.formulario.patchValue({
-      estado: 'GENERADO'
-    });*/
-    console.log(this.formulario_traslado_cola.formulario.value)
+
   if(this.formulario_traslado_cola.formulario.valid){
     let formularioEnvio=this.formulario_traslado_cola.formulario.value;
     formularioEnvio={
@@ -434,13 +428,11 @@ guardar(){
       municipio_origen:this.municipio_origen_envio,
       municipio_destino:this.municipio_destino_envio
     }
-    console.log(formularioEnvio);
 
     this.formularioTraladoDeCola.editarFormularioTrasladoCola(formularioEnvio,this.id).subscribe(
       (data:any) =>
       {
           this.formulario_traslado_cola_registrado=this.formularioTraladoDeCola.handleCrearFormularioTrasladoCola(data);
-          console.log(this.formulario_traslado_cola_registrado);
         if(this.formulario_traslado_cola_registrado!==null)
         {
 
@@ -617,7 +609,6 @@ agregarLey(){
         });
       }
     }
-    console.log(event);
   }
 
   cambioPresentacion(event:any){

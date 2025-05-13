@@ -68,14 +68,14 @@ export class ListaTomaDeMuestraComponent implements OnInit {
         private confirmationService:ConfirmationService
     ) {
         this.operador_id= authService.getUser.operador_id;
-        console.log(this.operador_id);
+
     }
 
     ngOnInit() {
         this.tomaDeMuestraService.verTomaDeMuestrasSimpleOperador(this.operador_id).subscribe(
             (data:any)=>{
             this.listaTomaDeMuestra=this.tomaDeMuestraService.handleTomaDeMuestraOperadorSimple(data);
-                console.log(this.listaTomaDeMuestra);
+
         },
           (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
 
@@ -126,22 +126,22 @@ export class ListaTomaDeMuestraComponent implements OnInit {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
     generarPDF(tdm:IFormularioInternoSimple){
-        console.log(tdm);
+
         this.tomaDeMuestraService.verTomaDeMuestraPDF(tdm.id.toString()).subscribe(
             (data:any)=>{
             this.tdm_completo=this.tomaDeMuestraService.handleTomaDeMuestraPDF(data);
-            console.log(this.tdm_completo);
+
             this.pdfTomaDemuestra.generarPDF(this.tdm_completo);
           },
           (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
-        
+
     }
-    
+
     solicitar(event:ITomaDeMuestra){
-        console.log(event);
+
         this.tomaDeMuestraService.solicitarTomaDeMuestra(event.id).subscribe(
             (data:any)=>{
-            console.log(this.tomaDeMuestraService.handleTomaDeMuestraOperadorSimple(data));
+
             this.tomaDeMuestraService.verTomaDeMuestrasSimpleOperador(this.operador_id).subscribe(
                 (data:any)=>{
                 this.listaTomaDeMuestra=this.tomaDeMuestraService.handleTomaDeMuestraOperadorSimple(data);
@@ -151,10 +151,10 @@ export class ListaTomaDeMuestraComponent implements OnInit {
           (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
     }
     firmar(event:ITomaDeMuestra){
-        console.log(event);
+
         this.tomaDeMuestraService.firmarTomaDeMuestra(event.id).subscribe(
             (data:any)=>{
-            console.log(this.tomaDeMuestraService.handleTomaDeMuestraOperadorSimple(data));
+
             this.tomaDeMuestraService.verTomaDeMuestrasSimpleOperador(this.operador_id).subscribe(
                 (data:any)=>{
                 this.listaTomaDeMuestra=this.tomaDeMuestraService.handleTomaDeMuestraOperadorSimple(data);
@@ -164,7 +164,7 @@ export class ListaTomaDeMuestraComponent implements OnInit {
           (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
     }
     confirmarSolicitud(event:ITomaDeMuestra) {
-        console.log
+
         this.confirmationService.confirm({
             key: 'confirm1',
             message: '¿Estas seguro de Solicitar la Toma de Muestra: '+event.nro_formulario+'?',
@@ -174,7 +174,7 @@ export class ListaTomaDeMuestraComponent implements OnInit {
         });
     }
     firmarTDM(event:ITomaDeMuestra){
-        console.log
+
         this.confirmationService.confirm({
             key: 'confirm1',
             message: '¿Estas seguro de Firmar la Toma de Muestra: '+event.nro_formulario+'?',
@@ -183,7 +183,7 @@ export class ListaTomaDeMuestraComponent implements OnInit {
               },
         });
     }
-    verSolicitud(event:ITomaDeMuestraSimple){   
+    verSolicitud(event:ITomaDeMuestraSimple){
             this.tomaDeMuestra=event;
             this.verDialog = true;
             this.toma_de_muestra_id=event.id;

@@ -55,11 +55,10 @@ export class ListarResponsableTMComponent implements OnInit {
         public canEliminarUsuario:CanEliminarUsuarioGuard,
         private authService:AuthService,
         private notify:ToastrService,
-    ) { 
-        
+    ) {
+
         this.operador_id= authService.getUser.operador_id;
-        console.log('este operador: '+this.operador_id);
-        
+
     }
 
     ngOnInit() {
@@ -90,7 +89,7 @@ export class ListarResponsableTMComponent implements OnInit {
         this.responsableTMService.verResponsableTMOperador(this.operador_id.toString()).subscribe(
             (data:any)=>{
             this.listaUsuarios=this.responsableTMService.handleusuario(data);
-            
+
 
           },
           (error:any)=> this.error=this.responsableTMService.handleError(error));
@@ -106,12 +105,12 @@ export class ListarResponsableTMComponent implements OnInit {
         const { operador, ...rest } = responsable;
 
         // Asignar el resto de las propiedades al objeto responsable
-        this.responsable = { ...rest }; 
-       // 
+        this.responsable = { ...rest };
+       //
 
 
 
-        //this.responsable = { ...responsable }; 
+        //this.responsable = { ...responsable };
         //
         //this.submitted = false;
         this.productDialog = true;
@@ -176,15 +175,15 @@ export class ListarResponsableTMComponent implements OnInit {
     onGlobalFilter(table: Table, event: Event) {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
-    
+
     bloquearDialogo(responsable:any){
-        
+
         // Crear una copia del objeto, excluyendo el campo "operador"
         const { operador, ...rest } = responsable;
 
         // Asignar el resto de las propiedades al objeto responsable
-        this.responsable = { ...rest }; 
-       // 
+        this.responsable = { ...rest };
+       //
         if(this.responsable.estado=='ACTIVO')
         {
             this.responsable.estado='INACTIVO';
@@ -196,7 +195,7 @@ export class ListarResponsableTMComponent implements OnInit {
             (data:any) =>
             {
               this.responsableTMService.handleCrearusuario(data);
-              
+
               if(data.error==null)
               {
                 this.notify.success('Actualizado Correctamente','Actualizado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
@@ -207,8 +206,8 @@ export class ListarResponsableTMComponent implements OnInit {
                         ...usuario,
                         operador: this.getNombreOperador(usuario.operador_id) // Asegúrate de añadir esta propiedad
                     }));
-                    
-        
+
+
                   },
                   (error:any)=> this.error=this.responsableTMService.handleError(error));
               }

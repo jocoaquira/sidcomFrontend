@@ -45,7 +45,6 @@ export class FormularioExternoComponent implements OnInit {
         private authService:AuthService,
     ) {
         this.operador_id= authService.getUser.operador_id;
-        console.log(this.operador_id);
      }
 
     ngOnInit() {
@@ -109,7 +108,7 @@ export class FormularioExternoComponent implements OnInit {
         this.formularioExternoService.verFormularioExternoPDF(tdm.id.toString()).subscribe(
             (data:any)=>{
             let tdm_completo=this.formularioExternoService.handleFormularioExternoPDF(data);
-            
+
             this.formularioExternoPDF.generarPDF(tdm_completo);
           },
           (error:any)=> this.error=this.formularioExternoService.handleError(error));

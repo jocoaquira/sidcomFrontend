@@ -25,7 +25,7 @@ export class InfoOperadorComponent implements OnInit {
     public isEditMode:boolean=true;
     public usuario_id:number=null;
     public error:any=null;
-    
+
     constructor(
         private usuarioService:UsuariosService,
         private operadoresService:OperatorsService,
@@ -35,23 +35,23 @@ export class InfoOperadorComponent implements OnInit {
         private authService:AuthService,
         private notify:ToastrService,
         private confirmationService:ConfirmationService
-    ) { 
+    ) {
         this.usuario_id= authService.getUser.id
-        console.log(this.usuario_id);
+
     }
 
     ngOnInit() {
         this.usuarioService.verusuarioCompleto(this.usuario_id).subscribe(
             (data:any)=>{
             this.usuario=this.usuarioService.handleUsuarioCompleto(data);
-            console.log(this.usuario);
+
 
           },
           (error:any)=> this.error=this.usuarioService.handleError(error));
 
     }
     cerrar(event:any){
-        
+
     }
     openNew() {
 
@@ -91,10 +91,10 @@ export class InfoOperadorComponent implements OnInit {
                             (data:any)=>{
                             this.listaMinerales=this.usuarioService.handlethis.usuario(data);
                             console.log(this.listaMinerales);
-                
+
                           },
                           (error:any)=> this.error=this.usuarioService.handleError(error));
-        
+
                         this.notify.success('Actualizado Correctamente','Actualizado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
                       }
                     },

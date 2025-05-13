@@ -116,7 +116,7 @@ export class ListarUsuarioComponent implements OnInit {
         this.productDialog = true;
     }
     edit(usuario:IUsuario) {
-            this.usuario = { ...usuario }; 
+            this.usuario = { ...usuario };
             console.log(this.usuario);
             //this.submitted = false;
             this.productDialog = true;
@@ -214,7 +214,7 @@ export class ListarUsuarioComponent implements OnInit {
 
     }
     bloquearDialogo(usuario:IUsuario){
-        
+
         this.confirmationService.confirm({
             key: 'confirm1',
             message: '¿Estas seguro de Realizar esta Operación?',
@@ -226,20 +226,22 @@ export class ListarUsuarioComponent implements OnInit {
                     else{
                         usuario.estado='ACTIVO';
                     }
+                delete usuario.password;
+                console.log(usuario);
                 this.usuariosService.editarusuario(usuario).subscribe(
                     (data:any) =>
                     {
                       this.usuariosService.handleCrearusuario(data);
-                      console.log(data);
+
                       if(data.error==null)
                       {
                         this.usuariosService.verusuarios('nada').subscribe(
                             (data:any)=>{
                             this.listaUsuarios=this.usuariosService.handleusuario(data);
-                
+
                           },
                           (error:any)=> this.error=this.usuariosService.handleError(error));
-        
+
                         this.notify.success('Actualizado Correctamente','Actualizado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
                       }
                     },
@@ -255,7 +257,7 @@ export class ListarUsuarioComponent implements OnInit {
         });
     }
     resetPassword(usuario:IUsuario){
-        
+
         this.confirmationService.confirm({
             key: 'confirm1',
             message: '¿Estas seguro de Resetear Password?',
@@ -271,10 +273,10 @@ export class ListarUsuarioComponent implements OnInit {
                         this.usuariosService.verusuarios('nada').subscribe(
                             (data:any)=>{
                             this.listaUsuarios=this.usuariosService.handleusuario(data);
-                
+
                           },
                           (error:any)=> this.error=this.usuariosService.handleError(error));
-        
+
                         this.notify.success('Se reseteo la COntraseña','Operación realizada Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
                       }
                     },

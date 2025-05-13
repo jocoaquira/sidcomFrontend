@@ -136,7 +136,6 @@ isStepValid(stepIndex: number): boolean {
       this.formulario_interno.formulario.get('lote')?.valid && this.formulario_interno.formulario.get('presentacion_id')?.valid &&
       (this.formulario_interno.formulario.get('cantidad')?.valid || this.formulario_interno.formulario.get('cantidad')?.disabled) &&
       this.formulario_interno.formulario.get('peso_neto')?.valid && this.lista_leyes_mineral.length>0;
-      console.log(valid);
       break;
     case 1:
       valid =this.lista_municipios_origen.length>0
@@ -188,7 +187,6 @@ constructor(
     });
  }
 cargar_datos(form:any){
-  console.log(form);
   this.formulario_interno.formulario.patchValue({
       id: form.id,
       user_id: form.user_id,
@@ -223,7 +221,6 @@ cargar_datos(form:any){
       nro_viajes: form.nro_viajes,
       estado: form.estado
   });
-  console.log(this.formulario_interno.formulario.value);
   this.minerales_envio=form.minerales//.push({...envio_minerales});
   // Crear una nueva lista excluyendo ciertos campos
     this.minerales_envio = form.minerales.map(mineral => {
@@ -341,8 +338,7 @@ ngOnInit() {
   ];
   this.unidades = [
       { nombre: '%', id: '1' },
-      { nombre: 'DM', id: '2' },
-      { nombre: 'g/TM', id: '3' },
+      { nombre: 'g/TM', id: '2' },
   ];
   this.tipo_traslado = [
     { nombre: 'BROZA', id: '1' },
@@ -419,7 +415,6 @@ guardar(){
  /* this.formulario_interno.formulario.patchValue({
       estado: 'GENERADO'
     });*/
-    console.log(this.formulario_interno.formulario.value)
   if(this.formulario_interno.formulario.valid){
     let formularioEnvio=this.formulario_interno.formulario.value;
     formularioEnvio={
@@ -427,13 +422,12 @@ guardar(){
       minerales:this.minerales_envio,
       municipio_origen:this.municipio_origen_envio
     }
-    console.log(formularioEnvio);
 
     this.formularioCooperativaService.editarFormularioInterno(formularioEnvio,this.id).subscribe(
       (data:any) =>
       {
           this.formulario_Interno_registrado=this.formularioCooperativaService.handleCrearFormularioInterno(data);
-          console.log(this.formulario_Interno_registrado);
+
         if(this.formulario_Interno_registrado!==null)
         {
 
@@ -628,7 +622,6 @@ agregarLey(){
         });
       }
     }
-    console.log(event);
   }
 
   cambioPresentacion(event:any){

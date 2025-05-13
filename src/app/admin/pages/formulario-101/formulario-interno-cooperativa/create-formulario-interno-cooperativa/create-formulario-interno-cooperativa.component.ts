@@ -192,8 +192,7 @@ nextStep() {
     ];
     this.unidades = [
         { nombre: '%', id: '1' },
-        { nombre: 'DM', id: '2' },
-        { nombre: 'g/TM', id: '3' },
+        { nombre: 'g/TM', id: '2' },
     ];
     this.tipo_traslado = [
       { nombre: 'BROZA', id: '1' },

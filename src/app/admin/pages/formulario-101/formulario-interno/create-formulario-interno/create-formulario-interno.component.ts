@@ -122,12 +122,12 @@ nextStep() {
       case 0:
         // Validar los campos del Paso 1
         valid = this.formulario_interno.formulario.get('peso_bruto_humedo')?.valid && this.formulario_interno.formulario.get('tara')?.valid &&
-        (this.formulario_interno.formulario.get('merma')?.valid || this.formulario_interno.formulario.get('merma')?.disable) && 
+        (this.formulario_interno.formulario.get('merma')?.valid || this.formulario_interno.formulario.get('merma')?.disable) &&
         (this.formulario_interno.formulario.get('humedad')?.valid || this.formulario_interno.formulario.get('humedad')?.disable) &&
         this.formulario_interno.formulario.get('lote')?.valid && this.formulario_interno.formulario.get('presentacion_id')?.valid &&
-        (this.formulario_interno.formulario.get('cantidad')?.valid || this.formulario_interno.formulario.get('cantidad')?.disabled) && 
+        (this.formulario_interno.formulario.get('cantidad')?.valid || this.formulario_interno.formulario.get('cantidad')?.disabled) &&
         this.formulario_interno.formulario.get('peso_neto')?.valid && this.lista_leyes_mineral.length>0;
-      
+
         break;
       case 1:
         valid =this.lista_municipios_origen.length>0
@@ -158,7 +158,7 @@ nextStep() {
     private router: Router,
     private presentacionService:PresentacionService
   ) {
-   
+
     this.formulario_interno.formulario.patchValue({
         user_id: authService.getUser.id
       });
@@ -176,22 +176,21 @@ nextStep() {
         this.minerales=this.mineralesService.handlemineral(data);
       },
       (error:any)=> this.error=this.mineralesService.handleError(error));
-      
+
       this.presentacionService.verpresentacions('hj').subscribe(
         (data:any)=>{
         this.presentaciones=this.presentacionService.handlepresentacion(data);
         console.log(this.presentaciones);
       },
       (error:any)=> this.error=this.presentacionService.handleError(error));
-     
+
     this.destinos = [
         { nombre: 'COMPRADOR', id: '1' },
         { nombre: 'PLANTA DE TRATAMIENTO', id: '2' },
     ];
     this.unidades = [
         { nombre: '%', id: '1' },
-        { nombre: 'DM', id: '2' },
-        { nombre: 'g/TM', id: '3' },
+        { nombre: 'g/TM', id: '2' },
     ];
     this.tipo_transporte = [
         { nombre: 'TRAILER', id: '1' },
@@ -286,7 +285,7 @@ nextStep() {
         (data:any) =>
         {
             this.formulario_Interno_registrado=this.formularioInternoService.handleCrearFormularioInterno(data);
-         
+
           if(this.formulario_Interno_registrado!==null)
           {
             console.log(this.formulario_Interno_registrado);
@@ -300,21 +299,21 @@ nextStep() {
         },
         (error:any) =>
         {
-         
+
           this.error=this.formularioInternoService.handleCrearFormularioInternoError(error.error.data);
           if(error.error.status=='fail')
           {
             this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
           }
         }
-      
+
         /*this.formularioInternoService.crearFormularioInterno(this.formulario_interno.formulario.value).subscribe(
             (data:any) =>
             {
                 this.formulario_Interno_registrado=this.formularioInternoService.handleCrearFormularioInterno(data);
                 this.guardarMinerales(this.formulario_Interno_registrado.id);
                 this.guardarMunicipiosOrigen(this.formulario_Interno_registrado.id);
-             
+
               if(data.error==null)
               {
                 this.formulario_interno.formulario.reset();
@@ -324,7 +323,7 @@ nextStep() {
             },
             (error:any) =>
             {
-             
+
               this.error=this.formularioInternoService.handleCrearFormularioInternoError(error.error.data);
               if(error.error.status=='fail')
               {
@@ -338,18 +337,18 @@ nextStep() {
         this.notify.error('Revise los datos e intente nuevamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
 
    }
-   
+
   }
   guardarMinerales(formulario_int_id:any) {
     this.lista_leyes_mineral.forEach((item) => {
-       
+
         item.formulario_int_id=formulario_int_id;
       this.listaLeyesMineralesService.crearFormularioInternoMineral(item).subscribe((data:any) =>
       {
 
          this.listaLeyesMineralesService.handleCrearFormularioInternoMineral(data);
 
-       
+
         if(data.error==null)
         {
           this.notify.success('Minerales Agregados Correctamente','Creado Correctamente',{timeOut:500,positionClass: 'toast-top-right'});
@@ -357,7 +356,7 @@ nextStep() {
       },
       (error:any) =>
       {
-       
+
         this.error=this.listaLeyesMineralesService.handleCrearFormularioInternoMineralError(error.error.data);
         if(error.error.status=='fail')
         {
@@ -368,13 +367,13 @@ nextStep() {
   }
   guardarMunicipiosOrigen(formulario_int_id:any) {
     this.lista_municipios_origen.forEach((item) => {
-       
+
         item.formulario_int_id=formulario_int_id;
       this.listaMunicipiosOrigenService.crearFormularioInternoMunicipioOrigen(item).subscribe((data:any) =>
       {
          this.listaMunicipiosOrigenService.handleCrearFormularioInternoMunicipioOrigen(data);
 
-       
+
         if(data.error==null)
         {
           this.notify.success('Municios Origen Agregados Correctamente','Creado Correctamente',{timeOut:500,positionClass: 'toast-top-right'});
@@ -382,7 +381,7 @@ nextStep() {
       },
       (error:any) =>
       {
-       
+
         this.error=this.listaMunicipiosOrigenService.handleCrearFormularioInternoMunicipioOrigenError(error.error.data);
         if(error.error.status=='fail')
         {
@@ -411,7 +410,7 @@ nextStep() {
             }
             this.minerales_envio.push({...envio_minerales});
             this.lista_leyes_mineral.push({...this.formulario_mineral});
-           
+
         }
     } else {
         this.notify.error('Por favor, complete todos los campos','Error con el Registro',{timeOut:2000,positionClass: 'toast-bottom-right'});
@@ -479,7 +478,7 @@ nextStep() {
     eliminarMunicipio(domicilio:IFormularioInternoMunicipioOrigen) {
         this.municipio_origen_envio=this.municipio_origen_envio.filter(val => val.id !== domicilio.municipio_id)
         this.lista_municipios_origen = this.lista_municipios_origen.filter(val => val.municipio_id !== domicilio.municipio_id);
-    
+
       }
 
     cambioMunicipio1(event){
@@ -530,9 +529,9 @@ private mostrarErrorFormularios(formGroup: FormularioInternoFormulario): void {
   });
 
   if (errores.length > 0) {
-   
+
   } else {
-   
+
   }
 }
 cancelar(){

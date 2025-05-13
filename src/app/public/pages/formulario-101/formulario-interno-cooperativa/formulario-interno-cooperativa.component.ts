@@ -108,7 +108,6 @@ export class FormularioInternoCooperativaComponent implements OnInit {
         this.formularioInternoService.verFormularioInternoCooperativaPDF(formulario_interno.id.toString()).subscribe(
             (data:any)=>{
             let tdm_completo=this.formularioInternoService.handleFormularioInternoCooperativaPDF(data);
-            console.log(tdm_completo);
             this.pdfFormularioInterno.generarPDF(tdm_completo);
           },
           (error:any)=> this.error=this.formularioInternoService.handleError(error));
@@ -137,7 +136,7 @@ export class FormularioInternoCooperativaComponent implements OnInit {
             });
     }
     confirmarEmision(event:IFormularioInternoSimple) {
-        console.log
+
         this.confirmationService.confirm({
             key: 'confirm1',
             message: '¿Estas seguro de Emitir el formulario '+event.nro_formulario+'?',

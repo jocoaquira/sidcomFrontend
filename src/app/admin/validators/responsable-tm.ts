@@ -85,7 +85,7 @@ getErrorMessage(controlName: string): string | null {
       }
     });
 
-    console.log(errores);
+
   }
   getControlNames(): string[] {
     return Object.keys(this.formulario.controls);

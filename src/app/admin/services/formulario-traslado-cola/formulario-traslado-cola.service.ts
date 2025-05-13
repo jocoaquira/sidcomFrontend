@@ -98,7 +98,6 @@ handleCrearFormularioTrasladoCola(data: any):any {
 //---------------------Editar   FormularioTrasladoCola-------------------------------------------
 editarFormularioTrasladoCola(data:IFormularioTrasladoCola,id:number) {
   this.token();
-  console.log(id);
   return this.http.put(`${this.baseUrl}formcola/`+id.toString(), data)
 }
 handleEditarFormularioTrasladoColaError(error: any): any {

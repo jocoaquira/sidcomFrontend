@@ -200,7 +200,7 @@ nextStep() {
       this.presentacionService.verpresentacions('hj').subscribe(
         (data:any)=>{
         this.presentaciones=this.presentacionService.handlepresentacion(data);
-        console.log(this.presentaciones);
+
       },
       (error:any)=> this.error=this.presentacionService.handleError(error));
 
@@ -210,8 +210,7 @@ nextStep() {
     ];
     this.unidades = [
         { nombre: '%', id: '1' },
-        { nombre: 'DM', id: '2' },
-        { nombre: 'g/TM', id: '3' },
+        { nombre: 'g/TM', id: '2' },
     ];
     this.tipo_transporte = [
         { nombre: 'TRAILER', id: '1' },
@@ -261,7 +260,6 @@ nextStep() {
         });
       }
     }
-    console.log(event);
   }
  // Función para calcular el peso neto
  calcularPesoNeto() {
@@ -303,7 +301,6 @@ nextStep() {
         minerales:this.minerales_envio,
         municipio_origen:this.municipio_origen_envio
       }
-      console.log(formularioEnvio);
       this.formularioExternoService.crearFormularioExterno(formularioEnvio).subscribe(
         (data:any) =>
         {
@@ -311,7 +308,6 @@ nextStep() {
 
           if(this.formulario_Interno_registrado!==null)
           {
-            console.log(this.formulario_Interno_registrado);
             this.formulario_externo.formulario.reset();
             this.notify.success('El el formulario interno se generó exitosamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
             this.router.navigate(['/public/formulario-101/formulario-externo']);
@@ -540,13 +536,11 @@ cambioNroFormulario(event:any){
     presentacion_id:null,
     humedad:0,
   });
-  console.log(nro_acta);
   this.tomaDeMuestraService.verTomaDeMuestraForm(nro_acta,this.authService.getUser.operador_id).subscribe(
     (data:any)=>{
     this.acta_TDM=this.tomaDeMuestraService.handleTomaDeMuestraNroForm(data);
     if(this.acta_TDM)
     {
-      console.log('se encontro!!!');
       this.cargarDatosTDM(this.acta_TDM);
     }
   },

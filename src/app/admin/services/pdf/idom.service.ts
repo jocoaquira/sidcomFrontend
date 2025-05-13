@@ -19,7 +19,6 @@ export class IDOMService {
     const mes = String(fechaActual.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
     const anio = fechaActual.getFullYear();
     const fecha_creacion = `${dia}/${mes}/${anio}`;
-    console.log(operador.fecha_actualizacion);
 
 
     const fechaActual2 = new Date(operador.fecha_expiracion);

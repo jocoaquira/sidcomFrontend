@@ -131,7 +131,7 @@ getErrorMessage(controlName: string): string | null {
   }
 
   private actualizarValidacionesSegunTipo(valor: string): void {
-    console.log(valor);
+
     const almacen = this.formulario.get('almacen');
     const dique_cola = this.formulario.get('dique_cola');
 

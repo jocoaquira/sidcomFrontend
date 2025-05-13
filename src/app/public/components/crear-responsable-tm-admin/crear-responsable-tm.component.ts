@@ -42,7 +42,6 @@ export class CrearResponsableTMComponent implements OnInit {
     private authService:AuthService,
         ) {
           this.operador_id= authService.getUser.operador_id;
-        console.log('este operador: '+this.operador_id);
 
 
         }
@@ -54,7 +53,6 @@ export class CrearResponsableTMComponent implements OnInit {
   ];
   }
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('pero: ',this.usuario);
     if (changes && this.usuario && this.isEditMode) {
       this.form.formulario.patchValue({
         id:this.usuario.id,
@@ -67,7 +65,6 @@ export class CrearResponsableTMComponent implements OnInit {
         estado: this.estados.find((e: any) => e.label === this.usuario.estado) || null,
       });
     }
-    console.log(this.form.formulario.value);
   }
   onChangeRol(rol_id:any){
     let id=rol_id.value;
@@ -85,7 +82,6 @@ export class CrearResponsableTMComponent implements OnInit {
    // this.form.formulario.value.estado=operator_id.value
   }
   onChangeOperadores(operator_id:any){
-    console.log(operator_id);
    // this.form.formulario.value.estado=this.form.formulario.value.estado.label;
   }
   ocultarDialogo(){
@@ -105,7 +101,6 @@ export class CrearResponsableTMComponent implements OnInit {
     this.form.formulario.value.celular=parseInt(this.form.formulario.value.celular);
 
     if (this.form.formulario.valid) {
-        console.log(this.form.formulario.value);
         let limpio:any= Object.fromEntries(
             Object.entries(this.form.formulario.value).filter(([_, v]) => v !== null)
           );
@@ -113,7 +108,7 @@ export class CrearResponsableTMComponent implements OnInit {
             (data:any) =>
             {
               this.responsableTMAdminService.handleCrearusuario(data);
-              console.log(data);
+
               if(data.error==null)
               {
                 this.form.formulario.reset();
@@ -123,7 +118,6 @@ export class CrearResponsableTMComponent implements OnInit {
             },
             (error:any) =>
             {
-              console.log(error);
               this.errorUsuario=this.responsableTMAdminService.handleCrearusuarioError(error.error.data);
               if(error.error.status=='fail')
               {
@@ -143,18 +137,7 @@ export class CrearResponsableTMComponent implements OnInit {
       estado:this.form.formulario.value.estado.label
 
     });
-    console.log(this.form.formulario.invalid);
-    console.log(this.form.mostrarErrores());
-    console.log(this.form.formulario.valid);
-    for (const controlName in this.form.formulario.controls) {
-      const control = this.form.formulario.get(controlName);
-      if (control?.invalid && (control?.touched || control?.dirty)) {
-        console.log(`El campo '${controlName}' tiene errores:`, control?.errors);
-      }
-      else {
-        console.log(`El campo '${controlName}' no tiene errores:`, control?.errors);
-      }
-    }
+
     if (this.form.formulario.valid) {
         let limpio:any= Object.fromEntries(
             Object.entries(this.form.formulario.value).filter(([_, v]) => v !== null)
@@ -163,7 +146,6 @@ export class CrearResponsableTMComponent implements OnInit {
             (data:any) =>
             {
               this.responsableTMAdminService.handleCrearusuario(data);
-              console.log(data);
               if(data.error==null)
               {
                 this.form.formulario.reset();
@@ -173,7 +155,6 @@ export class CrearResponsableTMComponent implements OnInit {
             },
             (error:any) =>
             {
-              console.log(error);
               this.errorUsuario=this.responsableTMAdminService.handleCrearusuarioError(error.error.data);
               if(error.error.status=='fail')
               {
@@ -189,7 +170,6 @@ export class CrearResponsableTMComponent implements OnInit {
     const email = (event.target as HTMLInputElement).value;
     this.responsableTMAdminService.verificarEmail(email).subscribe(
       (data:any)=>{
-        console.log(data)
         if(data==true)
         {
           this.errorVerificarEmail=true;
