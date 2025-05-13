@@ -12,7 +12,7 @@ export interface ITomaDeMuestra {
     departamento_id:number,
     municipio_id:number,
     lote:string,
-    presentacion:string,
+    presentacion_id:string,
     cantidad:number,
     nro_camiones:number,
     total_parcial:number,

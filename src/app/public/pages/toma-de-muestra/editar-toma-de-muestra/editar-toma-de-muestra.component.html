@@ -14,7 +14,7 @@
 
 
   <div class="card-titulo">
-      <h4 class="text-center" style="color: white;">EDICION DE SOLICITUD DE TOMA DE MUESTRA</h4>
+      <h4 class="text-center" style="color: white;">EDICION DE SOLICITUD DE TOMA DE MUESTRA {{num_form}}</h4>
   </div>
       <div class="grid p-fluid">
           <div class="card card-w-title flex flex-wrap col-12">
@@ -33,7 +33,7 @@
                                 <p-dropdown
                                     inputId="departamento_id"
                                     [autoDisplayFirst]="false"
-                                    [options]="departamento"
+                                    [options]="departamentos"
                                     formControlName="departamento_id"
                                     optionLabel="nombre"
                                     optionValue="id"
@@ -50,7 +50,7 @@
                                 <p-dropdown
                                     inputId="municipio"
                                     [autoDisplayFirst]="false"
-                                    [options]="municipio"
+                                    [options]="municipios"
                                     formControlName="municipio_id"
                                     optionLabel="municipio"
                                     optionValue="id"
@@ -118,7 +118,7 @@
                                     [autoDisplayFirst]="false"
                                     [options]="listaUsuarios"
                                     formControlName="responsable_tdm_id"
-                                    optionLabel="nombre"
+                                    optionLabel="nombreCompleto"
                                     optionValue="id"
 
                                 ></p-dropdown>
@@ -433,13 +433,13 @@
                         <div class="col-33" *ngIf="activeStep === steps.length - 1">
                             <button pButton pRipple type="button" label="Guardar"
                                 class="p-button-rounded p-button-info boton-ajustado"
-                                (click)="onSubmit()" icon="pi pi-save">
+                                (click)="guardar()" icon="pi pi-save">
                             </button>
                         </div>
                         <div class="col-33">
                             <button pButton pRipple type="button" label="Cancelar"
                                 class="p-button-rounded p-button-danger boton-ajustado"
-                                [routerLink]="['/admin/formulario-101/formulario-interno']" icon="pi pi-trash">
+                                [routerLink]="['/public/toma-de-muestra']" icon="pi pi-trash">
                             </button>
                         </div>
                     </div>

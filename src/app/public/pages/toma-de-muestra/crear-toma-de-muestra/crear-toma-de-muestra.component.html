@@ -27,7 +27,7 @@
                   <div *ngIf="activeStep === 0"
                   >
                       <div class="grid p-fluid">
-                        
+
                           <div class="field col-12 md:col-3">
                             <span class="p-float-label">
                                 <p-dropdown
@@ -118,11 +118,10 @@
                                     [autoDisplayFirst]="false"
                                     [options]="listaUsuarios"
                                     formControlName="responsable_tdm_id"
-                                    optionLabel="nombre"
+                                    optionLabel="nombreCompleto"
                                     optionValue="id"
-                                    (ngModelChange)="onChangeOperadores($event)"
                                 ></p-dropdown>
-                    
+
                                 <label for="dropdown">Responsable de Toma de Muestra</label>
                             </span>
                         </div>
@@ -172,14 +171,14 @@
                                     inputId="dropdown"
                                     [autoDisplayFirst]="false"
                                     [options]="presentaciones"
-                                    formControlName="presentacion"
+                                    formControlName="presentacion_id"
                                     optionLabel="nombre"
                                     optionValue="id"
                                     (onChange)="cambioPresentacion($event)"
                                 ></p-dropdown>
                                 <label for="dropdown">Presentacion</label>
-                                <small id="presentacion" class="p-error " *ngIf="formulario_interno.esCampoInvalido('presentacion')">
-                                    {{formulario_interno.getErrorMessage('presentacion')}}
+                                <small id="presentacion_id" class="p-error " *ngIf="formulario_interno.esCampoInvalido('presentacion_id')">
+                                    {{formulario_interno.getErrorMessage('presentacion_id')}}
                                 </small>
                             </span>
                         </div>
@@ -360,7 +359,7 @@
                         <div class="field col-12 md:col-12 ">
                             <h5>2.2 Origen del Mineral </h5>
                         </div>
-                                                
+
                           <div class="field col-12 md:col-3 ">
                               <app-departamentoSelect [departamento_id]="departamento_id" (cambioDepartamento)="cambioDepartamento($event)" (nombre_departamento)="cambioNombreDepartemento($event)"></app-departamentoSelect>
                           </div>

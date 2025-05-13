@@ -187,6 +187,10 @@ nextStep() {
     this.responsableTMService.verResponsableTMOperador(this.formulario_interno.formulario.value.operador_id.toString()).subscribe(
       (data:any)=>{
       this.listaUsuarios=this.responsableTMService.handleusuario(data);
+      this.listaUsuarios = this.listaUsuarios.map(usuario => ({
+        ...usuario,
+        nombreCompleto: `${usuario.nombre} ${usuario.apellidos}`
+      }));
     },
     (error:any)=> this.error=this.responsableTMService.handleError(error));
     this.departamentosService.verdepartamentos(this.nombre).subscribe(
@@ -228,29 +232,14 @@ nextStep() {
         console.log(this.presentaciones);
       },
       (error:any)=> this.error=this.presentacionService.handleError(error));
-     /* this.presentaciones = [
-        { nombre: 'ENSACADO', id: '1',humedad:1,merma:1,cantidad:1 },
-        { nombre: 'LINGOTES', id: '2',humedad:0,merma:0,cantidad:1 },
-        { nombre: 'A GRANEL', id: '3',humedad:1,merma:1,cantidad:0 },
-        { nombre: 'CATODO DE COBRE', id: '4',humedad:0,merma:0,cantidad:1 },
-        { nombre: 'CONTENEDOR CILINDRICO', id: '5',humedad:1,merma:1,cantidad:1 },
-        { nombre: 'EMBALADAS', id: '6',humedad:1,merma:1,cantidad:1 },
-        { nombre: 'ENVASADO', id: '7',humedad:1,merma:1,cantidad:1 },
-        { nombre: 'BROZA', id: '8',humedad:1,merma:1,cantidad:0 },
-        { nombre: 'AMALGAMA', id: '9',humedad:0,merma:0,cantidad:1 },
-        { nombre: 'GRANALLA', id: '10',humedad:0,merma:0,cantidad:1 },
-        { nombre: 'ORO PEPA', id: '11',humedad:0,merma:0,cantidad:1 },
-        { nombre: 'SACOS', id: '12',humedad:1,merma:1,cantidad:1 },
-        { nombre: 'OTRO', id: '13',humedad:1,merma:1,cantidad:0 }
-    ];*/
+
     this.destinos = [
         { nombre: 'COMPRADOR', id: '1' },
         { nombre: 'PLANTA DE TRATAMIENTO', id: '2' },
     ];
     this.unidades = [
         { nombre: '%', id: '1' },
-        { nombre: 'DM', id: '2' },
-        { nombre: 'g/TM', id: '3' },
+        { nombre: 'g/TM', id: '2' },
     ];
     this.parciales = [
       { nombre: 'TOTAL', id: '1' },
@@ -479,7 +468,7 @@ abrirMapa() {
           tipo_muestra: formularioEnvio.tipo_muestra,
           total_parcial: formularioEnvio.total_parcial,
           peso_neto_parcial: formularioEnvio.peso_neto_parcial,
-          presentacion_id: formularioEnvio.presentacion,
+          presentacion_id: formularioEnvio.presentacion_id,
           cantidad: formularioEnvio.cantidad,
           humedad:humedadFinal,
           nro_camiones: formularioEnvio.nro_camiones,
@@ -629,7 +618,15 @@ abrirMapa() {
 
   agregarLey(){
     // Verifica si el formulario tiene datos completos
-    if (this.formulario_mineral.descripcion && this.formulario_mineral.sigla_mineral && this.formulario_mineral.ley && this.formulario_mineral.unidad) {
+    let sw:boolean=false;
+    if((this.formulario_mineral.unidad=='%' && parseFloat(this.formulario_mineral.ley)<100  && parseFloat(this.formulario_mineral.ley)>0) || (this.formulario_mineral.unidad=='g/TM'&& parseFloat(this.formulario_mineral.ley)>0))
+    {
+         sw=true;
+    }
+    else{
+        this.notify.error('Revise el campo Ley (no mayor a 100  si unidad es % )...','Error con el Registro',{timeOut:5000,positionClass: 'toast-bottom-right'});
+    }
+    if (this.formulario_mineral.descripcion && this.formulario_mineral.sigla_mineral && this.formulario_mineral.ley && this.formulario_mineral.unidad && sw) {
         // Verifica si el registro ya existe en la lista
         const existe = this.lista_leyes_mineral.some(ley => ley.sigla_mineral === this.formulario_mineral.sigla_mineral);
 
