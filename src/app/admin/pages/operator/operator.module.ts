@@ -20,6 +20,8 @@ import { OperatorComponent } from './operator.component';
 import { BadgeModule } from 'primeng/badge';
 import { TagModule } from 'primeng/tag';
 import { CrearOperadorModule } from './crear-operador-validacion/crear-operador.module';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 
 @NgModule({
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -43,7 +45,9 @@ import { CrearOperadorModule } from './crear-operador-validacion/crear-operador.
         InputNumberModule,
         DialogModule,
         CrearOperadorModule,
+        ConfirmDialogModule
     ],
     declarations: [OperatorComponent],
+    providers: [ConfirmationService]
 })
 export class OperatorModule { }

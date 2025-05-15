@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { IOperator } from '@data/operator.metadata';
 import { OperatorsService } from '../../services/operators.service';
@@ -7,6 +7,7 @@ import { CanCrearOperatorGuard } from '../../guards/operators/can-crear-operator
 import { CanEditarOperatorGuard } from '../../guards/operators/can-editar-operator.guard';
 import { CanEliminarOperatorGuard } from '../../guards/operators/can-eliminar-operator.guard';
 import { IDOMService } from '../../services/pdf/idom.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -32,7 +33,9 @@ export class OperatorComponent implements OnInit {
         public canCrearOperator:CanCrearOperatorGuard,
         public canEditarOperator:CanEditarOperatorGuard,
         public canEliminarOperator:CanEliminarOperatorGuard,
-        public idomServices:IDOMService
+        public idomServices:IDOMService,
+        private confirmationService:ConfirmationService,
+        private notify:ToastrService
 
     ) { }
 
@@ -93,27 +96,7 @@ export class OperatorComponent implements OnInit {
 
     saveProduct() {
         this.submitted = true;
-/*
-        if (this.product.name?.trim()) {
-            if (this.product.id) {
-                // @ts-ignore
-                this.product.inventoryStatus = this.product.inventoryStatus.value ? this.product.inventoryStatus.value : this.product.inventoryStatus;
-                this.products[this.findIndexById(this.product.id)] = this.product;
-                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
-            } else {
-                this.product.id = this.createId();
-                this.product.code = this.createId();
-                this.product.image = 'product-placeholder.svg';
-                // @ts-ignore
-                this.product.inventoryStatus = this.product.inventoryStatus ? this.product.inventoryStatus.value : 'INSTOCK';
-                this.products.push(this.product);
-                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
-            }
 
-            this.products = [...this.products];
-            this.productDialog = false;
-            this.product = {};
-        }*/
     }
     diasActivos(fecha1:string):number{
         let dias:any;
@@ -151,5 +134,48 @@ export class OperatorComponent implements OnInit {
     }
     generarIDOM(operador:IOperator){
         this.idomServices.generarPDF(operador);
+    }
+
+    bloquearDialogo(operador:IOperator){
+
+        this.confirmationService.confirm({
+            key: 'confirm1',
+            message: '¿Estas seguro de Realizar esta Operación?',
+            accept: () => {
+                if(operador.estado=='ACTIVO')
+                    {
+                        operador.estado='INACTIVO';
+                    }
+                    else{
+                        operador.estado='ACTIVO';
+                    }
+                console.log(operador);
+                this.operatorsService.editBloqueo(operador).subscribe(
+                    (data:any) =>
+                    {
+                        this.operatorsService.handleCrearoperator(data);
+
+                        if(data.error==null)
+                        {
+                        this.operatorsService.veroperators('nada').subscribe(
+                            (data:any)=>{
+                            this.listaOperadores=this.operatorsService.handleoperator(data);
+
+                            },
+                            (error:any)=> this.error=this.operatorsService.handleError(error));
+
+                        this.notify.success('Actualizado Correctamente','Actualizado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
+                        }
+                    },
+                    (error:any) =>
+                    {
+                        if(error.error.status=='fail')
+                        {
+                        this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con la Actualizacion',{timeOut:2000,positionClass: 'toast-top-right'});
+                        }
+                    }
+                    );
+                },
+        });
     }
 }

@@ -82,6 +82,9 @@
                         <td>
                             <div class="flex">
                                 <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editProduct(operador)" *ngIf="canEditarOperator.canActivate()"></button>
+                                <button pButton pRipple icon="pi pi-lock" *ngIf="operador.estado === 'ACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-danger mr-1" (click)="bloquearDialogo(operador)"></button>
+                                <button pButton pRipple icon="pi pi-unlock" *ngIf="operador.estado === 'INACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="bloquearDialogo(operador)"></button>
+
                             </div>
                         </td>
                     </tr>
@@ -173,5 +176,10 @@
                 <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
             </ng-template>
         </p-dialog>
+        <p-confirmDialog header="Confirmación" key="confirm1" icon="pi pi-exclamation-triangle" message="¿Está seguro de anular el formulario?"
+            [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
+            acceptLabel="Sí"
+            rejectLabel="No"
+        ></p-confirmDialog>
     </div>
 </div>

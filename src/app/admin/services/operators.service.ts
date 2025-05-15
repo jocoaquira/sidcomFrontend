@@ -100,6 +100,11 @@ editaroperator(data:IOperator) {
   this.token();
   return this.http.put(`${this.baseUrl}operator/`+data.id, data)
 }
+editBloqueo(data:IOperator) {
+  this.token();
+  let dato = { estado: data.estado };
+  return this.http.put(`${this.baseUrl}operator/`+data.id, dato)
+}
 handleEditaroperatorError(error: any): any {
   return error=error;
 }

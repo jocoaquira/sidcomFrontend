@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '@core/authentication/services/auth.service';
 
-//import { SnotifyService } from 'ng-snotify';
 
 @Component({
   selector: 'app-login',
@@ -28,6 +27,7 @@ export class LoginComponent implements OnInit {
         if(r.error)
         {
           this.form.password='';
+          console.log(r.error);
         }
 
     });
