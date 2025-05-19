@@ -280,17 +280,44 @@ export class CrearOperadorComponent implements OnInit {
             return resto; // Retornar el objeto sin id y operator_id
           });
           const listaOficinaLimpia = this.oficina.map((item: any) => {
-            const { id, operator_id, ...resto } = item; // Extraer los campos no deseados
-            return resto; // Retornar el objeto sin id y operator_id
+                const { id, operator_id, ...resto } = item;
+
+                // Convertir latitud y longitud a string si existen
+                if (resto.latitud !== undefined) {
+                    resto.latitud = resto.latitud.toString();
+                }
+                if (resto.longitud !== undefined) {
+                    resto.longitud = resto.longitud.toString();
+                }
+
+                return resto;
           });
 
-        formData.append('arrendamientos', JSON.stringify(listaArrendamientoLimpia));
-        formData.append('oficinas',JSON.stringify(listaOficinaLimpia));
+        // Solo agregar arrendamientos si hay elementos
+        if (listaArrendamientoLimpia.length > 0) {
+            formData.append('arrendamientos', JSON.stringify(listaArrendamientoLimpia));
+        }
+
+        // Solo agregar oficinas si hay elementos
+        if (listaOficinaLimpia.length > 0) {
+            formData.append('oficinas', JSON.stringify(listaOficinaLimpia));
+        }
 
         // Convertir fechas al formato adecuado antes de enviarlas
-        formData.set('fecha_exp_nim', this.formatDate(this.operador.formulario.value.fecha_exp_nim));
-        formData.set('fecha_exp_seprec', this.formatDate(this.operador.formulario.value.fecha_exp_seprec));
-        formData.set('fecha_exp_ruex', this.formatDate(this.operador.formulario.value.fecha_exp_ruex));
+        // Verificando null, undefined y cadena vacía
+        const hasValue = (value: any) => value !== null && value !== undefined && value !== '';
+
+        if (hasValue(this.operador.formulario.value.fecha_exp_nim)) {
+            formData.set('fecha_exp_nim', this.formatDate(this.operador.formulario.value.fecha_exp_nim));
+        }
+
+        if (hasValue(this.operador.formulario.value.fecha_exp_seprec)) {
+            formData.set('fecha_exp_seprec', this.formatDate(this.operador.formulario.value.fecha_exp_seprec));
+        }
+
+        if (hasValue(this.operador.formulario.value.fecha_exp_ruex)) {
+            formData.set('fecha_exp_ruex', this.formatDate(this.operador.formulario.value.fecha_exp_ruex));
+        }
 
         // Agregar archivos (debes tener referencias a los archivos en tu formulario)
         // Agregar los archivos si existen
@@ -340,13 +367,14 @@ export class CrearOperadorComponent implements OnInit {
         console.log(this.oficina);
         // Verificar si el formulario es válido antes de enviar
 
-        if (true) {
+        if (this.operador.formulario.valid) {
             this.operadorService.crearoperator(formData).subscribe(
                 (data: any) => {
                     console.log("Respuesta del servidor:", data);
                     this.operador_registrado = this.operadorService.handleCrearoperator(data);
                     if (data) {
                         this.notify.success('Guardado Correctamente');
+                        this.router.navigate(['/admin/operador/']);
                     }
                     else{
                         this.notify.success('nada de nada');
@@ -360,8 +388,17 @@ export class CrearOperadorComponent implements OnInit {
                 }
             );
         } else {
-            this.notify.error('Revise los datos e intente nuevamente', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
-        }
+            // Mostrar todos los errores de validación
+            this.getFormValidationErrors(this.operador.formulario);
+
+            // También puedes mostrar los errores en la interfaz de usuario
+            this.markAllAsTouched(this.operador.formulario);
+
+            this.notify.error('Revise los datos e intente nuevamente', 'Error con el Registro', {
+                timeOut: 2000,
+                positionClass: 'toast-top-right'
+            });
+    }
 
     }
 
@@ -416,12 +453,11 @@ export class CrearOperadorComponent implements OnInit {
          console.log(this.operador.formulario.value.dl_municipio_id=municipio.value);
     }
     cambioMunicipio1(municipio:any){
-        this.sucursal.municipio_id=municipio.value.codigo;
+        this.sucursal.municipio_id=municipio.value.id;
     }
     cambioMunicipioArrendamiento(municipio:any){
         this.arrendamiento.municipio_id=municipio.value.id;
     }
-
 
 
     cambioTipoSucursal(dependencia_id:any){
@@ -504,10 +540,6 @@ export class CrearOperadorComponent implements OnInit {
         else{
             this.notify.error('Seleccione un departamento para abrir el mapa....','Error al Abrir el Mapa',{timeOut:2000,positionClass: 'toast-bottom-right'});
         }
-
-
-
-
     }
     abrirMapaSucursal() {
         let dept:any=this.departamento.find(val => val.id === this.sucursal.departamento_id);
@@ -595,4 +627,26 @@ export class CrearOperadorComponent implements OnInit {
         console.log(event);
         this.valSwitch=event.checked;
     }
+
+    getFormValidationErrors(form: FormGroup) {
+    Object.keys(form.controls).forEach(key => {
+        const controlErrors = form.get(key)?.errors;
+        if (controlErrors != null) {
+        Object.keys(controlErrors).forEach(keyError => {
+            console.log(`Control: ${key}, Error: ${keyError}, Valor:`, controlErrors[keyError]);
+        });
+        }
+    });
+    }
+    // Método para marcar todos los campos como touched (mostrar errores en UI)
+    markAllAsTouched(formGroup: FormGroup) {
+        Object.values(formGroup.controls).forEach(control => {
+            control.markAsTouched();
+
+            if (control instanceof FormGroup) {
+                this.markAllAsTouched(control);
+            }
+        });
+    }
+
 }
