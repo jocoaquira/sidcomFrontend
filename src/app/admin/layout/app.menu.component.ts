@@ -55,8 +55,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'CUENTA',
                 items: [
-                    { label: 'Operador Minero', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/info/operador'], visible: this.canVerOperatorGuard.canActivate() },
-                    { label: 'Datos de Usuario', icon: 'pi pi-fw pi-user', routerLink: ['/admin/info/usuario'], visible: true },
+                     { label: 'Datos de Usuario', icon: 'pi pi-fw pi-user', routerLink: ['/admin/info/usuario'], visible: true },
                 ]
             },
             {

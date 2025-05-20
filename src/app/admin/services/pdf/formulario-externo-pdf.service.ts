@@ -1,16 +1,9 @@
 import { Injectable } from '@angular/core';
-import { IOperator } from '@data/operator.metadata';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable'
 import * as QRCode from 'qrcode';
 import { ImageToBase64Service } from './image-to-base64.service';
-import { IFormularioInternoMineral } from '@data/form_int_mineral.metadata';
-import { IFormularioInternoMunicipioOrigen } from '@data/form_int_municipio_origen.metadata';
-import { IMineral } from '@data/mineral.metadata';
-import { IMunicipio } from '@data/municipio.metadata';
-import { IDepartamento } from '@data/departamento.metadata';
 import { IFormularioExternoPDF } from '@data/formulario_externo_pdf.metadata';
-import { IFormularioInterno } from '@data/formulario_interno.metadata';
 
 @Injectable({
   providedIn: 'root',
@@ -59,24 +52,7 @@ export class PdfFormularioExternoService {
     return `${day}/${month}/${year} a Hrs.: ${hours}:${minutes}`; // Formato final
   }
     generarPDF(formulario_externo: IFormularioExternoPDF) {
-        let minerales!:IMineral[];
-        let municipios: IMunicipio[] = [];
-        let departamentos: IDepartamento[] = [];
 
-        let mineralesString:string='';
-        let leyesString:string='';
-        let municipiosString:string='';
-        let codigosMunicipioString:string='';
-
-        let minerales_envio:any=[];
-         let municipio_origen_envio:any=[];
-         let lista_leyes_mineral:IFormularioInternoMineral[]=[];
-         let lista_municipios_origen:IFormularioInternoMunicipioOrigen[]=[];
-
-        let formulario_int_completo!: IFormularioInterno;
-        let operator!: IOperator;
-        let error: any = null;
-        let departamentosObs,mineralesObs,municipiosObs;
         // Obtener datos del formulario interno y el operador
 
                       const doc = new jsPDF('p', 'pt', 'letter');

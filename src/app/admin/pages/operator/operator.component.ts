@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
     templateUrl: './operator.component.html',
+    styleUrls: ['./operador.component.scss'],
     providers: [MessageService]
 })
 export class OperatorComponent implements OnInit {
@@ -177,5 +178,37 @@ export class OperatorComponent implements OnInit {
                     );
                 },
         });
+    }
+
+    async abrirPdf(nitLink: string) {
+        const baseUrl = localStorage.getItem('url-backend');
+        const formattedNitLink = nitLink.replace(/\\/g, '/');
+        const fullUrl = `${baseUrl}${formattedNitLink}`;
+
+        try {
+            // Descarga el PDF como Blob
+            const response = await fetch(fullUrl);
+            const blob = await response.blob();
+
+            // Crea una URL local para el Blob
+            const blobUrl = URL.createObjectURL(blob);
+
+            // Abre el PDF en una nueva pestaña (sin mostrar la URL del API)
+            window.open(blobUrl, '_blank');
+
+            // Libera la memoria después de 10 segundos (opcional)
+            setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+        } catch (error) {
+            console.error('Error al cargar el PDF', error);
+        }
+    }
+    openGoogleMaps(lat: number, lon: number) {
+        if (lat && lon) {
+            const url = `https://www.google.com/maps?q=${lat},${lon}`;
+            window.open(url, '_blank');
+        } else {
+            console.warn('Coordenadas no disponibles');
+            // Opcional: Mostrar mensaje al usuario
+        }
     }
 }

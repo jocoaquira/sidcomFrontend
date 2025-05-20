@@ -25,6 +25,7 @@ export class InfoUsuarioComponent implements OnInit {
     public isEditMode:boolean=true;
     public usuario_id:number=null;
     public error:any=null;
+    public isAdmin:boolean=false;
 
     constructor(
         private usuarioService:UsuariosService,
@@ -36,7 +37,11 @@ export class InfoUsuarioComponent implements OnInit {
         private confirmationService:ConfirmationService
     ) {
         this.usuario_id= authService.getUser.id
-
+        console.log(authService.getUser);
+        if(authService.getUser.operador_id==null)
+        {
+            this.isAdmin=true;
+        }
     }
 
     ngOnInit() {

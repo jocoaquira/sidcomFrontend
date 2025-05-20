@@ -1,0 +1,17 @@
+/* Estilo para minimizar el padding del botón SEPREC */
+.btn-minimal-padding {
+    padding: 0.3rem 0.3rem !important;  /* Ajusta estos valores según necesites */
+}
+/* Color azul para el estilo "help" (outlined) */
+.p-button-outlined.p-button-help {
+  color: #3B82F6 !important;
+  border-color: #3B82F6 !important;
+}
+
+.p-button-outlined.p-button-help:hover {
+  background: rgba(59, 130, 246, 0.04) !important;
+}
+
+.p-button-outlined.p-button-help:active {
+  background: rgba(59, 130, 246, 0.16) !important;
+}

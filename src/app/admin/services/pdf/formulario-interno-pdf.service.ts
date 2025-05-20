@@ -66,14 +66,12 @@ export class PdfFormularioInternoService {
                         QRCode.toDataURL(
                           localStorage.getItem('url-frontend') +
                             'formulario_interno/verificacion/' +
-                            formulario_interno.nro_formulario,
+                            formulario_interno.hash,
                           (err, url) => {
                             if (err) {
 
                               return;
                             }
-
-
 
                             autoTable(doc, {
 

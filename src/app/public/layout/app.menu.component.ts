@@ -47,11 +47,6 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Toma de Muestra', icon: 'pi pi-fw pi-file-o', routerLink: ['/public/toma-de-muestra'],visible: this.canVerTomaDeMuestraGuard.canActivate() }
                 ]
             },
-            {
-                label: 'REPORTES',
-                items: [
-                    ]
-            },
 
         ];
     }

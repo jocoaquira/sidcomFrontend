@@ -4,6 +4,7 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 import { ToastrService } from 'ngx-toastr';
 import { IUsuarioCompleto } from '@data/usuario_completo.metadata';
 import { UsuariosService } from '../../services/usuarios.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cambiar-password-usuario',
@@ -26,8 +27,9 @@ export class CambiarPasswordComponent implements OnInit {
     estado:'',
     password:''
   };
-  
+
   @Input() isEditMode: boolean = false;
+  @Input() isAdmin:boolean=false;
   @Output() estadoDialogo = new EventEmitter<boolean>();
   public error!:any;
   public errorPass!:any;
@@ -42,11 +44,12 @@ export class CambiarPasswordComponent implements OnInit {
   valSwitch: boolean = false;
   public errorVerificarContraseña:boolean=false;
   public repetir_password:string='';
-  
+
 
   constructor(
     private notify:ToastrService,
-    private usuarioService:UsuariosService
+    private usuarioService:UsuariosService,
+    private router:Router,
   ) {
 
   }
@@ -58,13 +61,20 @@ export class CambiarPasswordComponent implements OnInit {
 
   ocultarDialogo(){
     this.estadoDialogo.emit(false);
-    
+    if(this.isAdmin)
+    {
+        this.router.navigate(['/admin/']);
+    }
+    else
+    {
+        this.router.navigate(['/public/']);
+    }
   }
-  
+
   onSubmit() {
     if (this.isEditMode) {
-      this.actualizarUsuario();
-    } else {
+        this.actualizarUsuario();
+
     }
   }
   valSwitches(event:any){
@@ -86,27 +96,27 @@ export class CambiarPasswordComponent implements OnInit {
     }
   }
   validarPassword() {
-    
-   
+
+
   console.log(this.usuario.password);
     // Longitud mínima de 8 caracteres
     if (this.usuario.password.length < 8) {
       this.errorPass='La contraseña debe tener al menos 8 caracteres.';
       return
     }
-  
+
     // Al menos una letra mayúscula
     if (!/[A-Z]/.test(this.usuario.password)) {
       this.errorPass='La contraseña debe contener al menos una letra mayúscula.';
       return
     }
-  
+
     // Al menos un número
     if (!/[0-9]/.test(this.usuario.password)) {
       this.errorPass='La contraseña debe contener al menos un número.';
       return
     }
-  
+
     // No debe contener el nombre de usuario
     if (this.usuario.nombre && this.usuario.password.toLowerCase().includes(this.usuario.nombre.toLowerCase())) {
       this.errorPass='La contraseña no puede contener el nombre de usuario.';
@@ -117,11 +127,11 @@ export class CambiarPasswordComponent implements OnInit {
   }
   actualizarUsuario() {
 
- 
+
     console.log(this.usuario);
-    
+
     if (this.errorPass==null && this.errorVerificarContraseña==false) {
-        
+
         let datos = {
           id: this.usuario.id,
           password: this.usuario.password
@@ -136,7 +146,8 @@ export class CambiarPasswordComponent implements OnInit {
               {
                 this.estadoDialogo.emit(false);
                 this.notify.success('Se cambio la contraseña exitosamente','Modificado Exitosamente',{timeOut:2500,positionClass: 'toast-top-right'});
-              }
+                this.ocultarDialogo();
+            }
             },
             (error:any) =>
             {
@@ -151,7 +162,7 @@ export class CambiarPasswordComponent implements OnInit {
       } else {
         this.notify.error('Revise los datos e intente nuevamente','Error con la actualizacion',{timeOut:2000,positionClass: 'toast-top-right'});
       }
-  
+
   }
 
 

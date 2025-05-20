@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { LayoutService } from "./service/app.layout.service";
 import { AuthService } from '@core/authentication/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-topbar',
@@ -10,27 +11,7 @@ import { AuthService } from '@core/authentication/services/auth.service';
 export class AppTopBarComponent {
 
     items!: MenuItem[];
-    overlayMenuItems = [
-        {
-            label: 'Save',
-            icon: 'pi pi-save'
-        },
-        {
-            label: 'Update',
-            icon: 'pi pi-refresh'
-        },
-        {
-            label: 'Delete',
-            icon: 'pi pi-trash'
-        },
-        {
-            separator: true
-        },
-        {
-            label: 'Home',
-            icon: 'pi pi-home'
-        }
-    ];
+    overlayMenuItems = [];
 
     @ViewChild('menubutton') menuButton!: ElementRef;
 
@@ -41,22 +22,26 @@ export class AppTopBarComponent {
     constructor(
         public layoutService: LayoutService,
         public authService:AuthService,
+        private router: Router
     ) {
         this.overlayMenuItems = [
             {
                 label: authService.getUser.nombre_completo.toString(),
-                icon: 'pi pi-user'
+                icon: 'pi pi-user',
+                routerLink: ['/admin/info/usuario']
             },
             {
                 label: 'Salir',
-                icon: 'pi pi-sign-out'
+                icon: 'pi pi-sign-out',
+                command: ()=>this.authService.logout()
             },
             {
                 separator: true
             },
             {
                 label: 'Inicio',
-                icon: 'pi pi-home'
+                icon: 'pi pi-home',
+                routerLink: ['/admin/']  // Navegación a ruta
             }
         ];
      }

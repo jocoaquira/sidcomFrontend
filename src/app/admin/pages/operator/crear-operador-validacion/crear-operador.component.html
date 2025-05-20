@@ -721,7 +721,7 @@
 
         <div class="field col-12 md:col-3">
             <p-fileUpload mode="basic" accept=".pdf,.jpg,.jpeg,.png"
-                [maxFileSize]="1000000"
+                [maxFileSize]="10485760"
                 chooseLabel="Subir Documento de Explotación"
                 class="mr-2 inline-block"
                 (onSelect)="onFileSelected($event, 'doc_explotacion_link')">

@@ -17,14 +17,13 @@ export class VerificacionOperadorComponent implements OnInit {
     private actRoute: ActivatedRoute,
     private operatorsService:OperatorsService
   ) {
-    console.log('llego');
+    console.log('aqui');
     this.actRoute.paramMap.subscribe(
       params=>
       {
         this.hash=params.get('hash');
         this.operatorsService.hashOperador(this.hash).subscribe(
           (data:any)=>{
-              console.log(data);
               this.operador=this.operatorsService.handleOperador(data);
         },
         (error:any)=> this.error=this.operatorsService.handleError(error));
@@ -33,7 +32,7 @@ export class VerificacionOperadorComponent implements OnInit {
    }
 
   ngOnInit() {
-    console.log('llego');
+    console.log('aqui');
   }
 
 }

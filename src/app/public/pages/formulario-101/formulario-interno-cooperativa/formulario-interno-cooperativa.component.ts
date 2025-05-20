@@ -14,6 +14,7 @@ import { CanEliminarFormularioCooperativaGuard } from 'src/app/admin/guards/form
 import { CanAnularFormularioCooperativaGuard } from 'src/app/admin/guards/formulario-cooperativas/can-anular-formulario-cooperativa.guard';
 import { CanImprimirFormularioCooperativaGuard } from 'src/app/admin/guards/formulario-cooperativas/can-imprimir-formulario-cooperativa.guard';
 import { PdfFormularioInternoCooperativaService } from 'src/app/admin/services/pdf/formulario-cooperativa-pdf.service';
+import { AuthService } from '@core/authentication/services/auth.service';
 
 @Component({
   selector: 'app-formulario-interno-cooperativa',
@@ -31,6 +32,7 @@ export class FormularioInternoCooperativaComponent implements OnInit {
     public statuses!:any;
     public productDialog=false;
     public submitted = true;
+    public operador_id:number=null;
 
     constructor(
         public canListarFormularioCooperativa:CanListarFormularioCooperativaGuard,
@@ -44,12 +46,14 @@ export class FormularioInternoCooperativaComponent implements OnInit {
         public formularioInternoService:FormularioCooperativaService,
         public pdfFormularioInterno:PdfFormularioInternoCooperativaService,
         private notify:ToastrService,
-        private confirmationService:ConfirmationService
+        private confirmationService:ConfirmationService,
+        private authService:AuthService,
     ) {
+        this.operador_id= authService.getUser.operador_id;
      }
 
     ngOnInit() {
-        this.formularioInternoService.verFormularioCooperativaSimple(this.nombre).subscribe(
+        this.formularioInternoService.verFormularioCooperativaOperadorSimple(this.operador_id.toString()).subscribe(
             (data:any)=>{
             this.listaFormularioInternos=this.formularioInternoService.handleFormularioInternoSimple(data);
           },
