@@ -59,7 +59,8 @@ export class SolicitarRegistroComponent implements OnInit {
         tipo:'',
         direccion:'',
         latitud:'',
-        longitud:''
+        longitud:'',
+        estado:'',
     };
     errorSucursal:IOficina={
         id:null,
@@ -69,7 +70,8 @@ export class SolicitarRegistroComponent implements OnInit {
         tipo:null,
         direccion:null,
         latitud:null,
-        longitud:null
+        longitud:null,
+        estado:null
     };
     arrendamiento:IArrendamiento={
         id:null,

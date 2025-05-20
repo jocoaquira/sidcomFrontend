@@ -41,6 +41,7 @@ export class CrearOperadorComponent implements OnInit {
     tipoSucursal: any[]=[];
     tipoCreacion:any[]=[];
     estados:any[]=[];
+    estadoOficina:any[]=[];
     tipoExplotacion:any[]=[];
     tipoExtension:any[]=[];
     filteredCountries: any[] = [];
@@ -60,7 +61,8 @@ export class CrearOperadorComponent implements OnInit {
         tipo:'',
         direccion:'',
         latitud:'',
-        longitud:''
+        longitud:'',
+        estado:''
     };
     errorSucursal:IOficina={
         id:null,
@@ -70,7 +72,8 @@ export class CrearOperadorComponent implements OnInit {
         tipo:null,
         direccion:null,
         latitud:null,
-        longitud:null
+        longitud:null,
+        estado:null
     };
     arrendamiento:IArrendamiento={
         id:null,
@@ -148,7 +151,10 @@ export class CrearOperadorComponent implements OnInit {
             { label: 'ACTIVO', value: '1' },
             { label: 'INACTIVO', value: '0' }
         ];
-
+        this.estadoOficina= [
+            { label: 'ACTIVO', value: '1' },
+            { label: 'INACTIVO', value: '0' }
+        ];
         this.es = {
             firstDayOfWeek: 1,
             dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
@@ -458,6 +464,10 @@ export class CrearOperadorComponent implements OnInit {
     cambioMunicipioArrendamiento(municipio:any){
         this.arrendamiento.municipio_id=municipio.value.id;
     }
+    cambioEstadoArrendamiento(estado:any){
+        this.arrendamiento.estado=estado.value;
+        console.log(this.arrendamiento);
+    }
 
 
     cambioTipoSucursal(dependencia_id:any){
@@ -465,6 +475,12 @@ export class CrearOperadorComponent implements OnInit {
 
         console.log(this.sucursal.tipo);
    }
+   cambioEstadoSucursal(dependencia_id:any){
+    this.sucursal.estado=dependencia_id.value;
+
+    console.log(dependencia_id.value);
+}
+
     onChangeTipoCreacion(dependencia_id:any){
          this.operador.formulario.value.tipo_doc_creacion=dependencia_id.value.id;
     }

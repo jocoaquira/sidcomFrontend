@@ -1,130 +1,146 @@
-
-
 <div class="grid">
-    <div class="col-12 lg:col-6 xl:col-4" *ngIf="reporteFornIntCantOperador">
-        <div class="card mb-0">
-            <div class="flex justify-content-between mb-3">
-                <div>
-                    <div class="text-900 font-medium text-xl">Formularios Internos</div>
-
-                    <!-- HOY con fecha actual -->
-                    <span class="text-green-500 font-medium mb-3 mt-3">
-                        HOY - {{fechaActual | date:'dd/MM/yyyy'}}
-                    </span>
-                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFornIntCantOperador.hoy?.emitidos || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFornIntCantOperador.hoy?.vencidos || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFornIntCantOperador.hoy?.generados || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFornIntCantOperador.hoy?.anulados || 0}}</span>
-
-                    <!-- SEMANA (sábado a domingo) -->
-                    <span class="text-green-500 font-medium mb-3 mt-3">
-                        SEMANA - {{inicioSemana | date:'dd/MM'}} al {{finSemana | date:'dd/MM'}} del {{finSemana | date:'yyyy'}}
-                    </span>
-                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFornIntCantOperador.semana?.emitidos || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFornIntCantOperador.semana?.vencidos || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFornIntCantOperador.semana?.generados || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFornIntCantOperador.semana?.anulados || 0}}</span>
-
-                    <!-- MES vigente -->
-                    <span class="text-green-500 font-medium mb-3 mt-3">
-                        MES - {{fechaActual | date:'MMMM yyyy' | titlecase}}
-                    </span>
-                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFornIntCantOperador.mes?.emitidos || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFornIntCantOperador.mes?.vencidos || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFornIntCantOperador.mes?.generados || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFornIntCantOperador.mes?.anulados || 0}}</span>
-
-                    <!-- AÑO vigente -->
-                    <span class="text-green-500 font-medium mb-3 mt-3">
-                        AÑO - {{fechaActual | date:'yyyy'}}
-                    </span>
-                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFornIntCantOperador.anio?.emitidos || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFornIntCantOperador.anio?.vencidos || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFornIntCantOperador.anio?.generados || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFornIntCantOperador.anio?.anulados || 0}}</span>
-                </div>
-                <div class="flex align-items-center justify-content-center bg-green-100 border-round" [ngStyle]="{width: '3rem', height: '3rem'}">
-                    <i class="pi pi-fw pi-book text-green-500 text-xl"></i>
-                </div>
-            </div>
+<!-- Columna principal izquierda -->
+<div class="col-12 lg:col-8 xl:col-9 content-column">
+    <!-- Fila 1 - Siempre visible -->
+    <div class="grid fixed-row">
+        <div class="col-12 md:col-6">
+            <app-card-idom [empresa]="operador" [title]="'Empresa'"></app-card-idom>
+        </div>
+        <div class="col-12 md:col-6">
+            <app-card-rep-legal
+                [title]="'REPRESENTANTE LEGAL'"
+                [operador]="operador"
+                [nimLink]="operador?.ci_link">
+            </app-card-rep-legal>
         </div>
     </div>
 
-    <div class="col-12 lg:col-6 xl:col-4" *ngIf="reporteFormExtCantOperador">
-        <div class="card mb-0">
-            <div class="flex justify-content-between mb-3">
-                <div>
-                    <div class="text-900 font-medium text-xl">Formularios Externos</div>
-
-                    <!-- HOY con fecha actual -->
-                    <span class="text-blue-500 font-medium mb-3 mt-3">
-                        HOY - {{fechaActual | date:'dd/MM/yyyy'}}
-                    </span>
-                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFormExtCantOperador.hoy?.emitidos || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFormExtCantOperador.hoy?.vencidos || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFormExtCantOperador.hoy?.generados || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFormExtCantOperador.hoy?.anulados || 0}}</span>
-
-                    <!-- SEMANA (sábado a domingo) -->
-                    <span class="text-blue-500 font-medium mb-3 mt-3">
-                        SEMANA - {{inicioSemana | date:'dd/MM'}} al {{finSemana | date:'dd/MM'}} del {{finSemana | date:'yyyy'}}
-                    </span>
-                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFormExtCantOperador.semana?.emitidos || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFormExtCantOperador.semana?.vencidos || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFormExtCantOperador.semana?.generados || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFormExtCantOperador.semana?.anulados || 0}}</span>
-
-                    <!-- MES vigente -->
-                    <span class="text-blue-500 font-medium mb-3 mt-3">
-                        MES - {{fechaActual | date:'MMMM yyyy' | titlecase}}
-                    </span>
-                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFormExtCantOperador.mes?.emitidos || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFormExtCantOperador.mes?.vencidos || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFormExtCantOperador.mes?.generados || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFormExtCantOperador.mes?.anulados || 0}}</span>
-
-                    <!-- AÑO vigente -->
-                    <span class="text-blue-500 font-medium mb-3 mt-3">
-                        AÑO - {{fechaActual | date:'yyyy'}}
-                    </span>
-                    <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFormExtCantOperador.anio?.emitidos || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFormExtCantOperador.anio?.vencidos || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Generados: {{reporteFormExtCantOperador.anio?.generados || 0}}</span>
-                    <span class="block text-500 font-medium ml-4">Anulados: {{reporteFormExtCantOperador.anio?.anulados || 0}}</span>
-                </div>
-                <div class="flex align-items-center justify-content-center bg-blue-100 border-round" [ngStyle]="{width: '3rem', height: '3rem'}">
-                    <i class="pi pi-fw pi-globe text-blue-500 text-xl"></i>
-                </div>
+    <!-- Fila 2 - Tarjetas dinámicas -->
+    <div class="grid dynamic-cards">
+        <ng-container *ngIf="operador?.tipo_nim_niar">
+            <div class="col-12 md:col-6 card-wrapper">
+                <app-card-documentos
+                    [title]="operador?.tipo_nim_niar"
+                    [fechaExpiracion]="operador?.fecha_exp_nim"
+                    [nimLink]="operador?.nim_link">
+                </app-card-documentos>
             </div>
-        </div>
+        </ng-container>
+
+        <ng-container *ngIf="operador?.seprec_link">
+            <div class="col-12 md:col-6 card-wrapper">
+                <app-card-documentos
+                    [title]="'SEPREC'"
+                    [fechaExpiracion]="operador?.fecha_exp_seprec"
+                    [nimLink]="operador?.seprec_link">
+                </app-card-documentos>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="operador?.ruex_link">
+            <div class="col-12 md:col-6 card-wrapper">
+                <app-card-documentos
+                    [title]="'RUEX'"
+                    [fechaExpiracion]="operador?.fecha_exp_ruex"
+                    [nimLink]="operador?.ruex_link">
+                </app-card-documentos>
+            </div>
+        </ng-container>
     </div>
-        <app-card-idom
-            [empresa]="operador"
-            [title]="'Empresa'"
-        >
-        </app-card-idom>
-        <app-card-rep-legal
-            [title]="'REPRESENTANTE LEGAL'"
-            [operador]="operador"
-            [nimLink]="operador?.ci_link">
-        </app-card-rep-legal>
-        <app-card-documentos
-            [title]="operador?.tipo_nim_niar"
-            [fechaExpiracion]="operador?.fecha_exp_nim"
-            [nimLink]="operador?.nim_link">
-        </app-card-documentos>
-
-        <app-card-documentos
-            [title]="'SEPREC'"
-            [fechaExpiracion]="operador?.fecha_exp_seprec"
-            [nimLink]="operador?.seprec_link">
-        </app-card-documentos>
-
-        <app-card-documentos
-            [title]="'RUEX'"
-            [fechaExpiracion]="operador?.fecha_exp_ruex"
-            [nimLink]="operador?.ruex_link">
-        </app-card-documentos>
-
 </div>
 
+    <!-- Sidebar derecho estático (4/12 en desktop) -->
+    <div class="col-12 lg:col-4 xl:col-3">
+        <div class="sticky-sidebar">
+            <!-- Formularios Internos -->
+            <div class="card mb-4" *ngIf="reporteFornIntCantOperador">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <div class="text-900 font-medium text-xl">Formularios Internos</div>
+
+                        <span class="text-green-500 font-medium mb-3 mt-3 block">
+                            HOY - {{fechaActual | date:'dd/MM/yyyy'}}
+                        </span>
+                        <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFornIntCantOperador.hoy?.emitidos || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFornIntCantOperador.hoy?.vencidos || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Generados: {{reporteFornIntCantOperador.hoy?.generados || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Anulados: {{reporteFornIntCantOperador.hoy?.anulados || 0}}</span>
+
+                        <span class="text-green-500 font-medium mb-3 mt-3 block">
+                            SEMANA - {{inicioSemana | date:'dd/MM'}} al {{finSemana | date:'dd/MM'}} del {{finSemana | date:'yyyy'}}
+                        </span>
+                        <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFornIntCantOperador.semana?.emitidos || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFornIntCantOperador.semana?.vencidos || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Generados: {{reporteFornIntCantOperador.semana?.generados || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Anulados: {{reporteFornIntCantOperador.semana?.anulados || 0}}</span>
+
+                        <span class="text-green-500 font-medium mb-3 mt-3 block">
+                            MES - {{fechaActual | date:'MMMM yyyy' | titlecase}}
+                        </span>
+                        <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFornIntCantOperador.mes?.emitidos || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFornIntCantOperador.mes?.vencidos || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Generados: {{reporteFornIntCantOperador.mes?.generados || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Anulados: {{reporteFornIntCantOperador.mes?.anulados || 0}}</span>
+
+                        <span class="text-green-500 font-medium mb-3 mt-3 block">
+                            AÑO - {{fechaActual | date:'yyyy'}}
+                        </span>
+                        <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFornIntCantOperador.anio?.emitidos || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFornIntCantOperador.anio?.vencidos || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Generados: {{reporteFornIntCantOperador.anio?.generados || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Anulados: {{reporteFornIntCantOperador.anio?.anulados || 0}}</span>
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-green-100 border-round"
+                         [ngStyle]="{width: '3rem', height: '3rem'}">
+                        <i class="pi pi-fw pi-book text-green-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formularios Externos -->
+            <div class="card" *ngIf="reporteFormExtCantOperador">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <div class="text-900 font-medium text-xl">Formularios Externos</div>
+
+                        <span class="text-blue-500 font-medium mb-3 mt-3 block">
+                            HOY - {{fechaActual | date:'dd/MM/yyyy'}}
+                        </span>
+                        <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFormExtCantOperador.hoy?.emitidos || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFormExtCantOperador.hoy?.vencidos || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Generados: {{reporteFormExtCantOperador.hoy?.generados || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Anulados: {{reporteFormExtCantOperador.hoy?.anulados || 0}}</span>
+
+                        <span class="text-blue-500 font-medium mb-3 mt-3 block">
+                            SEMANA - {{inicioSemana | date:'dd/MM'}} al {{finSemana | date:'dd/MM'}} del {{finSemana | date:'yyyy'}}
+                        </span>
+                        <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFormExtCantOperador.semana?.emitidos || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFormExtCantOperador.semana?.vencidos || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Generados: {{reporteFormExtCantOperador.semana?.generados || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Anulados: {{reporteFormExtCantOperador.semana?.anulados || 0}}</span>
+
+                        <span class="text-blue-500 font-medium mb-3 mt-3 block">
+                            MES - {{fechaActual | date:'MMMM yyyy' | titlecase}}
+                        </span>
+                        <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFormExtCantOperador.mes?.emitidos || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFormExtCantOperador.mes?.vencidos || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Generados: {{reporteFormExtCantOperador.mes?.generados || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Anulados: {{reporteFormExtCantOperador.mes?.anulados || 0}}</span>
+
+                        <span class="text-blue-500 font-medium mb-3 mt-3 block">
+                            AÑO - {{fechaActual | date:'yyyy'}}
+                        </span>
+                        <span class="block text-500 font-medium ml-4">Emitidos: {{reporteFormExtCantOperador.anio?.emitidos || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Vencidos: {{reporteFormExtCantOperador.anio?.vencidos || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Generados: {{reporteFormExtCantOperador.anio?.generados || 0}}</span>
+                        <span class="block text-500 font-medium ml-4">Anulados: {{reporteFormExtCantOperador.anio?.anulados || 0}}</span>
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                         [ngStyle]="{width: '3rem', height: '3rem'}">
+                        <i class="pi pi-fw pi-globe text-blue-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

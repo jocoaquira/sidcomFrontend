@@ -6,5 +6,6 @@ export interface IOficina {
   tipo:string,
   direccion:string,
   latitud:string,
-  longitud:string
+  longitud:string,
+  estado:string
 }

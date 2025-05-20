@@ -494,6 +494,7 @@
                 </small>
             </span>
         </div>
+
         <div class="field col-12 md:col-3">
             <button pButton pRipple type="button" icon="pi pi-map" label="Buscar en Mapa" class="p-button-outlined p-button-info" (click)="abrirMapaSucursal()"></button>
         </div>
@@ -527,6 +528,23 @@
                 <label for="dropdown">Tipo de Sucursal</label>
             </span>
         </div>
+
+        <div class="field col-12 md:col-2">
+            <span class="p-float-label">
+                <p-dropdown
+                    inputId="estadoOficina"
+                    [autoDisplayFirst]="false"
+                    [options]="estadoOficina"
+                    optionLabel="label"
+                    optionValue="label"
+                    (onChange)="cambioEstadoSucursal($event)"
+                >
+                </p-dropdown>
+                <label for="dropdown">Estado</label>
+
+            </span>
+        </div>
+
         <div class="field col-12 md:col-2">
             <button pButton pRipple (click)="agregarDireccion()" type="button" icon="pi pi-plus" label="Agregar" class="p-button-outlined p-button-info"></button>
         </div>
@@ -548,6 +566,7 @@
                     <th pSortableColumn="category">Tipo <p-sortIcon field="category"></p-sortIcon></th>
                     <th pSortableColumn="rating">Latitud <p-sortIcon field="rating"></p-sortIcon></th>
                     <th pSortableColumn="inventoryStatus">Longitud <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
+                    <th pSortableColumn="inventoryStatus">Estado <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
                     <th></th>
                 </tr>
             </ng-template>
@@ -576,6 +595,10 @@
                     <td style="width:14%; min-width: 10rem;">
                         <span class="p-column-title">Longitud</span>
                         {{product.longitud}}
+                    </td>
+                    <td style="width:14%; min-width: 10rem;">
+                        <span class="p-column-title">Estado</span>
+                        {{product.estado}}
                     </td>
                     <td>
                         <div class="flex">
@@ -809,6 +832,21 @@
                 ></p-dropdown>
 
                 <label for="dropdown">Municipio</label>
+            </span>
+        </div>
+        <div class="field col-12 md:col-2">
+            <span class="p-float-label">
+                <p-dropdown
+                    inputId="estadoArrendamiento"
+                    [autoDisplayFirst]="false"
+                    [options]="estadoOficina"
+                    optionLabel="label"
+                    optionValue="label"
+                    (onChange)="cambioEstadoArrendamiento($event)"
+                >
+                </p-dropdown>
+                <label for="dropdown">Estado</label>
+
             </span>
         </div>
         <div class="field col-12 md:col-2">
