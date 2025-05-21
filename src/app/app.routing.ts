@@ -30,7 +30,7 @@ import { MustChangePasswordGuard } from '@core/guards/cambiar-password.guard';
                 ]
             },
             { path: 'solicitud', loadChildren: () => import('./public/pages/solicitar-registro/solicitar-registro.module').then(m => m.SolicitarRegistroModule) },
-            { path: 'operador/verificacion/:hash', loadChildren: () => import('./admin/pages/operator/verificacion-operador/verificacion-operador.module').then(m => m.VerificacionOperadorModule) },
+            { path: 'operador/verificacion/:hash', loadChildren: () => import('./public/pages/verificacion/verificacion-operador/verificacion-operador.module').then(m => m.VerificacionOperadorModule) },
             { path: 'formulario-101/formulario-interno/verificacion/:hash', loadChildren: () => import('./admin/pages/formulario-101/formulario-interno-cooperativa/formulario-interno-cooperativa-verificacion/formulario-interno-cooperativa-verificacion.module').then(m => m.FormularioInternoCooperativaVerificacionModule) },
             { path: 'notfound', component: NotfoundComponent },
             { path: '**', redirectTo: '/notfound' },

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificación de Identificación de Operador Minero</title>
+    <style>
+        
+    </style>
+</head>
+<body>
+    <div class="header">SIDCOM</div>
+
+    <div class="container">
+        <div class="section">
+            <div class="title">VERIFICACIÓN DE IDENTIFICACIÓN DE OPERADOR MINERO</div>
+            <div><strong>Estado:</strong> <span class="status">ACTIVO</span></div>
+            <div><strong>IDOM:</strong> SDMM - 163</div>
+        </div>
+
+        <div class="section">
+            <div><strong>Fecha de Registro:</strong> {{operador.fecha_creacion}}</div>
+            <div><strong>Fecha de Expiración:</strong> {{operador.fecha_expiracion}}</div>
+        </div>
+
+        <div class="section">
+            <div class="title">{{operador.razon_social}}</div>
+            <div class="data">
+                <div><strong>NIT:</strong> {{operador.nit}}</div>
+                <div><strong>NIM/NIAR:</strong> {{operador.nro_nim}}</div>
+                <div><strong>Actor Minero:</strong> {{operador.tipo_operador}}</div>
+                <div><strong>Actividad:</strong> {{operador.act_calcinacion}}</div>
+                <div><strong>Representante Legal:</strong> {{operador.rep_nombre_completo}}</div>
+                <div><strong>Dirección de Oficina:</strong> {{operador.dl_direccion}}</div>
+                <div><strong>Correo Electrónico:</strong> {{operador.correo_inst}}</div>
+                <div><strong>Teléfono y/o Celular:</strong> {{operador.tel_fijo}} &nbsp;&nbsp; {{operador.celular}}</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
