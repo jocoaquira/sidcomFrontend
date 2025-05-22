@@ -91,14 +91,14 @@
 }
 /* Estilos para el checkbox */
 .custom-checkbox {
-    transform: scale(1.9); /* Aumentar el tamaño del checkbox si lo deseas */
+    transform: scale(1.7); /* Aumentar el tamaño del checkbox si lo deseas */
     margin-right: 10px; /* Espacio entre el checkbox y la etiqueta */
-    accent-color: rgb(17, 84, 185); /* Cambia el color del checkbox y el estado seleccionado */
+    accent-color: rgb(8, 59, 136); /* Cambia el color del checkbox y el estado seleccionado */
   }
 
   /* Estilos para la etiqueta */
   .custom-checkbox + label {
-    color: rgb(14, 85, 177); /* Cambia el color de la etiqueta */
-    font-size: 13px;
+    color: rgb(6, 74, 163); /* Cambia el color de la etiqueta */
+    font-size: 12px;
     font-weight: bold; /* Ajusta el tamaño de la fuente de la etiqueta */
   }

@@ -84,7 +84,7 @@ export class ListaTomaDeMuestraComponent implements OnInit {
         private confirmationService:ConfirmationService
     ) {
         this.operador_id= authService.getUser.operador_id;
-        
+
     }
 
     ngOnInit() {
@@ -96,14 +96,6 @@ export class ListaTomaDeMuestraComponent implements OnInit {
 
 
         //this.productService.getProducts().then(data => this.products = data);
-
-        this.cols = [
-            { field: 'product', header: 'Product' },
-            { field: 'price', header: 'Price' },
-            { field: 'category', header: 'Category' },
-            { field: 'rating', header: 'Reviews' },
-            { field: 'inventoryStatus', header: 'Status' }
-        ];
 
     }
 
@@ -152,19 +144,19 @@ export class ListaTomaDeMuestraComponent implements OnInit {
             this.pdfTomaDemuestra.generarPDF(this.tdm_completo);
           },
           (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
-        
+
     }
-   
+
     solicitar(event:ITomaDeMuestra){
-        
+
         this.tomaDeMuestraService.solicitarTomaDeMuestra(event.id).subscribe(
             (data:any)=>{
-            
+
           },
           (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
     }
     confirmarSolicitud(event:ITomaDeMuestra) {
-        
+
         this.confirmationService.confirm({
             key: 'confirm1',
             message: '¿Estas seguro de Solicitar la Toma de Muestra: '+event.nro_formulario+'?',
@@ -173,7 +165,7 @@ export class ListaTomaDeMuestraComponent implements OnInit {
               },
         });
     }
-    aprobarSolicitud(event:ITomaDeMuestraSimple){   
+    aprobarSolicitud(event:ITomaDeMuestraSimple){
         this.tomaDeMuestra=event;
         this.productDialog = true;
         this.isEditMode = true;
@@ -186,11 +178,11 @@ export class ListaTomaDeMuestraComponent implements OnInit {
           },
           (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
     }
-    verSolicitud(event:ITomaDeMuestraSimple){   
+    verSolicitud(event:ITomaDeMuestraSimple){
         this.tomaDeMuestra=event;
         this.verDialog = true;
         this.toma_de_muestra_id=event.id;
     }
-    
+
 
 }

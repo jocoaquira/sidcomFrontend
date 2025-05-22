@@ -123,7 +123,34 @@ export class ListaTomaDeMuestraComponent implements OnInit {
         return index.toString();
     }
     onGlobalFilter(table: Table, event: Event) {
-        table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+        const input = (event.target as HTMLInputElement).value.trim();
+
+        // Limpiar filtro si está vacío
+        if (!input) {
+            table.filterGlobal('', 'contains');
+            return;
+        }
+
+        // Intentar parsear como fecha en formato dd/MM/yyyy
+        const dateMatch = input.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+        if (dateMatch) {
+            const day = parseInt(dateMatch[1], 10);
+            const month = parseInt(dateMatch[2], 10); // Mes empieza en 0
+            const year = parseInt(dateMatch[3], 10);
+
+            const date = new Date(year, month - 1, day);
+
+            if (!isNaN(date.getTime())) {
+            // Convertir la fecha a formato ISO y extraer solo la parte de la fecha (YYYY-MM-DD)
+            const dateStr = date.toISOString().split('T')[0]; // Ejemplo: "2024-10-15"
+
+            // Aplicar filtro SOLO al campo fecha_hora_tdm buscando esa fecha
+            table.filter(dateStr, 'fecha_hora_tdm', 'contains');
+            }
+        } else {
+            // Búsqueda normal por texto en los campos definidos en globalFilterFields
+            table.filterGlobal(input, 'contains');
+        }
     }
     generarPDF(tdm:IFormularioInternoSimple){
 

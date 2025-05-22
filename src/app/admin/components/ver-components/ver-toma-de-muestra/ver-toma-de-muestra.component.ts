@@ -21,9 +21,7 @@ export class VerTomaDeMuestraComponent implements OnInit {
    @Output() estadoDialogo = new EventEmitter<boolean>();
   public tomaDM: any = null;
   public error: any = null;
-  public municipios: IMunicipio[] = [];
   public departamentos: IDepartamento[] = [];
-  public minerales: IMineral[] = [];
   public municipio:string=null;
   public ley_mineral:string=null;
   public elementos:string='';
@@ -40,24 +38,22 @@ export class VerTomaDeMuestraComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes && this.id) {
       this.cargarTomaDeMuestra();
       this.cargarDepartamentos();
-      this.cargarMinerales();
     }
   }
 
   cargarTomaDeMuestra() {
-    this.tomaDeMuestraService.verTomaDeMuestra(this.id.toString()).subscribe(
+    this.tomaDeMuestraService.verTomaDeMuestraPDF(this.id.toString()).subscribe(
       (data: any) => {
         this.tomaDM = this.tomaDeMuestraService.handleCrearTomaDeMuestra(data);
-        this.cargarMunicipios().then(() => {
+
           this.listarMunicipioOrigen();
-        });
         this.listarMinerales();
       },
       (error: any) => {
@@ -66,22 +62,7 @@ export class VerTomaDeMuestraComponent implements OnInit {
     );
   }
 
-  cargarMunicipios(): Promise<void> {
-    return new Promise((resolve) => {
-      this.municipiosService.verTodosMunicipios()
-        .pipe(
-          catchError((error) => {
-            this.error = this.municipiosService.handleError(error);
-            return of([]);
-          })
-        )
-        .subscribe((data: any) => {
-          this.municipios = this.municipiosService.handlemunicipio(data);
-          console.log('Municipios cargados:', this.municipios);
-          resolve();
-        });
-    });
-  }
+
 
   cargarDepartamentos() {
     this.departamentosService.verdepartamentos('gh')
@@ -97,19 +78,7 @@ export class VerTomaDeMuestraComponent implements OnInit {
       });
   }
 
-  cargarMinerales() {
-    this.mineralesService.verminerals('gh')
-      .pipe(
-        retry(3),
-        catchError((error) => {
-          this.error = this.mineralesService.handleError(error);
-          return of([]);
-        })
-      )
-      .subscribe((data: any) => {
-        this.minerales = this.mineralesService.handlemineral(data);
-      });
-  }
+
 
   listarMinerales() {
     if (!this.tomaDM || !this.tomaDM.minerales) {
@@ -117,25 +86,18 @@ export class VerTomaDeMuestraComponent implements OnInit {
       return;
     }
 
-    if (!this.minerales || this.minerales.length === 0) {
-      console.error('No hay datos en this.minerales');
-      return;
-    }
 
     // Inicializar variables vacías
     this.ley_mineral = "";
     this.elementos = "";
 
     this.tomaDM.minerales.forEach((element, index) => {
-      const mineral = this.minerales.find(i => i.id === element.mineralId);
-      if (mineral) {
+
         // Agregar coma solo si no es el primer elemento
-        this.elementos += (index > 0 ? ", " : "") + mineral.nombre;
-        this.ley_mineral += (index > 0 ? ", " : "") + mineral.sigla + " (" + element.ley + " " + element.unidad + ")";
-      } else {
-        console.warn(`Mineral con ID ${element.mineralId} no encontrado`);
+        this.elementos += (index > 0 ? ", " : "") + element.mineral;
+        this.ley_mineral += (index > 0 ? ", " : "") + element.sigla + " (" + element.ley + " " + element.unidad + ")";
       }
-    });
+    );
 
     console.log('Minerales encontrados: ' + this.elementos);
     console.log('Leyes minerales encontradas: ' + this.ley_mineral);
@@ -145,23 +107,14 @@ export class VerTomaDeMuestraComponent implements OnInit {
       console.error('No hay datos en tomaDM.municipio_origen');
       return;
     }
-
-    if (!this.municipios || this.municipios.length === 0) {
-      console.error('No hay datos en this.municipios');
-      return;
-    }
-
     // Asegurar que la variable municipio esté inicializada
     this.municipio = "";
 
     this.tomaDM.municipio_origen.forEach((element, index) => {
-      const municipio = this.municipios.find(i => i.id === element.municipioId);
-      if (municipio) {
-        this.municipio += (index > 0 ? ", " : "") + municipio.municipio;
-      } else {
-        console.warn(`Municipio con ID ${element.municipioId} no encontrado`);
+
+        this.municipio += (index > 0 ? ", " : "") + element.municipio_origen;
       }
-    });
+    );
 
     console.log('Municipios encontrados: ' + this.municipio);
   }

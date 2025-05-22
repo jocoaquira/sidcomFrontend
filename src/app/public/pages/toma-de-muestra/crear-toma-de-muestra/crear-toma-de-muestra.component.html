@@ -28,23 +28,7 @@
                   >
                       <div class="grid p-fluid">
 
-                          <div class="field col-12 md:col-3">
-                            <span class="p-float-label">
-                                <p-dropdown
-                                    inputId="departamento_id"
-                                    [autoDisplayFirst]="false"
-                                    [options]="departamento"
-                                    formControlName="departamento_id"
-                                    optionLabel="nombre"
-                                    optionValue="id"
-                                    (onChange)="cambioDepartamentoMapa($event)"
-                                ></p-dropdown>
-                                <label for="dropdown">Departamento</label>
-                                <small id="nit" class="p-error " *ngIf="formulario_interno.esCampoInvalido('departamento_id')">
-                                    {{formulario_interno.getErrorMessage('departamento_id')}}
-                                </small>
-                            </span>
-                        </div>
+
                         <div class="field col-12 md:col-3">
                             <span class="p-float-label">
                                 <p-dropdown

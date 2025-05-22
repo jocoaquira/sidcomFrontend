@@ -8,13 +8,6 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-verificacion-operador',
   template: `
-    <div *ngIf="pdfUrl">
-      <object [data]="pdfUrl" type="application/pdf" width="100%" height="100%">
-        <p>Tu navegador no soporta visualización de PDF.
-           <a [href]="pdfUrl">Descargar PDF</a>.
-        </p>
-      </object>
-    </div>
     <div *ngIf="loading">
       Generando PDF, por favor espere...
     </div>
@@ -27,22 +20,20 @@ import { HttpClient } from '@angular/common/http';
       display: block;
       height: 100vh;
       width: 100vw;
-    }
-    object {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      padding: 2rem;
+      font-family: sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
     }
   `]
 })
 export class VerificacionOperadorComponent {
   public hash: string = '';
   public error: any;
-  public pdfUrl: string;
   public loading: boolean = false;
-  public operador:IOperator;
+  public operador: IOperator;
 
   constructor(
     private actRoute: ActivatedRoute,
@@ -52,36 +43,32 @@ export class VerificacionOperadorComponent {
   ) {}
 
   ngOnInit() {
-    this.actRoute.paramMap.subscribe(
-        params=>
-        {
-          this.hash=params.get('hash');
-          this.operatorsService.hashOperador(this.hash).subscribe(
-            (data:any)=>{
-                this.operador=this.operatorsService.handleOperador(data);
-                this.loadPDF(this.operador);
-          },
-          (error:any)=> this.error=this.operatorsService.handleError(error));
-        }
+    this.actRoute.paramMap.subscribe(params => {
+      this.hash = params.get('hash');
+      this.operatorsService.hashOperador(this.hash).subscribe(
+        (data: any) => {
+          this.operador = this.operatorsService.handleOperador(data);
+          this.loadPDF(this.operador);
+        },
+        (error: any) => this.error = this.operatorsService.handleError(error)
       );
+    });
   }
 
-  async loadPDF(operadorData:IOperator) {
+  async loadPDF(operadorData: IOperator) {
     this.loading = true;
     try {
+      // Genera el PDF en el servidor
+      await this.idomServices.generarPDF(operadorData);
 
-      // Llamamos al servicio que genera el PDF
-      this.idomServices.generarPDF(operadorData);
-
-      // Esperamos un breve momento para que el PDF se genere
+      // Espera un pequeño retraso por seguridad
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Obtenemos el PDF del servidor (ajusta esta URL según tu API)
-      this.pdfUrl = `/api/pdf/generated/${this.hash}?timestamp=${Date.now()}`;
-
+      // Redirige directamente al PDF
+      const pdfUrl = `/api/pdf/generated/${this.hash}?timestamp=${Date.now()}`;
+      window.location.href = pdfUrl; // 🔥 Esto reemplaza Angular con el PDF
     } catch (error) {
       this.error = this.operatorsService.handleError(error);
-    } finally {
       this.loading = false;
     }
   }

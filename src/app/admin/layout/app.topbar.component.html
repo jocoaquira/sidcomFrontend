@@ -10,7 +10,10 @@
     </div>
 
     <div #topbarmenu class="layout-topbar-menu" [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
-        <p>{{authService.getUser.nombre_completo.toString()}}</p>
+        <button class="p-link layout-topbar-button" (click)="menu.toggle($event)">
+            <i class="pi pi-bell"></i>
+            <span>Notificaciones</span>
+        </button>
         <button class="p-link layout-topbar-button">
             <i class="pi pi-calendar"></i>
             <span>Calendar</span>
@@ -19,7 +22,7 @@
             <i class="pi pi-user"></i>
             <span>Profile</span>
         </button>
-        
+
         <p-menu #menu [popup]="true" [model]="overlayMenuItems"></p-menu>
     </div>
 </div>

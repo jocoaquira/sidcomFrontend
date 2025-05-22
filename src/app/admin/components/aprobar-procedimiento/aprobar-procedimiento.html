@@ -22,7 +22,7 @@
           #fileUploadComponent
           mode="advanced"
           accept=".pdf,.jpg,.jpeg,.png"
-          [maxFileSize]="1000000"
+          [maxFileSize]="10000000"
           label="Cargar SEPREC"
           chooseLabel="Subir Foto de "
           class="w-full inline-block"
@@ -33,7 +33,7 @@
         >
         </p-fileUpload>
       </div>
-      
+
     <div class="field col-12 md:col-12">
         <span class="p-float-label">
             <textarea
@@ -53,8 +53,6 @@
 
     <div class="card-procedimiento">
         <h5 class="text-center"><strong>PROCEDIMIENTO</strong></h5>
-            <div [innerHTML]="procedimiento[0].descripcion" *ngIf="agranel"></div>
-            <div [innerHTML]="procedimiento[1].descripcion" *ngIf="ensacado"></div>
 
     </div>
 

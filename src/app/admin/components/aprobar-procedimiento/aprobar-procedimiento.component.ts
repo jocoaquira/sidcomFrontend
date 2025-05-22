@@ -14,6 +14,7 @@ import { ResponsableSenarecomService } from '../../services/responsable-senareco
 import { IResponsableSenarecom } from '@data/responsable_senarecom_tm.metadata';
 import { ITomaDeMuestraSimple } from '@data/toma_de_muestra_simple.metadata';
 import { ITomaDeMuestra } from '@data/toma_de_muestra.metadata';
+import { ITomaDeMuestraPDF } from '@data/toma_de_muestra_pdf.metadata';
 
 @Component({
   selector: 'app-aprobar-procedimiento',
@@ -49,6 +50,7 @@ export class AprobarProcedimientoComponent implements OnInit {
     public procedimientosSeleccionados: any[] = []; // Procedimientos seleccionados
     public listaResponsableSenarecom:IResponsableSenarecom[]=[];
     public selectedFile: File | null = null;
+    public tdm_completo:ITomaDeMuestraPDF;
   constructor(
     private operadoresService:OperatorsService,
     private tomaDeMuestraService:TomaDeMuestraService,
@@ -57,11 +59,11 @@ export class AprobarProcedimientoComponent implements OnInit {
     private procedimientoService:ProcedimientoService,
     private responsableSenarecomService:ResponsableSenarecomService,
     private tomaDeMuestra:TomaDeMuestraService,
-        ) { 
+        ) {
         }
 
   ngOnInit(): void {
-    
+
     this.procedimientoService.verProcedimientos().subscribe(
       (data:any)=>{
       this.procedimientos=this.procedimientoService.handleProcedimientos(data);
@@ -80,7 +82,7 @@ export class AprobarProcedimientoComponent implements OnInit {
         fullName: `${responsable.nombre} ${responsable.apellidos}` // Concatenamos nombre y apellido
       }));
       this.listaResponsableSenarecom = this.listaResponsableSenarecom.filter(responsable => responsable.estado === 'ACTIVO');
-  
+
     },
     (error:any)=> this.error=this.responsableSenarecomService.handleError(error));
 
@@ -99,17 +101,25 @@ export class AprobarProcedimientoComponent implements OnInit {
         responsable_tdm_id:this.tmd.responsable_tdm_id,
         procedimiento: [],
       });
-      
+
       this.tomaDeMuestraService.verTomaDeMuestra(this.tmd.id+'').subscribe(
         (data:any)=>{
         this.tomaDM=this.tomaDeMuestraService.handleCrearTomaDeMuestra(data);
         console.log(this.tomaDM);
-        
+
       },
       (error:any)=> this.error=this.tomaDeMuestraService.handleAprobarTomaDeMuestraError(error));
+      this.tomaDeMuestraService.verTomaDeMuestraPDF(this.tmd.id+'').subscribe(
+            (data:any)=>{
+            this.tdm_completo=this.tomaDeMuestraService.handleTomaDeMuestraPDF(data);
+            console.log('pdf:',this.tdm_completo);
+          },
+          (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
     }
     console.log(this.form.formulario.value);
   }
+
+
   // Método para manejar los cambios en los checkboxes
   onCheckboxChange(event: any, procedimiento: any): void {
     if (event.target.checked) {
@@ -180,19 +190,19 @@ export class AprobarProcedimientoComponent implements OnInit {
 
   aprobarResponsable() {
     console.log("Formulario:", this.form.formulario.value); // Depuración inicial
-  
+
     // Verificar si hay un archivo seleccionado
     if (!this.selectedFile) {
       this.notify.error('Debe seleccionar un archivo antes de enviar', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
       return;
     }
-  
+
     let formData = new FormData();
-  
+
     // Agregar el archivo al FormData
     formData.append('foto_link', this.selectedFile);
     formData.append("estado", "APROBADO");
-  
+
     // Validar `responsable_tdm_senarecom_id`
     if (this.form.formulario.value.responsable_tdm_senarecom_id) {
       formData.append("responsable_tdm_senarecom_id", this.form.formulario.value.responsable_tdm_senarecom_id.toString());
@@ -200,14 +210,14 @@ export class AprobarProcedimientoComponent implements OnInit {
       this.notify.error('Falló... Revise el campo responsable_tdm_senarecom_id y vuelva a enviar.', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
       return;
     }
-  
+
     // Validar `observaciones`
     if (this.form.formulario.value.observaciones) {
       formData.append("observaciones", this.form.formulario.value.observaciones);
     } else {
       formData.append("observaciones", '');
     }
-  
+
     // Validar `operador_id`
     if (this.tmd.operador_id !== undefined && this.tmd.operador_id !== null) {
       formData.append("operador_id", this.tmd.operador_id.toString());
@@ -215,7 +225,7 @@ export class AprobarProcedimientoComponent implements OnInit {
       this.notify.error('Falló... Revise el campo operador_id y vuelva a enviar.', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
       return;
     }
-  
+
     // Validar `responsable_tdm_id`
     if (this.tmd.responsable_tdm_id !== undefined && this.tmd.responsable_tdm_id !== null) {
       formData.append("responsable_tdm_id", this.tmd.responsable_tdm_id.toString());
@@ -237,20 +247,20 @@ export class AprobarProcedimientoComponent implements OnInit {
       this.notify.error('Falló... Revise el campo  procedimiento es undefined o no es un array y vuelva a enviar.', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
       return;
     }
-  
+
     // Verificar si todos los valores se agregaron correctamente
     console.log("Valores en FormData:");
     formData.forEach((value, key) => console.log(`${key}: ${value}`));
     console.log('formulario valid: '+this.form.formulario.valid);
     // Verificar si el formulario es válido antes de enviar
-    
-  
+
+
     // Enviar los datos al servicio
     this.tomaDeMuestraService.aprobarTomaDeMuestra(formData, this.form.formulario.value.id).subscribe(
       (data: any) => {
         this.tomaDeMuestraService.handleAprobarTomaDeMuestra(data);
         console.log("Respuesta del servidor:", data);
-  
+
         if (data.error == null) {
           this.form.formulario.reset();
           this.estadoDialogo.emit(false);
@@ -260,14 +270,14 @@ export class AprobarProcedimientoComponent implements OnInit {
       (error: any) => {
         console.error("Error en la petición:", error);
         this.errorUsuario = this.tomaDeMuestraService.handleAprobarTomaDeMuestraError(error.error.data);
-  
+
         if (error.error.status == 'fail') {
           this.notify.error('Falló... Revise los campos y vuelva a enviar.', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
         }
       }
     );
   }
-  
+
   // Método para capturar el archivo seleccionado
   onFileSelect(event: any) {
     const file: File = event.files[0]; // Aquí capturamos el primer archivo seleccionado

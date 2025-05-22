@@ -43,7 +43,12 @@ export class TomaDeMuestraService {
     // asignacion de parametros
     return this.http.get(`${this.baseUrl}sample/operador/`+id);
   }
-
+//-------------------------CDONTAR SOLICITUDES------------------------------------------
+contarSolicitudesTDM()
+  {
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}sample/contar-solicitado`);
+  }
 //-----------------Visualizar Toma de Muestra-------------------------------------------
 verTomaDeMuestra(nombre:string)
 {

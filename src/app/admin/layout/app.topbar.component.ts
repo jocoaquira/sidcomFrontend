@@ -3,6 +3,7 @@ import { MenuItem } from 'primeng/api';
 import { LayoutService } from "./service/app.layout.service";
 import { AuthService } from '@core/authentication/services/auth.service';
 import { Router } from '@angular/router';
+import { TomaDeMuestraService } from '../services/toma-de-muestra/toma-de-muestra.service';
 
 @Component({
     selector: 'app-topbar',
@@ -12,6 +13,8 @@ export class AppTopBarComponent {
 
     items!: MenuItem[];
     overlayMenuItems = [];
+    cantidadTDM:any;
+    error:any;
 
     @ViewChild('menubutton') menuButton!: ElementRef;
 
@@ -22,8 +25,16 @@ export class AppTopBarComponent {
     constructor(
         public layoutService: LayoutService,
         public authService:AuthService,
+        public tdmNotificacion:TomaDeMuestraService,
         private router: Router
     ) {
+        this.tdmNotificacion.contarSolicitudesTDM().subscribe(
+            (data:any)=>{
+            this.cantidadTDM=data;
+            console.log(this.cantidadTDM);
+
+          },
+          (error:any)=> this.error=this.tdmNotificacion.handleError(error));
         this.overlayMenuItems = [
             {
                 label: authService.getUser.nombre_completo.toString(),

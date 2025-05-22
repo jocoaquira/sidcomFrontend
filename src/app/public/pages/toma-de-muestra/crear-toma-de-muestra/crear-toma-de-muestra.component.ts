@@ -179,25 +179,11 @@ nextStep() {
     this.formulario_interno.formulario.patchValue({
         operador_id: authService.getUser.operador_id
       });
+
    }
 
   ngOnInit() {
-    this.responsableTMService.verResponsableTMOperador(this.formulario_interno.formulario.value.operador_id.toString()).subscribe(
-      (data:any)=>{
-      this.listaUsuarios=this.responsableTMService.handleusuario(data);
-      this.listaUsuarios = this.listaUsuarios.map(usuario => ({
-        ...usuario,
-        nombreCompleto: `${usuario.nombre} ${usuario.apellidos}`
-      }));
-    },
-    (error:any)=> this.error=this.responsableTMService.handleError(error));
-    this.departamentosService.verdepartamentos(this.nombre).subscribe(
-      (data:any)=>{
-      this.departamento=this.departamentosService.handledepartamento(data);
 
-    },
-    (error:any)=> this.error=this.departamentosService.handleError(error)
-  );
 
 
     this.satelliteLayer = tileLayer(
@@ -217,7 +203,6 @@ nextStep() {
       }
     );
 
-    this.departamento_id=0;
           this.mineralesService.verminerals('hj').subscribe(
         (data:any)=>{
         this.minerales=this.mineralesService.handlemineral(data);
@@ -230,6 +215,32 @@ nextStep() {
 
       },
       (error:any)=> this.error=this.presentacionService.handleError(error));
+
+      this.responsableTMService.verResponsableTMOperador(this.formulario_interno.formulario.value.operador_id.toString()).subscribe(
+      (data:any)=>{
+      this.listaUsuarios=this.responsableTMService.handleusuario(data);
+      this.listaUsuarios = this.listaUsuarios.map(usuario => ({
+        ...usuario,
+        nombreCompleto: `${usuario.nombre} ${usuario.apellidos}`
+      }));
+    },
+    (error:any)=> this.error=this.responsableTMService.handleError(error));
+    this.departamentosService.verdepartamentos(this.nombre).subscribe(
+      (data:any)=>{
+      this.departamento=this.departamentosService.handledepartamento(data);
+      // Para asignar todos los valores del formulario (debe incluir todos los campos)
+        this.formulario_interno.formulario.get('departamento_id')?.setValue(4);
+        console.log(this.formulario_interno.formulario.value);
+      // Esperamos un momento para asegurar que el mapa esté listo
+      setTimeout(() => {
+        this.cambioDepartamentoMapa(4);
+      }, 800);
+
+      this.departamento_id = 4;
+
+    },
+    (error:any)=> this.error=this.departamentosService.handleError(error)
+  );
 
     this.destinos = [
         { nombre: 'COMPRADOR', id: '1' },
@@ -591,9 +602,9 @@ abrirMapa() {
     cambioDepartamentoMapa(departamento_id:any){
 
 
-            this.formulario_interno.formulario.value.departamento=departamento_id.value;
-            this.dept=this.departamento.find(element => element.id === departamento_id.value);
-            this.municipiosService.vermunicipios( departamento_id.value.toString()).subscribe(
+            this.formulario_interno.formulario.value.departamento=departamento_id;
+            this.dept=this.departamento.find(element => element.id === departamento_id);
+            this.municipiosService.vermunicipios( departamento_id.toString()).subscribe(
                 (data:any)=>{
 
                 this.municipio=this.municipiosService.handlemunicipio(data);
