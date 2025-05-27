@@ -10,10 +10,28 @@
     </div>
 
     <div #topbarmenu class="layout-topbar-menu" [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
-        <button class="p-link layout-topbar-button" (click)="menu.toggle($event)">
-            <i class="pi pi-bell"></i>
-            <span>Notificaciones</span>
-        </button>
+        <button class="p-link layout-topbar-button" style="position: relative;" (click)="menu1.toggle($event)">
+            <i class="pi pi-bell" style="font-size: 1.2rem;"></i>
+            <span *ngIf="cantidadTDM > 0" style="
+              position: absolute;
+              top: -5px;
+              right: -5px;
+              background: #f44336;
+              color: white;
+              border-radius: 50%;
+              width: 20px;
+              height: 20px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 0.75rem;
+              font-weight: bold;
+              border: 2px solid white;
+              z-index: 100;
+            ">
+              {{ cantidadTDM }}
+            </span>
+          </button>
         <button class="p-link layout-topbar-button">
             <i class="pi pi-calendar"></i>
             <span>Calendar</span>
@@ -24,5 +42,6 @@
         </button>
 
         <p-menu #menu [popup]="true" [model]="overlayMenuItems"></p-menu>
+        <p-menu #menu1 [popup]="true" [model]="overlayMenuItem"></p-menu>
     </div>
 </div>

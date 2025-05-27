@@ -7,13 +7,18 @@ import { ITomaDeMuestraSimple } from '@data/toma_de_muestra_simple.metadata';
 import { ITomaDeMuestraSimpleOperador } from '@data/toma_de_muestra_simple_operador.metadata';
 import { IAprobarTM } from '@data/aprobar_tm.metadata';
 import { ITomaDeMuestraPDF } from '@data/toma_de_muestra_pdf.metadata';
-import { Observable } from 'rxjs';
+import { Observable, Subject, tap } from 'rxjs';
 import { ITDMNroForm } from '@data/toma_de_muestra_nroform.metadata';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TomaDeMuestraService {
+    private notificacionesUpdated = new Subject<number>();
+
+    // Observable para componentes
+    notificaciones$ = this.notificacionesUpdated.asObservable();
+
   private user!:IApiUserAuthenticated;
   private baseUrl = localStorage.getItem('url-backend');
   private headers!:HttpHeaders;
@@ -44,10 +49,10 @@ export class TomaDeMuestraService {
     return this.http.get(`${this.baseUrl}sample/operador/`+id);
   }
 //-------------------------CDONTAR SOLICITUDES------------------------------------------
-contarSolicitudesTDM()
-  {
-    // asignacion de parametros
-    return this.http.get(`${this.baseUrl}sample/contar-solicitado`);
+contarSolicitudesTDM() {
+    return this.http.get(`${this.baseUrl}sample/contar_solicitado`).pipe(
+      tap((count:number) => this.notificacionesUpdated.next(count))
+    );
   }
 //-----------------Visualizar Toma de Muestra-------------------------------------------
 verTomaDeMuestra(nombre:string)
@@ -149,12 +154,12 @@ firmarTomaDeMuestra(id:number) {
 }
 
 // Función para aprobar la toma de muestra
-aprobarTomaDeMuestra(formData: FormData,id:number): Observable<any> {
-  this.token(); // Si es necesario, agrega la lógica para obtener el token
-
-  // Llamamos a la API con el FormData
-  return this.http.put(`${this.baseUrl}sample/aprobar/`+id, formData);
-}
+aprobarTomaDeMuestra(formData: FormData, id: number): Observable<any> {
+    this.token();
+    return this.http.put(`${this.baseUrl}sample/aprobar/`+id, formData).pipe(
+      tap(() => this.contarSolicitudesTDM().subscribe())
+    );
+  }
 handleAprobarTomaDeMuestraError(error: any): any {
   return error=error;
 }

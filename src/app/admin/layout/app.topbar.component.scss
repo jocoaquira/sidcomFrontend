@@ -4,6 +4,26 @@
     padding: 5px 10px;
 }
 
-.notification-item i {
-    margin-right: 10px;
-}
+/* Fuerza los estilos del badge - solución infalible */
+.p-badge.notification-badge {
+    position: absolute !important;
+    top: -10px !important;
+    right: -10px !important;
+    font-size: 12px !important;
+    min-width: 20px !important;
+    height: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 1000 !important;
+    background: #f44336 !important;
+    color: white !important;
+    transform: none !important;
+    border: 2px solid white !important; /* Para contraste */
+  }
+
+  /* Asegura que el botón padre no oculte el badge */
+  .layout-topbar-button {
+    position: relative !important;
+    overflow: visible !important;
+  }
