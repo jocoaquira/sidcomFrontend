@@ -44,7 +44,7 @@ export class LugarVerificacionTDMService {
 //---------------------crear   lugarverificacion-------------------------------------------
 crearlugarverificacionTDM(data:ILugarVerificacionTDM) {
   this.token();
-  return this.http.post(`${this.baseUrl}/lugarverificaciontdm`,data, {headers:this.headers})
+  return this.http.post(`${this.baseUrl}lugarverificaciontdm`,data, {headers:this.headers})
 }
 handleCrearlugarverificacionError(error: any): any {
   return error=error;

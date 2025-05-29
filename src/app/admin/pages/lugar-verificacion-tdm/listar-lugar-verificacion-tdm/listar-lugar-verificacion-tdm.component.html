@@ -5,7 +5,7 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="Nuevo Lugar de Toma de Muestra" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+                        <button pButton pRipple label="Nuevo Lugar de Toma de Muestra" icon="pi pi-plus" class="p-button-success mr-2" routerLink="/admin/lugar-verificacion-tdm/crear"></button>
                     </div>
                 </ng-template>
 
@@ -22,7 +22,7 @@
                     [sortOrder]="-1">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <h5 class="m-0">Administrar Lugar de Toma de Muestras</h5>
+                        <h5 class="m-0">Administrar Lugares de Toma de Muestras</h5>
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..." class="w-full sm:w-auto"/>
@@ -36,21 +36,38 @@
                         <th pSortableColumn="lugar">Lugar de Toma de Muestra <p-sortIcon field="lugar"></p-sortIcon></th>
                         <th pSortableColumn="latitud">Latitud <p-sortIcon field="latitud"></p-sortIcon></th>
                         <th pSortableColumn="longitud">Longitud <p-sortIcon field="longitud"></p-sortIcon></th>
+                        <th pSortableColumn="mapa">Mapa <p-sortIcon field="mapa"></p-sortIcon></th>
+                        <th pSortableColumn="estado">Estado <p-sortIcon field="estado"></p-sortIcon></th>
                         <th pSortableColumn="inventoryStatus">Acciones <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
                     </tr>
                 </ng-template>
 
                 <!-- Cuerpo de la tabla -->
-                <ng-template pTemplate="body" let-pais>
+                <ng-template pTemplate="body" let-lugar_verificacion>
                     <tr>
-                        <td>{{pais.id}}</td>
-                        <td>{{pais.lugar}}</td>
-                        <td>{{pais.latitud}}</td>
-                        <td>{{pais.longitud}}</td>
+                        <td>{{lugar_verificacion.id}}</td>
+                        <td>{{lugar_verificacion.lugar}}</td>
+                        <td>{{lugar_verificacion.latitud}}</td>
+                        <td>{{lugar_verificacion.longitud}}</td>
+                        <td style="width:8%; min-width: 5rem;">
+                        <span class="p-column-title">Reviews</span>
+                            <button pButton pRipple icon="pi pi-map-marker"
+                                    type="button"
+                                    class="p-button p-button-outlined p-button-help btn-minimal-padding"
+                                    (click)="openGoogleMaps(lugar_verificacion.latitud, lugar_verificacion.longitud)"
+                                    [disabled]="!lugar_verificacion.latitud || !lugar_verificacion.longitud"
+                                    pTooltip="Ver ubicación en Google Maps" tooltipPosition="top">
+                            </button>
+                        </td>
+                        <td style="width:10%; min-width: 10rem;"><span class="p-column-title">Status</span>
+
+                            <p-tag severity="success" *ngIf="lugar_verificacion.estado=='ACTIVO'" value="ACTIVO"></p-tag>
+                            <p-tag severity="danger" *ngIf="lugar_verificacion.estado=='INACTIVO'" value="INACTIVO"></p-tag>
+                            </td>
                         <td>
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="edit(pais)"></button>
-                                <button pButton pRipple icon="pi pi-trash"  class="p-button-text p-button-plain p-button-rounded p-button-danger mr-1" (click)="bloquearDialogo(pais)"></button>
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="edit(lugar_verificacion)"></button>
+                                <button pButton pRipple icon="pi pi-trash"  class="p-button-text p-button-plain p-button-rounded p-button-danger mr-1" (click)="bloquearDialogo(lugar_verificacion)"></button>
                                 </div>
                         </td>
                     </tr>
@@ -60,11 +77,11 @@
         <p-dialog [(visible)]="productDialog" [style]="{width: '700px'}"
           [modal]="true" header="{{isEditMode ? 'Editar Lugar de Toma de Muestra' : 'Agregar Lugar de Toma de Muestra'}}"
           class="p-fluid">
-            <app-crear-pais
-                [pais]="lugar_verificacion"
+            <app-crear-lugar_verificacion
+                [lugar_verificacion]="lugar_verificacion"
                 [isEditMode]="isEditMode"
                 (estadoDialogo)="cerrar($event)">
-            </app-crear-pais>
+            </app-crear-lugar_verificacion>
         </p-dialog>
         <p-confirmDialog header="Confirmación" key="confirm1" icon="pi pi-exclamation-triangle" message="¿Está seguro de anular el formulario?"
                 [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"

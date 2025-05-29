@@ -19,6 +19,7 @@ import { CanVerDepartamentoGuard } from '../guards/departamentos/can-ver-departa
 import { CanVerMunicipioGuard } from '../guards/municipios/can-ver-municipio.guard';
 import { CanVerTomaDeMuestraGuard } from '../guards/toma-de-muestra/can-ver-toma-de-muestra.guard';
 import { CanVerFormularioCooperativaGuard } from '../guards/formulario-cooperativas/can-ver-formulario-cooperativa.guard';
+import { CanListarLugarVerificacionTDMGuard } from '../guards/lugar-verificacion-tdm/can-listar-lugar-verificacion-tdm.guard';
 
 @Component({
     selector: 'app-menu',
@@ -48,6 +49,7 @@ export class AppMenuComponent implements OnInit {
         private canVerDepartamentoGuard:CanVerDepartamentoGuard,
         private canVerMunicipioGuard:CanVerMunicipioGuard,
         private canVerTomaDeMuestraGuard:CanVerTomaDeMuestraGuard,
+        private canListarLugarVerificacionTDMGuard:CanListarLugarVerificacionTDMGuard
         ) { }
 
     ngOnInit() {
@@ -72,7 +74,7 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Departamentos', icon: 'pi pi-fw pi-flag-fill', routerLink: ['/admin/departamento'],visible: this.canVerDepartamentoGuard.canActivate() },
                     { label: 'Municipios', icon: 'pi pi-fw pi-flag-fill', routerLink: ['/admin/municipio'],visible: this.canVerMunicipioGuard.canActivate() },
                     { label: 'Aduanas', icon: 'pi pi-fw pi-truck', routerLink: ['/admin/aduana'],visible: this.canVerAduanaGuard.canActivate() },
-                    { label: 'Lugar de Verificacion TDM', icon: 'pi pi-fw pi-truck', routerLink: ['/admin/lugar-verificacion-tdm'],visible: this.canVerAduanaGuard.canActivate() },
+                    { label: 'Lugar de Verificacion TDM', icon: 'pi pi-map-marker', routerLink: ['/admin/lugar-verificacion-tdm'],visible: this.canListarLugarVerificacionTDMGuard.canActivate() },
                 ]
             },
             {

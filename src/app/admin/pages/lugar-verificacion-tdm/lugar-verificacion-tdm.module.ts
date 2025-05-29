@@ -19,6 +19,8 @@ import { BadgeModule } from 'primeng/badge';
 import { TagModule } from 'primeng/tag';
 import { ListarLugarVerificacionTDMModule } from './listar-lugar-verificacion-tdm/listar-lugar-verificacion-tdm.module';
 import { LugarVerificacionTDMRoutingModule } from './lugar-verificacion-tdm.routing';
+import { CrearLugarVerificacionTDMModule } from './crear-lugar-verificacion-tdm/crear-lugar-verificacion-tdm.module';
+import { EditarLugarVerificacionTDMModule } from './editar-lugar-verificacion-tdm/editar-lugar-verificacion-tdm.module';
 
 @NgModule({
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -40,6 +42,8 @@ import { LugarVerificacionTDMRoutingModule } from './lugar-verificacion-tdm.rout
         RadioButtonModule,
         InputNumberModule,
         DialogModule,
+        CrearLugarVerificacionTDMModule,
+        EditarLugarVerificacionTDMModule,
         ListarLugarVerificacionTDMModule,
         LugarVerificacionTDMRoutingModule
     ],

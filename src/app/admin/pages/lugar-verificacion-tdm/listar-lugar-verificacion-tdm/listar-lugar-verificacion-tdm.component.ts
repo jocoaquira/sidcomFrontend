@@ -14,6 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 import { PaisesService } from 'src/app/admin/services/paises.service';
 import { ILugarVerificacionTDM } from '@data/lugar_verificacion_tdm.metadata';
 import { LugarVerificacionTDMService } from 'src/app/admin/services/lugar_verificacion_tdm.service';
+import { Router } from '@angular/router';
 
 
 
@@ -58,7 +59,8 @@ export class ListarLugarVerificacionTDMComponent implements OnInit {
         public canEliminarUsuario:CanEliminarUsuarioGuard,
         private authService:AuthService,
         private notify:ToastrService,
-        private confirmationService:ConfirmationService
+        private confirmationService:ConfirmationService,
+        private router: Router,
     ) {
         this.operador_id= authService.getUser.operador_id
         console.log(this.operador_id);
@@ -113,9 +115,7 @@ export class ListarLugarVerificacionTDMComponent implements OnInit {
     edit(lugar_verificacion:ILugarVerificacionTDM) {
         this.lugar_verificacion = { ...lugar_verificacion };
         console.log(this.lugar_verificacion);
-        //this.submitted = false;
-        this.productDialog = true;
-        this.isEditMode = true;
+        this.router.navigate(['/admin/lugar-verificacion-tdm/editar', this.lugar_verificacion.id]);
     }
 
     hideDialog() {
@@ -163,7 +163,15 @@ export class ListarLugarVerificacionTDMComponent implements OnInit {
     }
     return '';
     }
-
+openGoogleMaps(lat: number, lon: number) {
+        if (lat && lon) {
+            const url = `https://www.google.com/maps?q=${lat},${lon}`;
+            window.open(url, '_blank');
+        } else {
+            console.warn('Coordenadas no disponibles');
+            // Opcional: Mostrar mensaje al usuario
+        }
+    }
     bloquearDialogo(pais:ILugarVerificacionTDM){
         /*
         this.confirmationService.confirm({

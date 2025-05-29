@@ -21,6 +21,7 @@ import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CrearPaisModule } from 'src/app/admin/components/crear-pais/crear-pais.module';
 import { ListarLugarVerificacionTDMComponent } from './listar-lugar-verificacion-tdm.component';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { ListarLugarVerificacionTDMComponent } from './listar-lugar-verificacion
     imports: [
         CommonModule,
         TableModule,
+        RouterModule,
         FileUploadModule,
         FormsModule,
         ButtonModule,
