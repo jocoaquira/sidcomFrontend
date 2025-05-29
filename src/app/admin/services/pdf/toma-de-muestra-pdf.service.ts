@@ -160,9 +160,9 @@ convertirHTMLATextoConViñetas(html) {
                           // Si el estado es 'GENERADO', agregar solo la primera celda
                           celdas.push({ content: 'ESTE FORMULARIO SE ENCUENTRA EN PROCESO DE APROBACION, NO ES VALIDO APARA SU USO.', colSpan: 2, styles: { halign: 'center', fillColor: [255, 255, 0] } });
                           }
-                        if (toma_de_muestra.estado === 'APROBADO') {
+                        if (toma_de_muestra.estado === 'EMITIDO') {
                           // Si el estado es 'GENERADO', agregar solo la primera celda
-                          celdas.push({ content: 'ESTE FORMULARIO YA SE APROBÓ, ESTA A LA ESPERA DE FIRMA PARA SU USO.', colSpan: 2, styles: { halign: 'center', fillColor: [255, 255, 0] } });
+                          celdas.push({ content: 'ESTE FORMULARIO YA SE EMITIÓ, ESTA A LA ESPERA DE APROBACIÓN DEL OPERADOR MINERO PARA SU USO.', colSpan: 2, styles: { halign: 'center', fillColor: [255, 255, 0] } });
                           }
                         if (toma_de_muestra.estado === 'ANULADO') {
                           // Si el estado es 'GENERADO', agregar solo la primera celda
@@ -507,8 +507,8 @@ convertirHTMLATextoConViñetas(html) {
                             ],
                             body: [
                               [
-                                { content: 'Aprobado por: ' + toma_de_muestra.responsable_gador + '; Responsable de Toma de Muestra de la Secretaría de Mineria, Metalurgia y Recursos Energéticos GADOR, en fecha:' + toma_de_muestra.fecha_aprobacion + ' a Horas: ' + toma_de_muestra.hora_aprobacion, styles: { halign: 'center', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: 'Firmado por: ' + toma_de_muestra.responsable_muestra + '; Responsable de Toma de Muestra de la Empresa: ' + toma_de_muestra.razon_social + ' en fecha: ' + toma_de_muestra.fecha_firma + ' a Horas: ' + toma_de_muestra.hora_firma, styles: { halign: 'center', fontStyle: 'bold', fillColor: [255, 255, 255]} },
+                                { content: 'Emitido por: ' + toma_de_muestra.responsable_gador + '; Responsable de Toma de Muestra de la Secretaría de Mineria, Metalurgia y Recursos Energéticos GADOR, en fecha:' + toma_de_muestra.fecha_aprobacion + ' a Horas: ' + toma_de_muestra.hora_aprobacion, styles: { halign: 'center', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                { content: 'Aprobado por: ' + toma_de_muestra.responsable_muestra + '; Responsable de Toma de Muestra de la Empresa: ' + toma_de_muestra.razon_social + ' en fecha: ' + toma_de_muestra.fecha_firma + ' a Horas: ' + toma_de_muestra.hora_firma, styles: { halign: 'center', fontStyle: 'bold', fillColor: [255, 255, 255]} },
                                 { content: 'Imagen de la Toma de Muestra', styles: { halign: 'center', fontStyle: 'bold', fillColor: [255, 255, 255], fontSize: 6 } },
                                 { content: 'Escanee el código QR para verificar la autenticidad del Formulario de Toma de Muestra', styles: { halign: 'center', fontStyle: 'bold', fillColor: [255, 255, 255], fontSize: 6 } },
                               ],

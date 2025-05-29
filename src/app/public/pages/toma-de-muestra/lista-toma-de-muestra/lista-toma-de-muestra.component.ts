@@ -204,7 +204,7 @@ export class ListaTomaDeMuestraComponent implements OnInit {
 
         this.confirmationService.confirm({
             key: 'confirm1',
-            message: '¿Estas seguro de Firmar la Toma de Muestra: '+event.nro_formulario+'?',
+            message: '¿Estas seguro de Aprobar la Toma de Muestra: '+event.nro_formulario+'?',
             accept: () => {
                 this.firmar(event); // Llama a onSubmit cuando el usuario acepta
               },

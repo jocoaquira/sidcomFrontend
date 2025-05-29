@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 
 
 import { OperatorsService } from '../../services/operators.service';
@@ -13,8 +13,8 @@ import { ProcedimientoService } from '../../services/toma-de-muestra/procedimien
 import { ResponsableSenarecomService } from '../../services/responsable-senarecom.service';
 import { IResponsableSenarecom } from '@data/responsable_senarecom_tm.metadata';
 import { ITomaDeMuestraSimple } from '@data/toma_de_muestra_simple.metadata';
-import { ITomaDeMuestra } from '@data/toma_de_muestra.metadata';
 import { ITomaDeMuestraPDF } from '@data/toma_de_muestra_pdf.metadata';
+import { FileUpload } from 'primeng/fileupload';
 
 @Component({
   selector: 'app-aprobar-procedimiento',
@@ -26,6 +26,7 @@ export class AprobarProcedimientoComponent implements OnInit {
   @Input() tmd!:ITomaDeMuestraSimple;
   @Input() isEditMode: boolean = false;
   @Output() estadoDialogo = new EventEmitter<boolean>();
+  @ViewChild('fileUploadComponent') fileUploadComponent!: FileUpload;
   public error!:any;
   public errorVerificarContraseña:boolean=true;
   public errorVerificarEmail:boolean=false;
@@ -40,8 +41,7 @@ export class AprobarProcedimientoComponent implements OnInit {
   public form=new AprobarTMFormulario();
   public errorUsuario:any={};
   public operador_id:number=0;
-  public procedimientos: IProcedimiento[] = []; // Para almacenar los procedimientos
-  public tomaDM:ITomaDeMuestra;
+  public procedimientos: any[] = []; // Para almacenar los procedimientos
   public agranel:boolean=false;
     public ensacado:boolean=false;
     public lingotes:boolean=false;
@@ -52,13 +52,11 @@ export class AprobarProcedimientoComponent implements OnInit {
     public selectedFile: File | null = null;
     public tdm_completo:ITomaDeMuestraPDF;
   constructor(
-    private operadoresService:OperatorsService,
     private tomaDeMuestraService:TomaDeMuestraService,
     private notify:ToastrService,
     private authService:AuthService,
     private procedimientoService:ProcedimientoService,
     private responsableSenarecomService:ResponsableSenarecomService,
-    private tomaDeMuestra:TomaDeMuestraService,
         ) {
         }
 
@@ -92,23 +90,16 @@ export class AprobarProcedimientoComponent implements OnInit {
     ];
   }
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.tmd);
-    if (changes && this.tmd && this.isEditMode) {
+    console.log('IMPRESEE',this.tmd);
+    if (changes && this.tmd.id!=null && this.isEditMode) {
       this.form.formulario.patchValue({
         id:this.tmd.id,
-        estado: 'APROBADO',
+        estado: 'EMITIDO',
         operador_id:this.tmd.operador_id,
         responsable_tdm_id:this.tmd.responsable_tdm_id,
         procedimiento: [],
       });
 
-      this.tomaDeMuestraService.verTomaDeMuestra(this.tmd.id+'').subscribe(
-        (data:any)=>{
-        this.tomaDM=this.tomaDeMuestraService.handleCrearTomaDeMuestra(data);
-        console.log(this.tomaDM);
-
-      },
-      (error:any)=> this.error=this.tomaDeMuestraService.handleAprobarTomaDeMuestraError(error));
       this.tomaDeMuestraService.verTomaDeMuestraPDF(this.tmd.id+'').subscribe(
             (data:any)=>{
             this.tdm_completo=this.tomaDeMuestraService.handleTomaDeMuestraPDF(data);
@@ -201,7 +192,7 @@ export class AprobarProcedimientoComponent implements OnInit {
 
     // Agregar el archivo al FormData
     formData.append('foto_link', this.selectedFile);
-    formData.append("estado", "APROBADO");
+    formData.append("estado", "EMITIDO");
 
     // Validar `responsable_tdm_senarecom_id`
     if (this.form.formulario.value.responsable_tdm_senarecom_id) {
@@ -263,6 +254,10 @@ export class AprobarProcedimientoComponent implements OnInit {
 
         if (data.error == null) {
           this.form.formulario.reset();
+          this.selectedFile=null;
+          this.fileUploadComponent.clear(); // Limpiar el componente de carga de archivos
+          this.procedimientos.forEach(p => p.selected = false);
+          this.procedimientosSeleccionados = [];
           this.estadoDialogo.emit(false);
           this.notify.success('Creado Correctamente', 'Creado Correctamente', { timeOut: 2500, positionClass: 'toast-top-right' });
         }

@@ -147,7 +147,7 @@ solicitarTomaDeMuestra(id:number) {
 }
 firmarTomaDeMuestra(id:number) {
   let sol={
-    'estado':'FIRMADO'
+    'estado':'APROBADO'
   }
   this.token();
   return this.http.put(`${this.baseUrl}sample/firmar/`+id.toString(), sol)
