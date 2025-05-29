@@ -72,6 +72,7 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Departamentos', icon: 'pi pi-fw pi-flag-fill', routerLink: ['/admin/departamento'],visible: this.canVerDepartamentoGuard.canActivate() },
                     { label: 'Municipios', icon: 'pi pi-fw pi-flag-fill', routerLink: ['/admin/municipio'],visible: this.canVerMunicipioGuard.canActivate() },
                     { label: 'Aduanas', icon: 'pi pi-fw pi-truck', routerLink: ['/admin/aduana'],visible: this.canVerAduanaGuard.canActivate() },
+                    { label: 'Lugar de Verificacion TDM', icon: 'pi pi-fw pi-truck', routerLink: ['/admin/lugar-verificacion-tdm'],visible: this.canVerAduanaGuard.canActivate() },
                 ]
             },
             {
