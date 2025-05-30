@@ -27,7 +27,7 @@
                   <div *ngIf="activeStep === 0"
                   >
                       <div class="grid p-fluid">
-                        
+
                           <div class="field col-12 md:col-12">
                               <span class="p-float-label">
                                   <p-dropdown
@@ -128,7 +128,7 @@
                                 </small>
                               </span>
                           </div>
-                          
+
 
 
                       </div>
@@ -250,7 +250,7 @@
                             </span>
                         </div>
                         <div class="field col-12 md:col-3 ">
-                            <app-mineralesSelect (mineral_id)="cambioMineralId($event)" (sigla)="cambioSigla($event)" (nombre)="cambioNombreMineral($event)"></app-mineralesSelect>
+                            <app-mineralesSelect [tipo]="'NO COMPUESTO'" (mineral_id)="cambioMineralId($event)" (sigla)="cambioSigla($event)" (nombre)="cambioNombreMineral($event)"></app-mineralesSelect>
                         </div>
                         <div class="field col-12 md:col-3">
                             <span class="p-float-label">
@@ -334,7 +334,7 @@
                         <div class="field col-12 md:col-12 ">
                             <h5>2.2 Origen del Mineral </h5>
                         </div>
-                                                
+
                           <div class="field col-12 md:col-3 ">
                               <app-departamentoSelect [departamento_id]="departamento_id" (cambioDepartamento)="cambioDepartamento($event)" (nombre_departamento)="cambioNombreDepartemento($event)"></app-departamentoSelect>
                           </div>
@@ -453,7 +453,7 @@
                             <h5 class="text-center"><strong>PROCEDIMIENTO</strong></h5>
                                 <div [innerHTML]="procedimiento[0].descripcion" *ngIf="agranel"></div>
                                 <div [innerHTML]="procedimiento[1].descripcion" *ngIf="ensacado"></div>
-  
+
                         </div>
                         <div class="field col-12 md:col-12">
                             <span class="p-float-label">
@@ -476,7 +476,7 @@
                   <div  *ngIf="activeStep === 3"
                   >
                       <div class="grid p-fluid mt-2">
-                      
+
                   </div>
                   </div>
 

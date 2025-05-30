@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { IMineral } from '@data/mineral.metadata';
 import { MineralsService } from '../../services/minerales.service';
 import { of, throwError } from 'rxjs';
@@ -10,6 +10,7 @@ import { catchError, retry, delay } from 'rxjs/operators';
   styleUrls: ['./mineralesSelect.component.css'],
 })
 export class MineralesSelectComponent implements OnInit {
+  @Input() tipo: String | null = null; // Permite seleccionar un mineral por defecto
   @Output() sigla = new EventEmitter<string>();
   @Output() nombre = new EventEmitter<string>();
   @Output() mineral_id = new EventEmitter<number>();
@@ -35,6 +36,9 @@ export class MineralesSelectComponent implements OnInit {
       .subscribe(
         (data: any) => {
           this.minerales = this.mineralesService.handlemineral(data);
+          if(this.tipo!=='COMPUESTO') {
+            this.minerales = this.minerales.filter((mineral) => mineral.tipo !== 'COMPUESTO');
+          }
           this.loading = false;
         },
         (error: any) => {

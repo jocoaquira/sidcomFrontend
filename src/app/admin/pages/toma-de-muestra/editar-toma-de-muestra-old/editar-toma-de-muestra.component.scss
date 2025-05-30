@@ -128,33 +128,16 @@
 
 
   .centrar-botones {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px; /* Espaciado entre botones */
-    padding: 10px;
-}
-
-.botones-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    width: 100%;
+    display: flex;          /* Activa flexbox */
+    justify-content: center; /* Centra horizontalmente */
+    //align-items: center;    /* Centra verticalmente (si es necesario) */
+    margin-top: 7px;
+    gap: 10px;              /* Espacio entre los botones */
+    //height: 10;           /* Ajusta si necesitas centrar en un contenedor más grande */
 }
 
 .col-33 {
-    flex: 1 1 100%; /* Ocupa toda la fila en pantallas pequeñas */
-    max-width: 100%; /* Evita que sobrepase el ancho disponible */
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-@media (min-width: 768px) {
-    .col-33 {
-        flex: 1 1 30%; /* En pantallas grandes, ocupa 30% del ancho */
-        max-width: 30%;
-    }
+    display: flex;          /* Asegura que los hijos directos también respeten el centrado */
 }
 
 

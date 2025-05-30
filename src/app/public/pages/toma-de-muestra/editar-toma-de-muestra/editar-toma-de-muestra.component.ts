@@ -24,12 +24,15 @@ import { IMunicipio } from '@data/municipio.metadata';
 import { ITomaDeMuestraMineralEnvio } from '@data/toma_de_muestra_mineral_envio.metadata';
 import { ITomaDeMuestraMunicipioOrigenEnvio } from '@data/toma_de_muestra_municipio_origen_envio.metadata';
 import { catchError, of, retry } from 'rxjs';
+import { LugarVerificacionTDMService } from 'src/app/admin/services/lugar_verificacion_tdm.service';
+import { ILugarVerificacionTDM } from '@data/lugar_verificacion_tdm.metadata';
 @Component({
   selector: 'app-editar-toma-de-muestra',
   templateUrl: './editar-toma-de-muestra.component.html',
   styleUrls: ['./editar-toma-de-muestra.component.scss']
 })
 export class EditarTomaDeMuestraComponent implements OnInit {
+    public valSwitch:boolean=true;
     public id:number=0;
     public num_form!:any;
     public listaUsuarios!:IResponsableTM[];
@@ -48,6 +51,7 @@ export class EditarTomaDeMuestraComponent implements OnInit {
       longitud:null,
       latitud:null
     };
+    public listaLugaresVerificacion:ILugarVerificacionTDM[]=[];
     departamento_id1: number | null = null;  // Guardar el ID del departamento seleccionado
   municipio_id1: number | null = null;
   // Método que se llama cuando cambia el departamento
@@ -177,6 +181,7 @@ nextStep() {
     private presentacionService:PresentacionService,
     private municipiosService:MunicipiosService,
     private departamentosService:DepartamentosService,
+    private lugaresVerificacionTDMService:LugarVerificacionTDMService
   ) {
     this.actRoute.paramMap.subscribe(params=>{
         this.id=parseInt(params.get('id'));
@@ -219,8 +224,8 @@ cargar_datos(form:any){
       fecha_aprobacion: form.fecha_aprobacion,
       fecha_firma: form.fecha_firma,
       justificacion_anulacion: form.justificacion_anulacion,
-      lugar_verificacion: form.lugar_verificacion,
       nro_camiones: form.nro_camiones,
+      lugar_verificacion: form.lugar_verificacion,
       tipo_muestra: form.tipo_muestra,
       total_parcial:form.total_parcial,
       ubicacion_lat: form.ubicacion_lat,
@@ -229,6 +234,27 @@ cargar_datos(form:any){
       responsable_tdm_senarecom_id:form.responsable_tdm_senarecom_id,
       estado: form.estado
   });
+    this.lugaresVerificacionTDMService.verlugarverificacionTDMs('hj').subscribe(
+        (data:any)=>{
+        this.listaLugaresVerificacion=this.lugaresVerificacionTDMService.handlelugarverificacion(data);
+        // Supongamos que form.lugar_verificacion es el valor que quieres buscar
+        const existeLugar = this.listaLugaresVerificacion.some(
+        (item) => item.lugar === form.lugar_verificacion
+        );
+
+        if (existeLugar) {
+            this.valSwitch=false;
+
+            console.log(this.valSwitch);
+        // El lugar existe en la lista
+        // Puedes hacer alguna acción aquí si lo necesitas
+        } else {
+            this.valSwitch=true;
+            console.log(this.valSwitch);
+        // El lugar NO existe en la lista
+        }
+    },
+    (error:any)=> this.error=this.lugaresVerificacionTDMService.handleError(error));
 
   this.minerales_envio=form.minerales//.push({...envio_minerales});
   // Crear una nueva lista excluyendo ciertos campos
@@ -321,16 +347,32 @@ cargar_datos(form:any){
   });
 }
 
+valSwitches(event:any){
+    console.log(event);
+    this.valSwitch=event.checked;
+}
+cambioLugarVerificacionTDM(event:any){
+    const lugarEncontrado = this.listaLugaresVerificacion.find(
+  (item) => item.lugar === event.value
+);
+    console.log(lugarEncontrado);
 
-
+    this.formulario_interno.formulario.patchValue({
+        lugar_verificacion: lugarEncontrado.lugar,
+        ubicacion_lat:lugarEncontrado.latitud,
+        ubicacion_lon:lugarEncontrado.longitud,
+        municipio_id:lugarEncontrado.municipio_id
+      });
+}
   ngOnInit() {
     this.responsableTMService.verResponsableTMOperador(this.formulario_interno.formulario.value.operador_id.toString()).subscribe(
       (data:any)=>{
-      this.listaUsuarios=this.responsableTMService.handleusuario(data);
-      this.listaUsuarios = this.listaUsuarios.map(usuario => ({
-        ...usuario,
-        nombreCompleto: `${usuario.nombre} ${usuario.apellidos}`
-      }));
+      this.listaUsuarios = this.responsableTMService.handleusuario(data)
+        .filter(usuario => usuario.estado === 'ACTIVO')
+        .map(usuario => ({
+            ...usuario,
+            nombreCompleto: `${usuario.nombre} ${usuario.apellidos}`
+        }));
     },
     (error:any)=> this.error=this.responsableTMService.handleError(error));
     this.departamentosService.verdepartamentos(this.nombre).subscribe(
@@ -358,6 +400,8 @@ cargar_datos(form:any){
         maxZoom: 19,
       }
     );
+
+
 
     this.departamento_id=0;
           this.mineralesService.verminerals('hj').subscribe(

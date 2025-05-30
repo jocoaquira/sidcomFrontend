@@ -193,7 +193,8 @@ nextStep() {
 
       this.mineralesService.verminerals('hj').subscribe(
         (data:any)=>{
-        this.minerales=this.mineralesService.handlemineral(data);
+        this.minerales=this.mineralesService.handlemineral(data).filter(mineral => mineral.tipo !== 'COMPUESTO');
+        console.log(this.minerales);
       },
       (error:any)=> this.error=this.mineralesService.handleError(error));
 
@@ -606,7 +607,7 @@ cargarDatosTDM(form:ITDMNroForm){
       )
       .subscribe(
         (data: any) => {
-          this.minerales = this.mineralesService.handlemineral(data);
+          this.minerales = this.mineralesService.handlemineral(data).filter(mineral => mineral.tipo !== 'COMPUESTO');
 
 
           this.municipio_origen_envio.forEach((item) => {

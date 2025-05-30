@@ -27,8 +27,29 @@
                   <div *ngIf="activeStep === 0"
                   >
                       <div class="grid p-fluid">
+                            <div class="field col-12 md:col-9" *ngIf="!valSwitch">
+                                <span class="p-float-label">
+                                    <p-dropdown
+                                        inputId="dropdown"
+                                        [autoDisplayFirst]="false"
+                                        [options]="listaLugaresVerificacion"
+                                        optionLabel="lugar"
+                                        optionValue="lugar"
+                                        formControlName="lugar_verificacion"
+                                        (onChange)="cambioLugarVerificacionTDM($event)"
+                                    ></p-dropdown>
 
-                          <div class="field col-12 md:col-3">
+                                    <label for="dropdown">Lugar de Verificación de Toma de Muestra</label>
+                                </span>
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <div class="field-checkbox">
+                                    <p-inputSwitch [(ngModel)]="valSwitch" [ngModelOptions]="{standalone: true}"  (onChange)="valSwitches($event)"></p-inputSwitch>
+                                    <label for="sf">Otro Lugar de Toma de Muestra</label>
+                                </div>
+
+                            </div>
+                        <div class="field col-12 md:col-3" *ngIf="valSwitch">
                             <span class="p-float-label">
                                 <p-dropdown
                                     inputId="departamento_id"
@@ -45,7 +66,7 @@
                                 </small>
                             </span>
                         </div>
-                        <div class="field col-12 md:col-3">
+                        <div class="field col-12 md:col-3" *ngIf="valSwitch">
                             <span class="p-float-label">
                                 <p-dropdown
                                     inputId="municipio"
@@ -64,7 +85,7 @@
                         </div>
 
 
-                          <div class="field col-12 md:col-2">
+                          <div class="field col-12 md:col-2" *ngIf="valSwitch">
                             <span class="p-float-label">
                                 <input
                                     type="number"
@@ -78,7 +99,7 @@
                                 </small>
                             </span>
                         </div>
-                        <div class="field col-12 md:col-2">
+                        <div class="field col-12 md:col-2" *ngIf="valSwitch">
                             <span class="p-float-label">
                                 <input
                                     type="number"
@@ -92,11 +113,11 @@
                                 </small>
                             </span>
                         </div>
-                        <div class="field col-12 md:col-2">
+                        <div class="field col-12 md:col-2" *ngIf="valSwitch">
                             <button pButton pRipple type="button" icon="pi pi-map" label="Buscar en Mapa" class="p-button-outlined p-button-info" (click)="abrirMapa()"></button>
                         </div>
 
-                          <div class="field col-12 md:col-12">
+                          <div class="field col-12 md:col-12" *ngIf="valSwitch">
                               <span class="p-float-label">
                                   <input
                                       type="text"
@@ -130,7 +151,7 @@
                             <span class="p-float-label">
                                 <p-calendar
                                     inputId="fecha_hora_tdm"
-                                    dateFormat="yy-mm-dd"
+                                    dateFormat="dd-mm-yy"
                                     formControlName="fecha_hora_tdm"
                                     [showTime]="true"
                                     hourFormat="24"
@@ -141,8 +162,6 @@
                                 </small>
                             </span>
                         </div>
-
-
                       </div>
                   </div>
                   <div *ngIf="activeStep === 1"
@@ -239,7 +258,7 @@
                                     formControlName="peso_neto_total"
                                     class="ng-dirty"
                                 />
-                                <label for="Razón Social">Peso Neto Total (Kg.)</label>
+                                <label for="Razón Social">Peso Aproximado (Kg.)</label>
                                 <small id="peso_neto_total" class="p-error "*ngIf="formulario_interno.esCampoInvalido('peso_neto_total')">
                                     {{formulario_interno.getErrorMessage('peso_neto_total')}}
                                 </small>
@@ -276,7 +295,7 @@
                             </span>
                         </div>
                         <div class="field col-12 md:col-3 ">
-                            <app-mineralesSelect (mineral_id)="cambioMineralId($event)" (sigla)="cambioSigla($event)" (nombre)="cambioNombreMineral($event)"></app-mineralesSelect>
+                            <app-mineralesSelect [tipo]="'NO COMPUESTO'" (mineral_id)="cambioMineralId($event)" (sigla)="cambioSigla($event)" (nombre)="cambioNombreMineral($event)"></app-mineralesSelect>
                         </div>
                         <div class="field col-12 md:col-3">
                             <span class="p-float-label">

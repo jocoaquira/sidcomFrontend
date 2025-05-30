@@ -17,31 +17,27 @@ import { StepsModule } from 'primeng/steps';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { DialogModule } from 'primeng/dialog';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-import { CalendarModule } from 'primeng/calendar';
-import { InputSwitchModule } from 'primeng/inputswitch';
 
 @NgModule({
   imports: [
     CommonModule,
-    DropdownModule,
-    InputMaskModule,
-    InputSwitchModule,
-    InputNumberModule,
-    ReactiveFormsModule,
-    InputTextModule,
-    TableModule,
-    ButtonModule,
-    InputTextareaModule,
-    DepartamentoSelectModule,
-    MunicipioSelectModule,
-    MineralesSelectModule,
-    CheckboxModule,
-    StepsModule,
-    TabMenuModule,
-    FormsModule,
-    DialogModule,
-    LeafletModule,
-    CalendarModule
+        DropdownModule,
+        InputMaskModule,
+        InputNumberModule,
+        ReactiveFormsModule,
+        InputTextModule,
+        TableModule,
+        ButtonModule,
+        InputTextareaModule,
+        DepartamentoSelectModule,
+        MunicipioSelectModule,
+        MineralesSelectModule,
+        CheckboxModule,
+        StepsModule,
+        TabMenuModule,
+        FormsModule,
+        DialogModule,
+        LeafletModule
   ],
   declarations: [EditarTomaDeMuestraComponent]
 })

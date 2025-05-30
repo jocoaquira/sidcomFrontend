@@ -129,13 +129,16 @@
                                 ></p-dropdown>
 
                                 <label for="dropdown">Responsable de Toma de Muestra</label>
+                                <small id="responsable_tdm_id" class="p-error " *ngIf="formulario_interno.esCampoInvalido('responsable_tdm_id')">
+                                    {{formulario_interno.getErrorMessage('responsable_tdm_id')}}
+                                </small>
                             </span>
                         </div>
                         <div class="field col-12 md:col-12">
                             <span class="p-float-label">
                                 <p-calendar
                                     inputId="fecha_hora_tdm"
-                                    dateFormat="yy-mm-dd"
+                                    dateFormat="dd-mm-yy"
                                     formControlName="fecha_hora_tdm"
                                     [showTime]="true"
                                     hourFormat="24"
@@ -243,7 +246,7 @@
                                     formControlName="peso_neto_total"
                                     class="ng-dirty"
                                 />
-                                <label for="Razón Social">Peso Neto Total (Kg.)</label>
+                                <label for="Razón Social">Peso Aproximado (Kg.)</label>
                                 <small id="peso_neto_total" class="p-error "*ngIf="formulario_interno.esCampoInvalido('peso_neto_total')">
                                     {{formulario_interno.getErrorMessage('peso_neto_total')}}
                                 </small>
@@ -280,7 +283,7 @@
                             </span>
                         </div>
                         <div class="field col-12 md:col-3 ">
-                            <app-mineralesSelect (mineral_id)="cambioMineralId($event)" (sigla)="cambioSigla($event)" (nombre)="cambioNombreMineral($event)"></app-mineralesSelect>
+                            <app-mineralesSelect [tipo]="'NO COMPUESTO'" (mineral_id)="cambioMineralId($event)" (sigla)="cambioSigla($event)" (nombre)="cambioNombreMineral($event)"></app-mineralesSelect>
                         </div>
                         <div class="field col-12 md:col-3">
                             <span class="p-float-label">

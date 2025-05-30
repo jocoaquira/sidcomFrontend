@@ -89,8 +89,8 @@
                                     <small id="nro_formulario_tm" class="p-error" *ngIf="formulario_externo.esCampoInvalido('nro_formulario_tm')">
                                         {{formulario_externo.getErrorMessage('nro_formulario_tm')}}
                                     </small>
-                                    <small id="nro_formulario_tm" class="p-error "*ngIf="!acta_TDM">
-                                        Se requiere un formulario de Toma de Muestra Firmado
+                                    <small id="nro_formulario_tm" class="p-error " *ngIf="!acta_TDM">
+                                        Se requiere un formulario de Toma de Muestra Aprobado
                                     </small>
                                 </span>
                             </div>
@@ -226,7 +226,7 @@
                                 </span>
                             </div>
                             <div class="field col-12 md:col-3 ">
-                                <app-mineralesSelect (mineral_id)="cambioMineralId($event)" (sigla)="cambioSigla($event)" (nombre)="cambioNombreMineral($event)"></app-mineralesSelect>
+                                <app-mineralesSelect [tipo]="'NO COMPUESTO'" (mineral_id)="cambioMineralId($event)" (sigla)="cambioSigla($event)" (nombre)="cambioNombreMineral($event)"></app-mineralesSelect>
                             </div>
                             <div class="field col-12 md:col-3">
                                 <span class="p-float-label">

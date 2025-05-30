@@ -1,4 +1,4 @@
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ITomaDeMuestra } from '@data/toma_de_muestra.metadata';
 
 export class TomaDeMuestraFormulario {
@@ -10,14 +10,14 @@ export class TomaDeMuestraFormulario {
         id:0,
         user_id:0,//
         operador_id:0,//
-        responsable_tdm_id:0,
+        responsable_tdm_id:null,
         responsable_tdm_senarecom_id:0,
         responsable_tdm_gador_id:0,
         nro_formulario:null,
         lugar_verificacion:null,
         ubicacion_lat:null,
         ubicacion_lon:null,
-        municipio_id:0,
+        municipio_id:null,
         lote:null,//
         presentacion_id:null,//
         cantidad:0,//
@@ -50,10 +50,10 @@ export class TomaDeMuestraFormulario {
         lote:new FormControl(this.form_toma_de_muestra.lote,[Validators.required]),
         presentacion_id:new FormControl(this.form_toma_de_muestra.presentacion_id,[Validators.required]),
         cantidad:new FormControl(this.form_toma_de_muestra.cantidad,[Validators.pattern('^[0-9]*$'),  Validators.min(0)]),
-        nro_camiones:new FormControl(this.form_toma_de_muestra.nro_camiones,[Validators.pattern('^[0-9]*$'),  Validators.min(0)]),
-        humedad:new FormControl(this.form_toma_de_muestra.humedad,[Validators.pattern('^\\d+(\\.\\d+)?$'),  Validators.min(0)]),
+        nro_camiones:new FormControl(this.form_toma_de_muestra.nro_camiones,[Validators.pattern('^[0-9]*$'),  Validators.min(1)]),
+        humedad:new FormControl(this.form_toma_de_muestra.humedad,[Validators.pattern('^\\d+(\\.\\d+)?$'),  Validators.min(0),Validators.max(25)]),
         total_parcial:new FormControl(this.form_toma_de_muestra.total_parcial,[Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
-        peso_neto_total: new FormControl(this.form_toma_de_muestra.peso_neto_total,[Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
+        peso_neto_total: new FormControl(this.form_toma_de_muestra.peso_neto_total,[Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(1)]),
         peso_neto_parcial: new FormControl(this.form_toma_de_muestra.peso_neto_parcial,[Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
         ubicacion_lat:new FormControl(this.form_toma_de_muestra.ubicacion_lat,[Validators.required,Validators.pattern('^-?\\d+(\\.\\d+)?$')]),
         ubicacion_lon:new FormControl(this.form_toma_de_muestra.ubicacion_lon,[Validators.required,Validators.pattern('^-?\\d+(\\.\\d+)?$')]),
@@ -61,7 +61,7 @@ export class TomaDeMuestraFormulario {
         tipo_muestra:new FormControl(this.form_toma_de_muestra.tipo_muestra),
         observaciones:new FormControl(this.form_toma_de_muestra.observaciones),
         fecha_creacion:new FormControl(this.form_toma_de_muestra.fecha_creacion),
-        fecha_hora_tdm:new FormControl(this.form_toma_de_muestra.fecha_hora_tdm),
+        fecha_hora_tdm:new FormControl(this.form_toma_de_muestra.fecha_hora_tdm,[Validators.required,this.fechaNoAnteriorAHoy]),
         justificacion_anulacion:new FormControl(this.form_toma_de_muestra.justificacion_anulacion),
        fecha_firma:new FormControl(this.form_toma_de_muestra.fecha_firma),
         fecha_aprobacion:new FormControl(this.form_toma_de_muestra.fecha_aprobacion),
@@ -70,7 +70,14 @@ export class TomaDeMuestraFormulario {
 
   }
 
-
+// Validador personalizado para que la fecha no sea anterior a hoy
+fechaNoAnteriorAHoy(control: AbstractControl): ValidationErrors | null {
+  if (!control.value) return null;
+  const fechaIngresada = new Date(control.value);
+  const ahora = new Date();
+  // No seteamos las horas a 0, así compara fecha y hora exactas
+  return fechaIngresada < ahora ? { fechaAnterior: true } : null;
+}
   // Método general para obtener un FormControl
   getControl(controlName: null): FormControl | null {
     return this.formulario.get(controlName) as FormControl | null;
@@ -132,6 +139,9 @@ getErrorMessage(controlName: string): string | null {
             return 'Solo se permiten numeros.';
           }
           return 'Formato no válido.';
+      }
+      if (control?.hasError('fechaAnterior')) {
+        return 'La fecha no puede ser anterior a hoy.';
       }
     // Otros errores personalizados aquí si son necesarios
     return null;

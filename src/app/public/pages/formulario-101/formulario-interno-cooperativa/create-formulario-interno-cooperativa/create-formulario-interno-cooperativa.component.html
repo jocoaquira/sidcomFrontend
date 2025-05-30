@@ -111,7 +111,7 @@
                                 </span>
                             </div>
                             <div class="field col-12 md:col-3 ">
-                                <app-mineralesSelect (mineral_id)="cambioMineralId($event)" (sigla)="cambioSigla($event)" (nombre)="cambioNombreMineral($event)"></app-mineralesSelect>
+                                <app-mineralesSelect [tipo]="'COMPUESTO'" (mineral_id)="cambioMineralId($event)" (sigla)="cambioSigla($event)" (nombre)="cambioNombreMineral($event)"></app-mineralesSelect>
                             </div>
 
                             <div class="field col-12 md:col-3 ">
