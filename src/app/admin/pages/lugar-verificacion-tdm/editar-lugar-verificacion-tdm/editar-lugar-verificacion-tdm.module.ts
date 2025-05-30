@@ -18,10 +18,12 @@ import { DialogModule } from 'primeng/dialog';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { CalendarModule } from 'primeng/calendar';
 import { EditarLugarVerificacionTDMComponent } from './editar-lugar-verificacion-tdm.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [
     CommonModule,
+    RouterModule,
     DropdownModule,
     InputMaskModule,
     InputNumberModule,

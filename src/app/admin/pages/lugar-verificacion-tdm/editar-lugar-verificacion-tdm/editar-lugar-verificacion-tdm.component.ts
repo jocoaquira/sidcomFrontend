@@ -27,6 +27,7 @@ export class EditarLugarVerificacionTDMComponent implements OnInit {
         longitud:null,
         latitud:null
         };
+    public estados:any[] = [];
   // Método que se llama cuando cambia el departamento
   cambioDepartamento1(departamentoId: number): void {
 
@@ -63,6 +64,18 @@ export class EditarLugarVerificacionTDMComponent implements OnInit {
    }
 
   ngOnInit() {
+    this.departamento_id = 4;
+    this.municipiosService.vermunicipios( this.departamento_id.toString()).subscribe(
+        (data:any)=>{
+
+        this.municipio=this.municipiosService.handlemunicipio(data);
+      },
+      (error:any)=> this.error=this.municipiosService.handleError(error)
+    );
+    this.estados = [
+        { label: 'ACTIVO', value: '1' },
+        { label: 'INACTIVO', value: '0' }
+    ];
 
     this.satelliteLayer = tileLayer(
       'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
@@ -84,21 +97,19 @@ export class EditarLugarVerificacionTDMComponent implements OnInit {
       (data:any)=>{
       this.departamento=this.departamentosService.handledepartamento(data);
       // Para asignar todos los valores del formulario (debe incluir todos los campos)
-        this.lugar_verificacion_tdm.formulario.get('departamento_id')?.setValue(4);
         console.log(this.lugar_verificacion_tdm.formulario.value);
       // Esperamos un momento para asegurar que el mapa esté listo
       setTimeout(() => {
         this.cambioDepartamentoMapa(4);
       }, 800);
 
-      this.departamento_id = 4;
+
 
     },
     (error:any)=> this.error=this.departamentosService.handleError(error)
   );
 
   }
-
       options: any;
       satelliteLayer: any;
       standardLayer:any;
@@ -181,17 +192,20 @@ abrirMapa() {
       this.notify.error('Seleccione un departamento para abrir el mapa....','Error al Abrir el Mapa',{timeOut:2000,positionClass: 'toast-bottom-right'});
   }
 }
+cerrarMapa(){
+    this.mapaDialogo = false;
+}
 
   onSubmit(){
       if (this.lugar_verificacion_tdm.formulario.valid) {
          // Ahora puedes enviar el formulario reducido
-        this.lugarVerificacionTDMService.crearlugarverificacionTDM(this.lugar_verificacion_tdm.formulario.value).subscribe(
+        this.lugarVerificacionTDMService.editarlugarverificacionTDM(this.lugar_verificacion_tdm.formulario.value).subscribe(
           (data: any) => {
             this.lugar_verificaicon_tdm_registrado = this.lugarVerificacionTDMService.handleCrearlugarverificacionTDM(data);
             if (this.lugar_verificaicon_tdm_registrado !== null) {
 
               this.lugar_verificacion_tdm.formulario.reset();
-              this.notify.success('El formulario interno se generó exitosamente', 'Creado Correctamente', { timeOut: 2500, positionClass: 'toast-top-right' });
+              this.notify.success('El lugar de verificacion se actualizó exitosamente', 'Creado Correctamente', { timeOut: 2500, positionClass: 'toast-top-right' });
               this.router.navigate(['/admin/lugar-verificacion-tdm']);
             } else {
               this.notify.error('Falló... Revise los campos y vuelva a enviar...', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
@@ -252,7 +266,8 @@ private mostrarErrorFormularios(formGroup: LugarVerificacionTDMFormulario): void
 
   }
 }
-cancelar(){
+cancelar(): void {
+    this.router.navigate(['/admin/lugar-verificacion-tdm']);
 }
  formatFechaCompleta(fecha: string | Date): string {
     const fechaObj = new Date(fecha);

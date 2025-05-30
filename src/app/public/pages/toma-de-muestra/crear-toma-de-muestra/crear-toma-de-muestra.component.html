@@ -26,76 +26,98 @@
               <div class="col-12" >
                   <div *ngIf="activeStep === 0"
                   >
-                      <div class="grid p-fluid">
+                  <div class="grid p-fluid">
+                    <div class="field col-12 md:col-9" *ngIf="!valSwitch">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                inputId="dropdown"
+                                [autoDisplayFirst]="false"
+                                [options]="listaLugaresVerificacion"
+                                optionLabel="lugar"
+                                (onChange)="cambioLugarVerificacionTDM($event)"
+                            ></p-dropdown>
 
-
-                        <div class="field col-12 md:col-3">
-                            <span class="p-float-label">
-                                <p-dropdown
-                                    inputId="municipio"
-                                    [autoDisplayFirst]="false"
-                                    [options]="municipio"
-                                    formControlName="municipio_id"
-                                    optionLabel="municipio"
-                                    optionValue="id"
-                                    (onChange)="cambioMunicipioMapa($event)"
-                                ></p-dropdown>
-                                <label for="dropdown">Municipio</label>
-                                <small id="municipio_id" class="p-error " *ngIf="formulario_interno.esCampoInvalido('municipio_id')">
-                                    {{formulario_interno.getErrorMessage('municipio_id')}}
-                                </small>
-                            </span>
+                            <label for="dropdown">Lugar de Verificación de Toma de Muestra</label>
+                        </span>
+                    </div>
+                    <div class="field col-12 md:col-3">
+                        <div class="field-checkbox">
+                            <p-inputSwitch (onChange)="valSwitches($event)"></p-inputSwitch>
+                            <label for="sf">Otro Lugar de Toma de Muestra</label>
                         </div>
 
+                    </div>
+                </div>
+                        <div class="grid p-fluid" *ngIf="valSwitch">
+                            <div class="field col-12 md:col-3">
+                                <span class="p-float-label">
+                                    <p-dropdown
+                                        inputId="municipio"
+                                        [autoDisplayFirst]="false"
+                                        [options]="municipio"
+                                        formControlName="municipio_id"
+                                        optionLabel="municipio"
+                                        optionValue="id"
+                                        (onChange)="cambioMunicipioMapa($event)"
+                                    ></p-dropdown>
+                                    <label for="dropdown">Municipio</label>
+                                    <small id="municipio_id" class="p-error " *ngIf="formulario_interno.esCampoInvalido('municipio_id')">
+                                        {{formulario_interno.getErrorMessage('municipio_id')}}
+                                    </small>
+                                </span>
+                            </div>
 
-                          <div class="field col-12 md:col-2">
-                            <span class="p-float-label">
-                                <input
-                                    type="number"
-                                    id="ubicacion_lat"
-                                    pInputText
-                                    formControlName="ubicacion_lat"
+
+                              <div class="field col-12 md:col-2">
+                                <span class="p-float-label">
+                                    <input
+                                        type="number"
+                                        id="ubicacion_lat"
+                                        pInputText
+                                        formControlName="ubicacion_lat"
+                                    />
+                                    <label for="ubicacion_lat">Latitud </label>
+                            <small id="ubicacion_lat" class="p-error " *ngIf="formulario_interno.esCampoInvalido('ubicacion_lat')">
+                                        {{formulario_interno.getErrorMessage('ubicacion_lat')}}
+                                    </small>
+                                </span>
+                            </div>
+                            <div class="field col-12 md:col-2">
+                                <span class="p-float-label">
+                                    <input
+                                        type="number"
+                                        id="ubicacion_lon"
+                                        pInputText
+                                        formControlName="ubicacion_lon"
+                                    />
+                                    <label for="ubicacion_lon">Longitud </label>
+                            <small id="ubicacion_lon" class="p-error " *ngIf="formulario_interno.esCampoInvalido('ubicacion_lon')">
+                                        {{formulario_interno.getErrorMessage('ubicacion_lon')}}
+                                    </small>
+                                </span>
+                            </div>
+                            <div class="field col-12 md:col-2">
+                                <button pButton pRipple type="button" icon="pi pi-map" label="Buscar en Mapa" class="p-button-outlined p-button-info" (click)="abrirMapa()"></button>
+                            </div>
+
+                            <div class="field col-12 md:col-12">
+                                  <span class="p-float-label">
+                                      <input
+                                          type="text"
+                                          id="lugar_verificacion"
+                                          pInputText
+                                          formControlName="lugar_verificacion"
+                                class="ng-dirty"
                                 />
-                                <label for="ubicacion_lat">Latitud </label>
-                        <small id="ubicacion_lat" class="p-error " *ngIf="formulario_interno.esCampoInvalido('ubicacion_lat')">
-                                    {{formulario_interno.getErrorMessage('ubicacion_lat')}}
-                                </small>
-                            </span>
-                        </div>
-                        <div class="field col-12 md:col-2">
-                            <span class="p-float-label">
-                                <input
-                                    type="number"
-                                    id="ubicacion_lon"
-                                    pInputText
-                                    formControlName="ubicacion_lon"
-                                />
-                                <label for="ubicacion_lon">Longitud </label>
-                        <small id="ubicacion_lon" class="p-error " *ngIf="formulario_interno.esCampoInvalido('ubicacion_lon')">
-                                    {{formulario_interno.getErrorMessage('ubicacion_lon')}}
-                                </small>
-                            </span>
-                        </div>
-                        <div class="field col-12 md:col-2">
-                            <button pButton pRipple type="button" icon="pi pi-map" label="Buscar en Mapa" class="p-button-outlined p-button-info" (click)="abrirMapa()"></button>
+                                      <label for="lugar_verificacion">Lugar de Verificación </label>
+                                    <small id="lugar_verificacion" class="p-error " *ngIf="formulario_interno.esCampoInvalido('lugar_verificacion')">
+                                          {{formulario_interno.getErrorMessage('lugar_verificacion')}}
+                                    </small>
+                                  </span>
+                            </div>
                         </div>
 
-                          <div class="field col-12 md:col-12">
-                              <span class="p-float-label">
-                                  <input
-                                      type="text"
-                                      id="lugar_verificacion"
-                                      pInputText
-                                      formControlName="lugar_verificacion"
-                            class="ng-dirty"
-                            />
-                                  <label for="lugar_verificacion">Lugar de Verificación </label>
-                                <small id="lugar_verificacion" class="p-error " *ngIf="formulario_interno.esCampoInvalido('lugar_verificacion')">
-                                      {{formulario_interno.getErrorMessage('lugar_verificacion')}}
-                                </small>
-                              </span>
-                          </div>
-                          <div class="field col-12 md:col-12" *ngIf="!admin">
+                        <div class="field col-12 md:col-12" *ngIf="!admin">
                             <span class="p-float-label mt-5">
                                 <p-dropdown
                                     inputId="dropdown"
@@ -124,7 +146,6 @@
                                 </small>
                             </span>
                         </div>
-
 
                       </div>
                   </div>
@@ -398,38 +419,42 @@
                           </div>
                       </div>
                   </div>
-
-                  <div class="centrar-botones">
-                    <div class="botones-container">
-                        <div class="col-33" *ngIf="activeStep > 0">
+                  <div class="col-12">
+                    <div class="flex justify-content-center gap-3 mt-4">
+                        <!-- Botón Anterior (solo visible si no es el primer paso) -->
+                        <div *ngIf="activeStep > 0">
                             <button pButton pRipple type="button" label="Anterior"
-                                class="p-button-rounded p-button-secondary boton-ajustado"
+                                class="p-button-rounded p-button-secondary"
                                 (click)="prevStep()" icon="pi pi-arrow-left">
                             </button>
                         </div>
-                        <div class="col-33" *ngIf="activeStep !== steps.length - 1">
+
+                        <!-- Botón Siguiente o Guardar -->
+                        <div *ngIf="activeStep !== steps.length - 1">
                             <button pButton pRipple type="button" label="Siguiente"
-                                class="p-button-rounded p-button-success boton-icono-derecha boton-ajustado"
-                                (click)="nextStep()" icon="pi pi-arrow-right">
+                                class="p-button-rounded p-button-success"
+                                (click)="nextStep()" icon="pi pi-arrow-right" iconPos="right">
                             </button>
                         </div>
-                        <div class="col-33" *ngIf="activeStep === steps.length - 1">
+                        <div *ngIf="activeStep === steps.length - 1">
                             <button pButton pRipple type="button" label="Guardar"
-                                class="p-button-rounded p-button-info boton-ajustado"
+                                class="p-button-rounded p-button-info"
                                 (click)="onSubmit()" icon="pi pi-save">
                             </button>
                         </div>
-                        <div class="col-33">
+
+                        <!-- Botón Cancelar -->
+                        <div>
                             <button pButton pRipple type="button" label="Cancelar"
-                                class="p-button-rounded p-button-danger boton-ajustado"
+                                class="p-button-rounded p-button-danger"
                                 [routerLink]="['/public/toma-de-muestra']" icon="pi pi-trash">
                             </button>
                         </div>
                     </div>
-                </div>
-              </div>
+                  </div>
 
+
+              </div>
           </div>
 
-      </div>
 </form>

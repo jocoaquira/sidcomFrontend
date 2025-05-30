@@ -23,6 +23,8 @@ import { DepartamentosService } from 'src/app/admin/services/departamentos.servi
 import { IMunicipio } from '@data/municipio.metadata';
 import { ResponsableTMService } from 'src/app/admin/services/toma-de-muestra/responsable-tm.service';
 import { IResponsableTM } from '@data/responsable_tm.metadata';
+import { ILugarVerificacionTDM } from '@data/lugar_verificacion_tdm.metadata';
+import { LugarVerificacionTDMService } from 'src/app/admin/services/lugar_verificacion_tdm.service';
 
 @Component({
   selector: 'app-crear-toma-de-muestra',
@@ -41,6 +43,7 @@ export class CrearTomaDeMuestraComponent implements OnInit {
     public lingotes:boolean=false;
     public sal:boolean=false;
     public otro:boolean=false;
+    public listaLugaresVerificacion:ILugarVerificacionTDM[]=[];
     public dept:IDepartamento={
       longitud:null,
       latitud:null
@@ -89,6 +92,7 @@ export class CrearTomaDeMuestraComponent implements OnInit {
         municipio:null,
         municipio_id:null
      }
+     public valSwitch: boolean = false;
 
       // Definir los pasos para Steps
   steps = [
@@ -159,14 +163,12 @@ nextStep() {
 
 
   constructor(
-    private operadoresService:OperatorsService,
     private tomaDeMuestrasService:TomaDeMuestraService,
     private responsableTMService:ResponsableTMService,
     private mineralesService:MineralsService,
     private notify:ToastrService,
     private authService:AuthService,
-    private listaLeyesMineralesService:TomaDeMuestraMineralService,
-    private listaMunicipiosOrigenService:TomaDeMuestraMunicipioOrigenService,
+    private lugaresVerificacionTDMService:LugarVerificacionTDMService,
     private router: Router,
     private presentacionService:PresentacionService,
     private municipiosService:MunicipiosService,
@@ -202,8 +204,13 @@ nextStep() {
         maxZoom: 19,
       }
     );
+    this.lugaresVerificacionTDMService.verlugarverificacionTDMs('hj').subscribe(
+        (data:any)=>{
+        this.listaLugaresVerificacion=this.lugaresVerificacionTDMService.handlelugarverificacion(data);
+      },
+      (error:any)=> this.error=this.lugaresVerificacionTDMService.handleError(error));
 
-          this.mineralesService.verminerals('hj').subscribe(
+    this.mineralesService.verminerals('hj').subscribe(
         (data:any)=>{
         this.minerales=this.mineralesService.handlemineral(data);
       },
@@ -435,10 +442,20 @@ abrirMapa() {
   else{
       this.notify.error('Seleccione un departamento para abrir el mapa....','Error al Abrir el Mapa',{timeOut:2000,positionClass: 'toast-bottom-right'});
   }
+}
 
-
-
-
+cambioLugarVerificacionTDM(event:any){
+    console.log(event.value);
+    this.formulario_interno.formulario.patchValue({
+        lugar_verificacion: event.value.lugar,
+        ubicacion_lat:event.value.latitud,
+        ubicacion_lon:event.value.longitud,
+        municipio_id:event.value.municipio_id
+      });
+}
+valSwitches(event:any){
+    console.log(event);
+    this.valSwitch=event.checked;
 }
 
   onSubmit(){

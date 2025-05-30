@@ -56,7 +56,7 @@ handleCrearlugarverificacionTDM(data: ILugarVerificacionTDM):ILugarVerificacionT
 //---------------------Editar   lugarverificacion-------------------------------------------
 editarlugarverificacionTDM(data:ILugarVerificacionTDM) {
   this.token();
-  return this.http.put(`${this.baseUrl}/lugarverificaciontdm`+data.id, data)
+  return this.http.put(`${this.baseUrl}lugarverificaciontdm/`+data.id, data)
 }
 handleEditarlugarverificacionTDMError(error: any): any {
   return error=error;
@@ -65,6 +65,11 @@ handleEditarlugarverificacionTDM(data: boolean):boolean {
   let lugarverificacion:boolean=data;
   return lugarverificacion
 }
+//---------------------Eliminar   lugarverificacion-------------------------------------------
+eliminarlugarverificacionTDM(data:number) {
+    this.token();
+    return this.http.delete(`${this.baseUrl}lugarverificaciontdm/`+data)
+  }
 //-----------------Listado de Empelados por Dependencia--------------------------------------------
 private token(){
   this.user=this.authService.getUser;

@@ -18,6 +18,7 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { DialogModule } from 'primeng/dialog';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { CalendarModule } from 'primeng/calendar';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import { CalendarModule } from 'primeng/calendar';
     ReactiveFormsModule,
     InputTextModule,
     TableModule,
+    InputSwitchModule,
     ButtonModule,
     InputTextareaModule,
     DepartamentoSelectModule,

@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { UsuariosService } from 'src/app/admin/services/usuarios.service';
-import { CanCrearUsuarioGuard } from 'src/app/admin/guards/usuarios/can-crear-usuario.guard';
-import { CanEditarUsuarioGuard } from 'src/app/admin/guards/usuarios/can-editar-usuario.guard';
-import { CanEliminarUsuarioGuard } from 'src/app/admin/guards/usuarios/can-eliminar-usuario.guard';
 import { RolesService } from 'src/app/admin/services/roles.service';
 import { IRol } from '@data/rol.metadata';
 import { IOperatorSimple } from '@data/operador_simple.metadata';
@@ -15,6 +11,9 @@ import { PaisesService } from 'src/app/admin/services/paises.service';
 import { ILugarVerificacionTDM } from '@data/lugar_verificacion_tdm.metadata';
 import { LugarVerificacionTDMService } from 'src/app/admin/services/lugar_verificacion_tdm.service';
 import { Router } from '@angular/router';
+import { CanCrearLugarVerificacionTDMGuard } from 'src/app/admin/guards/lugar-verificacion-tdm/can-crear-lugar-verificacion-tdm.guard';
+import { CanEditarLugarVerificacionTDMGuard } from 'src/app/admin/guards/lugar-verificacion-tdm/can-editar-lugar-verificacion-tdm.guard';
+import { CanEliminarLugarVerificacionTDMGuard } from 'src/app/admin/guards/lugar-verificacion-tdm/can-eliminar-lugar-verificacion-tdm.guard';
 
 
 
@@ -28,7 +27,6 @@ export class ListarLugarVerificacionTDMComponent implements OnInit {
     public listaLugaresVerificacion!:ILugarVerificacionTDM[];
 
     public roles!:IRol[];
-    public operadores!:IOperatorSimple[];
     public error!:any;
     public nombre!:string;
     public buscarTexto:string='';
@@ -52,11 +50,9 @@ export class ListarLugarVerificacionTDMComponent implements OnInit {
     constructor(
         private messageService: MessageService,
         private lugarVerificacionTDMService:LugarVerificacionTDMService,
-        private rolesServices:RolesService,
-        private operadoresService:OperatorsService,
-        public canCrearUsuario:CanCrearUsuarioGuard,
-        public canEditarUsuario:CanEditarUsuarioGuard,
-        public canEliminarUsuario:CanEliminarUsuarioGuard,
+        public canCrearLugarVerificacionTDM:CanCrearLugarVerificacionTDMGuard,
+        public canEditarLugarVerificacionTDM:CanEditarLugarVerificacionTDMGuard,
+        public canEliminarLugarVerificacionTDM:CanEliminarLugarVerificacionTDMGuard,
         private authService:AuthService,
         private notify:ToastrService,
         private confirmationService:ConfirmationService,
@@ -71,16 +67,8 @@ export class ListarLugarVerificacionTDMComponent implements OnInit {
             (data:any)=>{
             this.listaLugaresVerificacion=this.lugarVerificacionTDMService.handlelugarverificacion(data);
             console.log(this.listaLugaresVerificacion);
-
           },
           (error:any)=> this.error=this.lugarVerificacionTDMService.handleError(error));
-
-        this.operadoresService.verOperatorsSimple(this.nombre).subscribe(
-            (data:any)=>{
-            this.operadores=this.operadoresService.handleOperatorSimple(data.data);
-        },
-        (error:any)=> this.error=this.operadoresService.handleOperatorSimpleError(error));
-        //this.productService.getProducts().then(data => this.products = data);
 
         this.cols = [
             { field: 'product', header: 'Product' },
@@ -116,6 +104,28 @@ export class ListarLugarVerificacionTDMComponent implements OnInit {
         this.lugar_verificacion = { ...lugar_verificacion };
         console.log(this.lugar_verificacion);
         this.router.navigate(['/admin/lugar-verificacion-tdm/editar', this.lugar_verificacion.id]);
+    }
+    eliminar(lugar_verificacion:ILugarVerificacionTDM) {
+        this.confirmationService.confirm({
+            key: 'confirm1',
+            message: '¿Estas seguro de Eliminar el registro de '+lugar_verificacion.lugar+' definitivamente?',
+            accept: () => {
+                this.lugar_verificacion = { ...lugar_verificacion };
+                console.log(this.lugar_verificacion);
+                this.lugarVerificacionTDMService.eliminarlugarverificacionTDM(lugar_verificacion.id).subscribe(
+                    (data:any)=>{
+                        this.lugarVerificacionTDMService.verlugarverificacionTDMs('nada').subscribe(
+                            (data:any)=>{
+                            this.listaLugaresVerificacion=this.lugarVerificacionTDMService.handlelugarverificacion(data);
+                            console.log(this.listaLugaresVerificacion);
+                        },
+                        (error:any)=> this.error=this.lugarVerificacionTDMService.handleError(error));
+                        this.notify.success('El Lugar de Toma de Muestra se eliminó exitosamente', 'Eliminado Correctamente', { timeOut: 2500, positionClass: 'toast-top-right' });
+                        this.router.navigate(['/admin/lugar-verificacion-tdm']);
+                },
+                (error:any)=> this.error=this.lugarVerificacionTDMService.handleError(error));
+              },
+        });
     }
 
     hideDialog() {
@@ -172,29 +182,29 @@ openGoogleMaps(lat: number, lon: number) {
             // Opcional: Mostrar mensaje al usuario
         }
     }
-    bloquearDialogo(pais:ILugarVerificacionTDM){
-        /*
+    bloquearDialogo(lugar_verificacion_tdm:ILugarVerificacionTDM){
+
         this.confirmationService.confirm({
             key: 'confirm1',
             message: '¿Estas seguro de Realizar esta Operación?',
             accept: () => {
-                if(pais.estado=='ACTIVO')
+                if(lugar_verificacion_tdm.estado=='ACTIVO')
                     {
-                        pais.estado='INACTIVO';
+                        lugar_verificacion_tdm.estado='INACTIVO';
                     }
                     else{
-                        pais.estado='ACTIVO';
+                        lugar_verificacion_tdm.estado='ACTIVO';
                     }
-                this.lugarVerificacionTDMService.editarpais(pais).subscribe(
+                this.lugarVerificacionTDMService.editarlugarverificacionTDM(lugar_verificacion_tdm).subscribe(
                     (data:any) =>
                     {
-                      this.lugarVerificacionTDMService.handleCrearpais(data);
+                      this.lugarVerificacionTDMService.handleCrearlugarverificacionTDM(data);
                       console.log(data);
                       if(data.error==null)
                       {
-                        this.lugarVerificacionTDMService.verpaiss('nada').subscribe(
+                        this.lugarVerificacionTDMService.verlugarverificacionTDMs('nada').subscribe(
                             (data:any)=>{
-                            this.listaLugaresVerificacion=this.lugarVerificacionTDMService.handlepais(data);
+                            this.listaLugaresVerificacion=this.lugarVerificacionTDMService.handlelugarverificacion(data);
                             console.log(this.listaLugaresVerificacion);
 
                           },
@@ -212,6 +222,6 @@ openGoogleMaps(lat: number, lon: number) {
                     }
                   );
               },
-        });*/
+        });
     }
 }

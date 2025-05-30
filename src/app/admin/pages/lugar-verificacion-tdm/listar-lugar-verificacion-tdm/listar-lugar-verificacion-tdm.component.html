@@ -5,7 +5,12 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="Nuevo Lugar de Toma de Muestra" icon="pi pi-plus" class="p-button-success mr-2" routerLink="/admin/lugar-verificacion-tdm/crear"></button>
+                        <button
+                            *ngIf="canCrearLugarVerificacionTDM.canActivate()"
+                            pButton pRipple label="Nuevo Lugar de Toma de Muestra"
+                            icon="pi pi-plus" class="p-button-success mr-2"
+                            routerLink="/admin/lugar-verificacion-tdm/crear"
+                        ></button>
                     </div>
                 </ng-template>
 
@@ -15,7 +20,7 @@
             </p-toolbar>
 
             <p-table #dt [value]="listaLugaresVerificacion" [columns]="cols" responsiveLayout="scroll" [rows]="30"
-                    [globalFilterFields]="['id','municipio_id','lugar','latitud','longitud']"
+                    [globalFilterFields]="['id','municipio_id','lugar','latitud','longitud','estado']"
                     [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
                     currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"
                     selectionMode="multiple" [rowHover]="true" dataKey="id" [sortField]="'lugar'"
@@ -66,8 +71,23 @@
                             </td>
                         <td>
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="edit(lugar_verificacion)"></button>
-                                <button pButton pRipple icon="pi pi-trash"  class="p-button-text p-button-plain p-button-rounded p-button-danger mr-1" (click)="bloquearDialogo(lugar_verificacion)"></button>
+                                <button
+                                    *ngIf="canEditarLugarVerificacionTDM.canActivate()"
+                                    pButton pRipple icon="pi pi-pencil"
+                                    class="p-button-text p-button-plain p-button-rounded p-button-info mr-1"
+                                    (click)="edit(lugar_verificacion)"
+                                ></button>
+                                <button
+                                    *ngIf="canEliminarLugarVerificacionTDM.canActivate()"
+                                    pButton pRipple icon="pi pi-trash"
+                                    class="p-button-text p-button-plain p-button-rounded p-button-danger mr-1"
+                                    (click)="eliminar(lugar_verificacion)"
+                                ></button>
+                                <div *ngIf="canEditarLugarVerificacionTDM.canActivate()">
+                                    <button pButton pRipple icon="pi pi-lock" *ngIf="lugar_verificacion.estado === 'ACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-danger mr-1" (click)="bloquearDialogo(lugar_verificacion)"></button>
+                                    <button pButton pRipple icon="pi pi-unlock" *ngIf="lugar_verificacion.estado === 'INACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="bloquearDialogo(lugar_verificacion)"></button>
+                                </div>
+
                                 </div>
                         </td>
                     </tr>
@@ -84,9 +104,9 @@
             </app-crear-lugar_verificacion>
         </p-dialog>
         <p-confirmDialog header="Confirmación" key="confirm1" icon="pi pi-exclamation-triangle" message="¿Está seguro de anular el formulario?"
-                [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
-                acceptLabel="Sí"
-                rejectLabel="No"
-            ></p-confirmDialog>
+            [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
+            acceptLabel="Sí"
+            rejectLabel="No"
+        ></p-confirmDialog>
     </div>
 </div>
