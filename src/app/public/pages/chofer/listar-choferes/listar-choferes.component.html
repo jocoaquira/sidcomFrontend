@@ -1,0 +1,110 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button pButton pRipple label="Nuevo Chofer" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #dt [value]="listaUsuarios" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['id','email','nombre','apellidos','ci','operador','operador_id']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Administrar Responsables de Tomas de Muestra</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."  class="w-full sm:w-auto"/>
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+
+                        <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                        <th pSortableColumn="nombre_apellidos">Nombre y Apellido <p-sortIcon field="nombre_apellidos"></p-sortIcon></th>
+                        <th pSortableColumn="fecha_vencimiento">Nro. Licencia <p-sortIcon field="fecha_vencimiento"></p-sortIcon></th>
+                        <th pSortableColumn="celular">Celular <p-sortIcon field="celular"></p-sortIcon></th>
+                        <th pSortableColumn="categoria">Categoria <p-sortIcon field="categoria"></p-sortIcon></th>
+                        <th pSortableColumn="estado">Estado <p-sortIcon field="estado"></p-sortIcon></th>
+                        <th pSortableColumn="inventoryStatus">Acciones <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-usuario>
+                    <tr>
+
+                        <td style="width:3%; min-width:5rem;"><span class="p-column-title">ID</span>
+                            {{usuario.id}}
+                        </td>
+                        <td style="width:20%; min-width:15rem;">
+                            <span class="p-column-title">Nombres y Apellidos</span>
+                            {{usuario.nombre_apellidos}}
+                        </td>
+                        <td style="width:15%; min-width:8rem;">
+                            <span class="p-column-title">Email</span>
+                            {{usuario.fecha_vencimiento}}
+                          </td>
+                        <td style="width:5%; min-width:5rem;" >
+                            <span class="p-column-title">celular</span>
+                            {{usuario.celular}}
+                        </td>
+                        <td style="width:5%; min-width:5rem;" >
+                            <span class="p-column-title">categoria</span>
+                            {{usuario.categoria}}
+                        </td>
+
+                        <td style="width:5%; min-width: 10rem;"><span class="p-column-title">Estado</span>
+                            <p-tag severity="success" *ngIf="usuario.estado=='ACTIVO'" value="ACTIVO"></p-tag>
+                            <p-tag severity="danger" *ngIf="usuario.estado=='INACTIVO'" value="INACTIVO"></p-tag>
+                        </td>
+
+                        <td style="width:5%; min-width: 10rem;">
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="edit(usuario)"></button>
+                                <button pButton pRipple icon="pi pi-lock" *ngIf="usuario.estado=='ACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-danger mr-1" (click)="bloquearDialogo(usuario)"></button>
+                                <button pButton pRipple icon="pi pi-unlock" *ngIf="usuario.estado=='INACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="bloquearDialogo(usuario)"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-dialog [(visible)]="productDialog" [style]="{width: '700px'}"
+          [modal]="true" header="{{isEditMode ? 'Editar Responsable' : 'Agregar Responsable'}}"
+          class="p-fluid">
+            <app-crear-chofer
+                [usuario]="responsable"
+                [isEditMode]="isEditMode"
+                (estadoDialogo)="cerrar($event)">
+            </app-crear-chofer>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+               </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span>Are you sure you want to delete selected products?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
+            </ng-template>
+        </p-dialog>
+    </div>
+</div>

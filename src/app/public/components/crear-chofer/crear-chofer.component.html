@@ -1,0 +1,73 @@
+<form [formGroup]="form.formulario" (ngSubmit)="onSubmit()">
+
+    <div class="field">
+        <label>Nombres y Apellidos:</label>
+        <input type="text" pInputText id="nombre_apellidos" formControlName="nombre_apellidos"  autofocus />
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('nombre_apellidos')">{{form.getErrorMessage('nombre_apellidos')}}</small>
+    </div>
+    <div class="field">
+        <label for="nro_licencia">Numero de Licencia</label>
+        <input type="text" pInputText id="nro_licencia" formControlName="nro_licencia" autofocus/>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('nro_licencia')">{{form.getErrorMessage('nro_licencia')}}</small>
+    </div>
+    <div class="field">
+        <label for="fecha_vencimiento">Fecha de Vencimiento</label>
+        <input type="text" pInputText id="fecha_vencimiento" formControlName="fecha_vencimiento" autofocus (input)="errorEmailRepetido($event)"/>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('fecha_vencimiento') || errorVerificarEmail" >{{form.getErrorMessage('fecha_vencimiento')}}</small>
+        <small class="ng-dirty ng-invalid" *ngIf="errorVerificarEmail" >El fecha_vencimiento ya existe en el sistema</small>
+    </div>
+    <div class="field">
+        <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+        <input type="text" pInputText id="fecha_nacimiento" formControlName="fecha_nacimiento" autofocus (input)="errorEmailRepetido($event)"/>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('fecha_nacimiento') || errorVerificarEmail" >{{form.getErrorMessage('fecha_nacimiento')}}</small>
+        <small class="ng-dirty ng-invalid" *ngIf="errorVerificarEmail" >El fecha_nacimiento ya existe en el sistema</small>
+    </div>
+    <div class="field">
+        <label for="celular">Celular</label>
+        <input type="text" pInputText id="celular" formControlName="celular" autofocus/>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('celular')">{{form.getErrorMessage('celular')}}</small>
+    </div>
+    <div class="field">
+        <span class="p-float-label mt-5">
+            <p-dropdown
+                inputId="dropdown"
+                [autoDisplayFirst]="false"
+                [options]="categorias"
+                formControlName="categoria"
+                optionLabel="label"
+                (ngModelChange)="onChangeEstado($event)"
+            >
+                <ng-template let-option pTemplate="item">
+                    <span [class]="'usuario-badge estado-' + option.value">{{option.label}}</span>
+                </ng-template>
+            </p-dropdown>
+
+            <label for="dropdown">Categoria</label>
+        </span>
+    </div>
+    <div class="field">
+        <span class="p-float-label mt-5">
+            <p-dropdown
+                inputId="dropdown"
+                [autoDisplayFirst]="false"
+                [options]="estados"
+                formControlName="estado"
+                optionLabel="label"
+                (ngModelChange)="onChangeEstado($event)"
+            >
+                <ng-template let-option pTemplate="item">
+                    <span [class]="'usuario-badge estado-' + option.value">{{option.label}}</span>
+                </ng-template>
+            </p-dropdown>
+
+            <label for="dropdown">Estado</label>
+        </span>
+    </div>
+    <div class="botones-derecha">
+        <span class="p-buttonset col-12 md:col-6 ">
+            <button pButton pRipple label="Guardar" class="p-button-secondary" icon="pi pi-check" type="submit"></button>
+            <button pButton pRipple label="Cancelar"  class="p-button-danger" icon="pi pi-trash" (click)="ocultarDialogo()"></button>
+        </span>
+    </div>
+</form>
+
