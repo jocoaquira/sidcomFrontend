@@ -3,7 +3,8 @@
         inputId="dropdown"
         [autoDisplayFirst]="false"
         [options]="minerales"
-        
+        [filter]="true"
+        filterBy="nombre"
         optionLabel="nombre"
         optionValue="id"
         (onChange)="cambioMineral($event)"

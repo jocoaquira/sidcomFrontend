@@ -7,6 +7,8 @@
                 [options]="roles"
                 formControlName="rol_id"
                 optionLabel="nombre"
+                [filter]="true"
+                filterBy="nombre"
                 optionValue="id"
                 (onChange)="onChangeRol($event)"
             ></p-dropdown>
@@ -60,6 +62,8 @@
                 [options]="operadores"
                 formControlName="operador_id"
                 optionLabel="razon_social"
+                [filter]="true"
+                filterBy="razon_social"
                 optionValue="id"
             ></p-dropdown>
 

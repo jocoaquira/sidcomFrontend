@@ -14,6 +14,7 @@ import { AppLayoutComponent } from './layout/app.layout.component';
         { path: 'info', loadChildren: () => import('../core/info-cuenta/info-cuenta.module').then(m => m.InfoCuentaModule) },
         { path: 'responsable-tm', loadChildren: () => import('./pages/responsable-tm/responsable-tm.module').then(m => m.ResponsableTMModule) },
         { path: 'chofer', loadChildren: () => import('./pages/chofer/chofer.module').then(m => m.ChoferModule) },
+        { path: 'vehiculo', loadChildren: () => import('./pages/vehiculo/vehiculo.module').then(m => m.VehiculoModule) },
         { path: 'toma-de-muestra', loadChildren: () => import('./pages/toma-de-muestra/toma-de-muestra.module').then(m => m.TomaDeMuestraModule) },
         { path: 'formulario-101', loadChildren: () => import('./pages/formulario-101/formulario-101.module').then(m => m.Formulario101Module) },
         //{ path: 'formulario-101', loadChildren: () => import('./pages/formulario-101/formulario-101.module').then(m => m.Formulario101Module) },

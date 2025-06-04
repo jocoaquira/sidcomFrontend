@@ -4,6 +4,8 @@
         [autoDisplayFirst]="false"
         [options]="municipios"
         [(ngModel)]="municipio_id1"
+        [filter]="true"
+        filterBy="municipio"
         optionLabel="municipio"
         optionValue="id"
         (onChange)="cambioMunicipio($event)"
