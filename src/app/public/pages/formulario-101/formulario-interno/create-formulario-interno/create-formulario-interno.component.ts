@@ -30,6 +30,7 @@ export class CreateFormularioInternoComponent implements OnInit {
     public formulario_interno=new FormularioInternoFormulario();
     public departamento_id:number=0;
     public municipio_id:number=0;
+    public operador_id:number=0;
     public declaracionJurada:boolean=false;
     departamento_id1: number | null = null;  // Guardar el ID del departamento seleccionado
   municipio_id1: number | null = null;
@@ -73,7 +74,6 @@ export class CreateFormularioInternoComponent implements OnInit {
         municipio:null,
         municipio_id:null
      }
-     public operador_id:number=0;
 
       // Definir los pasos para Steps
   steps = [
@@ -147,7 +147,6 @@ nextStep() {
 
 
   constructor(
-    private operadoresService:OperatorsService,
     private formularioInternoService:FormularioInternosService,
     private mineralesService:MineralsService,
     private notify:ToastrService,

@@ -39,9 +39,9 @@ export class ChoferService {
   handleError(error: any): any {
     return error=error.error.error;
   }
-  handleusuario(data: IChofer[]):IChofer[] {
-    let usuario:IChofer[]=data;
-    return usuario
+  handlechofer(data: IChofer[]):IChofer[] {
+    let chofer:IChofer[]=data;
+    return chofer
   }
   verificarEmail(nombre:string)
   {
@@ -55,29 +55,29 @@ export class ChoferService {
     // asignacion de parametros
     return this.http.post(`${this.baseUrl}auth/checkemail`,email,{headers:this.headers});
   }
-//---------------------crear   usuario-------------------------------------------
+//---------------------crear   chofer-------------------------------------------
 crearChofer(data:IChofer) {
   this.token();
   return this.http.post(`${this.baseUrl}chofer`,data, {headers:this.headers})
 }
-handleCrearusuarioError(error: any): any {
+handleCrearchoferError(error: any): any {
   return error=error;
 }
-handleCrearusuario(data: IChofer):IChofer {
-  let usuario:IChofer=data;
-  return usuario
+handleCrearchofer(data: IChofer):IChofer {
+  let chofer:IChofer=data;
+  return chofer
 }
-//---------------------Editar   usuario-------------------------------------------
+//---------------------Editar   chofer-------------------------------------------
 editarChofer(data:IChofer) {
   this.token();
   return this.http.put(`${this.baseUrl}chofer/`+data.id, data)
 }
-handleEditarusuarioError(error: any): any {
+handleEditarchoferError(error: any): any {
   return error=error;
 }
-handleEditarusuario(data: boolean):boolean {
-  let usuario:boolean=data;
-  return usuario
+handleEditarchofer(data: boolean):boolean {
+  let chofer:boolean=data;
+  return chofer
 }
 //-----------------Listado de Empelados por Dependencia--------------------------------------------
 private token(){

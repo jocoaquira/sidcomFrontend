@@ -65,7 +65,7 @@ export class ListarChoferComponent implements OnInit {
     ngOnInit() {
         this.choferService.verChoferOperador(this.operador_id.toString()).subscribe(
             (data:any)=>{
-            this.listaUsuarios=this.choferService.handleusuario(data);
+            this.listaUsuarios=this.choferService.handlechofer(data);
           },
           (error:any)=> this.error=this.choferService.handleError(error));
 
@@ -89,7 +89,7 @@ export class ListarChoferComponent implements OnInit {
         this.productDialog=event;
         this.choferService.verChoferOperador(this.operador_id.toString()).subscribe(
             (data:any)=>{
-            this.listaUsuarios=this.choferService.handleusuario(data);
+            this.listaUsuarios=this.choferService.handlechofer(data);
 
 
           },
@@ -195,14 +195,14 @@ export class ListarChoferComponent implements OnInit {
         this.choferService.editarChofer(this.responsable).subscribe(
             (data:any) =>
             {
-              this.choferService.handleCrearusuario(data);
+              this.choferService.handleCrearchofer(data);
 
               if(data.error==null)
               {
                 this.notify.success('Actualizado Correctamente','Actualizado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
                 this.choferService.verChoferOperador(this.operador_id.toString()).subscribe(
                     (data:any)=>{
-                    this.listaUsuarios=this.choferService.handleusuario(data);
+                    this.listaUsuarios=this.choferService.handlechofer(data);
                     this.listaUsuarios = this.listaUsuarios.map(usuario => ({
                         ...usuario,
                         operador: this.getNombreOperador(usuario.operador_id) // Asegúrate de añadir esta propiedad

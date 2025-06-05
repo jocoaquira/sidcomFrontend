@@ -115,7 +115,7 @@ export class CrearChoferComponent implements OnInit {
         this.choferService.editarChofer(limpio).subscribe(
             (data:any) =>
             {
-              this.choferService.handleCrearusuario(data);
+              this.choferService.handleCrearchofer(data);
 
               if(data.error==null)
               {
@@ -126,7 +126,7 @@ export class CrearChoferComponent implements OnInit {
             },
             (error:any) =>
             {
-              this.errorUsuario=this.choferService.handleCrearusuarioError(error.error.data);
+              this.errorUsuario=this.choferService.handleCrearchoferError(error.error.data);
               if(error.error.status=='fail')
               {
                 this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
@@ -153,7 +153,7 @@ export class CrearChoferComponent implements OnInit {
         this.choferService.crearChofer(limpio).subscribe(
             (data:any) =>
             {
-              this.choferService.handleCrearusuario(data);
+              this.choferService.handleCrearchofer(data);
               if(data.error==null)
               {
                 this.form.formulario.reset();
@@ -163,7 +163,7 @@ export class CrearChoferComponent implements OnInit {
             },
             (error:any) =>
             {
-              this.errorUsuario=this.choferService.handleCrearusuarioError(error.error.data);
+              this.errorUsuario=this.choferService.handleCrearchoferError(error.error.data);
               if(error.error.status=='fail')
               {
                 this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});

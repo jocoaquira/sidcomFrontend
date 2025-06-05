@@ -39,34 +39,34 @@ export class VehiculoService {
   handleError(error: any): any {
     return error=error.error.error;
   }
-  handleusuario(data: IVehiculo[]):IVehiculo[] {
-    let usuario:IVehiculo[]=data;
-    return usuario
+  handlevehiculo(data: IVehiculo[]):IVehiculo[] {
+    let vehiculo:IVehiculo[]=data;
+    return vehiculo
   }
 
-//---------------------crear   usuario-------------------------------------------
+//---------------------crear   vehiculo-------------------------------------------
 crearVehiculo(data:IVehiculo) {
   this.token();
   return this.http.post(`${this.baseUrl}vehiculo`,data, {headers:this.headers})
 }
-handleCrearusuarioError(error: any): any {
+handleCrearvehiculoError(error: any): any {
   return error=error;
 }
-handleCrearusuario(data: IVehiculo):IVehiculo {
-  let usuario:IVehiculo=data;
-  return usuario
+handleCrearvehiculo(data: IVehiculo):IVehiculo {
+  let vehiculo:IVehiculo=data;
+  return vehiculo
 }
-//---------------------Editar   usuario-------------------------------------------
+//---------------------Editar   vehiculo-------------------------------------------
 editarVehiculo(data:IVehiculo) {
   this.token();
   return this.http.put(`${this.baseUrl}vehiculo/`+data.id, data)
 }
-handleEditarusuarioError(error: any): any {
+handleEditarvehiculoError(error: any): any {
   return error=error;
 }
-handleEditarusuario(data: boolean):boolean {
-  let usuario:boolean=data;
-  return usuario
+handleEditarvehiculo(data: boolean):boolean {
+  let vehiculo:boolean=data;
+  return vehiculo
 }
 //-----------------Listado de Empelados por Dependencia--------------------------------------------
 private token(){

@@ -16,6 +16,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { StepsModule } from 'primeng/steps';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { RouterModule } from '@angular/router';
+import { ChoferSelectModule } from 'src/app/admin/components/choferSelect/choferSelect.module';
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import { RouterModule } from '@angular/router';
     ButtonModule,
     InputTextareaModule,
     DepartamentoSelectModule,
+    ChoferSelectModule,
     MunicipioSelectModule,
     MineralesSelectModule,
     CheckboxModule,

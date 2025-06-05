@@ -127,7 +127,7 @@ export class CrearVehiculoComponent implements OnInit {
         this.vehiculoService.editarVehiculo(limpio).subscribe(
             (data:any) =>
             {
-              this.vehiculoService.handleCrearusuario(data);
+              this.vehiculoService.handleCrearvehiculo(data);
 
               if(data.error==null)
               {
@@ -138,7 +138,7 @@ export class CrearVehiculoComponent implements OnInit {
             },
             (error:any) =>
             {
-              this.errorUsuario=this.vehiculoService.handleCrearusuarioError(error.error.data);
+              this.errorUsuario=this.vehiculoService.handleCrearvehiculoError(error.error.data);
               if(error.error.status=='fail')
               {
                 this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
@@ -165,7 +165,7 @@ export class CrearVehiculoComponent implements OnInit {
         this.vehiculoService.crearVehiculo(limpio).subscribe(
             (data:any) =>
             {
-              this.vehiculoService.handleCrearusuario(data);
+              this.vehiculoService.handleCrearvehiculo(data);
               if(data.error==null)
               {
                 this.form.formulario.reset();
@@ -175,7 +175,7 @@ export class CrearVehiculoComponent implements OnInit {
             },
             (error:any) =>
             {
-              this.errorUsuario=this.vehiculoService.handleCrearusuarioError(error.error.data);
+              this.errorUsuario=this.vehiculoService.handleCrearvehiculoError(error.error.data);
               if(error.error.status=='fail')
               {
                 this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});

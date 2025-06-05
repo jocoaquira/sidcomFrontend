@@ -1,0 +1,17 @@
+<span class="p-float-label">
+    <p-dropdown
+        inputId="dropdown"
+        [autoDisplayFirst]="false"
+        [options]="chofers"
+        [(ngModel)]="nro_licencia"
+        [filter]="true"
+        filterBy="nombre_apellidos"
+        optionLabel="nombre_apellidos"
+        optionValue="id"
+        (onChange)="cambioChofer($event)"
+    ></p-dropdown>
+    <label for="dropdown">Chofer</label>
+    <small id="presentacion" class="p-error " *ngIf="error">
+        {{error}}
+    </small>
+</span>

@@ -466,6 +466,9 @@
                                 </small>
                             </span>
                         </div>
+                        <div class="field col-12 md:col-3 ">
+                            <app-choferSelect [operador_id]="operador_id" [nro_licencia]="nro_licencia" [chofer]="chofer" (cambioChofer)="cambioChofer($event)" ></app-choferSelect>
+                        </div>
                         <div *ngIf="formulario_interno.formulario.value.tipo_transporte!=='VIA FERREA'" class="field col-12 md:col-2">
                             <span class="p-float-label">
                                 <input

@@ -63,7 +63,7 @@ export class ListarVehiculoComponent implements OnInit {
     ngOnInit() {
         this.vehiculoService.verVehiculoOperador(this.operador_id.toString()).subscribe(
             (data:any)=>{
-            this.listaVehiculos=this.vehiculoService.handleusuario(data);
+            this.listaVehiculos=this.vehiculoService.handlevehiculo(data);
           },
           (error:any)=> this.error=this.vehiculoService.handleError(error));
 
@@ -87,7 +87,7 @@ export class ListarVehiculoComponent implements OnInit {
         this.productDialog=event;
         this.vehiculoService.verVehiculoOperador(this.operador_id.toString()).subscribe(
             (data:any)=>{
-            this.listaVehiculos=this.vehiculoService.handleusuario(data);
+            this.listaVehiculos=this.vehiculoService.handlevehiculo(data);
                 console.log(this.listaVehiculos);
 
           },
@@ -193,14 +193,14 @@ export class ListarVehiculoComponent implements OnInit {
         this.vehiculoService.editarVehiculo(this.responsable).subscribe(
             (data:any) =>
             {
-              this.vehiculoService.handleCrearusuario(data);
+              this.vehiculoService.handleCrearvehiculo(data);
 
               if(data.error==null)
               {
                 this.notify.success('Actualizado Correctamente','Actualizado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
                 this.vehiculoService.verVehiculoOperador(this.operador_id.toString()).subscribe(
                     (data:any)=>{
-                    this.listaVehiculos=this.vehiculoService.handleusuario(data);
+                    this.listaVehiculos=this.vehiculoService.handlevehiculo(data);
                     this.listaVehiculos = this.listaVehiculos.map(usuario => ({
                         ...usuario,
                         operador: this.getNombreOperador(usuario.operador_id) // Asegúrate de añadir esta propiedad
