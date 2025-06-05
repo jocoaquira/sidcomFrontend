@@ -14,7 +14,7 @@
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="listaUsuarios" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['id','marca','placa','apellidos','ci','operador','operador_id']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-table #dt [value]="listaVehiculos" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['id','marca','placa','tipo','modelo','operador_id','estado']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Administrar Vehiculos</h5>
@@ -42,20 +42,20 @@
                         <td style="width:3%; min-width:5rem;"><span class="p-column-title">ID</span>
                             {{usuario.id}}
                         </td>
-                        <td style="width:20%; min-width:15rem;">
-                            <span class="p-column-title">Nombres y Apellidos</span>
+                        <td style="width:5%; min-width:8rem;">
+                            <span class="p-column-title">Placa</span>
                             {{usuario.placa}}
                         </td>
-                        <td style="width:15%; min-width:8rem;">
-                            <span class="p-column-title">Email</span>
+                        <td style="width:5%; min-width:8rem;">
+                            <span class="p-column-title">Modelo</span>
                             {{usuario.modelo}}
                           </td>
-                        <td style="width:5%; min-width:5rem;" >
-                            <span class="p-column-title">marca</span>
+                        <td style="width:15%; min-width:5rem;" >
+                            <span class="p-column-title">Marca</span>
                             {{usuario.marca}}
                         </td>
-                        <td style="width:5%; min-width:5rem;" >
-                            <span class="p-column-title">tipo</span>
+                        <td style="width:20%; min-width:5rem;" >
+                            <span class="p-column-title">Tipo</span>
                             {{usuario.tipo}}
                         </td>
 

@@ -2,7 +2,7 @@ export interface IVehiculo {
     id?: number,
     operador_id: number,
     placa:string,
-    modelo:string,
+    modelo:number,
     marca:string,
     tipo:string,
     estado:string,

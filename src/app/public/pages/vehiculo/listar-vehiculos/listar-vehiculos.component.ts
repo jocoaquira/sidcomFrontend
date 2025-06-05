@@ -20,7 +20,7 @@ import { VehiculoService } from 'src/app/admin/services/vehiculo.service';
 })
 export class ListarVehiculoComponent implements OnInit {
 
-    public listaUsuarios!:IVehiculo[];
+    public listaVehiculos!:IVehiculo[];
 
 
     public operadores!:IOperatorSimple[];
@@ -63,7 +63,7 @@ export class ListarVehiculoComponent implements OnInit {
     ngOnInit() {
         this.vehiculoService.verVehiculoOperador(this.operador_id.toString()).subscribe(
             (data:any)=>{
-            this.listaUsuarios=this.vehiculoService.handleusuario(data);
+            this.listaVehiculos=this.vehiculoService.handleusuario(data);
           },
           (error:any)=> this.error=this.vehiculoService.handleError(error));
 
@@ -87,8 +87,8 @@ export class ListarVehiculoComponent implements OnInit {
         this.productDialog=event;
         this.vehiculoService.verVehiculoOperador(this.operador_id.toString()).subscribe(
             (data:any)=>{
-            this.listaUsuarios=this.vehiculoService.handleusuario(data);
-
+            this.listaVehiculos=this.vehiculoService.handleusuario(data);
+                console.log(this.listaVehiculos);
 
           },
           (error:any)=> this.error=this.vehiculoService.handleError(error));
@@ -152,8 +152,8 @@ export class ListarVehiculoComponent implements OnInit {
     }
     findIndexById(id: number): number {
         let index = -1;
-        for (let i = 0; i < this.listaUsuarios.length; i++) {
-            if (this.listaUsuarios[i].id === id) {
+        for (let i = 0; i < this.listaVehiculos.length; i++) {
+            if (this.listaVehiculos[i].id === id) {
                 index = i;
                 break;
             }
@@ -200,8 +200,8 @@ export class ListarVehiculoComponent implements OnInit {
                 this.notify.success('Actualizado Correctamente','Actualizado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
                 this.vehiculoService.verVehiculoOperador(this.operador_id.toString()).subscribe(
                     (data:any)=>{
-                    this.listaUsuarios=this.vehiculoService.handleusuario(data);
-                    this.listaUsuarios = this.listaUsuarios.map(usuario => ({
+                    this.listaVehiculos=this.vehiculoService.handleusuario(data);
+                    this.listaVehiculos = this.listaVehiculos.map(usuario => ({
                         ...usuario,
                         operador: this.getNombreOperador(usuario.operador_id) // Asegúrate de añadir esta propiedad
                     }));

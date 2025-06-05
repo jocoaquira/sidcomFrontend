@@ -7,7 +7,7 @@
     </div>
     <div class="field">
         <label for="modelo">Modelo</label>
-        <input type="text" pInputText id="modelo" formControlName="modelo" autofocus/>
+        <input type="number" pInputText id="modelo" formControlName="modelo" autofocus/>
         <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('modelo')">{{form.getErrorMessage('modelo')}}</small>
     </div>
     <div class="field">

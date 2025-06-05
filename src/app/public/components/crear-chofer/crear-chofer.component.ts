@@ -104,6 +104,7 @@ export class CrearChoferComponent implements OnInit {
   }
   actualizarResponsable() {
 
+    this.form.formulario.value.categoria=this.form.formulario.value.categoria.label;
     this.form.formulario.value.estado=this.form.formulario.value.estado.label;
     this.form.formulario.value.celular=parseInt(this.form.formulario.value.celular);
 
@@ -141,10 +142,10 @@ export class CrearChoferComponent implements OnInit {
     this.form.formulario.patchValue({
       operador_id: this.operador_id,
       celular:parseInt(this.form.formulario.value.celular),
-      estado:this.form.formulario.value.estado.label
-
+      estado:this.form.formulario.value.estado.label,
+      categoria:this.form.formulario.value.categoria.label
     });
-
+    console.log(this.form.formulario.value);
     if (this.form.formulario.valid) {
         let limpio:any= Object.fromEntries(
             Object.entries(this.form.formulario.value).filter(([_, v]) => v !== null)

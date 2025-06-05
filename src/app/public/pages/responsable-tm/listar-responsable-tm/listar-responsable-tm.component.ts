@@ -71,12 +71,13 @@ export class ListarResponsableTMComponent implements OnInit {
         //this.productService.getProducts().then(data => this.products = data);
 
         this.cols = [
-            { field: 'product', header: 'Product' },
-            { field: 'price', header: 'Price' },
-            { field: 'category', header: 'Category' },
-            { field: 'rating', header: 'Reviews' },
-            { field: 'inventoryStatus', header: 'Status' }
-        ];
+            { field: 'id', header: 'ID' },
+            { field: 'nombre', header: 'Nombre' },
+            { field: 'apellidos', header: 'Apellidos' },
+            { field: 'email', header: 'Email' },
+            { field: 'celular', header: 'Celular' },
+            { field: 'estado', header: 'Estado' }
+          ];
 
         this.statuses = [
             { label: 'INSTOCK', value: 'instock' },
