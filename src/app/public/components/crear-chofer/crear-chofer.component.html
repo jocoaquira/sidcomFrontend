@@ -11,16 +11,32 @@
         <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('nro_licencia')">{{form.getErrorMessage('nro_licencia')}}</small>
     </div>
     <div class="field">
-        <label for="fecha_vencimiento">Fecha de Vencimiento</label>
-        <input type="text" pInputText id="fecha_vencimiento" formControlName="fecha_vencimiento" autofocus (input)="errorEmailRepetido($event)"/>
-        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('fecha_vencimiento') || errorVerificarEmail" >{{form.getErrorMessage('fecha_vencimiento')}}</small>
-        <small class="ng-dirty ng-invalid" *ngIf="errorVerificarEmail" >El fecha_vencimiento ya existe en el sistema</small>
+        <label for="fecha_vencimiento">Fecha de Vencimiento Licencia</label>
+        <p-calendar
+            inputId="fecha_vencimiento"
+            formControlName="fecha_vencimiento"
+            dateFormat="dd-mm-yy"
+            showIcon="true"
+            placeholder="dd-mm-yyyy"
+            (input)="errorEmailRepetido($event)"
+        ></p-calendar>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('fecha_vencimiento')">
+            {{ form.getErrorMessage('fecha_vencimiento') }}
+        </small>
     </div>
     <div class="field">
-        <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-        <input type="text" pInputText id="fecha_nacimiento" formControlName="fecha_nacimiento" autofocus (input)="errorEmailRepetido($event)"/>
-        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('fecha_nacimiento') || errorVerificarEmail" >{{form.getErrorMessage('fecha_nacimiento')}}</small>
-        <small class="ng-dirty ng-invalid" *ngIf="errorVerificarEmail" >El fecha_nacimiento ya existe en el sistema</small>
+        <label for="fecha_vencimiento">Fecha de Nacimiento</label>
+        <p-calendar
+            inputId="fecha_nacimiento"
+            formControlName="fecha_nacimiento"
+            dateFormat="dd-mm-yy"
+            showIcon="true"
+            placeholder="dd-mm-yyyy"
+            (input)="errorEmailRepetido($event)"
+        ></p-calendar>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('fecha_nacimiento')">
+            {{ form.getErrorMessage('fecha_nacimiento') }}
+        </small>
     </div>
     <div class="field">
         <label for="celular">Celular</label>

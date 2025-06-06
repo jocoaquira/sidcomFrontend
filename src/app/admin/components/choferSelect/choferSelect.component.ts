@@ -43,7 +43,8 @@ export class ChoferSelectComponent implements OnChanges {
         })
       )
       .subscribe((data: any) => {
-        this.chofers = this.chofersService.handlechofer(data);
+        this.chofers = this.chofersService.handlechofer(data)
+        .filter(chofer => chofer.estado === 'ACTIVO');
         this.loading = false;
       });
   }

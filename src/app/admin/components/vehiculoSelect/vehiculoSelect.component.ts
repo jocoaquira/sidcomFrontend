@@ -42,7 +42,8 @@ export class VehiculoSelectComponent implements OnChanges {
         })
       )
       .subscribe((data: any) => {
-        this.vehiculos = this.vehiculosService.handlevehiculo(data);
+        this.vehiculos = this.vehiculosService.handlevehiculo(data)
+        .filter(vehiculo => vehiculo.estado === 'ACTIVO');
         this.loading = false;
       });
   }

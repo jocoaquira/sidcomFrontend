@@ -15,6 +15,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CrearChoferComponent } from './crear-chofer.component';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -31,6 +32,7 @@ import { CrearChoferComponent } from './crear-chofer.component';
     FileUploadModule,
     FormsModule,
     ButtonModule,
+    CalendarModule,
     BadgeModule,
     TagModule,
     RippleModule,
@@ -43,7 +45,7 @@ import { CrearChoferComponent } from './crear-chofer.component';
     RadioButtonModule,
     InputNumberModule,
     ReactiveFormsModule
-    
+
   ],
   providers:[],
 })

@@ -57,16 +57,14 @@ export class CrearVehiculoComponent implements OnInit {
         { nombre: 'CAMION', id: '2' },
         { nombre: 'VOLQUETA', id: '3' },
         { nombre: 'CAMION CON ACOPLE', id: '4' },
-        { nombre: 'VIA FERREA', id: '5' },
-        { nombre: 'VIA AEREA', id: '6' },
         { nombre: 'JEEP', id: '7' },
         { nombre: 'FURGONETA BLINDADA', id: '8' },
         { nombre: 'CAMIONETA', id: '9' },
         { nombre: 'VAGONETA', id: '10' },
         { nombre: 'MINIBUS', id: '11' },
         { nombre: 'TAXI', id: '12' },
-        { nombre: 'ALZAPATA', id: '13' },
-        { nombre: 'FLOTA', id: '14' },
+        { nombre: 'ALZAPATA', id: '5' },
+        { nombre: 'FLOTA', id: '6' },
         { nombre: 'TRAILER FURGON', id: '0' }
     ];
   }
