@@ -11,9 +11,8 @@ import { VehiculoService } from '../../services/vehiculo.service';
 })
 export class VehiculoSelectComponent implements OnChanges {
   @Input() operador_id: number | null = null;
-  @Input() vehiculo_id1:number | null = null; ;
-  @Output() vehiculo_id = new EventEmitter<number>();
-  @Output() placa = new EventEmitter<string>();
+  @Input() placa: string | null = null;
+  @Output() vehiculo = new EventEmitter<IVehiculo>();
   vehiculos: IVehiculo[] = [];
   error: any;
   loading: boolean = false;
@@ -49,10 +48,10 @@ export class VehiculoSelectComponent implements OnChanges {
   }
 
   cambioVehiculo(event: any) {
-    const vehiculo = this.vehiculos.find((element) => element.id === event.value);
+    console.log(event);
+    const vehiculo = this.vehiculos.find((element) => element.placa === event.value);
     if (vehiculo) {
-      this.vehiculo_id.emit(vehiculo.id);
-      this.placa.emit(vehiculo.placa);
+      this.vehiculo.emit(vehiculo);
     } else {
       console.warn('El vehiculo seleccionado no existe');
     }

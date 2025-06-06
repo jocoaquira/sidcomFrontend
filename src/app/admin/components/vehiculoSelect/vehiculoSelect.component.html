@@ -3,14 +3,15 @@
         inputId="dropdown"
         [autoDisplayFirst]="false"
         [options]="vehiculos"
-        [(ngModel)]="vehiculo_id1"
+        [(ngModel)]="placa"
         [filter]="true"
         filterBy="placa"
         optionLabel="placa"
-        optionValue="id"
+        optionValue="placa"
+        optionValue="placa"
         (onChange)="cambioVehiculo($event)"
     ></p-dropdown>
-    <label for="dropdown">Vehiculo</label>
+    <label for="dropdown">Placa Vehiculo</label>
     <small id="presentacion" class="p-error " *ngIf="error">
         {{error}}
     </small>

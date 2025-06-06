@@ -11,7 +11,7 @@ import { ChoferService } from '../../services/chofer.service';
 })
 export class ChoferSelectComponent implements OnChanges {
   @Input() operador_id: number | null = null;
-  @Input() nro_licencia:number | null = null; ;
+  @Input() nro_licencia: string | null = null;
   @Output() chofer = new EventEmitter<IChofer>();
   chofers: IChofer[] = [];
   error: any;
@@ -49,7 +49,8 @@ export class ChoferSelectComponent implements OnChanges {
   }
 
   cambioChofer(event: any) {
-    const chofer = this.chofers.find((element) => element.id === event.value);
+    const chofer = this.chofers.find((element) => element.nro_licencia === event.value);
+    console.log(chofer);
     if (chofer) {
       this.chofer.emit(chofer);
     } else {

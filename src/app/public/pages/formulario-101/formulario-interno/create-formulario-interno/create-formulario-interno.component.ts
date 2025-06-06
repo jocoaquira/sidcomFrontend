@@ -19,6 +19,8 @@ import { FormularioInternoFormulario } from 'src/app/admin/validators/formulario
 import { IFormularioInternoMineralEnvio } from '@data/form_int_mineral_envio.metadata';
 import { IFormularioInternoMunicipioOrigenEnvio } from '@data/form_int_municipio_origen_envio.metadata';
 import { PresentacionService } from 'src/app/admin/services/presentacion.service';
+import { IChofer } from '@data/chofer.metadata';
+import { IVehiculo } from '@data/vehiculo.metadata';
 
 @Component({
   selector: 'app-create-formulario-interno',
@@ -31,6 +33,10 @@ export class CreateFormularioInternoComponent implements OnInit {
     public departamento_id:number=0;
     public municipio_id:number=0;
     public operador_id:number=0;
+    public placa:string='';
+    public nro_licencia:string='';
+    public chofer:IChofer | null = null; // ID del chofer seleccionado
+    public vehiculo:IVehiculo | null = null; // ID del vehiculo seleccionado
     public declaracionJurada:boolean=false;
     departamento_id1: number | null = null;  // Guardar el ID del departamento seleccionado
   municipio_id1: number | null = null;
@@ -156,10 +162,10 @@ nextStep() {
     private router: Router,
     private presentacionService:PresentacionService
   ) {
-
+    this.operador_id=this.authService.getUser.operador_id;
     this.formulario_interno.formulario.patchValue({
         user_id: authService.getUser.id,
-        operador_id:authService.getUser.operador_id
+        operador_id:this.operador_id
       });
    }
 
@@ -428,6 +434,7 @@ nextStep() {
         this.municipio_origen.departamento=event;
     }
     cambioMunicipio(event){
+        //console.log(event);
         this.municipio_id=event;
         this.municipio_origen.municipio_id=event;
     }
@@ -442,6 +449,23 @@ nextStep() {
     }
     cambioMineralId(event){
         this.formulario_mineral.mineral_id=event;
+    }
+    cambioChofer(event:any){
+        this.chofer=event;
+        this.nro_licencia=this.chofer.nro_licencia;
+        this.formulario_interno.formulario.patchValue({
+            nom_conductor: event.nombre_apellidos,
+            licencia: event.nro_licencia,
+          });
+    }
+    cambioVehiculo(event:any){
+        this.vehiculo=event;
+        this.placa=this.vehiculo.placa;
+
+        this.formulario_interno.formulario.patchValue({
+            placa: this.vehiculo.placa,
+            tipo_transporte:this.vehiculo.tipo,
+          });
     }
 
     eliminarMunicipio(domicilio:IFormularioInternoMunicipioOrigen) {
