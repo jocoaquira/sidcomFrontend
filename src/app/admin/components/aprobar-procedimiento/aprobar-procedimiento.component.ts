@@ -9,12 +9,12 @@ import { IAprobarTM } from '@data/aprobar_tm.metadata';
 import { TomaDeMuestraService } from '../../services/toma-de-muestra/toma-de-muestra.service';
 import { AprobarTMFormulario } from '../../validators/aprobar-toma-de-muestra';
 import { IProcedimiento } from '@data/procedimiento_tm.metadata';
-import { ProcedimientoService } from '../../services/toma-de-muestra/procedimiento-tm.service';
 import { ResponsableSenarecomService } from '../../services/responsable-senarecom.service';
 import { IResponsableSenarecom } from '@data/responsable_senarecom_tm.metadata';
 import { ITomaDeMuestraSimple } from '@data/toma_de_muestra_simple.metadata';
 import { ITomaDeMuestraPDF } from '@data/toma_de_muestra_pdf.metadata';
 import { FileUpload } from 'primeng/fileupload';
+import { ProcedimientoService } from '../../services/procedimiento/procedimiento.service';
 
 @Component({
   selector: 'app-aprobar-procedimiento',
@@ -64,10 +64,14 @@ export class AprobarProcedimientoComponent implements OnInit {
 
     this.procedimientoService.verProcedimientos().subscribe(
       (data:any)=>{
-      this.procedimientos=this.procedimientoService.handleProcedimientos(data);
+      this.procedimientos=this.procedimientoService.handleprocedimiento(data);
       this.procedimientos = this.procedimientos.map((procedimiento: any) => ({
         ...procedimiento,
-        selected: false  // Inicializamos con `false` (no seleccionado)
+        selected: false,  // Inicializamos con `false` (no seleccionado)
+        muestras: procedimiento.muestras.map((muestra: any) => ({
+            ...muestra,
+            selected: false // Inicializamos cada muestra con `false`
+        }))
       }));
     },
     (error:any)=> this.error=this.procedimientoService.handleCrearProcedimientoError(error));

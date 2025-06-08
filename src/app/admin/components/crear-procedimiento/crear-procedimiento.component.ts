@@ -8,13 +8,15 @@ import { ToastrService } from 'ngx-toastr';
 import { TextoAleatorio } from '../../functions/texto-aleatorio';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { ProcedimientoFormulario } from '../../validators/procedimiento';
-import { ProcedimientoService } from '../../services/toma-de-muestra/procedimiento-tm.service';
 import { IProcedimiento } from '@data/procedimiento_tm.metadata';
+import { IProcedimientoDetalle } from '@data/procedimiento_detalle.metadata';
+import { ProcedimientoService } from '../../services/procedimiento/procedimiento.service';
+import { ProcedimientoDetalleService } from '../../services/procedimiento/procedimiento_detalle.service';
 
 @Component({
   selector: 'app-crear-procedimiento',
-  templateUrl: './crear-procedimiento.html',
-  styleUrls: ['./crear-procedimiento.scss']
+  templateUrl: './crear-procedimiento.component.html',
+  styleUrls: ['./crear-procedimiento.component.scss']
 })
 export class CrearProcedimientoComponent implements OnInit {
 
@@ -26,7 +28,11 @@ export class CrearProcedimientoComponent implements OnInit {
   public errorVerificarEmail:boolean=false;
   public roles!:IRol[];
   public operadores!:IOperatorSimple[];
-  public descripcion:string='';
+  public detalle_procedure:IProcedimientoDetalle={
+    nombre: '',
+    descripcion: '',
+    procedimiento_id: null
+  };
   public sw1:any;
   public sw:any;
   public sw2:any;
@@ -36,23 +42,24 @@ export class CrearProcedimientoComponent implements OnInit {
   public form=new ProcedimientoFormulario();
   public errorUsuario:any={};
   public operador_id:number=0;
-  public lista_procedimientos:any[]=[];
+  public detalle_procedimiento:IProcedimientoDetalle[]=[];
 
 
   constructor(
     private rolesServices:RolesService,
     private operadoresService:OperatorsService,
     private procedimientoService:ProcedimientoService,
+    private detalleProcedimientoService:ProcedimientoDetalleService,
     private notify:ToastrService,
     private authService:AuthService,
-        ) { 
-          
-            
+        ) {
+
+
             console.log(this.usuario);
         }
 
   ngOnInit(): void {
-    
+
 
     this.operadoresService.verOperatorsSimple('hj').subscribe(
       (data:any)=>{
@@ -99,19 +106,19 @@ export class CrearProcedimientoComponent implements OnInit {
   }
   onSubmit(){
     if (this.isEditMode) {
-      this.actualizarResponsable();
+      this.actualizarProcedimiento();
     } else {
-      this.crearResponsable();
+      this.crearProcedimiento();
     }
   }
-  actualizarResponsable() {
-    
+  actualizarProcedimiento() {
+
     this.form.formulario.value.estado=this.form.formulario.value.estado.label;
     this.form.formulario.value.celular=parseInt(this.form.formulario.value.celular);
-    
+
     if (this.form.formulario.valid) {
         console.log(this.form.formulario.value);
-        this.procedimientoService.editarProcedimientoTM(this.form.formulario.value).subscribe(
+        this.procedimientoService.editarProcedimiento(this.form.formulario.value).subscribe(
             (data:any) =>
             {
               this.procedimientoService.handleCrearProcedimiento(data);
@@ -137,20 +144,20 @@ export class CrearProcedimientoComponent implements OnInit {
         this.notify.error('Revise los datos e intente nuevamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
       }
   }
-  crearResponsable() {
-    let hmtlConvertido=this.generarHTML(this.form.formulario.value.nombre,this.lista_procedimientos);
-    console.log(hmtlConvertido);
+  crearProcedimiento() {
+
     this.form.formulario.patchValue({
-      procedimiento: hmtlConvertido,
+      estado: 'ACTIVO',
     });
-    if (this.form.formulario.valid) {
-        this.procedimientoService.crearProcedimientoTM(this.form.formulario.value).subscribe(
+    if (this.form.formulario.valid && this.detalle_procedimiento.length>0) {
+        this.procedimientoService.crearProcedimiento(this.form.formulario.value).subscribe(
             (data:any) =>
             {
-              this.procedimientoService.handleCrearProcedimiento(data);
+              let procedimiento=this.procedimientoService.handleCrearProcedimiento(data);
               console.log(data);
               if(data.error==null)
               {
+                this.guardarDetalles(this.generarPasosDetalleTDM(this.detalle_procedimiento, procedimiento.id));
                 this.form.formulario.reset();
                 this.estadoDialogo.emit(false);
                 this.notify.success('Creado Correctamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
@@ -171,32 +178,51 @@ export class CrearProcedimientoComponent implements OnInit {
       }
   }
   agregarProcedimiento() {
-      // Verificamos si 'descripcion' no está vacío antes de agregarlo
-    if (this.descripcion) {
-      console.log(this.descripcion);  // Muestra la descripcion en la consola
-      this.lista_procedimientos.push(this.descripcion);
-      this.descripcion = '';  // Vaciamos la descripcion después de agregarla
+      // Verificamos si 'detalle_procedure' no está vacío antes de agregarlo
+    if (this.detalle_procedure) {
+      console.log(this.detalle_procedure);  // Muestra la detalle_procedure en la consola
+      this.detalle_procedimiento.push(this.detalle_procedure);
+      this.detalle_procedure={
+        nombre: '',
+        descripcion: '',
+        procedimiento_id: null
+      }; // Vaciamos la detalle_procedure después de agregarla
     }
   }
   cambioProcedimiento(event:any){
-    this.descripcion =(event.target as HTMLInputElement).value;
+    this.detalle_procedure.nombre =(event.target as HTMLInputElement).value;
   }
   eliminar(domicilio:any) {
-        this.lista_procedimientos=this.lista_procedimientos.filter(val => val !== domicilio)
+    console.log(domicilio);
+        this.detalle_procedimiento=this.detalle_procedimiento.filter(val => val.nombre !== domicilio.nombre);
       }
 
-  generarHTML(titulo, descripciones) {
-      // Crear el HTML deseado
-      let html = `<h6>${titulo}</h6>\r\n  <ul>\r\n`;
-  
-      // Iterar sobre las descripciones y crear los elementos <li>
-      descripciones.forEach(descripcion => {
-          html += `    <li>${descripcion}</li>\r\n`;
-      });
-  
-      html += "  </ul>";
-  
-      // Retornar el HTML generado
-      return html;
-  }
+generarPasosDetalleTDM(listaDetalle: IProcedimientoDetalle[], procedimiento_id: number): IProcedimientoDetalle[] {
+    return listaDetalle.map((detalle, index) => {
+        return {
+            ...detalle,
+            procedimiento_id: procedimiento_id, // Asigna el procedimiento_id
+            descripcion: `Paso ${index + 1}`    // Genera la descripción dinámica
+        };
+    });
+}
+guardarDetalles(lista_detalles:IProcedimientoDetalle[]): void {
+    if (lista_detalles.length > 0) {
+
+        lista_detalles.forEach(detalle => {
+            this.detalleProcedimientoService.crearProcedimientoDetalle(detalle).subscribe(
+                (data: any) => {
+                    console.log('Detalle guardado:', data);
+                    this.notify.success('Detalle guardado correctamente', 'Éxito', { timeOut: 2000, positionClass: 'toast-top-right' });
+                },
+                (error: any) => {
+                    console.error('Error al guardar detalle:', error);
+                    this.notify.error('Error al guardar detalle', 'Error', { timeOut: 2000, positionClass: 'toast-top-right' });
+                }
+            );
+        });
+    } else {
+        this.notify.warning('No hay detalles para guardar', 'Advertencia', { timeOut: 2000, positionClass: 'toast-top-right' });
+    }
+}
 }

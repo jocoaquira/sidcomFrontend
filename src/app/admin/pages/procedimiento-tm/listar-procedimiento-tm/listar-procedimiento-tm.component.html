@@ -33,27 +33,32 @@
                         <th pSortableColumn="inventoryStatus">Acciones <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-usuario>
+                <ng-template pTemplate="body" let-procedimiento>
                     <tr>
 
                         <td style="width:3%; min-width:5rem;"><span class="p-column-title">ID</span>
-                            {{usuario.id}}
+                            {{procedimiento.id}}
                         </td>
                         <td style="width:20%; min-width:10rem;">
                             <span class="p-column-title">Nombres</span>
-                            {{usuario.nombre}}
+                            {{procedimiento.nombre}}
                         </td>
-                        <td style="width:35%; min-width:20rem;">
+                        <td style="width:35%; min-width:10rem;">
                             <span class="p-column-title">Procedimiento</span>
                             <!-- Usamos [innerHTML] para que Angular interprete el HTML -->
-                            <div [innerHTML]="usuario.procedimiento"></div>
+                            <ul>
+                                <li *ngFor="let muestra of procedimiento.muestras" class="alinear-muestra">
+                                    <strong>{{muestra.descripcion+':'}}</strong>
+                                    <span>{{muestra.nombre}}</span>
+                                </li>
+                            </ul>
                         </td>
 
                         <td style="width:5%; min-width: 10rem;">
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="edit(usuario)"></button>
-                                <button pButton pRipple icon="pi pi-lock" *ngIf="usuario.estado=='ACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-danger mr-1" (click)="bloquearDialogo(usuario)"></button>
-                                <button pButton pRipple icon="pi pi-unlock" *ngIf="usuario.estado=='INACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="bloquearDialogo(usuario)"></button>
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="edit(procedimiento)"></button>
+                                <button pButton pRipple icon="pi pi-lock" *ngIf="procedimiento.estado=='ACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-danger mr-1" (click)="bloquearDialogo(procedimiento)"></button>
+                                <button pButton pRipple icon="pi pi-unlock" *ngIf="procedimiento.estado=='INACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="bloquearDialogo(procedimiento)"></button>
                             </div>
                         </td>
                     </tr>
@@ -61,21 +66,21 @@
             </p-table>
         </div>
 
-        <p-dialog [(visible)]="productDialog" [style]="{width: '700px'}" 
-          [modal]="true" header="{{isEditMode ? 'Editar Procedimiento' : 'Agregar Procedimiento'}}" 
+        <p-dialog [(visible)]="productDialog" [style]="{width: '700px'}"
+          [modal]="true" header="{{isEditMode ? 'Editar Procedimiento' : 'Agregar Procedimiento'}}"
           class="p-fluid">
-            <app-crear-procedimiento 
-                [usuario]="responsable" 
-                [isEditMode]="isEditMode" 
+            <app-crear-procedimiento
+                [procedimiento]="responsable"
+                [isEditMode]="isEditMode"
                 (estadoDialogo)="cerrar($event)">
             </app-crear-procedimiento>
         </p-dialog>
-        <p-dialog [(visible)]="productDialog1" [style]="{width: '700px'}" 
-          [modal]="true" header="Editar Procedimiento" 
+        <p-dialog [(visible)]="productDialog1" [style]="{width: '700px'}"
+          [modal]="true" header="Editar Procedimiento"
           class="p-fluid">
-            <app-editar-procedimiento 
-                [lista]="responsable" 
-                [isEditMode]="isEditMode" 
+            <app-editar-procedimiento
+                [lista]="responsable"
+                [isEditMode]="isEditMode"
                 (estadoDialogo)="cerrar1($event)">
             </app-editar-procedimiento>
         </p-dialog>

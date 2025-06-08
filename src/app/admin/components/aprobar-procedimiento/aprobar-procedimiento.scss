@@ -102,3 +102,15 @@
     font-size: 12px;
     font-weight: bold; /* Ajusta el tamaño de la fuente de la etiqueta */
   }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas de igual ancho */
+    gap: 16px; /* Espacio entre elementos */
+  }
+
+  .grid-item {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espacio entre checkbox y label */
+  }

@@ -1,6 +1,6 @@
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { passwordMatchValidator } from './igualar-password';
-import { IProcedimiento } from '@data/procedimiento_tm.metadata';
+import { IProcedimiento } from '@data/procedimiento.metadata';
 
 export class ProcedimientoFormulario {
   procedimiento!: IProcedimiento;
@@ -10,13 +10,13 @@ export class ProcedimientoFormulario {
     this.procedimiento = {
         id: null,
         nombre:null,
-        procedimiento:null
+        estado:null
     };
 
     this.formulario = new FormGroup({
         id: new FormControl(this.procedimiento.id),
         nombre:new FormControl(this.procedimiento.nombre,[Validators.required,Validators.pattern('^[a-zA-ZÀ-ÿ\\s]+$')]),
-        procedimiento:new FormControl(this.procedimiento.procedimiento,[Validators.required]),
+        estado:new FormControl(this.procedimiento.estado,[Validators.required]),
     });
   }
 
@@ -45,7 +45,7 @@ getErrorMessage(controlName: string): string | null {
       return `No puede exceder ${control.errors?.['maxlength']?.requiredLength} caracteres.`;
     }
     if (control?.hasError('pattern')) {
-        
+
           if (controlName === 'nombre') {
             return 'Solo se permiten letras y espacios.';
           }

@@ -1,20 +1,20 @@
 <form [formGroup]="form.formulario" (ngSubmit)="onSubmit()">
-    
-    <div class="card card-w-title flex flex-wrap col-12"> 
+
+    <div class="card card-w-title flex flex-wrap col-12">
     <div class="field col-12 md:col-12">
         <label>Nombre:</label>
         <input type="text" pInputText id="nombre" formControlName="nombre"  autofocus />
         <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('nombre')">{{form.getErrorMessage('nombre')}}</small>
     </div>
     <div class="form-control col-12 md:col-8">
-        
-        <input 
+
+        <input
           pInputText
           [ngModelOptions]="{standalone: true}"
-          type="text" 
-          id="descripcion" 
-          [(ngModel)]="descripcion" 
-          (input)="cambioProcedimiento($event)" 
+          type="text"
+          id="descripcion"
+          [(ngModel)]="detalle_procedure.nombre"
+          (input)="cambioProcedimiento($event)"
           placeholder="Descripción del procedimiento"
         />
     </div>
@@ -23,7 +23,7 @@
     </div>
 
     <div class="field col-12">
-        <p-table #dt [value]="lista_procedimientos"
+        <p-table #dt [value]="detalle_procedimiento"
         responsiveLayout="scroll" [rows]="10"
         [paginator]="false"  [showCurrentPageReport]="false"
         selectionMode="multiple"
@@ -38,15 +38,15 @@
 
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-product>
+            <ng-template pTemplate="body" let-detalle_procedure>
                 <tr>
 
                     <td style="width:60%; min-width:30rem;"><span class="p-column-title">Procedimiento</span>
-                        {{product}}
+                        {{detalle_procedure.nombre}}
                     </td>
                     <td>
                         <div class="flex">
-                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminar(product)"></button>
+                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminar(detalle_procedure)"></button>
                         </div>
                     </td>
                 </tr>

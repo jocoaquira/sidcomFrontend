@@ -58,23 +58,37 @@
 
     <div class="field-checkbox mr-2">
       <!-- Mostrar los checkboxes para cada procedimiento -->
-      <div *ngFor="let procedimiento of procedimientos">
-
+      <div class="grid-container">
+        <div *ngFor="let procedimiento of procedimientos" class="grid-item">
           <input type="checkbox"
-                  class="custom-checkbox"
+                 class="custom-checkbox"
                  [ngModelOptions]="{standalone: true}"
                  [(ngModel)]="procedimiento.selected"
                  (change)="onCheckboxChange($event, procedimiento)" />
-                 <label>
-                  {{ procedimiento.nombre }}
-                 </label>
+          <label>{{ procedimiento.nombre }}</label>
+        </div>
       </div>
     </div>
 
     <!-- Mostrar la descripción del procedimiento si el checkbox está marcado -->
     <div *ngFor="let procedimiento of procedimientos">
       <div *ngIf="procedimiento.selected">
-        <div [innerHTML]="procedimiento.procedimiento"></div>
+        <ul>
+            <li *ngFor="let muestra of procedimiento.muestras" class="alinear-muestra">
+                <input type="checkbox"
+                        class="custom-checkbox"
+                        [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="muestra.selected"
+                        (change)="onCheckboxChange($event, procedimiento)" />
+                <strong>
+
+                    {{muestra.descripcion+':'}}
+                </strong>
+                <span>
+                        {{ muestra.nombre }}
+                </span>
+            </li>
+        </ul>
       </div>
     </div>
 

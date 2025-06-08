@@ -1,0 +1,19 @@
+.alinear-muestra {
+    display: flex; /* Alinea los elementos horizontalmente */
+    justify-content: space-between; /* Distribuye los elementos */
+
+    gap: 0.5rem; /* Espaciado entre los elementos */
+}
+
+.alinear-muestra strong {
+    flex-shrink: 0; /* Evita que 'descripcion' se reduzca */
+    white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
+}
+
+.alinear-muestra span {
+    flex-grow: 1; /* Permite que 'nombre' ocupe el espacio restante */
+    text-align: left; /* Alinea el texto a la derecha */
+    overflow: hidden; /* Oculta el texto que exceda el contenedor */
+    text-overflow: ellipsis; /* Agrega puntos suspensivos si el texto es demasiado largo */
+    white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
+}

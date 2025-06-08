@@ -10,13 +10,14 @@ import { IOperatorSimple } from '@data/operador_simple.metadata';
 import { OperatorsService } from 'src/app/admin/services/operators.service';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
-import { IProcedimiento } from '@data/procedimiento_tm.metadata';
-import { ProcedimientoService } from 'src/app/admin/services/toma-de-muestra/procedimiento-tm.service';
+import { IProcedimiento } from '@data/procedimiento.metadata';
+import { ProcedimientoService } from 'src/app/admin/services/procedimiento/procedimiento.service';
 
 
 
 @Component({
     templateUrl: './listar-procedimiento-tm.component.html',
+    styleUrls: ['./listar-procedimiento-tm.component.scss'],
     providers: [MessageService]
 })
 export class ListarProcedimientoTMComponent implements OnInit {
@@ -25,7 +26,8 @@ export class ListarProcedimientoTMComponent implements OnInit {
     public procedimiento:IProcedimiento={
         id: null,
         nombre:null,
-        procedimiento:null
+        estado:null,
+        muestras: []=[]
     };
     public roles!:IRol[];
     public operadores!:IOperatorSimple[];
@@ -40,7 +42,8 @@ export class ListarProcedimientoTMComponent implements OnInit {
     public responsable:IProcedimiento={
         id: null,
         nombre:null,
-        procedimiento:null
+        estado:null,
+        muestras: []=[]
     };
     public submitted = true;
     public deleteProductsDialog = false;
@@ -57,7 +60,7 @@ export class ListarProcedimientoTMComponent implements OnInit {
         public canEliminarUsuario:CanEliminarUsuarioGuard,
         private authService:AuthService,
         private notify:ToastrService,
-    ) { 
+    ) {
         this.operador_id= authService.getUser.operador_id
         console.log(this.operador_id);
     }
@@ -65,7 +68,12 @@ export class ListarProcedimientoTMComponent implements OnInit {
     ngOnInit() {
         this.procedimientoService.verProcedimientos().subscribe(
             (data:any)=>{
-            this.listaProcedimientos=this.procedimientoService.handleProcedimientos(data);
+            this.listaProcedimientos=this.procedimientoService.handleprocedimiento(data);
+            this.listaProcedimientos.forEach(procedimiento => {
+                procedimiento.muestras = procedimiento.muestras.sort((a, b) => {
+                    return a.descripcion.localeCompare(b.descripcion);
+                });
+            });
             console.log(this.listaProcedimientos);
 
           },
@@ -88,7 +96,12 @@ export class ListarProcedimientoTMComponent implements OnInit {
         console.log(event);
         this.procedimientoService.verProcedimientos().subscribe(
             (data:any)=>{
-            this.listaProcedimientos=this.procedimientoService.handleProcedimientos(data);
+            this.listaProcedimientos=this.procedimientoService.handleprocedimiento(data);
+            this.listaProcedimientos.forEach(procedimiento => {
+                procedimiento.muestras = procedimiento.muestras.sort((a, b) => {
+                    return a.descripcion.localeCompare(b.descripcion);
+                });
+            });
             console.log(this.listaProcedimientos);
 
           },
@@ -99,7 +112,12 @@ export class ListarProcedimientoTMComponent implements OnInit {
         console.log(event);
         this.procedimientoService.verProcedimientos().subscribe(
             (data:any)=>{
-            this.listaProcedimientos=this.procedimientoService.handleProcedimientos(data);
+            this.listaProcedimientos=this.procedimientoService.handleprocedimiento(data);
+            this.listaProcedimientos.forEach(procedimiento => {
+                procedimiento.muestras = procedimiento.muestras.sort((a, b) => {
+                    return a.descripcion.localeCompare(b.descripcion);
+                });
+            });
             console.log(this.listaProcedimientos);
 
           },
@@ -112,7 +130,7 @@ export class ListarProcedimientoTMComponent implements OnInit {
         this.isEditMode = false;
     }
     edit(responsable:any) {
-        this.responsable = { ...responsable }; 
+        this.responsable = { ...responsable };
         console.log('respo:'+responsable.nombre)
         //this.submitted = false;
         this.productDialog1 = true;
@@ -214,7 +232,7 @@ export class ListarProcedimientoTMComponent implements OnInit {
         else{
             responsable.estado='ACTIVO';
         }
-        this.procedimientoService.editarProcedimientoTM(responsable).subscribe(
+        this.procedimientoService.editarProcedimiento(responsable).subscribe(
             (data:any) =>
             {
               this.procedimientoService.handleCrearProcedimiento(data);
@@ -223,9 +241,9 @@ export class ListarProcedimientoTMComponent implements OnInit {
               {
                 this.procedimientoService.verProcedimientos().subscribe(
                     (data:any)=>{
-                    this.listaProcedimientos=this.procedimientoService.handleProcedimientos(data);
+                    this.listaProcedimientos=this.procedimientoService.handleprocedimiento(data);
                     console.log(this.listaProcedimientos);
-        
+
                   },
                   (error:any)=> this.error=this.procedimientoService.handleError(error));
 
