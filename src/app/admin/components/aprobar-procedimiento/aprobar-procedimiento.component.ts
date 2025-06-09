@@ -18,8 +18,8 @@ import { ProcedimientoService } from '../../services/procedimiento/procedimiento
 
 @Component({
   selector: 'app-aprobar-procedimiento',
-  templateUrl: './aprobar-procedimiento.html',
-  styleUrls: ['./aprobar-procedimiento.scss']
+  templateUrl: './aprobar-procedimiento.component.html',
+  styleUrls: ['./aprobar-procedimiento.component.scss']
 })
 export class AprobarProcedimientoComponent implements OnInit {
 
@@ -113,13 +113,29 @@ export class AprobarProcedimientoComponent implements OnInit {
     }
     console.log(this.form.formulario.value);
   }
+  switchCaracterizacion(event:any){
 
+    if(event.checked) {
+        this.form.formulario.patchValue({
+            tipo_muestra: 'CARACTERIZACION',
+          });
+    } else {
+        this.form.formulario.patchValue({
+            tipo_muestra: 'SIN CARACTERIZACION',
+          });
+    }
+    console.log('Switch cambiado:', this.form.formulario.value);
+  }
 
   // Método para manejar los cambios en los checkboxes
   onCheckboxChange(event: any, procedimiento: any): void {
+    console.log('Checkbox cambiado:', event, procedimiento);
     if (event.target.checked) {
       // Si el checkbox está marcado, lo agregamos a los seleccionados
-      this.procedimientosSeleccionados.push({ id: procedimiento.id });
+      this.procedimientosSeleccionados.push({
+        id: procedimiento.id,
+
+     });
     } else {
       // Si no está marcado, lo eliminamos de los seleccionados
       this.procedimientosSeleccionados = this.procedimientosSeleccionados.filter(
@@ -140,6 +156,10 @@ export class AprobarProcedimientoComponent implements OnInit {
   }
   ocultarDialogo(){
     this.form.formulario.reset();
+    this.selectedFile=null;
+    this.fileUploadComponent.clear(); // Limpiar el componente de carga de archivos
+    this.procedimientos.forEach(p => p.selected = false);
+    this.procedimientosSeleccionados = [];
     this.estadoDialogo.emit(false);
   }
   onSubmit(){
@@ -212,6 +232,12 @@ export class AprobarProcedimientoComponent implements OnInit {
     } else {
       formData.append("observaciones", '');
     }
+    // Validar `observaciones`
+    if (this.form.formulario.value.tipo_muestra) {
+        formData.append("tipo_muestra", this.form.formulario.value.tipo_muestra);
+      } else {
+        formData.append("tipo_muestra", 'SIN CARACTERIZACION');
+      }
 
     // Validar `operador_id`
     if (this.tmd.operador_id !== undefined && this.tmd.operador_id !== null) {

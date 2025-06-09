@@ -190,19 +190,19 @@ nextStep() {
          let formulario_int=data;
 
          this.num_form=formulario_int.nro_formulario;
-
+         this.formulario_interno.formulario.patchValue({
+            user_id: formulario_int.user_id
+          });
+        this.formulario_interno.formulario.patchValue({
+            operador_id: formulario_int.operador_id,
+          });
          this.cargar_datos(formulario_int);
         // this.formulario_traslado_cola.formulario.get('operador_id')?.disable(); // Para desactivar
 
        },
        (error:any)=> this.error=this.tomaDeMuestrasService.handleError(error));
      });
-    this.formulario_interno.formulario.patchValue({
-        user_id: authService.getUser.id
-      });
-    this.formulario_interno.formulario.patchValue({
-        operador_id: authService.getUser.operador_id
-      });
+
    }
 
 cargar_datos(form:any){
@@ -234,6 +234,16 @@ cargar_datos(form:any){
       responsable_tdm_senarecom_id:form.responsable_tdm_senarecom_id,
       estado: form.estado
   });
+  this.responsableTMService.verResponsableTMOperador(this.formulario_interno.formulario.value.operador_id.toString()).subscribe(
+    (data:any)=>{
+    this.listaUsuarios = this.responsableTMService.handleusuario(data)
+      .filter(usuario => usuario.estado === 'ACTIVO')
+      .map(usuario => ({
+          ...usuario,
+          nombreCompleto: `${usuario.nombre} ${usuario.apellidos}`
+      }));
+  },
+  (error:any)=> this.error=this.responsableTMService.handleError(error));
     this.lugaresVerificacionTDMService.verlugarverificacionTDMs('hj').subscribe(
         (data:any)=>{
         this.listaLugaresVerificacion=this.lugaresVerificacionTDMService.handlelugarverificacion(data);
@@ -365,16 +375,7 @@ cambioLugarVerificacionTDM(event:any){
       });
 }
   ngOnInit() {
-    this.responsableTMService.verResponsableTMOperador(this.formulario_interno.formulario.value.operador_id.toString()).subscribe(
-      (data:any)=>{
-      this.listaUsuarios = this.responsableTMService.handleusuario(data)
-        .filter(usuario => usuario.estado === 'ACTIVO')
-        .map(usuario => ({
-            ...usuario,
-            nombreCompleto: `${usuario.nombre} ${usuario.apellidos}`
-        }));
-    },
-    (error:any)=> this.error=this.responsableTMService.handleError(error));
+
     this.departamentosService.verdepartamentos(this.nombre).subscribe(
       (data:any)=>{
       this.departamento=this.departamentosService.handledepartamento(data);
@@ -598,7 +599,7 @@ addMarker(lat: number, lng: number) {
   this.currentMarker.bindPopup(`Latitud: ${lat}, Longitud: ${lng}`).openPopup();
 }
 abrirMapa() {
-  if(this.formulario_interno.formulario.value.departamento_id){
+  if(this.formulario_interno.formulario.value.departamento_id || !this.formulario_interno || !this.formulario_interno.formulario.value.latitud){
       this.dept=this.departamento.find(val => val.id ===  this.formulario_interno.formulario.value.departamento_id);
 
       if (this.map) {
@@ -653,7 +654,7 @@ abrirMapa() {
 
             this.formulario_interno.formulario.reset();
             this.notify.success('El el formulario interno se generó exitosamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
-            this.router.navigate(['/public/toma-de-muestra']);
+            this.router.navigate(['/admin/toma-de-muestra']);
           }
           else{
             this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});

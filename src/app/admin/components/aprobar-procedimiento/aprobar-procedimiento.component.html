@@ -34,6 +34,54 @@
         </p-fileUpload>
       </div>
 
+
+
+    <div class="card-procedimiento">
+        <h5 class="text-center"><strong>PROCEDIMIENTO</strong></h5>
+
+    </div>
+
+    <div class="field-checkbox mr-2">
+      <!-- Mostrar los checkboxes para cada procedimiento -->
+      <div class="grid-container">
+        <div *ngFor="let procedimiento of procedimientos" class="grid-item">
+          <input type="checkbox"
+                 class="custom-checkbox"
+                 [ngModelOptions]="{standalone: true}"
+                 [(ngModel)]="procedimiento.selected" />
+          <label>{{ procedimiento.nombre }}</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mostrar la descripción del procedimiento si el checkbox está marcado -->
+    <div *ngFor="let procedimiento of procedimientos">
+      <div *ngIf="procedimiento.selected">
+        <ul>
+            <li *ngFor="let muestra of procedimiento.muestras" class="alinear-muestra">
+                <input type="checkbox"
+                        class="custom-checkbox"
+                        [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="muestra.selected"
+                        (change)="onCheckboxChange($event, muestra)" />
+                <strong>
+
+                    {{muestra.descripcion+':'}}
+                </strong>
+                <span>
+                        {{ muestra.nombre }}
+                </span>
+            </li>
+        </ul>
+      </div>
+    </div>
+    <div class="field col-12 md:col-3">
+        <div class="field-checkbox">
+            <p-inputSwitch (onChange)="switchCaracterizacion($event)"></p-inputSwitch>
+            <label for="sf">Caracterización</label>
+        </div>
+
+    </div>
     <div class="field col-12 md:col-12">
         <span class="p-float-label">
             <textarea
@@ -49,47 +97,6 @@
                 {{ form.getErrorMessage('observaciones') }}
             </small>
         </span>
-    </div>
-
-    <div class="card-procedimiento">
-        <h5 class="text-center"><strong>PROCEDIMIENTO</strong></h5>
-
-    </div>
-
-    <div class="field-checkbox mr-2">
-      <!-- Mostrar los checkboxes para cada procedimiento -->
-      <div class="grid-container">
-        <div *ngFor="let procedimiento of procedimientos" class="grid-item">
-          <input type="checkbox"
-                 class="custom-checkbox"
-                 [ngModelOptions]="{standalone: true}"
-                 [(ngModel)]="procedimiento.selected"
-                 (change)="onCheckboxChange($event, procedimiento)" />
-          <label>{{ procedimiento.nombre }}</label>
-        </div>
-      </div>
-    </div>
-
-    <!-- Mostrar la descripción del procedimiento si el checkbox está marcado -->
-    <div *ngFor="let procedimiento of procedimientos">
-      <div *ngIf="procedimiento.selected">
-        <ul>
-            <li *ngFor="let muestra of procedimiento.muestras" class="alinear-muestra">
-                <input type="checkbox"
-                        class="custom-checkbox"
-                        [ngModelOptions]="{standalone: true}"
-                        [(ngModel)]="muestra.selected"
-                        (change)="onCheckboxChange($event, procedimiento)" />
-                <strong>
-
-                    {{muestra.descripcion+':'}}
-                </strong>
-                <span>
-                        {{ muestra.nombre }}
-                </span>
-            </li>
-        </ul>
-      </div>
     </div>
 
     <div class="botones-derecha">

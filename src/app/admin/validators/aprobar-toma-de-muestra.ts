@@ -12,6 +12,7 @@ export class AprobarTMFormulario {
         operador_id:null,
         procedimiento:null,
         observaciones:null,
+        tipo_muestra:'SIN CARACTERIZACION',
         estado:null
     };
 
@@ -21,7 +22,8 @@ export class AprobarTMFormulario {
         procedimiento:new FormControl(this.aprobarTM.procedimiento,[Validators.required]),
         estado:new FormControl(this.aprobarTM.estado),
         observaciones:new FormControl(this.aprobarTM.observaciones),
-        operador_id:new FormControl(this.aprobarTM.operador_id)
+        operador_id:new FormControl(this.aprobarTM.operador_id),
+        tipo_muestra:new FormControl(this.aprobarTM.tipo_muestra)
     });
   }
 
@@ -50,7 +52,7 @@ getErrorMessage(controlName: string): string | null {
       return `No puede exceder ${control.errors?.['maxlength']?.requiredLength} caracteres.`;
     }
     if (control?.hasError('pattern')) {
-        
+
           if (controlName === 'responsable_tdm_senarecom_id') {
             return 'es necesario id de responsable SENARECOM';
           }

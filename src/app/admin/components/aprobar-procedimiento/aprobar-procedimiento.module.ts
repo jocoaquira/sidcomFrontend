@@ -16,6 +16,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { AprobarProcedimientoComponent } from './aprobar-procedimiento.component';
 import { VerTomaDeMuestraModule } from '../ver-components/ver-toma-de-muestra/ver-toma-de-muestra.module';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -32,6 +33,7 @@ import { VerTomaDeMuestraModule } from '../ver-components/ver-toma-de-muestra/ve
     FileUploadModule,
     FormsModule,
     ButtonModule,
+    InputSwitchModule,
     BadgeModule,
     TagModule,
     RippleModule,

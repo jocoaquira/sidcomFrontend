@@ -20,6 +20,7 @@ export interface ITomaDeMuestraPDF {
 	foto_link:string
     estado:string,
 	observaciones:string,
+    tipo_muestra:string,
     minerales:IMineralTDM[],
     municipio_origen:IMunicipioOrigenTDM[],
     procedimiento:IProcedimientoTDM[],
@@ -36,6 +37,7 @@ export interface IMunicipioOrigenTDM {
 }
 export interface IProcedimientoTDM {
     nombre:string,
-    procedimiento: string
+    num_paso: string,
+    procedimientoID:string
 }
 

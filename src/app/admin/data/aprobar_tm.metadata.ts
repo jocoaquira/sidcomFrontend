@@ -3,6 +3,7 @@ export interface IAprobarTM {
    estado:string,
    observaciones?:string,
    operador_id?:string,
+   tipo_muestra?:string,
    responsable_tdm_senarecom_id:number,
    procedimiento:IProcedimientoReducido[]
 }

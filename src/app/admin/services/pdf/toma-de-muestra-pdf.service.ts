@@ -5,7 +5,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable'
 import * as QRCode from 'qrcode';
 
-import { ITomaDeMuestraPDF } from '@data/toma_de_muestra_pdf.metadata';
+import { IProcedimientoTDM, ITomaDeMuestraPDF } from '@data/toma_de_muestra_pdf.metadata';
 
 @Injectable({
   providedIn: 'root',
@@ -427,49 +427,228 @@ convertirHTMLATextoConViñetas(html) {
                               2: { cellWidth: 370 }, // Segunda columna
                             },
                           });
+                            // Función para extraer el número del paso (ej: "Paso 3" → 3)
+                            const extraerNumeroPaso = (numPasoStr: string): number => {
+                                const match = numPasoStr.match(/\d+/);
+                                return match ? parseInt(match[0]) : 0;
+                            };
+                          // Ordenamos los datos
+                            const procedimientosOrdenados = [...toma_de_muestra.procedimiento].sort((a, b) => {
+                                // Primero ordenamos por procedimientoID
+                                if (a.procedimientoID < b.procedimientoID) return -1;
+                                if (a.procedimientoID > b.procedimientoID) return 1;
 
-                          const datosFormateados = toma_de_muestra.procedimiento.map(item => ({
-                            nombre: item.nombre,
-                            procedimiento: this.convertirHTMLATextoConViñetas(item.procedimiento)  // Usamos una nueva función de conversión
-                          }));
+                                // Si tienen el mismo procedimientoID, ordenamos por num_paso
+                                const numPasoA = extraerNumeroPaso(a.num_paso);
+                                const numPasoB = extraerNumeroPaso(b.num_paso);
+                                return numPasoA - numPasoB;
+                            });
+                            // Agrupamos por procedimientoID
+                            const procedimientosAgrupados: Record<string, IProcedimientoTDM[]> = {};
+                            procedimientosOrdenados.forEach((item) => {
+                            if (!procedimientosAgrupados[item.procedimientoID]) {
+                                procedimientosAgrupados[item.procedimientoID] = [];
+                            }
+                            procedimientosAgrupados[item.procedimientoID].push(item);
+                            });
+                            autoTable(doc, {
+                                startY: (doc as any).lastAutoTable?.finalY+3 || 40,
 
+                                head: [
+                                  [
+                                    { content:  '6. PROCEDIMIENTO', colSpan: 3,
+                                        styles: { halign: 'left', fillColor:[255,204,204], fontStyle: 'bold' }
 
+                                    },
+                                  ],
 
-                          // Crear la tabla
+                                ],
+                                body: [
+
+                                ],
+
+                                styles: {
+                                  textColor: [0, 0, 0], // Color de texto negro
+                                  valign: 'middle', // Alineación vertical centrada
+                                  fontSize: 9, // Tamaño de fuente
+                                  cellPadding: 2, // Espaciado interno de las celdas
+                                },
+                                headStyles: {
+                                  fillColor:[255,204,204], // Fondo verde para el encabezado
+                                  textColor: [0, 0, 0], // Texto negro para el encabezado
+                                  fontStyle: 'bold', // Texto en negrita
+
+                                },
+                                columnStyles: {
+                                  0: { cellWidth: 20 }, // Primera columna
+                                  1: { cellWidth: 140 }, // Primera columna
+                                  2: { cellWidth: 370 }, // Segunda columna
+                                },
+                              });
+                            // Configuración inicial
+                            let startY = (doc as any).lastAutoTable?.finalY + 3 || 10;
+
+                            // Iteramos sobre cada grupo de procedimiento
+                            Object.entries(procedimientosAgrupados).forEach(([procedimientoID, items]) => {
+                            // Añadimos el título del procedimiento
+                            (doc as any).autoTable({
+                                startY,
+                                head: [
+                                [
+
+                                    {
+                                    content: `${procedimientoID}`,
+
+                                    styles: {
+                                        halign: 'left',
+                                        fillColor: [255, 255, 255],
+                                        fontStyle: 'bold',
+                                        fontSize: 9
+                                    }
+                                    },
+                                ],
+                                ],
+                                body: [],
+                                styles: {
+                                textColor: [0, 0, 0],
+                                valign: 'middle',
+                                fontSize: 9,
+                                cellPadding: 2,
+                                },
+                                headStyles: {
+                                fillColor: [255, 204, 204],
+                                textColor: [0, 0, 0],
+                                fontStyle: 'bold',
+                                },
+                            });
+                            // Añadimos los pasos del procedimiento con viñetas
+                            (doc as any).autoTable({
+                                startY: (doc as any).lastAutoTable.finalY + 1,
+                                body: items.map((item) => [
+                                {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                {
+                                    content: item.num_paso,
+                                    styles: {
+                                    halign: 'left',
+                                    fontStyle: 'bold',
+                                    fillColor: [255, 255, 255],
+                                    cellPadding: { top: 2, right: 2, bottom: 2, left: 2 }
+                                    }
+                                },
+                                {
+                                    content: `• ${item.nombre}`,
+                                    styles: {
+                                    halign: 'left',
+                                    fillColor: [255, 255, 255],
+                                    cellPadding: { top: 2, right: 2, bottom: 2, left: 2 }
+                                    }
+                                },
+                                ]),
+                                columnStyles: {
+                                0: { cellWidth: 50 },
+                                1: { cellWidth: 40 },
+                                2: { cellWidth: 'auto' },
+                                },
+                                styles: {
+                                textColor: [0, 0, 0],
+                                valign: 'middle',
+                                fontSize: 9,
+                                cellPadding: 2,
+                                },
+                                margin: { left: 10, right: 10 },
+                            });
+
+                            startY = (doc as any).lastAutoTable.finalY + 5;
+                            });
+
+                            // Función para dibujar checkbox con "X" (cuadrado + tachado)
+                            const drawCustomCheckbox = (
+                                doc: jsPDF,
+                                x: number,
+                                y: number,
+                                isChecked: boolean,
+                                size: number = 10,
+                                lineWidth: number = 0.7
+                            ) => {
+                                // Dibujar el cuadro del checkbox
+                                doc.setDrawColor(0); // Color negro
+                                doc.setLineWidth(lineWidth);
+                                doc.rect(x, y, size, size);
+
+                                // Dibujar "X" si está marcado
+                                if (isChecked) {
+                                doc.line(x, y, x + size, y + size); // Línea diagonal 1
+                                doc.line(x + size, y, x, y + size); // Línea diagonal 2
+                                }
+                            };
+                            autoTable(doc, {
+                                startY: (doc as any).lastAutoTable?.finalY + 3 || 10,
+                                head: [
+                                  [
+                                    {
+                                      content: '7. CARACTERIZACIÓN',
+                                      colSpan: 4,
+                                      styles: { halign: 'left', fillColor: [255, 204, 204], fontStyle: 'bold', textColor: [0, 0, 0],fontSize: 9,cellPadding: 2 }
+                                    },
+                                  ],
+                                ],
+                                body: [
+                                  [{
+                                    // Celda vacía (dibujaremos el checkbox después)
+                                    content: '',
+                                    styles: { halign: 'center',fillColor: [255, 255, 255], }
+                                  },
+                                    {
+                                      content: 'SI:',
+                                      styles: { halign: 'left', fontStyle: 'bold' ,fillColor: [255, 255, 255],textColor: [0, 0, 0],fontSize: 9 }
+                                    },
+                                    {
+                                      // Celda vacía (dibujaremos el checkbox después)
+                                      content: '',
+                                      styles: { halign: 'center',fillColor: [255, 255, 255], }
+                                    },
+                                    {
+                                      content: 'NO:',
+                                      styles: { halign: 'left', fontStyle: 'bold' ,fillColor: [255, 255, 255],textColor: [0, 0, 0],fontSize: 9}
+                                    },
+                                    {
+                                      content: '',
+                                      styles: { halign: 'center',fillColor: [255, 255, 255], }
+                                    }
+                                  ],
+                                ],
+                                columnStyles: {
+                                  0: { cellWidth: 20 },  // Ancho columna texto
+                                  1: { cellWidth: 40 },  // Ancho columna texto
+                                  2: { cellWidth: 30 },  // Ancho columna texto
+                                  3: { cellWidth: 'auto' }   // Ancho columna checkbox
+                                },
+                                // Dibujar checkboxes después de crear la tabla
+                                didDrawCell: (data) => {
+                                    if (data.section === 'body') {
+                                      const checkboxX = data.cell.x + 25;
+                                      const checkboxY = data.cell.y + 4;
+
+                                      // Checkbox en columna 2 (CARACTERIZACIÓN)
+                                      if (data.column.index === 1) {
+                                        const isChecked = toma_de_muestra.tipo_muestra === "CARACTERIZACION";
+                                        drawCustomCheckbox(doc, checkboxX, checkboxY, isChecked);
+                                      }
+
+                                      // Checkbox en columna 4 (OTRO TIPO)
+                                      if (data.column.index === 3) {
+                                        const isChecked = toma_de_muestra.tipo_muestra !== "CARACTERIZACION";
+                                        drawCustomCheckbox(doc, checkboxX, checkboxY, isChecked);
+                                      }
+                                    }
+                                  }
+                              });
                           autoTable(doc, {
                             startY: (doc as any).lastAutoTable?.finalY+3 || 10,
-                            head: [
-                              [
-                                { content: '6. PROCEDIMIENTO', colSpan: 2, styles: { halign: 'left', fillColor:[255,204,204], fontStyle: 'bold' } },
-                              ],
-                            ],
-                            body: datosFormateados.map(item => [
-                              {content:'', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                              { content: item.procedimiento, styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                            ]),
-                            styles: {
-                              textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
-                              cellPadding: 2, // Espaciado interno de las celdas
-                            },
-                            headStyles: {
-                              fillColor: [255, 204, 204], // Fondo para el encabezado
-                              textColor: [0, 0, 0], // Texto negro para el encabezado
-                              fontStyle: 'bold', // Texto en negrita
-                            },
-                            columnStyles: {
-                              0: { cellWidth: 20 }, // Primera columna
-                              1: { cellWidth: 510 }, // Segunda columna
-                            },
-                          });
-
-                          autoTable(doc, {
-                            startY: (doc as any).lastAutoTable?.finalY+3 || 10,
 
                             head: [
                               [
-                                { content:  ' 7. OBSERVACIONES',colSpan:2, styles: { halign: 'left', fillColor:[255,204,204], fontStyle: 'bold' } },
+                                { content:  ' 8. OBSERVACIONES',colSpan:2, styles: { halign: 'left', fillColor:[255,204,204], fontStyle: 'bold' } },
                               ],
                             ],
                             body: [

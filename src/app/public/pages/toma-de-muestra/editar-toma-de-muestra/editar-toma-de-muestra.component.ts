@@ -598,7 +598,7 @@ addMarker(lat: number, lng: number) {
   this.currentMarker.bindPopup(`Latitud: ${lat}, Longitud: ${lng}`).openPopup();
 }
 abrirMapa() {
-  if(this.formulario_interno.formulario.value.departamento_id){
+  if(this.formulario_interno.formulario.value.departamento_id || !this.formulario_interno || !this.formulario_interno.formulario.value.latitud){
       this.dept=this.departamento.find(val => val.id ===  this.formulario_interno.formulario.value.departamento_id);
 
       if (this.map) {
