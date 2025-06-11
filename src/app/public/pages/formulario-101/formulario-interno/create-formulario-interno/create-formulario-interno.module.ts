@@ -18,6 +18,8 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { RouterModule } from '@angular/router';
 import { ChoferSelectModule } from 'src/app/admin/components/choferSelect/choferSelect.module';
 import { VehiculoSelectModule } from 'src/app/admin/components/vehiculoSelect/vehiculoSelect.module';
+import { OperadoresSelectModule } from 'src/app/admin/components/operadoresSelect/operadoresSelect.module';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 @NgModule({
   imports: [
@@ -26,13 +28,15 @@ import { VehiculoSelectModule } from 'src/app/admin/components/vehiculoSelect/ve
     InputMaskModule,
     InputNumberModule,
     ReactiveFormsModule,
-	  InputTextModule,
+    InputSwitchModule,
+	InputTextModule,
     TableModule,
     ButtonModule,
     InputTextareaModule,
     DepartamentoSelectModule,
     ChoferSelectModule,
     VehiculoSelectModule,
+    OperadoresSelectModule,
     MunicipioSelectModule,
     MineralesSelectModule,
     CheckboxModule,

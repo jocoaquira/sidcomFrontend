@@ -1,0 +1,17 @@
+<span class="p-float-label">
+    <p-dropdown
+        inputId="dropdown"
+        [autoDisplayFirst]="false"
+        [options]="operadores"
+        [(ngModel)]="nombre"
+        [filter]="true"
+        filterBy="razon_social"
+        optionLabel="razon_social"
+        optionValue="razon_social"
+        (onChange)="cambioOperador($event)"
+    ></p-dropdown>
+    <label for="dropdown">Compradores</label>
+    <small id="presentacion" class="p-error " *ngIf="error">
+        {{error}}
+    </small>
+</span>
