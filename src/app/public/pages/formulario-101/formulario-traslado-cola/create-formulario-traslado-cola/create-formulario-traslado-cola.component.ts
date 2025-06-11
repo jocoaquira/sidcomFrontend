@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@core/authentication/services/auth.service';
+import { IChofer } from '@data/chofer.metadata';
 import { IFormularioTrasladoColaMineral } from '@data/form_cola_mineral.metadata';
 import { IFormularioTrasladoColaMineralEnvio } from '@data/form_cola_mineral_envio.metadata';
 import { IFormularioTrasladoColaMunicipioOrigen } from '@data/form_cola_municipio_origen.metadata';
@@ -11,6 +12,7 @@ import { IFormularioTrasladoCola } from '@data/formulario_cola.metadata';
 
 import { IMineral } from '@data/mineral.metadata';
 import { IOperatorSimple } from '@data/operador_simple.metadata';
+import { IVehiculo } from '@data/vehiculo.metadata';
 import { ToastrService } from 'ngx-toastr';
 import { first } from 'rxjs';
 import { FormularioTrasladoColaMineralService } from 'src/app/admin/services/formulario-traslado-cola/formulario-traslado-cola-mineral.service';
@@ -31,6 +33,11 @@ export class CreateFormularioTrasladoColaComponent implements OnInit {
     public formulario_interno=new FormularioTrasladoColaFormulario();
     public departamento_id:number=0;
     public municipio_id:number=0;
+    public operador_id:number=0;
+    public placa:string='';
+    public nro_licencia:string='';
+    public chofer:IChofer | null = null; // ID del chofer seleccionado
+    public vehiculo:IVehiculo | null = null; // ID del vehiculo seleccionado
     public declaracionJurada:boolean=false;
     departamento_id1: number | null = null;  // Guardar el ID del departamento seleccionado
   municipio_id1: number | null = null;
@@ -163,10 +170,10 @@ nextStep() {
     private router: Router,
     private presentacionService:PresentacionService
   ) {
-
+    this.operador_id=this.authService.getUser.operador_id;
     this.formulario_interno.formulario.patchValue({
         user_id: authService.getUser.id,
-        operador_id:authService.getUser.operador_id
+        operador_id:this.operador_id
       });
    }
 
@@ -456,5 +463,22 @@ private mostrarErrorFormularios(formGroup: FormularioTrasladoColaFormulario): vo
 }
 cancelar(){
 
+}
+cambioChofer(event:any){
+    this.chofer=event;
+    this.nro_licencia=this.chofer.nro_licencia;
+    this.formulario_interno.formulario.patchValue({
+        nom_conductor: event.nombre_apellidos,
+        licencia: event.nro_licencia,
+        });
+}
+cambioVehiculo(event:any){
+    this.vehiculo=event;
+    this.placa=this.vehiculo.placa;
+
+    this.formulario_interno.formulario.patchValue({
+        placa: this.vehiculo.placa,
+        tipo_transporte:this.vehiculo.tipo,
+        });
 }
 }

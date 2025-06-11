@@ -22,6 +22,8 @@ import { FormularioTrasladoColaService } from 'src/app/admin/services/formulario
 import { FormularioTrasladoColaFormulario } from 'src/app/admin/validators/formulario-cola';
 import { IFormularioTrasladoCola } from '@data/formulario_cola.metadata';
 import { IFormularioTrasladoColaMunicipioOrigen } from '@data/form_cola_municipio_origen.metadata';
+import { IChofer } from '@data/chofer.metadata';
+import { IVehiculo } from '@data/vehiculo.metadata';
 
 @Component({
   selector: 'app-edit-formulario-traslado-cola',
@@ -34,6 +36,11 @@ export class EditFormularioTrasladoColaComponent implements OnInit {
   public formulario_traslado_cola=new FormularioTrasladoColaFormulario();
   public departamento_id:number=0;
   public municipio_id:number=0;
+  public operador_id:number=0;
+  public placa:string='';
+  public nro_licencia:string='';
+  public chofer:IChofer | null = null; // ID del chofer seleccionado
+  public vehiculo:IVehiculo | null = null; // ID del vehiculo seleccionado
   public declaracionJurada:boolean=false;
   //public minerales:IMineral[]=[];
 
@@ -177,12 +184,15 @@ constructor(
 ) {
   this.actRoute.paramMap.subscribe(params=>{
      this.id=parseInt(params.get('id'));
+     this.operador_id=this.authService.getUser.operador_id;
     this.formularioTraladoDeCola.verFormularioTrasladoCola(this.id.toString()).subscribe(
       (data:any)=>{
       let formulario_int=data;
       this.num_form=formulario_int.nro_formulario;
 
       this.cargar_datos(formulario_int);
+      this.placa=this.formulario_traslado_cola.formulario.value.placa;
+      this.nro_licencia=this.formulario_traslado_cola.formulario.value.licencia
      // this.formulario_traslado_cola.formulario.get('operador_id')?.disable(); // Para desactivar
 
     },
@@ -652,5 +662,22 @@ if (errores.length > 0) {
 }
 cancelar(){
 
+}
+cambioVehiculo(event:any){
+    this.vehiculo=event;
+    this.placa=this.vehiculo.placa;
+
+    this.formulario_traslado_cola.formulario.patchValue({
+        placa: this.vehiculo.placa,
+        tipo_transporte:this.vehiculo.tipo,
+        });
+}
+cambioChofer(event:any){
+    this.chofer=event;
+    this.nro_licencia=this.chofer.nro_licencia;
+    this.formulario_traslado_cola.formulario.patchValue({
+        nom_conductor: event.nombre_apellidos,
+        licencia: event.nro_licencia,
+        });
 }
 }

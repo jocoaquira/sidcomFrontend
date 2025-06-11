@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@core/authentication/services/auth.service';
+import { IChofer } from '@data/chofer.metadata';
 import { IDepartamento } from '@data/departamento.metadata';
 import { IFormularioExternoMineral } from '@data/form_ext_mineral.metadata';
 import { IFormularioExternoMineralEnvio } from '@data/form_ext_mineral_envio.metadata';
@@ -13,6 +14,7 @@ import { IMineral } from '@data/mineral.metadata';
 import { IMunicipio } from '@data/municipio.metadata';
 import { IOperatorSimple } from '@data/operador_simple.metadata';
 import { ITDMNroForm } from '@data/toma_de_muestra_nroform.metadata';
+import { IVehiculo } from '@data/vehiculo.metadata';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, first, of, retry } from 'rxjs';
 import { CanCrearTomaDeMuestraGuard } from 'src/app/admin/guards/toma-de-muestra/can-crear-toma-de-muestra.guard';
@@ -38,6 +40,11 @@ export class CreateFormularioExternoComponent implements OnInit {
     public formulario_externo;
     public departamento_id:number=0;
     public municipio_id:number=0;
+    public operador_id:number=0;
+    public placa:string='';
+    public nro_licencia:string='';
+    public chofer:IChofer | null = null; // ID del chofer seleccionado
+    public vehiculo:IVehiculo | null = null; // ID del vehiculo seleccionado
     public declaracionJurada:boolean=false;
     pais_id: number | null = null;  // Guardar el ID del departamento seleccionado
     aduana_id: number | null = null;  // Guardar el ID del departamento seleccionado
@@ -179,9 +186,10 @@ nextStep() {
     public canCrearTomaDeMuestra:CanCrearTomaDeMuestraGuard,
   ) {
     this.formulario_externo=new FormularioExternoFormulario(this.canCrearTomaDeMuestra);
+    this.operador_id=this.authService.getUser.operador_id;
     this.formulario_externo.formulario.patchValue({
         user_id: authService.getUser.id,
-        operador_id:authService.getUser.operador_id
+        operador_id:this.operador_id
       });
       if(!canCrearTomaDeMuestra){
         this.formulario_externo.formulario.get('nro_formulario_tm')?.disable();
@@ -640,8 +648,22 @@ cargarDatosTDM(form:ITDMNroForm){
 
     });
   });
-
-
-
 }
+cambioChofer(event:any){
+        this.chofer=event;
+        this.nro_licencia=this.chofer.nro_licencia;
+        this.formulario_externo.formulario.patchValue({
+            nom_conductor: event.nombre_apellidos,
+            licencia: event.nro_licencia,
+          });
+    }
+    cambioVehiculo(event:any){
+        this.vehiculo=event;
+        this.placa=this.vehiculo.placa;
+
+        this.formulario_externo.formulario.patchValue({
+            placa: this.vehiculo.placa,
+            tipo_transporte:this.vehiculo.tipo,
+          });
+    }
 }

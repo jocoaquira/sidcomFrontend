@@ -18,6 +18,8 @@ import { RouterModule } from '@angular/router';
 import { CreateFormularioExternoComponent } from './create-formulario-externo.component';
 import { PaisSelectModule } from 'src/app/admin/components/paisSelect/paisSelect.module';
 import { AduanaSelectModule } from 'src/app/admin/components/aduanaSelect/aduanaSelect.module';
+import { ChoferSelectModule } from 'src/app/admin/components/choferSelect/choferSelect.module';
+import { VehiculoSelectModule } from 'src/app/admin/components/vehiculoSelect/vehiculoSelect.module';
 
 @NgModule({
   imports: [
@@ -29,6 +31,8 @@ import { AduanaSelectModule } from 'src/app/admin/components/aduanaSelect/aduana
 	  InputTextModule,
     TableModule,
     ButtonModule,
+    ChoferSelectModule,
+    VehiculoSelectModule,
     InputTextareaModule,
     DepartamentoSelectModule,
     PaisSelectModule,

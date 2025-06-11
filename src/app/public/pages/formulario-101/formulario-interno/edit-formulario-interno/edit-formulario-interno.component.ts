@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@core/authentication/services/auth.service';
+import { IChofer } from '@data/chofer.metadata';
 import { IDepartamento } from '@data/departamento.metadata';
 import { IFormularioInternoMineral } from '@data/form_int_mineral.metadata';
 import { IFormularioInternoMineralEnvio } from '@data/form_int_mineral_envio.metadata';
@@ -10,6 +11,7 @@ import { IFormularioInterno } from '@data/formulario_interno.metadata';
 import { IMineral } from '@data/mineral.metadata';
 import { IMunicipio } from '@data/municipio.metadata';
 import { IOperatorSimple } from '@data/operador_simple.metadata';
+import { IVehiculo } from '@data/vehiculo.metadata';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, of, retry } from 'rxjs';
 import { DepartamentosService } from 'src/app/admin/services/departamentos.service';
@@ -47,6 +49,11 @@ cambioDepartamento1(departamentoId: number): void {
   public operadores!:IOperatorSimple[];
   public minerales!:IMineral[];
   public municipios: IMunicipio[] = [];
+  public operador_id:number=0;
+  public placa:string='';
+  public nro_licencia:string='';
+  public chofer:IChofer | null = null; // ID del chofer seleccionado
+  public vehiculo:IVehiculo | null = null; // ID del vehiculo seleccionado
   public departamentos: IDepartamento[] = [];
   public presentaciones!:any;
   public presentacion:any={
@@ -168,12 +175,15 @@ constructor(
 ) {
   this.actRoute.paramMap.subscribe(params=>{
      this.id=parseInt(params.get('id'));
+     this.operador_id=this.authService.getUser.operador_id;
     this.formularioInternoService.verFormularioInterno(this.id.toString()).subscribe(
       (data:any)=>{
       let formulario_int=data;
       this.num_form=formulario_int.nro_formulario;
 
       this.cargar_datos(formulario_int);
+      this.placa=this.formulario_interno.formulario.value.placa;
+      this.nro_licencia=this.formulario_interno.formulario.value.licencia;
       this.formulario_interno.formulario.get('operador_id')?.disable(); // Para desactivar
 
     },
@@ -655,5 +665,22 @@ if (errores.length > 0) {
 }
 cancelar(){
 
+}
+cambioVehiculo(event:any){
+    this.vehiculo=event;
+    this.placa=this.vehiculo.placa;
+
+    this.formulario_interno.formulario.patchValue({
+        placa: this.vehiculo.placa,
+        tipo_transporte:this.vehiculo.tipo,
+        });
+}
+cambioChofer(event:any){
+    this.chofer=event;
+    this.nro_licencia=this.chofer.nro_licencia;
+    this.formulario_interno.formulario.patchValue({
+        nom_conductor: event.nombre_apellidos,
+        licencia: event.nro_licencia,
+        });
 }
 }

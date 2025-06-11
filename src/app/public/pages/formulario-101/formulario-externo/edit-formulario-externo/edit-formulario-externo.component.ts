@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@core/authentication/services/auth.service';
+import { IChofer } from '@data/chofer.metadata';
 import { IDepartamento } from '@data/departamento.metadata';
 import { IFormularioExternoMineral } from '@data/form_ext_mineral.metadata';
 import { IFormularioExternoMineralEnvio } from '@data/form_ext_mineral_envio.metadata';
@@ -10,6 +11,7 @@ import { IFormularioExterno } from '@data/formulario_externo.metadata';
 import { IMineral } from '@data/mineral.metadata';
 import { IMunicipio } from '@data/municipio.metadata';
 import { IOperatorSimple } from '@data/operador_simple.metadata';
+import { IVehiculo } from '@data/vehiculo.metadata';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, of, retry } from 'rxjs';
 import { CanCrearTomaDeMuestraGuard } from 'src/app/admin/guards/toma-de-muestra/can-crear-toma-de-muestra.guard';
@@ -34,6 +36,11 @@ export class EditFormularioExternoComponent implements OnInit {
   public formulario_externo=new FormularioExternoFormulario(this.canCrearActaTomaDeMuestra);
   public departamento_id:number=0;
   public municipio_id:number=0;
+  public operador_id:number=0;
+  public placa:string='';
+  public nro_licencia:string='';
+  public chofer:IChofer | null = null; // ID del chofer seleccionado
+  public vehiculo:IVehiculo | null = null; // ID del vehiculo seleccionado
   public declaracionJurada:boolean=false;
   //public minerales:IMineral[]=[];
 
@@ -166,12 +173,15 @@ constructor(
 ) {
   this.actRoute.paramMap.subscribe(params=>{
      this.id=parseInt(params.get('id'));
+     this.operador_id=this.authService.getUser.operador_id;
     this.formularioInternoService.verFormularioExterno(this.id.toString()).subscribe(
       (data:any)=>{
       let formulario_int=data;
       this.num_form=formulario_int.nro_formulario;
 
       this.cargar_datos(formulario_int);
+      this.placa=this.formulario_externo.formulario.value.placa;
+      this.nro_licencia=this.formulario_externo.formulario.value.licencia;
       this.formulario_externo.formulario.get('operador_id')?.disable(); // Para desactivar
 
     },
@@ -664,5 +674,22 @@ if (errores.length > 0) {
 }
 cancelar(){
 
+}
+cambioVehiculo(event:any){
+    this.vehiculo=event;
+    this.placa=this.vehiculo.placa;
+
+    this.formulario_externo.formulario.patchValue({
+        placa: this.vehiculo.placa,
+        tipo_transporte:this.vehiculo.tipo,
+        });
+}
+cambioChofer(event:any){
+    this.chofer=event;
+    this.nro_licencia=this.chofer.nro_licencia;
+    this.formulario_externo.formulario.patchValue({
+        nom_conductor: event.nombre_apellidos,
+        licencia: event.nro_licencia,
+        });
 }
 }

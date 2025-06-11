@@ -22,6 +22,8 @@ import { OperatorsService } from 'src/app/admin/services/operators.service';
 import { PresentacionService } from 'src/app/admin/services/presentacion.service';
 import { FormularioCooperativaFormulario } from 'src/app/admin/validators/formulario-cooperativa';
 import { FormularioCooperativaService } from 'src/app/admin/services/formulario-interno-cooperativa/formulario-cooperativa.service';
+import { IChofer } from '@data/chofer.metadata';
+import { IVehiculo } from '@data/vehiculo.metadata';
 
 @Component({
   selector: 'app-edit-formulario-interno-cooperativa',
@@ -34,6 +36,11 @@ export class EditFormularioInternoCooperativaComponent implements OnInit {
   public formulario_interno=new FormularioCooperativaFormulario();
   public departamento_id:number=0;
   public municipio_id:number=0;
+  public operador_id:number=0;
+  public placa:string='';
+  public nro_licencia:string='';
+  public chofer:IChofer | null = null; // ID del chofer seleccionado
+  public vehiculo:IVehiculo | null = null; // ID del vehiculo seleccionado
   public declaracionJurada:boolean=false;
   //public minerales:IMineral[]=[];
 
@@ -171,12 +178,15 @@ constructor(
 ) {
   this.actRoute.paramMap.subscribe(params=>{
      this.id=parseInt(params.get('id'));
+     this.operador_id=this.authService.getUser.operador_id;
     this.formularioCooperativaService.verFormularioInterno(this.id.toString()).subscribe(
       (data:any)=>{
       let formulario_int=data;
       this.num_form=formulario_int.nro_formulario;
 
       this.cargar_datos(formulario_int);
+      this.placa=this.formulario_interno.formulario.value.placa;
+      this.nro_licencia=this.formulario_interno.formulario.value.licencia;
      // this.formulario_interno.formulario.get('operador_id')?.disable(); // Para desactivar
 
     },
@@ -665,5 +675,22 @@ if (errores.length > 0) {
 }
 cancelar(){
 
+}
+cambioVehiculo(event:any){
+    this.vehiculo=event;
+    this.placa=this.vehiculo.placa;
+
+    this.formulario_interno.formulario.patchValue({
+        placa: this.vehiculo.placa,
+        tipo_transporte:this.vehiculo.tipo,
+        });
+}
+cambioChofer(event:any){
+    this.chofer=event;
+    this.nro_licencia=this.chofer.nro_licencia;
+    this.formulario_interno.formulario.patchValue({
+        nom_conductor: event.nombre_apellidos,
+        licencia: event.nro_licencia,
+        });
 }
 }

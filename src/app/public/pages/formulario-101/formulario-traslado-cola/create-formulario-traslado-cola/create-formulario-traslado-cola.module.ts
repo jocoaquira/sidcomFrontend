@@ -16,6 +16,8 @@ import { StepsModule } from 'primeng/steps';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { RouterModule } from '@angular/router';
 import { CreateFormularioTrasladoColaComponent } from './create-formulario-traslado-cola.component';
+import { ChoferSelectModule } from 'src/app/admin/components/choferSelect/choferSelect.module';
+import { VehiculoSelectModule } from 'src/app/admin/components/vehiculoSelect/vehiculoSelect.module';
 
 @NgModule({
   imports: [
@@ -24,7 +26,7 @@ import { CreateFormularioTrasladoColaComponent } from './create-formulario-trasl
     InputMaskModule,
     InputNumberModule,
     ReactiveFormsModule,
-	  InputTextModule,
+	InputTextModule,
     TableModule,
     ButtonModule,
     InputTextareaModule,
@@ -35,6 +37,8 @@ import { CreateFormularioTrasladoColaComponent } from './create-formulario-trasl
     StepsModule,
     TabMenuModule,
     FormsModule,
+    ChoferSelectModule,
+    VehiculoSelectModule,
   ],
   declarations: [CreateFormularioTrasladoColaComponent]
 })

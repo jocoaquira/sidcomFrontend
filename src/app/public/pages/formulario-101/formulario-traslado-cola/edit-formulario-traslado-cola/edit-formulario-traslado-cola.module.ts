@@ -15,6 +15,8 @@ import { EditFormularioTrasladoColaComponent } from './edit-formulario-traslado-
 import { DepartamentoSelectModule } from 'src/app/admin/components/departamentoSelect/departamentoSelect.module';
 import { MunicipioSelectModule } from 'src/app/admin/components/municipioSelect/municipioSelect.module';
 import { MineralesSelectModule } from 'src/app/admin/components/mineralesSelect/mineralesSelect.module';
+import { VehiculoSelectModule } from 'src/app/admin/components/vehiculoSelect/vehiculoSelect.module';
+import { ChoferSelectModule } from 'src/app/admin/components/choferSelect/choferSelect.module';
 
 @NgModule({
   imports: [
@@ -23,7 +25,9 @@ import { MineralesSelectModule } from 'src/app/admin/components/mineralesSelect/
     InputMaskModule,
     InputNumberModule,
     ReactiveFormsModule,
-	  InputTextModule,
+	InputTextModule,
+    ChoferSelectModule,
+    VehiculoSelectModule,
     TableModule,
     ButtonModule,
     InputTextareaModule,

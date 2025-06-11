@@ -16,6 +16,8 @@ import { StepsModule } from 'primeng/steps';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { RouterModule } from '@angular/router';
 import { CreateFormularioInternoCooperativaComponent } from './create-formulario-interno-cooperativa.component';
+import { ChoferSelectModule } from 'src/app/admin/components/choferSelect/choferSelect.module';
+import { VehiculoSelectModule } from 'src/app/admin/components/vehiculoSelect/vehiculoSelect.module';
 
 @NgModule({
   imports: [
@@ -24,7 +26,9 @@ import { CreateFormularioInternoCooperativaComponent } from './create-formulario
     InputMaskModule,
     InputNumberModule,
     ReactiveFormsModule,
-	  InputTextModule,
+	InputTextModule,
+    ChoferSelectModule,
+    VehiculoSelectModule,
     TableModule,
     ButtonModule,
     InputTextareaModule,

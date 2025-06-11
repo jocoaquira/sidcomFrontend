@@ -15,6 +15,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { StepsModule } from 'primeng/steps';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { EditFormularioInternoCooperativaComponent } from './edit-formulario-interno-cooperativa.component';
+import { VehiculoSelectModule } from 'src/app/admin/components/vehiculoSelect/vehiculoSelect.module';
+import { ChoferSelectModule } from 'src/app/admin/components/choferSelect/choferSelect.module';
 
 @NgModule({
   imports: [
@@ -34,6 +36,8 @@ import { EditFormularioInternoCooperativaComponent } from './edit-formulario-int
     StepsModule,
     TabMenuModule,
     FormsModule,
+    ChoferSelectModule,
+    VehiculoSelectModule,
   ],
   declarations: [EditFormularioInternoCooperativaComponent]
 })

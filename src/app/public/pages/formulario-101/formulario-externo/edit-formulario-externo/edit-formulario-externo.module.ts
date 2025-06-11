@@ -17,6 +17,8 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { EditFormularioExternoComponent } from './edit-formulario-externo.component';
 import { PaisSelectModule } from 'src/app/admin/components/paisSelect/paisSelect.module';
 import { AduanaSelectModule } from 'src/app/admin/components/aduanaSelect/aduanaSelect.module';
+import { ChoferSelectModule } from 'src/app/admin/components/choferSelect/choferSelect.module';
+import { VehiculoSelectModule } from 'src/app/admin/components/vehiculoSelect/vehiculoSelect.module';
 
 @NgModule({
   imports: [
@@ -38,6 +40,8 @@ import { AduanaSelectModule } from 'src/app/admin/components/aduanaSelect/aduana
     FormsModule,
     PaisSelectModule,
     AduanaSelectModule,
+    ChoferSelectModule,
+    VehiculoSelectModule,
   ],
   declarations: [EditFormularioExternoComponent]
 })

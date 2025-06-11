@@ -15,6 +15,8 @@ import { MineralesSelectModule } from 'src/app/admin/components/mineralesSelect/
 import { CheckboxModule } from 'primeng/checkbox';
 import { StepsModule } from 'primeng/steps';
 import { TabMenuModule } from 'primeng/tabmenu';
+import { ChoferSelectModule } from 'src/app/admin/components/choferSelect/choferSelect.module';
+import { VehiculoSelectModule } from 'src/app/admin/components/vehiculoSelect/vehiculoSelect.module';
 
 @NgModule({
   imports: [
@@ -30,6 +32,8 @@ import { TabMenuModule } from 'primeng/tabmenu';
     DepartamentoSelectModule,
     MunicipioSelectModule,
     MineralesSelectModule,
+    ChoferSelectModule,
+    VehiculoSelectModule,
     CheckboxModule,
     StepsModule,
     TabMenuModule,
