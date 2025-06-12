@@ -357,7 +357,34 @@ convertirHTMLATextoConViñetas(html) {
                               4: { cellWidth:185 }, // Ajusta automáticamente
                             },
                           });
+                            autoTable(doc, {
+                                startY: (doc as any).lastAutoTable?.finalY+3 || 40,
 
+                                body: [
+                                [
+                                    {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                    { content: (toma_de_muestra.cantidad !== null && toma_de_muestra.cantidad !== undefined)
+                                    ? 'CANTIDAD:'
+                                    : '', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                    { content:(toma_de_muestra.cantidad !== null && toma_de_muestra.cantidad !== undefined)
+                                    ? toma_de_muestra.cantidad
+                                    : '', styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    ],
+                                ],
+                                styles: {
+                                textColor: [0, 0, 0], // Color de texto negro
+                                valign: 'middle', // Alineación vertical centrada
+                                fontSize: 9, // Tamaño de fuente
+                                cellPadding: 2, // Espaciado interno de las celdas
+                                },
+                                columnStyles: {
+                                0: { cellWidth: 20 }, // Primera columna
+                                1: { cellWidth: 110 }, // Primera columna
+                                2: { cellWidth: 130 }, // Segunda columna
+                                3: { cellWidth:105 }, // Ajusta automáticamente
+                                4: { cellWidth:185 }, // Ajusta automáticamente
+                                },
+                            });
 
                            autoTable(doc, {
                             startY: (doc as any).lastAutoTable?.finalY+3 || 40,

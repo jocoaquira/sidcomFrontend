@@ -554,7 +554,8 @@ valSwitches(event:any){
          sw=true;
     }
     else{
-        this.notify.error('Revise el campo Ley (no mayor a 100  si unidad es % )...','Error con el Registro',{timeOut:5000,positionClass: 'toast-bottom-right'});
+        this.notify.error('Revise el campo Ley (no mayor a 100  si unidad es % y si es g/TM mayor a cero)...','Error con el Registro',{timeOut:5000,positionClass: 'toast-bottom-right'});
+        return;
     }
     if (this.formulario_mineral.descripcion && this.formulario_mineral.sigla_mineral && this.formulario_mineral.ley && this.formulario_mineral.unidad && sw) {
         // Verifica si el registro ya existe en la lista

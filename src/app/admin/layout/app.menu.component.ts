@@ -107,7 +107,6 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: 'Roles', icon: 'pi pi-fw pi-shield', routerLink: ['/admin/roles'], visible: this.canVerRolGuard.canActivate() },
                     { label: 'Permisos', icon: 'pi pi-fw pi-key',  routerLink: ['/admin/permisos'], visible: this.canVerPermisoGuard.canActivate() },
-                    { label: 'Usuario', icon: 'pi pi-fw pi-user-edit', routerLink: ['/admin/roles'], visible: this.canVerRolGuard.canActivate() },
                 ]
             },
 
@@ -122,5 +121,5 @@ export class AppMenuComponent implements OnInit {
     }
     cerrarSesion(){
         this.authService.logout();
-      }
+    }
 }

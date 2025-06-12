@@ -267,7 +267,13 @@
                                   </small>
                               </span>
                           </div>
-                          <div *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR'" class="field col-12 md:col-3">
+                          <div class="field col-12 md:col-2" *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR'" >
+                                <div class="field-checkbox">
+                                    <p-inputSwitch [ngModelOptions]="{ standalone: true }" [(ngModel)]="valSwitch" (onChange)="valSwitches($event)"></p-inputSwitch>
+                                    <label for="sf">Otro Comprador</label>
+                                </div>
+                            </div>
+                          <div *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR' && valSwitch" class="field col-12 md:col-3">
                               <span class="p-float-label">
                                   <input
                                       type="text"
@@ -282,6 +288,12 @@
                                   </small>
                               </span>
                           </div>
+                          <div class="field col-12 md:col-3 " *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR' && valSwitch==false">
+                                <app-operadoresSelect [nombre]="razon_social" (operador)="cambioOperadorSimple($event)" ></app-operadoresSelect>
+                                <small id="des_comprador" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_comprador')">
+                                    {{formulario_interno.getErrorMessage('des_comprador')}}
+                                </small>
+                            </div>
                           <div *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO'" class="field col-12 md:col-3">
                               <span class="p-float-label">
                                   <input

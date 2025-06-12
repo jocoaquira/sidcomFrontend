@@ -20,6 +20,7 @@ export interface IFormularioExternoPDF{
 	merma:number,
 	tara:number,
 	humedad:number,
+    cantidad:number
 	peso_neto:number,
 	peso_bruto_humedo:number,
 	minerales:IMineral[],

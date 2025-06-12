@@ -49,7 +49,7 @@ export class VehiculoSelectComponent implements OnChanges {
   }
 
   cambioVehiculo(event: any) {
-    console.log(event);
+
     const vehiculo = this.vehiculos.find((element) => element.placa === event.value);
     if (vehiculo) {
       this.vehiculo.emit(vehiculo);

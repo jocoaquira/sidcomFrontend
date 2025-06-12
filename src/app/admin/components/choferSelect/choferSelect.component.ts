@@ -20,7 +20,7 @@ export class ChoferSelectComponent implements OnChanges {
   constructor(public chofersService: ChoferService) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(this.operador_id)
+
     if (
       changes['operador_id'] &&
       changes['operador_id'].currentValue != null &&
@@ -51,7 +51,7 @@ export class ChoferSelectComponent implements OnChanges {
 
   cambioChofer(event: any) {
     const chofer = this.chofers.find((element) => element.nro_licencia === event.value);
-    console.log(chofer);
+
     if (chofer) {
       this.chofer.emit(chofer);
     } else {

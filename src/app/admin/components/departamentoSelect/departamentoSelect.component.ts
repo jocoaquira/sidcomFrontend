@@ -46,8 +46,8 @@ export class DepartamentoSelectComponent implements OnChanges {
   }
 
   cambioDepartamentos(event: any) {
-    console.log(event.value);
-    console.log(this.departamentos);
+
+
     if (!event.value) {
       console.warn('El valor seleccionado no es válido');
       return;

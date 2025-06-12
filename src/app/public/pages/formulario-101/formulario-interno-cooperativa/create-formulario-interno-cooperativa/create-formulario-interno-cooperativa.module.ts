@@ -18,6 +18,8 @@ import { RouterModule } from '@angular/router';
 import { CreateFormularioInternoCooperativaComponent } from './create-formulario-interno-cooperativa.component';
 import { ChoferSelectModule } from 'src/app/admin/components/choferSelect/choferSelect.module';
 import { VehiculoSelectModule } from 'src/app/admin/components/vehiculoSelect/vehiculoSelect.module';
+import { OperadoresSelectModule } from 'src/app/admin/components/operadoresSelect/operadoresSelect.module';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 @NgModule({
   imports: [
@@ -27,6 +29,7 @@ import { VehiculoSelectModule } from 'src/app/admin/components/vehiculoSelect/ve
     InputNumberModule,
     ReactiveFormsModule,
 	InputTextModule,
+    InputSwitchModule,
     ChoferSelectModule,
     VehiculoSelectModule,
     TableModule,
@@ -35,6 +38,7 @@ import { VehiculoSelectModule } from 'src/app/admin/components/vehiculoSelect/ve
     DepartamentoSelectModule,
     MunicipioSelectModule,
     MineralesSelectModule,
+    OperadoresSelectModule,
     CheckboxModule,
     StepsModule,
     TabMenuModule,

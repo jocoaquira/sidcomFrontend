@@ -38,9 +38,12 @@ export class EditFormularioInternoCooperativaComponent implements OnInit {
   public municipio_id:number=0;
   public operador_id:number=0;
   public placa:string='';
+  public razon_social:string='';
   public nro_licencia:string='';
   public chofer:IChofer | null = null; // ID del chofer seleccionado
   public vehiculo:IVehiculo | null = null; // ID del vehiculo seleccionado
+  public comprador:IOperatorSimple | null = null; // ID del vehiculo seleccionado
+  public valSwitch:boolean=false;
   public declaracionJurada:boolean=false;
   //public minerales:IMineral[]=[];
 
@@ -327,6 +330,17 @@ ngOnInit() {
   this.operadoresService.verOperatorsSimple('hj').subscribe(
       (data:any)=>{
       this.operadores=this.operadoresService.handleOperatorSimple(data);
+      const operadorEncontrado = this.operadores.find(operador =>
+        operador.razon_social===this.formulario_interno.formulario.value.des_comprador
+        );
+
+        if (operadorEncontrado) {
+            console.log(operadorEncontrado);
+            this.valSwitch=false;
+            this.razon_social=operadorEncontrado.razon_social;
+        } else {
+            this.valSwitch=true;
+        }
     },
     (error:any)=> this.error=this.operadoresService.handleOperatorSimpleError(error));
     this.mineralesService.verminerals('hj').subscribe(
@@ -692,5 +706,18 @@ cambioChofer(event:any){
         nom_conductor: event.nombre_apellidos,
         licencia: event.nro_licencia,
         });
+}
+cambioOperadorSimple(event:any){
+    this.comprador=event;
+        this.razon_social=this.comprador.razon_social;
+
+        this.formulario_interno.formulario.patchValue({
+            des_comprador: this.comprador.razon_social,
+          });
+    console.log(event);
+}
+valSwitches(event:any){
+    console.log(event);
+    this.valSwitch=event.checked;
 }
 }

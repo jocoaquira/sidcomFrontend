@@ -6,7 +6,9 @@
     </button>
 
     <div class="layout-topbar-logo">
-        <img src="assets/layout/images/logo-white.png" alt="logo">
+        <a [routerLink]="['/admin/']">
+            <img src="assets/layout/images/logo-white.png" alt="logo">
+        </a>
     </div>
 
     <div #topbarmenu class="layout-topbar-menu" [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">

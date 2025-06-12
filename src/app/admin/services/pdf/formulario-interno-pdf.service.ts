@@ -198,8 +198,12 @@ export class PdfFormularioInternoService {
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                 { content: 'LOTE:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: formulario_interno.lote, styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                                { content: 'MERMA:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: (formulario_interno.merma ?? 0)+' %', styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: (formulario_interno.merma !== null && formulario_interno.merma !== undefined)
+                                    ? 'MERMA:'
+                                    : '' , styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: (formulario_interno.merma !== null && formulario_interno.merma !== undefined)
+                                    ? formulario_interno.merma + ' %'
+                                    : '', styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
 
@@ -308,10 +312,18 @@ export class PdfFormularioInternoService {
                             body: [
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: 'HUMEDAD:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: (formulario_interno.humedad ?? 0)+' %', styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                                {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                { content:  (formulario_interno.humedad !== null && formulario_interno.humedad !== undefined)
+                                    ? 'HUMEDAD:'
+                                    : '', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: (formulario_interno.humedad !== null && formulario_interno.humedad !== undefined)
+                                    ? formulario_interno.humedad + ' %'
+                                    : '', styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                {content:(formulario_interno.cantidad !== null && formulario_interno.cantidad !== undefined)
+                                    ? 'CANTIDAD:'
+                                    : '',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                {content:(formulario_interno.cantidad !== null && formulario_interno.cantidad !== undefined)
+                                    ? formulario_interno.cantidad
+                                    : '',  styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
                             styles: {
@@ -324,8 +336,8 @@ export class PdfFormularioInternoService {
                               0: { cellWidth: 20 }, // Primera columna
                               1: { cellWidth: 60 }, // Primera columna
                               2: { cellWidth: 180 }, // Segunda columna
-                              3: { cellWidth:30 }, // Ajusta automáticamente
-                              4: { cellWidth:260 }, // Ajusta automáticamente
+                              3: { cellWidth:55 }, // Ajusta automáticamente
+                              4: { cellWidth:235 }, // Ajusta automáticamente
                             },
                            });
 

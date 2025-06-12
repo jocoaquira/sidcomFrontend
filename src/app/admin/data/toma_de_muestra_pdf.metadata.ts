@@ -9,6 +9,7 @@ export interface ITomaDeMuestraPDF {
     municipio: string,
 	camiones: number,
 	humedad:number,
+    cantidad:number,
 	nro_formulario: string,
 	lugar_verificacion: string,
 	razon_social: string,

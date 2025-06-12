@@ -371,7 +371,16 @@ nextStep() {
 
   agregarLey(){
     // Verifica si el formulario tiene datos completos
-    if (this.formulario_mineral.descripcion && this.formulario_mineral.sigla_mineral && this.formulario_mineral.ley && this.formulario_mineral.unidad) {
+    // Verifica si el formulario tiene datos completos
+    let sw:boolean=false;
+    if((this.formulario_mineral.unidad=='%' && parseFloat(this.formulario_mineral.ley)<100  && parseFloat(this.formulario_mineral.ley)>0) || (this.formulario_mineral.unidad=='g/TM'&& parseFloat(this.formulario_mineral.ley)>0))
+    {
+         sw=true;
+    }
+    else{
+        this.notify.error('Revise el campo Ley (no mayor a 100  si unidad es % y si es g/TM mayor a cero )...','Error con el Registro',{timeOut:5000,positionClass: 'toast-bottom-right'});
+    }
+    if (this.formulario_mineral.descripcion && this.formulario_mineral.sigla_mineral && this.formulario_mineral.ley && this.formulario_mineral.unidad && sw) {
         // Verifica si el registro ya existe en la lista
         const existe = this.lista_leyes_mineral.some(ley => ley.sigla_mineral === this.formulario_mineral.sigla_mineral);
 
@@ -437,7 +446,7 @@ nextStep() {
         this.municipio_origen.departamento=event;
     }
     cambioMunicipio(event){
-        //console.log(event);
+        //
         this.municipio_id=event;
         this.municipio_origen.municipio_id=event;
     }
@@ -540,10 +549,10 @@ cambioOperadorSimple(event:any){
         this.formulario_interno.formulario.patchValue({
             des_comprador: this.comprador.razon_social,
           });
-    console.log(event);
+
 }
 valSwitches(event:any){
-    console.log(event);
+
     this.valSwitch=event.checked;
 }
 }

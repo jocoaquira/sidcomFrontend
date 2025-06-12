@@ -12,6 +12,7 @@ import { IMineral } from '@data/mineral.metadata';
 import { IMunicipio } from '@data/municipio.metadata';
 import { IOperatorSimple } from '@data/operador_simple.metadata';
 import { IVehiculo } from '@data/vehiculo.metadata';
+import { co } from '@fullcalendar/core/internal-common';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, of, retry } from 'rxjs';
 import { DepartamentosService } from 'src/app/admin/services/departamentos.service';
@@ -52,8 +53,11 @@ cambioDepartamento1(departamentoId: number): void {
   public operador_id:number=0;
   public placa:string='';
   public nro_licencia:string='';
+  public razon_social:string='';
   public chofer:IChofer | null = null; // ID del chofer seleccionado
   public vehiculo:IVehiculo | null = null; // ID del vehiculo seleccionado
+  public comprador:IOperatorSimple | null = null; // ID del vehiculo seleccionado
+  public valSwitch:boolean=false;
   public departamentos: IDepartamento[] = [];
   public presentaciones!:any;
   public presentacion:any={
@@ -137,7 +141,7 @@ isStepValid(stepIndex: number): boolean {
       // Validar los campos del Paso 1
       valid = this.formulario_interno.formulario.get('peso_bruto_humedo')?.valid && this.formulario_interno.formulario.get('tara')?.valid &&
       (this.formulario_interno.formulario.get('merma')?.valid || this.formulario_interno.formulario.get('merma')?.disable) && (this.formulario_interno.formulario.get('humedad')?.valid || this.formulario_interno.formulario.get('humedad')?.disable) &&
-      this.formulario_interno.formulario.get('lote')?.valid && this.formulario_interno.formulario.get('presentacion')?.valid &&
+      this.formulario_interno.formulario.get('lote')?.valid && this.formulario_interno.formulario.get('presentacion_id')?.valid &&
       (this.formulario_interno.formulario.get('cantidad')?.valid || this.formulario_interno.formulario.get('cantidad')?.disabled) && this.formulario_interno.formulario.get('peso_neto')?.valid && this.lista_leyes_mineral.length>0;
 
       break;
@@ -327,6 +331,18 @@ ngOnInit() {
   this.operadoresService.verOperatorsSimple('hj').subscribe(
       (data:any)=>{
       this.operadores=this.operadoresService.handleOperatorSimple(data);
+      console.log(this.operadores);
+      const operadorEncontrado = this.operadores.find(operador =>
+        operador.razon_social===this.formulario_interno.formulario.value.des_comprador
+        );
+
+        if (operadorEncontrado) {
+            console.log(operadorEncontrado);
+            this.valSwitch=false;
+            this.razon_social=operadorEncontrado.razon_social;
+        } else {
+            this.valSwitch=true;
+        }
     },
     (error:any)=> this.error=this.operadoresService.handleOperatorSimpleError(error));
     this.mineralesService.verminerals('hj').subscribe(
@@ -508,7 +524,16 @@ guardarMunicipiosOrigen(formulario_int_id:any) {
 
 agregarLey(){
   // Verifica si el formulario tiene datos completos
-  if (this.formulario_mineral.descripcion && this.formulario_mineral.sigla_mineral && this.formulario_mineral.ley && this.formulario_mineral.unidad) {
+  let sw:boolean=false;
+    if((this.formulario_mineral.unidad=='%' && parseFloat(this.formulario_mineral.ley)<100  && parseFloat(this.formulario_mineral.ley)>0) || (this.formulario_mineral.unidad=='g/TM'&& parseFloat(this.formulario_mineral.ley)>0))
+    {
+         sw=true;
+    }
+    else{
+        this.notify.error('Revise el campo Ley (no mayor a 100  si unidad es % y si es g/TM mayor a cero)...','Error con el Registro',{timeOut:5000,positionClass: 'toast-bottom-right'});
+        return;
+    }
+  if (this.formulario_mineral.descripcion && this.formulario_mineral.sigla_mineral && this.formulario_mineral.ley && this.formulario_mineral.unidad && sw) {
       // Verifica si el registro ya existe en la lista
       const existe = this.lista_leyes_mineral.some(ley => ley.sigla_mineral === this.formulario_mineral.sigla_mineral);
 
@@ -682,5 +707,18 @@ cambioChofer(event:any){
         nom_conductor: event.nombre_apellidos,
         licencia: event.nro_licencia,
         });
+}
+cambioOperadorSimple(event:any){
+    this.comprador=event;
+        this.razon_social=this.comprador.razon_social;
+
+        this.formulario_interno.formulario.patchValue({
+            des_comprador: this.comprador.razon_social,
+          });
+    console.log(event);
+}
+valSwitches(event:any){
+    console.log(event);
+    this.valSwitch=event.checked;
 }
 }

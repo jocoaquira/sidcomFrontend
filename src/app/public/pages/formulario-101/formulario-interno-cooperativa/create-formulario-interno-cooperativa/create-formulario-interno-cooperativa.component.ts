@@ -35,11 +35,13 @@ export class CreateFormularioInternoCooperativaComponent implements OnInit {
     public operador_id:number=0;
     public placa:string='';
     public nro_licencia:string='';
+    public razon_social:string='';
     public chofer:IChofer | null = null; // ID del chofer seleccionado
     public vehiculo:IVehiculo | null = null; // ID del vehiculo seleccionado
+    public comprador:IOperatorSimple | null = null; // ID del vehiculo seleccionado
     public declaracionJurada:boolean=false;
     departamento_id1: number | null = null;  // Guardar el ID del departamento seleccionado
-  municipio_id1: number | null = null;
+    municipio_id1: number | null = null;
   // Método que se llama cuando cambia el departamento
   cambioDepartamento1(departamentoId: number): void {
     this.departamento_id1 = departamentoId;
@@ -56,6 +58,7 @@ export class CreateFormularioInternoCooperativaComponent implements OnInit {
         merma:0,
         cantidad:0
     }
+    public valSwitch:boolean=false;
     public tipo_transporte!:any;
     public destinos!:any;
     public unidades!:any;
@@ -544,5 +547,18 @@ cambioVehiculo(event:any){
         placa: this.vehiculo.placa,
         tipo_transporte:this.vehiculo.tipo,
         });
+}
+cambioOperadorSimple(event:any){
+    this.comprador=event;
+        this.razon_social=this.comprador.razon_social;
+
+        this.formulario_interno.formulario.patchValue({
+            des_comprador: this.comprador.razon_social,
+          });
+    console.log(event);
+}
+valSwitches(event:any){
+    console.log(event);
+    this.valSwitch=event.checked;
 }
 }

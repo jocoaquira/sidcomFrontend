@@ -83,10 +83,14 @@
                                     pInputText
                                     formControlName="nro_formulario_tm"
                                     class="ng-dirty"
+                                    (input)="cambioNroFormulario($event)"
                                 />
                                 <label for="Acta de Verificación">Acta de Verificacion Toma de Muestra</label>
                                 <small id="nro_formulario_tm" class="p-error "*ngIf="formulario_externo.esCampoInvalido('nro_formulario_tm')">
                                     {{formulario_externo.getErrorMessage('nro_formulario_tm')}}
+                                </small>
+                                <small id="nro_formulario_tm" class="p-error " *ngIf="!acta_TDM">
+                                    Se requiere un formulario de Toma de Muestra Aprobado
                                 </small>
                             </span>
                         </div>

@@ -17,6 +17,8 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { EditFormularioInternoCooperativaComponent } from './edit-formulario-interno-cooperativa.component';
 import { VehiculoSelectModule } from 'src/app/admin/components/vehiculoSelect/vehiculoSelect.module';
 import { ChoferSelectModule } from 'src/app/admin/components/choferSelect/choferSelect.module';
+import { OperadoresSelectModule } from 'src/app/admin/components/operadoresSelect/operadoresSelect.module';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 @NgModule({
   imports: [
@@ -25,13 +27,15 @@ import { ChoferSelectModule } from 'src/app/admin/components/choferSelect/chofer
     InputMaskModule,
     InputNumberModule,
     ReactiveFormsModule,
-	  InputTextModule,
+    InputSwitchModule,
+	InputTextModule,
     TableModule,
     ButtonModule,
     InputTextareaModule,
     DepartamentoSelectModule,
     MunicipioSelectModule,
     MineralesSelectModule,
+    OperadoresSelectModule,
     CheckboxModule,
     StepsModule,
     TabMenuModule,

@@ -232,8 +232,8 @@ export class PdfFormularioExternoService {
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                 { content: 'N° FACTURA:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: formulario_externo.nro_factura_exportacion, styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                                { content: 'ACTA DE VERIFICACIÓN:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_externo.acta_verificacion, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: formulario_externo.acta_verificacion ? 'ACTA DE VERIFICACIÓN:' : '', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: formulario_externo.acta_verificacion || '', styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
                             styles: {
@@ -249,7 +249,8 @@ export class PdfFormularioExternoService {
                               3: { cellWidth:120 }, // Ajusta automáticamente
                               4: { cellWidth:150 }, // Ajusta automáticamente
                             },
-                          });autoTable(doc, {
+                          });
+                          autoTable(doc, {
                             startY: (doc as any).lastAutoTable?.finalY || 10,
 
                             body: [
@@ -289,8 +290,12 @@ export class PdfFormularioExternoService {
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                 { content: 'LOTE:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: formulario_externo.lote, styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                                { content: 'MERMA:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_externo.merma+' %', styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: (formulario_externo.merma !== null && formulario_externo.merma !== undefined)
+                                    ? 'MERMA:'
+                                    : '' , styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: (formulario_externo.merma !== null && formulario_externo.merma !== undefined)
+                                    ? formulario_externo.merma + ' %'
+                                    : '', styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
 
@@ -399,10 +404,18 @@ export class PdfFormularioExternoService {
                             body: [
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: 'HUMEDAD:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_externo.humedad+' %', styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                                {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                { content: (formulario_externo.humedad !== null && formulario_externo.humedad !== undefined)
+                                    ? 'HUMEDAD:'
+                                    : '', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: (formulario_externo.humedad !== null && formulario_externo.humedad !== undefined)
+                                    ? formulario_externo.humedad + ' %'
+                                    : '', styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                {content:(formulario_externo.cantidad !== null && formulario_externo.cantidad !== undefined)
+                                    ? 'CANTIDAD:'
+                                    : '',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                { content: (formulario_externo.cantidad !== null && formulario_externo.cantidad !== undefined)
+                                    ? formulario_externo.cantidad
+                                    : '',  styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
                             styles: {
@@ -415,8 +428,8 @@ export class PdfFormularioExternoService {
                               0: { cellWidth: 20 }, // Primera columna
                               1: { cellWidth: 60 }, // Primera columna
                               2: { cellWidth: 180 }, // Segunda columna
-                              3: { cellWidth:30 }, // Ajusta automáticamente
-                              4: { cellWidth:260 }, // Ajusta automáticamente
+                              3: { cellWidth:55 }, // Ajusta automáticamente
+                              4: { cellWidth:235 }, // Ajusta automáticamente
                             },
                            });
 

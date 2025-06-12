@@ -11,6 +11,7 @@ import { IFormularioExterno } from '@data/formulario_externo.metadata';
 import { IMineral } from '@data/mineral.metadata';
 import { IMunicipio } from '@data/municipio.metadata';
 import { IOperatorSimple } from '@data/operador_simple.metadata';
+import { ITDMNroForm } from '@data/toma_de_muestra_nroform.metadata';
 import { IVehiculo } from '@data/vehiculo.metadata';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, of, retry } from 'rxjs';
@@ -23,6 +24,7 @@ import { MineralsService } from 'src/app/admin/services/minerales.service';
 import { MunicipiosService } from 'src/app/admin/services/municipios.service';
 import { OperatorsService } from 'src/app/admin/services/operators.service';
 import { PresentacionService } from 'src/app/admin/services/presentacion.service';
+import { TomaDeMuestraService } from 'src/app/admin/services/toma-de-muestra/toma-de-muestra.service';
 import { FormularioExternoFormulario } from 'src/app/admin/validators/formulario-externo';
 
 @Component({
@@ -43,7 +45,7 @@ export class EditFormularioExternoComponent implements OnInit {
   public vehiculo:IVehiculo | null = null; // ID del vehiculo seleccionado
   public declaracionJurada:boolean=false;
   //public minerales:IMineral[]=[];
-
+  public acta_TDM:ITDMNroForm=null;
  public pais_id1: number | null = null;  // Guardar el ID del departamento seleccionado
  public aduana_id1: number | null = null;
 
@@ -131,30 +133,26 @@ isStepValid(stepIndex: number): boolean {
   let valid = true;
   switch (stepIndex) {
     case 0:
-      // Validar los campos del Paso 1
-      valid = this.formulario_externo.formulario.get('peso_bruto_humedo')?.valid && this.formulario_externo.formulario.get('tara')?.valid &&
-      (this.formulario_externo.formulario.get('merma')?.valid || this.formulario_externo.formulario.get('merma')?.disable) && (this.formulario_externo.formulario.get('humedad')?.valid || this.formulario_externo.formulario.get('humedad')?.disable) &&
-      this.formulario_externo.formulario.get('lote')?.valid && this.formulario_externo.formulario.get('presentacion')?.valid &&
-      (this.formulario_externo.formulario.get('cantidad')?.valid || this.formulario_externo.formulario.get('cantidad')?.disabled) && this.formulario_externo.formulario.get('peso_neto')?.valid && this.lista_leyes_mineral.length>0;
 
+      /// Validar los campos del Paso 1
+        valid = this.formulario_externo.formulario.get('operador_id')?.valid && this.formulario_externo.formulario.get('m03_id')?.valid &&
+        this.formulario_externo.formulario.get('nro_factura_exportacion')?.valid && this.formulario_externo.formulario.get('laboratorio')?.valid &&
+        this.formulario_externo.formulario.get('codigo_analisis')?.valid &&
+        ((this.formulario_externo.formulario.get('nro_formulario_tm')?.valid && this.acta_TDM!=null) || this.formulario_externo.formulario.get('nro_formulario_tm')?.disabled);
       break;
     case 1:
       valid =this.lista_municipios_origen.length>0
       break;
     case 2:
-      valid = this.formulario_externo.formulario.get('des_tipo')?.valid &&
-     (this.formulario_externo.formulario.get('des_comprador')?.valid ||
-      this.formulario_externo.formulario.get('des_comprador')?.disabled) &&
-     (this.formulario_externo.formulario.get('des_planta')?.valid ||
-      this.formulario_externo.formulario.get('des_planta')?.disabled);
+      valid = this.formulario_externo.formulario.get('aduana_id')?.valid &&
+     (this.formulario_externo.formulario.get('comprador')?.valid) &&
+     (this.formulario_externo.formulario.get('pais_destino_id')?.valid);
       break;
     // Agregar validaciones para otros pasos si es necesario
   }
 
   return valid;
 }
-
-
 
 constructor(
   private canCrearActaTomaDeMuestra:CanCrearTomaDeMuestraGuard,
@@ -169,7 +167,8 @@ constructor(
   private presentacionService:PresentacionService,
   private actRoute:ActivatedRoute,
   private municipiosService:MunicipiosService,
-  public departamentosService: DepartamentosService
+  public departamentosService: DepartamentosService,
+  private tomaDeMuestraService:TomaDeMuestraService,
 ) {
   this.actRoute.paramMap.subscribe(params=>{
      this.id=parseInt(params.get('id'));
@@ -182,7 +181,6 @@ constructor(
       this.cargar_datos(formulario_int);
       this.placa=this.formulario_externo.formulario.value.placa;
       this.nro_licencia=this.formulario_externo.formulario.value.licencia;
-      this.formulario_externo.formulario.get('operador_id')?.disable(); // Para desactivar
 
     },
     (error:any)=> this.error=this.formularioInternoService.handleError(error));
@@ -315,7 +313,9 @@ cargar_datos(form:any){
           });
           this.pais_id1=this.formulario_externo.formulario.value.pais_destino_id;
           this.aduana_id1=this.formulario_externo.formulario.value.aduana_id;;
-
+          if(this.formulario_externo.formulario.value.nro_formulario_tm!=null){
+            this.cargarNroFormulario(form.nro_formulario_tm);
+          }
         }
       );
 
@@ -517,7 +517,16 @@ guardarMunicipiosOrigen(formulario_ext_id:any) {
 
 agregarLey(){
   // Verifica si el formulario tiene datos completos
-  if (this.formulario_mineral.descripcion && this.formulario_mineral.sigla_mineral && this.formulario_mineral.ley && this.formulario_mineral.unidad) {
+  let sw:boolean=false;
+    if((this.formulario_mineral.unidad=='%' && parseFloat(this.formulario_mineral.ley)<100  && parseFloat(this.formulario_mineral.ley)>0) || (this.formulario_mineral.unidad=='g/TM'&& parseFloat(this.formulario_mineral.ley)>0))
+    {
+         sw=true;
+    }
+    else{
+        this.notify.error('Revise el campo Ley (no mayor a 100  si unidad es % y si es g/TM mayor a cero)...','Error con el Registro',{timeOut:5000,positionClass: 'toast-bottom-right'});
+        return;
+    }
+  if (this.formulario_mineral.descripcion && this.formulario_mineral.sigla_mineral && this.formulario_mineral.ley && this.formulario_mineral.unidad && sw) {
       // Verifica si el registro ya existe en la lista
       const existe = this.lista_leyes_mineral.some(ley => ley.sigla_mineral === this.formulario_mineral.sigla_mineral);
 
@@ -691,5 +700,140 @@ cambioChofer(event:any){
         nom_conductor: event.nombre_apellidos,
         licencia: event.nro_licencia,
         });
+}
+cambioNroFormulario(event:any){
+  let nro_acta:any=(event.target as HTMLInputElement).value;
+  this.acta_TDM=null;
+  this.lista_municipios_origen = []; // Resetea la lista
+  this.lista_leyes_mineral=[];
+  this.minerales_envio=[];
+  this.municipio_origen_envio=[];
+  this.formulario_externo.formulario.patchValue({
+    lote:null,
+    presentacion_id:null,
+    humedad:0,
+  });
+  this.tomaDeMuestraService.verTomaDeMuestraForm(nro_acta,this.authService.getUser.operador_id).subscribe(
+    (data:any)=>{
+    this.acta_TDM=this.tomaDeMuestraService.handleTomaDeMuestraNroForm(data);
+    if(this.acta_TDM)
+    {
+      this.cargarDatosTDM(this.acta_TDM);
+    }
+  },
+  (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
+}
+cargarDatosTDM(form:ITDMNroForm){
+  this.formulario_externo.formulario.patchValue({
+    lote:form.lote,
+    presentacion_id:form.presentacion_id,
+    humedad:form.humedad,
+  });
+  this.minerales_envio=form.minerales//.push({...envio_minerales});
+  // Crear una nueva lista excluyendo ciertos campos
+    this.minerales_envio = form.minerales.map(mineral => {
+      // Devuelve solo los campos necesarios
+      return {
+        mineralId: mineral.mineralId,
+        ley: mineral.ley,
+        unidad: mineral.unidad
+      };
+    });
+
+  //this.lista_leyes_mineral.push({...this.formulario_mineral});
+
+  this.municipio_origen_envio=form.municipio_origen;
+  // Crear una nueva lista excluyendo ciertos campos
+  this.municipio_origen_envio = form.municipio_origen.map(destino => {
+    // Devuelve solo los campos necesarios
+    return {
+      id: destino.municipio_origen_id,
+    };
+  });
+
+  this.municipiosService.verTodosMunicipios()
+  .pipe(
+    catchError((error) => {
+      this.error = this.municipiosService.handleError(error);
+      this.municipios = [];
+
+      return of([]);
+    })
+  )
+  .subscribe((data: any) => {
+    this.municipios = this.municipiosService.handlemunicipio(data);
+    this.departamentosService.verdepartamentos('ds')
+    .pipe(
+      catchError((error) => {
+        this.error = this.departamentosService.handleError(error);
+        this.departamentos = [];
+        return of([]);
+      })
+    )
+    .subscribe((data: any) => {
+      this.departamentos = this.departamentosService.handledepartamento(data);
+
+      this.mineralesService.verminerals('gh')
+      .pipe(
+        retry(3), // Intenta 3 veces si hay un error
+        catchError((error) => {
+          this.error = this.mineralesService.handleError(error);
+          return of([]); // Retorna un arreglo vacío en caso de error
+        })
+      )
+      .subscribe(
+        (data: any) => {
+          this.minerales = this.mineralesService.handlemineral(data).filter(mineral => mineral.tipo !== 'COMPUESTO');
+
+
+          this.municipio_origen_envio.forEach((item) => {
+            let index = this.municipios.findIndex(i => i.id === item.id);
+            let departamento=this.departamentos.find(dat=>dat.id===this.municipios[index].departamento_id);
+
+            let  origen_mun:IFormularioExternoMunicipioOrigen={
+              municipio:this.municipios[index].municipio,
+              departamento:departamento.nombre,
+              municipio_id:this.municipios[index].id,
+            }
+            this.lista_municipios_origen.push({...origen_mun});
+          });
+
+          this.minerales_envio.forEach((item) => {
+            let index = this.minerales.findIndex(i => i.id === item.mineralId);
+            //let mineral=this.minerales.find(dat=>dat.id===this.minerales[index].id);
+
+            let  origen_min:IFormularioExternoMineral={
+              sigla_mineral:this.minerales[index].sigla,
+              descripcion:this.minerales[index].nombre,
+              ley:item.ley,
+              unidad:item.unidad,
+              mineral_id:this.minerales[index].id
+            }
+            this.lista_leyes_mineral.push({...origen_min});
+          });
+        }
+      );
+
+    });
+  });
+}
+cargarNroFormulario(event:any){
+  let nro_acta:any=event;
+  this.acta_TDM=null;
+  this.lista_municipios_origen = []; // Resetea la lista
+  this.lista_leyes_mineral=[];
+
+  this.minerales_envio=[];
+  this.municipio_origen_envio=[];
+
+  this.tomaDeMuestraService.verTomaDeMuestraForm(nro_acta,this.authService.getUser.operador_id).subscribe(
+    (data:any)=>{
+    this.acta_TDM=this.tomaDeMuestraService.handleTomaDeMuestraNroForm(data);
+    if(this.acta_TDM)
+    {
+      this.cargarDatosTDM(this.acta_TDM);
+    }
+  },
+  (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
 }
 }
