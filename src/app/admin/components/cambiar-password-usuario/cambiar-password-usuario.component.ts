@@ -78,7 +78,7 @@ export class CambiarPasswordComponent implements OnInit {
     }
   }
   valSwitches(event:any){
-      console.log(event);
+
       this.valSwitch=event.checked;
       this.usuario.password='';
   }
@@ -86,7 +86,7 @@ export class CambiarPasswordComponent implements OnInit {
     return this.errorVerificarContraseña;
   }
   verificar(event:Event){
-    console.log()
+
     const input = (event.target as HTMLInputElement).value;
     if(this.repetir_password==this.usuario.password){
       this.errorVerificarContraseña=false;
@@ -98,7 +98,7 @@ export class CambiarPasswordComponent implements OnInit {
   validarPassword() {
 
 
-  console.log(this.usuario.password);
+
     // Longitud mínima de 8 caracteres
     if (this.usuario.password.length < 8) {
       this.errorPass='La contraseña debe tener al menos 8 caracteres.';
@@ -128,7 +128,7 @@ export class CambiarPasswordComponent implements OnInit {
   actualizarUsuario() {
 
 
-    console.log(this.usuario);
+
 
     if (this.errorPass==null && this.errorVerificarContraseña==false) {
 
@@ -136,12 +136,12 @@ export class CambiarPasswordComponent implements OnInit {
           id: this.usuario.id,
           password: this.usuario.password
         };
-        console.log(this.usuario);
+
         this.usuarioService.editarusuario(datos).subscribe(
             (data:any) =>
             {
               this.usuarioService.handleEditarusuario(data);
-              console.log(data);
+
               if(data.error==null)
               {
                 this.estadoDialogo.emit(false);
@@ -151,7 +151,7 @@ export class CambiarPasswordComponent implements OnInit {
             },
             (error:any) =>
             {
-              console.log(error);
+
               this.errorUsuario=this.usuarioService.handleCrearusuarioError(error.error.data);
               if(error.error.status=='fail')
               {

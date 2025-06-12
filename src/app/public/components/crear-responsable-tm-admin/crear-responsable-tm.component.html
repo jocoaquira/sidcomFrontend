@@ -1,5 +1,5 @@
 <form [formGroup]="form.formulario" (ngSubmit)="onSubmit()">
-    
+
     <div class="field">
         <label for="ci">Cedula de Identidad</label>
         <input type="text" pInputText id="ci" formControlName="ci" autofocus/>
@@ -47,7 +47,7 @@
     <div class="botones-derecha">
         <span class="p-buttonset col-12 md:col-6 ">
             <button pButton pRipple label="Guardar" class="p-button-secondary" icon="pi pi-check" type="submit"></button>
-            <button pButton pRipple label="Cancelar"  class="p-button-danger" icon="pi pi-trash" (click)="ocultarDialogo()"></button>
+            <button pButton pRipple label="Cancelar" type="button"  class="p-button-danger" icon="pi pi-trash" (click)="ocultarDialogo()"></button>
         </span>
     </div>
 </form>
