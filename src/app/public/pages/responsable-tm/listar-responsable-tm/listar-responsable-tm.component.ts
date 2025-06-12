@@ -203,12 +203,6 @@ export class ListarResponsableTMComponent implements OnInit {
                 this.responsableTMService.verResponsableTMOperador(this.operador_id.toString()).subscribe(
                     (data:any)=>{
                     this.listaUsuarios=this.responsableTMService.handleusuario(data);
-                    this.listaUsuarios = this.listaUsuarios.map(usuario => ({
-                        ...usuario,
-                        operador: this.getNombreOperador(usuario.operador_id) // Asegúrate de añadir esta propiedad
-                    }));
-
-
                   },
                   (error:any)=> this.error=this.responsableTMService.handleError(error));
               }
@@ -222,9 +216,5 @@ export class ListarResponsableTMComponent implements OnInit {
             }
           );
 
-    }
-    getNombreOperador(id: number): string {
-        let operador = this.operadores.find(op => op.id === id);
-        return operador ? operador.razon_social : 'Desconocido';
     }
 }

@@ -117,7 +117,7 @@ export class CrearVehiculoComponent implements OnInit {
 
     this.form.formulario.value.tipo=this.form.formulario.value.tipo.nombre;
     this.form.formulario.value.estado=this.form.formulario.value.estado.label;
-    console.log(this.form.formulario.value);
+
     if (this.form.formulario.valid) {
         let limpio:any= Object.fromEntries(
             Object.entries(this.form.formulario.value).filter(([_, v]) => v !== null)
@@ -154,7 +154,7 @@ export class CrearVehiculoComponent implements OnInit {
       tipo:this.form.formulario.value.tipo.nombre,
       estado:this.form.formulario.value.estado.label
     });
-    console.log(this.form.formulario.value);
+
 
     if (this.form.formulario.valid) {
         let limpio:any= Object.fromEntries(

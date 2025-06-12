@@ -15,10 +15,9 @@
         <p-calendar
             inputId="fecha_vencimiento"
             formControlName="fecha_vencimiento"
-            dateFormat="dd-mm-yy"
+            dateFormat="dd/mm/yy"
             showIcon="true"
-            placeholder="dd-mm-yyyy"
-            (input)="errorEmailRepetido($event)"
+            placeholder="dd/mm/yyyy"
         ></p-calendar>
         <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('fecha_vencimiento')">
             {{ form.getErrorMessage('fecha_vencimiento') }}
@@ -29,10 +28,9 @@
         <p-calendar
             inputId="fecha_nacimiento"
             formControlName="fecha_nacimiento"
-            dateFormat="dd-mm-yy"
+            dateFormat="dd/mm/yy"
             showIcon="true"
-            placeholder="dd-mm-yyyy"
-            (input)="errorEmailRepetido($event)"
+            placeholder="dd/mm/yyyy"
         ></p-calendar>
         <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('fecha_nacimiento')">
             {{ form.getErrorMessage('fecha_nacimiento') }}
@@ -47,6 +45,7 @@
         <span class="p-float-label mt-5">
             <p-dropdown
                 inputId="dropdown"
+                *ngIf="categorias"
                 [autoDisplayFirst]="false"
                 [options]="categorias"
                 formControlName="categoria"
@@ -65,6 +64,7 @@
         <span class="p-float-label mt-5">
             <p-dropdown
                 inputId="dropdown"
+                *ngIf="estados"
                 [autoDisplayFirst]="false"
                 [options]="estados"
                 formControlName="estado"
@@ -82,7 +82,7 @@
     <div class="botones-derecha">
         <span class="p-buttonset col-12 md:col-6 ">
             <button pButton pRipple label="Guardar" class="p-button-secondary" icon="pi pi-check" type="submit"></button>
-            <button pButton pRipple label="Cancelar"  class="p-button-danger" icon="pi pi-trash" (click)="ocultarDialogo()"></button>
+            <button pButton pRipple label="Cancelar" type="button"  class="p-button-danger" icon="pi pi-trash" (click)="ocultarDialogo()"></button>
         </span>
     </div>
 </form>

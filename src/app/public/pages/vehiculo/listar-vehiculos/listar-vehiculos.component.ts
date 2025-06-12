@@ -88,7 +88,7 @@ export class ListarVehiculoComponent implements OnInit {
         this.vehiculoService.verVehiculoOperador(this.operador_id.toString()).subscribe(
             (data:any)=>{
             this.listaVehiculos=this.vehiculoService.handlevehiculo(data);
-                console.log(this.listaVehiculos);
+
 
           },
           (error:any)=> this.error=this.vehiculoService.handleError(error));
@@ -201,10 +201,7 @@ export class ListarVehiculoComponent implements OnInit {
                 this.vehiculoService.verVehiculoOperador(this.operador_id.toString()).subscribe(
                     (data:any)=>{
                     this.listaVehiculos=this.vehiculoService.handlevehiculo(data);
-                    this.listaVehiculos = this.listaVehiculos.map(usuario => ({
-                        ...usuario,
-                        operador: this.getNombreOperador(usuario.operador_id) // Asegúrate de añadir esta propiedad
-                    }));
+
 
 
                   },
@@ -220,9 +217,5 @@ export class ListarVehiculoComponent implements OnInit {
             }
           );
 
-    }
-    getNombreOperador(id: number): string {
-        let operador = this.operadores.find(op => op.id === id);
-        return operador ? operador.razon_social : 'Desconocido';
     }
 }

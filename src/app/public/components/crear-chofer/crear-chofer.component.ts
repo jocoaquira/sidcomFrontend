@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 
 import { IRol } from '@data/rol.metadata';
-import { IOperatorSimple } from '@data/operador_simple.metadata';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { OperatorsService } from 'src/app/admin/services/operators.service';
@@ -23,7 +22,6 @@ export class CrearChoferComponent implements OnInit {
   public errorVerificarContraseña:boolean=true;
   public errorVerificarEmail:boolean=false;
   public roles!:IRol[];
-  public operadores!:IOperatorSimple[];
   public nombre:string='';
   public sw1:any;
   public sw:any;
@@ -37,7 +35,6 @@ export class CrearChoferComponent implements OnInit {
   public operador_id:number=0;
 
   constructor(
-    private operadoresService:OperatorsService,
     private choferService:ChoferService,
     private notify:ToastrService,
     private authService:AuthService,
@@ -64,13 +61,14 @@ export class CrearChoferComponent implements OnInit {
         id:this.usuario.id,
         nombre_apellidos: this.usuario.nombre_apellidos,
         nro_licencia: this.usuario.nro_licencia,
-        fecha_vencimiento: this.usuario.fecha_vencimiento,
-        categoria: this.usuario.categoria,
+        fecha_vencimiento: this.usuario.fecha_vencimiento ? new Date(this.usuario.fecha_vencimiento) : null,
+        categoria:this.categorias.find((e: any) => e.label === this.usuario.categoria) || null,
         celular: this.usuario.celular,
-        fecha_nacimiento: this.usuario.fecha_nacimiento,
+        fecha_nacimiento: this.usuario.fecha_nacimiento ? new Date(this.usuario.fecha_nacimiento) : null,
         operador_id: this.usuario.operador_id,
         estado: this.estados.find((e: any) => e.label === this.usuario.estado) || null,
       });
+
     }
   }
   onChangeRol(rol_id:any){
@@ -92,6 +90,7 @@ export class CrearChoferComponent implements OnInit {
    // this.form.formulario.value.estado=this.form.formulario.value.estado.label;
   }
   ocultarDialogo(){
+
     this.form.formulario.reset();
     this.estadoDialogo.emit(false);
   }
@@ -104,10 +103,20 @@ export class CrearChoferComponent implements OnInit {
   }
   actualizarResponsable() {
 
-    this.form.formulario.value.categoria=this.form.formulario.value.categoria.label;
-    this.form.formulario.value.estado=this.form.formulario.value.estado.label;
-    this.form.formulario.value.celular=parseInt(this.form.formulario.value.celular);
+    if (!this.form.formulario.value.categoria || !this.form.formulario.value.estado) {
+        this.notify.error('Seleccione una categoría y estado válidos', 'Error', { timeOut: 2000 });
+        return;
+    }
 
+    // Usa optional chaining (?.) para evitar errores
+    const categoriaLabel = this.form.formulario.value.categoria?.label;
+    const estadoLabel = this.form.formulario.value.estado?.label;
+
+    this.form.formulario.patchValue({
+        categoria: categoriaLabel,
+        estado: estadoLabel,
+        celular: parseInt(this.form.formulario.value.celular)
+    });
     if (this.form.formulario.valid) {
         let limpio:any= Object.fromEntries(
             Object.entries(this.form.formulario.value).filter(([_, v]) => v !== null)
@@ -145,7 +154,7 @@ export class CrearChoferComponent implements OnInit {
       estado:this.form.formulario.value.estado.label,
       categoria:this.form.formulario.value.categoria.label
     });
-    console.log(this.form.formulario.value);
+
     if (this.form.formulario.valid) {
         let limpio:any= Object.fromEntries(
             Object.entries(this.form.formulario.value).filter(([_, v]) => v !== null)
@@ -174,28 +183,6 @@ export class CrearChoferComponent implements OnInit {
         this.notify.error('Revise los datos e intente nuevamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
       }
   }
-  errorEmailRepetido(event:any){
-    const email = (event.target as HTMLInputElement).value;
-    this.choferService.verificarEmail(email).subscribe(
-      (data:any)=>{
-        if(data==true)
-        {
-          this.errorVerificarEmail=true;
-        }
-        else{
-          this.errorVerificarEmail=false;
-        }
-    },
-    (error:any)=> this.error=this.choferService.handleError);
-  }
-  verificar(event:Event){
-    const input = (event.target as HTMLInputElement).value;
-    if(this.form.formulario.value.repetir_password==this.form.formulario.value.password){
-      this.errorVerificarContraseña=false;
-    }
-    else{
-      this.errorVerificarContraseña=true;
-    }
-  }
+
 
 }

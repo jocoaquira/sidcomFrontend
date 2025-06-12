@@ -37,7 +37,7 @@ export class InfoUsuarioComponent implements OnInit {
         private confirmationService:ConfirmationService
     ) {
         this.usuario_id= authService.getUser.id
-        console.log(authService.getUser);
+
         if(authService.getUser.operador_id==null)
         {
             this.isAdmin=true;
@@ -88,13 +88,13 @@ export class InfoUsuarioComponent implements OnInit {
                     (data:any) =>
                     {
                       this.usuarioService.handleCrearthis.usuario(data);
-                      console.log(data);
+
                       if(data.error==null)
                       {
                         this.usuarioService.usuarios('nada').subscribe(
                             (data:any)=>{
                             this.listaMinerales=this.usuarioService.handlethis.usuario(data);
-                            console.log(this.listaMinerales);
+
 
                           },
                           (error:any)=> this.error=this.usuarioService.handleError(error));
