@@ -18,7 +18,14 @@
                 --></ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="listaFormularioInternos" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['nro_formulario','razon_social','fecha_creacion','estado','fecha_vencimiento']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-table #dt [value]="listaFormularioInternos" [columns]="cols" responsiveLayout="scroll"
+                [rows]="30" [globalFilterFields]="['id','nro_formulario','razon_social','fecha_creacion','estado','fecha_vencimiento']"
+                [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple"
+                [rowHover]="true" dataKey="id"
+                sortField="id"
+                sortOrder="-1"
+            >
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Administrar Formularios Interno Cooperativa</h5>

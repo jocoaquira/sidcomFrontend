@@ -51,7 +51,8 @@ export class FormularioInternoComponent implements OnInit {
         this.formularioInternoService.verFormularioInternosOperadorSimple(this.operador_id.toString()).subscribe(
             (data:any)=>{
             this.listaFormularioInternos=this.formularioInternoService.handleFormularioInternoSimple(data);
-          },
+                console.log(this.listaFormularioInternos);
+        },
           (error:any)=> this.error=this.formularioInternoService.handleError(error));
 
 
