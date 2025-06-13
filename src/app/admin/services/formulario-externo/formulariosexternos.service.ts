@@ -149,6 +149,11 @@ private token(){
     let FormularioInterno:IFormularioInternoEmitidos=data;
     return FormularioInterno
   }
+  verReporteTopMinerales()
+  {
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}formext/reporte/minerales`);
+  }
 
 }
 

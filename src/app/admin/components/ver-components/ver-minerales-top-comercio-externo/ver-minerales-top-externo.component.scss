@@ -1,0 +1,27 @@
+/* Contenedor de las tarjetas */
+.card-container {
+    display: flex;
+    flex-wrap: wrap;  /* Las tarjetas se envuelven cuando no caben */
+    gap: 20px;  /* Espacio entre tarjetas */
+    justify-content: space-between;  /* Alinea las tarjetas con espacio entre ellas */
+  }
+
+  /* Cada tarjeta */
+  .card-container app-card-documentos {
+    flex: 1 1 300px;  /* Hace que cada tarjeta tenga un tamaño mínimo de 300px, pero crezca si hay espacio */
+    max-width: 33%; /* Hace que como máximo ocupen un tercio del espacio */
+  }
+
+  /* Para pantallas más pequeñas (por ejemplo, móviles) */
+  @media (max-width: 768px) {
+    .card-container app-card-documentos {
+      flex: 1 1 45%;  /* En pantallas pequeñas, las tarjetas ocupan 45% */
+    }
+  }
+
+  /* Para pantallas muy pequeñas (por ejemplo, móviles muy estrechos) */
+  @media (max-width: 480px) {
+    .card-container app-card-documentos {
+      flex: 1 1 100%;  /* En pantallas muy pequeñas, las tarjetas ocupan el 100% */
+    }
+  }

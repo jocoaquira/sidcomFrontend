@@ -191,6 +191,11 @@ private token(){
         'Authorization': `Bearer ${auth_token}`
       });
 }
+verReporteTopMinerales()
+  {
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}sample/reporte/minerales`);
+  }
 }
 
 

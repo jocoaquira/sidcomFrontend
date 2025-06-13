@@ -10,50 +10,6 @@ import { FormularioInternosService } from '../../services/formulario-interno/for
 import { FormularioExternosService } from '../../services/formulario-externo/formulariosexternos.service';
 import { IFormularioInternoEmitidos } from '@data/formulario_interno_emitidos.metadata';
 
-interface Mineral {
-    id: number;
-    nombre: string;
-    sigla: string;
-    cantidad_formularios: number;
-    peso_neto_total: number;
-    ley_promedio: number;
-    porcentaje_total: number; // Cambiado a number
-    ranking: number;
-  }
-
-  interface PeriodoReporte {
-    nombre: string;
-    dato: Mineral[];
-  }
-
-  interface Metadata {
-    generado_en: string;
-    calculo: string;
-  }
-
-  interface ApiResponse {
-    dia: PeriodoReporte;
-    semana: PeriodoReporte;
-    mes: PeriodoReporte;
-    anio: PeriodoReporte;
-    metadata: Metadata;
-  }
-  interface MineralResponse {
-    id: number;
-    nombre: string;
-    sigla: string;
-    cantidad_formularios: number;
-    peso_neto_total: number;
-    ley_promedio: number;
-    porcentaje_total: string | number; // Puede venir como "12.34%" o como número
-    ranking: number;
-  }
-
-  interface Mineral extends Omit<MineralResponse, 'porcentaje_total'> {
-    porcentaje_total: number; // Lo convertimos siempre a número
-  }
-
-
 
 @Component({
     templateUrl: './dashboard.component.html',
@@ -82,20 +38,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     finSemana: Date;
 
     //-----------para minerales Top---------------------------------------------
-    loading = true;
-    errorMessage = '';
-    minerales: Mineral[] = [];
-    periodos = [
-        { nombre: 'Día', codigo: 'dia' },
-        { nombre: 'Semana', codigo: 'semana' },
-        { nombre: 'Mes', codigo: 'mes' },
-        { nombre: 'Año', codigo: 'anio' }
-    ];
-    periodoSeleccionado = this.periodos[2];
-    metadata = {
-        generado_en: '',
-        calculo: ''
-      };
+
 
     constructor(
         public layoutService: LayoutService,
@@ -106,11 +49,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         private sanitizer: DomSanitizer
 
     ) {
-        this.subscription = this.layoutService.configUpdate$
-        .pipe(debounceTime(25))
-        .subscribe((config) => {
-            this.initChart();
-        });
+
 
         const user = this.authService.getUser.id;
         if(user){
@@ -139,11 +78,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.calcularRangoSemana();
-        this.cargarDatos(this.periodoSeleccionado.codigo);
+
     }
-    cambiarPeriodo(event: any) {
-        this.cargarDatos(event.value.codigo);
-      }
+
 
       private parsearPorcentaje(valor: unknown): number {
         // Caso 1: Ya es número
@@ -161,102 +98,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         return 0;
       }
 
-      cargarDatos(periodo: string) {
-        this.loading = true;
-
-        this.formInterno.verReporteTopMinerales().subscribe({
-          next: (response: any) => {
-            const periodoData = response[periodo];
-
-            if (periodoData?.dato) {
-              this.minerales = periodoData.dato.map((m: MineralResponse) => ({
-                ...m,
-                porcentaje_total: this.parsearPorcentaje(m.porcentaje_total)
-              })) as Mineral[];
-            }
-          },
-          error: (err) => {
-            this.error = this.formInterno.handleError(err);
-          },
-          complete: () => {
-            this.loading = false;
-          }
-        });
-      }
-
-    // Función auxiliar para acceso seguro a los datos del período
-    private getPeriodoData(response: ApiResponse, periodo: string): PeriodoReporte | null {
-        switch(periodo) {
-            case 'dia': return response.dia;
-            case 'semana': return response.semana;
-            case 'mes': return response.mes;
-            case 'anio': return response.anio;
-            default: return null;
-        }
-    }
-    getColor(index: number): string {
-        const colors = ['orange', 'cyan', 'pink', 'purple', 'teal'];
-        return colors[index % colors.length];
-      }
-
-    initChart() {
-        const documentStyle = getComputedStyle(document.documentElement);
-        const textColor = documentStyle.getPropertyValue('--text-color');
-        const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
-        const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
-
-        this.chartData = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-                {
-                    label: 'First Dataset',
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                    fill: false,
-                    backgroundColor: documentStyle.getPropertyValue('--bluegray-700'),
-                    borderColor: documentStyle.getPropertyValue('--bluegray-700'),
-                    tension: .4
-                },
-                {
-                    label: 'Second Dataset',
-                    data: [28, 48, 40, 19, 86, 27, 90],
-                    fill: false,
-                    backgroundColor: documentStyle.getPropertyValue('--green-600'),
-                    borderColor: documentStyle.getPropertyValue('--green-600'),
-                    tension: .4
-                }
-            ]
-        };
-
-        this.chartOptions = {
-            plugins: {
-                legend: {
-                    labels: {
-                        color: textColor
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    ticks: {
-                        color: textColorSecondary
-                    },
-                    grid: {
-                        color: surfaceBorder,
-                        drawBorder: false
-                    }
-                },
-                y: {
-                    ticks: {
-                        color: textColorSecondary
-                    },
-                    grid: {
-                        color: surfaceBorder,
-                        drawBorder: false
-                    }
-                }
-            }
-        };
-    }
 
     ngOnDestroy() {
         if (this.subscription) {

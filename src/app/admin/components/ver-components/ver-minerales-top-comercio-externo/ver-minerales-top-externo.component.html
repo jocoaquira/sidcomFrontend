@@ -1,0 +1,56 @@
+
+<div class="card">
+    <div class="flex justify-content-between align-items-center mb-5">
+    <h5>Top Minerales Transportados Comercio Externo</h5>
+    <div>
+        <p-dropdown [options]="periodos" [(ngModel)]="periodoSeleccionado"
+                    (onChange)="cambiarPeriodo($event)" optionLabel="nombre"
+                    [disabled]="loading"></p-dropdown>
+    </div>
+    </div>
+
+    <small class="text-500">
+    Fórmula: {{metadata.calculo}} |
+    Actualizado: {{metadata.generado_en | date:'short'}}
+    </small>
+
+    <div *ngIf="loading" class="my-3 p-2 text-center">
+    <i class="pi pi-spin pi-spinner mr-2"></i>Cargando datos...
+    </div>
+
+    <div *ngIf="errorMessage" class="p-3 my-2 border-round bg-red-100 text-red-700">
+    <i class="pi pi-exclamation-circle mr-2"></i>{{errorMessage}}
+    </div>
+
+    <ul *ngIf="!loading && minerales.length > 0" class="list-none p-0 m-0">
+    <li *ngFor="let mineral of minerales; let i = index"
+        class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4">
+        <div>
+        <span class="text-900 font-medium mr-2 mb-1 md:mb-0">
+            {{mineral.nombre}} ({{mineral.sigla}})
+        </span>
+        <div class="text-600 text-sm">
+            <span class="mr-2">📋 {{mineral.cantidad_formularios}} form.</span>
+
+            <span>🏆 #{{mineral.ranking}}</span>
+        </div>
+        </div>
+        <div class="mt-2 md:mt-0 flex align-items-center">
+        <div class="surface-300 border-round overflow-hidden w-10rem lg:w-6rem" style="height: 8px">
+            <div class="h-full"
+                [class]="'bg-' + getColor(i) + '-500'"
+                [style.width.%]="mineral.porcentaje_total"></div>
+        </div>
+        <span class="ml-3 font-medium"
+                [class]="'text-' + getColor(i) + '-600'">
+            {{mineral.peso_neto_total | number:'1.0-0'}} kg
+        </span>
+        </div>
+    </li>
+    </ul>
+
+    <div *ngIf="!loading && minerales.length === 0 && !errorMessage"
+        class="p-4 text-center text-500 border-round bg-gray-100">
+    <i class="pi pi-database mr-2"></i>No se encontraron registros
+    </div>
+</div>
