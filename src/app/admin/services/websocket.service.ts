@@ -17,6 +17,7 @@ export class WebsocketService {
     }
   connect(): void {
     this.user=this.authService.getUser;
+    console.log('Conectando al WebSocket con token:', this.user.token);
     this.ws = new WebSocket(this.baseUrlWS+'?token='+this.user.token); // Cambia el puerto si es necesario
 
     this.ws.onopen = () => {
