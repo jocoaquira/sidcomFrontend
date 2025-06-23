@@ -17,7 +17,14 @@
                 --></ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="listaFormularioExternos" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['nro_formulario','razon_social','fecha_creacion','estado','fecha_vencimiento']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-table #dt [value]="listaFormularioExternos" [columns]="cols" responsiveLayout="scroll"
+                [rows]="30" [globalFilterFields]="['nro_formulario','razon_social','fecha_creacion','estado','fecha_vencimiento']"
+                [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple"
+                [rowHover]="true" dataKey="id"
+                sortField="id"
+                sortOrder="-1"
+            >
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Administrar Formularios Externo</h5>
@@ -29,11 +36,11 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="idom">Numero de Formulario <p-sortIcon field="idom"></p-sortIcon></th>
-                        <th pSortableColumn="razon_social"> Fecha Creacion <p-sortIcon field="razon_social"></p-sortIcon></th>
-                        <th pSortableColumn="price">Razon Social<p-sortIcon field="price"></p-sortIcon></th>
-                        <th pSortableColumn="price">Fecha Vencimiento <p-sortIcon field="price"></p-sortIcon></th>
-                        <th pSortableColumn="category">Estado <p-sortIcon field="category"></p-sortIcon></th>
+                        <th pSortableColumn="id">Numero de Formulario <p-sortIcon field="id"></p-sortIcon></th>
+                        <th pSortableColumn="fecha_creacion"> Fecha Creacion <p-sortIcon field="fecha_creacion"></p-sortIcon></th>
+                        <th pSortableColumn="razon_social">Razon Social<p-sortIcon field="razon_social"></p-sortIcon></th>
+                        <th pSortableColumn="fecha_vencimiento">Fecha Vencimiento <p-sortIcon field="fecha_vencimiento"></p-sortIcon></th>
+                        <th pSortableColumn="estado">Estado <p-sortIcon field="estado"></p-sortIcon></th>
                         <th pSortableColumn="rating">Acciones <p-sortIcon field="rating"></p-sortIcon></th>
                         <th pSortableColumn="rating">Imprimir <p-sortIcon field="rating"></p-sortIcon></th>
                       </tr>

@@ -11,7 +11,7 @@ export class AppComponent implements OnInit {
 
     constructor(
         private primengConfig: PrimeNGConfig,
-        private wsService: WebsocketService
+        //private wsService: WebsocketService
     ) {
         localStorage.setItem('url-backend', environment.API_URL);
         localStorage.setItem('url-backend-ws', environment.API_WS);
@@ -21,10 +21,8 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.wsService.connect();
+        //this.wsService.connect();
         this.primengConfig.ripple = true;
     }
-    enviarMensaje() {
-    this.wsService.sendMessage('¡Hola desde Angular!');
-  }
+
 }
