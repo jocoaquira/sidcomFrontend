@@ -19,13 +19,13 @@ export class EditarAduanaComponent implements OnInit {
 
     public aduana=new AduanaFormulario();
     public departamento_id:number=0;
-    
+
     public aduana_registrado:IAduana=null;
     public id:number=null;
     public error!:any;
     public nombre:string='';
     public estados:any;
-    
+
   constructor(
     private aduanasService:AduanasService,
     private notify:ToastrService,
@@ -78,9 +78,9 @@ export class EditarAduanaComponent implements OnInit {
 
 
 
-    this.departamento_id=0; 
+    this.departamento_id=0;
   }
- // Función 
+ // Función
 
       options: any;
       satelliteLayer: any;
@@ -104,7 +104,7 @@ export class EditarAduanaComponent implements OnInit {
     }
   }
 agregarPunto() {
-   
+
     if(this.currentMarker!==undefined){
         const position = this.currentMarker.getLatLng();
         if(!this.sw_mapa)
@@ -115,14 +115,14 @@ agregarPunto() {
                 //this.sucursal.latitud=position.lat;
                 //this.sucursal.longitud=position.lng;
                 //this.operador.formulario.patchValue({created_at: position.lat, updated_at:position.lng});
-    
+
             }
             this.mapaDialogo = false;
     }
     else{
         this.notify.error('Seleccione un punto en el mapa para agregar....','Error al Seleccionar un Punto',{timeOut:2000,positionClass: 'toast-bottom-right'});
     }
-    
+
 
 }
 onMapReady(map: Map) {
@@ -160,7 +160,7 @@ abrirMapa() {
     this.sw_mapa=false;
     this.mapaDialogo = true;
       this.notify.error('Seleccione un departamento para abrir el mapa....','Error al Abrir el Mapa',{timeOut:2000,positionClass: 'toast-bottom-right'});
-  } 
+  }
 }
 cargar_datos(form:any){
   this.aduana.formulario.patchValue({
@@ -169,25 +169,27 @@ cargar_datos(form:any){
       codigo_aduana:form.codigo_aduana,
       latitud:form.latitud,
       longitud:form.longitud,
+      departamento_id:this.departamento.find((e: any) => e.id === form.departamento_id) || null,
       estado: this.estados.find((e: any) => e.label === form.estado) || null,
   });
+  console.log(this.aduana.formulario.value);
 }
   onSubmit(){
-
+    
   }
   guardar(){
-    
+
     this.aduana.formulario.patchValue({
         estado: this.aduana.formulario.value.estado.label
       });
     if(this.aduana.formulario.valid){
       console.log(this.aduana.formulario.value);
-      
+
       this.aduanasService.editaraduana(this.aduana.formulario.value).subscribe(
         (data:any) =>
         {
             this.aduana_registrado=this.aduanasService.handleCrearaduana(data);
-         
+
           if(this.aduana_registrado!==null)
           {
             console.log(this.aduana_registrado);
@@ -201,14 +203,14 @@ cargar_datos(form:any){
         },
         (error:any) =>
         {
-         
+
           this.error=this.aduanasService.handleCrearaduanaError(error.error.data);
           if(error.error.status=='fail')
           {
             this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
           }
         }
-      
+
           );
     }
     else{
@@ -216,15 +218,15 @@ cargar_datos(form:any){
         this.notify.error('Revise los datos e intente nuevamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
 
    }
-   
+
   }
 
     cambioDepartamentoMapa(departamento_id:any){
             console.log(departamento_id);
-    
+
             this.aduana.formulario.value.departamento=departamento_id.value;
             let dept:IDepartamento=this.departamento.find(element => element.id === departamento_id.value);
-             
+
                 this.options = {
                     center: latLng(dept.latitud,dept.longitud),
                     zoom: 13.5
@@ -250,9 +252,9 @@ private mostrarErrorFormularios(formGroup: AduanaFormulario): void {
   });
 
   if (errores.length > 0) {
-   
+
   } else {
-   
+
   }
 }
 cancelar(){

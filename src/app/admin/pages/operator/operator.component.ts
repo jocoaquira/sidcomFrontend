@@ -43,7 +43,7 @@ export class OperatorComponent implements OnInit {
     ngOnInit() {
         this.operatorsService.veroperators(this.nombre).subscribe(
             (data:any)=>{
-                console.log(data);
+
             this.listaOperadores=this.operatorsService.handleoperator(data);
           },
           (error:any)=> this.error=this.operatorsService.handleError(error));
@@ -150,7 +150,7 @@ export class OperatorComponent implements OnInit {
                     else{
                         operador.estado='ACTIVO';
                     }
-                console.log(operador);
+
                 this.operatorsService.editBloqueo(operador).subscribe(
                     (data:any) =>
                     {

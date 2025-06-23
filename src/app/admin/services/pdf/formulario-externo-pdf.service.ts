@@ -447,7 +447,7 @@ export class PdfFormularioExternoService {
                                 { content: 'MUNICIPIO PRODUCTOR:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: this.unirMunicipios(formulario_externo.municipio_origen), styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                 { content: ' CODIGO MUNICIPIO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: this.unirMunicipios(formulario_externo.municipio_origen), styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: this.unirMunicipiosCodigo(formulario_externo.municipio_origen), styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
 

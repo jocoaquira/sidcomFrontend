@@ -151,7 +151,11 @@ export class ListaTomaDeMuestraComponent implements OnInit {
 
         this.tomaDeMuestraService.solicitarTomaDeMuestra(event.id).subscribe(
             (data:any)=>{
-
+                this.tomaDeMuestraService.verTomaDeMuestrasSimple().subscribe(
+                    (data:any)=>{
+                    this.listaTomaDeMuestras=this.tomaDeMuestraService.handleTomaDeMuestraSimple(data);
+                  },
+                  (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
           },
           (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
     }

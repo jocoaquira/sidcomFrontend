@@ -94,7 +94,7 @@ export class AprobarProcedimientoComponent implements OnInit {
     ];
   }
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('IMPRESEE',this.tmd);
+
     if (changes && this.tmd.id!=null && this.isEditMode) {
       this.form.formulario.patchValue({
         id:this.tmd.id,
@@ -107,11 +107,11 @@ export class AprobarProcedimientoComponent implements OnInit {
       this.tomaDeMuestraService.verTomaDeMuestraPDF(this.tmd.id+'').subscribe(
             (data:any)=>{
             this.tdm_completo=this.tomaDeMuestraService.handleTomaDeMuestraPDF(data);
-            console.log('pdf:',this.tdm_completo);
+
           },
           (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
     }
-    console.log(this.form.formulario.value);
+
   }
   switchCaracterizacion(event:any){
 
@@ -124,12 +124,12 @@ export class AprobarProcedimientoComponent implements OnInit {
             tipo_muestra: 'SIN CARACTERIZACION',
           });
     }
-    console.log('Switch cambiado:', this.form.formulario.value);
+
   }
 
   // Método para manejar los cambios en los checkboxes
   onCheckboxChange(event: any, procedimiento: any): void {
-    console.log('Checkbox cambiado:', event, procedimiento);
+
     if (event.target.checked) {
       // Si el checkbox está marcado, lo agregamos a los seleccionados
       this.procedimientosSeleccionados.push({
@@ -173,14 +173,14 @@ export class AprobarProcedimientoComponent implements OnInit {
     this.form.formulario.patchValue({
       procedimiento: this.procedimientosSeleccionados,
     });
-    console.log(this.form.formulario.value);
-    console.log(this.procedimientosSeleccionados)
+
+
     if (this.form.formulario.valid) {
         this.tomaDeMuestraService.aprobarTomaDeMuestra(this.form.formulario.value,this.form.formulario.value.id).subscribe(
             (data:any) =>
             {
               this.tomaDeMuestraService.handleAprobarTomaDeMuestra(data);
-              console.log(data);
+
               if(data.error==null)
               {
                 this.form.formulario.reset();
@@ -190,7 +190,7 @@ export class AprobarProcedimientoComponent implements OnInit {
             },
             (error:any) =>
             {
-              console.log(error);
+
               this.errorUsuario=this.tomaDeMuestraService.handleAprobarTomaDeMuestraError(error.error.data);
               if(error.error.status=='fail')
               {
@@ -204,7 +204,7 @@ export class AprobarProcedimientoComponent implements OnInit {
   }
 
   aprobarResponsable() {
-    console.log("Formulario:", this.form.formulario.value); // Depuración inicial
+
 
     // Verificar si hay un archivo seleccionado
     if (!this.selectedFile) {
@@ -259,7 +259,7 @@ export class AprobarProcedimientoComponent implements OnInit {
       this.procedimientosSeleccionados.forEach((item: any) => {
         if (item.id !== undefined && item.id !== null) {
           formData.append("procedimiento[]", item.id.toString());
-          console.log(item.id.toString());
+
         } else {
           console.error("Error: Un procedimiento tiene un ID indefinido", item);
         }
@@ -269,18 +269,11 @@ export class AprobarProcedimientoComponent implements OnInit {
       return;
     }
 
-    // Verificar si todos los valores se agregaron correctamente
-    console.log("Valores en FormData:");
-    formData.forEach((value, key) => console.log(`${key}: ${value}`));
-    console.log('formulario valid: '+this.form.formulario.valid);
-    // Verificar si el formulario es válido antes de enviar
-
-
     // Enviar los datos al servicio
     this.tomaDeMuestraService.aprobarTomaDeMuestra(formData, this.form.formulario.value.id).subscribe(
       (data: any) => {
         this.tomaDeMuestraService.handleAprobarTomaDeMuestra(data);
-        console.log("Respuesta del servidor:", data);
+
 
         if (data.error == null) {
           this.form.formulario.reset();
@@ -307,7 +300,7 @@ export class AprobarProcedimientoComponent implements OnInit {
   onFileSelect(event: any) {
     const file: File = event.files[0]; // Aquí capturamos el primer archivo seleccionado
     this.selectedFile = file; // Lo guardamos en la propiedad selectedFile
-    console.log('Archivo seleccionado:', file);
+
   }
 
 

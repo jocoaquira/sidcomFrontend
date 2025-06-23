@@ -4,6 +4,7 @@ import { LayoutService } from "./service/app.layout.service";
 import { AuthService } from '@core/authentication/services/auth.service';
 import { Router } from '@angular/router';
 import { TomaDeMuestraService } from '../services/toma-de-muestra/toma-de-muestra.service';
+import { WebsocketService } from '../services/websocket.service'; // Importa el servicio WebSocket
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -16,75 +17,47 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
     items!: MenuItem[];
     overlayMenuItems = [];
     overlayMenuItem = [];
-    cantidadTDM:number=0;
-    error:any;
+    cantidadTDM: number = 0;
+    error: any;
 
     @ViewChild('menubutton') menuButton!: ElementRef;
-
     @ViewChild('topbarmenubutton') topbarMenuButton!: ElementRef;
-
     @ViewChild('topbarmenu') menu!: ElementRef;
 
     constructor(
         public layoutService: LayoutService,
-        public authService:AuthService,
-        public tdmNotificacion:TomaDeMuestraService,
+        public authService: AuthService,
+        public tdmNotificacion: TomaDeMuestraService,
+        private websocketService: WebsocketService, // Inyecta el servicio WebSocket
         private router: Router
-    ) {
+    ) {}
+
+    ngOnInit() {
+        // Suscripción a actualizaciones desde el WebSocket
+        this.websocketService.notificaciones$.pipe(
+            takeUntil(this.destroy$)
+        ).subscribe((data: number) => {
+            this.cantidadTDM = data; // Actualiza cantidadTDM con el valor recibido
+            this.actualizarMenu();
+        });
+
+        // Carga inicial desde el servicio
         this.tdmNotificacion.contarSolicitudesTDM().subscribe(
-            (data:any)=>{
-            this.cantidadTDM=Number(data.toString());
-            console.log(this.cantidadTDM);
-            this.overlayMenuItem = [
-                {
-                    label:'Solicitudes de Tomas de Muestra: '+ this.cantidadTDM,
-
-                    routerLink: ['/admin/toma-de-muestra/']
-                },
-                {
-                    separator: true
-                },
-                {
-                    label: 'Solicitudes de Inscripción',
-                    icon: 'pi pi-sign-out',
-                    routerLink: ['/admin/']
-                }
-
-            ];
-          },
-          (error:any)=> this.error=this.tdmNotificacion.handleError(error));
-        this.overlayMenuItems = [
-            {
-                label: authService.getUser.nombre_completo.toString(),
-                icon: 'pi pi-user',
-                routerLink: ['/admin/info/usuario']
+            (data: any) => {
+                this.cantidadTDM = Number(data.toString());
+                this.actualizarMenu();
             },
-            {
-                label: 'Salir',
-                icon: 'pi pi-sign-out',
-                command: ()=>this.authService.logout()
-            },
-            {
-                separator: true
-            },
-            {
-                label: 'Inicio',
-                icon: 'pi pi-home',
-                routerLink: ['/admin/']  // Navegación a ruta
-            }
-        ];
+            (error: any) => this.error = this.tdmNotificacion.handleError(error)
+        );
 
-     }
-     ngOnInit() {
-        // Suscripción a actualizaciones
-        this.tdmNotificacion.notificaciones$.pipe(
-          takeUntil(this.destroy$)
-        ).subscribe(count => {
-          this.cantidadTDM = count;
-          this.overlayMenuItem = [
-            {
-                label:'Solicitudes de Tomas de Muestra: '+ this.cantidadTDM,
+        // Conectar al WebSocket
+        this.websocketService.connect();
+    }
 
+    actualizarMenu() {
+        this.overlayMenuItem = [
+            {
+                label: 'Solicitudes de Tomas de Muestra: ' + this.cantidadTDM,
                 routerLink: ['/admin/toma-de-muestra/']
             },
             {
@@ -94,16 +67,11 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
                 label: 'Solicitudes de Inscripción',
                 routerLink: ['/admin/']
             }
-
         ];
-        });
+    }
 
-        // Carga inicial
-        this.tdmNotificacion.contarSolicitudesTDM().subscribe();
-      }
-
-      ngOnDestroy() {
+    ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();
-      }
+    }
 }

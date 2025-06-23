@@ -158,7 +158,7 @@ export class PdfFormularioInternoService {
                                 { content: 'NIM/NIAR:', styles: { halign: 'right', fontStyle: 'bold' } },
                                 { content: formulario_interno.nro_nim, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                 { content: 'IDOM:', styles: { halign: 'right', fontStyle: 'bold' } },
-                                { content: 'SDMMRE-'+formulario_interno.id, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: 'SDMMRE-'+formulario_interno.operador_id, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
 

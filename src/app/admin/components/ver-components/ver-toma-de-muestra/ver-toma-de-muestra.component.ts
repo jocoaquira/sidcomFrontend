@@ -98,9 +98,6 @@ export class VerTomaDeMuestraComponent implements OnInit {
         this.ley_mineral += (index > 0 ? ", " : "") + element.sigla + " (" + element.ley + " " + element.unidad + ")";
       }
     );
-
-    console.log('Minerales encontrados: ' + this.elementos);
-    console.log('Leyes minerales encontradas: ' + this.ley_mineral);
   }
   listarMunicipioOrigen() {
     if (!this.tomaDM || !this.tomaDM.municipio_origen) {
@@ -115,8 +112,6 @@ export class VerTomaDeMuestraComponent implements OnInit {
         this.municipio += (index > 0 ? ", " : "") + element.municipio_origen;
       }
     );
-
-    console.log('Municipios encontrados: ' + this.municipio);
   }
 
 }
