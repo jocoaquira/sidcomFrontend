@@ -1,7 +1,7 @@
 <div class="card">
 
     <p-table #dt
-    [value]="listaFormularioInternos"
+    [value]="listaFormularioExternos"
     [columns]="cols"
     responsiveLayout="scroll"
     [rows]="rows"
@@ -23,10 +23,10 @@
         <div class="flex justify-content-between">
             <div class="p-input-icon-left">
                 <button pButton pRipple
-                label="Nuevo Formulario Interno"
+                label="Nuevo Formulario Externo"
                 icon="pi pi-plus" class="p-button-success mr-2"
                 routerLink="/admin/formulario-101/formulario-interno/crear"
-                *ngIf="canCrearFormularioInterno.canActivate()"
+                *ngIf="canCrearFormularioExterno.canActivate()"
                 ></button>
             </div>
 
@@ -36,7 +36,7 @@
           </span>
         </div>
         <div class="flex items-center justify-center h-32 mt-4">
-            <h5 class="m-0">Administrar Formularios Interno</h5>
+            <h5 class="m-0">Administrar Formularios Externo</h5>
         </div>
       </ng-template>
 
@@ -90,14 +90,14 @@
           </td>
             <td>
                 <div class="flex">
-                    <button *ngIf="form.estado === 'GENERADO' && canEditarFormularioInterno.canActivate()"
+                    <button *ngIf="form.estado === 'GENERADO' && canEditarFormularioExterno.canActivate()"
                     pButton pRipple icon="pi pi-pencil" label="Modificar"
                     class="p-button-outlined p-button-warning mr-2"
                     routerLink="/admin/formulario-101/formulario-interno/editar/{{form?.id}}"
                     ></button>
 
                     <button *ngIf="form.estado === 'GENERADO'" pButton pRipple icon="pi pi-lock" label="Emitir" class="p-button-outlined p-button-success mr-2" (click)="confirmarEmision(form)"></button>
-                    <button *ngIf="form.estado !== 'GENERADO' && form.estado !== 'ANULADO' && canAnularFormularioInterno.canActivate()"
+                    <button *ngIf="form.estado !== 'GENERADO' && form.estado !== 'ANULADO' && canAnularFormularioExterno.canActivate()"
                     pButton pRipple icon="pi pi-trash" label="Anular"
                     class="p-button-outlined p-button-danger mr-2"
                     routerLink="/admin/formulario-101/formulario-interno/anular/{{form?.id}}"></button>
@@ -108,7 +108,7 @@
                     <button pButton pRipple icon="pi pi-print"
                     class="p-button-outlined p-button-info mr-2" (click)="generarPDF(form)
                     "
-                    *ngIf="canImprimirFormularioInterno.canActivate()"
+                    *ngIf="canImprimirFormularioExterno.canActivate()"
                     ></button>
                 </div>
             </td>

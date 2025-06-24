@@ -8,10 +8,11 @@ import { CanVerFormularioExternoGuard } from 'src/app/admin/guards/formulario-ex
 import { CanCrearFormularioExternoGuard } from 'src/app/admin/guards/formulario-externos/can-crear-formulario-externo.guard';
 import { CanEditarFormularioExternoGuard } from 'src/app/admin/guards/formulario-externos/can-editar-formulario-externo.guard';
 import { CanAnularFormularioExternoGuard } from 'src/app/admin/guards/formulario-externos/can-anular-formulario-externo.guard';
+import { ListarFormularioExternoComponent } from './listar-formext/listar_formext.component';
 
 @NgModule({
 	imports: [RouterModule.forChild([
-		{ path: '', component: FormularioExternoComponent,
+		{ path: '', component: ListarFormularioExternoComponent,
 					canActivate:[CanVerFormularioExternoGuard] },
 		{
 			path:'crear',component:CreateFormularioExternoComponent,

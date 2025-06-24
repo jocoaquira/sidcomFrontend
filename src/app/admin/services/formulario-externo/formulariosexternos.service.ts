@@ -6,6 +6,7 @@ import { IFormularioExterno } from '@data/formulario_externo.metadata';
 import { IFormularioExternoSimple } from '@data/formulario_externo_simple.metadata';
 import { IFormularioExternoPDF } from '@data/formulario_externo_pdf.metadata';
 import { IFormularioInternoEmitidos } from '@data/formulario_interno_emitidos.metadata';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -71,7 +72,24 @@ verFormularioExterno(nombre:string)
     let FormularioExterno:IFormularioExternoSimple[]=data;
     return FormularioExterno
   }
+  //-------------------------Simple Formulario Reducido------------------------------------
+  getFormReducidoOptimizado(
+    page: number = 1,
+    pageSize: number = 30,
+    searchTerm: string = '',
+    sortField: string = 'id',
+    sortOrder: number = -1
+  ): Observable<any> {
+    // Parámetros HTTP para paginación, búsqueda y ordenamiento
+    const params = new HttpParams()
+    .set('page', page.toString())
+    .set('pageSize', pageSize.toString())
+    .set('search', searchTerm)
+    .set('sortField', sortField)
+    .set('sortOrder', sortOrder.toString());
 
+    return this.http.get(`${this.baseUrl}formext/reducido-opt`, { params });
+  }
 //-----------------Visualizar Toma de Muestra-------------------------------------------
 verFormularioExternoPDF(nombre:string)
 {

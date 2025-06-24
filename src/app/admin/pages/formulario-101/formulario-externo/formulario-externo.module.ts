@@ -16,6 +16,7 @@ import { FormularioExternoRoutingModule } from './formulario-externo.routing';
 import { FormularioExternoComponent } from './formulario-externo.component';
 import { PaisSelectModule } from 'src/app/admin/components/paisSelect/paisSelect.module';
 import { AduanaSelectModule } from 'src/app/admin/components/aduanaSelect/aduanaSelect.module';
+import { ListarFormularioExternoModule } from './listar-formext/listar_formext.module';
 
 @NgModule({
   imports: [
@@ -33,7 +34,8 @@ import { AduanaSelectModule } from 'src/app/admin/components/aduanaSelect/aduana
     EditFormularioExternoModule,
     FormularioExternoRoutingModule,
     ConfirmDialogModule,
-   
+    ListarFormularioExternoModule
+
   ],
   declarations: [
     FormularioExternoComponent
