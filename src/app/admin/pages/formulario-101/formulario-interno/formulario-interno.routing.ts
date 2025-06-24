@@ -8,11 +8,12 @@ import { CanVerFormularioInternoGuard } from 'src/app/admin/guards/formulario-in
 import { CanCrearFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-crear-formulario-interno.guard';
 import { CanEditarFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-editar-formulario-interno.guard';
 import { CanAnularFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-anular-formulario-interno.guard';
+import { ListarFormularioInternoComponent } from './listar-formint/listar_formint.component';
 
 @NgModule({
 	imports: [RouterModule.forChild([
-		{ 
-			path: '', component: FormularioInternoComponent,
+		{
+			path: '', component:ListarFormularioInternoComponent ,
 			canActivate:[CanVerFormularioInternoGuard]
 		 },
 		{
@@ -26,7 +27,11 @@ import { CanAnularFormularioInternoGuard } from 'src/app/admin/guards/formulario
 		{
 			path:'anular/:id',component:AnularFormularioInternoComponent,
 			canActivate:[CanAnularFormularioInternoGuard]
-		}
+		},
+        {
+			path: 'listar', component: FormularioInternoComponent,
+			canActivate:[CanVerFormularioInternoGuard]
+		 },
 	])],
 	exports: [RouterModule]
 })
