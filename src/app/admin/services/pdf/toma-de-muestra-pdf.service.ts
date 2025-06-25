@@ -74,7 +74,7 @@ convertirHTMLATextoConViñetas(html) {
 }
 
     generarPDF(toma_de_muestra: ITomaDeMuestraPDF) {
-
+                console.log(toma_de_muestra);
                      const doc = new jsPDF('p', 'pt', 'letter');
 
                       const logo = new Image();
@@ -524,7 +524,7 @@ convertirHTMLATextoConViñetas(html) {
                                 [
 
                                     {
-                                    content: `${procedimientoID}`,
+                                    content: '',
 
                                     styles: {
                                         halign: 'left',
@@ -554,7 +554,7 @@ convertirHTMLATextoConViñetas(html) {
                                 body: items.map((item) => [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                 {
-                                    content: item.num_paso,
+                                    content: '',
                                     styles: {
                                     halign: 'left',
                                     fontStyle: 'bold',
