@@ -1,5 +1,5 @@
 <form [formGroup]="form.formulario" (ngSubmit)="onSubmit()">
-    
+
     <div class="field">
         <label for="ci">Cedula de Identidad</label>
         <input type="text" pInputText id="ci" formControlName="ci" autofocus/>
@@ -32,6 +32,8 @@
                 inputId="dropdown"
                 [autoDisplayFirst]="false"
                 [options]="operadores"
+                [filter]="true"
+                filterBy="razon_social"
                 formControlName="operador_id"
                 optionLabel="razon_social"
                 optionValue="id"
