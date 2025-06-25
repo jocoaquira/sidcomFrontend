@@ -5,6 +5,7 @@ import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.
 import { IFormularioInternoSimple } from '@data/formulario_interno_simple.metadata';
 import { IFormularioInterno } from '@data/formulario_interno.metadata';
 import { IFormularioInternoCooperativaPDF } from '@data/formulario_interno_cooperativa_pdf.metadata';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -58,6 +59,25 @@ verFormularioInterno(nombre:string)
     // asignacion de parametros
     return this.http.get(`${this.baseUrl}formintcooperativa/reducido`,{params:params});
   }
+    //-------------------------Simple Formulario Reducido------------------------------------
+    getFormReducidoOptimizado(
+      page: number = 1,
+      pageSize: number = 30,
+      searchTerm: string = '',
+      sortField: string = 'id',
+      sortOrder: number = -1
+    ): Observable<any> {
+      // Parámetros HTTP para paginación, búsqueda y ordenamiento
+      const params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString())
+      .set('search', searchTerm)
+      .set('sortField', sortField)
+      .set('sortOrder', sortOrder.toString());
+
+      return this.http.get(`${this.baseUrl}formintcooperativa/reducido-opt`, { params });
+    }
+//---------------------------------------------------------------------------------------------
   verFormularioCooperativaOperadorSimple(nombre:string)
   {
     // asignacion de parametros

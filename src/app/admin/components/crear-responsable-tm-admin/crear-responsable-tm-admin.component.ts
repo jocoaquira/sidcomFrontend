@@ -148,7 +148,6 @@ export class CrearResponsableTMAdminComponent implements OnInit {
       celular:parseInt(this.form.formulario.value.celular),
       estado:this.form.formulario.value.estado.label
     });
-    console.log(this.form.formulario.value)
     if (this.form.formulario.valid) {
         let limpio:any= Object.fromEntries(
             Object.entries(this.form.formulario.value).filter(([_, v]) => v !== null)

@@ -1,0 +1,124 @@
+<div class="card">
+
+    <p-table #dt
+    [value]="listaFormularioCooperativas"
+    [columns]="cols"
+    responsiveLayout="scroll"
+    [rows]="rows"
+    [paginator]="true"
+    [rowsPerPageOptions]="[10,20,30,50]"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+    [totalRecords]="totalRecords"
+    [lazy]="true"
+    (onPage)="onPageChange($event)"
+    (onSort)="onSort($event)"
+    dataKey="id"
+    [sortField]="sortField"
+    [sortOrder]="sortOrder"
+    [globalFilterFields]="['nro_formulario','razon_social','fecha_creacion','estado','fecha_vencimiento']">
+
+      <ng-template pTemplate="caption">
+
+        <div class="flex justify-content-between">
+            <div class="p-input-icon-left">
+                <button pButton pRipple
+                label="Nuevo Formulario Interno"
+                icon="pi pi-plus" class="p-button-success mr-2"
+                routerLink="/admin/formulario-101/formulario-cooperativa/crear"
+                *ngIf="canCrearFormularioCooperativa.canActivate()"
+                ></button>
+            </div>
+
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input type="text" pInputText placeholder="Buscar..." (input)="onGlobalFilter($event)" />
+          </span>
+        </div>
+        <div class="flex items-center justify-center h-32 mt-4">
+            <h5 class="m-0">Administrar Formularios Interno</h5>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="nro_formulario">
+            Número <p-sortIcon field="nro_formulario"></p-sortIcon>
+          </th>
+          <th pSortableColumn="razon_social">
+            Operador <p-sortIcon field="razon_social"></p-sortIcon>
+          </th>
+          <th pSortableColumn="fecha_creacion">
+            Fecha Creación <p-sortIcon field="fecha_creacion"></p-sortIcon>
+          </th>
+          <th pSortableColumn="fecha_vencimiento">
+            Vencimiento <p-sortIcon field="fecha_vencimiento"></p-sortIcon>
+          </th>
+          <th pSortableColumn="estado">
+            Estado <p-sortIcon field="estado"></p-sortIcon>
+          </th>
+          <th pSortableColumn="rating">Acciones <p-sortIcon field="rating"></p-sortIcon></th>
+          <th pSortableColumn="rating">Imprimir <p-sortIcon field="rating"></p-sortIcon></th>
+
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-form>
+        <tr>
+          <td>{{ form.nro_formulario }}</td>
+          <td>{{ form.razon_social }}</td>
+          <td>{{ form.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>{{ form.fecha_vencimiento | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>
+            <div class="flex">
+                <div *ngIf="form.estado === 'GENERADO'" class="custom-tag generado-tag">
+                    GENERADO
+                  </div>
+
+                  <div *ngIf="form.estado === 'EMITIDO'" class="custom-tag emitido-tag">
+                    EMITIDO
+                  </div>
+
+                  <div *ngIf="form.estado === 'VENCIDO'" class="custom-tag vencido-tag">
+                    VENCIDO
+                  </div>
+
+                  <div *ngIf="form.estado === 'ANULADO'" class="custom-tag anulado-tag">
+                    ANULADO
+                  </div>
+            </div>
+          </td>
+            <td>
+                <div class="flex">
+                    <button *ngIf="form.estado === 'GENERADO' && canEditarFormularioCooperativa.canActivate()"
+                    pButton pRipple icon="pi pi-pencil" label="Modificar"
+                    class="p-button-outlined p-button-warning mr-2"
+                    routerLink="/admin/formulario-101/formulario-cooperativa/editar/{{form?.id}}"
+                    ></button>
+
+                    <button *ngIf="form.estado === 'GENERADO'" pButton pRipple icon="pi pi-lock" label="Emitir" class="p-button-outlined p-button-success mr-2" (click)="confirmarEmision(form)"></button>
+                    <button *ngIf="form.estado !== 'GENERADO' && form.estado !== 'ANULADO' && canAnularFormularioCooperativa.canActivate()"
+                    pButton pRipple icon="pi pi-trash" label="Anular"
+                    class="p-button-outlined p-button-danger mr-2"
+                    routerLink="/admin/formulario-101/formulario-cooperativa/anular/{{form?.id}}"></button>
+                    </div>
+            </td>
+            <td>
+                <div class="flex">
+                    <button pButton pRipple icon="pi pi-print"
+                    class="p-button-outlined p-button-info mr-2" (click)="generarPDF(form)
+                    "
+                    *ngIf="canImprimirFormularioCooperativa.canActivate()"
+                    ></button>
+                </div>
+            </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5">No se encontraron registros</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>

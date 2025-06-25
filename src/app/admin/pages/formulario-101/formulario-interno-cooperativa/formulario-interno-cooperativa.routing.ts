@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { FormularioInternoCooperativaComponent } from './formulario-interno-cooperativa.component';
 import { CreateFormularioInternoCooperativaComponent } from './create-formulario-interno-cooperativa/create-formulario-interno-cooperativa.component';
 import { EditFormularioInternoCooperativaComponent } from './edit-formulario-interno-cooperativa/edit-formulario-interno-cooperativa.component';
 import { AnularFormularioInternoCooperativaComponent } from './anular-formulario-interno-cooperativa/anular-formulario-interno-cooperativa.component';
@@ -8,11 +7,12 @@ import { CanVerFormularioCooperativaGuard } from 'src/app/admin/guards/formulari
 import { CanCrearFormularioCooperativaGuard } from 'src/app/admin/guards/formulario-cooperativas/can-crear-formulario-cooperativa.guard';
 import { CanEditarFormularioCooperativaGuard } from 'src/app/admin/guards/formulario-cooperativas/can-editar-formulario-cooperativa.guard';
 import { CanAnularFormularioCooperativaGuard } from 'src/app/admin/guards/formulario-cooperativas/can-anular-formulario-cooperativa.guard';
+import { ListarFormularioCooperativaComponent } from './listar-formintcoope/listar_formintcoope.component';
 
 @NgModule({
 	imports: [RouterModule.forChild([
-		{ 
-			path: '', component: FormularioInternoCooperativaComponent,
+		{
+			path: '', component: ListarFormularioCooperativaComponent,
 			canActivate:[CanVerFormularioCooperativaGuard]
 		 },
 		{

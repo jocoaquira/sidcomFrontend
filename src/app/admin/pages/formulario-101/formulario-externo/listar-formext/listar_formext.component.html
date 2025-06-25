@@ -25,7 +25,7 @@
                 <button pButton pRipple
                 label="Nuevo Formulario Externo"
                 icon="pi pi-plus" class="p-button-success mr-2"
-                routerLink="/admin/formulario-101/formulario-interno/crear"
+                routerLink="/admin/formulario-101/formulario-externo/crear"
                 *ngIf="canCrearFormularioExterno.canActivate()"
                 ></button>
             </div>
@@ -93,14 +93,14 @@
                     <button *ngIf="form.estado === 'GENERADO' && canEditarFormularioExterno.canActivate()"
                     pButton pRipple icon="pi pi-pencil" label="Modificar"
                     class="p-button-outlined p-button-warning mr-2"
-                    routerLink="/admin/formulario-101/formulario-interno/editar/{{form?.id}}"
+                    routerLink="/admin/formulario-101/formulario-externo/editar/{{form?.id}}"
                     ></button>
 
                     <button *ngIf="form.estado === 'GENERADO'" pButton pRipple icon="pi pi-lock" label="Emitir" class="p-button-outlined p-button-success mr-2" (click)="confirmarEmision(form)"></button>
                     <button *ngIf="form.estado !== 'GENERADO' && form.estado !== 'ANULADO' && canAnularFormularioExterno.canActivate()"
                     pButton pRipple icon="pi pi-trash" label="Anular"
                     class="p-button-outlined p-button-danger mr-2"
-                    routerLink="/admin/formulario-101/formulario-interno/anular/{{form?.id}}"></button>
+                    routerLink="/admin/formulario-101/formulario-externo/anular/{{form?.id}}"></button>
                     </div>
             </td>
             <td>

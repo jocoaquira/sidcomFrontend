@@ -12,7 +12,7 @@ import { CanImprimirFormularioInternoGuard } from "src/app/admin/guards/formular
 import { CanListarFormularioInternoGuard } from "src/app/admin/guards/formulario-internos/can-listar-formulario-interno.guard";
 import { CanVerFormularioInternoGuard } from "src/app/admin/guards/formulario-internos/can-ver-formulario-interno.guard";
 import { CanEliminarOperatorGuard } from "src/app/admin/guards/operators/can-eliminar-operator.guard";
-import { FormularioInternosOptService} from "src/app/admin/services/formulario-interno/formulariosInternosOpt.service";
+import { FormularioInternosService } from "src/app/admin/services/formulario-interno/formulariosinternos.service";
 import { PdfFormularioInternoService } from "src/app/admin/services/pdf/formulario-interno-pdf.service";
 
 @Component({
@@ -45,7 +45,7 @@ export class ListarFormularioInternoComponent implements OnInit {
         public pdfFormularioInterno:PdfFormularioInternoService,
         private confirmationService:ConfirmationService,
         private notify:ToastrService,
-        private formIntService: FormularioInternosOptService
+        private formIntService: FormularioInternosService
     ) { }
 
     ngOnInit() {

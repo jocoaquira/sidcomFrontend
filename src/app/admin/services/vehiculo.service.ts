@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.metadata';
 import { IVehiculo } from '@data/vehiculo.metadata';
+import { IVehiculoAdmin } from '@data/vehiculo_admin.metadata';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +42,10 @@ export class VehiculoService {
   }
   handlevehiculo(data: IVehiculo[]):IVehiculo[] {
     let vehiculo:IVehiculo[]=data;
+    return vehiculo
+  }
+  handlevehiculoAdmin(data: IVehiculoAdmin[]):IVehiculoAdmin[] {
+    let vehiculo:IVehiculoAdmin[]=data;
     return vehiculo
   }
 

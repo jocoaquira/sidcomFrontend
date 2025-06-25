@@ -14,6 +14,7 @@ import { CreateFormularioInternoCooperativaModule } from './create-formulario-in
 import { AnularFormularioInternoCooperativaModule } from './anular-formulario-interno-cooperativa/anular-formulario-interno-cooperativa.module';
 import { EditFormularioInternoCooperativaModule } from './edit-formulario-interno-cooperativa/edit-formulario-interno-cooperativa.module';
 import { FormularioInternoCooperativaRoutingModule } from './formulario-interno-cooperativa.routing';
+import { ListarFormularioCooperativaModule } from './listar-formintcoope/listar_formintcoope.module';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { FormularioInternoCooperativaRoutingModule } from './formulario-interno-
     AnularFormularioInternoCooperativaModule,
     EditFormularioInternoCooperativaModule,
     FormularioInternoCooperativaRoutingModule,
+    ListarFormularioCooperativaModule,
     ConfirmDialogModule
   ],
   declarations: [

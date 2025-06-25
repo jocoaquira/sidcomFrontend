@@ -1,0 +1,71 @@
+<form [formGroup]="form.formulario" (ngSubmit)="onSubmit()">
+    <div class="field" *ngIf="!admin">
+        <label for="dropdown">Operador Minero</label>
+            <p-dropdown
+                inputId="dropdown"
+                [autoDisplayFirst]="false"
+                [options]="operadores"
+                formControlName="operador_id"
+                optionLabel="razon_social"
+                optionValue="id"
+                (ngModelChange)="onChangeOperadores($event)"
+            ></p-dropdown>
+    </div>
+    <div class="field">
+        <label>Placa:</label>
+        <input type="text" pInputText id="placa" formControlName="placa"  autofocus />
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('placa')">{{form.getErrorMessage('placa')}}</small>
+    </div>
+    <div class="field">
+        <label for="modelo">Modelo</label>
+        <input type="number" pInputText id="modelo" formControlName="modelo" autofocus/>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('modelo')">{{form.getErrorMessage('modelo')}}</small>
+    </div>
+    <div class="field">
+        <label for="marca">Marca</label>
+        <input type="text" pInputText id="marca" formControlName="marca" autofocus/>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('marca') || errorVerificarEmail" >{{form.getErrorMessage('marca')}}</small>
+        <small class="ng-dirty ng-invalid" *ngIf="errorVerificarEmail" >El marca ya existe en el sistema</small>
+    </div>
+    <div class="field">
+        <span class="p-float-label mt-5">
+            <p-dropdown
+                inputId="dropdown"
+                [autoDisplayFirst]="false"
+                [options]="tipos"
+                formControlName="tipo"
+                optionLabel="nombre"
+                [filter]="true"
+                filterBy="nombre"
+            >
+            </p-dropdown>
+
+            <label for="dropdown">Tipo de Vehiculo</label>
+        </span>
+    </div>
+    <div class="field">
+        <span class="p-float-label mt-5">
+            <p-dropdown
+                inputId="dropdown"
+                [autoDisplayFirst]="false"
+                [options]="estados"
+                formControlName="estado"
+                optionLabel="label"
+                (ngModelChange)="onChangeEstado($event)"
+            >
+                <ng-template let-option pTemplate="item">
+                    <span [class]="'usuario-badge estado-' + option.value">{{option.label}}</span>
+                </ng-template>
+            </p-dropdown>
+
+            <label for="dropdown">Estado</label>
+        </span>
+    </div>
+    <div class="botones-derecha">
+        <span class="p-buttonset col-12 md:col-6 ">
+            <button pButton pRipple label="Guardar" class="p-button-secondary" icon="pi pi-check" type="submit"></button>
+            <button pButton pRipple label="Cancelar" type="button"  class="p-button-danger" icon="pi pi-trash" (click)="ocultarDialogo()"></button>
+        </span>
+    </div>
+</form>
+

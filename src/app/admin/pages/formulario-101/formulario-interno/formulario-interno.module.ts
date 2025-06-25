@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormularioInternoComponent } from './formulario-interno.component';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
@@ -35,7 +34,6 @@ import { ListarFormularioInternoModule } from './listar-formint/listar_formint.m
     ConfirmDialogModule
   ],
   declarations: [
-    FormularioInternoComponent
 ]
 })
 export class FormularioInternoModule { }

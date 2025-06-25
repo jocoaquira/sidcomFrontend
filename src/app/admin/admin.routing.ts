@@ -25,6 +25,8 @@ import { AppLayoutComponent } from './layout/app.layout.component';
         { path: 'presentacion', loadChildren: () => import('./pages/presentaciones/presentacion.module').then(m => m.PresentacionModule) },
         { path: 'roles', loadChildren: () => import('./pages/roles/rol.module').then(m => m.RolModule) },
         { path: 'permisos', loadChildren: () => import('./pages/permisos/permiso.module').then(m => m.PermisoModule) },
+        { path: 'choferes', loadChildren: () => import('./pages/chofer/chofer.module').then(m => m.ChoferModule) },
+        { path: 'vehiculos', loadChildren: () => import('./pages/vehiculo/vehiculo.module').then(m => m.VehiculoModule) },
         { path: 'municipio', loadChildren: () => import('./pages/municipio/municipio.module').then(m => m.MunicipioModule) },
         { path: 'departamento', loadChildren: () => import('./pages/departamento/departamento.module').then(m => m.DepartamentoModule) },
         { path: 'lugar-verificacion-tdm', loadChildren: () => import('./pages/lugar-verificacion-tdm/lugar-verificacion-tdm.module').then(m => m.LugarVerificacionTDMModule) },

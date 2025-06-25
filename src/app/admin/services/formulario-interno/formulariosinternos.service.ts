@@ -6,6 +6,8 @@ import { IFormularioInternoSimple } from '@data/formulario_interno_simple.metada
 import { IFormularioInterno } from '@data/formulario_interno.metadata';
 import { IFormularioInternoPDF } from '@data/formulario_interno_pdf.metadata';
 import { IFormularioInternoEmitidos } from '@data/formulario_interno_emitidos.metadata';
+import { Observable } from 'rxjs';
+import { IPaginatedResponse } from '@data/PaginatedResponse.metadata';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +23,23 @@ export class FormularioInternosService {
 
 
     //this.requestOptions = { headers: headers };
+  }
+  getFormReducidoOptimizado(
+    page: number = 1,
+    pageSize: number = 30,
+    searchTerm: string = '',
+    sortField: string = 'id',
+    sortOrder: number = -1
+  ): Observable<any> {
+    // Parámetros HTTP para paginación, búsqueda y ordenamiento
+    const params = new HttpParams()
+    .set('page', page.toString())
+    .set('pageSize', pageSize.toString())
+    .set('search', searchTerm)
+    .set('sortField', sortField)
+    .set('sortOrder', sortOrder.toString());
+
+    return this.http.get(`${this.baseUrl}formint/reducido-opt`, { params });
   }
 //-----------------Visualizar operadores-------------------------------------------
   verFormularioInternos(nombre:string)

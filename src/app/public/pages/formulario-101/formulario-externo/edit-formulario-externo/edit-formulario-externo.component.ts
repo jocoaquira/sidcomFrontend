@@ -563,7 +563,7 @@ agregarLey(){
   }
 
   agregarMunicipio(){
-      if (this.municipio_origen.departamento && this.municipio_origen.municipio && this.municipio_origen.municipio_id) {
+      if (this.municipio_origen.departamento && this.municipio_origen.municipio) {
           // Verifica si el registro ya existe en la lista
           const existe = this.lista_municipios_origen.some(municipio => municipio.municipio_id === this.municipio_origen.municipio_id);
 

@@ -20,6 +20,8 @@ import { CanVerMunicipioGuard } from '../guards/municipios/can-ver-municipio.gua
 import { CanVerTomaDeMuestraGuard } from '../guards/toma-de-muestra/can-ver-toma-de-muestra.guard';
 import { CanVerFormularioCooperativaGuard } from '../guards/formulario-cooperativas/can-ver-formulario-cooperativa.guard';
 import { CanListarLugarVerificacionTDMGuard } from '../guards/lugar-verificacion-tdm/can-listar-lugar-verificacion-tdm.guard';
+import { CanVerChoferGuard } from '../guards/chofer/can-ver-chofer.guard';
+import { CanVerVehiculoGuard } from '../guards/vehiculo/can-ver-vehiculo.guard';
 
 @Component({
     selector: 'app-menu',
@@ -48,6 +50,8 @@ export class AppMenuComponent implements OnInit {
         private canVerPermisoGuard:CanVerPermisoGuard,
         private canVerDepartamentoGuard:CanVerDepartamentoGuard,
         private canVerMunicipioGuard:CanVerMunicipioGuard,
+        private canVerChoferGuard:CanVerChoferGuard,
+        private canVerVehiculoGuard:CanVerVehiculoGuard,
         private canVerTomaDeMuestraGuard:CanVerTomaDeMuestraGuard,
         private canListarLugarVerificacionTDMGuard:CanListarLugarVerificacionTDMGuard
         ) { }
@@ -67,13 +71,15 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Usuarios', icon: 'pi pi-fw pi-users', routerLink: ['/admin/usuario'], visible: this.canVerUsuarioGuard.canActivate() },
                     { label: 'Responsables SENARECOM', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/responsable-senarecom'],visible: this.canVerResponsableSenarecomGuard.canActivate() },
                     { label: 'Responsables Toma de Muestras', icon: 'pi pi-fw pi-users', routerLink: ['/admin/responsable-tm'],visible: this.canVerResponsableTMGuard.canActivate() },
+                    { label: 'Choferes', icon: 'pi pi-fw pi-reddit', routerLink: ['/admin/choferes'],visible: this.canVerChoferGuard.canActivate() },
+                    { label: 'Vehiculos', icon: 'pi pi-fw pi-truck', routerLink: ['/admin/vehiculos'],visible: this.canVerVehiculoGuard.canActivate() },
                     { label: 'Procedimientos', icon: 'pi pi-fw pi-directions', routerLink: ['/admin/procedimiento-tm'],visible: this.canVerProcedimientoGuard.canActivate() },
                     { label: 'Minerales', icon: 'pi pi-fw pi-prime', routerLink: ['/admin/mineral'],visible: this.canVerMineralGuard.canActivate() },
                     { label: 'Presentaciónes', icon: 'pi pi-fw pi-shopping-bag', routerLink: ['/admin/presentacion'],visible: this.canVerPresentacionGuard.canActivate() },
                     { label: 'Paises', icon: 'pi pi-fw pi-flag-fill', routerLink: ['/admin/pais'],visible: this.canVerPaisGuard.canActivate() },
-                    { label: 'Departamentos', icon: 'pi pi-fw pi-flag-fill', routerLink: ['/admin/departamento'],visible: this.canVerDepartamentoGuard.canActivate() },
+                    { label: 'Departamentos', icon: 'pi pi-fw pi-flag', routerLink: ['/admin/departamento'],visible: this.canVerDepartamentoGuard.canActivate() },
                     { label: 'Municipios', icon: 'pi pi-fw pi-flag-fill', routerLink: ['/admin/municipio'],visible: this.canVerMunicipioGuard.canActivate() },
-                    { label: 'Aduanas', icon: 'pi pi-fw pi-truck', routerLink: ['/admin/aduana'],visible: this.canVerAduanaGuard.canActivate() },
+                    { label: 'Aduanas', icon: 'pi pi-fw pi-box', routerLink: ['/admin/aduana'],visible: this.canVerAduanaGuard.canActivate() },
                     { label: 'Lugar de Verificacion TDM', icon: 'pi pi-map-marker', routerLink: ['/admin/lugar-verificacion-tdm'],visible: this.canListarLugarVerificacionTDMGuard.canActivate() },
                 ]
             },
@@ -103,7 +109,7 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
-                label: 'PERMISOS',
+                label: 'SEGURIDAD',
                 items: [
                     { label: 'Roles', icon: 'pi pi-fw pi-shield', routerLink: ['/admin/roles'], visible: this.canVerRolGuard.canActivate() },
                     { label: 'Permisos', icon: 'pi pi-fw pi-key',  routerLink: ['/admin/permisos'], visible: this.canVerPermisoGuard.canActivate() },

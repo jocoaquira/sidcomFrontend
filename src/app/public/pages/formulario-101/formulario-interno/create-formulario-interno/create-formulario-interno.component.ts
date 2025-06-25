@@ -417,7 +417,7 @@ nextStep() {
     }
 
     agregarMunicipio(){
-        if (this.municipio_origen.departamento && this.municipio_origen.municipio && this.municipio_origen.municipio_id) {
+        if (this.municipio_origen.departamento && this.municipio_origen.municipio) {
             // Verifica si el registro ya existe en la lista
             const existe = this.lista_municipios_origen.some(municipio => municipio.municipio_id === this.municipio_origen.municipio_id);
 
@@ -463,6 +463,7 @@ nextStep() {
         this.formulario_mineral.mineral_id=event;
     }
     cambioChofer(event:any){
+        console.log(event);
         this.chofer=event;
         this.nro_licencia=this.chofer.nro_licencia;
         this.formulario_interno.formulario.patchValue({

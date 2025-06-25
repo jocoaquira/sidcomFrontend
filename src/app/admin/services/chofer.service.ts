@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.metadata';
 import { IChofer } from '@data/chofer.metadata';
+import { IChoferAdmin } from '@data/chofer_admin.metadata';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +44,10 @@ export class ChoferService {
     let chofer:IChofer[]=data;
     return chofer
   }
+  handlechoferAdmin(data: IChoferAdmin[]):IChoferAdmin[] {
+    let chofer:IChoferAdmin[]=data;
+    return chofer
+  }
   verificarEmail(nombre:string)
   {
     // Inicializacion de objeto params
@@ -69,6 +74,7 @@ handleCrearchofer(data: IChofer):IChofer {
 }
 //---------------------Editar   chofer-------------------------------------------
 editarChofer(data:IChofer) {
+    console.log(data.id);
   this.token();
   return this.http.put(`${this.baseUrl}chofer/`+data.id, data)
 }
