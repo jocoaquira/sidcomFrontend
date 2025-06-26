@@ -19,6 +19,8 @@ import { BadgeModule } from 'primeng/badge';
 import { TagModule } from 'primeng/tag';
 import { CrearChoferModule } from 'src/app/public/components/crear-chofer/crear-chofer.module';
 import { ListarChoferComponent } from './listar-choferes.component';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 
 
 @NgModule({
@@ -44,7 +46,9 @@ import { ListarChoferComponent } from './listar-choferes.component';
         InputNumberModule,
         DialogModule,
         CrearChoferModule,
+        ConfirmDialogModule
     ],
     declarations: [ListarChoferComponent],
+        providers: [ConfirmationService]
 })
 export class ListarChoferModule { }

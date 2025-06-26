@@ -19,6 +19,8 @@ import { BadgeModule } from 'primeng/badge';
 import { TagModule } from 'primeng/tag';
 import { ListarResponsableSenarecomComponent } from './listar-responsable-senarecom.component';
 import { CrearResponsableSenarecomModule } from 'src/app/admin/components/crear-responsable-senarecom/crear-responsable-senarecom.module';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 
 
 @NgModule({
@@ -44,7 +46,9 @@ import { CrearResponsableSenarecomModule } from 'src/app/admin/components/crear-
         InputNumberModule,
         DialogModule,
         CrearResponsableSenarecomModule,
+        ConfirmDialogModule
     ],
     declarations: [ListarResponsableSenarecomComponent],
+        providers: [ConfirmationService]
 })
 export class ListarRersponsableSenarecomModule { }

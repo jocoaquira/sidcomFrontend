@@ -19,6 +19,8 @@ import { BadgeModule } from 'primeng/badge';
 import { TagModule } from 'primeng/tag';
 import { ListarResponsableTMComponent } from './listar-responsable-tm.component';
 import { CrearResponsableTMAdminModule } from 'src/app/admin/components/crear-responsable-tm-admin/crear-responsable-tm-admin.module';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 
 
 @NgModule({
@@ -44,7 +46,9 @@ import { CrearResponsableTMAdminModule } from 'src/app/admin/components/crear-re
         InputNumberModule,
         DialogModule,
         CrearResponsableTMAdminModule,
+        ConfirmDialogModule
     ],
     declarations: [ListarResponsableTMComponent],
+    providers: [ConfirmationService]
 })
 export class ListarResponsableTMModule { }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { UsuariosService } from 'src/app/admin/services/usuarios.service';
 import { CanCrearUsuarioGuard } from 'src/app/admin/guards/usuarios/can-crear-usuario.guard';
@@ -57,8 +57,6 @@ export class ListarResponsableSenarecomComponent implements OnInit {
         estado:null,
     };
     public submitted = true;
-    public deleteProductsDialog = false;
-    public deleteProductDialog=false;
     public operador_id:number=0;
 
     constructor(
@@ -71,7 +69,8 @@ export class ListarResponsableSenarecomComponent implements OnInit {
         public canEliminarUsuario:CanEliminarUsuarioGuard,
         private authService:AuthService,
         private notify:ToastrService,
-    ) { 
+        private confirmationService:ConfirmationService,
+    ) {
         this.operador_id= authService.getUser.operador_id
         console.log(this.operador_id);
     }
@@ -123,30 +122,11 @@ export class ListarResponsableSenarecomComponent implements OnInit {
         this.isEditMode = false;
     }
     edit(responsable:IResponsableSenarecom) {
-        this.responsable = { ...responsable }; 
-        
+        this.responsable = { ...responsable };
+
         //this.submitted = false;
         this.productDialog = true;
         this.isEditMode = true;
-    }
-
-
-    deleteSelectedProducts() {
-        this.deleteProductsDialog = true;
-    }
-
-
-
-    confirmDeleteSelected() {
-        this.deleteProductsDialog = false;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
-        //this.selectedProducts = [];
-    }
-
-    confirmDelete() {
-        this.deleteProductDialog = false;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
-        //this.product = {};
     }
 
     hideDialog() {
@@ -175,49 +155,14 @@ export class ListarResponsableSenarecomComponent implements OnInit {
 
         return index;
     }
-
-    createId(): string {
-        let id = '';
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        for (let i = 0; i < 5; i++) {
-            id += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return id;
-    }
-
     onGlobalFilter(table: Table, event: Event) {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
-    userRol(rol_id:any):string{
-        if(this.roles!=null){
-        let resp='';
-        let index = -1;
-        for (let i = 0; i < this.roles.length; i++) {
-            if (this.roles[i].id === rol_id) {
-                index = i;
-                break;
-            }
-        }
-        return this.roles[index].nombre;
-    }
-    return '';
-    }
-    userOperador(operador_id:any):string{
-        if(operador_id!=null && this.operadores!=null){
-        let index = -1;
-        for (let i = 0; i < this.operadores.length; i++) {
-            if (this.operadores[i].id === operador_id) {
-                index = i;
-                break;
-            }
-        }
-        return this.operadores[index].razon_social;
-        }
-        else{ return '';}
-
-
-    }
     bloquearDialogo(responsable:IResponsableSenarecom){
+    this.confirmationService.confirm({
+        key: 'confirm1',
+        message: '¿Estas seguro de Realizar esta Operación?',
+        accept: () => {
         if(responsable.estado=='ACTIVO')
         {
             responsable.estado='INACTIVO';
@@ -236,7 +181,7 @@ export class ListarResponsableSenarecomComponent implements OnInit {
                     (data:any)=>{
                     this.listaUsuarios=this.responsableSenarecomService.handleusuario(data);
                     console.log(this.listaUsuarios);
-        
+
                   },
                   (error:any)=> this.error=this.responsableSenarecomService.handleError(error));
 
@@ -251,6 +196,7 @@ export class ListarResponsableSenarecomComponent implements OnInit {
               }
             }
           );
-
+        },
+    });
     }
 }

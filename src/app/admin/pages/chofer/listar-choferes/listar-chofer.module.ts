@@ -20,6 +20,8 @@ import { TagModule } from 'primeng/tag';
 import { CrearChoferModule } from 'src/app/public/components/crear-chofer/crear-chofer.module';
 import { ListarChoferComponent } from './listar-choferes.component';
 import { CrearChoferAdminModule } from 'src/app/admin/components/crear-chofer-admin/crear-chofer-admin.module';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 
 
 @NgModule({
@@ -45,7 +47,9 @@ import { CrearChoferAdminModule } from 'src/app/admin/components/crear-chofer-ad
         InputNumberModule,
         DialogModule,
         CrearChoferAdminModule,
+        ConfirmDialogModule
     ],
     declarations: [ListarChoferComponent],
+    providers: [ConfirmationService]
 })
 export class ListarChoferModule { }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { CanCrearUsuarioGuard } from 'src/app/admin/guards/usuarios/can-crear-usuario.guard';
 import { CanEditarUsuarioGuard } from 'src/app/admin/guards/usuarios/can-editar-usuario.guard';
@@ -43,8 +43,6 @@ export class ListarChoferComponent implements OnInit {
         estado:null,
     };
     public submitted = true;
-    public deleteProductsDialog = false;
-    public deleteProductDialog=false;
     public operador_id:number=0;
 
     constructor(
@@ -56,6 +54,7 @@ export class ListarChoferComponent implements OnInit {
         public canEliminarUsuario:CanEliminarUsuarioGuard,
         private authService:AuthService,
         private notify:ToastrService,
+        private confirmationService:ConfirmationService,
     ) {
 
         this.operador_id= authService.getUser.operador_id;
@@ -116,25 +115,6 @@ export class ListarChoferComponent implements OnInit {
         this.isEditMode = true;
     }
 
-
-    deleteSelectedProducts() {
-        this.deleteProductsDialog = true;
-    }
-
-
-
-    confirmDeleteSelected() {
-        this.deleteProductsDialog = false;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
-        //this.selectedProducts = [];
-    }
-
-    confirmDelete() {
-        this.deleteProductDialog = false;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
-        //this.product = {};
-    }
-
     hideDialog() {
         this.productDialog = false;
         this.submitted = false;
@@ -162,21 +142,15 @@ export class ListarChoferComponent implements OnInit {
         return index;
     }
 
-    createId(): string {
-        let id = '';
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        for (let i = 0; i < 5; i++) {
-            id += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return id;
-    }
-
     onGlobalFilter(table: Table, event: Event) {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
 
     bloquearDialogo(responsable:any){
-
+    this.confirmationService.confirm({
+        key: 'confirm1',
+        message: '¿Estas seguro de Realizar esta Operación?',
+        accept: () => {
         // Crear una copia del objeto, excluyendo el campo "operador"
         const { operador, ...rest } = responsable;
 
@@ -216,6 +190,7 @@ export class ListarChoferComponent implements OnInit {
               }
             }
           );
-
+        },
+    });
     }
 }

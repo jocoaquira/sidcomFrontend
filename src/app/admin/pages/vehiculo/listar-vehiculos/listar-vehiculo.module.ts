@@ -19,6 +19,8 @@ import { BadgeModule } from 'primeng/badge';
 import { TagModule } from 'primeng/tag';
 import { ListarVehiculoComponent } from './listar-vehiculos.component';
 import { CrearVehiculoAdminModule } from 'src/app/admin/components/crear-vehiculo-admin/crear-vehiculo-admin.module';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 
 
 
@@ -45,7 +47,9 @@ import { CrearVehiculoAdminModule } from 'src/app/admin/components/crear-vehicul
         InputNumberModule,
         DialogModule,
         CrearVehiculoAdminModule,
+        ConfirmDialogModule
     ],
     declarations: [ListarVehiculoComponent],
+    providers: [ConfirmationService]
 })
 export class ListarVehiculoModule { }

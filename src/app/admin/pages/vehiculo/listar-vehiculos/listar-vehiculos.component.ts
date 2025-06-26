@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { CanCrearUsuarioGuard } from 'src/app/admin/guards/usuarios/can-crear-usuario.guard';
 import { CanEditarUsuarioGuard } from 'src/app/admin/guards/usuarios/can-editar-usuario.guard';
@@ -41,8 +41,6 @@ export class ListarVehiculoComponent implements OnInit {
         estado:null,
     };
     public submitted = true;
-    public deleteProductsDialog = false;
-    public deleteProductDialog=false;
     public operador_id:number=0;
 
     constructor(
@@ -54,6 +52,7 @@ export class ListarVehiculoComponent implements OnInit {
         public canEliminarUsuario:CanEliminarUsuarioGuard,
         private authService:AuthService,
         private notify:ToastrService,
+        private confirmationService:ConfirmationService,
     ) {
 
         this.operador_id= 0;
@@ -104,34 +103,9 @@ export class ListarVehiculoComponent implements OnInit {
 
         // Asignar el resto de las propiedades al objeto responsable
         this.responsable = { ...rest };
-       //
 
-
-
-        //this.responsable = { ...responsable };
-        //
-        //this.submitted = false;
         this.productDialog = true;
         this.isEditMode = true;
-    }
-
-
-    deleteSelectedProducts() {
-        this.deleteProductsDialog = true;
-    }
-
-
-
-    confirmDeleteSelected() {
-        this.deleteProductsDialog = false;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
-        //this.selectedProducts = [];
-    }
-
-    confirmDelete() {
-        this.deleteProductDialog = false;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
-        //this.product = {};
     }
 
     hideDialog() {
@@ -161,23 +135,17 @@ export class ListarVehiculoComponent implements OnInit {
         return index;
     }
 
-    createId(): string {
-        let id = '';
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        for (let i = 0; i < 5; i++) {
-            id += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return id;
-    }
-
     onGlobalFilter(table: Table, event: Event) {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
 
     bloquearDialogo(responsable:any){
-
+    this.confirmationService.confirm({
+        key: 'confirm1',
+        message: '¿Estas seguro de Realizar esta Operación?',
+        accept: () => {
         // Crear una copia del objeto, excluyendo el campo "operador"
-        const { operador, ...rest } = responsable;
+        const { razon_social, ...rest } = responsable;
 
         // Asignar el resto de las propiedades al objeto responsable
         this.responsable = { ...rest };
@@ -197,12 +165,9 @@ export class ListarVehiculoComponent implements OnInit {
               if(data.error==null)
               {
                 this.notify.success('Actualizado Correctamente','Actualizado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
-                this.vehiculoService.verVehiculos(this.operador_id.toString()).subscribe(
+                this.vehiculoService.verVehiculos(this.responsable.id.toString()).subscribe(
                     (data:any)=>{
                     this.listaVehiculos=this.vehiculoService.handlevehiculoAdmin(data);
-
-
-
                   },
                   (error:any)=> this.error=this.vehiculoService.handleError(error));
               }
@@ -215,6 +180,7 @@ export class ListarVehiculoComponent implements OnInit {
               }
             }
           );
-
+        },
+    });
     }
 }
