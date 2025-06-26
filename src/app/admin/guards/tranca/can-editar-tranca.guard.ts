@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router} from '@angular/router';
 import { PermissionHelperService } from '../../helpers/permission.helper.service';
-const canEditar='update_chofer';
+const canEditar='update_tranca';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CanEditarChoferGuard implements CanActivate {
+export class CanEditarTrancaGuard implements CanActivate {
   constructor(
     private router:Router,
     private permissionHelperService:PermissionHelperService,

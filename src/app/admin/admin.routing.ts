@@ -14,6 +14,8 @@ import { AppLayoutComponent } from './layout/app.layout.component';
         { path: 'info', loadChildren: () => import('../core/info-cuenta/info-cuenta.module').then(m => m.InfoCuentaModule) },
         { path: 'operador', loadChildren: () => import('./pages/operator/operator.module').then(m => m.OperatorModule) },
         { path: 'usuario', loadChildren: () => import('./pages/usuario/usuario.module').then(m => m.UsuarioModule) },
+        { path: 'puesto-control', loadChildren: () => import('./pages/tranca/tranca.module').then(m => m.TrancaModule) },
+        { path: 'control-tranca', loadChildren: () => import('./pages/control-tranca/control-tranca.module').then(m => m.ControlTrancaModule) },
         { path: 'formulario-101', loadChildren: () => import('./pages/formulario-101/formulario-101.module').then(m => m.Formulario101Module) },
         { path: 'toma-de-muestra', loadChildren: () => import('./pages/toma-de-muestra/toma-de-muestra.module').then(m => m.TomaDeMuestraModule) },
         { path: 'responsable-tm', loadChildren: () => import('./pages/responsable-tm/responsable-tm.module').then(m => m.ResponsableTMModule) },

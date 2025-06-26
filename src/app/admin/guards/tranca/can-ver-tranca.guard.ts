@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router} from '@angular/router';
+import {CanActivate, Router} from '@angular/router';
 import { PermissionHelperService } from '../../helpers/permission.helper.service';
-const canEditar='update_chofer';
-
+const canVer='view_tranca';
 @Injectable({
   providedIn: 'root'
 })
-export class CanEditarChoferGuard implements CanActivate {
+export class CanVerTrancaGuard implements CanActivate {
+
   constructor(
     private router:Router,
     private permissionHelperService:PermissionHelperService,
@@ -14,7 +14,7 @@ export class CanEditarChoferGuard implements CanActivate {
   public canActivate(
   ):boolean{
     if(this.permissionHelperService.existeUsuarioPermisos()){
-      return this.permissionHelperService.existePermiso(canEditar);
+      return this.permissionHelperService.existePermiso(canVer);
     }
     this.router.navigate(['auth']);
     return false;
