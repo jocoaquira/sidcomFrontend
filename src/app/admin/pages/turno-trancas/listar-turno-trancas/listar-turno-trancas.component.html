@@ -1,3 +1,29 @@
+<div class="grid p-fluid mt-3">
+    <div class="field col-12 md:col-3">
+        <span class="p-float-label">
+            <p-calendar
+                inputId="fecha_de_inicio"
+                dateFormat="dd-mm-yy"
+                [(ngModel)]="fecha_de_inicio"
+                (onSelect)="cambioFecha($event)"
+            ></p-calendar>
+            <label for="calendar">Fecha Inicio</label>
+
+        </span>
+    </div>
+    <div class="field col-12 md:col-3">
+        <span class="p-float-label">
+            <p-calendar
+                inputId="fecha_de_fin"
+                dateFormat="dd-mm-yy"
+                [(ngModel)]="fecha_de_fin"
+            ></p-calendar>
+            <label for="calendar">Fecha Fin</label>
+
+        </span>
+    </div>
+</div>
+
 <div class="calendario-container">
     <div *ngIf="!loading && !error" class="table-scroll-wrapper">
       <div class="table-responsive">
@@ -27,7 +53,7 @@
                 <div *ngFor="let turno of obtenerTurnosDia(tranca.id, dia)"
                      class="turno-item"
                      [ngStyle]="{'background-color': obtenerColor(turno.nombre_apellidos)}">
-                  <div class="font-bold">{{ formatearNombre(turno.nombre_apellidos) }}</div>
+                  <div class="font-bold boton-turno"  role="button"  tabindex="0" (click)="verDiaUsuario(turno)">{{ formatearNombre(turno.nombre_apellidos) }}</div>
                 </div>
               </td>
             </tr>

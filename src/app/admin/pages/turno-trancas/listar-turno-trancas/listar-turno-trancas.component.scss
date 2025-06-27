@@ -74,6 +74,21 @@
             font-size: 0.95rem;
             color: #222;
           }
+         .boton-turno {
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+
+            &:hover {
+                background-color: #ddd; // o uno más oscuro que el fondo actual
+            }
+
+            &:focus {
+                outline: 2px solid #888; // accesibilidad
+                outline-offset: 2px;
+            }
+            }
       }
     }
   }

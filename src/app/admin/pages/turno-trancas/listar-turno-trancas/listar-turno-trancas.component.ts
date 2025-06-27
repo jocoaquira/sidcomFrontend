@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { ITurnoTrancaLista } from '@data/turno_tranca.metadata';
+import { ITurnoTranca, ITurnoTrancaLista } from '@data/turno_tranca.metadata';
 import { TurnoTrancaService } from 'src/app/admin/services/turno_tranca.service';
 import { MessageService } from 'primeng/api';
 
@@ -13,12 +13,14 @@ import { MessageService } from 'primeng/api';
 export class ListarTurnoTrancaComponent implements OnInit {
   turnos: ITurnoTrancaLista[] = [];
   semanas: Date[] = [];
+  fecha_de_inicio: Date = new Date();
+  fecha_de_fin: Date = new Date();
   loading = true;
   error = '';
   trancasUnicas: { id: number, nombre: string }[] = [];
 
   diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
-  semanasAMostrar = 4;
+  semanasAMostrar = 5;
 
   private coloresUsuarios = new Map<string, string>();
 
@@ -40,6 +42,7 @@ export class ListarTurnoTrancaComponent implements OnInit {
         this.prepararDatos();
         this.generarCalendario();
         this.loading = false;
+        console.log(this.turnos)
       },
       error: (err) => {
         this.error = 'Error al cargar los turnos';
@@ -61,6 +64,7 @@ export class ListarTurnoTrancaComponent implements OnInit {
         trancasMap.set(turno.trancaId, turno.nombre_tranca);
       }
     });
+    console.log(trancasMap);
     this.trancasUnicas = Array.from(trancasMap.entries()).map(([id, nombre]) => ({ id, nombre }));
   }
 
@@ -80,17 +84,16 @@ export class ListarTurnoTrancaComponent implements OnInit {
   }
 
   obtenerTurnosDia(trancaId: number, dia: Date): ITurnoTrancaLista[] {
-    const inicioDia = new Date(dia);
-    inicioDia.setHours(0, 0, 0, 0);
+    const dia_actual = new Date(dia);
+    dia_actual.setHours(0, 0, 0, 0);
 
-    const finDia = new Date(dia);
-    finDia.setHours(23, 59, 59, 999);
-
-    return this.turnos.filter(t =>
+    let turnos_dia= this.turnos.filter(t =>
       t.trancaId === trancaId &&
-      new Date(t.fecha_inicio) <= finDia &&
-      new Date(t.fecha_fin) >= inicioDia
+      new Date(t.fecha_inicio) <= dia_actual &&
+      new Date(t.fecha_fin) >= dia_actual
     );
+    return turnos_dia;
+
   }
 
   esFinDeSemana(dia: Date): boolean {
@@ -119,5 +122,12 @@ export class ListarTurnoTrancaComponent implements OnInit {
     const hue = Math.floor(Math.random() * 360);
     const pastel = `hsl(${hue}, 70%, 85%)`; // tono claro
     return pastel;
+  }
+  verDiaUsuario(turno:ITurnoTranca){
+    console.log(turno);
+  }
+  cambioFecha(event){
+    console.log(event);
+    console.log(this.fecha_de_inicio);
   }
 }

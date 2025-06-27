@@ -11,6 +11,8 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ListarTurnoTrancaComponent } from './listar-turno-trancas.component';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { CalendarModule } from 'primeng/calendar';
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     ListarTurnoTrancaComponent
@@ -18,13 +20,15 @@ import { MessageService } from 'primeng/api';
   imports: [
     CommonModule,
     HttpClientModule,
+    FormsModule,
     ToolbarModule,
     TableModule,
     ToastModule,
     ProgressSpinnerModule,
     MessagesModule,
     TagModule,
-    TooltipModule
+    TooltipModule,
+    CalendarModule
 
   ],
   exports: [

@@ -25,6 +25,7 @@ import { CanVerChoferGuard } from '../guards/chofer/can-ver-chofer.guard';
 import { CanVerVehiculoGuard } from '../guards/vehiculo/can-ver-vehiculo.guard';
 import { CanVerTrancaGuard } from '../guards/tranca/can-ver-tranca.guard';
 import { CanVercontrolTrancaGuard } from '../guards/control_tranca/can-ver-control_tranca.guard';
+import { CanVerTurnoTrancaGuard } from '../guards/turno-tranca/can-ver-turno-tranca.guard';
 
 @Component({
     selector: 'app-menu',
@@ -55,6 +56,7 @@ export class AppMenuComponent implements OnInit {
         private canVerMunicipioGuard:CanVerMunicipioGuard,
         private canVerChoferGuard:CanVerChoferGuard,
         private canVerTrancaGuard:CanVerTrancaGuard,
+        private canVerTurnoTrancaGuard:CanVerTurnoTrancaGuard,
         private canVerControlTrancaGuard:CanVercontrolTrancaGuard,
         private canVerVehiculoGuard:CanVerVehiculoGuard,
         private canVerTomaDeMuestraGuard:CanVerTomaDeMuestraGuard,
@@ -78,6 +80,7 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Responsables Toma de Muestras', icon: 'pi pi-fw pi-users', routerLink: ['/admin/responsable-tm'],visible: this.canVerResponsableTMGuard.canActivate() },
                     { label: 'Choferes', icon: 'pi pi-fw pi-reddit', routerLink: ['/admin/choferes'],visible: this.canVerChoferGuard.canActivate() },
                     { label: 'Vehiculos', icon: 'pi pi-fw pi-truck', routerLink: ['/admin/vehiculos'],visible: this.canVerVehiculoGuard.canActivate() },
+                    { label: 'Turnos Puestos de Control', icon: 'pi pi-fw pi-truck', routerLink: ['/admin/turno-trancas'],visible: this.canVerTurnoTrancaGuard.canActivate() },
                     { label: 'Puntos de Control', icon: 'pi pi-fw pi-directions', routerLink: ['/admin/puesto-control'],visible: this.canVerTrancaGuard.canActivate() },
                     { label: 'Control de Formulario 101', icon: 'pi pi-fw pi-directions', routerLink: ['/admin/control-tranca'],visible: this.canVerControlTrancaGuard.canActivate() },
                     { label: 'Procedimientos', icon: 'pi pi-fw pi-directions', routerLink: ['/admin/procedimiento-tm'],visible: this.canVerProcedimientoGuard.canActivate() },
