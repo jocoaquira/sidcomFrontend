@@ -1,0 +1,79 @@
+.calendario-container {
+    .table-scroll-wrapper {
+      max-height: 70vh;
+      overflow: auto;
+      border: 1px solid #ccc;
+    }
+
+    .table-responsive {
+      min-width: max-content;
+
+      table.custom-table {
+        border-collapse: collapse;
+        width: 100%;
+
+        th, td {
+          padding: 8px;
+          border: 1px solid #dee2e6;
+          white-space: nowrap;
+          text-align: center;
+        }
+
+        thead th {
+          position: sticky;
+          top: 0;
+          background: #fff;
+          z-index: 10;
+        }
+
+        .sticky-left {
+          position: sticky;
+          left: 0;
+          background: #ab2020;
+          color: white;
+          z-index: 11;
+        }
+
+        .mes-header {
+          background: #f1f1f1;
+          font-weight: bold;
+          text-align: center;
+        }
+
+        .dia-header {
+          background: white;
+
+          &.fin-de-semana {
+            background-color: #eee;
+            color: #888;
+          }
+        }
+
+        .dia-cell {
+          min-height: 80px;
+          background: white;
+
+          &.fin-de-semana {
+            background-color: #f9f9f9;
+          }
+        }
+
+        .turno-item {
+            padding: 2px 4px;
+            margin: 2px 0;
+            border-radius: 4px;
+            max-width: 100px; // Limita el ancho
+            white-space: normal;
+            word-break: break-word;
+            font-size: 0.95rem;
+            background-color: #f0f0f0; // color de fondo claro por defecto (si no hay ngStyle)
+            color: #333; // texto oscuro
+          }
+          .turno-item .font-bold {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #222;
+          }
+      }
+    }
+  }

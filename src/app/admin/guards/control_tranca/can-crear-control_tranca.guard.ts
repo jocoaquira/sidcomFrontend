@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { PermissionHelperService } from '../../helpers/permission.helper.service';
 
-const canPermiso='control_tranca';
+const canPermiso='create_control_tranca';
 
 @Injectable({
   providedIn: 'root'

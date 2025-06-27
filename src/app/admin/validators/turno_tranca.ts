@@ -1,30 +1,26 @@
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ITranca } from '@data/tranca.metadata';
+import { ITurnoTranca } from '@data/turno_tranca.metadata';
 
 
-export class TrancaFormulario {
-  tranca!: ITranca;
+export class TurnoTrancaFormulario {
+  turno_tranca!: ITurnoTranca;
   formulario: FormGroup;
 
   constructor() {
-    this.tranca = {
+    this.turno_tranca = {
         id: null,
-        nombre:null,
-        latitud:null,
-        longitud:null,
-        municipioId:null,
-        descripcion:null,
-        estado:null
+        fecha_inicio:null,
+        fecha_fin:null,
+        trancaId:null,
+        usuarioId:null
     };
 
     this.formulario = new FormGroup({
-        id: new FormControl(this.tranca.id),
-        nombre:new FormControl(this.tranca.nombre,[Validators.required,Validators.pattern('^[a-zA-ZÀ-ÿ\\s(),]+$')]),
-        descripcion:new FormControl(this.tranca.descripcion,[Validators.required,Validators.pattern('^[a-zA-ZÀ-ÿ\\s(),]+$')]),
-        latitud:new FormControl(this.tranca.latitud,[Validators.required]),
-        longitud:new FormControl(this.tranca.longitud,[Validators.required]),
-        municipioId:new FormControl(this.tranca.municipioId,[Validators.required]),
-        estado:new FormControl(this.tranca.estado),
+        id: new FormControl(this.turno_tranca.id),
+        fecha_inicio:new FormControl(this.turno_tranca.fecha_inicio,[Validators.required]),
+        fecha_fin:new FormControl(this.turno_tranca.fecha_fin,[Validators.required]),
+        trancaId:new FormControl(this.turno_tranca.trancaId,[Validators.required]),
+        usuarioId:new FormControl(this.turno_tranca.usuarioId,[Validators.required]),
     });
   }
 

@@ -7,7 +7,7 @@
                     <div class="my-2">
                         <button
                             *ngIf="canCrearTranca.canActivate()"
-                            pButton pRipple label="Nuevo Lugar de Toma de Muestra"
+                            pButton pRipple label="Nuevo Puesto de Control"
                             icon="pi pi-plus" class="p-button-success mr-2"
                             routerLink="/admin/puesto-control/crear"
                         ></button>
@@ -20,14 +20,14 @@
             </p-toolbar>
 
             <p-table #dt [value]="listaTrancas" [columns]="cols" responsiveLayout="scroll" [rows]="30"
-                    [globalFilterFields]="['id','municipio_id','nombre','latitud','longitud','estado']"
+                    [globalFilterFields]="['id','municipioId','nombre','latitud','longitud','estado']"
                     [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
                     currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"
                     selectionMode="multiple" [rowHover]="true" dataKey="id" [sortField]="'nombre'"
                     [sortOrder]="-1">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <h5 class="m-0">Administrar Puntos de Control</h5>
+                        <h5 class="m-0">Administrar Puestos de Control</h5>
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..." class="w-full sm:w-auto"/>
@@ -40,8 +40,7 @@
                         <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
                         <th pSortableColumn="nombre">Nombre Punto de Control <p-sortIcon field="nombre"></p-sortIcon></th>
                         <th pSortableColumn="descripcion">Descripción <p-sortIcon field="descripcion"></p-sortIcon></th>
-                        <th pSortableColumn="latitud">Latitud <p-sortIcon field="latitud"></p-sortIcon></th>
-                        <th pSortableColumn="longitud">Longitud <p-sortIcon field="longitud"></p-sortIcon></th>
+                        <th pSortableColumn="nombre_municipio">Municipio <p-sortIcon field="nombre_municipio"></p-sortIcon></th>
                         <th pSortableColumn="mapa">Mapa <p-sortIcon field="mapa"></p-sortIcon></th>
                         <th pSortableColumn="estado">Estado <p-sortIcon field="estado"></p-sortIcon></th>
                         <th pSortableColumn="inventoryStatus">Acciones <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
@@ -51,11 +50,10 @@
                 <!-- Cuerpo de la tabla -->
                 <ng-template pTemplate="body" let-tranca>
                     <tr>
-                        <td>{{tranca.id}}</td>
-                        <td>{{tranca.nombre}}</td>
-                        <td>{{tranca.descripcion}}</td>
-                        <td>{{tranca.latitud}}</td>
-                        <td>{{tranca.longitud}}</td>
+                        <td style="width:8%; min-width: 5rem;">{{tranca.id}}</td>
+                        <td style="width:15%; min-width: 10rem;">{{tranca.nombre}}</td>
+                        <td style="width:30%; min-width: 20rem;">{{tranca.descripcion}}</td>
+                        <td>{{tranca.nombre_municipio}}</td>
                         <td style="width:8%; min-width: 5rem;">
                         <span class="p-column-title">Reviews</span>
                             <button pButton pRipple icon="pi pi-map-marker"

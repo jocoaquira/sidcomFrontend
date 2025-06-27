@@ -27,7 +27,7 @@ export class TrancaService {
     params = params.append('nombre', nombre);
 
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}tranca`,{params:params});
+    return this.http.get(`${this.baseUrl}trancas`,{params:params});
   }
   handleError(error: any): any {
     return error=error.error.error;
@@ -39,12 +39,12 @@ export class TrancaService {
   //-----------------------------Ver Tranca---------------------------------
   verTranca(nombre:string)
 {
-  return this.http.get(`${this.baseUrl}tranca/`+nombre);
+  return this.http.get(`${this.baseUrl}trancas/`+nombre);
 }
 //---------------------crear   lugarverificacion-------------------------------------------
 crearTranca(data:ITranca) {
   this.token();
-  return this.http.post(`${this.baseUrl}tranca`,data, {headers:this.headers})
+  return this.http.post(`${this.baseUrl}trancas`,data, {headers:this.headers})
 }
 handleCrearlugarverificacionError(error: any): any {
   return error=error;
@@ -56,7 +56,7 @@ handleCrearTranca(data: ITranca):ITranca {
 //---------------------Editar   lugarverificacion-------------------------------------------
 editarTranca(data:ITranca) {
   this.token();
-  return this.http.put(`${this.baseUrl}tranca/`+data.id, data)
+  return this.http.put(`${this.baseUrl}trancas/`+data.id, data)
 }
 handleEditarTrancaError(error: any): any {
   return error=error;
@@ -68,7 +68,7 @@ handleEditarTranca(data: boolean):boolean {
 //---------------------Eliminar   lugarverificacion-------------------------------------------
 eliminarTranca(data:number) {
     this.token();
-    return this.http.delete(`${this.baseUrl}tranca/`+data)
+    return this.http.delete(`${this.baseUrl}trancas/`+data)
   }
 //-----------------Listado de Empelados por Dependencia--------------------------------------------
 private token(){

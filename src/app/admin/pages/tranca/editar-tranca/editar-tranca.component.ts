@@ -21,7 +21,7 @@ export class EditarTrancaComponent implements OnInit {
 
     public tranca=new TrancaFormulario();
     public departamento_id:number=0;
-    public municipio_id:number=0;
+    public municipioId:number=0;
     public id:number=0;
     public dept:IDepartamento={
         longitud:null,
@@ -53,9 +53,11 @@ export class EditarTrancaComponent implements OnInit {
   ) {
         this.actRoute.paramMap.subscribe(params=>{
         this.id=parseInt(params.get('id'));
+        console.log(this.id);
         this.trancaService.verTranca(this.id.toString()).subscribe(
         (data:any)=>{
         let formulario_int=data;
+        console.log(formulario_int);
             this.cargar_datos(formulario_int);
         },
         (error:any)=> this.error=this.trancaService.handleError(error));
@@ -127,8 +129,9 @@ export class EditarTrancaComponent implements OnInit {
 cargar_datos(form:any){
   this.tranca.formulario.patchValue({
       id: form.id,
-      municipio_id: form.municipio_id,
-      lugar: form.lugar,
+      municipioId: form.municipioId,
+      nombre: form.nombre,
+      descripcion: form.descripcion,
       latitud: form.latitud,
       longitud: form.longitud,
       estado: form.estado
@@ -206,7 +209,7 @@ cerrarMapa(){
 
               this.tranca.formulario.reset();
               this.notify.success('El lugar de verificacion se actualizó exitosamente', 'Creado Correctamente', { timeOut: 2500, positionClass: 'toast-top-right' });
-              this.router.navigate(['/admin/tranca']);
+              this.router.navigate(['/admin/puesto-control']);
             } else {
               this.notify.error('Falló... Revise los campos y vuelva a enviar...', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
             }
@@ -244,7 +247,7 @@ cerrarMapa(){
             );
         }
     cambioMunicipio(event){
-        this.municipio_id=event;
+        this.municipioId=event;
     }
     cambioMunicipioMapa(municipio:any){
 
@@ -267,7 +270,7 @@ private mostrarErrorFormularios(formGroup: TrancaFormulario): void {
   }
 }
 cancelar(): void {
-    this.router.navigate(['/admin/tranca']);
+    this.router.navigate(['/admin/puesto-control']);
 }
  formatFechaCompleta(fecha: string | Date): string {
     const fechaObj = new Date(fecha);

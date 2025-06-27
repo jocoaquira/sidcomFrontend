@@ -36,7 +36,7 @@ export class ListarTrancaComponent implements OnInit {
         nombre:null,
         latitud:null,
         longitud:null,
-        municipio_id:null,
+        municipioId:null,
         descripcion:null,
         estado:null
     };
@@ -61,7 +61,7 @@ export class ListarTrancaComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.lugarVerificacionTDMService.verTranca('nada').subscribe(
+        this.lugarVerificacionTDMService.verTrancas('nada').subscribe(
             (data:any)=>{
             this.listaTrancas=this.lugarVerificacionTDMService.handlelugarverificacion(data);
             console.log(this.listaTrancas);
@@ -84,7 +84,7 @@ export class ListarTrancaComponent implements OnInit {
     }
     cerrar(event:any){
         this.productDialog=event;
-        this.lugarVerificacionTDMService.verTranca('nada').subscribe(
+        this.lugarVerificacionTDMService.verTrancas('nada').subscribe(
             (data:any)=>{
             this.listaTrancas=this.lugarVerificacionTDMService.handlelugarverificacion(data);
             console.log(this.listaTrancas);
@@ -101,7 +101,7 @@ export class ListarTrancaComponent implements OnInit {
     edit(tranca:ITranca) {
         this.tranca = { ...tranca };
         console.log(this.tranca);
-        this.router.navigate(['/admin/tranca/editar', this.tranca.id]);
+        this.router.navigate(['/admin/puesto-control/editar', this.tranca.id]);
     }
     eliminar(tranca:ITranca) {
         this.confirmationService.confirm({
@@ -112,7 +112,7 @@ export class ListarTrancaComponent implements OnInit {
                 console.log(this.tranca);
                 this.lugarVerificacionTDMService.eliminarTranca(tranca.id).subscribe(
                     (data:any)=>{
-                        this.lugarVerificacionTDMService.verTranca('nada').subscribe(
+                        this.lugarVerificacionTDMService.verTrancas('nada').subscribe(
                             (data:any)=>{
                             this.listaTrancas=this.lugarVerificacionTDMService.handlelugarverificacion(data);
                             console.log(this.listaTrancas);
@@ -200,7 +200,7 @@ openGoogleMaps(lat: number, lon: number) {
                       console.log(data);
                       if(data.error==null)
                       {
-                        this.lugarVerificacionTDMService.verTranca('nada').subscribe(
+                        this.lugarVerificacionTDMService.verTrancas('nada').subscribe(
                             (data:any)=>{
                             this.listaTrancas=this.lugarVerificacionTDMService.handlelugarverificacion(data);
                             console.log(this.listaTrancas);

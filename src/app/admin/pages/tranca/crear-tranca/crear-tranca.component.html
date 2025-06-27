@@ -29,14 +29,14 @@
                                     inputId="municipio"
                                     [autoDisplayFirst]="false"
                                     [options]="municipio"
-                                    formControlName="municipio_id"
+                                    formControlName="municipioId"
                                     optionLabel="municipio"
                                     optionValue="id"
                                     (onChange)="cambioMunicipioMapa($event)"
                                 ></p-dropdown>
                                 <label for="dropdown">Municipio</label>
-                                <small id="municipio_id" class="p-error " *ngIf="tranca.esCampoInvalido('municipio_id')">
-                                    {{tranca.getErrorMessage('municipio_id')}}
+                                <small id="municipioId" class="p-error " *ngIf="tranca.esCampoInvalido('municipioId')">
+                                    {{tranca.getErrorMessage('municipioId')}}
                                 </small>
                             </span>
                         </div>

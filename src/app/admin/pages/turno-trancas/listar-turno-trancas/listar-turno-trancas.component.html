@@ -1,0 +1,38 @@
+<div class="calendario-container">
+    <div *ngIf="!loading && !error" class="table-scroll-wrapper">
+      <div class="table-responsive">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th rowspan="2" class="sticky-left">Tranca</th>
+              <ng-container *ngFor="let grupoMes of semanas; let i = index">
+                <ng-container *ngIf="i === 0 || semanas[i].getMonth() !== semanas[i - 1].getMonth()">
+                  <th [attr.colspan]="contarDiasMes(semanas, semanas[i].getMonth())" class="mes-header">
+                    {{ semanas[i] | date: 'MMMM yyyy' | titlecase }}
+                  </th>
+                </ng-container>
+              </ng-container>
+            </tr>
+            <tr>
+              <th *ngFor="let dia of semanas" class="dia-header" [class.fin-de-semana]="esFinDeSemana(dia)">
+                <div class="font-bold">{{ diasSemana[dia.getDay()] }}</div>
+                <div>{{ dia.getDate() }}</div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let tranca of trancasUnicas">
+              <td class="sticky-left font-bold">{{ tranca.nombre }}</td>
+              <td *ngFor="let dia of semanas" class="dia-cell" [class.fin-de-semana]="esFinDeSemana(dia)">
+                <div *ngFor="let turno of obtenerTurnosDia(tranca.id, dia)"
+                     class="turno-item"
+                     [ngStyle]="{'background-color': obtenerColor(turno.nombre_apellidos)}">
+                  <div class="font-bold">{{ formatearNombre(turno.nombre_apellidos) }}</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>

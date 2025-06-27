@@ -23,7 +23,7 @@ export class CrearTrancaComponent implements OnInit {
 
     public tranca=new TrancaFormulario();
     public departamento_id:number=0;
-    public municipio_id:number=0;
+    public municipioId:number=0;
     public dept:IDepartamento={
         longitud:null,
         latitud:null
@@ -190,16 +190,22 @@ abrirMapa() {
 }
 
   onSubmit(){
+
       if (this.tranca.formulario.valid) {
+        const datosParaDB = {
+            ...this.tranca.formulario.value,
+            latitud: `${this.tranca.formulario.value.latitud}`, // Conversión a string
+            longitud: `${this.tranca.formulario.value.longitud}` // Conversión a string
+          };
          // Ahora puedes enviar el formulario reducido
-        this.trancaService.crearTranca(this.tranca.formulario.value).subscribe(
+        this.trancaService.crearTranca(datosParaDB).subscribe(
           (data: any) => {
             this.tranca_registrado = this.trancaService.handleCrearTranca(data);
             if (this.tranca_registrado !== null) {
 
               this.tranca.formulario.reset();
               this.notify.success('El formulario interno se generó exitosamente', 'Creado Correctamente', { timeOut: 2500, positionClass: 'toast-top-right' });
-              this.router.navigate(['/admin/tranca']);
+              this.router.navigate(['/admin/puesto-control']);
             } else {
               this.notify.error('Falló... Revise los campos y vuelva a enviar...', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
             }
@@ -237,7 +243,7 @@ abrirMapa() {
             );
         }
     cambioMunicipio(event){
-        this.municipio_id=event;
+        this.municipioId=event;
     }
     cambioMunicipioMapa(municipio:any){
 
