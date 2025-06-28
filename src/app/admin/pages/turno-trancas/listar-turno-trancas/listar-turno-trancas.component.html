@@ -54,7 +54,7 @@
                 <div *ngFor="let turno of obtenerTurnosDia(tranca.id, dia)"
                      class="turno-item"
                      [ngStyle]="{'background-color': obtenerColor(turno.nombre_apellidos)}">
-                  <div class="font-bold boton-turno"  role="button"  tabindex="0" (click)="verDiaUsuario(turno)">{{ formatearNombre(turno.nombre_apellidos) }}</div>
+                  <div class="font-bold boton-turno"  role="button"  tabindex="0" (click)="verDiaUsuario(turno)">{{turno.usuarioId+' '+ formatearNombre(turno.nombre_apellidos) }}</div>
                 </div>
               </td>
             </tr>
