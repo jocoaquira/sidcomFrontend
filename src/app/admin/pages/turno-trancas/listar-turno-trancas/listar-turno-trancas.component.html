@@ -17,6 +17,7 @@
                 inputId="fecha_de_fin"
                 dateFormat="dd-mm-yy"
                 [(ngModel)]="fecha_de_fin"
+                (onSelect)="cambioFecha($event)"
             ></p-calendar>
             <label for="calendar">Fecha Fin</label>
 

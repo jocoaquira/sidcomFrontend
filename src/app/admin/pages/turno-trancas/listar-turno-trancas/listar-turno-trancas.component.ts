@@ -3,6 +3,8 @@ import { DatePipe } from '@angular/common';
 import { ITurnoTranca, ITurnoTrancaLista } from '@data/turno_tranca.metadata';
 import { TurnoTrancaService } from 'src/app/admin/services/turno_tranca.service';
 import { MessageService } from 'primeng/api';
+import { TrancaService } from 'src/app/admin/services/tranca.service';
+import { ITranca } from '@data/tranca.metadata';
 
 @Component({
   selector: 'app-listar-turno-trancas',
@@ -12,6 +14,7 @@ import { MessageService } from 'primeng/api';
 })
 export class ListarTurnoTrancaComponent implements OnInit {
   turnos: ITurnoTrancaLista[] = [];
+  trancas: ITranca[] = [];
   semanas: Date[] = [];
   fecha_de_inicio: Date = new Date();
   fecha_de_fin: Date = new Date();
@@ -26,20 +29,39 @@ export class ListarTurnoTrancaComponent implements OnInit {
 
   constructor(
     private turnoTrancaService: TurnoTrancaService,
+    private trancaService: TrancaService,
     private datePipe: DatePipe,
     private messageService: MessageService
   ) { }
 
   ngOnInit(): void {
+    this.fecha_de_inicio = new Date();
+    this.fecha_de_fin.setDate(this.fecha_de_fin.getDate() + 14);
     this.cargarTurnos();
   }
+  cargarTrancas(): void {
+    this.trancaService.verTrancas('').subscribe({
+      next: (response: any) => {
+        this.trancasUnicas = response.map((tranca: any) => ({
+          id: tranca.id,
+          nombre: tranca.nombre
+        }));
+      },
+      error: (err) => {
+        this.error = 'Error al cargar las trancas';
+        console.error(err);
+      }
+    });
+  }
+
 
   cargarTurnos(): void {
     this.loading = true;
     this.turnoTrancaService.verTurnoTrancas('').subscribe({
       next: (response: any) => {
         this.turnos = this.turnoTrancaService.handleTurnoTranca(response);
-        this.prepararDatos();
+        //this.prepararDatos();
+        this.cargarTrancas();
         this.generarCalendario();
         this.loading = false;
         console.log(this.turnos)
@@ -58,6 +80,7 @@ export class ListarTurnoTrancaComponent implements OnInit {
   }
 
   prepararDatos(): void {
+
     const trancasMap = new Map<number, string>();
     this.turnos.forEach(turno => {
       if (turno.nombre_tranca && !trancasMap.has(turno.trancaId)) {
@@ -66,21 +89,18 @@ export class ListarTurnoTrancaComponent implements OnInit {
     });
     console.log(trancasMap);
     this.trancasUnicas = Array.from(trancasMap.entries()).map(([id, nombre]) => ({ id, nombre }));
+    console.log( this.trancasUnicas);
   }
 
   generarCalendario(): void {
     this.semanas = [];
-    const hoy = new Date();
-    hoy.setHours(0, 0, 0, 0);
 
-    const fechaFin = new Date(hoy);
-    fechaFin.setDate(hoy.getDate() + (this.semanasAMostrar * 7) - 1);
-
-    let currentDate = new Date(hoy);
-    while (currentDate <= fechaFin) {
+    let currentDate = new Date(this.fecha_de_inicio);
+    while (currentDate <= this.fecha_de_fin) {
       this.semanas.push(new Date(currentDate));
       currentDate.setDate(currentDate.getDate() + 1);
     }
+    console.log('semanas_ ',this.semanas);
   }
 
   obtenerTurnosDia(trancaId: number, dia: Date): ITurnoTrancaLista[] {
@@ -127,7 +147,11 @@ export class ListarTurnoTrancaComponent implements OnInit {
     console.log(turno);
   }
   cambioFecha(event){
-    console.log(event);
-    console.log(this.fecha_de_inicio);
+    if(this.fecha_de_inicio > this.fecha_de_fin){
+        let nuevaFechaFin = new Date(this.fecha_de_inicio);
+        nuevaFechaFin.setDate(nuevaFechaFin.getDate() + 14);
+        this.fecha_de_fin = nuevaFechaFin;
+    }
+    this.cargarTurnos();
   }
 }
