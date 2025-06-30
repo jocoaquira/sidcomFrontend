@@ -1,7 +1,9 @@
+import { TurnoTrancaService } from 'src/app/admin/services/turno_tranca.service';
 import { Component, OnInit } from '@angular/core';
 import { ITranca } from '@data/tranca.metadata';
 import { ITurnoTrancaLista } from '@data/turno_tranca.metadata';
 import { TrancaService } from 'src/app/admin/services/tranca.service';
+import { firstValueFrom } from 'rxjs';
 interface IMes{
     nombre: string;
     dias: number;
@@ -14,12 +16,13 @@ interface IMes{
 export class TablaContainerComponent implements OnInit {
   rows = 5; // Número de filas
   columns = 15; // Número de columnas
-  columnWidth = 120; // Ancho de cada columna en píxeles
-  rowHeight = 70; // Altura de cada fila en píxeles
+  columnWidth = 100; // Ancho de cada columna en píxeles
+  rowHeight = 60; // Altura de cada fila en píxeles
   itemWidth = 100; // Ancho de los elementos dinámicos
   itemHeight = 30; // Altura de los elementos dinámicos
   items: any[] = []; // Lista de elementos dinámicos
   gridCells: any[] = []; // Referencias visuales de las celdas
+  diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
   dragging = false;
   draggedElement: any = null;
@@ -31,6 +34,7 @@ export class TablaContainerComponent implements OnInit {
     semanas: Date[] = [];
     meses: IMes[] = [];
     encabezados: any[] = [];
+    encabezadosTranca: any[] = [];
     fecha_de_inicio: Date = new Date();
     fecha_de_fin: Date = new Date();
     loading = true;
@@ -39,21 +43,25 @@ export class TablaContainerComponent implements OnInit {
 
   constructor(
     private trancaService: TrancaService,
+    private turnoTrancaService: TurnoTrancaService,
 ) {
     this.updateGrid();
-
+        this.cargarEncabezadoCalendario();
+        this.cargarEncabezadoTranca();
   }
-  ngOnInit(): void {
+  async ngOnInit() {
     this.fecha_de_inicio = new Date();
     this.fecha_de_fin.setDate(this.fecha_de_fin.getDate() + this.columns-1);
-    this.cargarTrancas();
     this.cargarEncabezadoCalendario();
+    this.cargarEncabezadoTranca();
+    this.cargarTurnosMatriz();
   }
 
   //-----------------------------------PARA LAS GRILLAS-----------------------------------
   updateGrid(): void {
     // Actualiza las celdas según las filas y columnas
     this.gridCells = Array(this.rows * this.columns).fill(null);
+    console.log(this.gridCells);
   }
 
   generateGridRows(): string {
@@ -124,28 +132,11 @@ export class TablaContainerComponent implements OnInit {
     // Calcular la diferencia de días entre fecha_de_inicio y fecha_de_fin, incluyendo el último día
     const diferenciaMilisegundos = this.fecha_de_fin.getTime() - this.fecha_de_inicio.getTime();
     this.columns = Math.ceil(diferenciaMilisegundos / (1000 * 60 * 60 * 24)) + 2; // Convertir milisegundos a días y sumar 1 para incluir el último día
-
-    this.cargarTrancas();
+    this.cargarEncabezadoTranca();
     this.cargarEncabezadoCalendario();
-  }
-  //----------------------------------generar CELDAS-----------------------------------
-  generarDatos(){
 
   }
-  cargarTrancas(): void {
-    this.trancaService.verTrancas('').subscribe({
-      next: (response: any) => {
-        this.trancas =this.trancaService.handleTrancas(response);
-        this.rows=this.trancas.length+1;
-        this.updateGrid();
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = 'Error al cargar las trancas';
-        console.error(err);
-      }
-    });
-  }
+
 //-------------------------------------GENERAR CALENDARIO-----------------------------------
 generarCalendario(): void {
     this.semanas = [];
@@ -174,8 +165,10 @@ generarCalendario(): void {
       nombre,
       dias
     }));
+    this.semanas.forEach((fecha) => {
 
-    console.log(this.meses); // Muestra los meses y días en la consola
+    });
+
   }
   //----------------------------------CARGAR ENCABEZADO DEL CALENDARIO-----------------------------------
   cargarEncabezadoCalendario(): void {
@@ -204,13 +197,122 @@ generarCalendario(): void {
 
       columnaActual += anchoColumnas; // Avanza a la siguiente posición inicial
     });
+    columnaActual = 1; // Reinicia la posición de columna para los días de la semana
+    this.semanas.forEach((fecha) => {
+        const diaSemana = this.diasSemana[fecha.getDay()]+' '+fecha.getDate(); // Obtiene el nombre del día de la semana
+        const posicionX = columnaActual * this.columnWidth; // Calcula la posición X en base a la columna actual
+        let colorFondo = '#f0f0f0'; // Color de fondo claro por defecto
+        if (fecha.getDay() === 0 || fecha.getDay() === 6) { // Si es domingo o sábado
+            colorFondo = '#d0d0d0'; // Color de fondo diferente para fines de semana
+        }
+        this.encabezados.push({
+            text: diaSemana, // Nombre del día de la semana
+            position: {
+            top: `${this.rowHeight / 2}px`, // Posición en la mitad de la fila
+            left: `${posicionX}px` // Posición X calculada
+            },
+            width: `${this.columnWidth}px`, // Ancho de la columna
+            height: `${this.rowHeight / 2}px`, // Altura de la mitad de la fila
+            backgroundColor: colorFondo, // Color de fondo claro para los días de la semana
+            textColor: '#000000' // Color del
+        });
+        columnaActual++; // Avanza a la siguiente columna
+    });
 
-    console.log(this.encabezados); // Muestra los encabezados generados en la consola
   }
+  //----------------------------------GENERAR COLOR OSCURO-----------------------------------
   private generarColorOscuro(): string {
     const r = Math.floor(Math.random() * 128); // Valores bajos para rojo
     const g = Math.floor(Math.random() * 128); // Valores bajos para verde
     const b = Math.floor(Math.random() * 128); // Valores bajos para azul
     return `rgb(${r}, ${g}, ${b})`; // Retorna el color en formato RGB
   }
+  //----------------------------------COLOCAR TRANCAS EN LA TABLA-----------------------------------
+  cargarEncabezadoTranca(): void {
+  this.trancaService.verTrancas('').subscribe({
+    next: (response: any) => {
+      this.trancas = this.trancaService.handleTrancas(response);
+      this.rows = this.trancas.length + 1;
+      this.encabezadosTranca = []; // Limpia antes de llenar
+
+        this.encabezadosTranca.push({
+            text: 'TRANCAS', // Nombre de la tranca
+            row: 1, // Fila 2 en adelante
+            position: {
+            top: `${0}px`,
+            left: `${0}px` // Posición X calculada
+            },
+            width: `${this.columnWidth}px`, // Ancho de la columna
+            height: `${this.rowHeight}px`, // Altura de la mitad de la fila
+            backgroundColor: '#900c3f ', // Color de fondo claro para los días de la semana
+            textColor: '#ffffff' // Color del
+        });
+
+
+      this.trancas.forEach((tranca, index) => {
+        const posicionY = (index + 1) * this.rowHeight;
+        this.encabezadosTranca.push({
+            text: tranca.nombre, // Nombre de la tranca
+            row: index + 2, // Fila 2 en adelante
+            position: {
+            top: `${0}px`,
+            left: `${posicionY}px` // Posición X calculada
+            },
+            width: `${this.columnWidth}px`, // Ancho de la columna
+            height: `${this.rowHeight}px`, // Altura de la mitad de la fila
+            backgroundColor: '#ff5733', // Color de fondo claro para los días de la semana
+            textColor: '#ffffff' // Color del
+        });
+      });
+      this.loading = false;
+
+    },
+    error: (err) => {
+      this.error = 'Error al cargar las trancas';
+      console.error(err);
+    }
+  });
+}
+
+cargarTurnos(): void {
+  this.loading = true;
+  this.turnoTrancaService.verTurnoTrancas('').subscribe({
+    next: (response: any) => {
+      this.turnos = this.turnoTrancaService.handleTurnoTranca(response);
+        console.log(this.turnos);
+      this.loading = false;
+    },
+    error: (err) => {
+      this.error = 'Error al cargar los turnos';
+      this.loading = false;
+      console.error(err);
+    }
+  });
+}
+async cargarTurnosMatriz(){
+  this.cargarTurnos()
+  this.cargarEncabezadoTranca();
+    const response = await firstValueFrom(this.turnoTrancaService.verTurnoTrancas(''));
+    const response1=await firstValueFrom(this.trancaService.verTrancas(''));
+
+
+  this.trancas.forEach(tranca => {
+    const turnosTranca = this.turnos.filter(turno => turno.trancaId === tranca.id);
+    const turnosPorFecha: { [key: string]: ITurnoTrancaLista[] } = {};
+
+    turnosTranca.forEach(turno => {
+    const fechaKey = new Date(turno.fecha_inicio).toISOString().split('T')[0]; // Usar la fecha sin hora como clave
+      if (!turnosPorFecha[fechaKey]) {
+        turnosPorFecha[fechaKey] = [];
+      }
+      turnosPorFecha[fechaKey].push(turno);
+    });
+
+    console.log('turnos por fecha', turnosPorFecha);
+  });
+
+
+}
+
+
 }

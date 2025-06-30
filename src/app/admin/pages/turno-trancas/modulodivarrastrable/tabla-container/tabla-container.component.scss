@@ -7,6 +7,7 @@
   }
 
   .grid-container {
+
     display: grid;
     grid-gap: 0px;
     width: max-content;
@@ -14,7 +15,8 @@
   }
 
   .grid-cell {
-    border: 0.2px solid #f6e0b239;
+    display: grid;
+    border: 0.2px solid #f6e1b288;
     border-width: 0.5px; /* Reduce el grosor del borde */
   }
   .cabecera-fecha {
@@ -26,6 +28,28 @@
     text-align: center;
     border-radius: 4px;
   }
+  .cabecera-tranca {
+    //position: sticky;
+    //z-index: 10;
+    //left: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 4px;
+    border: 1px solid #ffffff; /* Cambia el color del borde */
+    grid-column: 1 / -1;
+  }
+  .cabecera-tranca,
+  .sticky-col {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  background: #3f51b5;
+  color: #fff;
+}
   .item-turno {
     position: absolute;
     border-radius: 4px;

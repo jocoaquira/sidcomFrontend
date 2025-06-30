@@ -44,15 +44,28 @@
   </div>
 
   <div class="scrollable-container">
+
     <div
       class="grid-container"
       [style.gridTemplateRows]="generateGridRows()"
       [style.gridTemplateColumns]="generateGridColumns()"
     >
+    <div *ngFor="let encabezado of encabezadosTranca" class="grid-cell cabecera-tranca"
+       [style.backgroundColor]="encabezado.backgroundColor"
+       [style.color]="encabezado.textColor"
+       [style.top]="encabezado.position.left"
+       [style.left]="encabezado.position.top"
+       [style.width]="encabezado.width"
+       [style.height]="encabezado.height"
+       [style.gridRow]="encabezado.row"
+       [style.gridColumn]="1">
+        {{ encabezado.text }}
+    </div>
       <div *ngFor="let cell of gridCells; let i = index" class="grid-cell">
         <!-- Las celdas son solo referencias visuales -->
       </div>
     </div>
+
     <div *ngFor="let encabezado of encabezados" class="cabecera-fecha"
        [style.backgroundColor]="encabezado.backgroundColor"
        [style.color]="encabezado.textColor"
@@ -62,6 +75,7 @@
        [style.height]="encabezado.height">
     {{ encabezado.text }}
   </div>
+
     <div *ngFor="let item of items" class="item-turno"
          [style.backgroundColor]="item.backgroundColor"
          [style.color]="item.textColor"

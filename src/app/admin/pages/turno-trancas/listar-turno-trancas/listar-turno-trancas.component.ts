@@ -99,6 +99,7 @@ export class ListarTurnoTrancaComponent implements OnInit {
     while (currentDate <= this.fecha_de_fin) {
       this.semanas.push(new Date(currentDate));
       currentDate.setDate(currentDate.getDate() + 1);
+
     }
   }
 
@@ -158,6 +159,7 @@ export class ListarTurnoTrancaComponent implements OnInit {
     shiftBlocks.forEach(shift => {
       const trancaId = shift.turno.trancaId;
       const dateKey = this.datePipe.transform(shift.startDate, 'yyyy-MM-dd')!;
+
       if (!this.processedShifts[trancaId]) { // Asegurar que el objeto tranca exista
         this.processedShifts[trancaId] = {};
       }
@@ -244,7 +246,7 @@ export class ListarTurnoTrancaComponent implements OnInit {
   }
 
   verDiaUsuario(turno: ITurnoTranca) {
-    console.log(turno);
+
   }
 
   cambioFecha(event: any): void {
