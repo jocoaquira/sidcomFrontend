@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { TurnoTrancaService } from 'src/app/admin/services/turno_tranca.service';
@@ -13,10 +13,14 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
+import { ItemTurnoModule } from '../modulodivarrastrable/item-turno/item-turno.module';
+import { TablaContainerModule } from '../modulodivarrastrable/tabla-container/tabla-container.module';
 @NgModule({
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
-    ListarTurnoTrancaComponent
+    ListarTurnoTrancaComponent,
   ],
+
   imports: [
     CommonModule,
     HttpClientModule,
@@ -28,16 +32,19 @@ import { FormsModule } from '@angular/forms';
     MessagesModule,
     TagModule,
     TooltipModule,
-    CalendarModule
+    CalendarModule,
+    ItemTurnoModule,
+    TablaContainerModule
 
   ],
   exports: [
-    ListarTurnoTrancaComponent
+    ListarTurnoTrancaComponent,
+
   ],
   providers: [
     DatePipe,
     TurnoTrancaService,
     MessageService
-  ]
+  ],
 })
 export class ListarTurnoTrancasModule { }

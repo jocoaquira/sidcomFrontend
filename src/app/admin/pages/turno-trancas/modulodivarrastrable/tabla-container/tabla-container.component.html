@@ -1,0 +1,76 @@
+<div class="grid p-fluid mt-3">
+    <div class="field col-12 md:col-3">
+      <span class="p-float-label">
+        <p-calendar
+          inputId="fecha_de_inicio"
+          dateFormat="dd-mm-yy"
+          [(ngModel)]="fecha_de_inicio"
+          (onSelect)="cambioFecha($event)"
+        ></p-calendar>
+        <label for="calendar">Fecha Inicio</label>
+      </span>
+    </div>
+    <div class="field col-12 md:col-3">
+      <span class="p-float-label">
+        <p-calendar
+          inputId="fecha_de_fin"
+          dateFormat="dd-mm-yy"
+          [(ngModel)]="fecha_de_fin"
+          (onSelect)="cambioFecha($event)"
+        ></p-calendar>
+        <label for="calendar">Fecha Fin</label>
+      </span>
+    </div>
+  </div>
+
+<div class="controls">
+
+    <label>
+      Ancho de columna:
+      <input type="number" [(ngModel)]="columnWidth" min="50" (change)="updateGrid()" />
+    </label>
+    <label>
+      Alto de fila:
+      <input type="number" [(ngModel)]="rowHeight" min="50" (change)="updateGrid()" />
+    </label>
+    <label>
+      Ancho de elemento:
+      <input type="number" [(ngModel)]="itemWidth" min="50" />
+    </label>
+    <label>
+      Alto de elemento:
+      <input type="number" [(ngModel)]="itemHeight" min="20" />
+    </label>
+  </div>
+
+  <div class="scrollable-container">
+    <div
+      class="grid-container"
+      [style.gridTemplateRows]="generateGridRows()"
+      [style.gridTemplateColumns]="generateGridColumns()"
+    >
+      <div *ngFor="let cell of gridCells; let i = index" class="grid-cell">
+        <!-- Las celdas son solo referencias visuales -->
+      </div>
+    </div>
+    <div *ngFor="let encabezado of encabezados" class="cabecera-fecha"
+       [style.backgroundColor]="encabezado.backgroundColor"
+       [style.color]="encabezado.textColor"
+       [style.top]="encabezado.position.top"
+       [style.left]="encabezado.position.left"
+       [style.width]="encabezado.width"
+       [style.height]="encabezado.height">
+    {{ encabezado.text }}
+  </div>
+    <div *ngFor="let item of items" class="item-turno"
+         [style.backgroundColor]="item.backgroundColor"
+         [style.color]="item.textColor"
+         [style.top]="item.positionY + 'px'"
+         [style.left]="item.positionX + 'px'"
+         [style.width]="item.width + 'px'"
+         [style.height]="item.height + 'px'"
+         (mousedown)="startDrag($event, item)">
+      {{ item.text }}
+    </div>
+  </div>
+  <button class="add-button" (click)="agregarTurnoUsuario()">Agregar Componente</button>

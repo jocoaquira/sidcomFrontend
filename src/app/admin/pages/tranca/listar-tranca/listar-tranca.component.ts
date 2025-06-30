@@ -63,7 +63,7 @@ export class ListarTrancaComponent implements OnInit {
     ngOnInit() {
         this.lugarVerificacionTDMService.verTrancas('nada').subscribe(
             (data:any)=>{
-            this.listaTrancas=this.lugarVerificacionTDMService.handlelugarverificacion(data);
+            this.listaTrancas=this.lugarVerificacionTDMService.handleTrancas(data);
             console.log(this.listaTrancas);
           },
           (error:any)=> this.error=this.lugarVerificacionTDMService.handleError(error));
@@ -86,7 +86,7 @@ export class ListarTrancaComponent implements OnInit {
         this.productDialog=event;
         this.lugarVerificacionTDMService.verTrancas('nada').subscribe(
             (data:any)=>{
-            this.listaTrancas=this.lugarVerificacionTDMService.handlelugarverificacion(data);
+            this.listaTrancas=this.lugarVerificacionTDMService.handleTrancas(data);
             console.log(this.listaTrancas);
 
           },
@@ -114,7 +114,7 @@ export class ListarTrancaComponent implements OnInit {
                     (data:any)=>{
                         this.lugarVerificacionTDMService.verTrancas('nada').subscribe(
                             (data:any)=>{
-                            this.listaTrancas=this.lugarVerificacionTDMService.handlelugarverificacion(data);
+                            this.listaTrancas=this.lugarVerificacionTDMService.handleTrancas(data);
                             console.log(this.listaTrancas);
                         },
                         (error:any)=> this.error=this.lugarVerificacionTDMService.handleError(error));
@@ -202,7 +202,7 @@ openGoogleMaps(lat: number, lon: number) {
                       {
                         this.lugarVerificacionTDMService.verTrancas('nada').subscribe(
                             (data:any)=>{
-                            this.listaTrancas=this.lugarVerificacionTDMService.handlelugarverificacion(data);
+                            this.listaTrancas=this.lugarVerificacionTDMService.handleTrancas(data);
                             console.log(this.listaTrancas);
 
                           },

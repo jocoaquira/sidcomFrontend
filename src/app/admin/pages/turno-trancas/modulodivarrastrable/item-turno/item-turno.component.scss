@@ -1,0 +1,17 @@
+.draggable-element {
+    position: absolute;
+    padding: 1px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    text-align: center;
+    cursor: grab;
+    user-select: none; /* Evita la selección de texto al arrastrar */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: box-shadow 0.2s ease;
+
+    &:active {
+      cursor: grabbing;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      z-index: 1000; /* Asegura que el elemento arrastrado esté sobre los demás */
+    }
+  }

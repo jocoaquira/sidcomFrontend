@@ -1,31 +1,29 @@
 <div class="grid p-fluid mt-3">
     <div class="field col-12 md:col-3">
-        <span class="p-float-label">
-            <p-calendar
-                inputId="fecha_de_inicio"
-                dateFormat="dd-mm-yy"
-                [(ngModel)]="fecha_de_inicio"
-                (onSelect)="cambioFecha($event)"
-            ></p-calendar>
-            <label for="calendar">Fecha Inicio</label>
-
-        </span>
+      <span class="p-float-label">
+        <p-calendar
+          inputId="fecha_de_inicio"
+          dateFormat="dd-mm-yy"
+          [(ngModel)]="fecha_de_inicio"
+          (onSelect)="cambioFecha($event)"
+        ></p-calendar>
+        <label for="calendar">Fecha Inicio</label>
+      </span>
     </div>
     <div class="field col-12 md:col-3">
-        <span class="p-float-label">
-            <p-calendar
-                inputId="fecha_de_fin"
-                dateFormat="dd-mm-yy"
-                [(ngModel)]="fecha_de_fin"
-                (onSelect)="cambioFecha($event)"
-            ></p-calendar>
-            <label for="calendar">Fecha Fin</label>
-
-        </span>
+      <span class="p-float-label">
+        <p-calendar
+          inputId="fecha_de_fin"
+          dateFormat="dd-mm-yy"
+          [(ngModel)]="fecha_de_fin"
+          (onSelect)="cambioFecha($event)"
+        ></p-calendar>
+        <label for="calendar">Fecha Fin</label>
+      </span>
     </div>
-</div>
+  </div>
 
-<div class="calendario-container">
+  <div class="calendario-container">
     <div *ngIf="!loading && !error" class="table-scroll-wrapper">
       <div class="table-responsive">
         <table class="custom-table">
@@ -34,8 +32,11 @@
               <th rowspan="2" class="sticky-left">Tranca</th>
               <ng-container *ngFor="let grupoMes of semanas; let i = index">
                 <ng-container *ngIf="i === 0 || semanas[i].getMonth() !== semanas[i - 1].getMonth()">
-                  <th [attr.colspan]="contarDiasMes(semanas, semanas[i].getMonth())" class="mes-header">
-                    {{ semanas[i] | date: 'MMMM yyyy' | titlecase }}
+                  <th
+                    [attr.colspan]="contarDiasMes(semanas, semanas[i].getMonth())"
+                    class="mes-header"
+                  >
+                    {{ semanas[i] | date: 'MMMM \u0079' | titlecase }}
                   </th>
                 </ng-container>
               </ng-container>
@@ -50,11 +51,24 @@
           <tbody>
             <tr *ngFor="let tranca of trancasUnicas">
               <td class="sticky-left font-bold">{{ tranca.nombre }}</td>
-              <td *ngFor="let dia of semanas" class="dia-cell" [class.fin-de-semana]="esFinDeSemana(dia)">
-                <div *ngFor="let turno of obtenerTurnosDia(tranca.id, dia)"
-                     class="turno-item"
-                     [ngStyle]="{'background-color': obtenerColor(turno.nombre_apellidos)}">
-                  <div class="font-bold boton-turno"  role="button"  tabindex="0" (click)="verDiaUsuario(turno)">{{turno.usuarioId+' '+ formatearNombre(turno.nombre_apellidos) }}</div>
+              <td *ngFor="let dia of semanas; let i = index" class="dia-cell" [class.fin-de-semana]="esFinDeSemana(dia)">
+                <div class="cell-flex-container">
+                  <ng-container *ngFor="let shiftDisplay of getShiftsForCell(tranca.id, dia)">
+                    <div
+                      class="turno-bar"
+                      [ngStyle]="{
+                        'background-color': obtenerColor(shiftDisplay.turno.nombre_apellidos),
+
+                        'width': 'calc(' + shiftDisplay.span + ' * var(--cell-width) + ' + (shiftDisplay.span - 1) + 'px)',
+                        'left': 'calc(' + i + ' * var(--cell-width) + ' + i + 'px)'
+
+                      }"
+                      (click)="verDiaUsuario(shiftDisplay.turno)"
+                      [title]="formatearNombre(shiftDisplay.turno.nombre_apellidos) + ' (' + (shiftDisplay.startDate | date:'shortDate') + ' - ' + (shiftDisplay.endDate | date:'shortDate') + ')'"
+                    >
+                      {{ formatearNombre(shiftDisplay.turno.nombre_apellidos) }}
+                    </div>
+                  </ng-container>
                 </div>
               </td>
             </tr>
@@ -63,3 +77,8 @@
       </div>
     </div>
   </div>
+  <div>
+    <p>hola</p>
+    <app-tabla-container></app-tabla-container>
+  </div>
+

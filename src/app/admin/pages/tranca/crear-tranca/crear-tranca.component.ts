@@ -211,7 +211,7 @@ abrirMapa() {
             }
           },
           (error: any) => {
-            this.error = this.trancaService.handleCrearlugarverificacionError(error.error.data);
+            this.error = this.trancaService.handleCrearTrancaError(error.error.data);
             if (error.error.status == 'fail') {
               this.notify.error('Falló... Revise los campos y vuelva a enviar...', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
             }

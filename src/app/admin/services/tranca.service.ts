@@ -32,28 +32,28 @@ export class TrancaService {
   handleError(error: any): any {
     return error=error.error.error;
   }
-  handlelugarverificacion(data: ITranca[]):ITranca[] {
-    let lugarverificacion:ITranca[]=data;
-    return lugarverificacion
+  handleTrancas(data: ITranca[]):ITranca[] {
+    let Tranca:ITranca[]=data;
+    return Tranca
   }
   //-----------------------------Ver Tranca---------------------------------
   verTranca(nombre:string)
 {
   return this.http.get(`${this.baseUrl}trancas/`+nombre);
 }
-//---------------------crear   lugarverificacion-------------------------------------------
+//---------------------crear   Tranca-------------------------------------------
 crearTranca(data:ITranca) {
   this.token();
   return this.http.post(`${this.baseUrl}trancas`,data, {headers:this.headers})
 }
-handleCrearlugarverificacionError(error: any): any {
+handleCrearTrancaError(error: any): any {
   return error=error;
 }
 handleCrearTranca(data: ITranca):ITranca {
-  let lugarverificacion:ITranca=data;
-  return lugarverificacion
+  let Tranca:ITranca=data;
+  return Tranca
 }
-//---------------------Editar   lugarverificacion-------------------------------------------
+//---------------------Editar   Tranca-------------------------------------------
 editarTranca(data:ITranca) {
   this.token();
   return this.http.put(`${this.baseUrl}trancas/`+data.id, data)
@@ -62,10 +62,10 @@ handleEditarTrancaError(error: any): any {
   return error=error;
 }
 handleEditarTranca(data: boolean):boolean {
-  let lugarverificacion:boolean=data;
-  return lugarverificacion
+  let Tranca:boolean=data;
+  return Tranca
 }
-//---------------------Eliminar   lugarverificacion-------------------------------------------
+//---------------------Eliminar   Tranca-------------------------------------------
 eliminarTranca(data:number) {
     this.token();
     return this.http.delete(`${this.baseUrl}trancas/`+data)

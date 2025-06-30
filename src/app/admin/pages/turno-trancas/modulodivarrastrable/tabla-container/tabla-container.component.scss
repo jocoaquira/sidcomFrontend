@@ -1,0 +1,57 @@
+.scrollable-container {
+    position: relative;
+    width: 100%;
+    overflow: auto;
+    border: 1px dashed #999;
+    margin-bottom: 10px;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-gap: 0px;
+    width: max-content;
+    height: max-content;
+  }
+
+  .grid-cell {
+    border: 0.2px solid #f6e0b239;
+    border-width: 0.5px; /* Reduce el grosor del borde */
+  }
+  .cabecera-fecha {
+    position: absolute; /* Permite posicionar los encabezados según las coordenadas */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 4px;
+  }
+  .item-turno {
+    position: absolute;
+    border-radius: 4px;
+    cursor: grab;
+    transition: transform 0.2s ease;
+    background-color: #3f51b5;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .item-turno:active {
+    cursor: grabbing;
+  }
+
+  .add-button {
+    padding: 10px 15px;
+    background-color: #3f51b5;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #303f9f;
+    }
+  }
