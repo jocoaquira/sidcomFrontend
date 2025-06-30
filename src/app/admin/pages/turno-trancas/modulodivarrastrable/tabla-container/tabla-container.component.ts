@@ -8,6 +8,14 @@ interface IMes{
     nombre: string;
     dias: number;
 }
+interface ITurnoUsuario{
+    fecha_fin: Date;
+    fecha_inicio: Date;
+    dias: number;
+    trancaId: number;
+    usuarioId: number;
+    posFila: number;
+}
 @Component({
   selector: 'app-tabla-container',
   templateUrl: './tabla-container.component.html',
@@ -23,7 +31,7 @@ export class TablaContainerComponent implements OnInit {
   items: any[] = []; // Lista de elementos dinámicos
   gridCells: any[] = []; // Referencias visuales de las celdas
   diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
-
+  turnosDias:any[]=[];
   dragging = false;
   draggedElement: any = null;
   offsetX = 0;
