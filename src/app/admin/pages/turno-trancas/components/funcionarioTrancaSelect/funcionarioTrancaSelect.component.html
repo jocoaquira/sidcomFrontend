@@ -1,0 +1,19 @@
+<span class="p-float-label">
+
+    <p-dropdown
+        inputId="dropdown"
+        [autoDisplayFirst]="false"
+        [options]="funcionario_trancas"
+        [(ngModel)]="funcionario_id"
+        [filter]="true"
+        filterBy="nombre_apellidos"
+        optionLabel="nombre_apellidos"
+        optionValue="id"
+        (onChange)="cambioFuncionarioTranca($event)"
+        [appendTo]="'body'"
+    ></p-dropdown>
+    <label for="dropdown">Funcionario Trancas</label>
+    <small id="presentacion" class="p-error " *ngIf="error">
+        {{error}}
+    </small>
+</span>

@@ -15,6 +15,7 @@ interface ITurnoUsuario{
     trancaId: number;
     usuarioId: number;
     posFila: number;
+    nombreUsuario: string; // Opcional, si se quiere mostrar el nombre del usuario
 }
 @Component({
   selector: 'app-tabla-container',
@@ -29,6 +30,7 @@ export class TablaContainerComponent implements OnInit {
   itemWidth = 100; // Ancho de los elementos dinámicos
   itemHeight = 30; // Altura de los elementos dinámicos
   items: any[] = []; // Lista de elementos dinámicos
+  itemsTurnos: any[] = []; // Lista de turnos de usuarios
   gridCells: any[] = []; // Referencias visuales de las celdas
   diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
   turnosDias:any[]=[];
@@ -39,6 +41,7 @@ export class TablaContainerComponent implements OnInit {
 
     turnos: ITurnoTrancaLista[] = [];
     trancas: ITranca[] = [];
+    listaTurnosMatriz:ITurnoUsuario[] = [];
     semanas: Date[] = [];
     meses: IMes[] = [];
     encabezados: any[] = [];
@@ -47,6 +50,10 @@ export class TablaContainerComponent implements OnInit {
     fecha_de_fin: Date = new Date();
     loading = true;
     error=null;
+//-----------------dialogo crear variables------------------------------------------------
+crearDialogo: boolean = false;
+modoEditar: boolean = false;
+posicionCreacion: { top?: number; left?: number } = { top: 0, left: 0 };
 
 
   constructor(
@@ -54,15 +61,16 @@ export class TablaContainerComponent implements OnInit {
     private turnoTrancaService: TurnoTrancaService,
 ) {
     this.updateGrid();
-        this.cargarEncabezadoCalendario();
-        this.cargarEncabezadoTranca();
   }
   async ngOnInit() {
     this.fecha_de_inicio = new Date();
+    this.fecha_de_inicio.setHours(0, 0, 0, 0);
     this.fecha_de_fin.setDate(this.fecha_de_fin.getDate() + this.columns-1);
+    this.fecha_de_fin.setHours(0, 0, 0, 0);
     this.cargarEncabezadoCalendario();
     this.cargarEncabezadoTranca();
-    this.cargarTurnosMatriz();
+    this.colocarTurnosEnPantalla();
+    console.log('oninit');
   }
 
   //-----------------------------------PARA LAS GRILLAS-----------------------------------
@@ -130,22 +138,28 @@ export class TablaContainerComponent implements OnInit {
     }
   }
   //-------------------------------------FIN ARRASTRE-----------------------------------
-  cambioFecha(event: any): void {
-    if (this.fecha_de_inicio > this.fecha_de_fin) {
-      let nuevaFechaFin = new Date(this.fecha_de_inicio);
-      nuevaFechaFin.setDate(nuevaFechaFin.getDate() + 14);
-      this.fecha_de_fin = nuevaFechaFin;
-    }
-
-    // Calcular la diferencia de días entre fecha_de_inicio y fecha_de_fin, incluyendo el último día
-    const diferenciaMilisegundos = this.fecha_de_fin.getTime() - this.fecha_de_inicio.getTime();
-    this.columns = Math.ceil(diferenciaMilisegundos / (1000 * 60 * 60 * 24)) + 2; // Convertir milisegundos a días y sumar 1 para incluir el último día
-    this.cargarEncabezadoTranca();
-    this.cargarEncabezadoCalendario();
-
+cambioFecha(event: any): void {
+  if (this.fecha_de_inicio > this.fecha_de_fin) {
+    const nuevaFechaFin = new Date(this.fecha_de_inicio);
+    nuevaFechaFin.setDate(nuevaFechaFin.getDate() + 14);
+    this.fecha_de_fin = nuevaFechaFin;
   }
 
+  // Calcular columnas
+  const diferenciaMilisegundos = this.fecha_de_fin.getTime() - this.fecha_de_inicio.getTime();
+  this.columns = Math.ceil(diferenciaMilisegundos / (1000 * 60 * 60 * 24)) + 1;
+
+  // 🔧 ACTUALIZAR LA GRILLA
+  this.updateGrid();
+
+  // 🔁 Recargar encabezados y turnos
+  this.cargarEncabezadoTranca();
+  this.cargarEncabezadoCalendario();
+  this.colocarTurnosEnPantalla();
+}
+
 //-------------------------------------GENERAR CALENDARIO-----------------------------------
+/*
 generarCalendario(): void {
     this.semanas = [];
     this.meses = []; // Reinicia el array de meses
@@ -178,6 +192,39 @@ generarCalendario(): void {
     });
 
   }
+*/
+generarCalendario(): void {
+    this.semanas = [];
+    this.meses = [];
+
+    let currentDate = new Date(this.fecha_de_inicio);
+    const endDate = new Date(this.fecha_de_fin);
+
+    currentDate.setHours(0, 0, 0, 0);
+    endDate.setHours(0, 0, 0, 0);
+
+    while (currentDate <= endDate) {
+      this.semanas.push(new Date(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    // Actualizar el número de columnas y grid
+    this.columns = this.semanas.length+1;
+    this.updateGrid();
+
+    const mesesMap = new Map<string, number>();
+    this.semanas.forEach((fecha) => {
+      const nombreMes = fecha.toLocaleString('default', { month: 'long' });
+      mesesMap.set(nombreMes, (mesesMap.get(nombreMes) || 0) + 1);
+    });
+
+    this.meses = Array.from(mesesMap.entries()).map(([nombre, dias]) => ({
+      nombre,
+      dias
+    }));
+  }
+
+
   //----------------------------------CARGAR ENCABEZADO DEL CALENDARIO-----------------------------------
   cargarEncabezadoCalendario(): void {
     this.generarCalendario(); // Genera los meses y días
@@ -297,30 +344,351 @@ cargarTurnos(): void {
     }
   });
 }
-async cargarTurnosMatriz(){
-  this.cargarTurnos()
-  this.cargarEncabezadoTranca();
-    const response = await firstValueFrom(this.turnoTrancaService.verTurnoTrancas(''));
-    const response1=await firstValueFrom(this.trancaService.verTrancas(''));
+//----------------------------------CARGAR TURNOS EN MATRIZ-----------------------------------
+async cargarTurnosMatriz() {
+    this.listaTurnosMatriz = [];
+    const turnosExcluidos: ITurnoUsuario[] = [];
 
+    await this.cargarTurnos();
+    await this.cargarEncabezadoTranca();
 
-  this.trancas.forEach(tranca => {
-    const turnosTranca = this.turnos.filter(turno => turno.trancaId === tranca.id);
-    const turnosPorFecha: { [key: string]: ITurnoTrancaLista[] } = {};
+    this.trancas.forEach(tranca => {
+      const turnosTranca = this.turnos.filter(turno => turno.trancaId === tranca.id);
 
-    turnosTranca.forEach(turno => {
-    const fechaKey = new Date(turno.fecha_inicio).toISOString().split('T')[0]; // Usar la fecha sin hora como clave
-      if (!turnosPorFecha[fechaKey]) {
-        turnosPorFecha[fechaKey] = [];
-      }
-      turnosPorFecha[fechaKey].push(turno);
+      turnosTranca.forEach(turno => {
+        let fechaInicioTurno = this.normalizarFecha(new Date(turno.fecha_inicio));
+        let fechaFinTurno = this.normalizarFecha(new Date(turno.fecha_fin));
+
+        if (fechaFinTurno < this.fecha_de_inicio || fechaInicioTurno > this.fecha_de_fin) {
+            turnosExcluidos.push(this.crearTurnoExcluido(turno, fechaInicioTurno, fechaFinTurno));
+            return;
+        }
+        // Ajustar el rango según los filtros aplicados
+        const fechaInicioAjustada = this.ajustarFechaInicio(fechaInicioTurno, this.fecha_de_inicio);
+        const fechaFinAjustada = this.ajustarFechaFin(fechaFinTurno, this.fecha_de_fin);
+
+        // Verificar validez del rango ajustado
+        if (fechaInicioAjustada > fechaFinAjustada) {
+          turnosExcluidos.push(this.crearTurnoExcluido(turno, fechaInicioAjustada, fechaFinAjustada));
+          return;
+        }
+
+        // Calcular días correctamente considerando el ajuste
+        const dias = this.calcularDiasAjustados(
+          fechaInicioAjustada,
+          fechaFinAjustada
+        );
+
+        // Asignar turno a posición disponible
+        const posicionAsignada = this.asignarTurnoAPosicion(
+          fechaInicioAjustada,
+          fechaFinAjustada,
+          tranca.id,
+          turno,
+          dias
+        );
+
+        if (posicionAsignada === -1) {
+          turnosExcluidos.push(this.crearTurnoExcluido(turno, fechaInicioAjustada, fechaFinAjustada, dias));
+        }
+      });
     });
 
-    console.log('turnos por fecha', turnosPorFecha);
-  });
-
-
+    console.log('Turnos asignados:', this.listaTurnosMatriz);
+    console.log('Turnos excluidos:', turnosExcluidos);
 }
 
+//----------------------------------FUNCIONES AUXILIARES SIMPLIFICADAS (SOLO FECHAS)-----------------------------------
 
+/**
+ * Ajusta la fecha de inicio del turno según el filtro, eliminando la hora.
+ */
+private ajustarFechaInicio(fechaTurno: Date, fechaFiltro: Date): Date {
+    const turnoInicio = this.normalizarFecha(fechaTurno);
+    const filtroInicio = this.normalizarFecha(fechaFiltro);
+    if(filtroInicio>turnoInicio){
+        return filtroInicio
+    }
+    else{
+        return turnoInicio
+    }
+}
+private normalizarFecha(fecha: Date): Date {
+    console.log('normalizarFecha', fecha);
+    console.log('fecha normalizada', new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()));
+    return new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate());
+  }
+/**
+ * Ajusta la fecha de fin del turno según el filtro, eliminando la hora.
+ */
+private ajustarFechaFin(fechaTurno: Date, fechaFiltro: Date): Date {
+    const turnoInicio = this.normalizarFecha(fechaTurno);
+    const filtroInicio = this.normalizarFecha(fechaFiltro);
+    if(filtroInicio < turnoInicio) {
+        console.log('fecha filtro', turnoInicio);
+        console.log('fecha turno', filtroInicio);
+        return filtroInicio;
+    } else {
+        return turnoInicio;
+    }
+}
+
+/**
+ * Normaliza una fecha eliminando la hora (dejando solo año, mes y día).
+ */
+
+
+/**
+ * Calcula la cantidad de días entre dos fechas ajustadas.
+ */
+private calcularDiasAjustados(
+    fechaIniAjustada: Date,
+    fechaFinAjustada: Date
+): number {
+
+
+    const diffMs = fechaFinAjustada.getTime() - fechaIniAjustada.getTime();
+    const diasAjustados = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
+
+    return diasAjustados;
+}
+
+/**
+ * Calcula la diferencia de días exacta entre dos fechas (sin considerar horas).
+ */
+private calcularDiasDiferencia(fechaIni: Date, fechaFin: Date): number {
+    const inicio = this.normalizarFecha(fechaIni);
+    const fin = this.normalizarFecha(fechaFin);
+
+    const diffTiempo = fin.getTime() - inicio.getTime();
+    return Math.floor(diffTiempo / (1000 * 60 * 60 * 24)) + 1;
+}
+
+/**
+ * Asigna el turno a la primera posición disponible en la matriz.
+ */
+private asignarTurnoAPosicion(
+    fechaInicio: Date,
+    fechaFin: Date,
+    trancaId: number,
+    turno: any,
+    dias: number
+): number {
+    for (let posicion = 1; posicion <= 2; posicion++) {
+        if (!this.siFechaOcupada(this.listaTurnosMatriz, fechaInicio, fechaFin, posicion, trancaId)) {
+            this.listaTurnosMatriz.push({
+                fecha_inicio: fechaInicio,
+                fecha_fin: fechaFin,
+                dias: dias,
+                trancaId: trancaId,
+                usuarioId: turno.usuarioId,
+                posFila: posicion,
+                nombreUsuario: turno.nombre_apellidos
+            });
+            return posicion;
+        }
+    }
+    return -1;
+}
+
+/**
+ * Verifica si una fecha ya está ocupada en la misma fila y tranca.
+ */
+public siFechaOcupada(
+    turnoOcupados: ITurnoUsuario[],
+    fechaIni: Date,
+    fechaFin: Date,
+    posFila: number,
+    tranca_id: number
+): boolean {
+    const inicio = this.normalizarFecha(fechaIni);
+    const fin = this.normalizarFecha(fechaFin);
+
+    for (const turno of turnoOcupados) {
+        if (turno.trancaId === tranca_id && turno.posFila === posFila) {
+            const turnoInicio = this.normalizarFecha(turno.fecha_inicio);
+            const turnoFin = this.normalizarFecha(turno.fecha_fin);
+
+            const haySolapamiento = (
+                inicio <= turnoFin && fin >= turnoInicio
+            );
+
+            if (haySolapamiento) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+/**
+ * Crea un objeto de turno excluido cuando no se puede asignar.
+ */
+private crearTurnoExcluido(
+    turno: any,
+    fechaInicio: Date,
+    fechaFin: Date,
+    dias: number = 0
+): ITurnoUsuario {
+    return {
+        fecha_inicio: fechaInicio,
+        fecha_fin: fechaFin,
+        dias: dias,
+        trancaId: turno.trancaId,
+        usuarioId: turno.usuarioId,
+        posFila: -1,
+        nombreUsuario: turno.nombre_apellidos,
+    };
+}
+
+//-----------------------------------COLOCAR EN PANTALLA TODOS LOS TURNOS-----------------------------------
+async colocarTurnosEnPantalla() {
+    console.log('colocarTurnosEnPantalla');
+    await this.cargarTurnosMatriz();
+    this.itemsTurnos = [];
+
+    const filtroInicio = this.normalizarFecha(this.fecha_de_inicio);
+
+    this.listaTurnosMatriz.forEach(turno => {
+      let posX = turno.posFila === 2 ? 1 : 0;
+
+      const fechaTurno = this.normalizarFecha(new Date(turno.fecha_inicio));
+
+      const fechaact = Math.floor(
+        (fechaTurno.getTime() - filtroInicio.getTime()) / (1000 * 60 * 60 * 24)
+      );
+
+
+      const posicionX = (fechaact + 1) * this.columnWidth;
+
+      const posicionY = turno.trancaId * this.rowHeight + (posX * this.rowHeight) / 2;
+      const ancho = turno.dias * this.columnWidth;
+
+      this.itemsTurnos.push({
+        text: turno.nombreUsuario.toLowerCase(),
+        positionX: posicionX,
+        positionY: posicionY,
+        width: ancho,
+        height: this.rowHeight / 2,
+        backgroundColor: this.generarColorClaro(),
+        textColor: '#000000'
+      });
+
+      // Debug
+      console.log(`Turno: ${turno.nombreUsuario} - fechaact: ${fechaact} - posición X: ${posicionX}`);
+    });
+
+    console.log('itemsTurnos', this.itemsTurnos);
+  }
+
+
+//-----------------------------------GENERAR COLORES CLAROS-----------------------------------
+    private generarColorClaro(): string {
+        const r = Math.floor(Math.random() * 128) + 128; // Valores altos para rojo
+        const g = Math.floor(Math.random() * 128) + 128; // Valores altos para verde
+        const b = Math.floor(Math.random() * 128) + 128; // Valores altos para azul
+        return `rgb(${r}, ${g}, ${b})`; // Retorna el color en formato RGB
+    }
+//-----------------------------------INICIAR REDIMENSIONAMIENTO-----------------------------------
+private resizingElement: any = null;
+private initialMouseX: number = 0;
+
+startResize(event: MouseEvent, item: any): void {
+    event.stopPropagation(); // <--- Esto evita que se dispare startDrag
+
+    this.resizingElement = item;
+    this.initialMouseX = event.clientX;
+
+    this.resizingElement.originalPositionX = item.positionX;
+    this.resizingElement.originalPositionY = item.positionY;
+    this.resizingElement.originalWidth = item.width;
+
+    document.addEventListener('mousemove', this.onResize.bind(this));
+    document.addEventListener('mouseup', this.endResize.bind(this));
+  }
+
+
+  onResize(event: MouseEvent): void {
+    if (this.resizingElement) {
+      const deltaX = event.clientX - this.initialMouseX;
+      const newWidth = Math.max(this.resizingElement.originalWidth + deltaX, 50); // Mínimo ancho de 50px
+
+      // Ajustar el ancho directamente
+      this.resizingElement.width = newWidth;
+
+      // Mantener las posiciones originales sin permitir que cambien
+      Object.assign(this.resizingElement, {
+        positionX: this.resizingElement.originalPositionX,
+        positionY: this.resizingElement.originalPositionY,
+      });
+
+      console.log('Nuevo ancho:', this.resizingElement.width);
+      console.log('Posición fija durante el redimensionamiento:', {
+        positionX: this.resizingElement.positionX,
+        positionY: this.resizingElement.positionY,
+      });
+    }
+  }
+  endResize(): void {
+    if (this.resizingElement) {
+      // Redondear el ancho al múltiplo de itemWidth más cercano
+      const roundedWidth = Math.round(this.resizingElement.width / this.itemWidth) * this.itemWidth;
+
+      // Restaurar las posiciones originales
+      this.resizingElement.positionX = this.resizingElement.originalPositionX;
+      this.resizingElement.positionY = this.resizingElement.originalPositionY;
+
+      // Ajustar el ancho redondeado
+      this.resizingElement.width = roundedWidth;
+
+      console.log('Posición final ajustada:', {
+        positionX: this.resizingElement.positionX,
+        positionY: this.resizingElement.positionY,
+        width: this.resizingElement.width,
+      });
+    }
+
+    // Finalizar el redimensionamiento
+    this.resizingElement = null;
+    document.removeEventListener('mousemove', this.onResize.bind(this));
+    document.removeEventListener('mouseup', this.endResize.bind(this));
+  }
+  //--------------------------------CLICK DERECHO PARA AGRERGAR TURNOS-----------------------------------
+  dialogVisible: boolean = false; // Controla la visibilidad del diálogo
+dialogPosition: { x: number; y: number } | null = null; // Posición del diálogo
+cellIndex: number | null = null; // Índice de la celda seleccionada
+
+onRightClick(event: MouseEvent, cellIndex: number): void {
+    event.preventDefault();
+
+    const scrollableContainer = document.querySelector('.scrollable-container') as HTMLElement;
+    const scrollLeft = scrollableContainer?.scrollLeft || 0;
+    const scrollTop = scrollableContainer?.scrollTop || 0;
+
+    this.dialogPosition = {
+      x: event.pageX - scrollLeft,
+      y: event.pageY - scrollTop,
+    };
+    this.posicionCreacion={
+        top: event.pageY - scrollTop, // Ajusta la posición Y
+        left: event.pageX - scrollLeft // Ajusta la posición X
+    }
+    this.cellIndex = cellIndex;
+    this.dialogVisible = true;
+    this.crearDialogo=true;
+  }
+
+agregarDiv(): void {
+  console.log('Agregar div dinámico en la celda:', this.cellIndex);
+  // Aquí puedes implementar la lógica para agregar un div dinámico
+  this.dialogVisible = false; // Ocultar el diálogo después de agregar el div
+}
+  mostrarDialogoAgregarDiv(position: { x: number; y: number }, cellIndex: number): void {
+    // Implementa la lógica para mostrar el diálogo en la posición del clic
+    console.log('Mostrar diálogo en posición:', position, 'para la celda:', cellIndex);
+
+    // Ejemplo: Puedes usar un servicio de diálogo o una variable para controlar la visibilidad
+    this.dialogVisible = true;
+    this.dialogPosition = position;
+  }
 }

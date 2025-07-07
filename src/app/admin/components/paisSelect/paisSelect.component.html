@@ -11,6 +11,7 @@
         optionValue="id"
         dataKey="value"
         (onChange)="cambioPaises($event)"
+        [appendTo]="'body'"
     ></p-dropdown>
     <label for="dropdown">Pais de Dastino</label>
     <small id="pais" class="p-error " *ngIf="error">

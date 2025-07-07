@@ -36,6 +36,7 @@ export class ControlTrancaService {
     let ControlTranca:IControlTranca[]=data;
     return ControlTranca
   }
+
   //-----------------------------Ver ControlTranca---------------------------------
   verControlTranca(nombre:string)
 {

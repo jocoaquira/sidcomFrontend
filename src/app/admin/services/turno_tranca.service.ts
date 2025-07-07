@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.metadata';
 import { ITurnoTranca, ITurnoTrancaLista } from '@data/turno_tranca.metadata';
+import { IFuncionarioTranca } from '@data/funcionarioTranca.metadata';
 
 
 @Injectable({
@@ -37,6 +38,20 @@ export class TurnoTrancaService {
     let TurnoTranca:ITurnoTrancaLista[]=data;
     return TurnoTranca
   }
+   //-----------------Visualizar operadores-------------------------------------------
+    verFuncionarioTrancas(nombre:string)
+    {
+      // Inicializacion de objeto params
+      let params = new HttpParams();
+      params = params.append('nombre', nombre);
+
+      // asignacion de parametros
+      return this.http.get(`${this.baseUrl}turnotrancas/funcionarios`,{params:params});
+    }
+    handleListarFuncionarioTrancas(data: IFuncionarioTranca[]):IFuncionarioTranca[] {
+      let ControlTranca:IFuncionarioTranca[]=data;
+      return ControlTranca
+    }
   //-----------------------------Ver TurnoTranca---------------------------------
   verTurnoTranca(nombre:string)
 {

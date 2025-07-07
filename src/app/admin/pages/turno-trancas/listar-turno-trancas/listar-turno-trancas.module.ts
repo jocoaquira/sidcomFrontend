@@ -13,7 +13,6 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
-import { ItemTurnoModule } from '../modulodivarrastrable/item-turno/item-turno.module';
 import { TablaContainerModule } from '../modulodivarrastrable/tabla-container/tabla-container.module';
 @NgModule({
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -33,7 +32,6 @@ import { TablaContainerModule } from '../modulodivarrastrable/tabla-container/ta
     TagModule,
     TooltipModule,
     CalendarModule,
-    ItemTurnoModule,
     TablaContainerModule
 
   ],

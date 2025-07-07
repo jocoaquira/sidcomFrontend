@@ -11,6 +11,7 @@
                 filterBy="nombre"
                 optionValue="id"
                 (onChange)="onChangeRol($event)"
+                [appendTo]="'body'"
             ></p-dropdown>
             <label for="dropdown">Nivel de Usuario</label>
             <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('rol_id')">{{form.getErrorMessage('rol_id')}}</small>
@@ -65,6 +66,7 @@
                 [filter]="true"
                 filterBy="razon_social"
                 optionValue="id"
+                [appendTo]="'body'"
             ></p-dropdown>
 
             <label for="dropdown">Operador Minero</label>

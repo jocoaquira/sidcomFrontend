@@ -1,0 +1,8 @@
+<div class="field ">
+    <app-funcionarioTrancaSelect [funcionario_id]="4"></app-funcionarioTrancaSelect>
+</div>
+<div class="field">
+    <label for="dias">Cantidad de Dias</label>
+    <input type="text" pInputText id="dias" formControlName="dias" autofocus/>
+    <small class="ng-dirty ng-invalid" *ngIf="esCampoInvalido('dias')">{{error}}</small>
+</div>
