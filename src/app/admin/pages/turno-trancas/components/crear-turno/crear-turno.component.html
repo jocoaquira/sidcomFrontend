@@ -1,8 +1,25 @@
-<div class="field ">
-    <app-funcionarioTrancaSelect [funcionario_id]="4"></app-funcionarioTrancaSelect>
+<div class="field destacado">
+    <label for="turno" class="titulo">Fecha:</label>
+    <span class="valor">{{ fecha | date:'dd/MM/yyyy' }}</span>
+</div>
+<div class="field destacado">
+    <label for="turno" class="titulo">Tranca:</label>
+    <span class="valor">{{ tranca?.nombre }}</span>
+</div>
+<div class="field">
+    <label for="funcionario">Funcionario:</label>
+    <app-funcionarioTrancaSelect [funcionario_id]="4" class="funcionario-select"></app-funcionarioTrancaSelect>
 </div>
 <div class="field">
     <label for="dias">Cantidad de Dias</label>
-    <input type="text" pInputText id="dias" formControlName="dias" autofocus/>
+    <input type="number" pInputText id="dias" [ngModel]="dias" autofocus/>
     <small class="ng-dirty ng-invalid" *ngIf="esCampoInvalido('dias')">{{error}}</small>
+</div>
+
+
+<div class="botones-derecha">
+    <span class="p-buttonset col-12 md:col-6">
+        <button pButton pRipple label="Guardar" class="p-button-secondary" icon="pi pi-check" type="submit"></button>
+        <button pButton pRipple label="Cancelar" class="p-button-danger" icon="pi pi-trash" (click)="ocultarDialogo()"></button>
+    </span>
 </div>

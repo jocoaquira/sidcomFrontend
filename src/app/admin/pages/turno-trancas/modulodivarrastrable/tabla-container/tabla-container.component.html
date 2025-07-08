@@ -92,6 +92,10 @@
                 [columnas]="columns"
                 [alto]="rowHeight"
                 [ancho]="columnWidth"
-                [filas]="rows">
+                [filas]="rows"
+                [semanas]="semanas"
+                [listaTurnos]="listaTurnosMatriz"
+                [trancas]="trancas"
+                (estadoDialogo)="cerrarDialogo($event)">
             </app-crear-turno>
 </p-dialog>

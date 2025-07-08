@@ -664,16 +664,20 @@ onRightClick(event: MouseEvent, cellIndex: number): void {
     const scrollableContainer = document.querySelector('.scrollable-container') as HTMLElement;
     const scrollLeft = scrollableContainer?.scrollLeft || 0;
     const scrollTop = scrollableContainer?.scrollTop || 0;
-
+    const targetElement = event.target as HTMLElement; // Obtener el elemento clicado
+    const top = targetElement.offsetTop; // Posición vertical relativa al contenedor
+    const left = targetElement.offsetLeft; // Posición horizontal relativa al contenedor
+  
     this.dialogPosition = {
       x: event.pageX - scrollLeft,
       y: event.pageY - scrollTop,
     };
     this.posicionCreacion={
-        top: event.pageY - scrollTop, // Ajusta la posición Y
-        left: event.pageX - scrollLeft // Ajusta la posición X
+        top: top, // Ajusta la posición Y
+        left: left // Ajusta la posición X
     }
     this.cellIndex = cellIndex;
+    console.log('celda',cellIndex);
     this.dialogVisible = true;
     this.crearDialogo=true;
   }
@@ -691,4 +695,9 @@ agregarDiv(): void {
     this.dialogVisible = true;
     this.dialogPosition = position;
   }
+  //-----------------------------------CERRAR DIALOGO CREAR-----------------------------------
+  cerrarDialogo(event:any): void {
+    this.crearDialogo = false; 
+}
+
 }

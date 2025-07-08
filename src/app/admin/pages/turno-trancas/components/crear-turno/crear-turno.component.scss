@@ -15,3 +15,51 @@
       z-index: 1000; /* Asegura que el elemento arrastrado esté sobre los demás */
     }
   }
+/* Estilo para resaltar los campos destacados */
+.destacado {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  /* Estilo para los títulos */
+  .titulo {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #333;
+    margin-right: 0.5rem;
+  }
+  
+  /* Estilo para los valores */
+  .valor {
+    font-size: 1.2rem;
+    color: #86898c; /* Azul para destacar */
+  }
+/* Estilo para el selector de funcionario */
+.funcionario-select {
+    flex-grow: 1; /* Hace que el selector ocupe el espacio disponible */
+    max-width: 300px; /* Ajusta el ancho máximo del selector */
+}
+
+/* Botones */
+.botones-derecha .p-button-secondary {
+    background-color: #28a745; /* Verde para el botón de guardar */
+    border-color: #28a745;
+  }
+  
+  .botones-derecha .p-button-danger {
+    background-color: #dc3545; /* Rojo para el botón de cancelar */
+    border-color: #dc3545;
+  }
+
+
+
+
+
+
+  .botones-derecha {
+    display: flex;
+    justify-content: flex-end;
+}

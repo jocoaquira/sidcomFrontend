@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FuncionarioTrancaSelectModule } from '../funcionarioTrancaSelect/funcionarioTrancaSelect.module';
 import { CrearTurnoComponent } from './crear-turno.component';
 import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -11,6 +13,8 @@ import { InputTextModule } from 'primeng/inputtext';
   imports: [
     CommonModule,
     InputTextModule,
+    ButtonModule,
+    FormsModule,
     FuncionarioTrancaSelectModule
   ],
   exports: [
