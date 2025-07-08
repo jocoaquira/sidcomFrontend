@@ -52,7 +52,7 @@ export class CrearVehiculoAdminComponent implements OnInit {
     this.operadoresService.verOperatorsSimple('hj').subscribe(
         (data:any)=>{
         this.operadores=this.operadoresService.handleOperatorSimple(data);
-        console.log(this.operadores);
+
       },
       (error:any)=> this.error=this.operadoresService.handleOperatorSimpleError(error));
 

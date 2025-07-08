@@ -45,14 +45,14 @@ export class CrearMunicipioComponent implements OnInit {
     private municipioService:MunicipiosService,
     private notify:ToastrService,
     private authService:AuthService,
-        ) { 
-          
-            
-            console.log(this.municipio);
+        ) {
+
+
+
         }
 
   ngOnInit(): void {
-    
+
 
     this.operadoresService.verOperatorsSimple('hj').subscribe(
       (data:any)=>{
@@ -71,7 +71,7 @@ export class CrearMunicipioComponent implements OnInit {
 ];
   }
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.municipio)
+
     if (changes && this.municipio && this.isEditMode) {
       this.form.formulario.patchValue({
         id:this.municipio.id,
@@ -81,14 +81,14 @@ export class CrearMunicipioComponent implements OnInit {
         departamento_id: this.municipio.departamento_id//this.departamentos.find((e: any) => e.label === this.municipio.departamento_id) || null,
       });
     }
-    console.log(this.form.formulario.value);
+
   }
-  
+
   onChangeEstado(operator_id:any){
 
    // this.form.formulario.value.estado=operator_id.value
   }
- 
+
   ocultarDialogo(){
     this.form.formulario.reset();
     this.estadoDialogo.emit(false);
@@ -101,17 +101,17 @@ export class CrearMunicipioComponent implements OnInit {
     }
   }
   actualizarResponsable() {
-    
+
     this.form.formulario.value.estado=this.form.formulario.value.estado.label;
     this.form.formulario.value.tipo=this.form.formulario.value.tipo.label;
 
     if (this.form.formulario.valid) {
-        console.log(this.form.formulario.value);
+
         this.municipioService.editarmunicipio(this.form.formulario.value).subscribe(
             (data:any) =>
             {
               this.municipioService.handleCrearmunicipio(data);
-              console.log(data);
+
               if(data.error==null)
               {
                 this.form.formulario.reset();
@@ -121,7 +121,7 @@ export class CrearMunicipioComponent implements OnInit {
             },
             (error:any) =>
             {
-              console.log(error);
+
               this.errorUsuario=this.municipioService.handleCrearmunicipioError(error.error.data);
               if(error.error.status=='fail')
               {
@@ -134,16 +134,16 @@ export class CrearMunicipioComponent implements OnInit {
       }
   }
   crearResponsable() {
-    
+
     this.form.formulario.value.estado=this.form.formulario.value.estado.label;
     this.form.formulario.value.tipo=this.form.formulario.value.tipo.label;
-    console.log(this.form.formulario.value);
+
     if (this.form.formulario.valid) {
         this.municipioService.crearmunicipio(this.form.formulario.value).subscribe(
             (data:any) =>
             {
               this.municipioService.handleCrearmunicipio(data);
-              console.log(data);
+
               if(data.error==null)
               {
                 this.form.formulario.reset();
@@ -153,7 +153,7 @@ export class CrearMunicipioComponent implements OnInit {
             },
             (error:any) =>
             {
-              console.log(error);
+
               this.errorUsuario=this.municipioService.handleCrearmunicipioError(error.error.data);
               if(error.error.status=='fail')
               {

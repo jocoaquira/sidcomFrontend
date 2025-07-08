@@ -92,7 +92,7 @@ export class CrearRolComponent implements OnInit {
 
 // Método para enviar el formulario con el formato correcto
 onSubmitRol() {
-    console.log(this.roleForm.valid);
+   
     if (this.roleForm.invalid) {
       this.roleForm.markAllAsTouched();
       return;
@@ -103,7 +103,7 @@ onSubmitRol() {
       nombre: this.roleForm.value.nombre,
       permisos: this.roleForm.value.permissions.map((id: number) => ({ id }))
     };
-    console.log(formattedData);
+   
     this.roleService.crearrol(formattedData).subscribe(
       (data: any) => {
         if (data) {

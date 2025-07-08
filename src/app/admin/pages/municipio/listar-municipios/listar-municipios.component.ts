@@ -58,14 +58,14 @@ export class ListarMunicipioComponent implements OnInit {
         private confirmationService:ConfirmationService
     ) { 
         this.operador_id= authService.getUser.operador_id
-        console.log(this.operador_id);
+        
     }
 
     ngOnInit() {
         this.municipioService.vermunicipios('nada').subscribe(
             (data:any)=>{
             this.listaMunicipios=this.municipioService.handlemunicipio(data);
-            console.log(this.listaMunicipios);
+            
 
           },
           (error:any)=> this.error=this.municipioService.handleError(error));
@@ -96,7 +96,7 @@ export class ListarMunicipioComponent implements OnInit {
         this.municipioService.vermunicipios('nada').subscribe(
             (data:any)=>{
             this.listaMunicipios=this.municipioService.handlemunicipio(data);
-            console.log(this.listaMunicipios);
+            
 
           },
           (error:any)=> this.error=this.municipioService.handleError(error));
@@ -109,7 +109,7 @@ export class ListarMunicipioComponent implements OnInit {
     }
     edit(municipio:IMunicipio) {
         this.municipio = { ...municipio }; 
-        console.log(this.municipio);
+        
         //this.submitted = false;
         this.productDialog = true;
         this.isEditMode = true;
@@ -172,13 +172,13 @@ export class ListarMunicipioComponent implements OnInit {
                     (data:any) =>
                     {
                       this.municipioService.handleCrearmunicipio(data);
-                      console.log(data);
+                      
                       if(data.error==null)
                       {
                         this.municipioService.vermunicipios('nada').subscribe(
                             (data:any)=>{
                             this.listaMunicipios=this.municipioService.handlemunicipio(data);
-                            console.log(this.listaMunicipios);
+                            
                 
                           },
                           (error:any)=> this.error=this.municipioService.handleError(error));

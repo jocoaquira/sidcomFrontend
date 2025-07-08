@@ -255,12 +255,12 @@ cargar_datos(form:any){
         if (existeLugar) {
             this.valSwitch=false;
 
-            console.log(this.valSwitch);
+           
         // El lugar existe en la lista
         // Puedes hacer alguna acción aquí si lo necesitas
         } else {
             this.valSwitch=true;
-            console.log(this.valSwitch);
+           
         // El lugar NO existe en la lista
         }
     },
@@ -358,14 +358,14 @@ cargar_datos(form:any){
 }
 
 valSwitches(event:any){
-    console.log(event);
+   
     this.valSwitch=event.checked;
 }
 cambioLugarVerificacionTDM(event:any){
     const lugarEncontrado = this.listaLugaresVerificacion.find(
   (item) => item.lugar === event.value
 );
-    console.log(lugarEncontrado);
+   
 
     this.formulario_interno.formulario.patchValue({
         lugar_verificacion: lugarEncontrado.lugar,

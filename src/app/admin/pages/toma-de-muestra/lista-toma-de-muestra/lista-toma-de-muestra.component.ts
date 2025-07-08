@@ -136,11 +136,11 @@ export class ListaTomaDeMuestraComponent implements OnInit {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
     generarPDF(tdm:IFormularioInternoSimple){
-        console.log(tdm);
+       
         this.tomaDeMuestraService.verTomaDeMuestraPDF(tdm.id.toString()).subscribe(
             (data:any)=>{
             this.tdm_completo=this.tomaDeMuestraService.handleTomaDeMuestraPDF(data);
-            console.log(this.tdm_completo);
+           
             this.pdfTomaDemuestra.generarPDF(this.tdm_completo);
           },
           (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));

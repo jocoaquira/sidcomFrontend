@@ -29,7 +29,7 @@ p: number = 1;
     this.roleService.verRoles().subscribe(
       (data:any)=>{
         this.roles=this.roleService.handlerol(data);
-        console.log(this.roles);
+        
       },
       (error:any)=>this.error=this.roleService.handleErrorRole(error.error.data)
     );
@@ -85,13 +85,13 @@ p: number = 1;
                       (data:any) =>
                       {
                         this.paisService.handleCrearpais(data);
-                        console.log(data);
+                        
                         if(data.error==null)
                         {
                           this.paisService.verpaiss('nada').subscribe(
                               (data:any)=>{
                               this.listaPaises=this.paisService.handlepais(data);
-                              console.log(this.listaPaises);
+                              
 
                             },
                             (error:any)=> this.error=this.paisService.handleError(error));

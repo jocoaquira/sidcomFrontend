@@ -55,7 +55,7 @@ export class CrearProcedimientoComponent implements OnInit {
         ) {
 
 
-            console.log(this.usuario);
+
         }
 
   ngOnInit(): void {
@@ -81,7 +81,7 @@ export class CrearProcedimientoComponent implements OnInit {
         estado: this.estados.find((e: any) => e.label === this.usuario.estado) || null,
       });
     }
-    console.log(this.form.formulario.value);
+
   }
   onChangeRol(rol_id:any){
     let id=rol_id.value;
@@ -117,12 +117,12 @@ export class CrearProcedimientoComponent implements OnInit {
     this.form.formulario.value.celular=parseInt(this.form.formulario.value.celular);
 
     if (this.form.formulario.valid) {
-        console.log(this.form.formulario.value);
+
         this.procedimientoService.editarProcedimiento(this.form.formulario.value).subscribe(
             (data:any) =>
             {
               this.procedimientoService.handleCrearProcedimiento(data);
-              console.log(data);
+
               if(data.error==null)
               {
                 this.form.formulario.reset();
@@ -132,7 +132,7 @@ export class CrearProcedimientoComponent implements OnInit {
             },
             (error:any) =>
             {
-              console.log(error);
+
               this.errorUsuario=this.procedimientoService.handleCrearProcedimiento(error.error.data);
               if(error.error.status=='fail')
               {
@@ -154,7 +154,7 @@ export class CrearProcedimientoComponent implements OnInit {
             (data:any) =>
             {
               let procedimiento=this.procedimientoService.handleCrearProcedimiento(data);
-              console.log(data);
+
               if(data.error==null)
               {
                 this.guardarDetalles(this.generarPasosDetalleTDM(this.detalle_procedimiento, procedimiento.id));
@@ -165,7 +165,7 @@ export class CrearProcedimientoComponent implements OnInit {
             },
             (error:any) =>
             {
-              console.log(error);
+
               this.errorUsuario=this.procedimientoService.handleCrearProcedimientoError(error.error.data);
               if(error.error.status=='fail')
               {
@@ -180,7 +180,7 @@ export class CrearProcedimientoComponent implements OnInit {
   agregarProcedimiento() {
       // Verificamos si 'detalle_procedure' no está vacío antes de agregarlo
     if (this.detalle_procedure) {
-      console.log(this.detalle_procedure);  // Muestra la detalle_procedure en la consola
+
       this.detalle_procedimiento.push(this.detalle_procedure);
       this.detalle_procedure={
         nombre: '',
@@ -193,7 +193,7 @@ export class CrearProcedimientoComponent implements OnInit {
     this.detalle_procedure.nombre =(event.target as HTMLInputElement).value;
   }
   eliminar(domicilio:any) {
-    console.log(domicilio);
+
         this.detalle_procedimiento=this.detalle_procedimiento.filter(val => val.nombre !== domicilio.nombre);
       }
 
@@ -212,7 +212,7 @@ guardarDetalles(lista_detalles:IProcedimientoDetalle[]): void {
         lista_detalles.forEach(detalle => {
             this.detalleProcedimientoService.crearProcedimientoDetalle(detalle).subscribe(
                 (data: any) => {
-                    console.log('Detalle guardado:', data);
+
                     this.notify.success('Detalle guardado correctamente', 'Éxito', { timeOut: 2000, positionClass: 'toast-top-right' });
                 },
                 (error: any) => {

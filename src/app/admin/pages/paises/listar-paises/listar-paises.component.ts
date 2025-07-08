@@ -58,14 +58,14 @@ export class ListarPaisComponent implements OnInit {
         private confirmationService:ConfirmationService
     ) { 
         this.operador_id= authService.getUser.operador_id
-        console.log(this.operador_id);
+        
     }
 
     ngOnInit() {
         this.paisService.verpaises('nada').subscribe(
             (data:any)=>{
             this.listaPaises=this.paisService.handlepais(data);
-            console.log(this.listaPaises);
+            
 
           },
           (error:any)=> this.error=this.paisService.handleError(error));
@@ -96,7 +96,7 @@ export class ListarPaisComponent implements OnInit {
         this.paisService.verpaises('nada').subscribe(
             (data:any)=>{
             this.listaPaises=this.paisService.handlepais(data);
-            console.log(this.listaPaises);
+            
 
           },
           (error:any)=> this.error=this.paisService.handleError(error));
@@ -109,7 +109,7 @@ export class ListarPaisComponent implements OnInit {
     }
     edit(pais:IPais) {
         this.pais = { ...pais }; 
-        console.log(this.pais);
+        
         //this.submitted = false;
         this.productDialog = true;
         this.isEditMode = true;
@@ -178,13 +178,13 @@ export class ListarPaisComponent implements OnInit {
                     (data:any) =>
                     {
                       this.paisService.handleCrearpais(data);
-                      console.log(data);
+                      
                       if(data.error==null)
                       {
                         this.paisService.verpaiss('nada').subscribe(
                             (data:any)=>{
                             this.listaPaises=this.paisService.handlepais(data);
-                            console.log(this.listaPaises);
+                            
                 
                           },
                           (error:any)=> this.error=this.paisService.handleError(error));

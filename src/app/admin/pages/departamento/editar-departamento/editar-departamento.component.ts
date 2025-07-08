@@ -16,13 +16,13 @@ export class EditarDepartamentoComponent implements OnInit {
 
     public departamento=new DepartamentoFormulario();
     public departamento_id:number=0;
-    
+
     public departamento_registrado:IDepartamento=null;
     public id:number=null;
     public error!:any;
     public nombre:string='';
     public estados:any;
-    
+
   constructor(
     private departamentosService:DepartamentosService,
     private notify:ToastrService,
@@ -49,7 +49,7 @@ export class EditarDepartamentoComponent implements OnInit {
     this.departamentosService.verdepartamentos(this.nombre).subscribe(
       (data:any)=>{
       this.departamento=this.departamentosService.handledepartamento(data);
-      console.log(data);
+
     },
     (error:any)=> this.error=this.departamentosService.handleError(error)
   );
@@ -74,9 +74,9 @@ export class EditarDepartamentoComponent implements OnInit {
 
 
 
-    this.departamento_id=0; 
+    this.departamento_id=0;
   }
- // Función 
+ // Función
 
       options: any;
       satelliteLayer: any;
@@ -100,7 +100,7 @@ export class EditarDepartamentoComponent implements OnInit {
     }
   }
 agregarPunto() {
-   
+
     if(this.currentMarker!==undefined){
         const position = this.currentMarker.getLatLng();
         if(!this.sw_mapa)
@@ -111,14 +111,14 @@ agregarPunto() {
                 //this.sucursal.latitud=position.lat;
                 //this.sucursal.longitud=position.lng;
                 //this.operador.formulario.patchValue({created_at: position.lat, updated_at:position.lng});
-    
+
             }
             this.mapaDialogo = false;
     }
     else{
         this.notify.error('Seleccione un punto en el mapa para agregar....','Error al Seleccionar un Punto',{timeOut:2000,positionClass: 'toast-bottom-right'});
     }
-    
+
 
 }
 onMapReady(map: Map) {
@@ -142,7 +142,7 @@ addMarker(lat: number, lng: number) {
 abrirMapa() {
   if(this.departamento.formulario.value.departamento){
       let dept:any=this.departamento.find(val => val.id ===  this.departamento.formulario.value.departamento);
-      console.log(this.departamento.formulario.value.departamento);
+
       if (this.map) {
           this.map.setView(latLng(dept.latitud, dept.longitud), 13.5);
       }
@@ -156,7 +156,7 @@ abrirMapa() {
     this.sw_mapa=false;
     this.mapaDialogo = true;
       this.notify.error('Seleccione un departamento para abrir el mapa....','Error al Abrir el Mapa',{timeOut:2000,positionClass: 'toast-bottom-right'});
-  } 
+  }
 }
 cargar_datos(form:any){
   this.departamento.formulario.patchValue({
@@ -172,21 +172,21 @@ cargar_datos(form:any){
 
   }
   guardar(){
-    
+
     this.departamento.formulario.patchValue({
         estado: this.departamento.formulario.value.estado.label
       });
     if(this.departamento.formulario.valid){
-      console.log(this.departamento.formulario.value);
-      
+
+
       this.departamentosService.editardepartamento(this.departamento.formulario.value).subscribe(
         (data:any) =>
         {
             this.departamento_registrado=this.departamentosService.handleCreardepartamento(data);
-         
+
           if(this.departamento_registrado!==null)
           {
-            console.log(this.departamento_registrado);
+
             this.departamento.formulario.reset();
             this.notify.success('El el formulario interno se generó exitosamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
             this.router.navigate(['/admin/departamento/']);
@@ -197,14 +197,14 @@ cargar_datos(form:any){
         },
         (error:any) =>
         {
-         
+
           this.error=this.departamentosService.handleCreardepartamentoError(error.error.data);
           if(error.error.status=='fail')
           {
             this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
           }
         }
-      
+
           );
     }
     else{
@@ -212,15 +212,15 @@ cargar_datos(form:any){
         this.notify.error('Revise los datos e intente nuevamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
 
    }
-   
+
   }
 
     cambioDepartamentoMapa(departamento_id:any){
-            console.log(departamento_id);
-    
+
+
             this.departamento.formulario.value.departamento=departamento_id.value;
             let dept:IDepartamento=this.departamento.find(element => element.id === departamento_id.value);
-             
+
                 this.options = {
                     center: latLng(dept.latitud,dept.longitud),
                     zoom: 13.5
@@ -246,9 +246,9 @@ private mostrarErrorFormularios(formGroup: DepartamentoFormulario): void {
   });
 
   if (errores.length > 0) {
-   
+
   } else {
-   
+
   }
 }
 cancelar(){

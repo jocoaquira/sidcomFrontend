@@ -49,7 +49,7 @@ export class CrearAduanaComponent implements OnInit {
     this.departamentosService.verdepartamentos(this.nombre).subscribe(
       (data:any)=>{
       this.departamento=this.departamentosService.handledepartamento(data);
-      console.log(data);
+
     },
     (error:any)=> this.error=this.departamentosService.handleError(error)
   );
@@ -159,7 +159,7 @@ addMarker(lat: number, lng: number) {
 abrirMapa() {
   if(this.aduana.formulario.value.departamento){
       let dept:any=this.departamento.find(val => val.id ===  this.aduana.formulario.value.departamento);
-      console.log(this.aduana.formulario.value.departamento);
+
       if (this.map) {
           this.map.setView(latLng(dept.latitud, dept.longitud), 13.5);
       }
@@ -189,7 +189,7 @@ abrirMapa() {
         estado: this.aduana.formulario.value.estado.label
       });
     if(this.aduana.formulario.valid){
-      console.log(this.aduana.formulario.value);
+
       let limpio = Object.fromEntries(
         Object.entries(this.aduana.formulario.value).filter(([_, v]) => v !== null)
       );
@@ -200,7 +200,7 @@ abrirMapa() {
 
           if(this.aduana_registrado!==null)
           {
-            console.log(this.aduana_registrado);
+
             this.aduana.formulario.reset();
             this.notify.success('El el formulario interno se generó exitosamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
             this.router.navigate(['/admin/aduana/']);
@@ -230,7 +230,7 @@ abrirMapa() {
   }
 
     cambioDepartamentoMapa(departamento_id:any){
-            console.log(departamento_id);
+
 
             this.aduana.formulario.value.departamento=departamento_id.value;
             let dept:IDepartamento=this.departamento.find(element => element.id === departamento_id.value);

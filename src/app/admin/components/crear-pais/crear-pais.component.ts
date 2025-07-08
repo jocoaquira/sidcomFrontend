@@ -36,7 +36,7 @@ export class CrearPaisComponent implements OnInit {
         ) {
 
 
-            console.log(this.pais);
+
         }
 
   ngOnInit(): void {
@@ -52,7 +52,7 @@ export class CrearPaisComponent implements OnInit {
         continente:this.pais.continente
       });
     }
-    console.log(this.form.formulario.value);
+
   }
 
   onChangeEstado(operator_id:any){
@@ -76,12 +76,12 @@ export class CrearPaisComponent implements OnInit {
 
 
     if (this.form.formulario.valid) {
-        console.log(this.form.formulario.value);
+
         this.paisService.editarpais(this.form.formulario.value).subscribe(
             (data:any) =>
             {
               this.paisService.handleCrearpais(data);
-              console.log(data);
+
               if(data.error==null)
               {
                 this.form.formulario.reset();
@@ -91,7 +91,7 @@ export class CrearPaisComponent implements OnInit {
             },
             (error:any) =>
             {
-              console.log(error);
+
               this.errorUsuario=this.paisService.handleCrearpaisError(error.error.data);
               if(error.error.status=='fail')
               {
@@ -105,7 +105,7 @@ export class CrearPaisComponent implements OnInit {
   }
   crearPais() {
 
-    console.log(this.form.formulario.value);
+
     if (this.form.formulario.valid) {
         let limpio = Object.fromEntries(
             Object.entries(this.form.formulario.value).filter(([_, v]) => v !== null)
@@ -114,7 +114,7 @@ export class CrearPaisComponent implements OnInit {
             (data:any) =>
             {
               this.paisService.handleCrearpais(data);
-              console.log(data);
+
               if(data.error==null)
               {
                 this.form.formulario.reset();
@@ -124,7 +124,7 @@ export class CrearPaisComponent implements OnInit {
             },
             (error:any) =>
             {
-              console.log(error);
+
               this.errorUsuario=this.paisService.handleCrearpaisError(error.error.data);
               if(error.error.status=='fail')
               {

@@ -555,10 +555,10 @@ cambioOperadorSimple(event:any){
         this.formulario_interno.formulario.patchValue({
             des_comprador: this.comprador.razon_social,
           });
-    console.log(event);
+
 }
 valSwitches(event:any){
-    console.log(event);
+
     this.valSwitch=event.checked;
 }
 }

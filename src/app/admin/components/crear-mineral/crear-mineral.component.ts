@@ -46,7 +46,7 @@ export class CrearMineralComponent implements OnInit {
         ) {
 
 
-            console.log(this.mineral);
+
         }
 
   ngOnInit(): void {
@@ -80,7 +80,7 @@ export class CrearMineralComponent implements OnInit {
         estado: this.estados.find((e: any) => e.label === this.mineral.estado) || null,
       });
     }
-    console.log(this.form.formulario.value);
+
   }
   onChangeRol(rol_id:any){
     let id=rol_id.value;
@@ -116,12 +116,12 @@ export class CrearMineralComponent implements OnInit {
     this.form.formulario.value.tipo=this.form.formulario.value.tipo.label;
 
     if (this.form.formulario.valid) {
-        console.log(this.form.formulario.value);
+
         this.mineralService.editarmineral(this.form.formulario.value).subscribe(
             (data:any) =>
             {
               this.mineralService.handleCrearmineral(data);
-              console.log(data);
+
               if(data.error==null)
               {
                 this.form.formulario.reset();
@@ -131,7 +131,7 @@ export class CrearMineralComponent implements OnInit {
             },
             (error:any) =>
             {
-              console.log(error);
+
               this.errorUsuario=this.mineralService.handleCrearmineralError(error.error.data);
               if(error.error.status=='fail')
               {
@@ -147,7 +147,7 @@ export class CrearMineralComponent implements OnInit {
 
     this.form.formulario.value.estado=this.form.formulario.value.estado.label;
     this.form.formulario.value.tipo=this.form.formulario.value.tipo.label;
-    console.log(this.form.formulario.value);
+
     if (this.form.formulario.valid) {
         let limpio:any= Object.fromEntries(
             Object.entries(this.form.formulario.value).filter(([_, v]) => v !== null)
@@ -156,7 +156,7 @@ export class CrearMineralComponent implements OnInit {
             (data:any) =>
             {
               this.mineralService.handleCrearmineral(data);
-              console.log(data);
+
               if(data.error==null)
               {
                 this.form.formulario.reset();
@@ -166,7 +166,7 @@ export class CrearMineralComponent implements OnInit {
             },
             (error:any) =>
             {
-              console.log(error);
+
               this.errorUsuario=this.mineralService.handleCrearmineralError(error.error.data);
               if(error.error.status=='fail')
               {

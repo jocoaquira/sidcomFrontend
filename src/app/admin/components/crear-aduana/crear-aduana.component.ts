@@ -43,14 +43,14 @@ export class CrearAduanaComponent implements OnInit {
     private aduanaService:AduanasService,
     private notify:ToastrService,
     private authService:AuthService,
-        ) { 
-          
-            
-            console.log(this.aduana);
+        ) {
+
+
+
         }
 
   ngOnInit(): void {
-    
+
 
     this.operadoresService.verOperatorsSimple('hj').subscribe(
       (data:any)=>{
@@ -79,7 +79,7 @@ export class CrearAduanaComponent implements OnInit {
         estado: this.estados.find((e: any) => e.label === this.aduana.estado) || null,
       });
     }
-    console.log(this.form.formulario.value);
+
   }
   onChangeRol(rol_id:any){
     let id=rol_id.value;
@@ -110,17 +110,17 @@ export class CrearAduanaComponent implements OnInit {
     }
   }
   actualizarResponsable() {
-    
+
     this.form.formulario.value.estado=this.form.formulario.value.estado.label;
     this.form.formulario.value.tipo=this.form.formulario.value.tipo.label;
 
     if (this.form.formulario.valid) {
-        console.log(this.form.formulario.value);
+
         this.aduanaService.editaraduana(this.form.formulario.value).subscribe(
             (data:any) =>
             {
               this.aduanaService.handleCrearaduana(data);
-              console.log(data);
+
               if(data.error==null)
               {
                 this.form.formulario.reset();
@@ -130,7 +130,7 @@ export class CrearAduanaComponent implements OnInit {
             },
             (error:any) =>
             {
-              console.log(error);
+
               this.errorUsuario=this.aduanaService.handleCrearaduanaError(error.error.data);
               if(error.error.status=='fail')
               {
@@ -143,16 +143,16 @@ export class CrearAduanaComponent implements OnInit {
       }
   }
   crearResponsable() {
-    
+
     this.form.formulario.value.estado=this.form.formulario.value.estado.label;
     this.form.formulario.value.tipo=this.form.formulario.value.tipo.label;
-    console.log(this.form.formulario.value);
+
     if (this.form.formulario.valid) {
         this.aduanaService.crearaduana(this.form.formulario.value).subscribe(
             (data:any) =>
             {
               this.aduanaService.handleCrearaduana(data);
-              console.log(data);
+
               if(data.error==null)
               {
                 this.form.formulario.reset();
@@ -162,7 +162,7 @@ export class CrearAduanaComponent implements OnInit {
             },
             (error:any) =>
             {
-              console.log(error);
+
               this.errorUsuario=this.aduanaService.handleCrearaduanaError(error.error.data);
               if(error.error.status=='fail')
               {

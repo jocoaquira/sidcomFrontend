@@ -108,15 +108,15 @@ export class FormularioExternoComponent implements OnInit {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
     generarPDF(tdm:IFormularioExternoSimple){
-            console.log(tdm);
+
             this.formularioExternoService.verFormularioExternoPDF(tdm.id.toString()).subscribe(
                 (data:any)=>{
                 let tdm_completo=this.formularioExternoService.handleFormularioExternoPDF(data);
-                console.log(tdm_completo);
+
                 this.formularioExternoPDF.generarPDF(tdm_completo);
               },
               (error:any)=> this.error=this.formularioExternoService.handleError(error));
-            
+
     }
     emitir(event:IFormularioExternoSimple){
         let emitido:any=null;
@@ -142,7 +142,6 @@ export class FormularioExternoComponent implements OnInit {
             });
     }
     confirmarEmision(event:IFormularioExternoSimple) {
-        console.log
         this.confirmationService.confirm({
             key: 'confirm1',
             message: '¿Estas seguro de Emitir el formulario '+event.nro_formulario+'?',

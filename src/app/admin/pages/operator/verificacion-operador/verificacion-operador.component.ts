@@ -17,7 +17,7 @@ export class VerificacionOperadorComponent implements OnInit {
     private actRoute: ActivatedRoute,
     private operatorsService:OperatorsService
   ) {
-    console.log('aqui');
+    
     this.actRoute.paramMap.subscribe(
       params=>
       {
@@ -32,7 +32,7 @@ export class VerificacionOperadorComponent implements OnInit {
    }
 
   ngOnInit() {
-    console.log('aqui');
+    
   }
 
 }

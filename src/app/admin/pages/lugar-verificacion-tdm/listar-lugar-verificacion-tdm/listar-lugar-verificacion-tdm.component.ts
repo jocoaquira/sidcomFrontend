@@ -59,14 +59,14 @@ export class ListarLugarVerificacionTDMComponent implements OnInit {
         private router: Router,
     ) {
         this.operador_id= authService.getUser.operador_id
-        console.log(this.operador_id);
+
     }
 
     ngOnInit() {
         this.lugarVerificacionTDMService.verlugarverificacionTDMs('nada').subscribe(
             (data:any)=>{
             this.listaLugaresVerificacion=this.lugarVerificacionTDMService.handlelugarverificacion(data);
-            console.log(this.listaLugaresVerificacion);
+
           },
           (error:any)=> this.error=this.lugarVerificacionTDMService.handleError(error));
 
@@ -89,7 +89,7 @@ export class ListarLugarVerificacionTDMComponent implements OnInit {
         this.lugarVerificacionTDMService.verlugarverificacionTDMs('nada').subscribe(
             (data:any)=>{
             this.listaLugaresVerificacion=this.lugarVerificacionTDMService.handlelugarverificacion(data);
-            console.log(this.listaLugaresVerificacion);
+
 
           },
           (error:any)=> this.error=this.lugarVerificacionTDMService.handleError(error));
@@ -102,7 +102,7 @@ export class ListarLugarVerificacionTDMComponent implements OnInit {
     }
     edit(lugar_verificacion:ILugarVerificacionTDM) {
         this.lugar_verificacion = { ...lugar_verificacion };
-        console.log(this.lugar_verificacion);
+
         this.router.navigate(['/admin/lugar-verificacion-tdm/editar', this.lugar_verificacion.id]);
     }
     eliminar(lugar_verificacion:ILugarVerificacionTDM) {
@@ -111,13 +111,13 @@ export class ListarLugarVerificacionTDMComponent implements OnInit {
             message: '¿Estas seguro de Eliminar el registro de '+lugar_verificacion.lugar+' definitivamente?',
             accept: () => {
                 this.lugar_verificacion = { ...lugar_verificacion };
-                console.log(this.lugar_verificacion);
+
                 this.lugarVerificacionTDMService.eliminarlugarverificacionTDM(lugar_verificacion.id).subscribe(
                     (data:any)=>{
                         this.lugarVerificacionTDMService.verlugarverificacionTDMs('nada').subscribe(
                             (data:any)=>{
                             this.listaLugaresVerificacion=this.lugarVerificacionTDMService.handlelugarverificacion(data);
-                            console.log(this.listaLugaresVerificacion);
+
                         },
                         (error:any)=> this.error=this.lugarVerificacionTDMService.handleError(error));
                         this.notify.success('El Lugar de Toma de Muestra se eliminó exitosamente', 'Eliminado Correctamente', { timeOut: 2500, positionClass: 'toast-top-right' });
@@ -199,13 +199,13 @@ openGoogleMaps(lat: number, lon: number) {
                     (data:any) =>
                     {
                       this.lugarVerificacionTDMService.handleCrearlugarverificacionTDM(data);
-                      console.log(data);
+
                       if(data.error==null)
                       {
                         this.lugarVerificacionTDMService.verlugarverificacionTDMs('nada').subscribe(
                             (data:any)=>{
                             this.listaLugaresVerificacion=this.lugarVerificacionTDMService.handlelugarverificacion(data);
-                            console.log(this.listaLugaresVerificacion);
+
 
                           },
                           (error:any)=> this.error=this.lugarVerificacionTDMService.handleError(error));

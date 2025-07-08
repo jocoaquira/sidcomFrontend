@@ -58,14 +58,14 @@ export class ListarPresentacionComponent implements OnInit {
         private confirmationService:ConfirmationService
     ) { 
         this.operador_id= authService.getUser.operador_id
-        console.log(this.operador_id);
+       
     }
 
     ngOnInit() {
         this.presentacionService.verpresentacions('nada').subscribe(
             (data:any)=>{
             this.listaPresentaciones=this.presentacionService.handlepresentacion(data);
-            console.log(this.listaPresentaciones);
+           
 
           },
           (error:any)=> this.error=this.presentacionService.handleError(error));
@@ -96,7 +96,7 @@ export class ListarPresentacionComponent implements OnInit {
         this.presentacionService.verpresentacions('nada').subscribe(
             (data:any)=>{
             this.listaPresentaciones=this.presentacionService.handlepresentacion(data);
-            console.log(this.listaPresentaciones);
+           
 
           },
           (error:any)=> this.error=this.presentacionService.handleError(error));
@@ -109,7 +109,7 @@ export class ListarPresentacionComponent implements OnInit {
     }
     edit(presentacion:IPresentacion) {
         this.presentacion = { ...presentacion }; 
-        console.log(this.presentacion);
+       
         //this.submitted = false;
         this.productDialog = true;
         this.isEditMode = true;
@@ -172,13 +172,13 @@ export class ListarPresentacionComponent implements OnInit {
                     (data:any) =>
                     {
                       this.presentacionService.handleCrearpresentacion(data);
-                      console.log(data);
+                     
                       if(data.error==null)
                       {
                         this.presentacionService.verpresentacions('nada').subscribe(
                             (data:any)=>{
                             this.listaPresentaciones=this.presentacionService.handlepresentacion(data);
-                            console.log(this.listaPresentaciones);
+                           
                 
                           },
                           (error:any)=> this.error=this.presentacionService.handleError(error));

@@ -24,7 +24,6 @@ export class FormularioInternoCooperativaVerificacionComponent implements OnInit
             this.hash=params.get('hash');
             this.FormularioCooperativaService.verFormularioInternoCooperativaHash(this.hash).subscribe(
                 (data:any)=>{
-                    console.log(data);
                     this.formIntCoope=this.FormularioCooperativaService.handleFormularioInternoCooperativaPDF(data);
             },
             (error:any)=> this.error=this.FormularioCooperativaService.handleError(error));

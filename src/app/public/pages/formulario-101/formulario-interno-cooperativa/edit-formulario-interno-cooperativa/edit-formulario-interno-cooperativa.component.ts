@@ -335,7 +335,7 @@ ngOnInit() {
         );
 
         if (operadorEncontrado) {
-            console.log(operadorEncontrado);
+
             this.valSwitch=false;
             this.razon_social=operadorEncontrado.razon_social;
         } else {
@@ -714,10 +714,10 @@ cambioOperadorSimple(event:any){
         this.formulario_interno.formulario.patchValue({
             des_comprador: this.comprador.razon_social,
           });
-    console.log(event);
+
 }
 valSwitches(event:any){
-    console.log(event);
+
     this.valSwitch=event.checked;
 }
 }

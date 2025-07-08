@@ -97,8 +97,7 @@ export class EditarLugarVerificacionTDMComponent implements OnInit {
       (data:any)=>{
       this.departamento=this.departamentosService.handledepartamento(data);
       // Para asignar todos los valores del formulario (debe incluir todos los campos)
-        console.log(this.lugar_verificacion_tdm.formulario.value);
-      // Esperamos un momento para asegurar que el mapa esté listo
+        
       setTimeout(() => {
         this.cambioDepartamentoMapa(4);
       }, 800);

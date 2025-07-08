@@ -50,7 +50,7 @@ export class AnularTomaDeMuestraComponent implements OnInit {
     {
 
         this.anulacion_tm.estado='ANULADO';
-        console.log(this.anulacion_tm);
+       
         this.tomaDeMuestraService.anularTomaDeMuestra(this.anulacion_tm).subscribe(
             (data:any) =>
             {

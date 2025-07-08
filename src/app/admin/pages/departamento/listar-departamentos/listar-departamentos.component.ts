@@ -22,7 +22,7 @@ import { DepartamentosService } from 'src/app/admin/services/departamentos.servi
 export class ListarDepartamentoComponent implements OnInit {
 
     public listaDepartamentos!:IDepartamento[];
-    
+
     public roles!:IRol[];
     public operadores!:IOperatorSimple[];
     public error!:any;
@@ -53,16 +53,16 @@ export class ListarDepartamentoComponent implements OnInit {
         private authService:AuthService,
         private notify:ToastrService,
         private confirmationService:ConfirmationService
-    ) { 
+    ) {
         this.operador_id= authService.getUser.operador_id
-        console.log(this.operador_id);
+
     }
 
     ngOnInit() {
         this.departamentoService.verdepartamentos('nada').subscribe(
             (data:any)=>{
             this.listaDepartamentos=this.departamentoService.handledepartamento(data);
-            console.log(this.listaDepartamentos);
+
 
           },
           (error:any)=> this.error=this.departamentoService.handleError(error));
@@ -93,7 +93,7 @@ export class ListarDepartamentoComponent implements OnInit {
         this.departamentoService.verdepartamentos('nada').subscribe(
             (data:any)=>{
             this.listaDepartamentos=this.departamentoService.handledepartamento(data);
-            console.log(this.listaDepartamentos);
+
 
           },
           (error:any)=> this.error=this.departamentoService.handleError(error));
@@ -105,8 +105,8 @@ export class ListarDepartamentoComponent implements OnInit {
         this.isEditMode = false;
     }
     edit(departamento:IDepartamento) {
-        this.departamento = { ...departamento }; 
-        console.log(this.departamento);
+        this.departamento = { ...departamento };
+
         //this.submitted = false;
         this.productDialog = true;
         this.isEditMode = true;
@@ -159,27 +159,27 @@ export class ListarDepartamentoComponent implements OnInit {
     }
 
     bloquearDialogo(departamento:IDepartamento){
-        
+
         this.confirmationService.confirm({
             key: 'confirm1',
             message: '¿Estas seguro de Realizar esta Operación?',
             accept: () => {
-                
+
                 this.departamentoService.editardepartamento(departamento).subscribe(
                     (data:any) =>
                     {
                       this.departamentoService.handleCreardepartamento(data);
-                      console.log(data);
+
                       if(data.error==null)
                       {
                         this.departamentoService.verdepartamentos('nada').subscribe(
                             (data:any)=>{
                             this.listaDepartamentos=this.departamentoService.handledepartamento(data);
-                            console.log(this.listaDepartamentos);
-                
+
+
                           },
                           (error:any)=> this.error=this.departamentoService.handleError(error));
-        
+
                         this.notify.success('Actualizado Correctamente','Actualizado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
                       }
                     },

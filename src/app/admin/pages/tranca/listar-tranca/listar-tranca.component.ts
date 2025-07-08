@@ -57,14 +57,14 @@ export class ListarTrancaComponent implements OnInit {
         private router: Router,
     ) {
         this.operador_id= authService.getUser.operador_id
-        console.log(this.operador_id);
+       
     }
 
     ngOnInit() {
         this.lugarVerificacionTDMService.verTrancas('nada').subscribe(
             (data:any)=>{
             this.listaTrancas=this.lugarVerificacionTDMService.handleTrancas(data);
-            console.log(this.listaTrancas);
+           
           },
           (error:any)=> this.error=this.lugarVerificacionTDMService.handleError(error));
 
@@ -87,7 +87,7 @@ export class ListarTrancaComponent implements OnInit {
         this.lugarVerificacionTDMService.verTrancas('nada').subscribe(
             (data:any)=>{
             this.listaTrancas=this.lugarVerificacionTDMService.handleTrancas(data);
-            console.log(this.listaTrancas);
+           
 
           },
           (error:any)=> this.error=this.lugarVerificacionTDMService.handleError(error));
@@ -100,7 +100,7 @@ export class ListarTrancaComponent implements OnInit {
     }
     edit(tranca:ITranca) {
         this.tranca = { ...tranca };
-        console.log(this.tranca);
+       
         this.router.navigate(['/admin/puesto-control/editar', this.tranca.id]);
     }
     eliminar(tranca:ITranca) {
@@ -109,13 +109,13 @@ export class ListarTrancaComponent implements OnInit {
             message: '¿Estas seguro de Eliminar el registro de '+tranca.nombre+' definitivamente?',
             accept: () => {
                 this.tranca = { ...tranca };
-                console.log(this.tranca);
+               
                 this.lugarVerificacionTDMService.eliminarTranca(tranca.id).subscribe(
                     (data:any)=>{
                         this.lugarVerificacionTDMService.verTrancas('nada').subscribe(
                             (data:any)=>{
                             this.listaTrancas=this.lugarVerificacionTDMService.handleTrancas(data);
-                            console.log(this.listaTrancas);
+                           
                         },
                         (error:any)=> this.error=this.lugarVerificacionTDMService.handleError(error));
                         this.notify.success('El Lugar de Toma de Muestra se eliminó exitosamente', 'Eliminado Correctamente', { timeOut: 2500, positionClass: 'toast-top-right' });
@@ -197,13 +197,13 @@ openGoogleMaps(lat: number, lon: number) {
                     (data:any) =>
                     {
                       this.lugarVerificacionTDMService.handleCrearTranca(data);
-                      console.log(data);
+                     
                       if(data.error==null)
                       {
                         this.lugarVerificacionTDMService.verTrancas('nada').subscribe(
                             (data:any)=>{
                             this.listaTrancas=this.lugarVerificacionTDMService.handleTrancas(data);
-                            console.log(this.listaTrancas);
+                           
 
                           },
                           (error:any)=> this.error=this.lugarVerificacionTDMService.handleError(error));

@@ -331,13 +331,13 @@ ngOnInit() {
   this.operadoresService.verOperatorsSimple('hj').subscribe(
       (data:any)=>{
       this.operadores=this.operadoresService.handleOperatorSimple(data);
-      console.log(this.operadores);
+
       const operadorEncontrado = this.operadores.find(operador =>
         operador.razon_social===this.formulario_interno.formulario.value.des_comprador
         );
 
         if (operadorEncontrado) {
-            console.log(operadorEncontrado);
+
             this.valSwitch=false;
             this.razon_social=operadorEncontrado.razon_social;
         } else {
@@ -715,10 +715,10 @@ cambioOperadorSimple(event:any){
         this.formulario_interno.formulario.patchValue({
             des_comprador: this.comprador.razon_social,
           });
-    console.log(event);
+
 }
 valSwitches(event:any){
-    console.log(event);
+
     this.valSwitch=event.checked;
 }
 }
