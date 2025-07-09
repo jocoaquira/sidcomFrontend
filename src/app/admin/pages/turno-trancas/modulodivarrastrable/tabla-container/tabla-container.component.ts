@@ -4,10 +4,15 @@ import { ITranca } from '@data/tranca.metadata';
 import { ITurnoTrancaLista } from '@data/turno_tranca.metadata';
 import { TrancaService } from 'src/app/admin/services/tranca.service';
 import { firstValueFrom } from 'rxjs';
+import { IFuncionarioTranca } from '@data/funcionarioTranca.metadata';
 
 interface IMes{
     nombre: string;
     dias: number;
+}
+interface IFuncionarioColor{
+    id:number;
+    color:string;
 }
 
 interface ITurnoUsuario{
@@ -44,6 +49,9 @@ export class TablaContainerComponent implements OnInit {
 
   turnos: ITurnoTrancaLista[] = [];
   trancas: ITranca[] = [];
+  funcionarios:IFuncionarioTranca[]=[];
+  funcionarioColor:IFuncionarioColor[]=[];
+
   listaTurnosMatriz:ITurnoUsuario[] = [];
   semanas: Date[] = [];
   meses: IMes[] = [];
@@ -119,6 +127,10 @@ export class TablaContainerComponent implements OnInit {
       // Cargar turnos
       const responseTurnos: any = await firstValueFrom(this.turnoTrancaService.verTurnoTrancas(''));
       this.turnos = this.turnoTrancaService.handleTurnoTranca(responseTurnos);
+    //   Cargar Funcionarios
+    const responseFuncionarios: any = await firstValueFrom(this.turnoTrancaService.verFuncionarioTrancas(''));
+    this.funcionarios = this.turnoTrancaService.handleListarFuncionarioTrancas(responseFuncionarios);
+        this.asignarColorFuncionario();
 
 
     } catch (error) {
@@ -489,7 +501,7 @@ export class TablaContainerComponent implements OnInit {
   //-----------------------------------COLOCAR EN PANTALLA TODOS LOS TURNOS-----------------------------------
   async colocarTurnosEnPantalla(): Promise<void> {
     this.itemsTurnos = [];
-
+    console.log(this.funcionarioColor)
     if (this.listaTurnosMatriz.length === 0) {
       return;
     }
@@ -514,7 +526,7 @@ export class TablaContainerComponent implements OnInit {
         positionY: posicionY,
         width: ancho,
         height: this.rowHeight / 2,
-        backgroundColor: this.generarColorClaro(),
+        backgroundColor: this.funcionarioColor.find(funCol=> funCol.id===turno.usuarioId).color,
         textColor: '#000000'
       });
 
@@ -529,6 +541,14 @@ export class TablaContainerComponent implements OnInit {
     const b = Math.floor(Math.random() * 128) + 128;
     return `rgb(${r}, ${g}, ${b})`;
   }
+    private asignarColorFuncionario(): void {
+        this.funcionarios.forEach(funcionario => {
+            this.funcionarioColor.push({
+                id: funcionario.id,
+                color: this.generarColorClaro()
+            });
+        });
+    }
 
   //-----------------------------------REDIMENSIONAMIENTO-----------------------------------
   startResize(event: MouseEvent, item: any): void {
