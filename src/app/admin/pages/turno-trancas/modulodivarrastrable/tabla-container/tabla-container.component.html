@@ -35,11 +35,11 @@
         [style.width.px]="columns * columnWidth"
      [style.height.px]="rows * rowHeight"
     >
-    <div *ngFor="let encabezado of encabezadosTranca" class="grid-cell cabecera-tranca"
+    <div *ngFor="let encabezado of encabezadosTranca" class="cabecera-tranca"
        [style.backgroundColor]="encabezado.backgroundColor"
        [style.color]="encabezado.textColor"
-       [style.top]="encabezado.position.left"
-       [style.left]="encabezado.position.top"
+       [style.top]="encabezado.position.top"
+       [style.left]="encabezado.position.left"
        [style.width]="encabezado.width"
        [style.height]="encabezado.height"
        [style.gridRow]="encabezado.row"
@@ -74,7 +74,6 @@
       <div class="resize-handle" (mousedown)="startResize($event, item)"></div>
     </div>
   </div>
-  <button class="add-button" (click)="agregarTurnoUsuario()">Agregar Componente</button>
 
 <p-dialog
     [(visible)]="crearDialogo"

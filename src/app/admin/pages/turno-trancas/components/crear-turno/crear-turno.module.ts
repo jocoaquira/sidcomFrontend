@@ -5,6 +5,7 @@ import { CrearTurnoComponent } from './crear-turno.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { FormsModule } from '@angular/forms';
     InputTextModule,
     ButtonModule,
     FormsModule,
+    ToastModule,
     FuncionarioTrancaSelectModule
   ],
   exports: [
