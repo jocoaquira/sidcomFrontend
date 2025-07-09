@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ITranca } from '@data/tranca.metadata';
 import { ITurnoTrancaLista } from '@data/turno_tranca.metadata';
 
 @Injectable({
@@ -130,4 +131,38 @@ export class TurnoValidatorService {
 
         return { valido: true };
     }
+    public obtenerFechaClick(semanas:Date[],ancho:number,position:{ top?: number; left?: number }): Date | null {
+    if (!semanas || semanas.length === 0 || ancho <= 0) {
+      console.error('Datos insuficientes para calcular la fecha.');
+      return null;
+    }
+    const columnaIndex = Math.floor((position.left) / ancho);
+
+
+    if (columnaIndex > 0 && columnaIndex <= semanas.length) {
+      return semanas[columnaIndex-1];
+    }
+    console.error('El clic está fuera del rango de columnas.');
+    return null;
+  }
+  public calcularFechaFin(fechaInicio: Date, dias: number): string {
+    const fechaFin = new Date(fechaInicio);
+    fechaFin.setDate(fechaFin.getDate() + dias-1);
+    return fechaFin.toISOString();
+}
+public obtenerTrancaClick(trancas:ITranca[],alto:number,position:{ top?: number; left?: number }): ITranca | null {
+
+    if (!trancas || trancas.length === 0 || alto <= 0) {
+      console.error('Datos insuficientes para calcular la tranca.');
+      return null;
+    }
+    const filaIndex = Math.floor(position.top / alto);
+    console.log('trancas:',filaIndex)
+    if (filaIndex > 0 && filaIndex <= trancas.length) {
+      return trancas[filaIndex-1];
+    }
+
+    console.error('El clic está fuera del rango de filas.');
+    return null;
+  }
 }

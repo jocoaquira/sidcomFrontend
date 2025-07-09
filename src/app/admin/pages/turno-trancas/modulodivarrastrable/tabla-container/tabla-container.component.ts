@@ -5,17 +5,23 @@ import { ITurnoTrancaLista } from '@data/turno_tranca.metadata';
 import { TrancaService } from 'src/app/admin/services/tranca.service';
 import { firstValueFrom } from 'rxjs';
 import { IFuncionarioTranca } from '@data/funcionarioTranca.metadata';
+import { TurnoValidatorService } from '../../services/validar-turno.service';
 
 interface IMes{
     nombre: string;
     dias: number;
 }
+interface IColores{
+    fondo:string;
+    borde:string;
+}
 interface IFuncionarioColor{
     id:number;
-    color:string;
+    color:IColores;
 }
 
 interface ITurnoUsuario{
+    id:number
     fecha_fin: Date;
     fecha_inicio: Date;
     dias: number;
@@ -75,6 +81,7 @@ export class TablaContainerComponent implements OnInit {
   constructor(
     private trancaService: TrancaService,
     private turnoTrancaService: TurnoTrancaService,
+    private validador:TurnoValidatorService
   ) {
     // Mover la inicialización del grid aquí NO es necesario
     // this.updateGrid();
@@ -211,7 +218,7 @@ export class TablaContainerComponent implements OnInit {
 
       this.draggedElement.positionX = closestColumn;
       this.draggedElement.positionY = closestRow;
-
+        this.updateTurno(this.draggedElement);
       this.dragging = false;
       this.draggedElement = null;
 
@@ -219,7 +226,16 @@ export class TablaContainerComponent implements OnInit {
       document.removeEventListener('mouseup', this.endDrag.bind(this));
     }
   }
-
+//-------------------------------------UPDATE TURNO------------------------------------------------
+updateTurno(item:any){
+    const posicion={
+        top:item.positionY,
+        left:item.positionX
+    }
+    let fecha=this.validador.obtenerFechaClick(this.semanas,this.columnWidth,posicion);
+    let tranca=this.validador.obtenerTrancaClick(this.trancas,this.rowHeight,posicion);
+    console.log('update',item);
+}
   //-------------------------------------CAMBIO DE FECHA-----------------------------------
   async cambioFecha(event: any): Promise<void> {
     try {
@@ -403,7 +419,7 @@ export class TablaContainerComponent implements OnInit {
 
         // Verificar si el turno está dentro del rango visible
         if (fechaFinTurno < this.fecha_de_inicio || fechaInicioTurno > this.fecha_de_fin) {
-          turnosExcluidos.push(this.crearTurnoExcluido(turno, fechaInicioTurno, fechaFinTurno));
+          turnosExcluidos.push(this.crearTurnoExcluido(turno.id,turno, fechaInicioTurno, fechaFinTurno));
           return;
         }
 
@@ -411,15 +427,15 @@ export class TablaContainerComponent implements OnInit {
         const fechaFinAjustada = this.ajustarFechaFin(fechaFinTurno, this.fecha_de_fin);
 
         if (fechaInicioAjustada > fechaFinAjustada) {
-          turnosExcluidos.push(this.crearTurnoExcluido(turno, fechaInicioAjustada, fechaFinAjustada));
+          turnosExcluidos.push(this.crearTurnoExcluido(turno.id,turno, fechaInicioAjustada, fechaFinAjustada));
           return;
         }
 
         const dias = this.calcularDiasAjustados(fechaInicioAjustada, fechaFinAjustada);
-        const posicionAsignada = this.asignarTurnoAPosicion(fechaInicioAjustada, fechaFinAjustada, tranca.id, turno, dias);
+        const posicionAsignada = this.asignarTurnoAPosicion(turno.id,fechaInicioAjustada, fechaFinAjustada, tranca.id, turno, dias);
 
         if (posicionAsignada === -1) {
-          turnosExcluidos.push(this.crearTurnoExcluido(turno, fechaInicioAjustada, fechaFinAjustada, dias));
+          turnosExcluidos.push(this.crearTurnoExcluido(turno.id,turno, fechaInicioAjustada, fechaFinAjustada, dias));
         }
       });
     });
@@ -448,10 +464,11 @@ export class TablaContainerComponent implements OnInit {
     return Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
   }
 
-  private asignarTurnoAPosicion(fechaInicio: Date, fechaFin: Date, trancaId: number, turno: any, dias: number): number {
+  private asignarTurnoAPosicion(id:number,fechaInicio: Date, fechaFin: Date, trancaId: number, turno: any, dias: number): number {
     for (let posicion = 1; posicion <= 2; posicion++) {
       if (!this.siFechaOcupada(this.listaTurnosMatriz, fechaInicio, fechaFin, posicion, trancaId)) {
         this.listaTurnosMatriz.push({
+          id:id,
           fecha_inicio: fechaInicio,
           fecha_fin: fechaFin,
           dias: dias,
@@ -484,8 +501,9 @@ export class TablaContainerComponent implements OnInit {
     return false;
   }
 
-  private crearTurnoExcluido(turno: any, fechaInicio: Date, fechaFin: Date, dias: number = 0): ITurnoUsuario {
+  private crearTurnoExcluido(id:number,turno: any, fechaInicio: Date, fechaFin: Date, dias: number = 0): ITurnoUsuario {
     return {
+      id:id,
       fecha_inicio: fechaInicio,
       fecha_fin: fechaFin,
       dias: dias,
@@ -505,7 +523,7 @@ export class TablaContainerComponent implements OnInit {
     }
 
     const filtroInicio = this.normalizarFecha(this.fecha_de_inicio);
-
+    await this.asignarColorFuncionario();
     this.listaTurnosMatriz.forEach(turno => {
       const posX = turno.posFila === 2 ? 1 : 0;
       const fechaTurno = this.normalizarFecha(new Date(turno.fecha_inicio));
@@ -517,14 +535,24 @@ export class TablaContainerComponent implements OnInit {
       const posicionX = (fechaact + 1) * this.columnWidth;
       const posicionY = (trancaIndex + 1) * this.rowHeight + (posX * this.rowHeight) / 2;
       const ancho = turno.dias * this.columnWidth;
-
+      let color='rgb (143,188,143)';
+      let colorBorde='rgb (143,188,143)';
+      let funcColor=this.funcionarioColor.find(funcColor=>funcColor.id===turno.usuarioId)
+      if(funcColor)
+      {
+        color=funcColor.color.fondo;
+        colorBorde=funcColor.color.borde;
+      }
       this.itemsTurnos.push({
+        id:turno.id,
         text: turno.nombreUsuario.toLowerCase(),
+        usuarioId: turno.usuarioId,
         positionX: posicionX,
         positionY: posicionY,
         width: ancho,
         height: this.rowHeight / 2,
-        backgroundColor: this.generarColorClaro(),
+        backgroundColor: color,
+        borderColor:colorBorde,
         textColor: '#000000'
       });
 
@@ -532,13 +560,48 @@ export class TablaContainerComponent implements OnInit {
 
   }
 
-  //-----------------------------------GENERAR COLORES CLAROS-----------------------------------
-  private generarColorClaro(): string {
-    const r = Math.floor(Math.random() * 128) + 128;
-    const g = Math.floor(Math.random() * 128) + 128;
-    const b = Math.floor(Math.random() * 128) + 128;
-    return `rgb(${r}, ${g}, ${b})`;
-  }
+//-----------------------------------GENERAR COLORES CLAROS-----------------------------------
+private tonosUsados: number[] = [];
+private generarColorClaro(): IColores {
+    const MIN_DISTANCIA = 60; // Distancia mínima entre tonos
+
+    let h: number;
+    let intentos = 0;
+    const maxIntentos = 100;
+
+    // 1. Buscar un tono no usado (igual que antes)
+    do {
+        h = Math.floor(Math.random() * 360);
+        intentos++;
+
+        if (this.tonosUsados.length === 0 ||
+            this.tonosUsados.every(tono =>
+                Math.abs(tono - h) > MIN_DISTANCIA &&
+                Math.abs(tono - h) < (360 - MIN_DISTANCIA)
+            )) {
+            break;
+        }
+    } while (intentos < maxIntentos);
+
+    // 2. Resetear si no se encuentra un tono válido
+    if (intentos >= maxIntentos) {
+        this.tonosUsados = [];
+        h = Math.floor(Math.random() * 360);
+    }
+    this.tonosUsados.push(h);
+
+    // 3. Generar saturación y luminosidad (colores claros)
+    const s = Math.floor(Math.random() * 30) + 70; // 70-100%
+    const l = Math.floor(Math.random() * 15) + 80; // 80-95%
+
+    // 4. Borde: mismo tono y saturación, pero 25% menos luminosidad
+    const bordeL = Math.max(20, l - 25); // Asegurar que no sea negativo
+
+    return {
+        fondo: `hsl(${h}, ${s}%, ${l}%)`,
+        borde: `hsl(${h}, ${s}%, ${bordeL}%)`
+    };
+}
      private async asignarColorFuncionario(): Promise<void> {
         const responseFuncionarios: any = await firstValueFrom(this.turnoTrancaService.verFuncionarioTrancas(''));
         this.funcionarios = this.turnoTrancaService.handleListarFuncionarioTrancas(responseFuncionarios);
@@ -618,4 +681,5 @@ async cerrarDialogo(event: any): Promise<void> {
     this.crearDialogo = false;
     this.dialogVisible = false;
   }
+
 }
