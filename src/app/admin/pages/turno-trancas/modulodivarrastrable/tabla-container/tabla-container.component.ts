@@ -89,7 +89,7 @@ export class TablaContainerComponent implements OnInit {
 
       // 2. Cargar datos base necesarios para dimensiones del grid
       await this.cargarDatosBase();
-
+      await this.asignarColorFuncionario()
       // 3. Configurar dimensiones del grid basado en datos cargados
       this.configurarDimensionesGrid();
 
@@ -128,9 +128,7 @@ export class TablaContainerComponent implements OnInit {
       const responseTurnos: any = await firstValueFrom(this.turnoTrancaService.verTurnoTrancas(''));
       this.turnos = this.turnoTrancaService.handleTurnoTranca(responseTurnos);
     //   Cargar Funcionarios
-    const responseFuncionarios: any = await firstValueFrom(this.turnoTrancaService.verFuncionarioTrancas(''));
-    this.funcionarios = this.turnoTrancaService.handleListarFuncionarioTrancas(responseFuncionarios);
-        this.asignarColorFuncionario();
+
 
 
     } catch (error) {
@@ -232,7 +230,7 @@ export class TablaContainerComponent implements OnInit {
         nuevaFechaFin.setDate(nuevaFechaFin.getDate() + 14);
         this.fecha_de_fin = nuevaFechaFin;
       }
-
+      await this.cargarDatosBase();
       // Reconfigurar dimensiones
       this.configurarDimensionesGrid();
 
@@ -526,7 +524,7 @@ export class TablaContainerComponent implements OnInit {
         positionY: posicionY,
         width: ancho,
         height: this.rowHeight / 2,
-        backgroundColor: this.funcionarioColor.find(funCol=> funCol.id===turno.usuarioId).color,
+        backgroundColor: this.generarColorClaro(),
         textColor: '#000000'
       });
 
@@ -541,7 +539,9 @@ export class TablaContainerComponent implements OnInit {
     const b = Math.floor(Math.random() * 128) + 128;
     return `rgb(${r}, ${g}, ${b})`;
   }
-    private asignarColorFuncionario(): void {
+     private async asignarColorFuncionario(): Promise<void> {
+        const responseFuncionarios: any = await firstValueFrom(this.turnoTrancaService.verFuncionarioTrancas(''));
+        this.funcionarios = this.turnoTrancaService.handleListarFuncionarioTrancas(responseFuncionarios);
         this.funcionarios.forEach(funcionario => {
             this.funcionarioColor.push({
                 id: funcionario.id,
