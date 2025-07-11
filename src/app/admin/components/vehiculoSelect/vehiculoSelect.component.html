@@ -10,6 +10,7 @@
         optionValue="placa"
         optionValue="placa"
         (onChange)="cambioVehiculo($event)"
+        [appendTo]="'body'"
     ></p-dropdown>
     <label for="dropdown">Placa Vehiculo</label>
     <small id="presentacion" class="p-error " *ngIf="error">

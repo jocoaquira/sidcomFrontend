@@ -9,6 +9,7 @@
         optionValue="id"
         dataKey="value"
         (onChange)="cambioDepartamentos($event)"
+        [appendTo]="'body'"
     ></p-dropdown>
     <label for="dropdown">Departamento</label>
     <small id="presentacion" class="p-error " *ngIf="error">

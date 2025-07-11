@@ -423,13 +423,13 @@ guardar(){
       minerales:this.minerales_envio,
       municipio_origen:this.municipio_origen_envio
     }
-    console.log(this.id);
+
 
     this.formularioInternoService.editarFormularioExterno(formularioEnvio,this.id).subscribe(
       (data:any) =>
       {
           this.formulario_Interno_registrado=this.formularioInternoService.handleCrearFormularioExterno(data);
-          console.log(this.formulario_Interno_registrado);
+
         if(this.formulario_Interno_registrado!==null)
         {
 
@@ -623,7 +623,7 @@ agregarLey(){
         });
       }
     }
-    console.log(event);
+
   }
 
   cambioPresentacion(event:any){

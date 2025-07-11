@@ -43,14 +43,14 @@ export class CrearPresentacionComponent implements OnInit {
     private presentacionService:PresentacionService,
     private notify:ToastrService,
     private authService:AuthService,
-        ) { 
-          
-            
-            console.log(this.presentacion);
+        ) {
+
+
+
         }
 
   ngOnInit(): void {
-    
+
 
     this.operadoresService.verOperatorsSimple('hj').subscribe(
       (data:any)=>{
@@ -73,10 +73,10 @@ export class CrearPresentacionComponent implements OnInit {
       this.form.formulario.patchValue({
         id:this.presentacion.id,
         nombre: this.presentacion.nombre,
-        
+
       });
     }
-    console.log(this.form.formulario.value);
+
   }
   onChangeRol(rol_id:any){
     let id=rol_id.value;
@@ -107,17 +107,17 @@ export class CrearPresentacionComponent implements OnInit {
     }
   }
   actualizarResponsable() {
-    
+
     this.form.formulario.value.estado=this.form.formulario.value.estado.label;
     this.form.formulario.value.tipo=this.form.formulario.value.tipo.label;
 
     if (this.form.formulario.valid) {
-        console.log(this.form.formulario.value);
+
         this.presentacionService.editarpresentacion(this.form.formulario.value).subscribe(
             (data:any) =>
             {
               this.presentacionService.handleCrearpresentacion(data);
-              console.log(data);
+
               if(data.error==null)
               {
                 this.form.formulario.reset();
@@ -127,7 +127,7 @@ export class CrearPresentacionComponent implements OnInit {
             },
             (error:any) =>
             {
-              console.log(error);
+
               this.errorUsuario=this.presentacionService.handleCrearpresentacionError(error.error.data);
               if(error.error.status=='fail')
               {
@@ -140,16 +140,16 @@ export class CrearPresentacionComponent implements OnInit {
       }
   }
   crearResponsable() {
-    
+
     this.form.formulario.value.estado=this.form.formulario.value.estado.label;
     this.form.formulario.value.tipo=this.form.formulario.value.tipo.label;
-    console.log(this.form.formulario.value);
+
     if (this.form.formulario.valid) {
         this.presentacionService.crearpresentacion(this.form.formulario.value).subscribe(
             (data:any) =>
             {
               this.presentacionService.handleCrearpresentacion(data);
-              console.log(data);
+
               if(data.error==null)
               {
                 this.form.formulario.reset();
@@ -159,7 +159,7 @@ export class CrearPresentacionComponent implements OnInit {
             },
             (error:any) =>
             {
-              console.log(error);
+
               this.errorUsuario=this.presentacionService.handleCrearpresentacionError(error.error.data);
               if(error.error.status=='fail')
               {

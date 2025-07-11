@@ -37,7 +37,7 @@ export class AduanaSelectComponent implements OnChanges {
       )
       .subscribe((data: any) => {
         this.aduanas = this.aduanasService.handleaduana(data);
-        console.log(this.aduanas);
+
         this.loading = false;
 
         // Si aduana_id está definido y es válido, intenta seleccionar el valor correcto
@@ -51,8 +51,8 @@ export class AduanaSelectComponent implements OnChanges {
   }
 
   cambioAduanas(event: any) {
-    console.log(event.value);
-    console.log(this.aduanas);
+
+
     if (!event.value) {
       console.warn('El valor seleccionado no es válido');
       return;

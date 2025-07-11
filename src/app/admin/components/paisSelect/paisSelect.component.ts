@@ -48,8 +48,6 @@ export class PaisSelectComponent implements OnChanges {
   }
 
   cambioPaises(event: any) {
-    console.log(event.value);
-    console.log(this.paises);
     if (!event.value) {
       console.warn('El valor seleccionado no es válido');
       return;

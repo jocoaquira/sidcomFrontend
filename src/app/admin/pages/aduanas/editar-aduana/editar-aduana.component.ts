@@ -53,7 +53,7 @@ export class EditarAduanaComponent implements OnInit {
     this.departamentosService.verdepartamentos(this.nombre).subscribe(
       (data:any)=>{
       this.departamento=this.departamentosService.handledepartamento(data);
-      console.log(data);
+
     },
     (error:any)=> this.error=this.departamentosService.handleError(error)
   );
@@ -146,7 +146,7 @@ addMarker(lat: number, lng: number) {
 abrirMapa() {
   if(this.aduana.formulario.value.departamento){
       let dept:any=this.departamento.find(val => val.id ===  this.aduana.formulario.value.departamento);
-      console.log(this.aduana.formulario.value.departamento);
+
       if (this.map) {
           this.map.setView(latLng(dept.latitud, dept.longitud), 13.5);
       }
@@ -172,10 +172,10 @@ cargar_datos(form:any){
       departamento_id:this.departamento.find((e: any) => e.id === form.departamento_id) || null,
       estado: this.estados.find((e: any) => e.label === form.estado) || null,
   });
-  console.log(this.aduana.formulario.value);
+
 }
   onSubmit(){
-    
+
   }
   guardar(){
 
@@ -183,7 +183,7 @@ cargar_datos(form:any){
         estado: this.aduana.formulario.value.estado.label
       });
     if(this.aduana.formulario.valid){
-      console.log(this.aduana.formulario.value);
+
 
       this.aduanasService.editaraduana(this.aduana.formulario.value).subscribe(
         (data:any) =>
@@ -192,7 +192,7 @@ cargar_datos(form:any){
 
           if(this.aduana_registrado!==null)
           {
-            console.log(this.aduana_registrado);
+
             this.aduana.formulario.reset();
             this.notify.success('El el formulario interno se generó exitosamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
             this.router.navigate(['/admin/aduana/']);
@@ -222,7 +222,7 @@ cargar_datos(form:any){
   }
 
     cambioDepartamentoMapa(departamento_id:any){
-            console.log(departamento_id);
+
 
             this.aduana.formulario.value.departamento=departamento_id.value;
             let dept:IDepartamento=this.departamento.find(element => element.id === departamento_id.value);

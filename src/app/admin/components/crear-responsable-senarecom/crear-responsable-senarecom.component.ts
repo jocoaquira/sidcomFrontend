@@ -46,7 +46,7 @@ export class CrearResponsableSenarecomComponent implements OnInit {
         ) {
 
 
-            console.log(this.usuario);
+
         }
 
   ngOnInit(): void {
@@ -76,7 +76,7 @@ export class CrearResponsableSenarecomComponent implements OnInit {
         estado: this.estados.find((e: any) => e.label === this.usuario.estado) || null,
       });
     }
-    console.log(this.form.formulario.value);
+
   }
   onChangeRol(rol_id:any){
     let id=rol_id.value;
@@ -112,12 +112,12 @@ export class CrearResponsableSenarecomComponent implements OnInit {
     this.form.formulario.value.celular=parseInt(this.form.formulario.value.celular);
 
     if (this.form.formulario.valid) {
-        console.log(this.form.formulario.value);
+
         this.responsableSenarecomService.editarResponsableSenarecom(this.form.formulario.value).subscribe(
             (data:any) =>
             {
               this.responsableSenarecomService.handleCrearusuario(data);
-              console.log(data);
+
               if(data.error==null)
               {
                 this.form.formulario.reset();
@@ -127,7 +127,7 @@ export class CrearResponsableSenarecomComponent implements OnInit {
             },
             (error:any) =>
             {
-              console.log(error);
+
               this.errorUsuario=this.responsableSenarecomService.handleCrearusuarioError(error.error.data);
               if(error.error.status=='fail')
               {
@@ -152,7 +152,7 @@ export class CrearResponsableSenarecomComponent implements OnInit {
             (data:any) =>
             {
               this.responsableSenarecomService.handleCrearusuario(data);
-              console.log(data);
+
               if(data.error==null)
               {
                 this.form.formulario.reset();
@@ -162,7 +162,7 @@ export class CrearResponsableSenarecomComponent implements OnInit {
             },
             (error:any) =>
             {
-              console.log(error);
+
               this.errorUsuario=this.responsableSenarecomService.handleCrearusuarioError(error.error.data);
               if(error.error.status=='fail')
               {
@@ -178,7 +178,7 @@ export class CrearResponsableSenarecomComponent implements OnInit {
     const email = (event.target as HTMLInputElement).value;
     this.responsableSenarecomService.verificarEmail(email).subscribe(
       (data:any)=>{
-        console.log(data)
+
         if(data==true)
         {
           this.errorVerificarEmail=true;

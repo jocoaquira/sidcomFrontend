@@ -104,11 +104,11 @@ export class FormularioTrasladoColaComponent implements OnInit {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
     generarPDF(tdm:IFormularioTrasladoColaSimple){
-                console.log(tdm);
+               
                 this.formularioTrasladoColaService.verFormularioTrasladoColaPDF(tdm.id.toString()).subscribe(
                     (data:any)=>{
                     let tdm_completo=this.formularioTrasladoColaService.handleFormularioTrasladoColaPDF(data);
-                    console.log(tdm_completo);
+                   
                     this.pdfFormularioTrasladoCola.generarPDF(tdm_completo);
                   },
                   (error:any)=> this.error=this.formularioTrasladoColaService.handleError(error));
@@ -138,7 +138,7 @@ export class FormularioTrasladoColaComponent implements OnInit {
             });
     }
     confirmarEmision(event:IFormularioTrasladoColaSimple) {
-        console.log
+       
         this.confirmationService.confirm({
             key: 'confirm1',
             message: '¿Estas seguro de Emitir el formulario '+event.nro_formulario+'?',

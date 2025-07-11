@@ -48,7 +48,7 @@ export class CrearChoferAdminComponent implements OnInit {
     this.operadoresService.verOperatorsSimple('hj').subscribe(
         (data:any)=>{
         this.operadores=this.operadoresService.handleOperatorSimple(data);
-        console.log(this.operadores);
+
       },
       (error:any)=> this.error=this.operadoresService.handleOperatorSimpleError(error));
 
@@ -128,8 +128,8 @@ export class CrearChoferAdminComponent implements OnInit {
         let limpio:any= Object.fromEntries(
             Object.entries(this.form.formulario.value).filter(([_, v]) => v !== null)
           );
-          console.log(this.form.formulario.value)
-          console.log(limpio)
+
+
         this.choferService.editarChofer(limpio).subscribe(
             (data:any) =>
             {

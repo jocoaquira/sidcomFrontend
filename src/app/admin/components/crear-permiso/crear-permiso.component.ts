@@ -33,14 +33,14 @@ export class CrearPermisoComponent implements OnInit {
     private PermisoService:PermissionService,
     private notify:ToastrService,
     private authService:AuthService,
-        ) { 
-          
-            
-            console.log(this.permiso);
+        ) {
+
+
+
         }
 
   ngOnInit(): void {
-    
+
 
   }
   ngOnChanges(changes: SimpleChanges): void {
@@ -49,10 +49,10 @@ export class CrearPermisoComponent implements OnInit {
         id:this.permiso.id,
         name: this.permiso.name
     });
-    console.log(this.form.formulario.value);
+
   }
 }
-  
+
   onChangeEstado(operator_id:any){
 
    // this.form.formulario.value.estado=operator_id.value
@@ -71,15 +71,15 @@ export class CrearPermisoComponent implements OnInit {
     }
   }
   actualizarPermiso() {
-    
+
 
     if (this.form.formulario.valid) {
-        console.log(this.form.formulario.value);
+
         this.PermisoService.editarPermission(this.form.formulario.value).subscribe(
             (data:any) =>
             {
               this.PermisoService.handleCrearPermission(data);
-              console.log(data);
+
               if(data.error==null)
               {
                 this.form.formulario.reset();
@@ -89,7 +89,7 @@ export class CrearPermisoComponent implements OnInit {
             },
             (error:any) =>
             {
-              console.log(error);
+
               this.errorUsuario=this.PermisoService.handleCrearPermissionError(error.error.data);
               if(error.error.status=='fail')
               {
@@ -102,14 +102,14 @@ export class CrearPermisoComponent implements OnInit {
       }
   }
   crearPermiso() {
-    
-    console.log(this.form.formulario.value);
+
+
     if (this.form.formulario.valid) {
         this.PermisoService.crearPermission(this.form.formulario.value).subscribe(
             (data:any) =>
             {
               this.PermisoService.handleCrearPermission(data);
-              console.log(data);
+
               if(data.error==null)
               {
                 this.form.formulario.reset();
@@ -119,7 +119,7 @@ export class CrearPermisoComponent implements OnInit {
             },
             (error:any) =>
             {
-              console.log(error);
+
               this.errorUsuario=this.PermisoService.handleCrearPermissionError(error.error.data);
               if(error.error.status=='fail')
               {

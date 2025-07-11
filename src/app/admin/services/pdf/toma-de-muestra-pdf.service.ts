@@ -74,7 +74,6 @@ convertirHTMLATextoConViñetas(html) {
 }
 
     generarPDF(toma_de_muestra: ITomaDeMuestraPDF) {
-                console.log(toma_de_muestra);
                      const doc = new jsPDF('p', 'pt', 'letter');
 
                       const logo = new Image();

@@ -53,11 +53,11 @@ export class EditarTrancaComponent implements OnInit {
   ) {
         this.actRoute.paramMap.subscribe(params=>{
         this.id=parseInt(params.get('id'));
-        console.log(this.id);
+      
         this.trancaService.verTranca(this.id.toString()).subscribe(
         (data:any)=>{
         let formulario_int=data;
-        console.log(formulario_int);
+      
             this.cargar_datos(formulario_int);
         },
         (error:any)=> this.error=this.trancaService.handleError(error));
@@ -99,7 +99,7 @@ export class EditarTrancaComponent implements OnInit {
       (data:any)=>{
       this.departamento=this.departamentosService.handledepartamento(data);
       // Para asignar todos los valores del formulario (debe incluir todos los campos)
-        console.log(this.tranca.formulario.value);
+      
       // Esperamos un momento para asegurar que el mapa esté listo
       setTimeout(() => {
         this.cambioDepartamentoMapa(4);
@@ -215,7 +215,7 @@ cerrarMapa(){
             }
           },
           (error: any) => {
-            this.error = this.trancaService.handleCrearlugarverificacionError(error.error.data);
+            this.error = this.trancaService.handleCrearTrancaError(error.error.data);
             if (error.error.status == 'fail') {
               this.notify.error('Falló... Revise los campos y vuelva a enviar...', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
             }

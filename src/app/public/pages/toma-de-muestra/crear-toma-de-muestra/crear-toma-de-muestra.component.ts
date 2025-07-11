@@ -142,7 +142,7 @@ nextStep() {
         valid = this.formulario_interno.formulario.get('operador_id')?.valid && this.formulario_interno.formulario.get('departamento_id')?.valid &&
         this.formulario_interno.formulario.get('municipio_id')?.valid  && this.formulario_interno.formulario.get('ubicacion_lat')?.valid && this.formulario_interno.formulario.get('ubicacion_lon')?.valid &&
         this.formulario_interno.formulario.get('lugar_verificacion')?.valid && this.formulario_interno.formulario.get('fecha_hora_tdm')?.valid && this.formulario_interno.formulario.get('responsable_tdm_id')?.valid;
-        console.log(this.formulario_interno.formulario.get('responsable_tdm_id')?.valid);
+
         break;
       case 1:
         valid =this.lista_municipios_origen.length>0
@@ -238,7 +238,7 @@ nextStep() {
       this.departamento=this.departamentosService.handledepartamento(data);
       // Para asignar todos los valores del formulario (debe incluir todos los campos)
         this.formulario_interno.formulario.get('departamento_id')?.setValue(4);
-        console.log(this.formulario_interno.formulario.value);
+
       // Esperamos un momento para asegurar que el mapa esté listo
       setTimeout(() => {
         this.cambioDepartamentoMapa(4);
@@ -446,7 +446,7 @@ abrirMapa() {
 }
 
 cambioLugarVerificacionTDM(event:any){
-    console.log(event.value);
+
     this.formulario_interno.formulario.patchValue({
         lugar_verificacion: event.value.lugar,
         ubicacion_lat:event.value.latitud,
@@ -455,7 +455,7 @@ cambioLugarVerificacionTDM(event:any){
       });
 }
 valSwitches(event:any){
-    console.log(event);
+
     this.valSwitch=event.checked;
 }
 

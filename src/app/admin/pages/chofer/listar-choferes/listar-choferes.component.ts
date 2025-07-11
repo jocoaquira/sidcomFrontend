@@ -151,11 +151,11 @@ export class ListarChoferComponent implements OnInit {
             accept: () => {
         // Crear una copia del objeto, excluyendo el campo "operador"
         const { razon_social, ...rest } = responsable;
-        console.log(responsable);
+
         // Asignar el resto de las propiedades al objeto responsable
         this.responsable = { ...rest };
        //
-       console.log(this.responsable);
+
         if(this.responsable.estado=='ACTIVO')
         {
             this.responsable.estado='INACTIVO';

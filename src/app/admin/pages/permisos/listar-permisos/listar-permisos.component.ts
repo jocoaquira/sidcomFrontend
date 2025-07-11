@@ -56,14 +56,14 @@ export class ListarPermisoComponent implements OnInit {
         private confirmationService:ConfirmationService
     ) { 
         this.operador_id= authService.getUser.operador_id
-        console.log(this.operador_id);
+        
     }
 
     ngOnInit() {
         this.permisoService.Permissions().subscribe(
             (data:any)=>{
             this.listaPermisos=this.permisoService.handlePermissions(data);
-            console.log(this.listaPermisos);
+            
 
           },
           (error:any)=> this.error=this.permisoService.handleErrorPermission(error));
@@ -94,7 +94,7 @@ export class ListarPermisoComponent implements OnInit {
         this.permisoService.Permissions().subscribe(
             (data:any)=>{
             this.listaPermisos=this.permisoService.handlePermissions(data);
-            console.log(this.listaPermisos);
+            
 
           },
           (error:any)=> this.error=this.permisoService.handleErrorPermission(error));
@@ -126,7 +126,7 @@ export class ListarPermisoComponent implements OnInit {
     }
     edit(permiso:IPermiso) {
         this.permiso = { ...permiso }; 
-        console.log(this.permiso);
+        
         //this.submitted = false;
         this.productDialog = true;
         this.isEditMode = true;

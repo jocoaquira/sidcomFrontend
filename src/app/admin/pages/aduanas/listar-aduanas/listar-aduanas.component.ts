@@ -25,7 +25,7 @@ import { Router } from '@angular/router';
 export class ListarAduanaComponent implements OnInit {
 
     public listaAduanas!:IAduana[];
-    
+
     public roles!:IRol[];
     public operadores!:IOperatorSimple[];
     public error!:any;
@@ -61,16 +61,16 @@ export class ListarAduanaComponent implements OnInit {
         private authService:AuthService,
         private notify:ToastrService,
         private confirmationService:ConfirmationService
-    ) { 
+    ) {
         this.operador_id= authService.getUser.operador_id
-        console.log(this.operador_id);
+
     }
 
     ngOnInit() {
         this.aduanaService.veraduanas('nada').subscribe(
             (data:any)=>{
             this.listaAduanas=this.aduanaService.handleaduana(data);
-            console.log(this.listaAduanas);
+
 
           },
           (error:any)=> this.error=this.aduanaService.handleError(error));
@@ -94,7 +94,7 @@ export class ListarAduanaComponent implements OnInit {
         this.aduanaService.veraduanas('nada').subscribe(
             (data:any)=>{
             this.listaAduanas=this.aduanaService.handleaduana(data);
-            console.log(this.listaAduanas);
+
 
           },
           (error:any)=> this.error=this.aduanaService.handleError(error));
@@ -106,17 +106,17 @@ export class ListarAduanaComponent implements OnInit {
         this.isEditMode = false;
     }
     edit(aduana:IAduana) {
-        this.aduana = { ...aduana }; 
-        console.log(this.aduana);
+        this.aduana = { ...aduana };
+
         //this.submitted = false;
         this.productDialog = true;
         this.isEditMode = true;
     }
     mapa(aduana:IAduana) {
-        this.aduana = { ...aduana }; 
+        this.aduana = { ...aduana };
         this.latitud=this.aduana.latitud;
         this.longitud=this.aduana.longitud;
-        console.log(this.aduana);
+
         //this.submitted = false;
         this.verMapa = true;
     }
@@ -168,7 +168,7 @@ export class ListarAduanaComponent implements OnInit {
     }
 
     bloquearDialogo(aduana:IAduana){
-        
+
         this.confirmationService.confirm({
             key: 'confirm1',
             message: '¿Estas seguro de Realizar esta Operación?',
@@ -184,17 +184,17 @@ export class ListarAduanaComponent implements OnInit {
                     (data:any) =>
                     {
                       this.aduanaService.handleCrearaduana(data);
-                      console.log(data);
+
                       if(data.error==null)
                       {
                         this.aduanaService.veraduanas('nada').subscribe(
                             (data:any)=>{
                             this.listaAduanas=this.aduanaService.handleaduana(data);
-                            console.log(this.listaAduanas);
-                
+
+
                           },
                           (error:any)=> this.error=this.aduanaService.handleError(error));
-        
+
                         this.notify.success('Actualizado Correctamente','Actualizado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
                       }
                     },

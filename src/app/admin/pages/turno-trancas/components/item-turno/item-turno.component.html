@@ -1,0 +1,14 @@
+<div
+  class="draggable-element"
+  [ngStyle]="{
+    'top': position?.top,
+    'left': position?.left,
+    'color': textColor,
+    'height': height,
+    'width': width,
+    'background-color': backgroundColor
+  }"
+  (mousedown)="startDrag($event)"
+>
+  {{ text }}
+</div>

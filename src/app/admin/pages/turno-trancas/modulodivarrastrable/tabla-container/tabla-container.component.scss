@@ -1,0 +1,109 @@
+.scrollable-container {
+    position: relative;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+    margin-bottom: 10px;
+  }
+
+.grid-container {
+    position: relative;
+    display: grid;
+    grid-gap: 0px;
+    overflow: visible;
+    width: calc(var(--columns) * var(--column-width)); /* Establecer por CSS si es posible */
+    height: calc(var(--rows) * var(--row-height));
+}
+
+.grid-cell {
+    display: grid;
+    border: 0.2px solid #f6e1b288;
+    border-width: 0.5px;
+  }
+.cabecera-fecha {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 4px;
+  }
+.cabecera-tranca {
+
+    position: sticky;
+    left: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 4px;
+    border: 1px solid #ffffff;
+    //grid-column: 1 / -1;
+  }
+
+  .item-turno {
+    position: absolute;
+    border-radius: 4px;
+    cursor: grab;
+    transition: transform 0.2s ease;
+    background-color: #3f51b5;
+    color: white;
+    font-size: 13px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    text-transform: capitalize;
+    overflow: hidden;
+    padding: 0 4px;
+    border: 1px solid;
+    /* Estilo por defecto para texto centrado */
+    .text-content {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+      text-align: center;
+    }
+
+    @container (max-width: 100px) {
+        justify-content: flex-start;
+
+        .text-content {
+          text-align: left;
+        }
+      }
+  }
+  .resize-handle {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 10px;
+    height: 100%;
+    cursor: ew-resize; /* Cursor para indicar ajuste horizontal */
+    background-color: rgba(0, 0, 0, 0.1); /* Indicador visual */
+  }
+
+  .item-turno:active {
+    cursor: grabbing;
+  }
+
+  .add-button {
+    padding: 10px 15px;
+    background-color: #3f51b5;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #303f9f;
+    }
+  }
+  ::ng-deep .p-dialog {
+    position: fixed !important;
+  }

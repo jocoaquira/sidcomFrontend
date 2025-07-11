@@ -33,7 +33,7 @@ export class EditarUsuarioComponent implements OnInit {
   public admin:boolean=false;
   public form=new UsuarioFormulario();
   public errorUsuario:any={};
-  
+
 
   constructor(
     private rolesServices:RolesService,
@@ -47,7 +47,7 @@ export class EditarUsuarioComponent implements OnInit {
   ngOnInit(): void {
     this.rolesServices.verRoles().subscribe(
       (data:any)=>{
-        console.log(data);
+
       this.roles=this.rolesServices.handlerol(data);
 
     },
@@ -81,7 +81,7 @@ export class EditarUsuarioComponent implements OnInit {
       this.onChangeRol(rolcito);
       this.errorVerificarEmail=false;
     }
-    console.log(this.form.formulario.value);
+
   }
   onChangeRol(rol_id:any){
     let id=rol_id.value;
@@ -105,15 +105,15 @@ export class EditarUsuarioComponent implements OnInit {
       estado: this.form.formulario.value.estado.label || null,
     });
     this.form.formulario.value.celular=parseInt(this.form.formulario.value.celular);
-    console.log(this.form.formulario.value);
+
     if(this.admin && this.form.formulario.value.password!=null){
       if (this.form.formulario.valid && !this.errorVerificarContraseña && !this.errorVerificarEmail) {
-        console.log(this.form.formulario.value);
+
         this.usuarioService.crearusuario(this.form.formulario.value).subscribe(
           (data:any) =>
           {
             this.usuarioService.handleCrearusuario(data);
-            console.log(data);
+
             if(data.error==null)
             {
               this.form.formulario.reset();
@@ -123,7 +123,7 @@ export class EditarUsuarioComponent implements OnInit {
           },
           (error:any) =>
           {
-            console.log(error);
+
             this.errorUsuario=this.usuarioService.handleCrearusuarioError(error.error.data);
             if(error.error.status=='fail')
             {
@@ -137,9 +137,9 @@ export class EditarUsuarioComponent implements OnInit {
       }
     }
     else{
-      console.log(this.form.formulario.valid);
-      console.log(this.errorVerificarEmail);
-      console.log(this.form.formulario.value.operador_id);
+
+
+
       if (this.form.formulario.valid && !this.errorVerificarEmail && this.form.formulario.value.operador_id!=null) {
         let pass_gen=TextoAleatorio.generarCadenaSegura(8);
         this.form.formulario.value.password='12345678';
@@ -148,7 +148,7 @@ export class EditarUsuarioComponent implements OnInit {
             (data:any) =>
             {
               this.usuarioService.handleCrearusuario(data);
-              console.log(data);
+
               if(data.error==null)
               {
                 this.form.formulario.reset();
@@ -158,7 +158,7 @@ export class EditarUsuarioComponent implements OnInit {
             },
             (error:any) =>
             {
-              console.log(error);
+
               this.errorUsuario=this.usuarioService.handleCrearusuarioError(error.error.data);
               if(error.error.status=='fail')
               {
@@ -183,21 +183,21 @@ export class EditarUsuarioComponent implements OnInit {
       estado: this.form.formulario.value.estado.label || null,
     });
     this.form.formulario.value.celular=parseInt(this.form.formulario.value.celular);
-    
-    console.log(this.form.formulario.valid);
+
+
     Object.keys(this.form.formulario.controls).forEach(field => {
       const control = this.form.formulario.get(field);
       if (control?.errors) {
-        console.log(`Errores en ${field}:`, control.errors);
+
       }
     });
     if (this.form.formulario.valid) {
-        console.log(this.form.formulario.value);
+
         this.usuarioService.editarusuario(this.form.formulario.value).subscribe(
             (data:any) =>
             {
               this.usuarioService.handleEditarusuario(data);
-              console.log(data);
+
               if(data.error==null)
               {
                 this.form.formulario.reset();
@@ -207,7 +207,7 @@ export class EditarUsuarioComponent implements OnInit {
             },
             (error:any) =>
             {
-              console.log(error);
+
               this.errorUsuario=this.usuarioService.handleCrearusuarioError(error.error.data);
               if(error.error.status=='fail')
               {
@@ -222,10 +222,10 @@ export class EditarUsuarioComponent implements OnInit {
 
   errorEmailRepetido(event:any){
     const email = (event.target as HTMLInputElement).value;
-    
+
     this.usuarioService.verificarEmail(email).subscribe(
       (data:any)=>{
-        console.log(data)
+
         if(data==true && this.isEditMode==false)
         {
           this.errorVerificarEmail=true;
@@ -238,7 +238,7 @@ export class EditarUsuarioComponent implements OnInit {
           else{
             this.errorVerificarEmail=false;
           }
-          
+
         }
     },
     (error:any)=> this.error=this.usuarioService.handleError(error));

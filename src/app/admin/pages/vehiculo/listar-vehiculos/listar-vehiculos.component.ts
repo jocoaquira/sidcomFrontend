@@ -63,7 +63,6 @@ export class ListarVehiculoComponent implements OnInit {
         this.vehiculoService.verVehiculos(this.operador_id.toString()).subscribe(
             (data:any)=>{
             this.listaVehiculos=this.vehiculoService.handlevehiculoAdmin(data);
-            console.log(this.listaVehiculos);
           },
           (error:any)=> this.error=this.vehiculoService.handleError(error));
 

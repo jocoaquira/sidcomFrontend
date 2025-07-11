@@ -60,14 +60,14 @@ export class ListarMineralComponent implements OnInit {
         private confirmationService:ConfirmationService
     ) { 
         this.operador_id= authService.getUser.operador_id
-        console.log(this.operador_id);
+        
     }
 
     ngOnInit() {
         this.mineralService.verminerals('nada').subscribe(
             (data:any)=>{
             this.listaMinerales=this.mineralService.handlemineral(data);
-            console.log(this.listaMinerales);
+            
 
           },
           (error:any)=> this.error=this.mineralService.handleError(error));
@@ -98,7 +98,7 @@ export class ListarMineralComponent implements OnInit {
         this.mineralService.verminerals('nada').subscribe(
             (data:any)=>{
             this.listaMinerales=this.mineralService.handlemineral(data);
-            console.log(this.listaMinerales);
+            
 
           },
           (error:any)=> this.error=this.mineralService.handleError(error));
@@ -111,7 +111,7 @@ export class ListarMineralComponent implements OnInit {
     }
     edit(mineral:IMineral) {
         this.mineral = { ...mineral }; 
-        console.log(this.mineral);
+        
         //this.submitted = false;
         this.productDialog = true;
         this.isEditMode = true;
@@ -180,13 +180,13 @@ export class ListarMineralComponent implements OnInit {
                     (data:any) =>
                     {
                       this.mineralService.handleCrearmineral(data);
-                      console.log(data);
+                      
                       if(data.error==null)
                       {
                         this.mineralService.verminerals('nada').subscribe(
                             (data:any)=>{
                             this.listaMinerales=this.mineralService.handlemineral(data);
-                            console.log(this.listaMinerales);
+                            
                 
                           },
                           (error:any)=> this.error=this.mineralService.handleError(error));

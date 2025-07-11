@@ -463,7 +463,6 @@ nextStep() {
         this.formulario_mineral.mineral_id=event;
     }
     cambioChofer(event:any){
-        console.log(event);
         this.chofer=event;
         this.nro_licencia=this.chofer.nro_licencia;
         this.formulario_interno.formulario.patchValue({

@@ -117,7 +117,7 @@ export class ListarUsuarioComponent implements OnInit {
     }
     edit(usuario:IUsuario) {
             this.usuario = { ...usuario };
-            console.log(this.usuario);
+          
             //this.submitted = false;
             this.productDialog = true;
             this.isEditMode = true;
@@ -227,7 +227,7 @@ export class ListarUsuarioComponent implements OnInit {
                         usuario.estado='ACTIVO';
                     }
                 delete usuario.password;
-                console.log(usuario);
+              
                 this.usuariosService.editarusuario(usuario).subscribe(
                     (data:any) =>
                     {
@@ -267,7 +267,7 @@ export class ListarUsuarioComponent implements OnInit {
                     (data:any) =>
                     {
                       this.usuariosService.handleCrearusuario(data);
-                      console.log(data);
+                    
                       if(data.error==null)
                       {
                         this.usuariosService.verusuarios('nada').subscribe(

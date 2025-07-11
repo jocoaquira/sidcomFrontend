@@ -146,11 +146,11 @@ export class ListarControlTrancaComponent implements OnInit {
             accept: () => {
         // Crear una copia del objeto, excluyendo el campo "operador"
         const { razon_social, ...rest } = control_tranca;
-        console.log(control_tranca);
+
         // Asignar el resto de las propiedades al objeto control_tranca
         this.control_tranca = { ...rest };
        //
-       console.log(this.control_tranca);
+
 
         this.controlTrancaService.editarControlTranca(this.control_tranca).subscribe(
             (data:any) =>

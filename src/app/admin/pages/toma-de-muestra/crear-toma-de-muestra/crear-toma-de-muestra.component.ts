@@ -127,12 +127,12 @@ nextStep() {
     let valid = true;
     switch (stepIndex) {
       case 0:
-        console.log(valid);
+       
         // Validar los campos del Paso 1
         valid = this.formulario_interno.formulario.get('operador_id')?.valid && this.formulario_interno.formulario.get('departamento')?.valid &&
         this.formulario_interno.formulario.get('municipio_id')?.valid  && this.formulario_interno.formulario.get('latitud')?.valid && this.formulario_interno.formulario.get('longitud')?.valid &&
         this.formulario_interno.formulario.get('lugar_verificacion')?.valid ;
-        console.log(valid);
+       
         break;
       case 1:
         valid =this.lista_municipios_origen.length>0
@@ -176,7 +176,7 @@ nextStep() {
     this.departamentosService.verdepartamentos(this.nombre).subscribe(
       (data:any)=>{
       this.departamento=this.departamentosService.handledepartamento(data);
-      console.log(data);
+     
     },
     (error:any)=> this.error=this.departamentosService.handleError(error)
   );
@@ -216,7 +216,7 @@ nextStep() {
       this.presentacionService.verpresentacions('hj').subscribe(
         (data:any)=>{
         this.presentaciones=this.presentacionService.handlepresentacion(data);
-        console.log(this.presentaciones);
+       
       },
       (error:any)=> this.error=this.presentacionService.handleError(error));
      /* this.presentaciones = [
@@ -326,7 +326,7 @@ nextStep() {
         });
       }
     }
-    console.log(event);
+   
   }
  // Función para calcular el peso neto
  calcularPesoNeto() {
@@ -417,7 +417,7 @@ addMarker(lat: number, lng: number) {
 abrirMapa() {
   if(this.formulario_interno.formulario.value.departamento){
       let dept:any=this.departamento.find(val => val.id ===  this.formulario_interno.formulario.value.departamento);
-      console.log(this.formulario_interno.formulario.value.departamento);
+     
       if (this.map) {
           this.map.setView(latLng(dept.latitud, dept.longitud), 13.5);
       }
@@ -447,7 +447,7 @@ abrirMapa() {
         minerales:this.minerales_envio,
         municipio_origen:this.municipio_origen_envio
       }
-      console.log(formularioEnvio);
+     
       this.tomaDeMuestrasService.crearTomaDeMuestra(formularioEnvio).subscribe(
         (data:any) =>
         {
@@ -455,7 +455,7 @@ abrirMapa() {
 
           if(this.formulario_Interno_registrado!==null)
           {
-            console.log(this.formulario_Interno_registrado);
+           
             this.formulario_interno.formulario.reset();
             this.notify.success('El el formulario interno se generó exitosamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
             this.router.navigate(['/admin/formulario-101/formulario-interno']);
@@ -622,7 +622,7 @@ abrirMapa() {
 
     }
     cambioDepartamentoMapa(departamento_id:any){
-            console.log(departamento_id);
+           
 
             this.formulario_interno.formulario.value.departamento=departamento_id.value;
             let dept:IDepartamento=this.departamento.find(element => element.id === departamento_id.value);
@@ -650,7 +650,7 @@ abrirMapa() {
         this.municipio_origen.municipio_id=event;
     }
     cambioMunicipioMapa(municipio:any){
-      console.log(this.formulario_interno.formulario.value.municipio_id=municipio.value);
+     
  }
     cambioNombreMunicipio(event){
         this.municipio_origen.municipio=event;

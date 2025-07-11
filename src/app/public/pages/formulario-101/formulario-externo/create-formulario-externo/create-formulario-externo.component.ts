@@ -202,7 +202,7 @@ nextStep() {
       this.mineralesService.verminerals('hj').subscribe(
         (data:any)=>{
         this.minerales=this.mineralesService.handlemineral(data).filter(mineral => mineral.tipo !== 'COMPUESTO');
-        console.log(this.minerales);
+
       },
       (error:any)=> this.error=this.mineralesService.handleError(error));
 
@@ -313,7 +313,7 @@ nextStep() {
         municipio_origen:this.municipio_origen_envio,
         ...(!formularioEnvio.hasOwnProperty('nro_formulario_tm') && { nro_formulario_tm: null }) // Agrega solo si no existe
       }
-      console.log(formularioEnvio);
+
       this.formularioExternoService.crearFormularioExterno(formularioEnvio).subscribe(
         (data:any) =>
         {

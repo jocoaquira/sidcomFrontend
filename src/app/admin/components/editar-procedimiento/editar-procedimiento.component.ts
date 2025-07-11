@@ -65,13 +65,13 @@ export class EditarProcedimientoComponent implements OnInit {
   }
   guardar(){
     this.lista.procedimiento=this.generarHTML(this.lista.nombre,this.listaProcedimientos);
-    
+
     if (this.lista.nombre!='' && this.lista.procedimiento.length>0) {
       this.procedimientoService.editarProcedimientoTM(this.lista).subscribe(
           (data:any) =>
           {
             this.procedimientoService.handleCrearProcedimiento(data);
-            console.log(data);
+
             if(data.error==null)
             {
               this.estadoDialogo.emit(false);
@@ -80,7 +80,7 @@ export class EditarProcedimientoComponent implements OnInit {
           },
           (error:any) =>
           {
-            console.log(error);
+
             if(error.error.status=='fail')
             {
               this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con la Actualización',{timeOut:2000,positionClass: 'toast-top-right'});
@@ -90,7 +90,7 @@ export class EditarProcedimientoComponent implements OnInit {
     } else {
       this.notify.error('Revise los datos e intente nuevamente','Error con la Actualización',{timeOut:2000,positionClass: 'toast-top-right'});
     }
-    console.log(this.lista)
+
   }
   generarHTML(titulo, descripciones) {
     // Crear el HTML deseado

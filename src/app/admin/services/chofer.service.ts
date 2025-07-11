@@ -74,7 +74,6 @@ handleCrearchofer(data: IChofer):IChofer {
 }
 //---------------------Editar   chofer-------------------------------------------
 editarChofer(data:IChofer) {
-    console.log(data.id);
   this.token();
   return this.http.put(`${this.baseUrl}chofer/`+data.id, data)
 }

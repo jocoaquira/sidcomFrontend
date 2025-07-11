@@ -24,7 +24,7 @@ export class CrearDepartamentoComponent implements OnInit {
     public nombre:string='';
     public estados:any;
     public ubicacion:any={
-      latitud:-16.451615981589992, 
+      latitud:-16.451615981589992,
       longitus:-65.34825300026785
     }
 
@@ -45,7 +45,7 @@ export class CrearDepartamentoComponent implements OnInit {
       { label: 'ACTIVO', value: '1' },
       { label: 'INACTIVO', value: '0' }
   ];
-   
+
 
     this.satelliteLayer = tileLayer(
       'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
@@ -149,7 +149,7 @@ addMarker(lat: number, lng: number) {
   this.currentMarker.bindPopup(`Latitud: ${lat}, Longitud: ${lng}`).openPopup();
 }
 abrirMapa() {
-  
+
     if (this.map) {
         this.map.setView(latLng('-17.986080103148147', '-67.09125114199388'), 13.5);
     this.sw_mapa=false;
@@ -171,7 +171,7 @@ abrirMapa() {
         estado: this.departamento.formulario.value.estado.label
       });
     if(this.departamento.formulario.valid){
-      console.log(this.departamento.formulario.value);
+
 
       this.departamentosService.creardepartamento(this.departamento.formulario.value).subscribe(
         (data:any) =>
@@ -180,7 +180,7 @@ abrirMapa() {
 
           if(this.departamento_registrado!==null)
           {
-            console.log(this.departamento_registrado);
+
             this.departamento.formulario.reset();
             this.notify.success('El el formulario interno se generó exitosamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
             this.router.navigate(['/admin/departamento/']);

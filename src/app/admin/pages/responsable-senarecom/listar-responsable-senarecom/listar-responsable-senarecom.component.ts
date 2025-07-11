@@ -72,14 +72,14 @@ export class ListarResponsableSenarecomComponent implements OnInit {
         private confirmationService:ConfirmationService,
     ) {
         this.operador_id= authService.getUser.operador_id
-        console.log(this.operador_id);
+      
     }
 
     ngOnInit() {
         this.responsableSenarecomService.verResponsableSenarecom('nada').subscribe(
             (data:any)=>{
             this.listaUsuarios=this.responsableSenarecomService.handleusuario(data);
-            console.log(this.listaUsuarios);
+          
 
           },
           (error:any)=> this.error=this.responsableSenarecomService.handleError(error));
@@ -110,7 +110,7 @@ export class ListarResponsableSenarecomComponent implements OnInit {
         this.responsableSenarecomService.verResponsableSenarecom('nada').subscribe(
             (data:any)=>{
             this.listaUsuarios=this.responsableSenarecomService.handleusuario(data);
-            console.log(this.listaUsuarios);
+          
 
           },
           (error:any)=> this.error=this.responsableSenarecomService.handleError(error));
@@ -174,13 +174,13 @@ export class ListarResponsableSenarecomComponent implements OnInit {
             (data:any) =>
             {
               this.responsableSenarecomService.handleCrearusuario(data);
-              console.log(data);
+            
               if(data.error==null)
               {
                 this.responsableSenarecomService.verResponsableSenarecom('nada').subscribe(
                     (data:any)=>{
                     this.listaUsuarios=this.responsableSenarecomService.handleusuario(data);
-                    console.log(this.listaUsuarios);
+                  
 
                   },
                   (error:any)=> this.error=this.responsableSenarecomService.handleError(error));

@@ -99,20 +99,20 @@ export class ListarFormularioCooperativaComponent implements OnInit {
         this.searchTerm = value;  // <-- Almacena el término de búsqueda
         this.dt.first = 0;       // <-- Reinicia a la primera página
         this.loadData();         // <-- Vuelve a cargar los datos
-        console.log(this.searchTerm);
+       
     }
 
     generarPDF(formulario_interno:IFormularioInternoSimple){
             this.formIntService.verFormularioInternoCooperativaPDF(formulario_interno.id.toString()).subscribe(
                         (data:any)=>{
                         let tdm_completo:IFormularioInternoCooperativaPDF=this.formIntService.handleFormularioInternoCooperativaPDF(data);
-                        console.log(tdm_completo);
+                       
                         this.pdfFormularioCooperativa.generarPDF(tdm_completo);
                       },
                       (error:any)=> this.error=this.formIntService.handleError(error));
         }
     confirmarEmision(event:IFormularioInternoSimple) {
-        console.log
+       
         this.confirmationService.confirm({
             key: 'confirm1',
             message: '¿Estas seguro de Emitir el formulario '+event.nro_formulario+'?',

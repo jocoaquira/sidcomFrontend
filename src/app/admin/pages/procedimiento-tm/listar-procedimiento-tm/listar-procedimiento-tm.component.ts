@@ -62,7 +62,7 @@ export class ListarProcedimientoTMComponent implements OnInit {
         private notify:ToastrService,
     ) {
         this.operador_id= authService.getUser.operador_id
-        console.log(this.operador_id);
+       
     }
 
     ngOnInit() {
@@ -74,7 +74,7 @@ export class ListarProcedimientoTMComponent implements OnInit {
                     return a.descripcion.localeCompare(b.descripcion);
                 });
             });
-            console.log(this.listaProcedimientos);
+           
 
           },
           (error:any)=> this.error=this.procedimientoService.handleError(error));
@@ -93,7 +93,7 @@ export class ListarProcedimientoTMComponent implements OnInit {
     }
     cerrar(event:any){
         this.productDialog=event;
-        console.log(event);
+       
         this.procedimientoService.verProcedimientos().subscribe(
             (data:any)=>{
             this.listaProcedimientos=this.procedimientoService.handleprocedimiento(data);
@@ -102,14 +102,14 @@ export class ListarProcedimientoTMComponent implements OnInit {
                     return a.descripcion.localeCompare(b.descripcion);
                 });
             });
-            console.log(this.listaProcedimientos);
+           
 
           },
           (error:any)=> this.error=this.procedimientoService.handleError(error));
     }
     cerrar1(event:any){
         this.productDialog1=event;
-        console.log(event);
+       
         this.procedimientoService.verProcedimientos().subscribe(
             (data:any)=>{
             this.listaProcedimientos=this.procedimientoService.handleprocedimiento(data);
@@ -118,7 +118,7 @@ export class ListarProcedimientoTMComponent implements OnInit {
                     return a.descripcion.localeCompare(b.descripcion);
                 });
             });
-            console.log(this.listaProcedimientos);
+           
 
           },
           (error:any)=> this.error=this.procedimientoService.handleError(error));
@@ -131,7 +131,7 @@ export class ListarProcedimientoTMComponent implements OnInit {
     }
     edit(responsable:any) {
         this.responsable = { ...responsable };
-        console.log('respo:'+responsable.nombre)
+       
         //this.submitted = false;
         this.productDialog1 = true;
         this.isEditMode = true;
@@ -236,13 +236,13 @@ export class ListarProcedimientoTMComponent implements OnInit {
             (data:any) =>
             {
               this.procedimientoService.handleCrearProcedimiento(data);
-              console.log(data);
+             
               if(data.error==null)
               {
                 this.procedimientoService.verProcedimientos().subscribe(
                     (data:any)=>{
                     this.listaProcedimientos=this.procedimientoService.handleprocedimiento(data);
-                    console.log(this.listaProcedimientos);
+                   
 
                   },
                   (error:any)=> this.error=this.procedimientoService.handleError(error));

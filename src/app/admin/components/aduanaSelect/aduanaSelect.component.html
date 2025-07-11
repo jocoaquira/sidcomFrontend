@@ -9,10 +9,10 @@
       optionValue="id"
       dataKey="value"
       (onChange)="cambioAduanas($event)"
+      [appendTo]="'body'"
     ></p-dropdown>
     <label for="dropdown">Aduana de Salida</label>
     <small id="presentacion" class="p-error " *ngIf="error">
       {{error}}
     </small>
   </span>
-  

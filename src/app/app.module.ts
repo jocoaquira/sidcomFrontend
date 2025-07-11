@@ -3,7 +3,7 @@ import { APP_BASE_HREF, HashLocationStrategy, LocationStrategy, PathLocationStra
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
 //import { AppLayoutModule } from './layout/app.layout.module';
-import localeEs from '@angular/common/locales/es';
+import localeEsBo from '@angular/common/locales/es-BO';
 import localeEsExtra from '@angular/common/locales/extra/es';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorAuthInterceptor } from './admin/interceptors/interceptor-auth.interceptor';
@@ -11,7 +11,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NotfoundComponent } from '@core/authentication/pages/notfound/notfound.component';
 
-registerLocaleData(localeEs,'es',localeEsExtra);
+registerLocaleData(localeEsBo);
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
     imports: [
@@ -24,7 +24,7 @@ registerLocaleData(localeEs,'es',localeEsExtra);
 
         ],
     providers: [
-        { provide: LOCALE_ID, useValue: 'es' },
+        { provide: LOCALE_ID, useValue: 'es-BO'  },
         {
             provide: HTTP_INTERCEPTORS,
             useClass:InterceptorAuthInterceptor,

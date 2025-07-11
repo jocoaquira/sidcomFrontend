@@ -404,7 +404,7 @@ guardar(){
  /* this.formulario_interno.formulario.patchValue({
       estado: 'GENERADO'
     });*/
-    console.log(this.formulario_interno.formulario.value)
+
   if(this.formulario_interno.formulario.valid){
     let formularioEnvio=this.formulario_interno.formulario.value;
     formularioEnvio={
@@ -412,13 +412,13 @@ guardar(){
       minerales:this.minerales_envio,
       municipio_origen:this.municipio_origen_envio
     }
-    console.log(formularioEnvio);
+
 
     this.formularioInternoService.editarFormularioInterno(formularioEnvio,this.id).subscribe(
       (data:any) =>
       {
           this.formulario_Interno_registrado=this.formularioInternoService.handleCrearFormularioInterno(data);
-          console.log(this.formulario_Interno_registrado);
+
         if(this.formulario_Interno_registrado!==null)
         {
 
@@ -612,7 +612,7 @@ agregarLey(){
         });
       }
     }
-    console.log(event);
+
   }
 
   cambioPresentacion(event:any){
