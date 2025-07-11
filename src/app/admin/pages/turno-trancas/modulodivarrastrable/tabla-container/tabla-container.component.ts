@@ -6,6 +6,7 @@ import { TrancaService } from 'src/app/admin/services/tranca.service';
 import { firstValueFrom } from 'rxjs';
 import { IFuncionarioTranca } from '@data/funcionarioTranca.metadata';
 import { TurnoValidatorService } from '../../services/validar-turno.service';
+import { ToastrService } from 'ngx-toastr';
 
 interface IMes{
     nombre: string;
@@ -81,7 +82,8 @@ export class TablaContainerComponent implements OnInit {
   constructor(
     private trancaService: TrancaService,
     private turnoTrancaService: TurnoTrancaService,
-    private validador:TurnoValidatorService
+    private validador:TurnoValidatorService,
+    private notify:ToastrService,
   ) {
     // Mover la inicialización del grid aquí NO es necesario
     // this.updateGrid();
@@ -216,14 +218,14 @@ export class TablaContainerComponent implements OnInit {
       const closestColumn = Math.round(this.draggedElement.positionX / this.columnWidth) * this.columnWidth;
       const closestRow = Math.round(this.draggedElement.positionY / (this.rowHeight / 2)) * (this.rowHeight / 2);
 
-      this.draggedElement.positionX = closestColumn;
-      this.draggedElement.positionY = closestRow;
-        this.updateTurno(this.draggedElement);
-      this.dragging = false;
-      this.draggedElement = null;
+    this.draggedElement.positionX = closestColumn;
+    this.draggedElement.positionY = closestRow;
+    this.updateTurno(this.draggedElement);
+    this.dragging = false;
+    this.draggedElement = null;
 
-      document.removeEventListener('mousemove', this.onDrag.bind(this));
-      document.removeEventListener('mouseup', this.endDrag.bind(this));
+    document.removeEventListener('mousemove', this.onDrag.bind(this));
+    document.removeEventListener('mouseup', this.endDrag.bind(this));
     }
   }
 //-------------------------------------UPDATE TURNO------------------------------------------------
@@ -232,9 +234,43 @@ updateTurno(item:any){
         top:item.positionY,
         left:item.positionX
     }
-    let fecha=this.validador.obtenerFechaClick(this.semanas,this.columnWidth,posicion);
+    let fecha_ini=this.validador.obtenerFechaClick(this.semanas,this.columnWidth,posicion);
     let tranca=this.validador.obtenerTrancaClick(this.trancas,this.rowHeight,posicion);
-    console.log('update',item);
+    let nuevos_turnos = this.turnos.filter(t => t.id !== item.id);
+    let dias=item.width/this.columnWidth;
+    let fecha_fin=this.validador.calcularFechaFin(fecha_ini,dias);
+    let turnoUpdate:ITurnoTrancaLista={
+        id:item.id,
+        trancaId:tranca.id,
+        usuarioId:item.usuarioId,
+        fecha_inicio:fecha_ini.toISOString(),
+        fecha_fin:fecha_fin,
+    }
+    let sw=this.validador.validarTurno(turnoUpdate,nuevos_turnos)
+    if(turnoUpdate.usuarioId && turnoUpdate.trancaId && turnoUpdate.fecha_inicio && turnoUpdate.fecha_fin && sw.valido==true && dias>0 )
+        {
+            this.turnoTrancaService.editarTurnoTranca(turnoUpdate).subscribe({
+                next: (response: any) => {
+
+                    this.notify.success('Actualizado Correctamente','Se reasigno el Turno ',{timeOut:2500,positionClass: 'toast-top-right'});
+                    this.cambioFecha('');
+                },
+                error: (err) => {
+                    this.cambioFecha('');
+                    this.error = 'Error al alctualizar el turno';
+                    console.error(err);
+                }
+            })
+        }
+        else{
+            this.cambioFecha('');
+            if(sw.valido){
+                this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con la Actualización de Turno',{timeOut:2000,positionClass: 'toast-top-right'});
+            }else{
+                this.notify.error(sw.mensaje,'Error con la Actualización de Turno',{timeOut:2000,positionClass: 'toast-top-right'});
+            }
+        }
+
 }
   //-------------------------------------CAMBIO DE FECHA-----------------------------------
   async cambioFecha(event: any): Promise<void> {
@@ -644,6 +680,7 @@ private generarColorClaro(): IColores {
       this.resizingElement.positionX = this.resizingElement.originalPositionX;
       this.resizingElement.positionY = this.resizingElement.originalPositionY;
       this.resizingElement.width = roundedWidth;
+      this.updateTurno(this.resizingElement)
     }
 
     this.resizingElement = null;

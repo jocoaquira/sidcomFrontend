@@ -131,6 +131,7 @@ export class TurnoValidatorService {
 
         return { valido: true };
     }
+
     public obtenerFechaClick(semanas:Date[],ancho:number,position:{ top?: number; left?: number }): Date | null {
     if (!semanas || semanas.length === 0 || ancho <= 0) {
       console.error('Datos insuficientes para calcular la fecha.');
