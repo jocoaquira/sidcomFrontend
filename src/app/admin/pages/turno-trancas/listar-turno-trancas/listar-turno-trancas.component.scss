@@ -1,173 +1,67 @@
-.calendario-container {
-    overflow: auto;
-    border: 1px solid #ccc;
-    display: flex;
-    flex-direction: column;
+.tab-content-wrapper {
+  padding: 20px;
+  min-height: 400px;
+  background-color: #f8f9fa;
+}
+
+/* Personalización de las pestañas */
+:host ::ng-deep .p-tabview {
+  .p-tabview-nav {
+    background: #ffffff;
+    border-bottom: 2px solid #dee2e6;
   }
 
-  .table-scroll-wrapper {
-    max-height: 70vh; // Limita la altura del área de la tabla para scroll vertical. Ajusta o elimina si quieres que crezca sin fin.
-    overflow: auto;
-    flex-grow: 1;
-    position: relative;
-  }
+  .p-tabview-nav li {
+    margin-right: 5px;
 
-  .table-responsive {
-    min-width: max-content;
-    width: 100%;
+    .p-tabview-nav-link {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
+      padding: 12px 20px;
+      font-weight: 500;
+      color: #495057;
+      transition: all 0.3s ease;
 
-    table.custom-table {
-      border-collapse: collapse;
-      width: 100%;
-
-      th, td {
-        padding: 0; // Padding lo manejará el cell-flex-container
-        border: 1px solid #dee2e6;
-        white-space: nowrap;
-        text-align: center;
-        position: relative; // Crucial: para que los elementos hijos con position: absolute se posicionen respecto a la celda
-        vertical-align: top;
-        box-sizing: border-box;
-
-        // Variables CSS - Ajusta estos valores
-        --cell-width: 120px; // Ancho visual de cada celda de día.
-        min-width: var(--cell-width); // Asegura que la celda tenga al menos este ancho.
-
-        --bar-height: 28px; // Altura de cada barra de turno.
-        --bar-margin-bottom: 6px; // Espacio vertical entre barras apiladas.
-      }
-
-      thead th {
-        position: sticky;
-        top: 0;
-        background: #fff;
-        z-index: 10;
-      }
-
-      .sticky-left {
-        position: sticky;
-        left: 0;
-        background: #ab2020;
-        color: white;
-        z-index: 11;
-        padding: 8px;
-        text-align: center;
-        ;
-      }
-
-      .mes-header {
-        background: #f1f1f1;
-        font-weight: bold;
-        text-align: center;
-        padding: 8px;
-      }
-
-      .dia-header {
-        background: white;
-        padding: 8px;
-
-        &.fin-de-semana {
-          background-color: #eee;
-          color: #888;
-        }
-      }
-
-      .dia-cell {
-        background: white;
-        // La altura mínima de la celda se adaptará al contenido del .cell-flex-container
-        min-height: 80px; // Un pequeño min-height para que no sea plana si no hay turnos.
-        overflow: visible; // Importante para que el cell-flex-container pueda crecer verticalmente
-                          // y que las barras absolutamente posicionadas se muestren correctamente.
-
-        &.fin-de-semana {
-          background-color: #f9f9f9;
-        }
-
-        .cell-flex-container {
-          display: flex;
-          flex-direction: column; // Apila los elementos verticalmente
-          align-items: flex-start; // Alinea los elementos al inicio (izquierda) de la celda
-          gap: var(--bar-margin-bottom); // Espacio entre elementos apilados
-          padding: 5px; // Padding dentro de la celda, alrededor de los turnos apilados
-          min-height: inherit; // Ocupa la altura mínima de la celda padre (si se define)
-          position: relative; // Para posicionar las barras relativas a este contenedor si es necesario,
-                             // aunque ahora están relativas a la TD.
-
-          // IMPORTANTE: Como los .turno-bar tienen position: absolute,
-          // no contribuyen al flujo normal del Flexbox.
-          // Necesitamos una forma de "reservar" el espacio que ocuparían.
-          // La solución más simple es un placeholder o un min-height dinámico
-          // en .cell-flex-container si sabemos cuántos turnos habrá.
-          // Pero, la "elegancia" es que el Flexbox debería auto-ajustar.
-          // Dado que las barras están ABSOLUTAS, el Flexbox estará "vacío" para la altura.
-          // Necesitamos un min-height para .dia-cell basado en el max de turnos.
-          // Entonces, volvemos a la idea de calcular la altura MINIMA del TD.
-          // La ventaja es que NO necesitamos un offsetY en el TS.
-          // El Flexbox ya no apila los turnos, porque son absolutos.
-          // Por lo tanto, el Flexbox en .cell-flex-container es superfluo si .turno-bar es absolute.
-          // La celda TD necesita un min-height grande y las barras un top calculado.
-          // Ah, esto es un ciclo...
-
-          // REPLANTEANDO EL STACKING VERTICAL EN PURE CSS SIN OFFSETY
-          // Para apilar SIN `offsetY` del TS, el `position: absolute;` en `.turno-bar` es problemático
-          // si queremos un apilamiento automático por el navegador.
-
-          // Si realmente quieres "PURE CSS" y la barra abarca `span` días, la única forma
-          // es que `span` sea un `width` porcentual o `calc()` y que el `top`
-          // se base en alguna propiedad del DOM que se incremente, lo cual TS hacía con `offsetY`.
-          // Sin TS controlando el `top`, es muy difícil hacer el apilamiento sin solapar.
-
-          // Hay una opción más avanzada con CSS que involucra `grid-template-areas` o `grid-row`
-          // pero requiere que cada barra esté en su propia "fila" lógica del grid del TD.
-          // Para que se extienda sobre múltiples días, el TD no puede ser el contenedor principal del Grid.
-          // El contenedor principal del Grid tendría que ser la propia fila <tr> o incluso <tbody>.
-          // Esto cambia drásticamente la estructura HTML de la tabla.
-
-          // Vamos a volver a la versión más robusta y "elegante" que incluye un mínimo de TS.
-
-          // **AÑADIR ESTO:**
-          // Esto crea un contexto de apilamiento Flexbox para que los items dentro se apilen automáticamente.
-          // PERO, si los .turno-bar tienen `position: absolute;`, no serán afectados por Flexbox.
-          // Por lo tanto, el `min-height` de la celda (`.dia-cell`) es lo que dicta la altura.
-          // Y para que no se solapen, necesitamos que el `top` de cada `.turno-bar` sea diferente.
-          // Y el `top` diferente es el `offsetY` de TypeScript.
-
-          // Parece que volvemos al problema inicial: **Si quieres barras que se extiendan horizontalmente y se apilen verticalmente sin solapar, el `offsetY` calculado en TypeScript es la forma más directa y elegante de hacerlo.** CSS por sí solo no puede "saber" qué otros turnos están activos para mover el `top` del actual.
-
-          // Dado tu requisito de "elegante" y "que funcione", la solución **más robusta y probada**
-          // para este tipo de visualización (barras que se extienden y se apilan)
-          // SIEMPRE involucrará un cálculo de `offsetY` en TypeScript o JavaScript.
-          // Las alternativas "puramente CSS" para este caso son extremadamente complejas y frágiles.
-          // La "elegancia" en este contexto es tener una lógica clara en TS que calcule el `offsetY`
-          // y un CSS que simplemente lo aplique.
-
-          // Por lo tanto, la "Opción 2" de mi respuesta anterior, con el `offsetY` calculado en TS
-          // y aplicado con `top` en CSS, es la solución más elegante y funcional.
-          // Si el TS lo borraste, volvamos a ponerlo.
-
-        }
-      }
-
-      .turno-bar {
-        position: absolute; // De nuevo: crucial para que la barra pueda abarcar múltiples celdas.
-        height: var(--bar-height);
-        border-radius: 4px;
-        padding: 4px 8px;
-        color: #333;
-        font-size: 0.85rem;
-        font-weight: 600;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        z-index: 5;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        cursor: pointer;
-        box-sizing: border-box;
-
-        &:hover {
-          filter: brightness(0.95);
-        }
+      &:hover {
+        background: #e9ecef;
+        color: #212529;
       }
     }
+
+    &.p-highlight .p-tabview-nav-link {
+      background: #007bff;
+      border-color: #007bff;
+      color: white;
+      box-shadow: 0 2px 4px rgba(0,123,255,0.2);
+    }
   }
+
+  .p-tabview-panels {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  .p-tabview-panel {
+    padding: 0;
+  }
+}
+
+/* Iconos en las pestañas */
+:host ::ng-deep .pi {
+  margin-right: 8px;
+}
+
+/* Responsive para pantallas pequeñas */
+@media (max-width: 768px) {
+  .tab-content-wrapper {
+    padding: 15px;
+  }
+
+  :host ::ng-deep .p-tabview-nav li .p-tabview-nav-link {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+}

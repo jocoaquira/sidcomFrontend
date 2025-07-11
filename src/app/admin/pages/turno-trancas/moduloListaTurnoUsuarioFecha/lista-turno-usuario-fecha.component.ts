@@ -5,8 +5,8 @@ import { ITurnoTrancaLista } from '@data/turno_tranca.metadata';
 import { TrancaService } from 'src/app/admin/services/tranca.service';
 import { firstValueFrom } from 'rxjs';
 import { IFuncionarioTranca } from '@data/funcionarioTranca.metadata';
-import { TurnoValidatorService } from '../../services/validar-turno.service';
 import { ToastrService } from 'ngx-toastr';
+import { TurnoValidatorService } from '../services/validar-turno.service';
 
 interface IMes{
     nombre: string;
@@ -30,14 +30,15 @@ interface ITurnoUsuario{
     usuarioId: number;
     posFila: number;
     nombreUsuario: string;
+    trancaNombre:string;
 }
 
 @Component({
-  selector: 'app-tabla-container',
-  templateUrl: './tabla-container.component.html',
-  styleUrls: ['./tabla-container.component.scss']
+  selector: 'app-lista-turno-usuario-fecha',
+  templateUrl: './lista-turno-usuario-fecha.component.html',
+  styleUrls: ['./lista-turno-usuario-fecha.component.scss']
 })
-export class TablaContainerComponent implements OnInit {
+export class ListaTurnoUsuarioFechaComponent implements OnInit {
   rows = 5;
   columns = 15;
   columnWidth = 100;
@@ -57,13 +58,13 @@ export class TablaContainerComponent implements OnInit {
   turnos: ITurnoTrancaLista[] = [];
   trancas: ITranca[] = [];
   funcionarios:IFuncionarioTranca[]=[];
-  funcionarioColor:IFuncionarioColor[]=[];
+  trancaColor:IFuncionarioColor[]=[];
 
   listaTurnosMatriz:ITurnoUsuario[] = [];
   semanas: Date[] = [];
   meses: IMes[] = [];
   encabezados: any[] = [];
-  encabezadosTranca: any[] = [];
+  encabezadosUsuario: any[] = [];
   fecha_de_inicio: Date = new Date();
   fecha_de_fin: Date = new Date();
   loading = true;
@@ -98,7 +99,7 @@ export class TablaContainerComponent implements OnInit {
 
       // 2. Cargar datos base necesarios para dimensiones del grid
       await this.cargarDatosBase();
-      await this.asignarColorFuncionario()
+      await this.asignarColorTranca()
       // 3. Configurar dimensiones del grid basado en datos cargados
       this.configurarDimensionesGrid();
 
@@ -124,7 +125,6 @@ export class TablaContainerComponent implements OnInit {
     this.fecha_de_fin = new Date();
     this.fecha_de_fin.setDate(this.fecha_de_fin.getDate() + 14); // 15 días por defecto
     this.fecha_de_fin.setHours(0, 0, 0, 0);
-
   }
 
   private async cargarDatosBase(): Promise<void> {
@@ -153,7 +153,7 @@ export class TablaContainerComponent implements OnInit {
     this.columns = diasEnRango + 1; // +1 para la columna de trancas
 
     // Calcular filas basado en trancas + encabezado
-    this.rows = this.trancas.length + 1; // +1 para el encabezado
+    this.rows = this.funcionarios.length + 1; // +1 para el encabezado
 
 
   }
@@ -162,7 +162,7 @@ export class TablaContainerComponent implements OnInit {
     try {
       // Cargar en orden secuencial
       await this.cargarEncabezadoCalendario();
-      await this.cargarEncabezadoTranca();
+      await this.cargarEncabezadoUsuario();
       await this.procesarYMostrarTurnos();
 
     } catch (error) {
@@ -397,14 +397,14 @@ updateTurno(item:any){
   }
 
   //----------------------------------COLOCAR TRANCAS EN LA TABLA-----------------------------------
-  async cargarEncabezadoTranca(): Promise<void> {
+  async cargarEncabezadoUsuario(): Promise<void> {
     try {
       // Los datos ya están cargados en cargarDatosBase()
-      this.encabezadosTranca = [];
+      this.encabezadosUsuario = [];
 
       // Encabezado principal
-      this.encabezadosTranca.push({
-        text: 'TRANCAS',
+      this.encabezadosUsuario.push({
+        text: 'Funcionario de Control',
         row: 1,
         position: {
           top: `${0}px`,
@@ -417,10 +417,10 @@ updateTurno(item:any){
       });
 
       // Encabezados de trancas
-      this.trancas.forEach((tranca, index) => {
+      this.funcionarios.forEach((funcionario, index) => {
         const posicionY = (index + 1) * this.rowHeight;
-        this.encabezadosTranca.push({
-          text: tranca.nombre,
+        this.encabezadosUsuario.push({
+          text: funcionario.nombre_apellidos,
           row: index + 2,
           position: {
             top: `${posicionY}px`,
@@ -432,16 +432,17 @@ updateTurno(item:any){
           textColor: '#ffffff'
         });
       });
-      console.log(this.encabezadosTranca);
+      console.log(this.encabezadosUsuario);
 
     } catch (error) {
-      console.error('Error al cargar encabezados de trancas:', error);
+      console.error('Error al cargar encabezados de funcionario:', error);
       throw error;
     }
   }
 
   //----------------------------------CARGAR TURNOS EN MATRIZ-----------------------------------
   async cargarTurnosMatriz(): Promise<void> {
+    let dias:number=0;
     this.listaTurnosMatriz = [];
     const turnosExcluidos: ITurnoUsuario[] = [];
 
@@ -455,7 +456,7 @@ updateTurno(item:any){
 
         // Verificar si el turno está dentro del rango visible
         if (fechaFinTurno < this.fecha_de_inicio || fechaInicioTurno > this.fecha_de_fin) {
-          turnosExcluidos.push(this.crearTurnoExcluido(turno.id,turno, fechaInicioTurno, fechaFinTurno));
+          turnosExcluidos.push(this.crearTurnoExcluido(turno.id,turno, fechaInicioTurno, fechaFinTurno,dias,tranca.nombre));
           return;
         }
 
@@ -463,15 +464,15 @@ updateTurno(item:any){
         const fechaFinAjustada = this.ajustarFechaFin(fechaFinTurno, this.fecha_de_fin);
 
         if (fechaInicioAjustada > fechaFinAjustada) {
-          turnosExcluidos.push(this.crearTurnoExcluido(turno.id,turno, fechaInicioAjustada, fechaFinAjustada));
+          turnosExcluidos.push(this.crearTurnoExcluido(turno.id,turno, fechaInicioAjustada, fechaFinAjustada,dias,tranca.nombre));
           return;
         }
 
-        const dias = this.calcularDiasAjustados(fechaInicioAjustada, fechaFinAjustada);
-        const posicionAsignada = this.asignarTurnoAPosicion(turno.id,fechaInicioAjustada, fechaFinAjustada, tranca.id, turno, dias);
+        dias = this.calcularDiasAjustados(fechaInicioAjustada, fechaFinAjustada);
+        const posicionAsignada = this.asignarTurnoAPosicion(turno.id,fechaInicioAjustada, fechaFinAjustada, tranca.id, turno, dias,tranca.nombre);
 
         if (posicionAsignada === -1) {
-          turnosExcluidos.push(this.crearTurnoExcluido(turno.id,turno, fechaInicioAjustada, fechaFinAjustada, dias));
+          turnosExcluidos.push(this.crearTurnoExcluido(turno.id,turno, fechaInicioAjustada, fechaFinAjustada, dias,tranca.nombre));
         }
       });
     });
@@ -500,9 +501,9 @@ updateTurno(item:any){
     return Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
   }
 
-  private asignarTurnoAPosicion(id:number,fechaInicio: Date, fechaFin: Date, trancaId: number, turno: any, dias: number): number {
-    for (let posicion = 1; posicion <= 2; posicion++) {
-      if (!this.siFechaOcupada(this.listaTurnosMatriz, fechaInicio, fechaFin, posicion, trancaId)) {
+  private asignarTurnoAPosicion(id:number,fechaInicio: Date, fechaFin: Date, trancaId: number, turno: any, dias: number,nombreTranca:string): number {
+
+      if (!this.siFechaOcupada(this.listaTurnosMatriz, fechaInicio, fechaFin, 1, trancaId)) {
         this.listaTurnosMatriz.push({
           id:id,
           fecha_inicio: fechaInicio,
@@ -510,21 +511,21 @@ updateTurno(item:any){
           dias: dias,
           trancaId: trancaId,
           usuarioId: turno.usuarioId,
-          posFila: posicion,
-          nombreUsuario: turno.nombre_apellidos
+          posFila: 1,
+          nombreUsuario: turno.nombre_apellidos,
+          trancaNombre:nombreTranca
         });
-        return posicion;
+        return 1;
       }
-    }
     return -1;
   }
 
-  public siFechaOcupada(turnoOcupados: ITurnoUsuario[], fechaIni: Date, fechaFin: Date, posFila: number, tranca_id: number): boolean {
+  public siFechaOcupada(turnoOcupados: ITurnoUsuario[], fechaIni: Date, fechaFin: Date, posFila: number, usuario_id: number): boolean {
     const inicio = this.normalizarFecha(fechaIni);
     const fin = this.normalizarFecha(fechaFin);
 
     for (const turno of turnoOcupados) {
-      if (turno.trancaId === tranca_id && turno.posFila === posFila) {
+      if (turno.usuarioId === usuario_id && turno.posFila === posFila) {
         const turnoInicio = this.normalizarFecha(turno.fecha_inicio);
         const turnoFin = this.normalizarFecha(turno.fecha_fin);
 
@@ -537,7 +538,7 @@ updateTurno(item:any){
     return false;
   }
 
-  private crearTurnoExcluido(id:number,turno: any, fechaInicio: Date, fechaFin: Date, dias: number = 0): ITurnoUsuario {
+  private crearTurnoExcluido(id:number,turno: any, fechaInicio: Date, fechaFin: Date, dias: number = 0,tranca:string): ITurnoUsuario {
     return {
       id:id,
       fecha_inicio: fechaInicio,
@@ -547,33 +548,34 @@ updateTurno(item:any){
       usuarioId: turno.usuarioId,
       posFila: -1,
       nombreUsuario: turno.nombre_apellidos,
+      trancaNombre:tranca
     };
   }
 
   //-----------------------------------COLOCAR EN PANTALLA TODOS LOS TURNOS-----------------------------------
   async colocarTurnosEnPantalla(): Promise<void> {
     this.itemsTurnos = [];
-    console.log(this.funcionarioColor)
+    console.log(this.trancaColor)
     if (this.listaTurnosMatriz.length === 0) {
       return;
     }
 
     const filtroInicio = this.normalizarFecha(this.fecha_de_inicio);
-    await this.asignarColorFuncionario();
+    await this.asignarColorTranca();
     this.listaTurnosMatriz.forEach(turno => {
       const posX = turno.posFila === 2 ? 1 : 0;
       const fechaTurno = this.normalizarFecha(new Date(turno.fecha_inicio));
       const fechaact = Math.floor((fechaTurno.getTime() - filtroInicio.getTime()) / (1000 * 60 * 60 * 24));
 
       // Encontrar el índice de la tranca
-      const trancaIndex = this.trancas.findIndex(t => t.id === turno.trancaId);
+      const funcionarioIndex = this.funcionarios.findIndex(t => t.id === turno.usuarioId);
 
       const posicionX = (fechaact + 1) * this.columnWidth;
-      const posicionY = (trancaIndex + 1) * this.rowHeight + (posX * this.rowHeight) / 2;
+      const posicionY = (funcionarioIndex + 1) * this.rowHeight + (posX * this.rowHeight);
       const ancho = turno.dias * this.columnWidth;
       let color='rgb (143,188,143)';
       let colorBorde='rgb (143,188,143)';
-      let funcColor=this.funcionarioColor.find(funcColor=>funcColor.id===turno.usuarioId)
+      let funcColor=this.trancaColor.find(funcColor=>funcColor.id===turno.trancaId)
       if(funcColor)
       {
         color=funcColor.color.fondo;
@@ -581,12 +583,12 @@ updateTurno(item:any){
       }
       this.itemsTurnos.push({
         id:turno.id,
-        text: turno.nombreUsuario.toLowerCase(),
+        text: turno.trancaNombre,
         usuarioId: turno.usuarioId,
         positionX: posicionX,
         positionY: posicionY,
         width: ancho,
-        height: this.rowHeight / 2,
+        height: this.rowHeight,
         backgroundColor: color,
         borderColor:colorBorde,
         textColor: '#000000'
@@ -638,15 +640,16 @@ private generarColorClaro(): IColores {
         borde: `hsl(${h}, ${s}%, ${bordeL}%)`
     };
 }
-     private async asignarColorFuncionario(): Promise<void> {
+     private async asignarColorTranca(): Promise<void> {
         const responseFuncionarios: any = await firstValueFrom(this.turnoTrancaService.verFuncionarioTrancas(''));
         this.funcionarios = this.turnoTrancaService.handleListarFuncionarioTrancas(responseFuncionarios);
-        this.funcionarios.forEach(funcionario => {
-            this.funcionarioColor.push({
+        this.trancas.forEach(funcionario => {
+            this.trancaColor.push({
                 id: funcionario.id,
                 color: this.generarColorClaro()
             });
         });
+        console.log(this.trancaColor);
     }
 
   //-----------------------------------REDIMENSIONAMIENTO-----------------------------------

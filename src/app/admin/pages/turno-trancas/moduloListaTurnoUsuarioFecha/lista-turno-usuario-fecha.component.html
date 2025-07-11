@@ -1,0 +1,101 @@
+<div class="grid p-fluid mt-3">
+    <div class="field col-12 md:col-3">
+      <span class="p-float-label">
+        <p-calendar
+          inputId="fecha_de_inicio"
+          dateFormat="dd-mm-yy"
+          [(ngModel)]="fecha_de_inicio"
+          (onSelect)="cambioFecha($event)"
+        ></p-calendar>
+        <label for="calendar">Fecha Inicio</label>
+      </span>
+    </div>
+    <div class="field col-12 md:col-3">
+      <span class="p-float-label">
+        <p-calendar
+          inputId="fecha_de_fin"
+          dateFormat="dd-mm-yy"
+          [(ngModel)]="fecha_de_fin"
+          (onSelect)="cambioFecha($event)"
+        ></p-calendar>
+        <label for="calendar">Fecha Fin</label>
+      </span>
+    </div>
+
+
+  </div>
+
+
+  <div class="scrollable-container">
+
+    <div
+        class="grid-container"
+        [style.gridTemplateRows]="generateGridRows()"
+        [style.gridTemplateColumns]="generateGridColumns()"
+        [style.width.px]="columns * columnWidth"
+     [style.height.px]="rows * rowHeight"
+    >
+    <div *ngFor="let encabezado of encabezadosUsuario" class="cabecera-tranca"
+       [style.backgroundColor]="encabezado.backgroundColor"
+       [style.color]="encabezado.textColor"
+       [style.top]="encabezado.position.top"
+       [style.left]="encabezado.position.left"
+       [style.width]="encabezado.width"
+       [style.height]="encabezado.height"
+       [style.gridRow]="encabezado.row"
+       [style.gridColumn]="1">
+        {{ encabezado.text }}
+    </div>
+      <div *ngFor="let cell of gridCells; let i = index" class="grid-cell"
+      (contextmenu)="onRightClick($event, i)">
+        <!-- Las celdas son solo referencias visuales -->
+      </div>
+    </div>
+
+    <div *ngFor="let encabezado of encabezados" class="cabecera-fecha"
+       [style.backgroundColor]="encabezado.backgroundColor"
+       [style.color]="encabezado.textColor"
+       [style.top]="encabezado.position.top"
+       [style.left]="encabezado.position.left"
+       [style.width]="encabezado.width"
+       [style.height]="encabezado.height">
+    {{ encabezado.text }}
+  </div>
+
+    <div *ngFor="let item of itemsTurnos" class="item-turno"
+         [style.backgroundColor]="item.backgroundColor"
+         [style.borderColor]="item.borderColor"
+         [style.color]="item.textColor"
+         [style.top]="item.positionY + 'px'"
+         [style.left]="item.positionX + 'px'"
+         [style.width]="item.width + 'px'"
+         [style.height]="item.height + 'px'"
+         (mousedown)="startDrag($event, item)">
+      {{ item.text }}
+      <div class="resize-handle" (mousedown)="startResize($event, item)"></div>
+    </div>
+  </div>
+
+<p-dialog
+    [(visible)]="crearDialogo"
+    [style]="{width: '700px'}"
+    [modal]="true"
+    [closable]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [baseZIndex]="10000"
+    [contentStyle]="{ overflow: 'visible' }"
+    header="{{modoEditar ? 'Editar Turno' : 'Agregar Turno'}}"
+    class="p-fluid">
+            <app-crear-turno
+                [position]="posicionCreacion"
+                [columnas]="columns"
+                [alto]="rowHeight"
+                [ancho]="columnWidth"
+                [filas]="rows"
+                [semanas]="semanas"
+                [listaTurnos]="listaTurnosMatriz"
+                [trancas]="trancas"
+                (estadoDialogo)="cerrarDialogo($event)">
+            </app-crear-turno>
+</p-dialog>

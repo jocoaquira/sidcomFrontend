@@ -1,4 +1,36 @@
-<div class="COL-12">
-    <app-tabla-container></app-tabla-container>
+<div class="col-12">
+  <p-tabView
+    [(activeIndex)]="activeIndex"
+    (onChange)="onTabChange($event)"
+    [scrollable]="true">
+
+    <!-- Pestaña 1: Turno Tranca por Fecha -->
+    <p-tabPanel
+      header="Turno Tranca por Fecha"
+      [selected]="true">
+      <ng-template pTemplate="header">
+        <i class="pi pi-calendar mr-2"></i>
+        <span>Turno Tranca por Fecha</span>
+      </ng-template>
+
+      <div class="tab-content-wrapper">
+        <app-lista-turno-tranca-fecha></app-lista-turno-tranca-fecha>
+      </div>
+    </p-tabPanel>
+
+    <!-- Pestaña 2: Turno Usuario por Fecha -->
+    <p-tabPanel header="Turno Usuario por Fecha">
+      <ng-template pTemplate="header">
+        <i class="pi pi-users mr-2"></i>
+        <span>Turno Usuario por Fecha</span>
+      </ng-template>
+
+      <div class="tab-content-wrapper">
+        <app-lista-turno-usuario-fecha></app-lista-turno-usuario-fecha>
+      </div>
+    </p-tabPanel>
+
+  </p-tabView>
 </div>
+
 
