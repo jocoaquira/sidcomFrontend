@@ -1,0 +1,156 @@
+<div class="formulario-container">
+    <!-- Encabezado -->
+    <div class="formulario-header">
+      <div class="title-group">
+        <h1>
+          <i class="pi pi-file"></i>
+          FORMULARIO INTERNO: {{ formulario.nro_formulario }}
+        </h1>
+        <div class="fechas">
+          <div class="fecha-item">
+            <i class="pi pi-calendar"></i>
+            <span>Emisión: {{ formulario.fecha_emision }} {{ formulario.hora_emision }}</span>
+          </div>
+          <div class="fecha-item">
+            <i class="pi pi-clock"></i>
+            <span>Vencimiento: {{ formulario.fecha_vencimiento }} {{ formulario.hora_vencimiento }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="estado-badge estado-vencido">
+        <i class="pi pi-exclamation-triangle"></i>
+        <span>{{ formulario.estado }}</span>
+      </div>
+    </div>
+  
+    <!-- Información Principal -->
+    <div class="formulario-section">
+      <h2><i class="pi pi-info-circle"></i> INFORMACIÓN PRINCIPAL</h2>
+      <div class="grid-container">
+        <div class="grid-item">
+          <label><i class="pi pi-building"></i> Cooperativa Minera:</label>
+          <p>{{ formulario.razon_social }}</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-id-card"></i> NIT:</label>
+          <p>{{ formulario.nit }}</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-tag"></i> NIM/NIAR:</label>
+          <p>{{ formulario.nro_nim }} ({{ formulario.tipo_nim_niar }})</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-briefcase"></i> Comprador:</label>
+          <p>{{ formulario.comprador }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Datos del Mineral -->
+    <div class="formulario-section">
+      <h2><i class="pi pi-database"></i> DATOS DEL MINERAL</h2>
+      <div class="grid-container">
+        <div class="grid-item">
+          <label><i class="pi pi-box"></i> Lote:</label>
+          <p>{{ formulario.lote }}</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-shopping-bag"></i> Presentación:</label>
+          <p>{{ formulario.presentacion }}</p>
+        </div>
+        <div class="grid-item" *ngIf="formulario.peso_bruto_humedo !== null">
+          <label><i class="pi pi-weight"></i> Peso Bruto Húmedo:</label>
+          <p>{{ formulario.peso_bruto_humedo }} TM</p>
+        </div>
+        <div class="grid-item" *ngIf="formulario.peso_neto !== null">
+          <label><i class="pi pi-weight"></i> Peso Neto:</label>
+          <p>{{ formulario.peso_neto }} TM</p>
+        </div>
+        <div class="grid-item" *ngIf="formulario.merma !== null">
+          <label><i class="pi pi-percentage"></i> Merma:</label>
+          <p>{{ formulario.merma }}%</p>
+        </div>
+        <div class="grid-item" *ngIf="formulario.humedad !== null">
+          <label><i class="pi pi-cloud"></i> Humedad:</label>
+          <p>{{ formulario.humedad }}%</p>
+        </div>
+        <div class="grid-item" *ngIf="formulario.tara !== null">
+          <label><i class="pi pi-weight"></i> Tara:</label>
+          <p>{{ formulario.tara }} TM</p>
+        </div>
+      </div>
+  
+      <div class="mineral-table" *ngIf="formulario.minerales?.length">
+        <h3><i class="pi pi-list"></i> Minerales</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Mineral</th>
+              <th>Ley</th>
+              <th>Unidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let mineral of formulario.minerales">
+              <td><i class="pi pi-box"></i> {{ mineral.mineral }} ({{ mineral.sigla }})</td>
+              <td><i class="pi pi-chart-bar"></i> {{ mineral.ley || 'N/A' }}</td>
+              <td><i class="pi pi-cog"></i> {{ mineral.unidad }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+    <!-- Transporte -->
+    <div class="formulario-section">
+      <h2><i class="pi pi-truck"></i> TRANSPORTE</h2>
+      <div class="grid-container">
+        <div class="grid-item">
+          <label><i class="pi pi-tag"></i> Tipo:</label>
+          <p>{{ formulario.tipo_transpote }}</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-user"></i> Conductor:</label>
+          <p>{{ formulario.conductor }}</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-car"></i> Placa:</label>
+          <p>{{ formulario.placa }}</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-id-card"></i> Licencia:</label>
+          <p>{{ formulario.licencia }}</p>
+        </div>
+        <div class="grid-item" *ngIf="formulario.tara_volqueta !== null">
+          <label><i class="pi pi-weight"></i> Tara Volqueta:</label>
+          <p>{{ formulario.tara_volqueta }} TM</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Ubicaciones -->
+    <div class="formulario-section">
+      <h2><i class="pi pi-map"></i> UBICACIONES</h2>
+      <div class="grid-container">
+        <div class="grid-item" *ngIf="formulario.municipio_origen?.length">
+          <label><i class="pi pi-arrow-right"></i> Origen:</label>
+          <p *ngFor="let origen of formulario.municipio_origen">
+            {{ origen.municipio_origen }} ({{ origen.codigo }})
+          </p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-arrow-left"></i> Destino:</label>
+          <p>{{ formulario.munipio_destino }}, {{ formulario.departamento_destino }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Observaciones -->
+    <div class="formulario-section" *ngIf="formulario.observacion">
+      <h2><i class="pi pi-comment"></i> OBSERVACIONES</h2>
+      <p class="observacion-text">
+        <i class="pi pi-info-circle"></i>
+        {{ formulario.observacion }}
+      </p>
+    </div>
+  </div>

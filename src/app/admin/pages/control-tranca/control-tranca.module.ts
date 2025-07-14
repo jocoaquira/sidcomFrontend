@@ -18,7 +18,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { BadgeModule } from 'primeng/badge';
 import { TagModule } from 'primeng/tag';
 import { ControlTrancaRoutingModule } from './control-tranca.routing';
-import { ListarControlTrancaModule } from './listar-control-tranca/listar-control-tranca.module';
+import { ControlarTrancaModule } from './controlar-tranca/controlar-tranca.module';
 
 @NgModule({
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -41,7 +41,7 @@ import { ListarControlTrancaModule } from './listar-control-tranca/listar-contro
         RadioButtonModule,
         InputNumberModule,
         DialogModule,
-        ListarControlTrancaModule
+        ControlarTrancaModule
     ],
     declarations: [],
 })

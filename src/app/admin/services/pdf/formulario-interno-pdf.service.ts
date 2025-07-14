@@ -65,7 +65,7 @@ export class PdfFormularioInternoService {
 
                         QRCode.toDataURL(
                           localStorage.getItem('url-frontend') +
-                            'formulario_interno/verificacion/' +
+                            'formulario-101/formulario-interno/verificacion?hash=' +
                             formulario_interno.hash,
                           (err, url) => {
                             if (err) {
@@ -391,7 +391,7 @@ export class PdfFormularioInternoService {
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                 { content: formulario_interno.des_tipo+':', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_interno.des_tipo === 'COMPRADOR' ? formulario_interno.des_comprador : formulario_interno.des_planta, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: formulario_interno.des_tipo === 'COMPRADOR' ? formulario_interno.comprador : formulario_interno.des_planta, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                 { content: 'DESTINO FINAL (MUNICIPIO):', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: formulario_interno.municipio_destino+', '+formulario_interno.departamento_destino, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],

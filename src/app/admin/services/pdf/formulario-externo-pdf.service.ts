@@ -65,7 +65,7 @@ export class PdfFormularioExternoService {
 
                         QRCode.toDataURL(
                           localStorage.getItem('url-frontend') +
-                            'formulario_externo/verificacion/' +
+                            'formulario-101/formulario-externo/verificacion?hash=' +
                             formulario_externo.hash,
                           (err, url) => {
                             if (err) {

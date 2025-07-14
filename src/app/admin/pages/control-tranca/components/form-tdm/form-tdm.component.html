@@ -1,0 +1,142 @@
+<div class="formulario-container">
+    <!-- Encabezado -->
+    <div class="formulario-header">
+      <div class="title-group">
+        <h1>
+          <i class="pi pi-file"></i>
+          TOMA DE MUESTRA: {{ formulario.nro_formulario }}
+        </h1>
+        <div class="fechas">
+          <div class="fecha-item">
+            <i class="pi pi-calendar"></i>
+            <span>Aprobación: {{ formulario.fecha_aprobacion }} {{ formulario.hora_aprobacion }}</span>
+          </div>
+          <div class="fecha-item">
+            <i class="pi pi-clock"></i>
+            <span>Firma: {{ formulario.fecha_firma }} {{ formulario.hora_firma }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="estado-badge estado-aprobado">
+        <i class="pi pi-check-circle"></i>
+        <span>{{ formulario.estado }}</span>
+      </div>
+    </div>
+  
+    <!-- Información Principal -->
+    <div class="formulario-section">
+      <h2><i class="pi pi-info-circle"></i> INFORMACIÓN PRINCIPAL</h2>
+      <div class="grid-container">
+        <div class="grid-item">
+          <label><i class="pi pi-building"></i> Razón Social:</label>
+          <p>{{ formulario.razon_social }}</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-map-marker"></i> Municipio:</label>
+          <p>{{ formulario.municipio }}</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-map"></i> Lugar Verificación:</label>
+          <p>{{ formulario.lugar_verificacion }}</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-box"></i> Lote:</label>
+          <p>{{ formulario.lote }}</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-shopping-bag"></i> Presentación:</label>
+          <p>{{ formulario.presentacion }}</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-weight"></i> Peso Neto:</label>
+          <p>{{ formulario.peso_neto }} TM</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-cloud"></i> Humedad:</label>
+          <p>{{ formulario.humedad }}%</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-car"></i> Camiones:</label>
+          <p>{{ formulario.camiones }}</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-tags"></i> Tipo Muestra:</label>
+          <p>{{ formulario.tipo_muestra }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Foto -->
+    <div class="formulario-section" *ngIf="formulario.foto_link">
+        <h2><i class="pi pi-camera"></i> FOTO DE LA MUESTRA</h2>
+        <div class="foto-container">
+          <img [src]="getImageUrl(formulario.foto_link)" 
+               alt="Foto de la muestra" 
+               class="muestra-foto"
+               (error)="handleImageError($event)">
+        </div>
+      </div>
+  
+    <!-- Minerales -->
+    <div class="formulario-section" *ngIf="formulario.minerales?.length">
+        <h2><i class="pi pi-database"></i> MINERALES</h2>
+        <div class="table-responsive">
+          <table class="mineral-table">
+            <thead>
+              <tr>
+                <th><i class="pi pi-box"></i> Mineral</th>
+                <th><i class="pi pi-chart-bar"></i> Ley</th>
+                <th><i class="pi pi-cog"></i> Unidad</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let mineral of formulario.minerales">
+                <td>{{ mineral.mineral }} ({{ mineral.sigla }})</td>
+                <td>{{ mineral.ley || 'N/A' }}</td>
+                <td>{{ mineral.unidad || 'N/A' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+  
+    <!-- Responsables -->
+    <div class="formulario-section">
+      <h2><i class="pi pi-users"></i> RESPONSABLES</h2>
+      <div class="grid-container">
+        <div class="grid-item">
+          <label><i class="pi pi-user"></i> Responsable Muestra:</label>
+          <p>{{ formulario.responsable_muestra }}</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-user"></i> Responsable SENARECOM:</label>
+          <p>{{ formulario.responsable_senarecom }}</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-user"></i> Responsable GADOR:</label>
+          <p>{{ formulario.responsable_gador }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Procedimiento -->
+    <div class="formulario-section" *ngIf="formulario.procedimiento?.length">
+      <h2><i class="pi pi-list"></i> PROCEDIMIENTO DE TOMA DE MUESTRA</h2>
+      <div class="procedimiento-list">
+        <div class="procedimiento-item" *ngFor="let paso of formulario.procedimiento">
+          <div class="paso-numero">{{ paso.num_paso }}</div>
+          <div class="paso-descripcion">{{ paso.nombre }}</div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Origen -->
+    <div class="formulario-section" *ngIf="formulario.municipio_origen?.length">
+      <h2><i class="pi pi-map-marker"></i> ORIGEN</h2>
+      <div class="origen-container">
+        <div *ngFor="let origen of formulario.municipio_origen">
+          <p><i class="pi pi-location-arrow"></i> {{ origen.municipio_origen }}</p>
+        </div>
+      </div>
+    </div>
+  </div>

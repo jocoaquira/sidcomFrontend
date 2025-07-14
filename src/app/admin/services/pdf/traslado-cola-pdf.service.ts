@@ -95,7 +95,7 @@ export class PdfFormularioTrasladoColaService {
 
                         QRCode.toDataURL(
                           localStorage.getItem('url-frontend') +
-                            'formulario-tralado-cola/verificacion/' +
+                            'formulario-101/formulario-cola/verificacion?hash=' +
                             formulario_externo.hash,
                           (err, url) => {
                             if (err) {

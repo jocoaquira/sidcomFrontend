@@ -30,8 +30,12 @@ import { MustChangePasswordGuard } from '@core/guards/cambiar-password.guard';
                 ]
             },
             { path: 'solicitud', loadChildren: () => import('./public/pages/solicitar-registro/solicitar-registro.module').then(m => m.SolicitarRegistroModule) },
-            { path: 'operador/verificacion/:hash', loadChildren: () => import('./public/pages/verificacion/verificacion-operador/verificacion-operador.module').then(m => m.VerificacionOperadorModule) },
-            { path: 'formulario-101/formulario-interno/verificacion/:hash', loadChildren: () => import('./admin/pages/formulario-101/formulario-interno-cooperativa/formulario-interno-cooperativa-verificacion/formulario-interno-cooperativa-verificacion.module').then(m => m.FormularioInternoCooperativaVerificacionModule) },
+            { path: 'operador/verificacion', loadChildren: () => import('./public/pages/verificacion/verificacion-operador/verificacion-operador.module').then(m => m.VerificacionOperadorModule) },
+            { path: 'formulario-101/formulario-cola/verificacion', loadChildren: () => import('./public/pages/verificacion/formulario-cola/formulario-cola.module').then(m => m.VerificacionFormularioTrasladoColaModule) },
+            { path: 'formulario-101/formulario-externo/verificacion', loadChildren: () => import('./public/pages/verificacion/formulario-externo/formulario-externo.module').then(m => m.VerificacionFormularioExternoModule) },
+            { path: 'formulario-101/formulario-interno/verificacion', loadChildren: () => import('./public/pages/verificacion/formulario-interno/formulario-interno.module').then(m => m.VerificacionFormularioInternoModule) },
+            { path: 'formulario-101/formulario-interno-cooperativa/verificacion', loadChildren: () => import('./public/pages/verificacion/formulario-interno-cooperativa/formulario-interno-cooperativa.module').then(m => m.VerificacionFormularioInternoCooperativaModule) },
+            { path: 'formulario-101/formulario-tdm/verificacion', loadChildren: () => import('./public/pages/verificacion/formulario-tdm/formulario-tdm.module').then(m => m.VerificacionFormularioTDMModule) },
             { path: 'notfound', component: NotfoundComponent },
             { path: '**', redirectTo: '/notfound' },
         ], { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled', onSameUrlNavigation: 'reload',useHash:true}

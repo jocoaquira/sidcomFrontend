@@ -28,6 +28,17 @@ export class TomaDeMuestraService {
   ) {
 
   }
+//-----------------Verificacion Hash Formulario Interno-------------------------------------------
+  hashFormularioTomaDeMuestra(nombre:string)
+  {
+    // Inicializacion de objeto params
+    let params = new HttpParams();
+    const encodeHash=encodeURIComponent(nombre);
+    params = params.append('hash', nombre);
+
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}sample/verificacion`,{params:params});
+  }
 //-----------------Visualizar operadores-------------------------------------------
   verTomaDeMuestras()
   {

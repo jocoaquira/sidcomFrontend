@@ -39,6 +39,17 @@ export class FormularioCooperativaService {
     let FormularioInterno:IFormularioInterno[]=data;
     return FormularioInterno
   }
+  //-----------------Verificacion Hash Traslado Cola-------------------------------------------
+  hashFormularioInternoCooperativa(nombre:string)
+  {
+    // Inicializacion de objeto params
+    let params = new HttpParams();
+    const encodeHash=encodeURIComponent(nombre);
+    params = params.append('hash', nombre);
+
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}formintcooperativa/verificacion`,{params:params});
+  }
 //-----------------Visualizar Formulario Interno-------------------------------------------
 verFormularioInterno(nombre:string)
 {

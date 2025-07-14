@@ -1,0 +1,205 @@
+<div class="formulario-container">
+    <!-- Encabezado -->
+    <div class="formulario-header">
+      <div class="title-group">
+        <h1>
+          <i class="pi pi-file"></i>
+          FORMULARIO EXTERNO: {{ formulario.nro_formulario }}
+        </h1>
+        <div class="fechas">
+          <div class="fecha-item">
+            <i class="pi pi-calendar"></i>
+            <span>Emisión: {{ formulario.fecha_emision }} {{ formulario.hora_emision }}</span>
+          </div>
+          <div class="fecha-item">
+            <i class="pi pi-clock"></i>
+            <span>Vencimiento: {{ formulario.fecha_vencimiento }} {{ formulario.hora_vencimiento }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="estado-badge {{ getEstadoClass() }}">
+        <i class="pi {{
+          formulario.estado === 'VENCIDO' ? 'pi-exclamation-triangle' :
+          formulario.estado === 'EMITIDO' ? 'pi-check-circle' : 'pi-ban'
+        }}"></i>
+        <span>{{ formulario.estado }}</span>
+      </div>
+    </div>
+  
+    <!-- Información Principal -->
+    <div class="formulario-section">
+      <h2><i class="pi pi-info-circle"></i> INFORMACIÓN PRINCIPAL</h2>
+      <div class="grid-container">
+        <div class="grid-item" *ngIf="shouldShowField(formulario.razon_social)">
+          <label><i class="pi pi-building"></i> Exportador:</label>
+          <p>{{ formulario.razon_social }}</p>
+        </div>
+        <div class="grid-item" *ngIf="shouldShowField(formulario.nit)">
+          <label><i class="pi pi-id-card"></i> NIT:</label>
+          <p>{{ formulario.nit }}</p>
+        </div>
+        <div class="grid-item" *ngIf="shouldShowField(formulario.nro_nim)">
+          <label><i class="pi pi-tag"></i> NIM/NIAR:</label>
+          <p>{{ formulario.nro_nim }} ({{ formulario.tipo_nim_niar }})</p>
+        </div>
+        <div class="grid-item" *ngIf="shouldShowField(formulario.comprador)">
+          <label><i class="pi pi-briefcase"></i> Comprador:</label>
+          <p>{{ formulario.comprador }}</p>
+        </div>
+        <div class="grid-item" *ngIf="shouldShowField(formulario.pais)">
+          <label><i class="pi pi-globe"></i> País Destino:</label>
+          <p>{{ formulario.pais }}</p>
+        </div>
+        <div class="grid-item" *ngIf="shouldShowField(formulario.aduana)">
+          <label><i class="pi pi-map-marker"></i> Aduana:</label>
+          <p>{{ formulario.aduana }} ({{ formulario.codigo_aduana }})</p>
+        </div>
+        <div class="grid-item" *ngIf="shouldShowField(formulario.laboratorio)">
+          <label><i class="pi pi-flask"></i> Laboratorio:</label>
+          <p>{{ formulario.laboratorio }}</p>
+        </div>
+        <div class="grid-item" *ngIf="shouldShowField(formulario.codigo_analisis)">
+          <label><i class="pi pi-code"></i> Código Análisis:</label>
+          <p>{{ formulario.codigo_analisis }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Datos del Mineral -->
+    <div class="formulario-section">
+      <h2><i class="pi pi-database"></i> DATOS DEL MINERAL</h2>
+      <div class="grid-container">
+        <div class="grid-item" *ngIf="shouldShowField(formulario.lote)">
+          <label><i class="pi pi-box"></i> Lote:</label>
+          <p>{{ formulario.lote }}</p>
+        </div>
+        <div class="grid-item" *ngIf="shouldShowField(formulario.presentacion)">
+          <label><i class="pi pi-shopping-bag"></i> Presentación:</label>
+          <p>{{ formulario.presentacion }}</p>
+        </div>
+        <div class="grid-item" *ngIf="shouldShowField(formulario.peso_bruto_humedo)">
+          <label><i class="pi pi-weight"></i> Peso Bruto Húmedo:</label>
+          <p>{{ formulario.peso_bruto_humedo }} Kgs.</p>
+        </div>
+        <div class="grid-item" *ngIf="shouldShowField(formulario.peso_neto)">
+          <label><i class="pi pi-weight"></i> Peso Neto:</label>
+          <p>{{ formulario.peso_neto }} Kgs.</p>
+        </div>
+        <div class="grid-item" *ngIf="shouldShowField(formulario.merma)">
+          <label><i class="pi pi-percentage"></i> Merma:</label>
+          <p>{{ formulario.merma }}%</p>
+        </div>
+        <div class="grid-item" *ngIf="shouldShowField(formulario.humedad)">
+          <label><i class="pi pi-cloud"></i> Humedad:</label>
+          <p>{{ formulario.humedad }}%</p>
+        </div>
+      </div>
+  
+      <div class="mineral-table" *ngIf="formulario.minerales?.length">
+        <h3><i class="pi pi-list"></i> Minerales Principales</h3>
+        <table>
+          <thead>
+            <tr>
+              <th><i class="pi pi-box"></i>Mineral</th>
+              <th><i class="pi pi-chart-bar"></i>Ley</th>
+              <th><i class="pi pi-cog"></i>Unidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let mineral of formulario.minerales">
+              <td>
+                 {{ mineral.mineral }} ({{ mineral.sigla }})
+              </td>
+              <td>
+                 {{ mineral.ley || 'N/A' }}
+              </td>
+              <td>
+                 {{ mineral.unidad }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+    <!-- Transporte -->
+    <div class="formulario-section">
+      <h2>
+        <i class="pi {{ formulario.tipo_transpote === 'TREN' ? 'pi-train' : 'pi-truck' }}"></i>
+        TRANSPORTE
+      </h2>
+      <div class="transporte-info">
+        <i class="pi {{
+          formulario.tipo_transpote === 'TREN' ? 'pi-train' : 'pi-truck'
+        }} icono-transporte"></i>
+        <div class="transporte-details">
+          <p><strong><i class="pi pi-tag"></i> Tipo:</strong> {{ formulario.tipo_transpote }}</p>
+          
+          <div *ngIf="formulario.tipo_transpote === 'TREN'">
+            <p *ngIf="shouldShowField(formulario.nro_vagon)">
+              <i class="pi pi-box"></i> <strong>Vagón:</strong> {{ formulario.nro_vagon }}
+            </p>
+            <p *ngIf="shouldShowField(formulario.empresa_ferrea)">
+              <i class="pi pi-building"></i> <strong>Empresa Férrea:</strong> {{ formulario.empresa_ferrea }}
+            </p>
+            <p *ngIf="shouldShowField(formulario.fecha_ferrea)">
+              <i class="pi pi-calendar"></i> <strong>Fecha Férrea:</strong> {{ formulario.fecha_ferrea }}
+            </p>
+          </div>
+  
+          <div *ngIf="formulario.tipo_transpote !== 'TREN'">
+            <p *ngIf="shouldShowField(formulario.conductor)">
+              <i class="pi pi-user"></i> <strong>Conductor:</strong> {{ formulario.conductor }}
+            </p>
+            <p *ngIf="shouldShowField(formulario.placa)">
+              <i class="pi pi-car"></i> <strong>Placa:</strong> {{ formulario.placa }}
+            </p>
+            <p *ngIf="shouldShowField(formulario.licencia)">
+              <i class="pi pi-id-card"></i> <strong>Licencia:</strong> {{ formulario.licencia }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Origen -->
+    <div class="formulario-section" *ngIf="formulario.municipio_origen?.length">
+      <h2><i class="pi pi-map-marker"></i> ORIGEN</h2>
+      <div class="origen-info">
+        <i class="pi pi-map"></i>
+        <div>
+          <p *ngFor="let origen of formulario.municipio_origen">
+            {{ origen.municipio_origen }} ({{ origen.codigo }})
+          </p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Documentos -->
+    <div class="formulario-section">
+      <h2><i class="pi pi-file"></i> DOCUMENTOS</h2>
+      <div class="grid-container">
+        <div class="grid-item" *ngIf="shouldShowField(formulario.m03)">
+          <label><i class="pi pi-file-o"></i> M03:</label>
+          <p>{{ formulario.m03 }}</p>
+        </div>
+        <div class="grid-item" *ngIf="shouldShowField(formulario.nro_factura_exportacion)">
+          <label><i class="pi pi-file-o"></i> Factura Exportación:</label>
+          <p>{{ formulario.nro_factura_exportacion }}</p>
+        </div>
+        <div class="grid-item" *ngIf="shouldShowField(formulario.acta_verificacion)">
+          <label><i class="pi pi-file-o"></i> Acta Verificación:</label>
+          <p>{{ formulario.acta_verificacion }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Observaciones -->
+    <div class="formulario-section" *ngIf="shouldShowField(formulario.observacion)">
+      <h2><i class="pi pi-comment"></i> OBSERVACIONES</h2>
+      <p class="observacion-text">
+        <i class="pi pi-info-circle"></i>
+        {{ formulario.observacion }}
+      </p>
+    </div>
+  </div>

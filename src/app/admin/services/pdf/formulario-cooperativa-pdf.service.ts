@@ -67,7 +67,7 @@ export class PdfFormularioInternoCooperativaService {
 
                         QRCode.toDataURL(
                           localStorage.getItem('url-frontend') +
-                            'formulario-101/formulario-interno/verificacion/' +
+                            'formulario-101/formulario-interno-cooperativa/verificacion?hash=' +
                             formulario_cooperativa.hash,
                           (err, url) => {
                             if (err) {

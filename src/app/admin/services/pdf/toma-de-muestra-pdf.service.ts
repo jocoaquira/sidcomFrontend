@@ -84,7 +84,7 @@ convertirHTMLATextoConViñetas(html) {
 
                         QRCode.toDataURL(
                           localStorage.getItem('url-frontend') +
-                            'toma-de-muestra/verificacion/' +
+                            'formulario-101/formulario-tdm/verificacion?hash=' +
                             toma_de_muestra.hash,
                           (err, url) => {
                             if (err) {

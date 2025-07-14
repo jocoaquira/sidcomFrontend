@@ -20,7 +20,7 @@ export interface IFormularioInternoPDF{
     peso_bruto_humedo: number,
     des_tipo:string,
     des_planta:string,
-    des_comprador: string,
+    comprador: string,
     municipio_destino: string,
     departamento_destino:string,
     tipo_transporte: string,

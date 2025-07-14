@@ -1,0 +1,142 @@
+<div class="formulario-container">
+    <!-- Encabezado -->
+    <div class="formulario-header">
+      <div class="title-group">
+        <h1>
+          <i class="pi pi-file"></i>
+          FORMULARIO TRASLADO DE COLA: {{ formulario.nro_formulario }}
+        </h1>
+        <div class="fechas">
+          <div class="fecha-item">
+            <i class="pi pi-calendar"></i>
+            <span>Emisión: {{ formulario.fecha_emision }} {{ formulario.hora_emision }}</span>
+          </div>
+          <div class="fecha-item">
+            <i class="pi pi-clock"></i>
+            <span>Vencimiento: {{ formulario.fecha_vencimiento }} {{ formulario.hora_vencimiento }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="estado-badge {{ getEstadoClass() }}">
+        <i class="pi {{
+          formulario.estado === 'VENCIDO' ? 'pi-exclamation-triangle' :
+          formulario.estado === 'EMITIDO' ? 'pi-check-circle' : 'pi-ban'
+        }}"></i>
+        <span>{{ formulario.estado }}</span>
+      </div>
+    </div>
+  
+    <!-- Información Principal -->
+    <div class="formulario-section">
+      <h2><i class="pi pi-info-circle"></i> INFORMACIÓN PRINCIPAL</h2>
+      <div class="grid-container">
+        <div class="grid-item">
+          <label><i class="pi pi-building"></i> Cooperativa Minera:</label>
+          <p>{{ formulario.razon_social }}</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-id-card"></i> NIT:</label>
+          <p>{{ formulario.nit }}</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-tag"></i> NIM:</label>
+          <p>{{ formulario.nro_nim }}</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-map-marker"></i> Destino:</label>
+          <p>{{ formulario.destino }}</p>
+        </div>
+        <div class="grid-item" *ngIf="formulario.destino === 'ALMACEN'">
+          <label><i class="pi pi-home"></i> Almacén:</label>
+          <p>{{ formulario.almacen }}</p>
+        </div>
+        <div class="grid-item" *ngIf="formulario.destino === 'DIQUE_COLA'">
+          <label><i class="pi pi-map"></i> Dique de Cola:</label>
+          <p>{{ formulario.dique_cola }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Datos del Mineral -->
+    <div class="formulario-section">
+      <h2><i class="pi pi-database"></i> DATOS DEL TRASLADO</h2>
+      <div class="grid-container">
+        <div class="grid-item">
+          <label><i class="pi pi-box"></i> Lote:</label>
+          <p>{{ formulario.lote }}</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-weight"></i> Peso Bruto Húmedo:</label>
+          <p>{{ formulario.peso_bruto_humedo }} Kgs.</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-weight"></i> Peso Neto:</label>
+          <p>{{ formulario.peso_neto }} Kgs.</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-weight"></i> Tara:</label>
+          <p>{{ formulario.tara }} Kgs.</p>
+        </div>
+      </div>
+  
+      <div class="mineral-table" *ngIf="formulario.minerales?.length">
+        <h3><i class="pi pi-list"></i> Minerales en Cola</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Mineral</th>
+              <th>Sigla</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let mineral of formulario.minerales">
+              <td><i class="pi pi-box"></i> {{ mineral.mineral }}</td>
+              <td><i class="pi pi-tag"></i> {{ mineral.sigla }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+    <!-- Transporte -->
+    <div class="formulario-section">
+      <h2><i class="pi pi-truck"></i> TRANSPORTE</h2>
+      <div class="grid-container">
+        <div class="grid-item">
+          <label><i class="pi pi-tag"></i> Tipo:</label>
+          <p>{{ formulario.tipo_transpote }}</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-user"></i> Conductor:</label>
+          <p>{{ formulario.conductor }}</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-car"></i> Placa:</label>
+          <p>{{ formulario.placa }}</p>
+        </div>
+        <div class="grid-item">
+          <label><i class="pi pi-id-card"></i> Licencia:</label>
+          <p>{{ formulario.licencia }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Ubicaciones -->
+    <div class="formulario-section">
+      <h2><i class="pi pi-map"></i> UBICACIONES</h2>
+      <div class="grid-container">
+        <div class="grid-item" *ngIf="formulario.municipio_origen?.length">
+          <label><i class="pi pi-arrow-right"></i> Origen:</label>
+          <p *ngFor="let origen of formulario.municipio_origen">
+            {{ origen.municipio_origen }} ({{ origen.codigo }})
+          </p>
+        </div>
+        <div class="grid-item" *ngIf="formulario.municipio_destino?.length">
+          <label><i class="pi pi-arrow-left"></i> Destino:</label>
+          <p *ngFor="let destino of formulario.municipio_destino">
+            {{ destino.municipio_destino }} ({{ destino.codigo }})
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>

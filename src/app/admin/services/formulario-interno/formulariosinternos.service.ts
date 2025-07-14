@@ -41,6 +41,17 @@ export class FormularioInternosService {
 
     return this.http.get(`${this.baseUrl}formint/reducido-opt`, { params });
   }
+  //-----------------Verificacion Hash Formulario Interno-------------------------------------------
+hashFormularioInterno(nombre:string)
+{
+  // Inicializacion de objeto params
+  let params = new HttpParams();
+  const encodeHash=encodeURIComponent(nombre);
+  params = params.append('hash', nombre);
+
+  // asignacion de parametros
+  return this.http.get(`${this.baseUrl}formint/verificacion`,{params:params});
+}
 //-----------------Visualizar operadores-------------------------------------------
   verFormularioInternos(nombre:string)
   {

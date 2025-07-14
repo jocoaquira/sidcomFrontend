@@ -4,6 +4,7 @@ import { AuthService } from '@core/authentication/services/auth.service';
 import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.metadata';
 import { ITurnoTranca, ITurnoTrancaLista } from '@data/turno_tranca.metadata';
 import { IFuncionarioTranca } from '@data/funcionarioTranca.metadata';
+import { catchError, throwError } from 'rxjs';
 
 
 @Injectable({
@@ -38,7 +39,30 @@ export class TurnoTrancaService {
     let TurnoTranca:ITurnoTrancaLista[]=data;
     return TurnoTranca
   }
-   //-----------------Visualizar operadores-------------------------------------------
+  //-----------------Verificar fecha Usuario-------------------------------------------
+  verificarFechaUsuario(fecha: string, usuarioId: number) {
+    // Validación adicional
+    if (!fecha || usuarioId === null || usuarioId === undefined) {
+      return throwError(() => new Error('Parámetros inválidos'));
+    }
+
+    // Formatea la fecha a ISO sin milisegundos (opcional)
+    const fechaFormateada = new Date(fecha).toISOString();
+
+    // Usa URLSearchParams para garantizar el formato correcto
+    const params = new URLSearchParams();
+    params.append('fecha', fechaFormateada);
+    params.append('usuarioId', usuarioId.toString());
+
+    return this.http.get(`${this.baseUrl}turnotrancas/verificar-fecha-usuario?${params.toString()}`)
+      .pipe(
+        catchError(error => {
+          console.error('Error en verificarFechaUsuario:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+   //-----------------Visualizar Funcionarios Tranca-------------------------------------------
     verFuncionarioTrancas(nombre:string)
     {
       // Inicializacion de objeto params

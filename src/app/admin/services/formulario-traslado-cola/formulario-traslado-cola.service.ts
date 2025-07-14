@@ -59,6 +59,17 @@ handleFormularioTrasladoColaPDF(data: IFormularioTrasladoColaPDF):IFormularioTra
   let TomaDeMuestra:IFormularioTrasladoColaPDF=data;
   return TomaDeMuestra
 }
+//-----------------Verificacion Hash Traslado Cola-------------------------------------------
+hashFormularioTrasladoCola(nombre:string)
+{
+  // Inicializacion de objeto params
+  let params = new HttpParams();
+  const encodeHash=encodeURIComponent(nombre);
+  params = params.append('hash', nombre);
+
+  // asignacion de parametros
+  return this.http.get(`${this.baseUrl}formcola/verificacion`,{params:params});
+}
   //-----------------Visualizar operadores-------------------------------------------
   verFormularioTrasladoColaSimple(nombre:string)
   {

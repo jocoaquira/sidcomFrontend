@@ -50,6 +50,17 @@ verFormularioExterno(nombre:string)
   // asignacion de parametros
   return this.http.get(`${this.baseUrl}formext/`+nombre,{params:params});
 }
+//-----------------Verificacion Hash Traslado Cola-------------------------------------------
+hashFormularioExterno(nombre:string)
+{
+  // Inicializacion de objeto params
+  let params = new HttpParams();
+  const encodeHash=encodeURIComponent(nombre);
+  params = params.append('hash', nombre);
+
+  // asignacion de parametros
+  return this.http.get(`${this.baseUrl}formext/verificacion`,{params:params});
+}
   //-----------------Visualizar operadores-------------------------------------------
   verFormularioExternosSimple(nombre:string)
   {

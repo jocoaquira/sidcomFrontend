@@ -6,10 +6,10 @@ export const environment = {
     //FRONTEND_URL:'http://192.168.205.73:4200/',
     //API_URL:'http://localhost/sidcom_v2/sidcom_backend/public/api/'
 
-    //API_URL: 'http://127.0.0.1:3000/',
-    //API_WS: 'ws://127.0.0.1:3000/',
-    API_URL: 'http://192.168.205.144:3000/',
-   API_WS: 'ws://192.168.205.144:3000/',
+   // API_URL: 'http://127.0.0.1:3000/',
+   // API_WS: 'ws://127.0.0.1:3000/',
+    API_URL: 'http://192.168.100.188:3000/',
+    API_WS: 'ws://192.168.100.188:3000/',
    //API_URL: 'https://apim.oruro.gob.bo/',
    //API_WS: 'wss://apim.oruro.gob.bo/',
    //API_URL: 'http://192.168.205.73:4201/',

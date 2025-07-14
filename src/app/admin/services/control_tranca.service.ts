@@ -27,7 +27,7 @@ export class ControlTrancaService {
     params = params.append('nombre', nombre);
 
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}control-tranca`,{params:params});
+    return this.http.get(`${this.baseUrl}controltrancas`,{params:params});
   }
   handleError(error: any): any {
     return error=error.error.error;
@@ -40,12 +40,12 @@ export class ControlTrancaService {
   //-----------------------------Ver ControlTranca---------------------------------
   verControlTranca(nombre:string)
 {
-  return this.http.get(`${this.baseUrl}control-tranca/`+nombre);
+  return this.http.get(`${this.baseUrl}controltrancas/`+nombre);
 }
 //---------------------crear   ControlTranca-------------------------------------------
 crearControlTranca(data:IControlTranca) {
   this.token();
-  return this.http.post(`${this.baseUrl}control-tranca`,data, {headers:this.headers})
+  return this.http.post(`${this.baseUrl}controltrancas`,data, {headers:this.headers})
 }
 handleCrearControlTrancaError(error: any): any {
   return error=error;
@@ -57,7 +57,7 @@ handleCrearControlTranca(data: IControlTranca):IControlTranca {
 //---------------------Editar   ControlTranca-------------------------------------------
 editarControlTranca(data:IControlTranca) {
   this.token();
-  return this.http.put(`${this.baseUrl}control-tranca/`+data.id, data)
+  return this.http.put(`${this.baseUrl}controltrancas/`+data.id, data)
 }
 handleEditarControlTrancaError(error: any): any {
   return error=error;
@@ -69,7 +69,7 @@ handleEditarControlTranca(data: boolean):boolean {
 //---------------------Eliminar   ControlTranca-------------------------------------------
 eliminarControlTranca(data:number) {
     this.token();
-    return this.http.delete(`${this.baseUrl}control-tranca/`+data)
+    return this.http.delete(`${this.baseUrl}controltrancas/`+data)
   }
 //-----------------Listado de Empelados por Dependencia--------------------------------------------
 private token(){

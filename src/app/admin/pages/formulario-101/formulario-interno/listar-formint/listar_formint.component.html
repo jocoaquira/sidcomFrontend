@@ -54,6 +54,9 @@
           <th pSortableColumn="fecha_vencimiento">
             Vencimiento <p-sortIcon field="fecha_vencimiento"></p-sortIcon>
           </th>
+          <th>
+            Trancas Trancitadas
+        </th>
           <th pSortableColumn="estado">
             Estado <p-sortIcon field="estado"></p-sortIcon>
           </th>
@@ -65,11 +68,27 @@
 
       <ng-template pTemplate="body" let-form>
         <tr>
-          <td>{{ form.nro_formulario }}</td>
-          <td>{{ form.razon_social }}</td>
-          <td>{{ form.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</td>
-          <td>{{ form.fecha_vencimiento | date:'dd/MM/yyyy HH:mm' }}</td>
-          <td>
+          <td style="width:8%; min-width:5rem;">{{ form.nro_formulario }}</td>
+          <td style="width:30%; min-width:5rem;">{{ form.razon_social }}</td>
+          <td style="width:5%; min-width:5rem;">{{ form.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td style="width:5%; min-width:5rem;">{{ form.fecha_vencimiento | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td style="width:5%; min-width:5rem;">
+            <div class="trancas-container" *ngIf="form.control_trancas?.length>0">
+                <div *ngFor="let tranca of form.control_trancas; let j = index"
+                    class="tranca-item tranca-color-{{j % 10}}"
+                    (click)="showTrancaDetail(tranca)" style="cursor: pointer;"
+                >
+                    <div class="tranca-nombre">{{ tranca.nombre_tranca }}</div>
+                    <div class="tranca-fecha">{{ tranca.fecha_inspeccion | date:'dd/MM/yyyy'}}</div>
+                    <div class="tranca-hora">{{ tranca.fecha_inspeccion | date:'HH:mm' }}</div>
+                </div>
+                <div *ngIf="!form.control_trancas || form.control_trancas.length === 0"
+                     class="sin-trancas">
+                    Sin Control en Trancas
+                </div>
+            </div>
+        </td>
+          <td style="width:5%; min-width:5rem;">
             <div class="flex">
                 <div *ngIf="form.estado === 'GENERADO'" class="custom-tag generado-tag">
                     GENERADO
@@ -88,7 +107,7 @@
                   </div>
             </div>
           </td>
-            <td>
+            <td style="width:5%; min-width:5rem;">
                 <div class="flex">
                     <button *ngIf="form.estado === 'GENERADO' && canEditarFormularioInterno.canActivate()"
                     pButton pRipple icon="pi pi-pencil" label="Modificar"
@@ -101,7 +120,7 @@
                     pButton pRipple icon="pi pi-trash" label="Anular"
                     class="p-button-outlined p-button-danger mr-2"
                     routerLink="/admin/formulario-101/formulario-interno/anular/{{form?.id}}"></button>
-                    </div>
+                </div>
             </td>
             <td>
                 <div class="flex">

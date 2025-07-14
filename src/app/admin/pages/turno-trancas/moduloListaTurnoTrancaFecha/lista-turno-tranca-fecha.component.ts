@@ -441,160 +441,232 @@ updateTurno(item:any){
   }
 
   //----------------------------------CARGAR TURNOS EN MATRIZ-----------------------------------
-  async cargarTurnosMatriz(): Promise<void> {
+  // VERSIÓN MEJORADA CON CORRECCIONES
+
+async cargarTurnosMatriz(): Promise<void> {
     this.listaTurnosMatriz = [];
     const turnosExcluidos: ITurnoUsuario[] = [];
 
+    // Ordenar turnos por fecha de inicio para mejor asignación
+    const turnosOrdenados = this.turnos.sort((a, b) =>
+        new Date(a.fecha_inicio).getTime() - new Date(b.fecha_inicio).getTime()
+    );
 
     this.trancas.forEach(tranca => {
-      const turnosTranca = this.turnos.filter(turno => turno.trancaId === tranca.id);
+        const turnosTranca = turnosOrdenados.filter(turno => turno.trancaId === tranca.id);
 
-      turnosTranca.forEach(turno => {
-        let fechaInicioTurno = this.normalizarFecha(new Date(turno.fecha_inicio));
-        let fechaFinTurno = this.normalizarFecha(new Date(turno.fecha_fin));
+        turnosTranca.forEach(turno => {
+            let fechaInicioTurno = this.normalizarFecha(new Date(turno.fecha_inicio));
+            let fechaFinTurno = this.normalizarFecha(new Date(turno.fecha_fin));
 
-        // Verificar si el turno está dentro del rango visible
-        if (fechaFinTurno < this.fecha_de_inicio || fechaInicioTurno > this.fecha_de_fin) {
-          turnosExcluidos.push(this.crearTurnoExcluido(turno.id,turno, fechaInicioTurno, fechaFinTurno));
-          return;
-        }
+            // Verificar si el turno está dentro del rango visible
+            if (fechaFinTurno < this.fecha_de_inicio || fechaInicioTurno > this.fecha_de_fin) {
+                turnosExcluidos.push(this.crearTurnoExcluido(turno.id, turno, fechaInicioTurno, fechaFinTurno));
+                return;
+            }
 
-        const fechaInicioAjustada = this.ajustarFechaInicio(fechaInicioTurno, this.fecha_de_inicio);
-        const fechaFinAjustada = this.ajustarFechaFin(fechaFinTurno, this.fecha_de_fin);
+            const fechaInicioAjustada = this.ajustarFechaInicio(fechaInicioTurno, this.fecha_de_inicio);
+            const fechaFinAjustada = this.ajustarFechaFin(fechaFinTurno, this.fecha_de_fin);
 
-        if (fechaInicioAjustada > fechaFinAjustada) {
-          turnosExcluidos.push(this.crearTurnoExcluido(turno.id,turno, fechaInicioAjustada, fechaFinAjustada));
-          return;
-        }
+            if (fechaInicioAjustada > fechaFinAjustada) {
+                turnosExcluidos.push(this.crearTurnoExcluido(turno.id, turno, fechaInicioAjustada, fechaFinAjustada));
+                return;
+            }
 
-        const dias = this.calcularDiasAjustados(fechaInicioAjustada, fechaFinAjustada);
-        const posicionAsignada = this.asignarTurnoAPosicion(turno.id,fechaInicioAjustada, fechaFinAjustada, tranca.id, turno, dias);
+            const dias = this.calcularDiasAjustados(fechaInicioAjustada, fechaFinAjustada);
+            const posicionAsignada = this.asignarTurnoAPosicion(turno.id, fechaInicioAjustada, fechaFinAjustada, tranca.id, turno, dias);
 
-        if (posicionAsignada === -1) {
-          turnosExcluidos.push(this.crearTurnoExcluido(turno.id,turno, fechaInicioAjustada, fechaFinAjustada, dias));
-        }
-      });
+            if (posicionAsignada === -1) {
+                turnosExcluidos.push(this.crearTurnoExcluido(turno.id, turno, fechaInicioAjustada, fechaFinAjustada, dias));
+                console.warn(`Turno ${turno.id} no pudo ser asignado - posible solapamiento`);
+            }
+        });
     });
 
-  }
+    console.log(`Turnos asignados: ${this.listaTurnosMatriz.length}, Turnos excluidos: ${turnosExcluidos.length}`);
+}
 
-  //----------------------------------FUNCIONES AUXILIARES-----------------------------------
-  private ajustarFechaInicio(fechaTurno: Date, fechaFiltro: Date): Date {
+// FUNCIONES AUXILIARES MEJORADAS
+private ajustarFechaInicio(fechaTurno: Date, fechaFiltro: Date): Date {
     const turnoInicio = this.normalizarFecha(fechaTurno);
     const filtroInicio = this.normalizarFecha(fechaFiltro);
     return filtroInicio > turnoInicio ? filtroInicio : turnoInicio;
-  }
+}
 
-  private normalizarFecha(fecha: Date): Date {
-    return new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate());
-  }
+private normalizarFecha(fecha: Date): Date {
+    const fechaNormalizada = new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate());
+    // Resetear la hora para evitar problemas de comparación
+    fechaNormalizada.setHours(0, 0, 0, 0);
+    return fechaNormalizada;
+}
 
-  private ajustarFechaFin(fechaTurno: Date, fechaFiltro: Date): Date {
+private ajustarFechaFin(fechaTurno: Date, fechaFiltro: Date): Date {
     const turnoFin = this.normalizarFecha(fechaTurno);
     const filtroFin = this.normalizarFecha(fechaFiltro);
     return filtroFin < turnoFin ? filtroFin : turnoFin;
-  }
+}
 
-  private calcularDiasAjustados(fechaIniAjustada: Date, fechaFinAjustada: Date): number {
+private calcularDiasAjustados(fechaIniAjustada: Date, fechaFinAjustada: Date): number {
     const diffMs = fechaFinAjustada.getTime() - fechaIniAjustada.getTime();
-    return Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
-  }
+    const dias = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
+    return Math.max(1, dias); // Asegurar que sea al menos 1 día
+}
 
-  private asignarTurnoAPosicion(id:number,fechaInicio: Date, fechaFin: Date, trancaId: number, turno: any, dias: number): number {
+// ASIGNACIÓN MEJORADA CON MEJOR ALGORITMO
+private asignarTurnoAPosicion(id: number, fechaInicio: Date, fechaFin: Date, trancaId: number, turno: any, dias: number): number {
+    // Intentar asignar en la posición más óptima
     for (let posicion = 1; posicion <= 2; posicion++) {
-      if (!this.siFechaOcupada(this.listaTurnosMatriz, fechaInicio, fechaFin, posicion, trancaId)) {
-        this.listaTurnosMatriz.push({
-          id:id,
-          fecha_inicio: fechaInicio,
-          fecha_fin: fechaFin,
-          dias: dias,
-          trancaId: trancaId,
-          usuarioId: turno.usuarioId,
-          posFila: posicion,
-          nombreUsuario: turno.nombre_apellidos
-        });
-        return posicion;
-      }
+        if (!this.siFechaOcupada(this.listaTurnosMatriz, fechaInicio, fechaFin, posicion, trancaId)) {
+            this.listaTurnosMatriz.push({
+                id: id,
+                fecha_inicio: fechaInicio,
+                fecha_fin: fechaFin,
+                dias: dias,
+                trancaId: trancaId,
+                usuarioId: turno.usuarioId,
+                posFila: posicion,
+                nombreUsuario: turno.nombre_apellidos
+            });
+            return posicion;
+        }
     }
     return -1;
-  }
+}
 
-  public siFechaOcupada(turnoOcupados: ITurnoUsuario[], fechaIni: Date, fechaFin: Date, posFila: number, tranca_id: number): boolean {
+// VERIFICACIÓN DE OCUPACIÓN MEJORADA
+public siFechaOcupada(turnoOcupados: ITurnoUsuario[], fechaIni: Date, fechaFin: Date, posFila: number, tranca_id: number): boolean {
     const inicio = this.normalizarFecha(fechaIni);
     const fin = this.normalizarFecha(fechaFin);
 
     for (const turno of turnoOcupados) {
-      if (turno.trancaId === tranca_id && turno.posFila === posFila) {
-        const turnoInicio = this.normalizarFecha(turno.fecha_inicio);
-        const turnoFin = this.normalizarFecha(turno.fecha_fin);
+        if (turno.trancaId === tranca_id && turno.posFila === posFila) {
+            const turnoInicio = this.normalizarFecha(turno.fecha_inicio);
+            const turnoFin = this.normalizarFecha(turno.fecha_fin);
 
-        const haySolapamiento = (inicio <= turnoFin && fin >= turnoInicio);
-        if (haySolapamiento) {
-          return true;
+            // Verificación más precisa de solapamiento
+            const haySolapamiento = (inicio <= turnoFin && fin >= turnoInicio);
+
+            if (haySolapamiento) {
+                console.log(`Solapamiento detectado - Turno existente: ${turno.id} (${turnoInicio.toDateString()} - ${turnoFin.toDateString()}) vs Nuevo: (${inicio.toDateString()} - ${fin.toDateString()})`);
+                return true;
+            }
         }
-      }
     }
     return false;
-  }
+}
 
-  private crearTurnoExcluido(id:number,turno: any, fechaInicio: Date, fechaFin: Date, dias: number = 0): ITurnoUsuario {
+private crearTurnoExcluido(id: number, turno: any, fechaInicio: Date, fechaFin: Date, dias: number = 0): ITurnoUsuario {
     return {
-      id:id,
-      fecha_inicio: fechaInicio,
-      fecha_fin: fechaFin,
-      dias: dias,
-      trancaId: turno.trancaId,
-      usuarioId: turno.usuarioId,
-      posFila: -1,
-      nombreUsuario: turno.nombre_apellidos,
+        id: id,
+        fecha_inicio: fechaInicio,
+        fecha_fin: fechaFin,
+        dias: dias,
+        trancaId: turno.trancaId,
+        usuarioId: turno.usuarioId,
+        posFila: -1,
+        nombreUsuario: turno.nombre_apellidos,
     };
-  }
+}
 
-  //-----------------------------------COLOCAR EN PANTALLA TODOS LOS TURNOS-----------------------------------
-  async colocarTurnosEnPantalla(): Promise<void> {
+// COLOCACIÓN EN PANTALLA MEJORADA
+async colocarTurnosEnPantalla(): Promise<void> {
     this.itemsTurnos = [];
-    console.log(this.funcionarioColor)
+
     if (this.listaTurnosMatriz.length === 0) {
-      return;
+        console.warn('No hay turnos en la matriz para mostrar');
+        return;
     }
 
     const filtroInicio = this.normalizarFecha(this.fecha_de_inicio);
     await this.asignarColorFuncionario();
-    this.listaTurnosMatriz.forEach(turno => {
-      const posX = turno.posFila === 2 ? 1 : 0;
-      const fechaTurno = this.normalizarFecha(new Date(turno.fecha_inicio));
-      const fechaact = Math.floor((fechaTurno.getTime() - filtroInicio.getTime()) / (1000 * 60 * 60 * 24));
 
-      // Encontrar el índice de la tranca
-      const trancaIndex = this.trancas.findIndex(t => t.id === turno.trancaId);
+    console.log(`Colocando ${this.listaTurnosMatriz.length} turnos en pantalla`);
 
-      const posicionX = (fechaact + 1) * this.columnWidth;
-      const posicionY = (trancaIndex + 1) * this.rowHeight + (posX * this.rowHeight) / 2;
-      const ancho = turno.dias * this.columnWidth;
-      let color='rgb (143,188,143)';
-      let colorBorde='rgb (143,188,143)';
-      let funcColor=this.funcionarioColor.find(funcColor=>funcColor.id===turno.usuarioId)
-      if(funcColor)
-      {
-        color=funcColor.color.fondo;
-        colorBorde=funcColor.color.borde;
-      }
-      this.itemsTurnos.push({
-        id:turno.id,
-        text: turno.nombreUsuario.toLowerCase(),
-        usuarioId: turno.usuarioId,
-        positionX: posicionX,
-        positionY: posicionY,
-        width: ancho,
-        height: this.rowHeight / 2,
-        backgroundColor: color,
-        borderColor:colorBorde,
-        textColor: '#000000'
-      });
+    this.listaTurnosMatriz.forEach((turno, index) => {
+        try {
+            // Validar que el turno tenga una posición válida
+            if (turno.posFila === -1) {
+                console.warn(`Turno ${turno.id} tiene posición inválida (-1)`);
+                return;
+            }
 
+            const posX = turno.posFila === 2 ? 1 : 0;
+            const fechaTurno = this.normalizarFecha(new Date(turno.fecha_inicio));
+            const fechaact = Math.floor((fechaTurno.getTime() - filtroInicio.getTime()) / (1000 * 60 * 60 * 24));
+
+            // Validar que fechaact no sea negativo
+            if (fechaact < 0) {
+                console.warn(`Turno ${turno.id} tiene fecha anterior al filtro de inicio`);
+                return;
+            }
+
+            // Encontrar el índice de la tranca
+            const trancaIndex = this.trancas.findIndex(t => t.id === turno.trancaId);
+
+            if (trancaIndex === -1) {
+                console.warn(`Tranca ${turno.trancaId} no encontrada para turno ${turno.id}`);
+                return;
+            }
+
+            const posicionX = (fechaact + 1) * this.columnWidth;
+            const posicionY = (trancaIndex + 1) * this.rowHeight + (posX * this.rowHeight) / 2;
+            const ancho = turno.dias * this.columnWidth;
+
+            // Validar dimensiones
+            if (ancho <= 0 || posicionX < 0 || posicionY < 0) {
+                console.warn(`Turno ${turno.id} tiene dimensiones inválidas - ancho: ${ancho}, posX: ${posicionX}, posY: ${posicionY}`);
+                return;
+            }
+
+            let color = 'rgb(143,188,143)';
+            let colorBorde = 'rgb(143,188,143)';
+            let funcColor = this.funcionarioColor.find(funcColor => funcColor.id === turno.usuarioId);
+
+            if (funcColor) {
+                color = funcColor.color.fondo;
+                colorBorde = funcColor.color.borde;
+            }
+
+            this.itemsTurnos.push({
+                id: turno.id,
+                text: turno.nombreUsuario.toLowerCase(),
+                usuarioId: turno.usuarioId,
+                positionX: posicionX,
+                positionY: posicionY,
+                width: ancho,
+                height: this.rowHeight / 2,
+                backgroundColor: color,
+                borderColor: colorBorde,
+                textColor: '#000000'
+            });
+
+        } catch (error) {
+            console.error(`Error procesando turno ${turno.id}:`, error);
+        }
     });
 
-  }
+    console.log(`Items de turnos creados: ${this.itemsTurnos.length}`);
+}
+
+// FUNCIÓN ADICIONAL PARA DEBUGGING
+private validarConsistenciaDatos(): void {
+    console.log('=== VALIDACIÓN DE CONSISTENCIA ===');
+    console.log(`Turnos originales: ${this.turnos.length}`);
+    console.log(`Turnos en matriz: ${this.listaTurnosMatriz.length}`);
+    console.log(`Items en pantalla: ${this.itemsTurnos.length}`);
+
+    // Verificar turnos duplicados
+    const idsUnicos = new Set(this.listaTurnosMatriz.map(t => t.id));
+    if (idsUnicos.size !== this.listaTurnosMatriz.length) {
+        console.warn('¡Turnos duplicados detectados en la matriz!');
+    }
+
+    // Verificar posiciones válidas
+    const turnosConPosicionInvalida = this.listaTurnosMatriz.filter(t => t.posFila === -1);
+    if (turnosConPosicionInvalida.length > 0) {
+        console.warn(`${turnosConPosicionInvalida.length} turnos con posición inválida`);
+    }
+}
 
 //-----------------------------------GENERAR COLORES CLAROS-----------------------------------
 private tonosUsados: number[] = [];

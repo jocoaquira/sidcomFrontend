@@ -14,6 +14,8 @@ import { CanVerFormularioInternoGuard } from "src/app/admin/guards/formulario-in
 import { CanEliminarOperatorGuard } from "src/app/admin/guards/operators/can-eliminar-operator.guard";
 import { FormularioInternosService } from "src/app/admin/services/formulario-interno/formulariosinternos.service";
 import { PdfFormularioInternoService } from "src/app/admin/services/pdf/formulario-interno-pdf.service";
+import { TrancaDetailComponent } from "./components/control-tranca-detalle.component";
+import { DialogService } from "primeng/dynamicdialog";
 
 @Component({
   selector: 'app-listar_formint',
@@ -45,6 +47,7 @@ export class ListarFormularioInternoComponent implements OnInit {
         public pdfFormularioInterno:PdfFormularioInternoService,
         private confirmationService:ConfirmationService,
         private notify:ToastrService,
+        private dialogService: DialogService,
         private formIntService: FormularioInternosService
     ) { }
 
@@ -71,6 +74,7 @@ export class ListarFormularioInternoComponent implements OnInit {
           this.sortOrder
         ).subscribe({
           next: (response) => {
+            console.log('Response:', response.data);
             this.listaFormularioInternos = response.data;
             this.totalRecords = response.total;
             this.loading = false;
@@ -142,5 +146,14 @@ export class ListarFormularioInternoComponent implements OnInit {
                     this.notify.error('Falló...Revise los datos y vuelva a enviar....','Error con la Emisión del Formulario',{timeOut:2000,positionClass: 'toast-top-right'});
                 });
         }
+        showTrancaDetail(tranca: any) {
+            const ref = this.dialogService.open(TrancaDetailComponent, {
+              header: 'Detalle del Control en Tranca',
+              width: '35%',
+              data: {
+                trancaData: tranca
+              }
+            });
+          }
 
 }

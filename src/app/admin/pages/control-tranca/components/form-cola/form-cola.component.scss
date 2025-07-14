@@ -1,0 +1,334 @@
+/* Estilos generales del contenedor */
+.formulario-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 25px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    color: #333;
+  
+    .pi {
+      font-size: 1rem;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+  }
+  
+  /* Encabezado */
+  .formulario-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eaeaea;
+  
+    .title-group {
+      h1 {
+        margin: 0;
+        color: #2c3e50;
+        font-size: 1.8rem;
+        display: flex;
+        align-items: center;
+  
+        .pi {
+          font-size: 1.5rem;
+          color: #3498db;
+        }
+      }
+  
+      .fechas {
+        display: flex;
+        gap: 20px;
+        margin-top: 10px;
+  
+        .fecha-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: #7f8c8d;
+          font-size: 0.95rem;
+  
+          .pi {
+            font-size: 1rem;
+            color: #6b7280;
+          }
+        }
+      }
+    }
+  
+    .estado-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+  
+      .pi {
+        font-size: 1.2rem;
+        margin-right: 6px;
+      }
+  
+      &.estado-vencido {
+        background-color: #ffebee;
+        color: #c62828;
+  
+        .pi {
+          color: #c62828;
+        }
+      }
+  
+      &.estado-emitido {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+  
+        .pi {
+          color: #2e7d32;
+        }
+      }
+  
+      &.estado-anulado {
+        background-color: #fff8e1;
+        color: #f57f17;
+  
+        .pi {
+          color: #f57f17;
+        }
+      }
+    }
+  }
+  
+  /* Secciones */
+  .formulario-section {
+    margin-bottom: 30px;
+  
+    h2 {
+      color: #34495e;
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      align-items: center;
+  
+      .pi {
+        font-size: 1.2rem;
+        color: #3498db;
+      }
+    }
+  
+    h3 {
+      font-size: 1.1rem;
+      color: #4a5568;
+      margin: 20px 0 10px 0;
+      display: flex;
+      align-items: center;
+    }
+  }
+  
+  /* Grid de información */
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+  
+    .grid-item {
+      padding: 12px 15px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      border-left: 4px solid #3498db;
+  
+      label {
+        display: flex;
+        align-items: center;
+        color: #6b7280;
+        font-size: 0.85rem;
+        margin-bottom: 4px;
+  
+        .pi {
+          font-size: 0.9rem;
+          color: #6b7280;
+        }
+      }
+  
+      p {
+        margin: 0;
+        color: #2d3748;
+        font-weight: 500;
+        padding-left: 24px;
+      }
+    }
+  }
+  
+  /* Tabla de minerales */
+  .mineral-table {
+    margin-top: 20px;
+    width: 100%;
+    overflow-x: auto;
+  
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+  
+      th, td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #e0e0e0;
+        vertical-align: middle;
+  
+        .pi {
+          margin-right: 8px;
+          color: #6b7280;
+        }
+      }
+  
+      th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+        color: #34495e;
+        border-bottom: 2px solid #e0e0e0;
+      }
+  
+      tr:hover {
+        background-color: #f5f5f5;
+      }
+  
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+    }
+  
+    h3 {
+      margin-bottom: 15px;
+      color: #2c3e50;
+      display: flex;
+      align-items: center;
+      
+      .pi {
+        margin-right: 10px;
+        color: #3498db;
+      }
+    }
+  }
+  
+  /* Sección de transporte */
+  .transporte-info {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 6px;
+  
+    .icono-transporte {
+      font-size: 2rem;
+      color: #3498db;
+      margin-right: 15px;
+    }
+  
+    .transporte-details {
+      p {
+        margin: 5px 0;
+        color: #4a5568;
+        display: flex;
+        align-items: center;
+  
+        strong {
+          color: #2d3748;
+          margin-right: 5px;
+        }
+  
+        .pi {
+          font-size: 0.9rem;
+          color: #6b7280;
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+  
+  /* Sección de origen */
+  .origen-info {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 6px;
+  
+    .pi {
+      font-size: 1.5rem;
+      color: #e74c3c;
+    }
+  
+    p {
+      margin: 5px 0;
+      color: #4a5568;
+    }
+  }
+  
+  /* Observaciones */
+  .observacion-text {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 4px solid #3498db;
+    color: #4a5568;
+    display: flex;
+    align-items: flex-start;
+  
+    .pi {
+      font-size: 1.2rem;
+      color: #6b7280;
+      margin-right: 10px;
+    }
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .formulario-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+    }
+  
+    .grid-container {
+      grid-template-columns: 1fr;
+    }
+  
+    .transporte-info, .origen-info {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .transporte-info .icono-transporte {
+      margin-bottom: 10px;
+    }
+  }
+  
+  /* Clases específicas para PrimeIcons */
+  .pi-info-circle {
+    color: #3498db;
+  }
+  
+  .pi-database {
+    color: #8e44ad;
+  }
+  
+  .pi-map-marker {
+    color: #e74c3c;
+  }
+  
+  .pi-comment {
+    color: #3498db;
+  }
+  
+  .pi-question-circle {
+    color: #f39c12;
+  }

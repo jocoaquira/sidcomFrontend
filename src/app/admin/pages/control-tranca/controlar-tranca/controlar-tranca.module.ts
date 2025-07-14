@@ -19,7 +19,12 @@ import { BadgeModule } from 'primeng/badge';
 import { TagModule } from 'primeng/tag';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
-import { ListarControlTrancaComponent } from './listar-control-tranca.component';
+import { ControlarTrancaComponent } from './controlar-tranca.component';
+import { FormIntCopesModule } from '../components/form-int-copes/form-int-copes.module';
+import { FormExtModule } from '../components/form-ext/form-ext.module';
+import { FormIntModule } from '../components/form-int/form-int.module';
+import { FormColaModule } from '../components/form-cola/form-cola.module';
+import { FormTDMModule } from '../components/form-tdm/form-tdm.module';
 
 
 @NgModule({
@@ -44,9 +49,14 @@ import { ListarControlTrancaComponent } from './listar-control-tranca.component'
         RadioButtonModule,
         InputNumberModule,
         DialogModule,
-        ConfirmDialogModule
+        ConfirmDialogModule,
+        FormIntCopesModule,
+        FormExtModule,
+        FormIntModule,
+        FormColaModule,
+        FormTDMModule
     ],
-    declarations: [ListarControlTrancaComponent],
+    declarations: [ControlarTrancaComponent],
     providers: [ConfirmationService]
 })
-export class ListarControlTrancaModule { }
+export class ControlarTrancaModule { }
