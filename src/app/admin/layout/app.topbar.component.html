@@ -34,9 +34,12 @@
               {{ cantidadTDM }}
             </span>
           </button>
-        <button class="p-link layout-topbar-button">
-            <i class="pi pi-calendar"></i>
-            <span>Calendar</span>
+          <button
+          class="p-link layout-topbar-button"
+          routerLink="/admin/turno-trancas"
+          routerLinkActive="active-link">
+          <i class="pi pi-calendar"></i>
+          <span>Turno Trancas</span>
         </button>
         <button class="p-link layout-topbar-button" (click)="menu.toggle($event)">
             <i class="pi pi-user"></i>

@@ -5,6 +5,7 @@ import { IFormularioExternoSimple } from "@data/formulario_externo_simple.metada
 
 import { ToastrService } from "ngx-toastr";
 import { ConfirmationService } from "primeng/api";
+import { DialogService } from "primeng/dynamicdialog";
 import { Table } from "primeng/table";
 import { CanAnularFormularioExternoGuard } from "src/app/admin/guards/formulario-externos/can-anular-formulario-externo.guard";
 import { CanCrearFormularioExternoGuard } from "src/app/admin/guards/formulario-externos/can-crear-formulario-externo.guard";
@@ -15,6 +16,7 @@ import { CanVerFormularioExternoGuard } from "src/app/admin/guards/formulario-ex
 import { CanEliminarOperatorGuard } from "src/app/admin/guards/operators/can-eliminar-operator.guard";
 import { FormularioExternosService } from "src/app/admin/services/formulario-externo/formulariosexternos.service";
 import { PdfFormularioExternoService } from "src/app/admin/services/pdf/formulario-externo-pdf.service";
+import { TrancaDetailComponent } from "./components/control-tranca-detalle.component";
 
 @Component({
   selector: 'app-listar_formext',
@@ -46,7 +48,8 @@ export class ListarFormularioExternoComponent implements OnInit {
         public pdfFormularioExterno:PdfFormularioExternoService,
         private confirmationService:ConfirmationService,
         private notify:ToastrService,
-        private formExtService: FormularioExternosService
+        private formExtService: FormularioExternosService,
+        private dialogService: DialogService,
     ) { }
 
     ngOnInit() {
@@ -143,5 +146,13 @@ export class ListarFormularioExternoComponent implements OnInit {
                     this.notify.error('Falló...Revise los datos y vuelva a enviar....','Error con la Emisión del Formulario',{timeOut:2000,positionClass: 'toast-top-right'});
                 });
         }
-
+showTrancaDetail(tranca: any) {
+            const ref = this.dialogService.open(TrancaDetailComponent, {
+              header: 'Detalle del Control en Tranca',
+              width: '35%',
+              data: {
+                trancaData: tranca
+              }
+            });
+          }
 }

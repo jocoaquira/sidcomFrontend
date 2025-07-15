@@ -14,6 +14,8 @@ import { FormularioTrasladoColaComponent } from './formulario-traslado-cola.comp
 import { CreateFormularioTrasladoColaModule } from './create-formulario-traslado-cola/create-formulario-traslado-cola.module';
 import { AnularFormularioTrasladoColaModule } from './anular-formulario-interno/anular-formulario-traslado-cola.module';
 import { EditFormularioTrasladoColaModule } from './edit-formulario-traslado-cola/edit-formulario-traslado-cola.module';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import { TrancaDetailComponent } from './components/control-tranca-detalle.component';
 
 @NgModule({
   imports: [
@@ -30,10 +32,15 @@ import { EditFormularioTrasladoColaModule } from './edit-formulario-traslado-col
     EditFormularioTrasladoColaModule,
     AnularFormularioTrasladoColaModule,
     FormularioTrasladoColaRoutingModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    DynamicDialogModule
   ],
   declarations: [
-    FormularioTrasladoColaComponent
-]
+    FormularioTrasladoColaComponent,
+    TrancaDetailComponent
+],
+providers: [
+    DialogService
+  ]
 })
 export class FormularioTrasladoColaModule { }

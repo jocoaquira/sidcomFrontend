@@ -13,6 +13,8 @@ import { FormularioTrasladoColaService } from 'src/app/admin/services/formulario
 import { IFormularioTrasladoColaSimple } from '@data/formulario_cola_simple.metadata';
 import { PdfFormularioTrasladoColaService } from 'src/app/admin/services/pdf/traslado-cola-pdf.service';
 import { CanCrearFormularioColasGuard } from 'src/app/admin/guards/formulario-colas/can-crear-formulario-cola.guard';
+import { DialogService } from 'primeng/dynamicdialog';
+import { TrancaDetailComponent } from './components/control-tranca-detalle.component';
 
 
 @Component({
@@ -43,13 +45,15 @@ export class FormularioTrasladoColaComponent implements OnInit {
         public formularioTrasladoColaService:FormularioTrasladoColaService,
         public pdfFormularioTrasladoCola:PdfFormularioTrasladoColaService,
         private notify:ToastrService,
-        private confirmationService:ConfirmationService
+        private confirmationService:ConfirmationService,
+        private dialogService: DialogService,
     ) {
      }
 
     ngOnInit() {
         this.formularioTrasladoColaService.verFormularioTrasladoColaSimple(this.nombre).subscribe(
             (data:any)=>{
+                console.log(data);
             this.listaFormularioTrasladoColas=this.formularioTrasladoColaService.handleFormularioTrasladoColaSimple(data);
           },
           (error:any)=> this.error=this.formularioTrasladoColaService.handleError(error));
@@ -104,11 +108,11 @@ export class FormularioTrasladoColaComponent implements OnInit {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
     generarPDF(tdm:IFormularioTrasladoColaSimple){
-               
+
                 this.formularioTrasladoColaService.verFormularioTrasladoColaPDF(tdm.id.toString()).subscribe(
                     (data:any)=>{
                     let tdm_completo=this.formularioTrasladoColaService.handleFormularioTrasladoColaPDF(data);
-                   
+
                     this.pdfFormularioTrasladoCola.generarPDF(tdm_completo);
                   },
                   (error:any)=> this.error=this.formularioTrasladoColaService.handleError(error));
@@ -138,7 +142,7 @@ export class FormularioTrasladoColaComponent implements OnInit {
             });
     }
     confirmarEmision(event:IFormularioTrasladoColaSimple) {
-       
+
         this.confirmationService.confirm({
             key: 'confirm1',
             message: '¿Estas seguro de Emitir el formulario '+event.nro_formulario+'?',
@@ -147,6 +151,15 @@ export class FormularioTrasladoColaComponent implements OnInit {
               },
         });
     }
+    showTrancaDetail(tranca: any) {
+                const ref = this.dialogService.open(TrancaDetailComponent, {
+                  header: 'Detalle del Control en Tranca',
+                  width: '35%',
+                  data: {
+                    trancaData: tranca
+                  }
+                });
+              }
 
 }
 

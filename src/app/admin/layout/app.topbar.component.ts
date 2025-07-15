@@ -30,7 +30,28 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
         public tdmNotificacion: TomaDeMuestraService,
         private websocketService: WebsocketService, // Inyecta el servicio WebSocket
         private router: Router
-    ) {}
+    ) {
+        this.overlayMenuItems = [
+            {
+                label: authService.getUser.nombre_completo.toString(),
+                icon: 'pi pi-user',
+                routerLink: ['/admin/info/usuario']
+            },
+            {
+                label: 'Salir',
+                icon: 'pi pi-sign-out',
+                command: ()=>this.authService.logout()
+            },
+            {
+                separator: true
+            },
+            {
+                label: 'Inicio',
+                icon: 'pi pi-home',
+                routerLink: ['/admin/']  // Navegación a ruta
+            }
+        ];
+    }
 
     ngOnInit() {
         // Suscripción a actualizaciones desde el WebSocket

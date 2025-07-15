@@ -11,6 +11,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { RouterModule } from '@angular/router';
 import { ListarFormularioCooperativaComponent } from './listar_formintcoope.component';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import { TrancaDetailComponent } from './components/control-tranca-detalle.component';
 
 @NgModule({
   imports: [
@@ -24,10 +26,15 @@ import { ListarFormularioCooperativaComponent } from './listar_formintcoope.comp
     TagModule,
     InputTextModule,
     InputNumberModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    DynamicDialogModule
   ],
   declarations: [
-    ListarFormularioCooperativaComponent
-]
+    ListarFormularioCooperativaComponent,
+    TrancaDetailComponent
+],
+providers: [
+    DialogService
+  ]
 })
 export class ListarFormularioCooperativaModule { }

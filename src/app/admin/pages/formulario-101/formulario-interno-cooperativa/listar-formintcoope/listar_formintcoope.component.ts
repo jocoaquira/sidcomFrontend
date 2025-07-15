@@ -5,6 +5,7 @@ import { IFormularioInternoSimple } from "@data/formulario_interno_simple.metada
 
 import { ToastrService } from "ngx-toastr";
 import { ConfirmationService } from "primeng/api";
+import { DialogService } from "primeng/dynamicdialog";
 import { Table } from "primeng/table";
 import { CanAnularFormularioCooperativaGuard } from "src/app/admin/guards/formulario-cooperativas/can-anular-formulario-cooperativa.guard";
 import { CanCrearFormularioCooperativaGuard } from "src/app/admin/guards/formulario-cooperativas/can-crear-formulario-cooperativa.guard";
@@ -15,6 +16,7 @@ import { CanVerFormularioCooperativaGuard } from "src/app/admin/guards/formulari
 import { CanEliminarOperatorGuard } from "src/app/admin/guards/operators/can-eliminar-operator.guard";
 import { FormularioCooperativaService } from "src/app/admin/services/formulario-interno-cooperativa/formulario-cooperativa.service";
 import { PdfFormularioInternoCooperativaService } from "src/app/admin/services/pdf/formulario-cooperativa-pdf.service";
+import { TrancaDetailComponent } from "./components/control-tranca-detalle.component";
 
 
 @Component({
@@ -47,6 +49,7 @@ export class ListarFormularioCooperativaComponent implements OnInit {
         public pdfFormularioCooperativa:PdfFormularioInternoCooperativaService,
         private confirmationService:ConfirmationService,
         private notify:ToastrService,
+        private dialogService: DialogService,
         private formIntService: FormularioCooperativaService
     ) { }
 
@@ -99,20 +102,20 @@ export class ListarFormularioCooperativaComponent implements OnInit {
         this.searchTerm = value;  // <-- Almacena el término de búsqueda
         this.dt.first = 0;       // <-- Reinicia a la primera página
         this.loadData();         // <-- Vuelve a cargar los datos
-       
+
     }
 
     generarPDF(formulario_interno:IFormularioInternoSimple){
             this.formIntService.verFormularioInternoCooperativaPDF(formulario_interno.id.toString()).subscribe(
                         (data:any)=>{
                         let tdm_completo:IFormularioInternoCooperativaPDF=this.formIntService.handleFormularioInternoCooperativaPDF(data);
-                       
+
                         this.pdfFormularioCooperativa.generarPDF(tdm_completo);
                       },
                       (error:any)=> this.error=this.formIntService.handleError(error));
         }
     confirmarEmision(event:IFormularioInternoSimple) {
-       
+
         this.confirmationService.confirm({
             key: 'confirm1',
             message: '¿Estas seguro de Emitir el formulario '+event.nro_formulario+'?',
@@ -144,5 +147,13 @@ export class ListarFormularioCooperativaComponent implements OnInit {
                     this.notify.error('Falló...Revise los datos y vuelva a enviar....','Error con la Emisión del Formulario',{timeOut:2000,positionClass: 'toast-top-right'});
                 });
         }
-
+showTrancaDetail(tranca: any) {
+            const ref = this.dialogService.open(TrancaDetailComponent, {
+              header: 'Detalle del Control en Tranca',
+              width: '35%',
+              data: {
+                trancaData: tranca
+              }
+            });
+          }
 }

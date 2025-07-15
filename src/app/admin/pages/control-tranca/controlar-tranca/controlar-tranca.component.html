@@ -30,11 +30,6 @@
 
           <!-- Resultado del QR -->
           <div class="qr-result" *ngIf="qrResult">
-            <div class="success-message">
-              <i class="pi pi-check-circle" style="color: #22c55e; font-size: 2rem;"></i>
-              <h4>¡Código QR encontrado!</h4>
-            </div>
-
             <div>
                 <p-card *ngIf="formulario_interno_cooperativa">
                     <app-form-int-copes  [formulario]="formulario_interno_cooperativa"></app-form-int-copes>
