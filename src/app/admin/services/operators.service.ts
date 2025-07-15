@@ -96,9 +96,8 @@ handleCrearoperator(data: IOperator):IOperator {
   return operator
 }
 //---------------------Editar   operator-------------------------------------------
-editaroperator(data:IOperator) {
-  this.token();
-  return this.http.put(`${this.baseUrl}operator/`+data.id, data)
+editaroperator(id:string,data:FormData) {
+  return this.http.put(`${this.baseUrl}operator/`+id, data)
 }
 editBloqueo(data:IOperator) {
   this.token();

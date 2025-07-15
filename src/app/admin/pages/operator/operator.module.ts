@@ -22,6 +22,7 @@ import { TagModule } from 'primeng/tag';
 import { CrearOperadorModule } from './crear-operador-validacion/crear-operador.module';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
+import { EditarOperadorModule } from './editar-operador/editar-operador.module';
 
 @NgModule({
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -45,6 +46,7 @@ import { ConfirmationService } from 'primeng/api';
         InputNumberModule,
         DialogModule,
         CrearOperadorModule,
+        EditarOperadorModule,
         ConfirmDialogModule
     ],
     declarations: [OperatorComponent],

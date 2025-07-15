@@ -8,6 +8,7 @@ import { CanEditarOperatorGuard } from '../../guards/operators/can-editar-operat
 import { CanEliminarOperatorGuard } from '../../guards/operators/can-eliminar-operator.guard';
 import { IDOMService } from '../../services/pdf/idom.service';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -36,7 +37,8 @@ export class OperatorComponent implements OnInit {
         public canEliminarOperator:CanEliminarOperatorGuard,
         public idomServices:IDOMService,
         private confirmationService:ConfirmationService,
-        private notify:ToastrService
+        private notify:ToastrService,
+        private router: Router
 
     ) { }
 
@@ -210,5 +212,9 @@ export class OperatorComponent implements OnInit {
             console.warn('Coordenadas no disponibles');
             // Opcional: Mostrar mensaje al usuario
         }
+    }
+    editarOperador(operador:IOperator){
+        console.log(operador);
+        this.router.navigate(['/admin/operador/editar', operador.id]);
     }
 }
