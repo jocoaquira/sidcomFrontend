@@ -1259,7 +1259,21 @@
             </span>
         </div>
         <div class="field col-12 md:col-6">
-            <button pButton pRipple label="Guardar Operador" icon="pi pi-check" class="p-button-success mr-2" type="submit"></button>
+            <button
+                pButton pRipple label="Guardar Operador"
+                icon="pi pi-check" class="p-button-success mr-2"
+                type="submit"
+                (click)="setAccion('guardar')"
+                ></button>
+        </div>
+        <div class="field col-12 md:col-6">
+            <button
+                pButton pRipple label="Guardar Operador y Actualizar IDOM"
+                icon="pi pi-check"
+                class="p-button-success mr-2"
+                type="submit"
+                (click)="setAccion('guardarYActualizarIDOM')"
+                ></button>
         </div>
         <div class="field col-12 md:col-6">
             <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-danger" ></button>

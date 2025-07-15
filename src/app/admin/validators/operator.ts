@@ -77,7 +77,8 @@ export class OperatorFormulario {
         rep_correo:null,
         observaciones:null,
         created_at: null,
-        updated_at: null
+        updated_at: null,
+
     }
     this.formulario = new FormGroup({
         razon_social:new FormControl(this.operator.razon_social,[Validators.required,Validators.minLength(5)]),
@@ -129,7 +130,7 @@ export class OperatorFormulario {
         fecha_exp_ruex:new FormControl(this.operator.fecha_exp_ruex),
         nro_ruex:new FormControl(this.operator.nro_ruex,[Validators.pattern('^[0-9]*$')]),
         verif_cert_liberacion:new FormControl(this.operator.verif_cert_liberacion),
-        nro_res_ministerial:new FormControl(this.operator.nro_res_ministerial),
+        nro_res_ministerial:new FormControl(this.operator.nro_res_ministerial)
     });
   }
 
