@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { IFormularioInternoSimple } from '@data/formulario_interno_simple.metadata';
 import { CanCrearFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-crear-formulario-interno.guard';
 import { CanEditarFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-editar-formulario-interno.guard';
@@ -13,6 +13,8 @@ import { IFormularioInterno } from '@data/formulario_interno.metadata';
 import { ConfirmationService } from 'primeng/api';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { IFormularioInternoPDF } from '@data/formulario_interno_pdf.metadata';
+import { DialogService } from 'primeng/dynamicdialog';
+import { TrancaDetailComponent } from '../components/control-tranca-detalle.component';
 
 @Component({
   selector: 'app-formulario-interno',
@@ -26,11 +28,20 @@ export class FormularioInternoComponent implements OnInit {
     public error!:any;
     public nombre!:string;
     public buscarTexto:string='';
-    public cols!:any;
+    cols: any[] = [];
     public statuses!:any;
     public productDialog=false;
     public submitted = true;
     public operador_id:number=null;
+    //--------------para la optimizacion------------------------------------
+    @ViewChild('dt') dt!: Table;
+    loading: boolean = true;
+    totalRecords: number = 0;
+    rows: number = 30;
+    // Variables para ordenamiento
+    sortField: string = 'id';
+    sortOrder: number = -1;
+    searchTerm: string = '';
 
     constructor(
         public canListarFormularioInterno:CanListarFormularioInternoGuard,
@@ -43,31 +54,46 @@ export class FormularioInternoComponent implements OnInit {
         private notify:ToastrService,
         private confirmationService:ConfirmationService,
         private authService:AuthService,
+        private dialogService: DialogService,
     ) {
         this.operador_id= authService.getUser.operador_id;
      }
 
     ngOnInit() {
-        this.formularioInternoService.verFormularioInternosOperadorSimple(this.operador_id.toString()).subscribe(
-            (data:any)=>{
-            this.listaFormularioInternos=this.formularioInternoService.handleFormularioInternoSimple(data);
 
-        },
-          (error:any)=> this.error=this.formularioInternoService.handleError(error));
-
-
-        //this.productService.getProducts().then(data => this.products = data);
-
+        this.loadData();
         this.cols = [
-            { field: 'product', header: 'Product' },
-            { field: 'price', header: 'Price' },
-            { field: 'category', header: 'Category' },
-            { field: 'rating', header: 'Reviews' },
-            { field: 'inventoryStatus', header: 'Status' }
+            { field: 'nro_formulario', header: 'Número' },
+            { field: 'razon_social', header: 'Operador' },
+            { field: 'fecha_creacion', header: 'Fecha Creación' },
+            { field: 'estado', header: 'Estado' },
+            { field: 'fecha_vencimiento', header: 'Vencimiento' }
         ];
 
     }
+loadData() {
 
+        this.loading = true;
+        this.formularioInternoService.getFormReducidoOperadorOptimizado(
+          this.dt?.first / this.rows + 1 || 1,
+          this.rows,
+          this.searchTerm,
+          this.sortField,
+          this.sortOrder,
+          this.operador_id
+        ).subscribe({
+          next: (response) => {
+            console.log('Response:', response.data);
+            this.listaFormularioInternos = response.data;
+            this.totalRecords = response.total;
+            this.loading = false;
+          },
+          error: (err) => {
+            console.error('Error:', err);
+            this.loading = false;
+          }
+        });
+      }
     openNew() {
         //this.product = {};
         //this.submitted = false;
@@ -155,5 +181,13 @@ export class FormularioInternoComponent implements OnInit {
 
         return sw; // Se muestra solo después de DIAS_ANULACION días
       }
-
+    showTrancaDetail(tranca: any) {
+        const ref = this.dialogService.open(TrancaDetailComponent, {
+            header: 'Detalle del Control en Tranca',
+            width: '35%',
+            data: {
+            trancaData: tranca
+            }
+        });
+    }
 }

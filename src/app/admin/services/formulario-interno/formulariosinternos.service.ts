@@ -24,6 +24,8 @@ export class FormularioInternosService {
 
     //this.requestOptions = { headers: headers };
   }
+  //------------------------ver formulario Interno Reducido Optimizado------------------------------
+
   getFormReducidoOptimizado(
     page: number = 1,
     pageSize: number = 30,
@@ -40,6 +42,25 @@ export class FormularioInternosService {
     .set('sortOrder', sortOrder.toString());
 
     return this.http.get(`${this.baseUrl}formint/reducido-opt`, { params });
+  }
+  //---------------------Ver Formulario Interno Reducido x Operador Optimizado----------------------
+    getFormReducidoOperadorOptimizado(
+    page: number = 1,
+    pageSize: number = 30,
+    searchTerm: string = '',
+    sortField: string = 'id',
+    sortOrder: number = -1,
+    operador:number=0
+  ): Observable<any> {
+    // Parámetros HTTP para paginación, búsqueda y ordenamiento
+    const params = new HttpParams()
+    .set('page', page.toString())
+    .set('pageSize', pageSize.toString())
+    .set('search', searchTerm)
+    .set('sortField', sortField)
+    .set('sortOrder', sortOrder.toString());
+
+    return this.http.get(`${this.baseUrl}formint/operador/reducido/`+operador, { params });
   }
   //-----------------Verificacion Hash Formulario Interno-------------------------------------------
 hashFormularioInterno(nombre:string)

@@ -14,6 +14,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { AnularFormularioInternoModule } from './anular-formulario-interno/anular-formulario-interno.module';
 import { EditFormularioInternoModule } from './edit-formulario-interno/edit-formulario-interno.module';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import { TrancaDetailComponent } from '../components/control-tranca-detalle.component';
 
 @NgModule({
   imports: [
@@ -30,10 +32,15 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     AnularFormularioInternoModule,
     EditFormularioInternoModule,
     FormularioInternoRoutingModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    DynamicDialogModule
   ],
   declarations: [
-    FormularioInternoComponent
-]
+    FormularioInternoComponent,
+    TrancaDetailComponent
+],
+providers: [
+    DialogService
+  ]
 })
 export class FormularioInternoModule { }
