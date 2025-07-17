@@ -1258,25 +1258,34 @@
                 </small>
             </span>
         </div>
-        <div class="field col-12 md:col-6">
+        <div class="field col-12 md:col-4">
             <button
                 pButton pRipple label="Guardar Operador"
-                icon="pi pi-check" class="p-button-success mr-2"
+                icon="pi pi-check"
+                class="p-button-outlined p-button-success mr-2"
                 type="submit"
                 (click)="setAccion('guardar')"
-                ></button>
+            ></button>
         </div>
-        <div class="field col-12 md:col-6">
+
+        <div class="field col-12 md:col-4">
             <button
-                pButton pRipple label="Guardar Operador y Actualizar IDOM"
+                pButton pRipple label="Guardar y Actualizar IDOM"
                 icon="pi pi-check"
-                class="p-button-success mr-2"
+                class="p-button-outlined p-button-info mr-2"
                 type="submit"
                 (click)="setAccion('guardarYActualizarIDOM')"
-                ></button>
+            ></button>
         </div>
-        <div class="field col-12 md:col-6">
-            <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-danger" ></button>
+
+        <div class="field col-12 md:col-4">
+            <button
+                pButton pRipple label="Cancelar"
+                icon="pi pi-times"
+                class="p-button-outlined p-button-danger"
+                type="button"
+                routerLink="/admin/operador/"
+            ></button>
         </div>
     </div>
 </div>

@@ -31,6 +31,7 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { TableModule } from 'primeng/table';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { EditarOperadorComponent } from './editar-operador.component';
+import { RouterModule } from '@angular/router';
 @NgModule({
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	imports: [
@@ -67,7 +68,8 @@ import { EditarOperadorComponent } from './editar-operador.component';
 		NgClass,
         ReactiveFormsModule,
         NgxMaskDirective,
-        NgxMaskPipe
+        NgxMaskPipe,
+        RouterModule,
 	],
 	declarations: [EditarOperadorComponent],
     providers: [provideNgxMask()]

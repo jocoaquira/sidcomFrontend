@@ -20,7 +20,7 @@ import { OperatorFormulario } from 'src/app/admin/validators/operator';
 })
 export class EditarOperadorComponent implements OnInit {
     es: any;
-
+    accion: string = '';
     public operador=new OperatorFormulario();
     public errorOperator:any={};
     public operador_registrado!:IOperator;
@@ -382,7 +382,9 @@ precargarFormulario(datos: any) {
                 formData.append('id', this.operador_registrado.id.toString());
                 operador_id=this.operador_registrado.id.toString()
             }
-
+        if (this.accion === 'guardarYActualizarIDOM') {
+            formData.append('fecha_actualizacion', new Date().toISOString());
+            }
         // Agregar todos los valores del formulario a formData
         let datos=this.convertBooleansToNumbers(this.operador.formulario.value)
         let datofin=this.removeZeroOneProperties(datos);
@@ -516,7 +518,7 @@ precargarFormulario(datos: any) {
                     this.errorOperator = this.operadorService.handleCrearoperatorError(error);
                     console.log(error);
                     this.status = error.status;
-                    this.notify.error(error.message);
+                    this.notify.error(error.error.message);
                 }
             );
         } else {
@@ -608,6 +610,18 @@ precargarFormulario(datos: any) {
 }
 
     onChangeTipoCreacion(dependencia_id:any){
+        const tipoDocId = dependencia_id?.value?.id;
+
+        if (!tipoDocId) {
+            console.warn('No se pudo obtener el ID del tipo de documento');
+            return;
+        }
+
+        // Validar que el formulario existe
+        if (!this.operador?.formulario?.value) {
+            console.warn('El formulario del operador no está disponible');
+            return;
+        }
          this.operador.formulario.value.tipo_doc_creacion=dependencia_id.value.id;
     }
     onChangeExplotacion(dependencia_id:any){
@@ -790,5 +804,7 @@ precargarFormulario(datos: any) {
             }
         });
     }
-
+    setAccion(valor:string){
+        this.accion=valor;
+    }
 }
