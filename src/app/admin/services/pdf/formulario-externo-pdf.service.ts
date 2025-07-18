@@ -728,47 +728,128 @@ export class PdfFormularioExternoService {
                             },
                           });
 
-                          autoTable(doc, {
-                            startY: (doc as any).lastAutoTable?.finalY || 10,
+// Obtener los datos de control_trancas
+const controlTrancas = formulario_externo.control_trancas || [];
 
-                            head: [
-                              [
-                                { content:  '  VERIFICACIÓN DE PUNTOS DE CONTROL (FIJOS Y/O MÓVILES) EN EL CIRCUITO DE TRASLADO.',colSpan:5, styles: { halign: 'center', fillColor: [255, 255, 255], fontStyle: 'bold' } },
-                              ],
-                            ],
-                            body: [
-                              [
-                                {content:'1er Punto de Control',  styles: { halign: 'center', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                {content:'2do Punto de Control',  styles: { halign: 'center', fontStyle: 'bold', fillColor: [255, 255, 255] , lineColor: [0, 0, 0] } },
-                                {content:'',  styles: { halign: 'center', fontStyle: 'bold', fillColor: [255, 255, 255] , lineColor: [255, 255, 255]} },
-                                {content:'Sello de Autorización',  styles: { halign: 'center', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                {content:'Escanee el código QR para verificar la autenticidad del Formulario 101',  styles: { halign: 'center', fontStyle: 'bold', fillColor: [255, 255, 255],fontSize: 7,  } },
-                              ],
-                            ],
+// Preparar contenido para los puntos de control
+let primerPunto = '';
+let segundoPunto = '';
 
-                            styles: {
-                              textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'bottom', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
-                              cellPadding: 2, // Espaciado interno de las celdas
-                              lineWidth: 1, // Ancho de la línea del borde
-                              lineColor: [0, 0, 0], // Color de la línea del borde
-                            },
-                            headStyles: {
-                              fillColor: [140, 170, 190]  , // Fondo verde para el encabezado
-                              textColor: [0, 0, 0], // Texto negro para el encabezado
-                              fontStyle: 'bold', // Texto en negrita
-                              cellPadding: 7, // Espaciado interno de las celdas
-                              lineColor: [255, 255, 255], // Color de la línea del borde
-                            },
-                            columnStyles: {
-                              0:{cellWidth:130,minCellHeight:100},
-                              1: { cellWidth: 130 }, // Primera columna
-                              2:{cellWidth:20},
-                              3: { cellWidth: 130 }, // Primera columna
-                              4:{cellWidth:130},
-                            },
-                          });
+if (controlTrancas.length > 0) {
+  // Primer punto de control
+  const primerControl = controlTrancas[0];
+  primerPunto = `Tranca: ${primerControl.nombre_tranca}\nFuncionario: ${primerControl.nombre_funcionario}\nFecha: ${new Date(primerControl.fecha_inspeccion).toLocaleDateString()}\nHora: ${new Date(primerControl.fecha_inspeccion).toLocaleTimeString()}`;
+
+  if (primerControl.observaciones) {
+    primerPunto += `\nObservaciones: ${primerControl.observaciones}`;
+  }
+
+  if (controlTrancas.length > 1) {
+    // Segundo punto de control
+    const segundoControl = controlTrancas[1];
+    segundoPunto = `Tranca: ${segundoControl.nombre_tranca}\nFuncionario: ${segundoControl.nombre_funcionario}\nFecha: ${new Date(segundoControl.fecha_inspeccion).toLocaleDateString()}\nHora: ${new Date(segundoControl.fecha_inspeccion).toLocaleTimeString()}`;
+
+    if (segundoControl.observaciones) {
+      segundoPunto += `\nObservaciones: ${segundoControl.observaciones}`;
+    }
+  } else {
+    segundoPunto = 'Pendiente de control';
+  }
+} else {
+  primerPunto = 'No hay controles registrados';
+  segundoPunto = 'No hay controles registrados';
+}
+
+// AutoTable con los datos de control_trancas
+autoTable(doc, {
+  startY: (doc as any).lastAutoTable?.finalY || 10,
+  head: [
+    [
+      {
+        content: '  VERIFICACIÓN DE PUNTOS DE CONTROL (FIJOS Y/O MÓVILES) EN EL CIRCUITO DE TRASLADO.',
+        colSpan: 5,
+        styles: {
+          halign: 'center',
+          fillColor: [255, 255, 255],
+          fontStyle: 'bold'
+        }
+      },
+    ],
+  ],
+  body: [
+    [
+      {
+        content: `1er Punto de Control\n\n${primerPunto}`,
+        styles: {
+          halign: 'center',
+          fontStyle: 'bold',
+          fillColor: [255, 255, 255],
+          valign: 'middle'
+        }
+      },
+      {
+        content: `2do Punto de Control\n\n${segundoPunto}`,
+        styles: {
+          halign: 'center',
+          fontStyle: 'bold',
+          fillColor: [255, 255, 255],
+          lineColor: [0, 0, 0],
+          valign: 'middle'
+        }
+      },
+      {
+        content: '',
+        styles: {
+          halign: 'center',
+          fontStyle: 'bold',
+          fillColor: [255, 255, 255],
+          lineColor: [255, 255, 255]
+        }
+      },
+      {
+        content: 'Sello de Autorización',
+        styles: {
+          halign: 'center',
+          fontStyle: 'bold',
+          fillColor: [255, 255, 255],
+          valign: 'middle'
+        }
+      },
+      {
+        content: 'Escanee el código QR para verificar la autenticidad del Formulario 101',
+        styles: {
+          halign: 'center',
+          fontStyle: 'bold',
+          fillColor: [255, 255, 255],
+          fontSize: 7,
+          valign: 'bottom'
+        }
+      },
+    ],
+  ],
+  styles: {
+    textColor: [0, 0, 0], // Color de texto negro
+    valign: 'middle', // Alineación vertical centrada
+    fontSize: 9, // Tamaño de fuente
+    cellPadding: 2, // Espaciado interno de las celdas
+    lineWidth: 1, // Ancho de la línea del borde
+    lineColor: [0, 0, 0], // Color de la línea del borde
+  },
+  headStyles: {
+    fillColor: [161, 216, 158], // Fondo verde para el encabezado
+    textColor: [0, 0, 0], // Texto negro para el encabezado
+    fontStyle: 'bold', // Texto en negrita
+    cellPadding: 7, // Espaciado interno de las celdas
+    lineColor: [255, 255, 255], // Color de la línea del borde
+  },
+  columnStyles: {
+    0: { cellWidth: 130, minCellHeight: 100 },
+    1: { cellWidth: 130 }, // Primera columna
+    2: { cellWidth: 20 },
+    3: { cellWidth: 130 }, // Primera columna
+    4: { cellWidth: 130 },
+  },
+});
 
 
 
@@ -777,8 +858,12 @@ export class PdfFormularioExternoService {
                           sello_auth.src = 'assets/sidcom/sello_blanco.jpg';
 
                           sello_auth.onload = () => {
+                            if(primerPunto=='No hay controles registrados'){
                             doc.addImage(sello_auth, 'JPEG', 42, (doc as any).lastAutoTable?.finalY-98, 127,86);
+                            }
+                            if(segundoPunto=='No hay controles registrados' || segundoPunto=='Pendiente de control')
                             doc.addImage(sello_auth, 'JPEG',172, (doc as any).lastAutoTable?.finalY-98, 127,86);
+
 
 
                             const sello_autorizado = new Image();

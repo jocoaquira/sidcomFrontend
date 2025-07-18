@@ -38,6 +38,7 @@ export interface IFormularioInternoPDF{
 
 	minerales:IMineral[],
 	municipio_origen:IMunicipioOrigen[],
+    control_trancas:IControlTranca[]
 }
 export interface IMineral {
     mineral:string,
@@ -48,5 +49,11 @@ export interface IMineral {
 export interface IMunicipioOrigen {
     municipio_origen:string,
 	codigo:string,
+}
+interface IControlTranca{
+    nombre_tranca:string,
+    nombre_funcionario:string,
+    observaciones:string
+    fecha_inspeccion:string
 }
 

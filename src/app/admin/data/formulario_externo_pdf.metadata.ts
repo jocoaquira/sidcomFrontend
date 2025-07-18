@@ -40,7 +40,8 @@ export interface IFormularioExternoPDF{
 	empresa_ferrea:string,
 	fecha_ferrea:string,
 	hr_ferrea:string,
-	tara_volqueta:string
+	tara_volqueta:string,
+    control_trancas:IControlTranca[]
 }
 export interface IMineral {
     mineral:string,
@@ -51,4 +52,10 @@ export interface IMineral {
 export interface IMunicipioOrigen {
     municipio_origen:string,
 	codigo:string,
+}
+interface IControlTranca{
+    nombre_tranca:string,
+    nombre_funcionario:string,
+    observaciones:string
+    fecha_inspeccion:string
 }

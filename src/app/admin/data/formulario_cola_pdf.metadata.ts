@@ -37,7 +37,8 @@ export interface IFormularioTrasladoColaPDF {
 
     minerales:IMineralTDM[],
     municipio_origen:IMunicipioOrigen[],
-    municipio_destino:IMunicipioOrigen[]
+    municipio_destino:IMunicipioOrigen[],
+    control_trancas:IControlTranca[]
 }
 
 export interface IMineralTDM {
@@ -47,5 +48,11 @@ export interface IMineralTDM {
 export interface IMunicipioOrigen {
     municipio_origen:string
     codigo:string
+}
+interface IControlTranca{
+    nombre_tranca:string,
+    nombre_funcionario:string,
+    observaciones:string
+    fecha_inspeccion:string
 }
 
