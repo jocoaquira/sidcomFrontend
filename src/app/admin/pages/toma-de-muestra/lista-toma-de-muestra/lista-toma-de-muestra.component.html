@@ -13,14 +13,30 @@
                 --></ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="listaTomaDeMuestras" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['nro_formulario','razon_social','fecha_hora_tdm','estado']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id"
-            [sortField]="'fecha_hora_tdm'" [sortOrder]="-1">
+            <p-table #dt
+                [value]="listaTomaDeMuestras"
+                [columns]="cols"
+                responsiveLayout="scroll"
+                [rows]="rows"
+                [paginator]="true"
+                [rowsPerPageOptions]="[10,20,30,50]"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+                [totalRecords]="totalRecords"
+                [lazy]="true"
+                (onPage)="onPageChange($event)"
+                (onSort)="onSort($event)"
+                dataKey="id"
+                [sortField]="sortField"
+                [sortOrder]="sortOrder"
+                [globalFilterFields]="['nro_formulario','fecha_hora_tdm','responsableTM','estado','id']"
+            >
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Administrar Tomas de Muestra</h5>
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
-                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."  class="w-full sm:w-auto"/>
+                            <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Buscar..."  class="w-full sm:w-auto"/>
                         </span>
                     </div>
                 </ng-template>

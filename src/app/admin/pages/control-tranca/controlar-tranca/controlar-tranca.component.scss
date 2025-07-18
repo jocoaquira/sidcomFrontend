@@ -1,17 +1,150 @@
 /* Reset básico */
 * {
     box-sizing: border-box;
-  }
+}
 
-  body, html {
+body, html {
     margin: 0;
     padding: 0;
     width: 100%;
     overflow-x: hidden;
-  }
+}
 
-  /* Contenedor principal del scanner QR */
-  .qr-scanner-content {
+/* ===== ESTILOS PARA FORMULARIO DE BÚSQUEDA ===== */
+
+/* Contenedor principal del formulario de búsqueda */
+.search-form-container {
+    width: 100%;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+    padding: 0;
+}
+
+/* Contenedor del grid */
+.grid.p-fluid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 0;
+    padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Campos del formulario de búsqueda */
+.grid.p-fluid .field {
+    margin: 0;
+    padding: 0;
+    flex: 1;
+    min-width: 0;
+}
+
+/* Input de número de formulario */
+.grid.p-fluid .field.col-12.md\:col-4:first-child {
+    flex: 2;
+    min-width: 200px;
+}
+
+/* Botón de búsqueda */
+.grid.p-fluid .field.col-12.md\:col-4:last-child {
+    flex: 1;
+    min-width: 180px;
+    display: flex;
+    align-items: end;
+}
+
+/* Contenedor del float label */
+.p-float-label {
+    position: relative;
+    width: 100%;
+}
+
+/* Input text styling */
+.p-float-label input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.15s;
+}
+
+.p-float-label input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+/* Label styling */
+.p-float-label label {
+    position: absolute;
+    left: 0.75rem;
+    top: 0.75rem;
+    color: #6c757d;
+    font-size: 14px;
+    transition: all 0.2s;
+    pointer-events: none;
+    background: white;
+    padding: 0 0.25rem;
+}
+
+.p-float-label input:focus ~ label,
+.p-float-label input.ng-dirty ~ label {
+    top: -0.5rem;
+    font-size: 12px;
+    color: #6366f1;
+}
+
+/* Botón de búsqueda */
+.p-button-outlined.p-button-info {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #3b82f6;
+    background: transparent;
+    color: #3b82f6;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.2s;
+    height: fit-content;
+}
+
+.p-button-outlined.p-button-info:hover {
+    background: #3b82f6;
+    color: white;
+}
+
+.p-button-outlined.p-button-info:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* Override específico para clases de PrimeNG Grid */
+.field.col-12.md\:col-4 {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Asegurar que el contenedor principal no tenga padding/margin conflictivos */
+.p-grid {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* ===== ESTILOS PARA FILE UPLOAD ===== */
+
+/* Contenedor del file upload */
+.file-upload-container {
+    width: 100%;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* Contenedor principal del scanner QR */
+.qr-scanner-content {
     min-height: auto;
     display: flex;
     align-items: center;
@@ -21,10 +154,10 @@
     margin: 0;
     width: 100%;
     position: relative;
-  }
+}
 
-  /* Área de carga de archivos */
-  .upload-area {
+/* Área de carga de archivos */
+.upload-area {
     text-align: center;
     padding: 40px 20px;
     border: 2px dashed #e2e8f0;
@@ -39,27 +172,27 @@
     align-items: center;
     min-height: 300px;
     margin: 10px;
-  }
+}
 
-  .upload-area:hover {
+.upload-area:hover {
     border-color: #3b82f6;
     background-color: #f0f9ff;
-  }
+}
 
-  .upload-area i {
+.upload-area i {
     font-size: 2.5rem;
     color: #6c757d;
     margin-bottom: 10px;
-  }
+}
 
-  .upload-area p {
+.upload-area p {
     margin: 8px 0;
     font-size: 14px;
     line-height: 1.4;
-  }
+}
 
-  /* Indicador de procesamiento */
-  .processing-indicator {
+/* Indicador de procesamiento */
+.processing-indicator {
     text-align: center;
     padding: 40px 20px;
     width: 100%;
@@ -70,15 +203,15 @@
     align-items: center;
     min-height: 300px;
     margin: 10px;
-  }
+}
 
-  .processing-indicator p {
+.processing-indicator p {
     margin: 10px 0;
     font-size: 14px;
-  }
+}
 
-  /* Resultado del QR */
-  .qr-result {
+/* Resultado del QR */
+.qr-result {
     width: 100%;
     text-align: center;
     flex-grow: 1;
@@ -89,41 +222,41 @@
     margin: 0;
     min-height: 20vh;
     overflow-y: auto;
-  }
+}
 
-  .success-message {
+.success-message {
     margin-bottom: 15px;
     padding: 0 10px;
-  }
+}
 
-  .success-message i {
+.success-message i {
     font-size: 2rem;
     color: #22c55e;
     margin-bottom: 8px;
-  }
+}
 
-  .success-message h4 {
+.success-message h4 {
     color: #22c55e;
     margin: 8px 0;
     font-size: 1.1rem;
-  }
+}
 
-  /* Contenedor de datos del QR */
-  .qr-data-container {
+/* Contenedor de datos del QR */
+.qr-data-container {
     margin-bottom: 15px;
     text-align: left;
     width: 100%;
-  }
+}
 
-  .qr-data-container label {
+.qr-data-container label {
     display: block;
     margin-bottom: 5px;
     font-weight: 600;
     color: #374151;
     font-size: 14px;
-  }
+}
 
-  .qr-data-text {
+.qr-data-text {
     width: 100%;
     padding: 8px;
     border: 1px solid #d1d5db;
@@ -135,20 +268,20 @@
     word-wrap: break-word;
     overflow-wrap: break-word;
     resize: vertical;
-  }
+}
 
-  /* Botones de acción */
-  .action-buttons {
+/* Botones de acción */
+.action-buttons {
     display: flex;
     gap: 8px;
     justify-content: center;
     flex-wrap: wrap;
     margin-top: 15px;
     width: 100%;
-  }
+}
 
-  /* Mensajes de error */
-  .error-message {
+/* Mensajes de error */
+.error-message {
     text-align: center;
     padding: 40px 20px;
     color: #ef4444;
@@ -160,91 +293,91 @@
     align-items: center;
     min-height: 300px;
     margin: 10px;
-  }
+}
 
-  .error-message i {
+.error-message i {
     font-size: 2rem;
     color: #ef4444;
     margin-bottom: 8px;
-  }
+}
 
-  .error-message h4 {
+.error-message h4 {
     color: #ef4444;
     margin: 8px 0;
     font-size: 1.1rem;
-  }
+}
 
-  .error-message p {
+.error-message p {
     margin: 8px 0;
     color: #6b7280;
     font-size: 14px;
-  }
+}
 
-  /* Consejos para el escaneo */
-  .qr-tips {
+/* Consejos para el escaneo */
+.qr-tips {
     margin-top: 5px;
     width: 100%;
     padding: 0 10px;
-  }
+}
 
-  .qr-tips h5 {
+.qr-tips h5 {
     color: #374151;
     margin-bottom: 10px;
     font-size: 1rem;
-  }
+}
 
-  .qr-tips ul {
+.qr-tips ul {
     margin: 0;
     padding-left: 18px;
-  }
+}
 
-  .qr-tips li {
+.qr-tips li {
     margin: 5px 0;
     color: #6b7280;
     font-size: 13px;
     line-height: 1.4;
-  }
+}
 
-  /* Campos de formulario */
-  .form-field {
+/* Campos de formulario */
+.form-field {
     margin-bottom: 1rem;
     position: relative;
     width: 100%;
-  }
+}
 
-  .form-field .form-label {
+.form-field .form-label {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 500;
     color: #495057;
     font-size: 14px;
-  }
+}
 
-  .form-field .form-label .pi {
+.form-field .form-label .pi {
     margin-right: 0.5rem;
     color: #6366f1;
-  }
+}
 
-  .form-field .form-input {
+.form-field .form-input {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid #ced4da;
     border-radius: 4px;
     transition: border-color 0.15s;
     font-size: 14px;
-  }
+}
 
-  .form-field .form-input:focus {
+.form-field .form-input:focus {
     outline: none;
     border-color: #6366f1;
     box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
-  }
+}
 
-  .form-field .form-input.input-error {
+.form-field .form-input.input-error {
     border-color: #f44336;
-  }
+}
 
-  .form-field .error-message {
+.form-field .error-message {
     display: block;
     margin-top: 0.25rem;
     color: #f44336;
@@ -253,272 +386,367 @@
     padding: 0;
     min-height: auto;
     flex-grow: 0;
-  }
+}
 
-  .form-field .error-message .pi {
+.form-field .error-message .pi {
     margin-right: 0.25rem;
-  }
+}
 
-  /* Contenedores de PrimeNG - Eliminar espacios innecesarios */
-  .p-component,
-  .p-fileupload {
+/* Contenedores de PrimeNG - Eliminar espacios innecesarios */
+.p-component,
+.p-fileupload {
     width: 100%;
     margin: 0;
     padding: 0;
-  }
+}
 
-  .p-fileupload-content {
+.p-fileupload-content {
     width: 100%;
     margin: 0;
     padding: 0;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-  }
+}
 
-  .p-grid,
-  .p-col,
-  .p-col-12,
-  .p-md-12,
-  .field,
-  .col-12 {
+.p-col,
+.p-col-12,
+.p-md-12,
+.field,
+.col-12 {
     padding: 0;
     margin: 0;
     width: 100%;
-  }
+}
 
-  .field.col-12.md\:col-12 {
-    display: flex;
-    flex-direction: column;
-    min-height: 20vh; /* Cambia a min-height */
-  }
-
-  .w-full.inline-block {
+.w-full.inline-block {
     height: 100%;
     display: flex;
     flex-direction: column;
     width: 100%;
     margin: 0;
     padding: 0;
-  }
+}
 
-  /* Responsivo para tablets */
-  @media (max-width: 768px) {
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Responsivo para tablets */
+@media (max-width: 768px) {
+    /* Formulario de búsqueda */
+    .search-form-container {
+        margin-bottom: 1rem;
+        border-radius: 6px;
+    }
+
+    .grid.p-fluid {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .grid.p-fluid .field.col-12.md\:col-4:first-child,
+    .grid.p-fluid .field.col-12.md\:col-4:last-child {
+        flex: 1;
+        min-width: 100%;
+    }
+
+    .p-float-label input {
+        font-size: 16px; /* Evita zoom en iOS */
+        padding: 0.75rem;
+    }
+
+    .p-button-outlined.p-button-info {
+        padding: 0.75rem;
+        font-size: 16px;
+    }
+
+    /* File upload */
+    .file-upload-container {
+        border-radius: 6px;
+    }
+
     .qr-scanner-content {
-      padding: 0;
-      min-height: 20vh;
-      width: 100%;
+        padding: 0;
+        min-height: 20vh;
+        width: 100%;
     }
 
     .upload-area {
-      padding: 30px 15px;
-      margin: 10px;
-      min-height: 250px;
+        padding: 30px 15px;
+        margin: 10px;
+        min-height: 250px;
     }
 
     .upload-area i {
-      font-size: 2rem;
+        font-size: 2rem;
     }
 
     .upload-area p {
-      font-size: 13px;
+        font-size: 13px;
     }
 
     .action-buttons {
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      margin-top: auto;
-      padding: 10px;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin-top: auto;
+        padding: 10px;
     }
 
     .action-buttons .p-button {
-      width: 100%;
-      max-width: 280px;
+        width: 100%;
+        max-width: 280px;
     }
 
     .success-message h4 {
-      font-size: 1rem;
+        font-size: 1rem;
     }
 
     .qr-data-text {
-      font-size: 11px;
-      padding: 6px;
+        font-size: 11px;
+        padding: 6px;
     }
 
     .form-field .form-input {
-      padding: 0.6rem;
-      font-size: 16px; /* Evita zoom en iOS */
+        padding: 0.6rem;
+        font-size: 16px; /* Evita zoom en iOS */
     }
 
     .qr-tips {
         padding: 1rem;
         background-color: white;
         border-top: 1px solid #e2e8f0;
-        margin-top: 1rem; /* Espacio normal entre componentes */
+        margin-top: 1rem;
         width: 100%;
         box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-
-        /* Elimina estas propiedades que causan problemas: */
-        /* margin-top: auto; */
-        /* bottom: 0; */
-        /* z-index: 10; */
-      }
+    }
 
     .qr-tips li {
-      font-size: 12px;
+        font-size: 12px;
     }
 
     .processing-indicator {
-      padding: 30px 15px;
-      margin: 10px;
-      min-height: 250px;
+        padding: 30px 15px;
+        margin: 10px;
+        min-height: 250px;
     }
 
     .error-message {
-      padding: 30px 15px;
-      margin: 10px;
-      min-height: 250px;
+        padding: 30px 15px;
+        margin: 10px;
+        min-height: 250px;
     }
 
     .qr-result {
-      min-height: 20vh;
-      padding: 15px;
+        min-height: 20vh;
+        padding: 15px;
     }
 
     .p-fileupload {
-      width: 100%;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      margin: 0;
-      padding: 0;
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        padding: 0;
     }
 
     .p-fileupload .p-fileupload-content {
-      padding: 0;
-      margin: 0;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      width: 100%;
+        padding: 0;
+        margin: 0;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
     }
 
     .p-fileupload .p-fileupload-buttonbar {
-      padding: 0.5rem;
-      flex-wrap: wrap;
-      flex-shrink: 0;
-      margin: 0;
+        padding: 0.5rem;
+        flex-wrap: wrap;
+        flex-shrink: 0;
+        margin: 0;
     }
 
     .p-fileupload .p-button {
-      font-size: 0.8rem;
-      padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+        padding: 0.5rem 0.8rem;
     }
 
     .qr-result p-card {
-      margin-bottom: 15px;
+        margin-bottom: 15px;
     }
 
     .qr-result p-card .p-card-body {
-      padding: 1rem;
+        padding: 1rem;
     }
 
     .qr-result p-card .p-card-content {
-      padding: 0.5rem;
+        padding: 0.5rem;
     }
-  }
+}
 
-  /* Responsivo para móviles pequeños */
-  @media (max-width: 480px) {
+/* Responsivo para móviles */
+@media (max-width: 480px) {
+    /* Formulario de búsqueda */
+    .search-form-container {
+        margin-bottom: 0.75rem;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .grid.p-fluid {
+        padding: 0.5rem;
+        gap: 0.75rem;
+    }
+
+    .p-float-label input {
+        padding: 0.6rem;
+        font-size: 16px;
+    }
+
+    .p-float-label label {
+        left: 0.6rem;
+        top: 0.6rem;
+        font-size: 14px;
+    }
+
+    .p-float-label input:focus ~ label,
+    .p-float-label input.ng-dirty ~ label {
+        top: -0.4rem;
+        font-size: 11px;
+    }
+
+    .p-button-outlined.p-button-info {
+        padding: 0.6rem;
+        font-size: 14px;
+    }
+
+    /* File upload */
+    .file-upload-container {
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
     .qr-scanner-content {
-      padding: 0;
-      min-height: 20vh;
-      width: 100%;
+        padding: 0;
+        min-height: 20vh;
+        width: 100%;
     }
 
     .upload-area {
-      padding: 20px 10px;
-      margin: 5px;
-      min-height: 200px;
+        padding: 20px 10px;
+        margin: 5px;
+        min-height: 200px;
     }
 
     .upload-area i {
-      font-size: 1.8rem;
+        font-size: 1.8rem;
     }
 
     .upload-area p {
-      font-size: 12px;
+        font-size: 12px;
     }
 
     .success-message i {
-      font-size: 1.5rem;
+        font-size: 1.5rem;
     }
 
     .error-message i {
-      font-size: 1.5rem;
+        font-size: 1.5rem;
     }
 
     .form-field .form-input {
-      padding: 0.5rem;
-      font-size: 16px;
+        padding: 0.5rem;
+        font-size: 16px;
     }
 
     .qr-tips {
-      padding: 8px 10px;
+        padding: 8px 10px;
     }
 
     .qr-tips h5 {
-      font-size: 0.9rem;
+        font-size: 0.9rem;
     }
 
     .qr-tips li {
-      font-size: 11px;
+        font-size: 11px;
     }
 
     .processing-indicator {
-      margin: 5px;
-      min-height: 200px;
-      padding: 20px 10px;
+        margin: 5px;
+        min-height: 200px;
+        padding: 20px 10px;
     }
 
     .error-message {
-      margin: 5px;
-      min-height: 200px;
-      padding: 20px 10px;
+        margin: 5px;
+        min-height: 200px;
+        padding: 20px 10px;
     }
 
     .qr-result {
-      min-height: 20vh;
-      padding: 10px;
+        min-height: 20vh;
+        padding: 10px;
     }
 
     .action-buttons .p-button {
-      width: 100%;
-      max-width: none;
+        width: 100%;
+        max-width: none;
     }
-  }
+}
 
-  /* Responsivo para móviles muy pequeños */
-  @media (max-width: 320px) {
+/* Responsivo para móviles muy pequeños */
+@media (max-width: 320px) {
+    /* Formulario de búsqueda */
+    .search-form-container {
+        margin-bottom: 0.5rem;
+    }
+
+    .grid.p-fluid {
+        padding: 0.25rem;
+        gap: 0.5rem;
+    }
+
+    .p-float-label input {
+        padding: 0.5rem;
+    }
+
+    .p-float-label label {
+        left: 0.5rem;
+        top: 0.5rem;
+        font-size: 13px;
+    }
+
+    .p-float-label input:focus ~ label,
+    .p-float-label input.ng-dirty ~ label {
+        top: -0.3rem;
+        font-size: 10px;
+    }
+
+    .p-button-outlined.p-button-info {
+        padding: 0.5rem;
+        font-size: 13px;
+    }
+
+    /* File upload */
     .upload-area {
-      padding: 15px 5px;
-      margin: 3px;
+        padding: 15px 5px;
+        margin: 3px;
     }
 
     .qr-result {
-      padding: 5px;
+        padding: 5px;
     }
 
     .qr-tips {
-      padding: 5px 8px;
+        padding: 5px 8px;
     }
 
     .processing-indicator {
-      padding: 15px 5px;
+        padding: 15px 5px;
     }
 
     .error-message {
-      padding: 15px 5px;
+        padding: 15px 5px;
     }
-  }
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { IFormularioInternoSimple } from '@data/formulario_interno_simple.metadata';
 import { CanCrearFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-crear-formulario-interno.guard';
 import { CanEditarFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-editar-formulario-interno.guard';
@@ -54,6 +54,15 @@ export class ListaTomaDeMuestraComponent implements OnInit {
     }
     public toma_de_muestra_id:number=null;
     public verDialog:boolean=false;
+    //---------------------variables para optimizacion de listado-----------------------
+        @ViewChild('dt') dt!: Table;
+        loading: boolean = true;
+        totalRecords: number = 0;
+        rows: number = 30;
+        // Variables para ordenamiento
+        sortField: string = 'id';
+        sortOrder: number = -1;
+        searchTerm: string = '';
 
     constructor(
         public canListarFormularioInterno:CanListarFormularioInternoGuard,
@@ -72,85 +81,55 @@ export class ListaTomaDeMuestraComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.tomaDeMuestraService.verTomaDeMuestrasSimpleOperador(this.operador_id).subscribe(
-            (data:any)=>{
-            this.listaTomaDeMuestra=this.tomaDeMuestraService.handleTomaDeMuestraOperadorSimple(data);
-
-        },
-          (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
-
-
-        //this.productService.getProducts().then(data => this.products = data);
 
         this.cols = [
             { field: 'nro_formulario', header: 'Nro. de Formulario' },
             { field: 'fecha_hora_tdm', header: 'Fecha de Muestra' },
-            { field: 'category', header: 'Category' },
-            { field: 'responsable_tdm_id', header: 'Reviews' },
-            { field: 'estado', header: 'Status' }
+            { field: 'razon_social', header: 'Operador' },
+            { field: 'responsable_tdm_id', header: 'Responsable' },
+            { field: 'estado', header: 'Estado' }
         ];
+        this.loadData();
 
     }
 
-    openNew() {
-        //this.product = {};
-        //this.submitted = false;
-        this.productDialog = true;
+    loadData() {
+
+        this.loading = true;
+        this.tomaDeMuestraService.getFormReducidoOperadorOptimizado(
+          this.dt?.first / this.rows + 1 || 1,
+          this.rows,
+          this.searchTerm,
+          this.sortField,
+          this.sortOrder,
+          this.operador_id
+        ).subscribe({
+          next: (response) => {
+            this.listaTomaDeMuestra = response.data;
+            this.totalRecords = response.total;
+            this.loading = false;
+          },
+          error: (err) => {
+            console.error('Error:', err);
+            this.loading = false;
+          }
+        });
+      }
+      onSort(event: any) {
+        this.sortField = event.field;
+        this.sortOrder = event.order;
+        this.loadData();
+      }
+    onPageChange(event: any) {
+      const page = event.first / event.rows + 1;
+      this.loadData();
     }
-    hideDialog() {
-        this.productDialog = false;
-        this.submitted = false;
-    }
-    diasActivos(fecha1:string):number{
-        let dias:any;
-        let fechas1 = new Date(fecha1);
-        const tiempoTranscurrido = Date.now();
-        const hoy = new Date(tiempoTranscurrido);
-        dias=fechas1.getTime()-hoy.getTime();
-        dias=dias / 1000 / 60 / 60 / 24;
-        dias=Math.round (dias);
-        return dias;
-    }
-    findIndexById(id: string): string {
-        let index = -1;
-        for (let i = 0; i < this.listaTomaDeMuestra.length; i++) {
-            if (this.listaTomaDeMuestra[i].nro_formulario === id) {
-                index = i;
-                break;
-            }
-        }
+    onGlobalFilter(event: Event) {
+        const value = (event.target as HTMLInputElement).value;
+        this.searchTerm = value;  // <-- Almacena el término de búsqueda
+        this.dt.first = 0;       // <-- Reinicia a la primera página
+        this.loadData();         // <-- Vuelve a cargar los datos
 
-        return index.toString();
-    }
-    onGlobalFilter(table: Table, event: Event) {
-        const input = (event.target as HTMLInputElement).value.trim();
-
-        // Limpiar filtro si está vacío
-        if (!input) {
-            table.filterGlobal('', 'contains');
-            return;
-        }
-
-        // Intentar parsear como fecha en formato dd/MM/yyyy
-        const dateMatch = input.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-        if (dateMatch) {
-            const day = parseInt(dateMatch[1], 10);
-            const month = parseInt(dateMatch[2], 10); // Mes empieza en 0
-            const year = parseInt(dateMatch[3], 10);
-
-            const date = new Date(year, month - 1, day);
-
-            if (!isNaN(date.getTime())) {
-            // Convertir la fecha a formato ISO y extraer solo la parte de la fecha (YYYY-MM-DD)
-            const dateStr = date.toISOString().split('T')[0]; // Ejemplo: "2024-10-15"
-
-            // Aplicar filtro SOLO al campo fecha_hora_tdm buscando esa fecha
-            table.filter(dateStr, 'fecha_hora_tdm', 'contains');
-            }
-        } else {
-            // Búsqueda normal por texto en los campos definidos en globalFilterFields
-            table.filterGlobal(input, 'contains');
-        }
     }
     generarPDF(tdm:IFormularioInternoSimple){
 
@@ -168,12 +147,7 @@ export class ListaTomaDeMuestraComponent implements OnInit {
 
         this.tomaDeMuestraService.solicitarTomaDeMuestra(event.id).subscribe(
             (data:any)=>{
-
-            this.tomaDeMuestraService.verTomaDeMuestrasSimpleOperador(this.operador_id).subscribe(
-                (data:any)=>{
-                this.listaTomaDeMuestra=this.tomaDeMuestraService.handleTomaDeMuestraOperadorSimple(data);
-              },
-              (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
+                this.loadData();
           },
           (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
     }
@@ -181,17 +155,11 @@ export class ListaTomaDeMuestraComponent implements OnInit {
 
         this.tomaDeMuestraService.firmarTomaDeMuestra(event.id).subscribe(
             (data:any)=>{
-
-            this.tomaDeMuestraService.verTomaDeMuestrasSimpleOperador(this.operador_id).subscribe(
-                (data:any)=>{
-                this.listaTomaDeMuestra=this.tomaDeMuestraService.handleTomaDeMuestraOperadorSimple(data);
-              },
-              (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
+                this.loadData();
           },
           (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
     }
     confirmarSolicitud(event:ITomaDeMuestra) {
-
         this.confirmationService.confirm({
             key: 'confirm1',
             message: '¿Estas seguro de Solicitar la Toma de Muestra: '+event.nro_formulario+'?',
@@ -219,7 +187,7 @@ export class ListaTomaDeMuestraComponent implements OnInit {
         this.productDialog=event;
         this.tomaDeMuestraService.verTomaDeMuestrasSimple().subscribe(
             (data:any)=>{
-                this.listaTomaDeMuestra=this.tomaDeMuestraService.handleTomaDeMuestraOperadorSimple(data);
+                this.loadData();
             },
             (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
     }

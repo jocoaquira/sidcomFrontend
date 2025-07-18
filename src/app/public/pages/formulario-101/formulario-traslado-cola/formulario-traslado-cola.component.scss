@@ -59,3 +59,172 @@
   .custom-tag {
     transition: background-color 0.3s ease, transform 0.3s ease;
   }
+
+
+
+.trancas-container {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+
+.tranca-item {
+    flex: 0 0 auto;
+    min-width: 80px;
+    padding: 1px;
+    border-radius: 4px;
+    text-align: center;
+    white-space: nowrap;
+
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.tranca-nombre {
+    font-weight: bold;
+    font-size: 12px;
+    margin-bottom: 1px;
+}
+
+.tranca-fecha {
+    font-size: 9px;
+    opacity: 0.85;
+}
+.tranca-hora {
+    font-weight: bold;
+    font-size: 11px;
+    opacity: 0.85;
+}
+
+.sin-trancas {
+    color: #6b7280;
+    font-style: italic;
+    font-size: 9px;
+    padding: 4px;
+    text-align: center;
+}
+
+/* Colores para diferentes trancas */
+.tranca-color-0 {
+    background-color: rgba(59, 130, 246, 0.1);
+    border-left-color: #3b82f6;
+    .tranca-nombre { color: #3b82f6; }
+    .tranca-fecha { color: #1e40af; }
+    .tranca-hora { color: #1e40af; }
+}
+
+.tranca-color-1 {
+    background-color: rgba(16, 185, 129, 0.1);
+    border-left-color: #10b981;
+    .tranca-nombre { color: #10b981; }
+    .tranca-fecha { color: #047857; }
+    .tranca-hora { color: #047857; }
+}
+
+.tranca-color-2 {
+    background-color: rgba(245, 158, 11, 0.1);
+    border-left-color: #f59e0b;
+    .tranca-nombre { color: #f59e0b; }
+    .tranca-fecha { color: #b45309; }
+    .tranca-hora { color: #b45309; }
+}
+
+.tranca-color-3 {
+    background-color: rgba(239, 68, 68, 0.1);
+    border-left-color: #ef4444;
+    .tranca-nombre { color: #ef4444; }
+    .tranca-fecha { color: #b91c1c; }
+    .tranca-hora { color: #b91c1c; }
+}
+
+.tranca-color-4 {
+    background-color: rgba(139, 92, 246, 0.1);
+    border-left-color: #8b5cf6;
+    .tranca-nombre { color: #8b5cf6; }
+    .tranca-fecha { color: #6d28d9; }
+    .tranca-hora { color: #6d28d9; }
+}
+
+.tranca-color-5 {
+    background-color: rgba(249, 115, 22, 0.1);
+    border-left-color: #f97316;
+    .tranca-nombre { color: #f97316; }
+    .tranca-fecha { color: #c2410c; }
+    .tranca-hora { color: #c2410c; }
+}
+
+.tranca-color-6 {
+    background-color: rgba(6, 182, 212, 0.1);
+    border-left-color: #06b6d4;
+    .tranca-nombre { color: #06b6d4; }
+    .tranca-fecha { color: #0891b2; }
+    .tranca-hora { color: #0891b2; }
+}
+
+.tranca-color-7 {
+    background-color: rgba(132, 204, 22, 0.1);
+    border-left-color: #84cc16;
+    .tranca-nombre { color: #84cc16; }
+    .tranca-fecha { color: #65a30d; }
+    .tranca-hora { color: #65a30d; }
+}
+
+.tranca-color-8 {
+    background-color: rgba(236, 72, 153, 0.1);
+    border-left-color: #ec4899;
+    .tranca-nombre { color: #ec4899; }
+    .tranca-fecha { color: #be185d; }
+    .tranca-hora { color: #be185d; }
+}
+
+.tranca-color-9 {
+    background-color: rgba(107, 114, 128, 0.1);
+    border-left-color: #6b7280;
+    .tranca-nombre { color: #6b7280; }
+    .tranca-fecha { color: #374151; }
+    .tranca-hora { color: #374151; }
+}
+
+/* Scrollbar personalizado - más delgado */
+.trancas-container::-webkit-scrollbar {
+    width: 3px;
+}
+
+.trancas-container::-webkit-scrollbar-track {
+    background: #f8f9fa;
+    border-radius: 1px;
+}
+
+.trancas-container::-webkit-scrollbar-thumb {
+    background: #dee2e6;
+    border-radius: 1px;
+}
+
+.trancas-container::-webkit-scrollbar-thumb:hover {
+    background: #ced4da;
+}
+
+/* Responsivo para pantallas pequeñas */
+@media (max-width: 768px) {
+    .trancas-container {
+        max-width: 100px;
+        max-height: 80px;
+    }
+
+    .tranca-item {
+        padding: 2px 4px;
+        font-size: 9px;
+    }
+
+    .tranca-nombre {
+        font-size: 9px;
+    }
+
+    .tranca-fecha {
+        font-size: 8px;
+    }
+}

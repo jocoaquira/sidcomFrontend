@@ -14,6 +14,7 @@ import { CreateFormularioInternoCooperativaModule } from './create-formulario-in
 import { AnularFormularioInternoCooperativaModule } from './anular-formulario-interno-cooperativa/anular-formulario-interno-cooperativa.module';
 import { EditFormularioInternoCooperativaModule } from './edit-formulario-interno-cooperativa/edit-formulario-interno-cooperativa.module';
 import { FormularioInternoCooperativaRoutingModule } from './formulario-interno-cooperativa.routing';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 
 @NgModule({
   imports: [
@@ -30,10 +31,14 @@ import { FormularioInternoCooperativaRoutingModule } from './formulario-interno-
     AnularFormularioInternoCooperativaModule,
     EditFormularioInternoCooperativaModule,
     FormularioInternoCooperativaRoutingModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    DynamicDialogModule
   ],
   declarations: [
     FormularioInternoCooperativaComponent
-]
+],
+providers: [
+    DialogService
+  ]
 })
 export class FormularioInternoCooperativaModule { }

@@ -122,7 +122,11 @@ verFormularioInterno(nombre:string)
     let FormularioInterno:IFormularioInternoSimple[]=data;
     return FormularioInterno
   }
-
+  verFormularioInternoNroForm(nombre:string)
+  {
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}formint/nro_form/`+nombre);
+  }
 verFormularioInternoPDF(nombre:string)
 {
   // asignacion de parametros

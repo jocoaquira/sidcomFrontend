@@ -5,6 +5,7 @@ import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.
 import { IFormularioTrasladoColaSimple } from '@data/formulario_cola_simple.metadata';
 import { IFormularioTrasladoCola } from '@data/formulario_cola.metadata';
 import { IFormularioTrasladoColaPDF } from '@data/formulario_cola_pdf.metadata';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -49,6 +50,12 @@ verFormularioTrasladoCola(nombre:string)
   // asignacion de parametros
   return this.http.get(`${this.baseUrl}formcola/`+nombre,{params:params});
 }
+
+verFormularioTrasladoColaNroForm(nombre:string)
+{
+  // asignacion de parametros
+  return this.http.get(`${this.baseUrl}formcola/nro_form/`+nombre);
+}
 //-----------------Visualizar Toma de Muestra-------------------------------------------
 verFormularioTrasladoColaPDF(nombre:string)
 {
@@ -70,6 +77,44 @@ hashFormularioTrasladoCola(nombre:string)
   // asignacion de parametros
   return this.http.get(`${this.baseUrl}formcola/verificacion`,{params:params});
 }
+
+  //-------------------------Simple Formulario Reducido Optimizado Operador------------------------------------
+  getFormReducidoOperadorOptimizado(
+    page: number = 1,
+    pageSize: number = 30,
+    searchTerm: string = '',
+    sortField: string = 'id',
+    sortOrder: number = -1,
+    operador_id:number
+  ): Observable<any> {
+    // Parámetros HTTP para paginación, búsqueda y ordenamiento
+    const params = new HttpParams()
+    .set('page', page.toString())
+    .set('pageSize', pageSize.toString())
+    .set('search', searchTerm)
+    .set('sortField', sortField)
+    .set('sortOrder', sortOrder.toString());
+
+    return this.http.get(`${this.baseUrl}formcola/operador/reducido/`+operador_id, { params });
+  }
+  //-------------------------Simple Formulario Reducido Optimizado------------------------------------
+  getFormReducidoOptimizado(
+    page: number = 1,
+    pageSize: number = 30,
+    searchTerm: string = '',
+    sortField: string = 'id',
+    sortOrder: number = -1
+  ): Observable<any> {
+    // Parámetros HTTP para paginación, búsqueda y ordenamiento
+    const params = new HttpParams()
+    .set('page', page.toString())
+    .set('pageSize', pageSize.toString())
+    .set('search', searchTerm)
+    .set('sortField', sortField)
+    .set('sortOrder', sortOrder.toString());
+
+    return this.http.get(`${this.baseUrl}formcola/reducido/`, { params });
+  }
   //-----------------Visualizar operadores-------------------------------------------
   verFormularioTrasladoColaSimple(nombre:string)
   {

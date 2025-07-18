@@ -101,7 +101,32 @@ hashFormularioExterno(nombre:string)
 
     return this.http.get(`${this.baseUrl}formext/reducido-opt`, { params });
   }
-//-----------------Visualizar Toma de Muestra-------------------------------------------
+
+  //-------------------------Simple Formulario Reducido Optimizado Operador------------------------------------
+  getFormReducidoOperadorOptimizado(
+    page: number = 1,
+    pageSize: number = 30,
+    searchTerm: string = '',
+    sortField: string = 'id',
+    sortOrder: number = -1,
+    operador_id:number
+  ): Observable<any> {
+    // Parámetros HTTP para paginación, búsqueda y ordenamiento
+    const params = new HttpParams()
+    .set('page', page.toString())
+    .set('pageSize', pageSize.toString())
+    .set('search', searchTerm)
+    .set('sortField', sortField)
+    .set('sortOrder', sortOrder.toString());
+
+    return this.http.get(`${this.baseUrl}formext/operador/reducido/`+operador_id, { params });
+  }
+  verFormularioExternoNroForm(nombre:string)
+  {
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}formext/nro_form/`+nombre);
+  }
+  //-----------------Visualizar Toma de Muestra-------------------------------------------
 verFormularioExternoPDF(nombre:string)
 {
   // asignacion de parametros

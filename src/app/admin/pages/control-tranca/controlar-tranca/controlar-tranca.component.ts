@@ -38,6 +38,7 @@ export class ControlarTrancaComponent {
     private readonly MAX_IMAGE_SIZE = 1024; // Máximo ancho/alto en píxeles
     private readonly JPEG_QUALITY = 0.8; // Calidad JPEG (0.1 - 1.0)
     private readonly MAX_FILE_SIZE = 15000000; // 15MB máximo
+    public nro_formulario:string='';
     //------------tipos de formulario---------------------------------
     public formulario_interno:IFormularioInternoPDF=null;
     public formulario_externo:IFormularioExternoPDF=null;
@@ -342,6 +343,7 @@ export class ControlarTrancaComponent {
     }
 
     clearResults() {
+        this.nro_formulario='';
       this.qrResult = null;
       this.errorMessage = null;
       if (this.fileUploadComponent) {
@@ -481,6 +483,79 @@ cargarFormulario(tipoFormulario: string, hash: string) {
         this.error = 'Tipo de formulario no válido';
     }
   }
+
+
+//-----------------------buscar formulario-----------------------------------------------------------
+extraerDatosNumeroFormulario(nro:string){
+    return nro.split('-')[0];
+}
+cargarFormularioNumero() {
+    console.log(this.nro_formulario)
+    let tipoFormulario:string=this.extraerDatosNumeroFormulario(this.nro_formulario);
+    console.log(tipoFormulario)
+    switch (tipoFormulario) {
+      case 'I':
+        console.log(tipoFormulario)
+        this.formularioInternoService.verFormularioInternoNroForm(this.nro_formulario).subscribe(
+          (data: IFormularioInternoPDF) => {
+            console.log(data);
+            this.qrResult='encontrado'
+            this.formulario_interno = data;
+            this.controlTranca.formId=this.formulario_interno.nro_formulario;
+            this.formulario_externo=null;
+            this.formulario_interno_cooperativa=null;
+            this.formulario_cola=null;
+            this.formulario_tdm=null;
+            console.log(this.formulario_interno)
+          },
+          (error) => {
+            this.error = this.handleError(error); // Manejo de errores personalizado
+          }
+        );
+        break;
+
+      case 'E':
+        this.formularioExternoService.verFormularioExternoNroForm(this.nro_formulario).subscribe(
+          (data: IFormularioExternoPDF) => {
+            this.qrResult='encontrado'
+            this.formulario_externo = data;
+            this.controlTranca.formId=this.formulario_externo.nro_formulario;
+            this.formulario_interno=null;
+            this.formulario_interno_cooperativa=null;
+            this.formulario_cola=null;
+            this.formulario_tdm=null;
+            console.log(this.formulario_externo)
+          },
+          (error) => {
+            this.error = this.handleError(error);
+          }
+        );
+        break;
+
+      case 'C':
+        this.formularioTrasladoColaService.verFormularioTrasladoColaNroForm(this.nro_formulario).subscribe(
+          (data: IFormularioTrasladoColaPDF) => {
+            this.qrResult='encontrado'
+            this.formulario_cola = data;
+            this.controlTranca.formId=this.formulario_cola.nro_formulario;
+            this.formulario_interno=null;
+            this.formulario_externo=null;
+            this.formulario_interno_cooperativa=null;
+            this.formulario_tdm=null;
+            console.log(this.formulario_cola)
+          },
+          (error) => {
+            this.error = this.handleError(error);
+          }
+        );
+        break;
+
+      default:
+        this.error = 'Tipo de formulario no válido';
+    }
+  }
+
+
 
   // Función para manejar errores (similar a choferService.handleError)
   private handleError(error: any): string {

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IFormularioInterno } from '@data/formulario_interno.metadata';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { FormularioCooperativaService } from 'src/app/admin/services/formulario-interno-cooperativa/formulario-cooperativa.service';
 import { FormularioInternosService } from 'src/app/admin/services/formulario-interno/formulariosinternos.service';
 
 @Component({
@@ -54,7 +55,7 @@ export class AnularFormularioInternoCooperativaComponent implements OnInit {
   //public id_formulario:string='E-12345/2024';
   constructor(
     private actRoute:ActivatedRoute,
-    private formularioInternoService:FormularioInternosService,
+    private formularioInternoService:FormularioCooperativaService,
     private notify:ToastrService,
     private router: Router,
     private confirmationService: ConfirmationService,

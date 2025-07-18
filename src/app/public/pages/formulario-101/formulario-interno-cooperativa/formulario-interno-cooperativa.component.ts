@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { IFormularioInternoSimple } from '@data/formulario_interno_simple.metadata';
 import { Table } from 'primeng/table';
 import { PdfFormularioInternoService } from 'src/app/admin/services/pdf/formulario-interno-pdf.service';
@@ -15,6 +15,8 @@ import { CanAnularFormularioCooperativaGuard } from 'src/app/admin/guards/formul
 import { CanImprimirFormularioCooperativaGuard } from 'src/app/admin/guards/formulario-cooperativas/can-imprimir-formulario-cooperativa.guard';
 import { PdfFormularioInternoCooperativaService } from 'src/app/admin/services/pdf/formulario-cooperativa-pdf.service';
 import { AuthService } from '@core/authentication/services/auth.service';
+import { DialogService } from 'primeng/dynamicdialog';
+import { TrancaDetailComponent } from '../components/control-tranca-detalle.component';
 
 @Component({
   selector: 'app-formulario-interno-cooperativa',
@@ -33,6 +35,15 @@ export class FormularioInternoCooperativaComponent implements OnInit {
     public productDialog=false;
     public submitted = true;
     public operador_id:number=null;
+    //---------------------variables para optimizacion de listado-----------------------
+        @ViewChild('dt') dt!: Table;
+        loading: boolean = true;
+        totalRecords: number = 0;
+        rows: number = 30;
+        // Variables para ordenamiento
+        sortField: string = 'id';
+        sortOrder: number = -1;
+        searchTerm: string = '';
 
     constructor(
         public canListarFormularioCooperativa:CanListarFormularioCooperativaGuard,
@@ -48,65 +59,60 @@ export class FormularioInternoCooperativaComponent implements OnInit {
         private notify:ToastrService,
         private confirmationService:ConfirmationService,
         private authService:AuthService,
+        private dialogService: DialogService,
     ) {
         this.operador_id= authService.getUser.operador_id;
      }
 
     ngOnInit() {
-        this.formularioInternoService.verFormularioCooperativaOperadorSimple(this.operador_id.toString()).subscribe(
-            (data:any)=>{
-            this.listaFormularioInternos=this.formularioInternoService.handleFormularioInternoSimple(data);
-          },
-          (error:any)=> this.error=this.formularioInternoService.handleError(error));
-
-
-        //this.productService.getProducts().then(data => this.products = data);
-
         this.cols = [
-            { field: 'product', header: 'Product' },
-            { field: 'price', header: 'Price' },
-            { field: 'category', header: 'Category' },
-            { field: 'rating', header: 'Reviews' },
-            { field: 'inventoryStatus', header: 'Status' }
-        ];
+            { field: 'nro_formulario', header: 'Número' },
+            { field: 'razon_social', header: 'Operador' },
+            { field: 'fecha_creacion', header: 'Fecha Creación' },
+            { field: 'estado', header: 'Estado' },
+            { field: 'fecha_vencimiento', header: 'Vencimiento' }
+          ];
+          this.loadData();
 
     }
+    loadData() {
 
-    openNew() {
-        //this.product = {};
-        //this.submitted = false;
-        this.productDialog = true;
+        this.loading = true;
+        this.formularioInternoService.getFormReducidoOperadorOptimizado(
+          this.dt?.first / this.rows + 1 || 1,
+          this.rows,
+          this.searchTerm,
+          this.sortField,
+          this.sortOrder,
+          this.operador_id
+        ).subscribe({
+          next: (response) => {
+            this.listaFormularioInternos = response.data;
+            this.totalRecords = response.total;
+            this.loading = false;
+          },
+          error: (err) => {
+            console.error('Error:', err);
+            this.loading = false;
+          }
+        });
+      }
+
+      onSort(event: any) {
+        this.sortField = event.field;
+        this.sortOrder = event.order;
+        this.loadData();
+      }
+    onPageChange(event: any) {
+      const page = event.first / event.rows + 1;
+      this.loadData();
     }
+    onGlobalFilter(event: Event) {
+        const value = (event.target as HTMLInputElement).value;
+        this.searchTerm = value;  // <-- Almacena el término de búsqueda
+        this.dt.first = 0;       // <-- Reinicia a la primera página
+        this.loadData();         // <-- Vuelve a cargar los datos
 
-
-    hideDialog() {
-        this.productDialog = false;
-        this.submitted = false;
-    }
-
-    diasActivos(fecha1:string):number{
-        let dias:any;
-        let fechas1 = new Date(fecha1);
-        const tiempoTranscurrido = Date.now();
-        const hoy = new Date(tiempoTranscurrido);
-        dias=fechas1.getTime()-hoy.getTime();
-        dias=dias / 1000 / 60 / 60 / 24;
-        dias=Math.round (dias);
-        return dias;
-    }
-    findIndexById(id: string): string {
-        let index = -1;
-        for (let i = 0; i < this.listaFormularioInternos.length; i++) {
-            if (this.listaFormularioInternos[i].nro_formulario === id) {
-                index = i;
-                break;
-            }
-        }
-
-        return index.toString();
-    }
-    onGlobalFilter(table: Table, event: Event) {
-        table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
     generarPDF(formulario_interno:IFormularioInternoSimple){
         this.formularioInternoService.verFormularioInternoCooperativaPDF(formulario_interno.id.toString()).subscribe(
@@ -149,5 +155,13 @@ export class FormularioInternoCooperativaComponent implements OnInit {
               },
         });
     }
-
+    showTrancaDetail(tranca: any) {
+        const ref = this.dialogService.open(TrancaDetailComponent, {
+        header: 'Detalle del Control en Tranca',
+        width: '35%',
+        data: {
+            trancaData: tranca
+        }
+        });
+    }
 }

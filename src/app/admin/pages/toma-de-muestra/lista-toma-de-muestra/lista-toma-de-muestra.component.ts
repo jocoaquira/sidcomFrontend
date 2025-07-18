@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { IFormularioInternoSimple } from '@data/formulario_interno_simple.metadata';
 import { CanCrearFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-crear-formulario-interno.guard';
 import { CanEditarFormularioInternoGuard } from 'src/app/admin/guards/formulario-internos/can-editar-formulario-interno.guard';
@@ -67,7 +67,15 @@ export class ListaTomaDeMuestraComponent implements OnInit {
     public verDialog:boolean=false;
     public toma_de_muestra_id:number=null;
     public tdm_completo:ITomaDeMuestraPDF;
-
+//---------------------variables para optimizacion de listado-----------------------
+        @ViewChild('dt') dt!: Table;
+        loading: boolean = true;
+        totalRecords: number = 0;
+        rows: number = 30;
+        // Variables para ordenamiento
+        sortField: string = 'id';
+        sortOrder: number = -1;
+        searchTerm: string = '';
     constructor(
         public canListarFormularioInterno:CanListarFormularioInternoGuard,
         public canVerTomaDeMuestra:CanVerTomaDeMuestraGuard,
@@ -88,59 +96,58 @@ export class ListaTomaDeMuestraComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.tomaDeMuestraService.verTomaDeMuestrasSimple().subscribe(
-            (data:any)=>{
-            this.listaTomaDeMuestras=this.tomaDeMuestraService.handleTomaDeMuestraSimple(data);
+        this.cols = [
+            { field: 'nro_formulario', header: 'Nro. de Formulario' },
+            { field: 'fecha_hora_tdm', header: 'Fecha de Muestra' },
+            { field: 'razon_social', header: 'Operador' },
+            { field: 'responsable_tdm_id', header: 'Responsable' },
+            { field: 'estado', header: 'Estado' }
+        ];
+        this.loadData();
+    }
+    loadData() {
+
+        this.loading = true;
+        this.tomaDeMuestraService.getFormReducidoOptimizado(
+          this.dt?.first / this.rows + 1 || 1,
+          this.rows,
+          this.searchTerm,
+          this.sortField,
+          this.sortOrder
+        ).subscribe({
+          next: (response) => {
+            this.listaTomaDeMuestras = response.data;
+            this.totalRecords = response.total;
+            this.loading = false;
           },
-          (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
-
-
-        //this.productService.getProducts().then(data => this.products = data);
-
+          error: (err) => {
+            console.error('Error:', err);
+            this.loading = false;
+          }
+        });
+      }
+      onSort(event: any) {
+        this.sortField = event.field;
+        this.sortOrder = event.order;
+        this.loadData();
+      }
+    onPageChange(event: any) {
+      const page = event.first / event.rows + 1;
+      this.loadData();
     }
+    onGlobalFilter(event: Event) {
+        const value = (event.target as HTMLInputElement).value;
+        this.searchTerm = value;  // <-- Almacena el término de búsqueda
+        this.dt.first = 0;       // <-- Reinicia a la primera página
+        this.loadData();         // <-- Vuelve a cargar los datos
 
-    openNew() {
-        //this.product = {};
-        //this.submitted = false;
-        this.productDialog = true;
-    }
-
-
-    hideDialog() {
-        this.productDialog = false;
-        this.submitted = false;
-    }
-
-    diasActivos(fecha1:string):number{
-        let dias:any;
-        let fechas1 = new Date(fecha1);
-        const tiempoTranscurrido = Date.now();
-        const hoy = new Date(tiempoTranscurrido);
-        dias=fechas1.getTime()-hoy.getTime();
-        dias=dias / 1000 / 60 / 60 / 24;
-        dias=Math.round (dias);
-        return dias;
-    }
-    findIndexById(id: string): string {
-        let index = -1;
-        for (let i = 0; i < this.listaTomaDeMuestras.length; i++) {
-            if (this.listaTomaDeMuestras[i].nro_formulario === id) {
-                index = i;
-                break;
-            }
-        }
-
-        return index.toString();
-    }
-    onGlobalFilter(table: Table, event: Event) {
-        table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
     generarPDF(tdm:IFormularioInternoSimple){
-       
+
         this.tomaDeMuestraService.verTomaDeMuestraPDF(tdm.id.toString()).subscribe(
             (data:any)=>{
             this.tdm_completo=this.tomaDeMuestraService.handleTomaDeMuestraPDF(data);
-           
+
             this.pdfTomaDemuestra.generarPDF(this.tdm_completo);
           },
           (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
@@ -151,12 +158,8 @@ export class ListaTomaDeMuestraComponent implements OnInit {
 
         this.tomaDeMuestraService.solicitarTomaDeMuestra(event.id).subscribe(
             (data:any)=>{
-                this.tomaDeMuestraService.verTomaDeMuestrasSimple().subscribe(
-                    (data:any)=>{
-                    this.listaTomaDeMuestras=this.tomaDeMuestraService.handleTomaDeMuestraSimple(data);
-                  },
-                  (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
-          },
+                this.loadData();
+            },
           (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
     }
     confirmarSolicitud(event:ITomaDeMuestra) {
@@ -176,12 +179,8 @@ export class ListaTomaDeMuestraComponent implements OnInit {
     }
     cerrar(event:any){
         this.productDialog=event;
-        this.tomaDeMuestraService.verTomaDeMuestrasSimple().subscribe(
-            (data:any)=>{
-            this.listaTomaDeMuestras=this.tomaDeMuestraService.handleTomaDeMuestraSimple(data);
-          },
-          (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
-    }
+        this.loadData();
+     }
     verSolicitud(event:ITomaDeMuestraSimple){
         this.tomaDeMuestra=event;
         this.verDialog = true;

@@ -109,20 +109,44 @@ handleTomaDeMuestraPDF(data: ITomaDeMuestraPDF):ITomaDeMuestraPDF {
     let TomaDeMuestra:ITomaDeMuestraSimple[]=data;
     return TomaDeMuestra
   }
-  //-----------------Visualizar TDMuestra Simple-------------------------------------------
-  verTomaDeMuestrasSimpleOperador(id:number)
-  {
+    //-------------------------Simple Formulario Reducido Optimizado------------------------------------
+    getFormReducidoOptimizado(
+        page: number = 1,
+        pageSize: number = 30,
+        searchTerm: string = '',
+        sortField: string = 'id',
+        sortOrder: number = -1
+      ): Observable<any> {
+        // Parámetros HTTP para paginación, búsqueda y ordenamiento
+        const params = new HttpParams()
+        .set('page', page.toString())
+        .set('pageSize', pageSize.toString())
+        .set('search', searchTerm)
+        .set('sortField', sortField)
+        .set('sortOrder', sortOrder.toString());
 
-    // asignacion de parametros
-    return this.http.get(`${this.baseUrl}sample/operador/reducido/`+id);
-  }
-  handleTomaDeMuestraOperadorSimpleError(error: any): any {
-    return error=error.error.error;
-  }
-  handleTomaDeMuestraOperadorSimple(data: ITomaDeMuestraSimpleOperador[]):ITomaDeMuestraSimpleOperador[] {
-    let TomaDeMuestra:ITomaDeMuestraSimpleOperador[]=data;
-    return TomaDeMuestra
-  }
+        return this.http.get(`${this.baseUrl}sample/reducido`, { params });
+      }
+
+    //-------------------------Simple Formulario Reducido Optimizado Operador------------------------------------
+    getFormReducidoOperadorOptimizado(
+        page: number = 1,
+        pageSize: number = 30,
+        searchTerm: string = '',
+        sortField: string = 'id',
+        sortOrder: number = -1,
+        operador_id:number
+      ): Observable<any> {
+        // Parámetros HTTP para paginación, búsqueda y ordenamiento
+        const params = new HttpParams()
+        .set('page', page.toString())
+        .set('pageSize', pageSize.toString())
+        .set('search', searchTerm)
+        .set('sortField', sortField)
+        .set('sortOrder', sortOrder.toString());
+
+        return this.http.get(`${this.baseUrl}sample/operador/reducido/`+operador_id, { params });
+      }
 
 //---------------------crear   TomaDeMuestra-------------------------------------------
 crearTomaDeMuestra(data:any) {

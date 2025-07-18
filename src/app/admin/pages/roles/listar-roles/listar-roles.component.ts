@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IPermisoRol } from '@data/permisos-por-rol.metadata';
+import { Table } from 'primeng/table';
 import { CanCrearRolGuard } from 'src/app/admin/guards/roles/can-crear-rol.guard';
 import { CanEditarRolGuard } from 'src/app/admin/guards/roles/can-editar-rol.guard';
 import { CanEliminarRolGuard } from 'src/app/admin/guards/roles/can-eliminar-rol.guard';
@@ -29,11 +30,14 @@ p: number = 1;
     this.roleService.verRoles().subscribe(
       (data:any)=>{
         this.roles=this.roleService.handlerol(data);
-        
+
       },
       (error:any)=>this.error=this.roleService.handleErrorRole(error.error.data)
     );
   }
+onGlobalFilter(table: Table, event: Event) {
+        table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+    }
   openNew(){
     this.router.navigate(['/admin/roles/crear']);
   }
@@ -85,13 +89,13 @@ p: number = 1;
                       (data:any) =>
                       {
                         this.paisService.handleCrearpais(data);
-                        
+
                         if(data.error==null)
                         {
                           this.paisService.verpaiss('nada').subscribe(
                               (data:any)=>{
                               this.listaPaises=this.paisService.handlepais(data);
-                              
+
 
                             },
                             (error:any)=> this.error=this.paisService.handleError(error));

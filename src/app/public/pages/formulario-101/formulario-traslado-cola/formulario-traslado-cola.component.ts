@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { Table } from 'primeng/table';
 import { ToastrService } from 'ngx-toastr';
@@ -14,6 +14,8 @@ import { IFormularioTrasladoColaSimple } from '@data/formulario_cola_simple.meta
 import { PdfFormularioTrasladoColaService } from 'src/app/admin/services/pdf/traslado-cola-pdf.service';
 import { CanCrearFormularioColasGuard } from 'src/app/admin/guards/formulario-colas/can-crear-formulario-cola.guard';
 import { AuthService } from '@core/authentication/services/auth.service';
+import { DialogService } from 'primeng/dynamicdialog';
+import { TrancaDetailComponent } from '../components/control-tranca-detalle.component';
 
 
 @Component({
@@ -33,6 +35,15 @@ export class FormularioTrasladoColaComponent implements OnInit {
     public productDialog=false;
     public submitted = true;
     public operador_id:number=0;
+    //---------------------variables para optimizacion de listado-----------------------
+        @ViewChild('dt') dt!: Table;
+        loading: boolean = true;
+        totalRecords: number = 0;
+        rows: number = 30;
+        // Variables para ordenamiento
+        sortField: string = 'id';
+        sortOrder: number = -1;
+        searchTerm: string = '';
 
     constructor(
         public canListarFormularioTrasladoCola:CanVerOperadorReducidoFormularioColasGuard,
@@ -47,66 +58,61 @@ export class FormularioTrasladoColaComponent implements OnInit {
         private notify:ToastrService,
         private confirmationService:ConfirmationService,
         private authService:AuthService,
+        private dialogService: DialogService,
     ) {
         this.operador_id= authService.getUser.operador_id;
 
      }
 
     ngOnInit() {
-        this.formularioTrasladoColaService.verFormularioTrasladoColaOperadorSimple(this.operador_id.toString()).subscribe(
-            (data:any)=>{
-            this.listaFormularioTrasladoColas=this.formularioTrasladoColaService.handleFormularioTrasladoColaSimple(data);
-          },
-          (error:any)=> this.error=this.formularioTrasladoColaService.handleError(error));
-
-
-        //this.productService.getProducts().then(data => this.products = data);
-
         this.cols = [
-            { field: 'product', header: 'Product' },
-            { field: 'price', header: 'Price' },
-            { field: 'category', header: 'Category' },
-            { field: 'rating', header: 'Reviews' },
-            { field: 'inventoryStatus', header: 'Status' }
-        ];
+            { field: 'nro_formulario', header: 'Número' },
+            { field: 'razon_social', header: 'Operador' },
+            { field: 'fecha_creacion', header: 'Fecha Creación' },
+            { field: 'estado', header: 'Estado' },
+            { field: 'fecha_vencimiento', header: 'Vencimiento' }
+          ];
+          this.loadData();
 
     }
 
-    openNew() {
-        //this.product = {};
-        //this.submitted = false;
-        this.productDialog = true;
-    }
+    loadData() {
 
-
-    hideDialog() {
-        this.productDialog = false;
-        this.submitted = false;
+        this.loading = true;
+        this.formularioTrasladoColaService.getFormReducidoOperadorOptimizado(
+          this.dt?.first / this.rows + 1 || 1,
+          this.rows,
+          this.searchTerm,
+          this.sortField,
+          this.sortOrder,
+          this.operador_id
+        ).subscribe({
+          next: (response) => {
+            this.listaFormularioTrasladoColas = response.data;
+            this.totalRecords = response.total;
+            this.loading = false;
+          },
+          error: (err) => {
+            console.error('Error:', err);
+            this.loading = false;
+          }
+        });
+      }
+      onSort(event: any) {
+        this.sortField = event.field;
+        this.sortOrder = event.order;
+        this.loadData();
+      }
+    onPageChange(event: any) {
+      const page = event.first / event.rows + 1;
+      this.loadData();
     }
+    onGlobalFilter(event: Event) {
+        const value = (event.target as HTMLInputElement).value;
+        this.searchTerm = value;  // <-- Almacena el término de búsqueda
+        this.dt.first = 0;       // <-- Reinicia a la primera página
+        this.loadData();         // <-- Vuelve a cargar los datos
 
-    diasActivos(fecha1:string):number{
-        let dias:any;
-        let fechas1 = new Date(fecha1);
-        const tiempoTranscurrido = Date.now();
-        const hoy = new Date(tiempoTranscurrido);
-        dias=fechas1.getTime()-hoy.getTime();
-        dias=dias / 1000 / 60 / 60 / 24;
-        dias=Math.round (dias);
-        return dias;
-    }
-    findIndexById(id: string): string {
-        let index = -1;
-        for (let i = 0; i < this.listaFormularioTrasladoColas.length; i++) {
-            if (this.listaFormularioTrasladoColas[i].nro_formulario === id) {
-                index = i;
-                break;
-            }
-        }
-
-        return index.toString();
-    }
-    onGlobalFilter(table: Table, event: Event) {
-        table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
     generarPDF(tdm:IFormularioTrasladoColaSimple){
                 this.formularioTrasladoColaService.verFormularioTrasladoColaPDF(tdm.id.toString()).subscribe(
@@ -149,6 +155,15 @@ export class FormularioTrasladoColaComponent implements OnInit {
             accept: () => {
                 this.emitir(event); // Llama a onSubmit cuando el usuario acepta
               },
+        });
+    }
+    showTrancaDetail(tranca: any) {
+        const ref = this.dialogService.open(TrancaDetailComponent, {
+        header: 'Detalle del Control en Tranca',
+        width: '35%',
+        data: {
+            trancaData: tranca
+        }
         });
     }
 

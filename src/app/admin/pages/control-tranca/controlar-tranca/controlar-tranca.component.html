@@ -1,116 +1,134 @@
-<div class="field col-12 md:col-12" style="display: flex; flex-direction: column; gap: 1rem;">
-    <p-fileUpload
-      #fileUploadComponent
-      mode="advanced"
-      accept=".jpg,.jpeg,.png"
-      [maxFileSize]="15000000"
-      label="Cargar imagen con QR"
-      chooseLabel="Subir QR de Formulario a insperccionar"
-      class="w-full inline-block"
-      [auto]="true"
-      [showUploadButton]="false"
-      [showCancelButton]="true"
-      (onSelect)="onFileSelect($event)"
-    >
-      <ng-template pTemplate="content">
-        <div class="qr-scanner-content">
-          <!-- Área de carga personalizada -->
-          <div class="upload-area" *ngIf="!isProcessing && !qrResult && !errorMessage">
-            <i class="pi pi-camera" style="font-size: 3rem; color: #6c757d;"></i>
-            <p>Arrastra una imagen aquí o haz clic para seleccionar</p>
-            <p class="text-sm text-gray-500">Formatos soportados: JPG, PNG, JPEG</p>
-          </div>
-
-          <!-- Indicador de procesamiento -->
-          <div class="processing-indicator" *ngIf="isProcessing">
-            <p-progressSpinner [style]="{width: '50px', height: '50px'}"></p-progressSpinner>
-            <p class="mt-2">Optimizando imagen...</p>
-            <p class="text-sm text-gray-500">Redimensionando y escaneando código QR</p>
-          </div>
-
-          <!-- Resultado del QR -->
-          <div class="qr-result" *ngIf="qrResult">
-            <div>
-                <p-card *ngIf="formulario_interno_cooperativa">
-                    <app-form-int-copes  [formulario]="formulario_interno_cooperativa"></app-form-int-copes>
-                </p-card>
-                <p-card *ngIf="formulario_externo">
-                    <app-form-ext  [formulario]="formulario_externo"></app-form-ext>
-                </p-card>
-                <p-card *ngIf="formulario_interno">
-                    <app-form-int  [formulario]="formulario_interno"></app-form-int>
-                </p-card>
-                <p-card *ngIf="formulario_cola">
-                    <app-form-cola  [formulario]="formulario_cola"></app-form-cola>
-                </p-card>
-                <p-card *ngIf="formulario_tdm">
-                    <app-form-tdm  [formulario]="formulario_tdm"></app-form-tdm>
-                </p-card>
-            </div>
-            <div class="form-field">
-                <label for="observaciones" class="form-label">
-                  <i class="pi pi-comment"></i> Observaciones
-                </label>
+<div class="search-form-container">
+    <div class="grid p-fluid">
+        <div class="field col-12 md:col-4">
+            <span class="p-float-label">
                 <input
-                  type="text"
-                  pInputText
-                  id="observaciones"
-                  class="form-input"
-                  [(ngModel)]="controlTranca.observaciones"
-                  [ngClass]="{'input-error': controlTranca.observaciones?.length === 0}"
-                  autofocus
-                  placeholder="Ingrese observaciones..."
+                    type="text"
+                    id="nro_formulario"
+                    pInputText
+                    placeholder="Nro Formulario"
+                    [(ngModel)]="nro_formulario"
+                    class="ng-dirty"
                 />
-                <small class="error-message" *ngIf="controlTranca.observaciones?.length === 0">
-                  <i class="pi pi-exclamation-circle"></i> Este campo es requerido
-                </small>
-              </div>
-            <div class="action-buttons mt-3">
-              <p-button
-                label="Realizar el Verificacion"
-                icon="pi pi-copy"
-                (onClick)="guardar()"
-                class="p-button-outlined p-button-sm mr-2"
-              ></p-button>
 
-              <p-button
-                label="Escanear otra imagen"
-                icon="pi pi-refresh"
-                (onClick)="clearResults()"
-                class="p-button-outlined p-button-sm"
-              ></p-button>
-            </div>
-          </div>
-
-          <!-- Error message -->
-          <div class="error-message" *ngIf="errorMessage">
-            <i class="pi pi-exclamation-triangle" style="color: #ef4444; font-size: 2rem;"></i>
-            <h4>Error</h4>
-            <p>{{ errorMessage }}</p>
-            <p-button
-              label="Intentar de nuevo"
-              icon="pi pi-refresh"
-              (onClick)="clearResults()"
-              class="p-button-outlined p-button-sm mt-2"
-            ></p-button>
-          </div>
+            </span>
         </div>
-      </ng-template>
+        <div class="field col-12 md:col-4">
+            <button pButton pRipple type="button" icon="pi pi-search" label="Buscar Nro Formulario" class="p-button-outlined p-button-info" (click)="cargarFormularioNumero()"></button>
+        </div>
+    </div>
+</div>
+
+<div class="file-upload-container">
+    <p-fileUpload
+        #fileUploadComponent
+        mode="advanced"
+        accept=".jpg,.jpeg,.png"
+        [maxFileSize]="15000000"
+        label="Cargar imagen con QR"
+        chooseLabel="Subir QR de Formulario a insperccionar"
+        class="w-full inline-block"
+        [auto]="true"
+        [showUploadButton]="false"
+        [showCancelButton]="true"
+        (onSelect)="onFileSelect($event)"
+    >
+        <ng-template pTemplate="content">
+            <div class="qr-scanner-content">
+                <!-- Área de carga personalizada -->
+                <div class="upload-area" *ngIf="!isProcessing && !qrResult && !errorMessage">
+                    <i class="pi pi-camera" style="font-size: 3rem; color: #6c757d;"></i>
+                    <p>Arrastra una imagen aquí o haz clic para seleccionar</p>
+                    <p class="text-sm text-gray-500">Formatos soportados: JPG, PNG, JPEG</p>
+                </div>
+
+                <!-- Indicador de procesamiento -->
+                <div class="processing-indicator" *ngIf="isProcessing">
+                    <p-progressSpinner [style]="{width: '50px', height: '50px'}"></p-progressSpinner>
+                    <p class="mt-2">Optimizando imagen...</p>
+                    <p class="text-sm text-gray-500">Redimensionando y escaneando código QR</p>
+                </div>
+
+                <!-- Resultado del QR -->
+                <div class="qr-result" *ngIf="qrResult">
+                    <div>
+                        <p-card *ngIf="formulario_interno_cooperativa">
+                            <app-form-int-copes [formulario]="formulario_interno_cooperativa"></app-form-int-copes>
+                        </p-card>
+                        <p-card *ngIf="formulario_externo">
+                            <app-form-ext [formulario]="formulario_externo"></app-form-ext>
+                        </p-card>
+                        <p-card *ngIf="formulario_interno">
+                            <app-form-int [formulario]="formulario_interno"></app-form-int>
+                        </p-card>
+                        <p-card *ngIf="formulario_cola">
+                            <app-form-cola [formulario]="formulario_cola"></app-form-cola>
+                        </p-card>
+                        <p-card *ngIf="formulario_tdm">
+                            <app-form-tdm [formulario]="formulario_tdm"></app-form-tdm>
+                        </p-card>
+                    </div>
+                    <div class="form-field">
+                        <label for="observaciones" class="form-label">
+                            <i class="pi pi-comment"></i> Observaciones
+                        </label>
+                        <input
+                            type="text"
+                            pInputText
+                            id="observaciones"
+                            class="form-input"
+                            [(ngModel)]="controlTranca.observaciones"
+                            [ngClass]="{'input-error': controlTranca.observaciones?.length === 0}"
+                            autofocus
+                            placeholder="Ingrese observaciones..."
+                        />
+                        <small class="error-message" *ngIf="controlTranca.observaciones?.length === 0">
+                            <i class="pi pi-exclamation-circle"></i> Este campo es requerido
+                        </small>
+                    </div>
+                    <div class="action-buttons mt-3">
+                        <p-button
+                            label="Realizar el Verificacion"
+                            icon="pi pi-copy"
+                            (onClick)="guardar()"
+                            class="p-button-outlined p-button-sm mr-2"
+                        ></p-button>
+                        <p-button
+                            label="Escanear otra imagen"
+                            icon="pi pi-refresh"
+                            (onClick)="clearResults()"
+                            class="p-button-outlined p-button-sm"
+                        ></p-button>
+                    </div>
+                </div>
+
+                <!-- Error message -->
+                <div class="error-message" *ngIf="errorMessage">
+                    <i class="pi pi-exclamation-triangle" style="color: #ef4444; font-size: 2rem;"></i>
+                    <h4>Error</h4>
+                    <p>{{ errorMessage }}</p>
+                    <p-button
+                        label="Intentar de nuevo"
+                        icon="pi pi-refresh"
+                        (onClick)="clearResults()"
+                        class="p-button-outlined p-button-sm mt-2"
+                    ></p-button>
+                </div>
+            </div>
+        </ng-template>
     </p-fileUpload>
-<!-- Consejos para mejor escaneo -->
-<div class="qr-tips" *ngIf="!qrResult">
-    <p-card>
-      <h5>Consejos para mejor escaneo:</h5>
-      <ul>
-        <li>Tamaño máximo: 15MB</li>
-        <li>Las imágenes grandes se redimensionan automáticamente</li>
-        <li>Asegúrate de que la imagen sea clara y bien iluminada</li>
-        <li>El código QR debe estar completo y sin distorsiones</li>
-        <li>Funciona mejor con fotos tomadas directamente al QR</li>
-      </ul>
-    </p-card>
-  </div>
 
-  </div>
-
-
+    <!-- Consejos para mejor escaneo -->
+    <div class="qr-tips" *ngIf="!qrResult">
+        <p-card>
+            <h5>Consejos para mejor escaneo:</h5>
+            <ul>
+                <li>Tamaño máximo: 15MB</li>
+                <li>Las imágenes grandes se redimensionan automáticamente</li>
+                <li>Asegúrate de que la imagen sea clara y bien iluminada</li>
+                <li>El código QR debe estar completo y sin distorsiones</li>
+                <li>Funciona mejor con fotos tomadas directamente al QR</li>
+            </ul>
+        </p-card>
+    </div>
+</div>
