@@ -124,9 +124,9 @@ export class EditarOperadorComponent implements OnInit {
             {name: 'EMPRESA ESTATAL', id: '2'},
         ];
         this.tipoCreacion = [
-            {name: 'LEY', id: '1'},
-            {name: 'DECRETO SUPREMO', id: '2'},
-            {name: 'RESOLUCION MINISTERIAL', id: '3'},
+            {name: 'LEY', id: 1},
+            {name: 'DECRETO SUPREMO', id: 2},
+            {name: 'RESOLUCION MINISTERIAL', id: 3},
         ];
         this.tipoExplotacion = [
             {name: 'PATENTE MINERA', id: '1'},
@@ -211,6 +211,7 @@ export class EditarOperadorComponent implements OnInit {
             const operadorId = params['id']; // Asumiendo que el ID viene en la URL
             if (operadorId) {
                 this.cargarDatosOperador(operadorId);
+                console.log(this.operador.formulario.value)
             }
         });
     }
@@ -610,19 +611,7 @@ precargarFormulario(datos: any) {
 }
 
     onChangeTipoCreacion(dependencia_id:any){
-        const tipoDocId = dependencia_id?.value?.id;
-
-        if (!tipoDocId) {
-            console.warn('No se pudo obtener el ID del tipo de documento');
-            return;
-        }
-
-        // Validar que el formulario existe
-        if (!this.operador?.formulario?.value) {
-            console.warn('El formulario del operador no está disponible');
-            return;
-        }
-         this.operador.formulario.value.tipo_doc_creacion=dependencia_id.value.id;
+         this.operador.formulario.value.tipo_doc_creacion=dependencia_id.value;
     }
     onChangeExplotacion(dependencia_id:any){
         this.arrendamiento.tipo_explotacion=dependencia_id.value.name;

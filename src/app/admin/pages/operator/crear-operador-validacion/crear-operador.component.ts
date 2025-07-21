@@ -114,18 +114,18 @@ export class CrearOperadorComponent implements OnInit {
         private departamentosService:DepartamentosService,
     ) {
         this.nimniar = [
-            {name: 'NIM', id: '1'},
-            {name: 'NIAR', id: '2'},
+            {name: 'NIM', id: 1},
+            {name: 'NIAR', id: 2},
         ];
         this.tipoOperador = [
-            {name: 'EMPRESA PRIVADA', id: '3'},
-            {name: 'COOPERATIVA', id: '1'},
-            {name: 'EMPRESA ESTATAL', id: '2'},
+            {name: 'EMPRESA PRIVADA', id: 3},
+            {name: 'COOPERATIVA', id: 1},
+            {name: 'EMPRESA ESTATAL', id: 2},
         ];
         this.tipoCreacion = [
-            {name: 'LEY', id: '1'},
-            {name: 'DECRETO SUPREMO', id: '2'},
-            {name: 'RESOLUCION MINISTERIAL', id: '3'},
+            {name: 'LEY', id: 1},
+            {name: 'DECRETO SUPREMO', id: 2},
+            {name: 'RESOLUCION MINISTERIAL', id: 3},
         ];
         this.tipoExplotacion = [
             {name: 'PATENTE MINERA', id: '1'},
@@ -482,9 +482,11 @@ export class CrearOperadorComponent implements OnInit {
 }
 
     onChangeTipoCreacion(dependencia_id:any){
-         this.operador.formulario.value.tipo_doc_creacion=dependencia_id.value.id;
+
+         this.operador.formulario.value.tipo_doc_creacion=dependencia_id;
     }
     onChangeExplotacion(dependencia_id:any){
+        console.log(dependencia_id);
         this.arrendamiento.tipo_explotacion=dependencia_id.value.name;
 
     }

@@ -223,12 +223,14 @@
         <div class="field col-12 md:col-4">
             <span class="p-float-label">
                 <p-dropdown
-                    inputId="tipoCreacion"
+                    *ngIf="tipoCreacion.length > 0"
+                    inputId="tipo_doc_creacion"
                     [autoDisplayFirst]="false"
                     [options]="tipoCreacion"
                     formControlName="tipo_doc_creacion"
                     optionLabel="name"
-                    (ngModelChange)="onChangeTipoCreacion($event)"
+                    optionValue="id"
+                    (onChange)="onChangeTipoCreacion($event)"
                 ></p-dropdown>
 
                 <label for="dropdown">Tipo de Creación</label>
