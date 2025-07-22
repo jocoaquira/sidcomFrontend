@@ -8,10 +8,10 @@ export const environment = {
 
     //API_URL: 'http://127.0.0.1:3000/',
     //API_WS: 'ws://127.0.0.1:3000/',
-    API_URL: 'http://192.168.205.133:3000/',
-    API_WS: 'ws://192.168.205.133:3000/',
-   //API_URL: 'https://apim.oruro.gob.bo/',
-   //API_WS: 'wss://apim.oruro.gob.bo/',
+   // API_URL: 'http://192.168.205.133:3000/',
+   // API_WS: 'ws://192.168.205.133:3000/',
+   API_URL: 'https://apim.oruro.gob.bo/',
+   API_WS: 'wss://apim.oruro.gob.bo/',
    //API_URL: 'http://192.168.205.73:4201/',
 
 

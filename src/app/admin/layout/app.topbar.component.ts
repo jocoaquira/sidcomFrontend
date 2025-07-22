@@ -18,6 +18,7 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
     overlayMenuItems = [];
     overlayMenuItem = [];
     cantidadTDM: number = 0;
+    cantidadPreRegistro:number=0;
     error: any;
 
     @ViewChild('menubutton') menuButton!: ElementRef;
