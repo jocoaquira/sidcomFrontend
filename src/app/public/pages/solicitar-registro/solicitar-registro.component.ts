@@ -1,12 +1,10 @@
 import { ElementRef , Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, NgForm } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IOperator } from '@data/operator.metadata';
 import { ToastrService } from 'ngx-toastr';
-import { SelectItem } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
-import { OperatorsService } from 'src/app/admin/services/operators.service';
-import { tileLayer, latLng, Marker,marker, MapOptions,Map, LeafletEvent , control } from 'leaflet';
+import { tileLayer, latLng, Marker,marker, Map } from 'leaflet';
 import { MunicipiosService } from 'src/app/admin/services/municipios.service';
 import { DepartamentosService } from 'src/app/admin/services/departamentos.service';
 import { IDepartamento } from '@data/departamento.metadata';
@@ -14,6 +12,7 @@ import { IMunicipio } from '@data/municipio.metadata';
 import { IOficina } from '@data/oficina.metadata';
 import { IArrendamiento } from '@data/arrendamiento.metadata';
 import { OperatorFormulario } from 'src/app/admin/validators/operator';
+import { PreRegistroService } from 'src/app/admin/services/pre-registro.service';
 @Component({
     templateUrl: './solicitar-registro.component.html',
 
@@ -105,7 +104,7 @@ export class SolicitarRegistroComponent implements OnInit {
     public status:string='error';
     valSwitch: boolean = false;
     constructor(
-        private operadorService:OperatorsService,
+        private preRegistroService:PreRegistroService,
         private notify:ToastrService,
         private router:Router,
         private municipiosService:MunicipiosService,
@@ -231,107 +230,48 @@ export class SolicitarRegistroComponent implements OnInit {
 
     return filteredData;
   };
+
+private markAllAsTouched(formGroup: FormGroup | FormArray) {
+  Object.keys(formGroup.controls).forEach(field => {
+    const control = formGroup.get(field);
+    if (control instanceof FormControl) {
+      control.markAsTouched({ onlySelf: true });
+    } else if (control instanceof FormGroup || control instanceof FormArray) {
+      this.markAllAsTouched(control);
+    }
+  });
+}
+
+
     onSubmit() {
-        let formData = new FormData();
+        this.operador.formulario.patchValue({
+            estado: 'ACTIVO'
+        });
 
-        // Agregar todos los valores del formulario a formData
-        let datos=this.convertBooleansToNumbers(this.operador.formulario.value)
-        let datofin=this.removeZeroOneProperties(datos);
-       /*Object.keys(datofin).forEach(key => {
-            if (datofin[key] !== null && datofin[key] !== undefined) {
-                formData.append(key, datofin[key]);
-            }
-        });*/
-
-        for (const key in datofin) {
-            const value = datofin[key];
-
-            // Verificar el tipo de dato y convertir si es necesario
-            if (typeof value === 'boolean') {
-              // Convertir el valor booleano a número (1 o 0)
-              formData.append(key, value ? '1' : '0');
-            } else if (typeof value === 'number') {
-              // Si es un número, agregarlo tal cual
-              formData.append(key, value.toString()); // Aunque FormData convierte, es recomendable asegurarse de que sea un string
-            } else {
-              // Para cadenas de texto o cualquier otro tipo, agregar como está
-              formData.append(key, value);
-            }
-          }
-
-
-       /* formData.append('fecha_exp_nim', '2025-12-1');
-        formData.append('razon_social','EMPRESA MINDEOR');
-        formData.append('nit','543543543');
-        formData.append('fecha_exp_seprec', '2025-12-1');*/
-        // Convertir fechas al formato adecuado antes de enviarlas
-        //formData.set('fecha_exp_nim', this.formatDate(this.operador.formulario.value.fecha_exp_nim));
-       // formData.set('fecha_exp_seprec', this.formatDate(this.operador.formulario.value.fecha_exp_seprec));
-        //formData.set('vencimiento_ruex', this.formatDate(this.operador.formulario.value.vencimiento_ruex));
-
-        // Agregar archivos (debes tener referencias a los archivos en tu formulario)
-        // Agregar los archivos si existen
-        if (this.fileNit) {
-            console.log('Añadiendo archivo Nit:', this.fileNit);
-            formData.append('nit_link', this.fileNit);
-        }
-        if (this.fileNim) {
-            console.log('Añadiendo archivo Nim:', this.fileNim);
-            formData.append('nim_link', this.fileNim);
-        }
-        if (this.fileSeprec) {
-            console.log('Añadiendo archivo SEPREC:', this.fileSeprec);
-            formData.append('seprec_link', this.fileSeprec);
-        }
-        if (this.fileDocExplotacion) {
-            console.log('Añadiendo archivo Doc Explotación:', this.fileDocExplotacion);
-            formData.append('doc_explotacion_link', this.fileDocExplotacion);
-        }
-        if (this.fileRuex) {
-            console.log('Añadiendo archivo RUEX:', this.fileRuex);
-            formData.append('ruex_link', this.fileRuex);
-        }
-        if (this.fileResolucion) {
-            console.log('Añadiendo archivo Resolución:', this.fileResolucion);
-            formData.append('resolucion_min_fundind_link', this.fileResolucion);
-        }
-        if (this.filePersoneria) {
-            console.log('Añadiendo archivo Personería:', this.filePersoneria);
-            formData.append('personeria_juridica_link', this.filePersoneria);
-        }
-        if (this.fileDocCreacion) {
-            console.log('Añadiendo archivo Creación Estatal:', this.fileDocCreacion);
-            formData.append('doc_creacion_estatal_link', this.fileDocCreacion);
-        }
-        if (this.fileCi) {
-            console.log('Añadiendo archivo CI:', this.fileCi);
-            formData.append('ci_link', this.fileCi);
-        }
-        // Verificar si todos los valores se agregaron correctamente
-        console.log("Valores en FormData:");
-        formData.forEach((value, key) => console.log(`${key}: ${value}`));
-        console.log('ver si hay errores',this.operador.formulario.valid);
-        console.log(this.operador.formulario.errors); // Muestra errores a nivel de formulario
-        console.log(this.operador.formulario.controls); // Muestra todos los controles
+        this.markAllAsTouched(this.operador.formulario);
 
         // Verificar si el formulario es válido antes de enviar
-        if (true) {
-            this.operadorService.crearoperator(formData).subscribe(
+        if (this.operador.formulario.valid) {
+            let datos=this.convertBooleansToNumbers(this.operador.formulario.value)
+            let datofin=this.removeZeroOneProperties(datos);
+            datofin.oficinas = this.oficina;
+            this.preRegistroService.crearPreRegistro(datofin).subscribe(
                 (data: any) => {
                     console.log("Respuesta del servidor:", data);
-                    this.operador_registrado = this.operadorService.handleCrearoperator(data);
+                    this.operador_registrado = this.preRegistroService.handleCrearoperator(data);
                     if (data) {
-                        this.notify.success('Guardado Correctamente');
+                        this.notify.success('Solicitud de Pre-Registro enviado Correctamente');
+                        this.onVolver()
                     }
                     else{
                         this.notify.success('nada de nada');
                     }
                 },
                 (error: any) => {
-                    this.errorOperator = this.operadorService.handleCrearoperatorError(error);
+                    this.errorOperator = this.preRegistroService.handleCrearoperatorError(error);
                     console.log(error);
                     this.status = error.status;
-                    this.notify.error(error.message);
+                    this.notify.error('Revise los datos e intente nuevamente', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
                 }
             );
         } else {
@@ -412,30 +352,6 @@ export class SolicitarRegistroComponent implements OnInit {
 
     }
 
-    onFileSelected(event: any, field: string) {
-        console.log('Evento de archivo:', event); // Verifica si el evento se está activando
-
-        if (event.files && event.files.length > 0) {
-            const file = event.files[0]; // PrimeNG usa `event.files`
-            console.log(`Archivo seleccionado para ${field}:`, file);
-
-            switch (field) {
-                case 'nit_link': this.fileNit = file; break;
-                case 'nim_link': this.fileNim = file; break;
-                case 'seprec_link': this.fileSeprec = file; break;
-                case 'doc_explotacion_link': this.fileDocExplotacion = file; break;
-                case 'ruex_link': this.fileRuex = file; break;
-                case 'resolucion_min_fundind_link': this.fileResolucion = file; break;
-                case 'personeria_juridica_link': this.filePersoneria = file; break;
-                case 'doc_creacion_estatal_link': this.fileDocCreacion = file; break;
-                case 'ci_link': this.fileCi = file; break;
-            }
-        } else {
-            console.warn(`No se seleccionó ningún archivo para ${field}`);
-        }
-    }
-
-
 
       options: any;
       satelliteLayer: any;
@@ -469,9 +385,9 @@ export class SolicitarRegistroComponent implements OnInit {
   submited:boolean=false;
   mapaDialogo:boolean=false;
     abrirMapa() {
-        if(this.operador.formulario.value.dl_departamento){
-            let dept:any=this.departamento.find(val => val.id ===  this.operador.formulario.value.dl_departamento);
-            console.log(this.operador.formulario.value.dl_departamento);
+        if(this.operador.formulario.value.dl_departamento_id){
+            let dept:any=this.departamento.find(val => val.id ===  this.operador.formulario.value.dl_departamento_id);
+            console.log(this.operador.formulario.value.dl_departamento_id);
             if (this.map) {
                 this.map.setView(latLng(dept.latitud, dept.longitud), 13.5);
             }
@@ -520,8 +436,9 @@ export class SolicitarRegistroComponent implements OnInit {
         else{
             this.notify.error('Seleccione un punto en el mapa para agregar....','Error al Seleccionar un Punto',{timeOut:2000,positionClass: 'toast-bottom-right'});
         }
-
-
+    }
+    cancelarMapa(){
+        this.mapaDialogo=false;
     }
     validarDireccion():boolean{
         let sw=true;

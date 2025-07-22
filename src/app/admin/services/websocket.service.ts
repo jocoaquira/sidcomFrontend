@@ -36,11 +36,8 @@ export class WebsocketService {
     this.ws.onmessage = (event) => {
         console.log('Mensaje recibido:', event.data);
         const mensaje = JSON.parse(event.data);
+        this.notificaciones$.next(mensaje);
 
-        // Emitir el valor recibido si el tipo es "solicitudes_tdm"
-        if (mensaje.type === 'solicitudes_tdm') {
-            this.notificaciones$.next(mensaje.data);
-        }
     };
 
     this.ws.onclose = () => {

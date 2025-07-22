@@ -57,9 +57,11 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
         // Suscripción a actualizaciones desde el WebSocket
         this.websocketService.notificaciones$.pipe(
             takeUntil(this.destroy$)
-        ).subscribe((data: number) => {
-            this.cantidadTDM = data; // Actualiza cantidadTDM con el valor recibido
-            this.actualizarMenu();
+        ).subscribe((data: any) => {
+            if(data.type==='solicitudes_tdm'){
+                this.cantidadTDM = data.data; // Actualiza cantidadTDM con el valor recibido
+                this.actualizarMenu();
+            }
         });
 
         // Carga inicial desde el servicio
