@@ -32,6 +32,7 @@ import { AppLayoutComponent } from './layout/app.layout.component';
         { path: 'vehiculos', loadChildren: () => import('./pages/vehiculo/vehiculo.module').then(m => m.VehiculoModule) },
         { path: 'municipio', loadChildren: () => import('./pages/municipio/municipio.module').then(m => m.MunicipioModule) },
         { path: 'departamento', loadChildren: () => import('./pages/departamento/departamento.module').then(m => m.DepartamentoModule) },
+        { path: 'pre-registro', loadChildren: () => import('./pages/preregistro/preregistro.module').then(m => m.PreRegistroModule) },
         { path: 'lugar-verificacion-tdm', loadChildren: () => import('./pages/lugar-verificacion-tdm/lugar-verificacion-tdm.module').then(m => m.LugarVerificacionTDMModule) },
         { path: '**', redirectTo: '/notfound' }
         ]

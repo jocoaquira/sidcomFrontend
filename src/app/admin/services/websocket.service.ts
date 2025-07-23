@@ -66,6 +66,7 @@ export class WebsocketService {
   sendMessage(message: string): void {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       this.ws.send(message);
+      console.log('envio correcto: ', message);
     } else {
       console.warn('No se puede enviar el mensaje porque el WebSocket no está conectado.');
     }

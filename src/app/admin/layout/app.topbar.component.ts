@@ -76,6 +76,7 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
 
         // Conectar al WebSocket
         this.websocketService.connect();
+        //this.websocketService.sendMessage('estadoPreregistroActualizado');
     }
 
     actualizarMenu() {
@@ -97,5 +98,8 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();
+    }
+    clickmensaje(){
+        this.websocketService.sendMessage('estadoPreregistroActualizado');
     }
 }

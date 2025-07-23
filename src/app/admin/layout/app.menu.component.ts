@@ -26,6 +26,7 @@ import { CanVerVehiculoGuard } from '../guards/vehiculo/can-ver-vehiculo.guard';
 import { CanVerTrancaGuard } from '../guards/tranca/can-ver-tranca.guard';
 import { CanVercontrolTrancaGuard } from '../guards/control_tranca/can-ver-control_tranca.guard';
 import { CanVerTurnoTrancaGuard } from '../guards/turno-tranca/can-ver-turno-tranca.guard';
+import { CanListarPreRegistroGuard } from '../guards/preregistro/can-listar-preregistro.guard';
 
 @Component({
     selector: 'app-menu',
@@ -60,7 +61,8 @@ export class AppMenuComponent implements OnInit {
         private canVerControlTrancaGuard:CanVercontrolTrancaGuard,
         private canVerVehiculoGuard:CanVerVehiculoGuard,
         private canVerTomaDeMuestraGuard:CanVerTomaDeMuestraGuard,
-        private canListarLugarVerificacionTDMGuard:CanListarLugarVerificacionTDMGuard
+        private canListarLugarVerificacionTDMGuard:CanListarLugarVerificacionTDMGuard,
+        private canListarPreRegistroGuard:CanListarPreRegistroGuard
         ) { }
 
     ngOnInit() {
@@ -74,6 +76,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'ADMINISTRACION',
                 items: [
+                    { label: 'Pre Registro', icon: 'pi pi-fw pi-truck', routerLink: ['/admin/pre-registro'],visible: this.canListarPreRegistroGuard.canActivate() },
                     { label: 'Operadores Mineros', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/operador'], visible: this.canVerOperatorGuard.canActivate() },
                     { label: 'Usuarios', icon: 'pi pi-fw pi-users', routerLink: ['/admin/usuario'], visible: this.canVerUsuarioGuard.canActivate() },
                     { label: 'Responsables SENARECOM', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/responsable-senarecom'],visible: this.canVerResponsableSenarecomGuard.canActivate() },

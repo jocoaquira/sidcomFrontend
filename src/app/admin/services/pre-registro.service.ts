@@ -1,33 +1,37 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { IOperator } from '../data/operator.metadata';
-import { AuthService } from '@core/authentication/services/auth.service';
-import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.metadata';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PreRegistroService {
-  private user!:IApiUserAuthenticated;
   private baseUrl = localStorage.getItem('url-backend');
   private headers!:HttpHeaders;
   constructor(
     private http: HttpClient,
-    private authService:AuthService
   ) {
 
 
     //this.requestOptions = { headers: headers };
   }
 //-----------------Visualizar operadores-------------------------------------------
-  verPreRegistros(nombre:string)
-  {
-    // Inicializacion de objeto params
-    let params = new HttpParams();
-    params = params.append('nombre', nombre);
+  verPreRegistros(
+      page: number = 1,
+      pageSize: number = 30,
+      searchTerm: string = '',
+      sortField: string = 'id',
+      sortOrder: number = -1
+    ): Observable<any> {
+      // Parámetros HTTP para paginación, búsqueda y ordenamiento
+      const params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString())
+      .set('search', searchTerm)
+      .set('sortField', sortField)
+      .set('sortOrder', sortOrder.toString());
 
-    // asignacion de parametros
     return this.http.get(`${this.baseUrl}preregistro`,{params:params});
   }
   handleError(error: any): any {
@@ -80,7 +84,7 @@ export class PreRegistroService {
 //---------------------crear   operator-------------------------------------------
 
 crearPreRegistro(data:IOperator) {
-  this.token();
+
   return this.http.post(`${this.baseUrl}preregistro`,data, {headers:this.headers})
 }
 handleCrearoperatorError(error: any): any {
@@ -101,16 +105,6 @@ handleEditaroperatorError(error: any): any {
 handleEditaroperator(data: boolean):boolean {
   let operator:boolean=data;
   return operator
-}
-//-----------------Listado de Empelados por Dependencia--------------------------------------------
-private token(){
-  this.user=this.authService.getUser;
-    let auth_token = this.user.token;
-
-    this.headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${auth_token}`
-      });
 }
 
 }
