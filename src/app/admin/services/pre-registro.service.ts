@@ -1,12 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { IOperator } from '../data/operator.metadata';
-import { Observable } from 'rxjs';
+import { Observable, Subject, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PreRegistroService {
+    private notificacionesUpdated = new Subject<number>();
+
+    // Observable para componentes
+    notificaciones$ = this.notificacionesUpdated.asObservable();
+
+
   private baseUrl = localStorage.getItem('url-backend');
   private headers!:HttpHeaders;
   constructor(
@@ -106,6 +112,13 @@ handleEditaroperator(data: boolean):boolean {
   let operator:boolean=data;
   return operator
 }
+
+//-------------------------CDONTAR SOLICITUDES------------------------------------------
+contarSolicitudes() {
+    return this.http.get(`${this.baseUrl}preregistro/contar_solicitudes`).pipe(
+      tap((count:number) => this.notificacionesUpdated.next(count))
+    );
+  }
 
 }
 

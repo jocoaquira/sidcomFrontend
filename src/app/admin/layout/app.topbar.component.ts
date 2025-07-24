@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { TomaDeMuestraService } from '../services/toma-de-muestra/toma-de-muestra.service';
 import { WebsocketService } from '../services/websocket.service'; // Importa el servicio WebSocket
 import { Subject, takeUntil } from 'rxjs';
+import { PreRegistroService } from '../services/pre-registro.service';
 
 @Component({
     selector: 'app-topbar',
@@ -29,6 +30,7 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
         public layoutService: LayoutService,
         public authService: AuthService,
         public tdmNotificacion: TomaDeMuestraService,
+        public preRegistroNotificacion:PreRegistroService,
         private websocketService: WebsocketService, // Inyecta el servicio WebSocket
         private router: Router
     ) {
@@ -63,12 +65,24 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
                 this.cantidadTDM = data.data; // Actualiza cantidadTDM con el valor recibido
                 this.actualizarMenu();
             }
+            if(data.type==='solicitudes_preregistro'){
+                this.cantidadPreRegistro = data.data; // Actualiza cantidadTDM con el valor recibido
+                this.actualizarMenu();
+            }
         });
 
         // Carga inicial desde el servicio
         this.tdmNotificacion.contarSolicitudesTDM().subscribe(
             (data: any) => {
                 this.cantidadTDM = Number(data.toString());
+                this.actualizarMenu();
+            },
+            (error: any) => this.error = this.tdmNotificacion.handleError(error)
+        );
+        // Carga inicial desde el servicio
+        this.preRegistroNotificacion.contarSolicitudes().subscribe(
+            (data: any) => {
+                this.cantidadPreRegistro = Number(data.toString());
                 this.actualizarMenu();
             },
             (error: any) => this.error = this.tdmNotificacion.handleError(error)
@@ -89,8 +103,8 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
                 separator: true
             },
             {
-                label: 'Solicitudes de Inscripción',
-                routerLink: ['/admin/']
+                label: 'Solicitudes de Inscripción: '+this.cantidadPreRegistro,
+                routerLink: ['/admin/pre-registro/']
             }
         ];
     }

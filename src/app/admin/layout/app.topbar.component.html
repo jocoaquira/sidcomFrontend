@@ -14,7 +14,7 @@
     <div #topbarmenu class="layout-topbar-menu" [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
         <button class="p-link layout-topbar-button" style="position: relative;" (click)="menu1.toggle($event)">
             <i class="pi pi-bell" style="font-size: 1.2rem;"></i>
-            <span *ngIf="cantidadTDM > 0" style="
+            <span *ngIf="(cantidadTDM+cantidadPreRegistro) > 0" style="
               position: absolute;
               top: -5px;
               right: -5px;
@@ -31,7 +31,7 @@
               border: 2px solid white;
               z-index: 100;
             ">
-              {{ cantidadTDM }}
+              {{ cantidadTDM +cantidadPreRegistro }}
             </span>
           </button>
           <button
