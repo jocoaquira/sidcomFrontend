@@ -1,3 +1,4 @@
+import { CanEditarPreRegistroGuard } from './../../guards/preregistro/can-editar-preregistro.guard';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
@@ -9,6 +10,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { PreRegistroService } from '../../services/pre-registro.service';
 import { IOperator } from '@data/operator.metadata';
+import { CanEliminarPreRegistroGuard } from '../../guards/preregistro/can-eliminar-preregistro.guard';
+import { preRegistroService } from '../operator/crear-operador-validacion/preregistro.service';
 
 
 @Component({
@@ -42,12 +45,13 @@ export class PreRegistroComponent implements OnInit {
         private messageService: MessageService,
         private preRegistroService:PreRegistroService,
         public canCrearOperator:CanCrearOperatorGuard,
-        public canEditarOperator:CanEditarOperatorGuard,
-        public canEliminarOperator:CanEliminarOperatorGuard,
+        public canEditarOperator:CanEditarPreRegistroGuard,
+        public canEliminarOperator:CanEliminarPreRegistroGuard,
         public idomServices:IDOMService,
         private confirmationService:ConfirmationService,
         private notify:ToastrService,
-        private router: Router
+        private router: Router,
+        private preRegistroServices:preRegistroService
 
     ) { }
 
@@ -178,4 +182,8 @@ export class PreRegistroComponent implements OnInit {
         console.log(operador);
         this.router.navigate(['/admin/operador/editar', operador.id]);
     }
+    crearOperador(operador: IOperator) {
+    this.preRegistroServices.setOperador(operador);
+    this.router.navigate(['/admin/operador/crear']);
+}
 }

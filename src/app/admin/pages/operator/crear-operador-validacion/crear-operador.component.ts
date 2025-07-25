@@ -14,6 +14,7 @@ import { IMunicipio } from '@data/municipio.metadata';
 import { IOficina } from '@data/oficina.metadata';
 import { IArrendamiento } from '@data/arrendamiento.metadata';
 import { OperatorFormulario } from 'src/app/admin/validators/operator';
+import { preRegistroService } from './preregistro.service';
 @Component({
     templateUrl: './crear-operador.component.html',
 
@@ -22,6 +23,7 @@ export class CrearOperadorComponent implements OnInit {
     es: any;
 
     public operador=new OperatorFormulario();
+    public preRegistroOperador:IOperator=null;
     public errorOperator:any={};
     public operador_registrado!:IOperator;
     @ViewChild('fileUpload') fileUpload: FileUpload;
@@ -112,6 +114,7 @@ export class CrearOperadorComponent implements OnInit {
         private router:Router,
         private municipiosService:MunicipiosService,
         private departamentosService:DepartamentosService,
+        private preRegistroServices:preRegistroService
     ) {
         this.nimniar = [
             {name: 'NIM', id: 1},
@@ -171,14 +174,15 @@ export class CrearOperadorComponent implements OnInit {
      nombre:any;
      error:any;
     ngOnInit() {
-        this.cols = [
-            { field: 'product', header: 'Product' },
-            { field: 'price', header: 'Price' },
-            { field: 'category', header: 'Category' },
-            { field: 'rating', header: 'Reviews' },
-            { field: 'inventoryStatus', header: 'Status' }
-        ];
-
+        this.preRegistroServices.currentOperador.subscribe(operador => {
+            if (operador) {
+                this.preRegistroOperador = operador;
+                this.precargarFormulario(this.preRegistroOperador)
+                console.log(this.preRegistroOperador);
+            } else {
+                console.error("Operador no disponible");
+            }
+        });
 
         this.departamentosService.verdepartamentos(this.nombre).subscribe(
             (data:any)=>{
@@ -206,6 +210,106 @@ export class CrearOperadorComponent implements OnInit {
             }
           );
     }
+
+//-----------------------------------PRE CARGAR LOS DATOS DE OPERADOR-----------------------------------------------------------
+precargarFormulario(datos: any) {
+    // Precargar el formulario principal
+    this.operador.formulario.patchValue({
+        razon_social: datos.razon_social || '',
+        nit: datos.nit || '',
+        nro_nim: datos.nro_nim || '',
+        fecha_exp_nim: datos.fecha_exp_nim ? new Date(datos.fecha_exp_nim) : null,
+        tipo_operador:String(datos.tipo_operador),
+        tipo_nim_niar:datos.tipo_nim_niar,
+        nro_personeria: datos.nro_personeria || '',
+        nro_matricula_seprec: datos.nro_matricula_seprec || '',
+        fecha_exp_seprec: datos.fecha_exp_seprec ? new Date(datos.fecha_exp_seprec) : null,
+        tipo_doc_creacion: datos.tipo_doc_creacion || null,
+        doc_creacion: datos.doc_creacion || '',
+        dl_direccion: datos.dl_direccion || '',
+        correo_inst: datos.correo_inst || '',
+        tel_fijo: datos.tel_fijo || '',
+        celular: datos.celular || null,
+        act_exploracion: datos.act_exploracion === 1,
+        act_comer_interna: datos.act_comer_interna === 1,
+        act_comer_externa: datos.act_comer_externa === 1,
+        act_industrializacion: datos.act_industrializacion === 1,
+        act_tras_colas: datos.act_tras_colas === 1,
+        act_explotacion: datos.act_explotacion === 1,
+        act_ben_concentracion: datos.act_ben_concentracion === 1,
+        act_refinacion: datos.act_refinacion === 1,
+        act_fundicion: datos.act_fundicion === 1,
+        nro_ruex: datos.nro_ruex || '',
+        nro_res_ministerial: datos.nro_res_ministerial || '',
+        act_calcinacion: datos.act_calcinacion === 1,
+        act_tostacion: datos.act_tostacion === 1,
+        fax_op_min: datos.fax_op_min || '',
+        observaciones: datos.observaciones || '',
+        ofi_lat: datos.ofi_lat || '',
+        ofi_lon: datos.ofi_lon || '',
+        otro_celular: datos.otro_celular || null,
+        rep_celular: datos.rep_celular || null,
+        rep_ci: datos.rep_ci || '',
+        rep_correo: datos.rep_correo || '',
+        rep_departamento_id: datos.rep_departamento_id || null,
+        rep_direccion: datos.rep_direccion || '',
+        rep_municipio_id: datos.rep_municipio_id || null,
+        rep_nombre_completo: datos.rep_nombre_completo || '',
+        rep_telefono: datos.rep_telefono || '',
+        fecha_exp_ruex: datos.fecha_exp_ruex ? new Date(datos.fecha_exp_ruex) : null,
+        verif_cert_liberacion: datos.verif_cert_liberacion || false,
+        comercio_interno_coperativa: datos.comercio_interno_coperativa || false,
+        transbordo: datos.transbordo || false,
+        traslado_colas: datos.traslado_colas || false,
+        verificacion_toma_muestra: datos.verificacion_toma_muestra || false,
+        dl_departamento_id: datos.dl_departamento_id || null,
+        dl_municipio_id: datos.dl_municipio_id || null,
+        estado:datos.estado||null
+    });
+
+    // Precargar arrendamientos si existen
+    if (datos.arrendamientos && datos.arrendamientos.length > 0) {
+        this.lista_arrendamiento = datos.arrendamientos.map((arr: any) => ({
+            id: arr.id || null,
+            operator_id: arr.operator_id || null,
+            codigo_unico: arr.codigo_unico || null,
+            extension: arr.extension || null,
+            unidad_extension: arr.unidad_extension || null,
+            departamento_id: arr.departamento_id || null,
+            denominacion_area: arr.denominacion_area || '',
+            municipio_id: arr.municipio_id || null,
+            tipo_explotacion: arr.tipo_explotacion || null,
+            estado: arr.estado || null
+        }));
+    }
+
+    // Precargar oficinas si existen
+    if (datos.oficinas && datos.oficinas.length > 0) {
+        this.oficina = datos.oficinas.map((ofi: any) => ({
+            id: ofi.id || null,
+            operator_id: ofi.operator_id || null,
+            departamento_id: ofi.departamento_id || null,
+            municipio_id: ofi.municipio_id || null,
+            tipo: ofi.tipo || '',
+            direccion: ofi.direccion || '',
+            latitud: ofi.latitud || '',
+            longitud: ofi.longitud || '',
+            estado: ofi.estado || ''
+        }));
+        this.valSwitch=true;
+    }
+
+    // Cargar municipios si hay un departamento seleccionado
+    if (datos.dl_departamento_id) {
+        this.cambioDepartamento({ value: datos.dl_departamento_id });
+    }
+
+    // Establecer valores para los switches
+    //this.valSwitch = datos.verif_cert_liberacion || false;
+}
+
+
+
     formatDate(date: any): string {
         console.log(date);
         if(date!=null){

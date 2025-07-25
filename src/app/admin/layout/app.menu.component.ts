@@ -76,7 +76,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'ADMINISTRACION',
                 items: [
-                    { label: 'Pre Registro', icon: 'pi pi-fw pi-truck', routerLink: ['/admin/pre-registro'],visible: this.canListarPreRegistroGuard.canActivate() },
+                    { label: 'Pre Registro', icon: 'pi pi-fw pi-comment', routerLink: ['/admin/pre-registro'],visible: this.canListarPreRegistroGuard.canActivate() },
                     { label: 'Operadores Mineros', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/operador'], visible: this.canVerOperatorGuard.canActivate() },
                     { label: 'Usuarios', icon: 'pi pi-fw pi-users', routerLink: ['/admin/usuario'], visible: this.canVerUsuarioGuard.canActivate() },
                     { label: 'Responsables SENARECOM', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/responsable-senarecom'],visible: this.canVerResponsableSenarecomGuard.canActivate() },
