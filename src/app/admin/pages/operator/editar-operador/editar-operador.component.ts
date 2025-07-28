@@ -1,12 +1,12 @@
-import { ElementRef , Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, NgForm } from '@angular/forms';
+import { ElementRef, Component, OnInit, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IOperator } from '@data/operator.metadata';
 import { ToastrService } from 'ngx-toastr';
 import { SelectItem } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
 import { OperatorsService } from 'src/app/admin/services/operators.service';
-import { tileLayer, latLng, Marker,marker, MapOptions,Map, LeafletEvent , control } from 'leaflet';
+import { tileLayer, latLng, Marker, marker, MapOptions, Map } from 'leaflet';
 import { MunicipiosService } from 'src/app/admin/services/municipios.service';
 import { DepartamentosService } from 'src/app/admin/services/departamentos.service';
 import { IDepartamento } from '@data/departamento.metadata';
@@ -14,16 +14,16 @@ import { IMunicipio } from '@data/municipio.metadata';
 import { IOficina } from '@data/oficina.metadata';
 import { IArrendamiento } from '@data/arrendamiento.metadata';
 import { OperatorFormulario } from 'src/app/admin/validators/operator';
+
 @Component({
     templateUrl: './editar-operador.component.html',
-
 })
 export class EditarOperadorComponent implements OnInit {
     es: any;
     accion: string = '';
-    public operador=new OperatorFormulario();
-    public errorOperator:any={};
-    public operador_registrado!:IOperator;
+    public operador = new OperatorFormulario();
+    public errorOperator: any = {};
+    public operador_registrado!: IOperator;
     @ViewChild('fileUpload') fileUpload: FileUpload;
 
     public fileNit: File | null = null;
@@ -37,81 +37,97 @@ export class EditarOperadorComponent implements OnInit {
     public fileCi: File | null = null;
 
     nimniar: any[];
-    tipoOperador: any[]=[];
-    tipoSucursal: any[]=[];
-    tipoCreacion:any[]=[];
-    estados:any[]=[];
-    estadoOficina:any[]=[];
-    tipoExplotacion:any[]=[];
-    tipoExtension:any[]=[];
+    tipoOperador: any[] = [];
+    tipoSucursal: any[] = [];
+    tipoCreacion: any[] = [];
+    estados: any[] = [];
+    estadoOficina: any[] = [];
+    tipoExplotacion: any[] = [];
+    tipoExtension: any[] = [];
     filteredCountries: any[] = [];
-    departamento:IDepartamento[]=[];
-    departamento_id:any=0;
-    municipio_id:any=0;
-    municipio:IMunicipio[]=[];
-    municipio_sucursal:IMunicipio[]=[];
-    municipio_arrendamiento:IMunicipio[]=[];
-    oficina:IOficina[]=[];
-    lista_arrendamiento:IArrendamiento[]=[];
-    sucursal:IOficina={
-        id:null,
-        operator_id:null,
-        departamento_id:null,
-        municipio_id:null,
-        tipo:'',
-        direccion:'',
-        latitud:'',
-        longitud:'',
-        estado:''
-    };
-    errorSucursal:IOficina={
-        id:null,
-        operator_id:null,
-        departamento_id:null,
-        municipio_id:null,
-        tipo:null,
-        direccion:null,
-        latitud:null,
-        longitud:null,
-        estado:null
-    };
-    arrendamiento:IArrendamiento={
-        id:null,
-        operator_id:null,
-        codigo_unico:null,
-        extension:null,
-        unidad_extension:null,
-        departamento_id:null,
-        denominacion_area:'',
-        municipio_id:null,
-        tipo_explotacion:null,
-        estado:null
-    };
-    errorArrendamiento:IArrendamiento={
-        id:null,
-        operator_id:null,
-        codigo_unico:null,
-        extension:null,
-        unidad_extension:null,
-        departamento_id:null,
-        denominacion_area:null,
-        municipio_id:null,
-        tipo_explotacion:null,
-        estado:null
-    };
-    oficinaSelecionadas:IOficina[]=[];
-    sw1:number=0;
-    cols:any[]=[];
-    sw_mapa:boolean=false;
+    departamento: IDepartamento[] = [];
+    departamento_id: any = 0;
+    municipio_id: any = 0;
+    municipio_principal: IMunicipio[] = []; // Para dirección legal
+    municipio_representante: IMunicipio[] = []; // Para representante legal
+    municipio_sucursal: IMunicipio[] = [];
+    municipio_arrendamiento: IMunicipio[] = [];
+    oficina: IOficina[] = [];
+    lista_arrendamiento: IArrendamiento[] = [];
 
-    public status:string='error';
+    sucursal: IOficina = {
+        id: null,
+        operator_id: null,
+        departamento_id: null,
+        municipio_id: null,
+        tipo: '',
+        direccion: '',
+        latitud: '',
+        longitud: '',
+        estado: ''
+    };
+
+    errorSucursal: IOficina = {
+        id: null,
+        operator_id: null,
+        departamento_id: null,
+        municipio_id: null,
+        tipo: null,
+        direccion: null,
+        latitud: null,
+        longitud: null,
+        estado: null
+    };
+
+    arrendamiento: IArrendamiento = {
+        id: null,
+        operator_id: null,
+        codigo_unico: null,
+        extension: null,
+        unidad_extension: null,
+        departamento_id: null,
+        denominacion_area: '',
+        municipio_id: null,
+        tipo_explotacion: null,
+        estado: null
+    };
+
+    errorArrendamiento: IArrendamiento = {
+        id: null,
+        operator_id: null,
+        codigo_unico: null,
+        extension: null,
+        unidad_extension: null,
+        departamento_id: null,
+        denominacion_area: null,
+        municipio_id: null,
+        tipo_explotacion: null,
+        estado: null
+    };
+
+    oficinaSelecionadas: IOficina[] = [];
+    sw1: number = 0;
+    cols: any[] = [];
+    sw_mapa: boolean = false;
+
+    public status: string = 'error';
     valSwitch: boolean = false;
+
+    // Variables para el mapa
+    options: MapOptions;
+    satelliteLayer: any;
+    streetLayer: any;
+    currentMarker: Marker;
+    map: Map;
+    submited: boolean = false;
+    mapaDialogo: boolean = false;
+
     constructor(
-        private operadorService:OperatorsService,
-        private notify:ToastrService,
-        private router:Router,
-        private municipiosService:MunicipiosService,
-        private departamentosService:DepartamentosService,
+        private operadorService: OperatorsService,
+        private notify: ToastrService,
+        private router: Router,
+        private municipiosService: MunicipiosService,
+        private departamentosService: DepartamentosService,
         private route: ActivatedRoute
     ) {
         this.nimniar = [
@@ -152,7 +168,7 @@ export class EditarOperadorComponent implements OnInit {
             { label: 'ACTIVO', value: '1' },
             { label: 'INACTIVO', value: '0' }
         ];
-        this.estadoOficina= [
+        this.estadoOficina = [
             { label: 'ACTIVO', value: '1' },
             { label: 'INACTIVO', value: '0' }
         ];
@@ -167,10 +183,12 @@ export class EditarOperadorComponent implements OnInit {
             clear: "Limpiar",
             dateFormat: "dd/mm/yy",
             weekHeader: "Sem"
-          };
-     }
-     nombre:any;
-     error:any;
+        };
+    }
+
+    nombre: any;
+    error: any;
+
     ngOnInit() {
         this.cols = [
             { field: 'product', header: 'Product' },
@@ -180,266 +198,237 @@ export class EditarOperadorComponent implements OnInit {
             { field: 'inventoryStatus', header: 'Status' }
         ];
 
-
         this.departamentosService.verdepartamentos(this.nombre).subscribe(
-            (data:any)=>{
-            this.departamento=this.departamentosService.handledepartamento(data);
-            console.log(data);
-          },
-          (error:any)=> this.error=this.departamentosService.handleError(error)
+            (data: any) => {
+                this.departamento = this.departamentosService.handledepartamento(data);
+            },
+            (error: any) => this.error = this.departamentosService.handleError(error)
         );
 
-
-          this.satelliteLayer = tileLayer(
+        this.satelliteLayer = tileLayer(
             'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
             {
-              attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
-              maxZoom: 19,
-              opacity:0.4
+                attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+                maxZoom: 19,
+                opacity: 0.4
             }
-          );
-          // Capa de calles de OpenStreetMap
-          this.streetLayer = tileLayer(
+        );
+
+        this.streetLayer = tileLayer(
             'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             {
-              attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-              maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 19,
             }
-          );
-        // 3. Obtener el ID del operador desde la URL y cargar los datos
+        );
+
         this.route.params.subscribe(params => {
-            const operadorId = params['id']; // Asumiendo que el ID viene en la URL
+            const operadorId = params['id'];
             if (operadorId) {
                 this.cargarDatosOperador(operadorId);
-                console.log(this.operador.formulario.value)
             }
         });
     }
 
-//------------------------------- 4. Método para cargar los datos del operador-------------------------------------------------
-cargarDatosOperador(id: string) {
-    this.operadorService.verOperator(id).subscribe(
-        (data: any) => {
-            this.operador_registrado = data;
-            console.log(this.operador_registrado)
-            this.precargarFormulario(data);
-        },
-        (error: any) => {
-            this.error = this.operadorService.handleError(error);
-            this.notify.error('Error al cargar los datos del operador');
+    cargarDatosOperador(id: string) {
+        this.operadorService.verOperator(id).subscribe(
+            (data: any) => {
+                this.operador_registrado = data;
+                this.precargarFormulario(data);
+            },
+            (error: any) => {
+                this.error = this.operadorService.handleError(error);
+                this.notify.error('Error al cargar los datos del operador');
+            }
+        );
+    }
+
+    precargarFormulario(datos: any) {
+        // Precargar el formulario principal
+        this.operador.formulario.patchValue({
+            razon_social: datos.razon_social || '',
+            nit: datos.nit || '',
+            nro_nim: datos.nro_nim || '',
+            fecha_exp_nim: datos.fecha_exp_nim ? new Date(datos.fecha_exp_nim) : null,
+            tipo_operador: String(datos.tipo_operador),
+            tipo_nim_niar: datos.tipo_nim_niar,
+            nro_personeria: datos.nro_personeria || '',
+            nro_matricula_seprec: datos.nro_matricula_seprec || '',
+            fecha_exp_seprec: datos.fecha_exp_seprec ? new Date(datos.fecha_exp_seprec) : null,
+            tipo_doc_creacion: datos.tipo_doc_creacion || null,
+            doc_creacion: datos.doc_creacion || '',
+            dl_direccion: datos.dl_direccion || '',
+            correo_inst: datos.correo_inst || '',
+            tel_fijo: datos.tel_fijo || '',
+            celular: datos.celular || null,
+            act_exploracion: datos.act_exploracion === 1,
+            act_comer_interna: datos.act_comer_interna === 1,
+            act_comer_externa: datos.act_comer_externa === 1,
+            act_industrializacion: datos.act_industrializacion === 1,
+            act_tras_colas: datos.act_tras_colas === 1,
+            act_explotacion: datos.act_explotacion === 1,
+            act_ben_concentracion: datos.act_ben_concentracion === 1,
+            act_refinacion: datos.act_refinacion === 1,
+            act_fundicion: datos.act_fundicion === 1,
+            nro_ruex: datos.nro_ruex || '',
+            nro_res_ministerial: datos.nro_res_ministerial || '',
+            act_calcinacion: datos.act_calcinacion === 1,
+            act_tostacion: datos.act_tostacion === 1,
+            fax_op_min: datos.fax_op_min || '',
+            observaciones: datos.observaciones || '',
+            ofi_lat: datos.ofi_lat || '',
+            ofi_lon: datos.ofi_lon || '',
+            otro_celular: datos.otro_celular || null,
+            rep_celular: datos.rep_celular || null,
+            rep_ci: datos.rep_ci || '',
+            rep_correo: datos.rep_correo || '',
+            rep_departamento_id: datos.rep_departamento_id || null,
+            rep_direccion: datos.rep_direccion || '',
+            rep_municipio_id: datos.rep_municipio_id || null,
+            rep_nombre_completo: datos.rep_nombre_completo || '',
+            rep_telefono: datos.rep_telefono || '',
+            fecha_exp_ruex: datos.fecha_exp_ruex ? new Date(datos.fecha_exp_ruex) : null,
+            verif_cert_liberacion: datos.verif_cert_liberacion || false,
+            comercio_interno_coperativa: datos.comercio_interno_coperativa || false,
+            transbordo: datos.transbordo || false,
+            traslado_colas: datos.traslado_colas || false,
+            verificacion_toma_muestra: datos.verificacion_toma_muestra || false,
+            dl_departamento_id: datos.dl_departamento_id || null,
+            dl_municipio_id: datos.dl_municipio_id || null,
+            estado: datos.estado || null
+        });
+
+        // Precargar arrendamientos si existen
+        if (datos.arrendamientos && datos.arrendamientos.length > 0) {
+            this.lista_arrendamiento = datos.arrendamientos.map((arr: any) => ({
+                id: arr.id || null,
+                operator_id: arr.operator_id || null,
+                codigo_unico: arr.codigo_unico || null,
+                extension: arr.extension || null,
+                unidad_extension: arr.unidad_extension || null,
+                departamento_id: arr.departamento_id || null,
+                denominacion_area: arr.denominacion_area || '',
+                municipio_id: arr.municipio_id || null,
+                tipo_explotacion: arr.tipo_explotacion || null,
+                estado: arr.estado || null
+            }));
         }
-    );
-}
-//-----------------------------------PRE CARGAR LOS DATOS DE OPERADOR-----------------------------------------------------------
-precargarFormulario(datos: any) {
-    // Precargar el formulario principal
-    this.operador.formulario.patchValue({
-        razon_social: datos.razon_social || '',
-        nit: datos.nit || '',
-        nro_nim: datos.nro_nim || '',
-        fecha_exp_nim: datos.fecha_exp_nim ? new Date(datos.fecha_exp_nim) : null,
-        tipo_operador:String(datos.tipo_operador),
-        tipo_nim_niar:datos.tipo_nim_niar,
-        nro_personeria: datos.nro_personeria || '',
-        nro_matricula_seprec: datos.nro_matricula_seprec || '',
-        fecha_exp_seprec: datos.fecha_exp_seprec ? new Date(datos.fecha_exp_seprec) : null,
-        tipo_doc_creacion: datos.tipo_doc_creacion || null,
-        doc_creacion: datos.doc_creacion || '',
-        dl_direccion: datos.dl_direccion || '',
-        correo_inst: datos.correo_inst || '',
-        tel_fijo: datos.tel_fijo || '',
-        celular: datos.celular || null,
-        act_exploracion: datos.act_exploracion === 1,
-        act_comer_interna: datos.act_comer_interna === 1,
-        act_comer_externa: datos.act_comer_externa === 1,
-        act_industrializacion: datos.act_industrializacion === 1,
-        act_tras_colas: datos.act_tras_colas === 1,
-        act_explotacion: datos.act_explotacion === 1,
-        act_ben_concentracion: datos.act_ben_concentracion === 1,
-        act_refinacion: datos.act_refinacion === 1,
-        act_fundicion: datos.act_fundicion === 1,
-        nro_ruex: datos.nro_ruex || '',
-        nro_res_ministerial: datos.nro_res_ministerial || '',
-        act_calcinacion: datos.act_calcinacion === 1,
-        act_tostacion: datos.act_tostacion === 1,
-        fax_op_min: datos.fax_op_min || '',
-        observaciones: datos.observaciones || '',
-        ofi_lat: datos.ofi_lat || '',
-        ofi_lon: datos.ofi_lon || '',
-        otro_celular: datos.otro_celular || null,
-        rep_celular: datos.rep_celular || null,
-        rep_ci: datos.rep_ci || '',
-        rep_correo: datos.rep_correo || '',
-        rep_departamento_id: datos.rep_departamento_id || null,
-        rep_direccion: datos.rep_direccion || '',
-        rep_municipio_id: datos.rep_municipio_id || null,
-        rep_nombre_completo: datos.rep_nombre_completo || '',
-        rep_telefono: datos.rep_telefono || '',
-        fecha_exp_ruex: datos.fecha_exp_ruex ? new Date(datos.fecha_exp_ruex) : null,
-        verif_cert_liberacion: datos.verif_cert_liberacion || false,
-        comercio_interno_coperativa: datos.comercio_interno_coperativa || false,
-        transbordo: datos.transbordo || false,
-        traslado_colas: datos.traslado_colas || false,
-        verificacion_toma_muestra: datos.verificacion_toma_muestra || false,
-        dl_departamento_id: datos.dl_departamento_id || null,
-        dl_municipio_id: datos.dl_municipio_id || null,
-        estado:datos.estado||null
-    });
 
-    // Precargar arrendamientos si existen
-    if (datos.arrendamientos && datos.arrendamientos.length > 0) {
-        this.lista_arrendamiento = datos.arrendamientos.map((arr: any) => ({
-            id: arr.id || null,
-            operator_id: arr.operator_id || null,
-            codigo_unico: arr.codigo_unico || null,
-            extension: arr.extension || null,
-            unidad_extension: arr.unidad_extension || null,
-            departamento_id: arr.departamento_id || null,
-            denominacion_area: arr.denominacion_area || '',
-            municipio_id: arr.municipio_id || null,
-            tipo_explotacion: arr.tipo_explotacion || null,
-            estado: arr.estado || null
-        }));
+        // Precargar oficinas si existen
+        if (datos.oficinas && datos.oficinas.length > 0) {
+            this.oficina = datos.oficinas.map((ofi: any) => ({
+                id: ofi.id || null,
+                operator_id: ofi.operator_id || null,
+                departamento_id: ofi.departamento_id || null,
+                municipio_id: ofi.municipio_id || null,
+                tipo: ofi.tipo || '',
+                direccion: ofi.direccion || '',
+                latitud: ofi.latitud || '',
+                longitud: ofi.longitud || '',
+                estado: ofi.estado || ''
+            }));
+            this.valSwitch = true;
+        }
+
+        // Cargar municipios para dirección principal y representante si existen
+        if (datos.dl_departamento_id) {
+            this.cambioDepartamentoPrincipal({ value: datos.dl_departamento_id });
+        }
+        if (datos.rep_departamento_id) {
+            this.cambioDepartamentoRepresentante({ value: datos.rep_departamento_id });
+        }
     }
-
-    // Precargar oficinas si existen
-    if (datos.oficinas && datos.oficinas.length > 0) {
-        this.oficina = datos.oficinas.map((ofi: any) => ({
-            id: ofi.id || null,
-            operator_id: ofi.operator_id || null,
-            departamento_id: ofi.departamento_id || null,
-            municipio_id: ofi.municipio_id || null,
-            tipo: ofi.tipo || '',
-            direccion: ofi.direccion || '',
-            latitud: ofi.latitud || '',
-            longitud: ofi.longitud || '',
-            estado: ofi.estado || ''
-        }));
-        this.valSwitch=true;
-    }
-
-    // Cargar municipios si hay un departamento seleccionado
-    if (datos.dl_departamento_id) {
-        this.cambioDepartamento({ value: datos.dl_departamento_id });
-    }
-
-    // Establecer valores para los switches
-    //this.valSwitch = datos.verif_cert_liberacion || false;
-}
-
 
     formatDate(date: any): string {
-        console.log(date);
-        if(date!=null){
-        const parsedDate = new Date(date); // Forzar conversión
-        if (!isNaN(parsedDate.getTime())) {
-            return parsedDate.toISOString().split('T')[0]; // Formato 'YYYY-MM-DD'
+        if (date != null) {
+            const parsedDate = new Date(date);
+            if (!isNaN(parsedDate.getTime())) {
+                return parsedDate.toISOString().split('T')[0];
+            }
+            console.warn('Fecha inválida:', date);
+            return '';
         }
-        console.warn('Fecha inválida:', date);
-        return ''; // Retorna vacío si no es una fecha válida
+        return null;
+    }
+
+    convertBooleansToNumbers = (data: any) => {
+        const convertedData = { ...data };
+        for (const key in convertedData) {
+            if (typeof convertedData[key] === 'boolean') {
+                convertedData[key] = convertedData[key] ? 1 : 0;
+            }
         }
-        else return null;
-    }
+        return convertedData;
+    };
 
-// Función para convertir true/false en 1/0
- convertBooleansToNumbers = (data: any) => {
-    const convertedData = { ...data }; // Copiar el objeto para no mutar el original
-    for (const key in convertedData) {
-      if (typeof convertedData[key] === 'boolean') {
-        convertedData[key] = convertedData[key] ? 1 : 0;
-      }
-    }
-    return convertedData;
-  };
-// Función para eliminar las propiedades con valores 0 o 1
- removeZeroOneProperties = (data: any) => {
-    const filteredData = { ...data }; // Copiar el objeto para no mutar el original
+    removeZeroOneProperties = (data: any) => {
+        const filteredData = { ...data };
+        for (const key in filteredData) {
+            if (filteredData[key] === 0) {
+                delete filteredData[key];
+            }
+        }
+        return filteredData;
+    };
 
-    for (const key in filteredData) {
-      if (filteredData[key] === 0) {
-        delete filteredData[key]; // Eliminar las propiedades con 0 o 1
-      }
-    }
-
-    return filteredData;
-  };
-  removeNullProperties = (data: any) => {
-    const filteredData = { ...data }; // Copiar el objeto para no mutar el original
-
-    for (const key in filteredData) {
-      if (filteredData[key] === null) {
-        delete filteredData[key]; // Eliminar solo las propiedades con null
-      }
-    }
-
-    return filteredData;
-  };
-
+    removeNullProperties = (data: any) => {
+        const filteredData = { ...data };
+        for (const key in filteredData) {
+            if (filteredData[key] === null) {
+                delete filteredData[key];
+            }
+        }
+        return filteredData;
+    };
 
     onSubmit() {
-        let operador_id:string=null;
+        let operador_id: string = null;
         let formData = new FormData();
+
         if (this.operador_registrado && this.operador_registrado.id) {
-                formData.append('id', this.operador_registrado.id.toString());
-                operador_id=this.operador_registrado.id.toString()
-            }
+            formData.append('id', this.operador_registrado.id.toString());
+            operador_id = this.operador_registrado.id.toString();
+        }
+
         if (this.accion === 'guardarYActualizarIDOM') {
             formData.append('fecha_actualizacion', new Date().toISOString());
-            }
-        // Agregar todos los valores del formulario a formData
-        let datos=this.convertBooleansToNumbers(this.operador.formulario.value)
-        let datofin=this.removeZeroOneProperties(datos);
-       /*Object.keys(datofin).forEach(key => {
-            if (datofin[key] !== null && datofin[key] !== undefined) {
-                formData.append(key, datofin[key]);
-            }
-        });*/
-        datofin=this.removeNullProperties(datofin);
+        }
+
+        let datos = this.convertBooleansToNumbers(this.operador.formulario.value);
+        let datofin = this.removeZeroOneProperties(datos);
+        datofin = this.removeNullProperties(datofin);
+
         for (const key in datofin) {
             const value = datofin[key];
-
-            // Verificar el tipo de dato y convertir si es necesario
             if (typeof value === 'boolean') {
-              // Convertir el valor booleano a número (1 o 0)
-              formData.append(key, value ? '1' : '0');
+                formData.append(key, value ? '1' : '0');
             } else if (typeof value === 'number') {
-              // Si es un número, agregarlo tal cual
-              formData.append(key, value.toString()); // Aunque FormData convierte, es recomendable asegurarse de que sea un string
+                formData.append(key, value.toString());
             } else {
-              // Para cadenas de texto o cualquier otro tipo, agregar como está
-              formData.append(key, value);
+                formData.append(key, value);
             }
-          }
-          const listaArrendamientoLimpia = this.lista_arrendamiento.map((item: any) => {
-            const { id, operator_id, ...resto } = item; // Extraer los campos no deseados
-            return resto; // Retornar el objeto sin id y operator_id
-          });
-          const listaOficinaLimpia = this.oficina.map((item: any) => {
-                const { id, operator_id, ...resto } = item;
+        }
 
-                // Convertir latitud y longitud a string si existen
-                if (resto.latitud !== undefined) {
-                    resto.latitud = resto.latitud.toString();
-                }
-                if (resto.longitud !== undefined) {
-                    resto.longitud = resto.longitud.toString();
-                }
+        const listaArrendamientoLimpia = this.lista_arrendamiento.map((item: any) => {
+            const { id, operator_id, ...resto } = item;
+            return resto;
+        });
 
-                return resto;
-          });
+        const listaOficinaLimpia = this.oficina.map((item: any) => {
+            const { id, operator_id, ...resto } = item;
+            if (resto.latitud !== undefined) resto.latitud = resto.latitud.toString();
+            if (resto.longitud !== undefined) resto.longitud = resto.longitud.toString();
+            return resto;
+        });
 
-        // Solo agregar arrendamientos si hay elementos
         if (listaArrendamientoLimpia.length > 0) {
             formData.append('arrendamientos', JSON.stringify(listaArrendamientoLimpia));
         }
 
-        // Solo agregar oficinas si hay elementos
         if (listaOficinaLimpia.length > 0) {
             formData.append('oficinas', JSON.stringify(listaOficinaLimpia));
         }
 
-        // Convertir fechas al formato adecuado antes de enviarlas
-        // Verificando null, undefined y cadena vacía
         const hasValue = (value: any) => value !== null && value !== undefined && value !== '';
 
         if (hasValue(this.operador.formulario.value.fecha_exp_nim)) {
@@ -454,177 +443,209 @@ precargarFormulario(datos: any) {
             formData.set('fecha_exp_ruex', this.formatDate(this.operador.formulario.value.fecha_exp_ruex));
         }
 
-        // Agregar archivos (debes tener referencias a los archivos en tu formulario)
-        // Agregar los archivos si existen
-        if (this.fileNit) {
-            console.log('Añadiendo archivo Nit:', this.fileNit);
-            formData.append('nit_link', this.fileNit);
-        }
-        if (this.fileNim) {
-            console.log('Añadiendo archivo Nim:', this.fileNim);
-            formData.append('nim_link', this.fileNim);
-        }
-        if (this.fileSeprec) {
-            console.log('Añadiendo archivo SEPREC:', this.fileSeprec);
-            formData.append('seprec_link', this.fileSeprec);
-        }
-        if (this.fileDocExplotacion) {
-            console.log('Añadiendo archivo Doc Explotación:', this.fileDocExplotacion);
-            formData.append('doc_explotacion_link', this.fileDocExplotacion);
-        }
-        if (this.fileRuex) {
-            console.log('Añadiendo archivo RUEX:', this.fileRuex);
-            formData.append('ruex_link', this.fileRuex);
-        }
-        if (this.fileResolucion) {
-            console.log('Añadiendo archivo Resolución:', this.fileResolucion);
-            formData.append('resolucion_min_fundind_link', this.fileResolucion);
-        }
-        if (this.filePersoneria) {
-            console.log('Añadiendo archivo Personería:', this.filePersoneria);
-            formData.append('personeria_juridica_link', this.filePersoneria);
-        }
-        if (this.fileDocCreacion) {
-            console.log('Añadiendo archivo Creación Estatal:', this.fileDocCreacion);
-            formData.append('doc_creacion_estatal_link', this.fileDocCreacion);
-        }
-        if (this.fileCi) {
-            console.log('Añadiendo archivo CI:', this.fileCi);
-            formData.append('ci_link', this.fileCi);
-        }
-        // Verificar si todos los valores se agregaron correctamente
-        console.log("Valores en FormData:");
-        formData.forEach((value, key) => console.log(`${key}: ${value}`));
-        console.log('ver si hay errores',this.operador.formulario.valid);
-        console.log(this.operador.formulario.errors); // Muestra errores a nivel de formulario
-        console.log(this.operador.formulario.controls); // Muestra todos los controles
-        console.log(this.lista_arrendamiento);
-        console.log(this.oficina);
-        // Verificar si el formulario es válido antes de enviar
+        if (this.fileNit) formData.append('nit_link', this.fileNit);
+        if (this.fileNim) formData.append('nim_link', this.fileNim);
+        if (this.fileSeprec) formData.append('seprec_link', this.fileSeprec);
+        if (this.fileDocExplotacion) formData.append('doc_explotacion_link', this.fileDocExplotacion);
+        if (this.fileRuex) formData.append('ruex_link', this.fileRuex);
+        if (this.fileResolucion) formData.append('resolucion_min_fundind_link', this.fileResolucion);
+        if (this.filePersoneria) formData.append('personeria_juridica_link', this.filePersoneria);
+        if (this.fileDocCreacion) formData.append('doc_creacion_estatal_link', this.fileDocCreacion);
+        if (this.fileCi) formData.append('ci_link', this.fileCi);
 
         if (this.operador.formulario.valid) {
-            this.operadorService.editaroperator(operador_id,formData).subscribe(
+            this.operadorService.editaroperator(operador_id, formData).subscribe(
                 (data: any) => {
-                    console.log("Respuesta del servidor:", data);
                     this.operador_registrado = this.operadorService.handleCrearoperator(data);
                     if (data) {
                         this.notify.success('Guardado Correctamente');
                         this.router.navigate(['/admin/operador/']);
-                    }
-                    else{
-                        this.notify.success('No se realizo la actualizacion correctmente');
+                    } else {
+                        this.notify.success('No se realizó la actualización correctamente');
                     }
                 },
                 (error: any) => {
                     this.errorOperator = this.operadorService.handleCrearoperatorError(error);
-                    console.log(error);
                     this.status = error.status;
                     this.notify.error(error.error.message);
                 }
             );
         } else {
-            // Mostrar todos los errores de validación
             this.getFormValidationErrors(this.operador.formulario);
-
-            // También puedes mostrar los errores en la interfaz de usuario
             this.markAllAsTouched(this.operador.formulario);
-
             this.notify.error('Revise los datos e intente nuevamente', 'Error con el Registro', {
                 timeOut: 2000,
                 positionClass: 'toast-top-right'
             });
+        }
     }
 
+    // Métodos para manejar departamentos y municipios
+    cambioDepartamentoPrincipal(departamento_id: any) {
+        this.cambioDepartamento(departamento_id, 'principal');
     }
 
-    private mostrarErrorFormularios(formGroup: FormGroup): void {
-        Object.keys(formGroup.controls).forEach((key) => {
-        const control = formGroup.get(key);
-        control?.markAsTouched(); // Marca como tocado para activar mensajes de error en la vista
-        control?.markAsDirty();
+    cambioDepartamentoRepresentante(departamento_id: any) {
+        this.cambioDepartamento(departamento_id, 'representante');
+    }
+
+    cambioDepartamentoSucursal(departamento: any) {
+        this.sucursal.departamento_id = departamento.value;
+        this.cambioDepartamento(departamento, 'sucursal');
+    }
+
+    cambioDepartamentoArrendamiento(departamento: any) {
+        this.arrendamiento.departamento_id = departamento.value.id;
+        this.cambioDepartamento(departamento, 'arrendamiento');
+    }
+
+    cambioDepartamento(departamento_id: any, tipo: 'principal' | 'representante' | 'sucursal' | 'arrendamiento' = 'principal') {
+        if (!departamento_id || !departamento_id.value) return;
+
+        let dept: IDepartamento = this.departamento.find(element => element.id === departamento_id.value);
+        if (!dept) return;
+
+        this.municipiosService.vermunicipios(departamento_id.value.toString()).subscribe(
+            (data: any) => {
+                switch (tipo) {
+                    case 'principal':
+                        this.municipio_principal = this.municipiosService.handlemunicipio(data);
+                        // Actualizar mapa solo para dirección principal
+                        if (dept.latitud && dept.longitud) {
+                            this.options = {
+                                layers: [this.streetLayer, this.satelliteLayer],
+                                center: latLng(dept.latitud, dept.longitud),
+                                zoom: 13.5
+                            };
+                            if (this.map && this.map.setView) {
+                                this.map.setView(latLng(dept.latitud, dept.longitud), 13.5);
+                            }
+                        }
+                        break;
+                    case 'representante':
+                        this.municipio_representante = this.municipiosService.handlemunicipio(data);
+                        break;
+                    case 'sucursal':
+                        this.municipio_sucursal = this.municipiosService.handlemunicipio(data);
+                        break;
+                    case 'arrendamiento':
+                        this.municipio_arrendamiento = this.municipiosService.handlemunicipio(data);
+                        break;
+                }
+            },
+            (error: any) => {
+                this.error = this.municipiosService.handleError(error);
+                console.error('Error loading municipios:', error);
+            }
+        );
+    }
+
+    // Métodos para cambio de municipio
+    cambioMunicipioPrincipal(municipio: any) {
+        this.operador.formulario.patchValue({ dl_municipio_id: municipio.value });
+    }
+
+    cambioMunicipioRepresentante(municipio: any) {
+        this.operador.formulario.patchValue({ rep_municipio_id: municipio.value });
+    }
+
+    cambioMunicipioSucursal(municipio: any) {
+        this.sucursal.municipio_id = municipio.value.id;
+    }
+
+    cambioMunicipioArrendamiento(municipio: any) {
+        this.arrendamiento.municipio_id = municipio.value.id;
+    }
+
+    // Métodos para el mapa
+    onMapReady(map: Map) {
+        this.map = map;
+        this.map.on('click', (event) => {
+            this.addMarker(event.latlng.lat, event.latlng.lng);
         });
     }
-    cambioDepartamento(departamento_id:any){
-        console.log(departamento_id);
 
-        //this.operador.formulario.value.dl_departamento_id=departamento_id.value;
-        let dept:IDepartamento=this.departamento.find(element => element.id === departamento_id.value);
-        this.municipiosService.vermunicipios( departamento_id.value.toString()).subscribe(
-            (data:any)=>{
+    addMarker(lat: number, lng: number) {
+        if (this.currentMarker) {
+            this.map.removeLayer(this.currentMarker);
+        }
+        this.currentMarker = marker([lat, lng]).addTo(this.map);
+        this.currentMarker.bindPopup(`Latitud: ${lat}, Longitud: ${lng}`).openPopup();
+    }
 
-            this.municipio=this.municipiosService.handlemunicipio(data);
-            this.options = {
-                center: latLng(dept.latitud,dept.longitud),
-                zoom: 13.5
-            };
+    abrirMapa() {
+        if (this.operador.formulario.value.dl_departamento_id) {
+            let dept: any = this.departamento.find(val => val.id === this.operador.formulario.value.dl_departamento_id);
             if (this.map) {
                 this.map.setView(latLng(dept.latitud, dept.longitud), 13.5);
-              }
-          },
-          (error:any)=> this.error=this.municipiosService.handleError(error)
-        );
-    }
-    cambioDepartamento1(departamento:any){
-        console.log(departamento);
-        this.sucursal.departamento_id=departamento.value;
-        this.municipiosService.vermunicipios(this.sucursal.departamento_id.toString()).subscribe(
-            (data:any)=>{
-            this.municipio_sucursal=this.municipiosService.handlemunicipio(data);
-          },
-          (error:any)=> this.error=this.municipiosService.handleError(error)
-        );
-    }
-    cambioDepartamentoArrendamiento(departamento:any){
-        this.arrendamiento.departamento_id=departamento.value.id;
-        this.municipiosService.vermunicipios(departamento.value.id.toString()).subscribe(
-            (data:any)=>{
-            this.municipio_arrendamiento=this.municipiosService.handlemunicipio(data);
-            console.log(this.municipio_arrendamiento);
-          },
-          (error:any)=> this.error=this.municipiosService.handleError(error)
-        );
-    }
-    cambioMunicipio(municipio:any){
-         console.log(this.operador.formulario.value.dl_municipio_id=municipio.value);
-    }
-    cambioMunicipio1(municipio:any){
-        this.sucursal.municipio_id=municipio.value.id;
-    }
-    cambioMunicipioArrendamiento(municipio:any){
-        this.arrendamiento.municipio_id=municipio.value.id;
-    }
-    cambioEstadoArrendamiento(estado:any){
-        this.arrendamiento.estado=estado.value;
-        console.log(this.arrendamiento);
+            }
+            this.sw_mapa = false;
+            this.mapaDialogo = true;
+        } else {
+            this.notify.error('Seleccione un departamento para abrir el mapa....', 'Error al Abrir el Mapa', { timeOut: 2000, positionClass: 'toast-bottom-right' });
+        }
     }
 
-
-    cambioTipoSucursal(dependencia_id:any){
-        this.sucursal.tipo=this.tipoSucursal.find(element => element.id === dependencia_id.value).name;
-
-        console.log(this.sucursal.tipo);
-   }
-   cambioEstadoSucursal(dependencia_id:any){
-    this.sucursal.estado=dependencia_id.value;
-
-    console.log(dependencia_id.value);
-}
-
-    onChangeTipoCreacion(dependencia_id:any){
-         this.operador.formulario.value.tipo_doc_creacion=dependencia_id.value;
+    abrirMapaSucursal() {
+        if (this.sucursal.departamento_id) {
+            let dept: any = this.departamento.find(val => val.id === this.sucursal.departamento_id);
+            if (this.map) {
+                this.map.setView(latLng(dept.latitud, dept.longitud), 13.5);
+            }
+            this.sw_mapa = true;
+            this.mapaDialogo = true;
+        } else {
+            this.notify.error('Seleccione un departamento para abrir el mapa....', 'Error al Abrir el Mapa', { timeOut: 2000, positionClass: 'toast-bottom-right' });
+        }
     }
-    onChangeExplotacion(dependencia_id:any){
-        this.arrendamiento.tipo_explotacion=dependencia_id.value.name;
 
+    actualizarMapa() {
+        if (this.map) {
+            setTimeout(() => {
+                this.map.invalidateSize();
+            }, 0);
+        }
+    }
+
+    agregarPunto() {
+        if (this.currentMarker) {
+            const position = this.currentMarker.getLatLng();
+            if (!this.sw_mapa) {
+                this.operador.formulario.patchValue({ ofi_lat: position.lat, ofi_lon: position.lng });
+            } else {
+                this.sucursal.latitud = position.lat;
+                this.sucursal.longitud = position.lng;
+            }
+            this.mapaDialogo = false;
+        } else {
+            this.notify.error('Seleccione un punto en el mapa para agregar....', 'Error al Seleccionar un Punto', { timeOut: 2000, positionClass: 'toast-bottom-right' });
+        }
+    }
+
+    // Métodos para manejar otros controles
+    cambioEstadoArrendamiento(estado: any) {
+        this.arrendamiento.estado = estado.value;
+    }
+
+    cambioTipoSucursal(dependencia_id: any) {
+        this.sucursal.tipo = this.tipoSucursal.find(element => element.id === dependencia_id.value).name;
+    }
+
+    cambioEstadoSucursal(dependencia_id: any) {
+        this.sucursal.estado = dependencia_id.value;
+    }
+
+    onChangeTipoCreacion(dependencia_id: any) {
+        this.operador.formulario.patchValue({ tipo_doc_creacion: dependencia_id.value });
+    }
+
+    onChangeExplotacion(dependencia_id: any) {
+        this.arrendamiento.tipo_explotacion = dependencia_id.value.name;
     }
 
     onFileSelected(event: any, field: string) {
-        console.log('Evento de archivo:', event); // Verifica si el evento se está activando
-
         if (event.files && event.files.length > 0) {
-            const file = event.files[0]; // PrimeNG usa `event.files`
-            console.log(`Archivo seleccionado para ${field}:`, file);
-
+            const file = event.files[0];
             switch (field) {
                 case 'nit_link': this.fileNit = file; break;
                 case 'nim_link': this.fileNim = file; break;
@@ -636,164 +657,103 @@ precargarFormulario(datos: any) {
                 case 'doc_creacion_estatal_link': this.fileDocCreacion = file; break;
                 case 'ci_link': this.fileCi = file; break;
             }
-        } else {
-            console.warn(`No se seleccionó ningún archivo para ${field}`);
         }
     }
 
-      options: any;
-      satelliteLayer: any;
-      standardLayer:any;
-      streetLayer:any;
-      clickedCoordinates: string = '';
-      markerLayer: any;
-      tonerLayer:any;
-      currentMarker: Marker;
-      map: any;
-
-      addMarker(lat: number, lng: number) {
-        // Si ya existe un marcador, lo eliminamos
-        if (this.currentMarker) {
-          this.map.removeLayer(this.currentMarker);
-        }
-
-        // Crear y agregar un nuevo marcador
-        this.currentMarker = marker([lat, lng]).addTo(this.map);
-        this.currentMarker.bindPopup(`Latitud: ${lat}, Longitud: ${lng}`).openPopup();
-      }
-      // Método que se ejecuta después de la inicialización
-  onMapReady(map: Map) {
-    this.map = map;
-
-    // Agregar evento de clic en el mapa
-    this.map.on('click', (event) => {
-      this.addMarker(event.latlng.lat, event.latlng.lng);
-    });
-  }
-  submited:boolean=false;
-  mapaDialogo:boolean=false;
-    abrirMapa() {
-        if(this.operador.formulario.value.dl_departamento_id){
-            let dept:any=this.departamento.find(val => val.id ===  this.operador.formulario.value.dl_departamento_id);
-            console.log(this.operador.formulario.value.dl_departamento_id);
-            if (this.map) {
-                this.map.setView(latLng(dept.latitud, dept.longitud), 13.5);
-            }
-            this.sw_mapa=false;
-            this.mapaDialogo = true;
-        }
-        else{
-            this.notify.error('Seleccione un departamento para abrir el mapa....','Error al Abrir el Mapa',{timeOut:2000,positionClass: 'toast-bottom-right'});
-        }
+    agregarDireccion() {
+        this.oficina.push({ ...this.sucursal });
+        this.sucursal = {
+            id: null,
+            operator_id: null,
+            departamento_id: null,
+            municipio_id: null,
+            tipo: '',
+            direccion: '',
+            latitud: '',
+            longitud: '',
+            estado: ''
+        };
     }
-    abrirMapaSucursal() {
-        let dept:any=this.departamento.find(val => val.id === this.sucursal.departamento_id);
-        if (this.map) {
-            this.map.setView(latLng(dept.latitud, dept.longitud), 13.5);
-        }
-        this.sw_mapa=true;
-        this.mapaDialogo = true;
-    }
-    actualizarMapa() {
-        if (this.map) {
-          setTimeout(() => {
-            this.map.invalidateSize();
-          }, 0);
-        }
-      }
-    agregarPunto() {
 
-        if(this.currentMarker!==undefined){
-            const position = this.currentMarker.getLatLng();
-            if(!this.sw_mapa)
-                {
-                    this.operador.formulario.patchValue({ofi_lat: position.lat, ofi_lon:position.lng});
-                }
-                else{
-                    this.sucursal.latitud=position.lat;
-                    this.sucursal.longitud=position.lng;
-                    this.operador.formulario.patchValue({created_at: position.lat, updated_at:position.lng});
+    agregarArrendamiento() {
+        this.lista_arrendamiento.push({ ...this.arrendamiento });
+        this.arrendamiento = {
+            id: null,
+            operator_id: null,
+            codigo_unico: null,
+            extension: null,
+            unidad_extension: null,
+            departamento_id: null,
+            denominacion_area: '',
+            municipio_id: null,
+            tipo_explotacion: null,
+            estado: null
+        };
+    }
 
-                }
-                this.mapaDialogo = false;
-        }
-        else{
-            this.notify.error('Seleccione un punto en el mapa para agregar....','Error al Seleccionar un Punto',{timeOut:2000,positionClass: 'toast-bottom-right'});
-        }
-
-
-    }
-    validarDireccion():boolean{
-        let sw=true;
-        return sw;
-    }
-    agregarDireccion(){
-        this.oficina.push({...this.sucursal});
-    }
-    agregarArrendamiento(){
-        this.lista_arrendamiento.push({...this.arrendamiento});
-    }
-    eliminar(domicilio:IOficina) {
-        //this.deleteProductDialog = false;
+    eliminar(domicilio: IOficina) {
         this.oficina = this.oficina.filter(val => val.direccion !== domicilio.direccion);
-        //this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
-        //this.product = {};
-    }
-    verForm(){
-        console.log( this.operador.formulario.value);
     }
 
-
-
-    codigoUnico(event){
-        this.arrendamiento.codigo_unico =parseInt((event.target as HTMLInputElement).value);
-    }
-    nroCuadricula(event){
-        this.arrendamiento.extension =parseInt((event.target as HTMLInputElement).value);
-    }
-    onChangeTipoExtension(event){
-        this.arrendamiento.unidad_extension=event.value.name;
-    }
-    denominacionAreas(event){
-        this.arrendamiento.denominacion_area =(event.target as HTMLInputElement).value;
-    }
-
-    sucursalLatitud(event){
-        this.sucursal.latitud =(event.target as HTMLInputElement).value;
-    }
-    sucursalDireccion(event){
-        this.sucursal.direccion =(event.target as HTMLInputElement).value;
-    }
-    sucursalLongitud(event){
-        this.sucursal.longitud =(event.target as HTMLInputElement).value;
-    }
-
-    valSwitches(event:any){
-        console.log(event);
-        this.valSwitch=event.checked;
-    }
-
+    // Métodos auxiliares
     getFormValidationErrors(form: FormGroup) {
-    Object.keys(form.controls).forEach(key => {
-        const controlErrors = form.get(key)?.errors;
-        if (controlErrors != null) {
-        Object.keys(controlErrors).forEach(keyError => {
-            console.log(`Control: ${key}, Error: ${keyError}, Valor:`, controlErrors[keyError]);
+        Object.keys(form.controls).forEach(key => {
+            const controlErrors = form.get(key)?.errors;
+            if (controlErrors != null) {
+                Object.keys(controlErrors).forEach(keyError => {
+                    console.log(`Control: ${key}, Error: ${keyError}, Valor:`, controlErrors[keyError]);
+                });
+            }
         });
-        }
-    });
     }
-    // Método para marcar todos los campos como touched (mostrar errores en UI)
+
     markAllAsTouched(formGroup: FormGroup) {
         Object.values(formGroup.controls).forEach(control => {
             control.markAsTouched();
-
             if (control instanceof FormGroup) {
                 this.markAllAsTouched(control);
             }
         });
     }
-    setAccion(valor:string){
-        this.accion=valor;
+
+    setAccion(valor: string) {
+        this.accion = valor;
+    }
+
+    // Métodos para manejar inputs
+    codigoUnico(event) {
+        this.arrendamiento.codigo_unico = parseInt((event.target as HTMLInputElement).value);
+    }
+
+    nroCuadricula(event) {
+        this.arrendamiento.extension = parseInt((event.target as HTMLInputElement).value);
+    }
+
+    onChangeTipoExtension(event) {
+        this.arrendamiento.unidad_extension = event.value.name;
+    }
+
+    denominacionAreas(event) {
+        this.arrendamiento.denominacion_area = (event.target as HTMLInputElement).value;
+    }
+
+    sucursalLatitud(event) {
+        this.sucursal.latitud = (event.target as HTMLInputElement).value;
+    }
+
+    sucursalDireccion(event) {
+        this.sucursal.direccion = (event.target as HTMLInputElement).value;
+    }
+
+    sucursalLongitud(event) {
+        this.sucursal.longitud = (event.target as HTMLInputElement).value;
+    }
+
+    valSwitches(event: any) {
+        this.valSwitch = event.checked;
+    }
+
+    verForm() {
+        console.log(this.operador.formulario.value);
     }
 }

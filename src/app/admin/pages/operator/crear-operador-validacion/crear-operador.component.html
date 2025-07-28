@@ -280,7 +280,7 @@
                     formControlName="dl_departamento_id"
                     optionLabel="nombre"
                     optionValue="id"
-                    (onChange)="cambioDepartamento($event)"
+                    (onChange)="cambioDepartamento($event, 'principal')"
                 ></p-dropdown>
                 <label for="dropdown">Departamento</label>
                 <small id="nit" class="p-error " *ngIf="operador.esCampoInvalido('dl_departamento_id')">
@@ -293,11 +293,10 @@
                 <p-dropdown
                     inputId="municipio"
                     [autoDisplayFirst]="false"
-                    [options]="municipio"
+                    [options]="municipio_principal"
                     formControlName="dl_municipio_id"
                     optionLabel="municipio"
                     optionValue="id"
-                    (onChange)="cambioMunicipio($event)"
                 ></p-dropdown>
                 <label for="dropdown">Municipio</label>
                 <small id="dl_municipio_id" class="p-error " *ngIf="operador.esCampoInvalido('dl_municipio_id')">
@@ -1059,7 +1058,7 @@
                     formControlName="rep_departamento_id"
                     optionLabel="nombre"
                     optionValue="id"
-                    (onChange)="cambioDepartamento($event)"
+                    (onChange)="cambioDepartamentoRepresentante($event)"
                 ></p-dropdown>
                 <label for="dropdown">Departamento</label>
                 <small id="rep_departamento_id" class="p-error " *ngIf="operador.esCampoInvalido('rep_departamento_id')">
@@ -1072,11 +1071,10 @@
                 <p-dropdown
                     inputId="municipio"
                     [autoDisplayFirst]="false"
-                    [options]="municipio"
+                    [options]="municipio_representante"
                     formControlName="rep_municipio_id"
                     optionLabel="municipio"
                     optionValue="id"
-                    (onChange)="cambioMunicipio($event)"
                 ></p-dropdown>
                 <label for="dropdown">Municipio</label>
                 <small id="rep_municipio_id" class="p-error " *ngIf="operador.esCampoInvalido('rep_municipio_id')">
