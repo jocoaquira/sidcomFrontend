@@ -223,7 +223,7 @@ export class SolicitarRegistroComponent implements OnInit {
     const filteredData = { ...data }; // Copiar el objeto para no mutar el original
 
     for (const key in filteredData) {
-      if (filteredData[key] === 0 || filteredData[key] === 1) {
+      if (filteredData[key] === 0) {
         delete filteredData[key]; // Eliminar las propiedades con 0 o 1
       }
     }
@@ -253,8 +253,10 @@ private markAllAsTouched(formGroup: FormGroup | FormArray) {
         // Verificar si el formulario es válido antes de enviar
         if (this.operador.formulario.valid) {
             let datos=this.convertBooleansToNumbers(this.operador.formulario.value)
+            console.log(datos);
             let datofin=this.removeZeroOneProperties(datos);
             datofin.oficinas = this.oficina;
+            console.log(datofin);
             this.preRegistroService.crearPreRegistro(datofin).subscribe(
                 (data: any) => {
                     console.log("Respuesta del servidor:", data);
@@ -330,10 +332,10 @@ private markAllAsTouched(formGroup: FormGroup | FormArray) {
          console.log(this.operador.formulario.value.dl_municipio=municipio.value);
     }
     cambioMunicipio1(municipio:any){
-        this.sucursal.municipio_id=municipio.value.codigo;
+        this.sucursal.municipio_id=municipio.value.id;
     }
     cambioMunicipioArrendamiento(municipio:any){
-        this.arrendamiento.municipio_id=municipio.value.codigo;
+        this.arrendamiento.municipio_id=municipio.value.id;
     }
 
 

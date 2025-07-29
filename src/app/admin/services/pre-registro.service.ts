@@ -101,7 +101,7 @@ handleCrearoperator(data: IOperator):IOperator {
   return operator
 }
 //---------------------Editar   operator-------------------------------------------
-editarPreRegistro(id:string,data:FormData) {
+editarPreRegistro(id:string,data:any) {
   return this.http.put(`${this.baseUrl}preregistro/`+id, data)
 }
 

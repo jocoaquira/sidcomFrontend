@@ -84,7 +84,7 @@ export class PreRegistroComponent implements OnInit {
           this.sortOrder
         ).subscribe({
           next: (response) => {
-            this.listaOperadores = response.data;
+            this.listaOperadores = response.data.filter(operador => operador.estado === 'ACTIVO');
             this.totalRecords = response.total;
             this.loading = false;
           },

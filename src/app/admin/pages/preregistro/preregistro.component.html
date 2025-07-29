@@ -46,7 +46,7 @@
                         <th pSortableColumn="fecha_exp_seprec">Vigencia SEPREC <p-sortIcon field="fecha_exp_seprec"></p-sortIcon></th>
                         <th pSortableColumn="category">Documentos <p-sortIcon field="category"></p-sortIcon></th>
                         <th pSortableColumn="rating">Mapa <p-sortIcon field="rating"></p-sortIcon></th>
-                        <th pSortableColumn="estado">Estado <p-sortIcon field="estado"></p-sortIcon></th>
+
                         <th pSortableColumn="inventoryStatus">Acciones <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
                     </tr>
                 </ng-template>
@@ -146,11 +146,7 @@
                                     pTooltip="Ver ubicación en Google Maps" tooltipPosition="top">
                             </button>
                         </td>
-                        <td style="width:10%; min-width: 10rem;"><span class="p-column-title">Status</span>
 
-                            <p-tag severity="success" *ngIf="operador.estado=='ACTIVO'" value="ACTIVO"></p-tag>
-                            <p-tag severity="danger" *ngIf="operador.estado=='INACTIVO'" value="INACTIVO"></p-tag>
-                            </td>
                         <td>
                             <div class="flex">
                                 <button pButton pRipple icon="pi pi-pencil" label="Registrar" class="p-button-rounded p-button-outlined p-button-success mr-2" (click)="crearOperador(operador)" *ngIf="canCrearOperator.canActivate()"></button>

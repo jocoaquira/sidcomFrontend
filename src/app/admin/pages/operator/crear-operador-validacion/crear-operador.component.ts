@@ -15,6 +15,8 @@ import { IOficina } from '@data/oficina.metadata';
 import { IArrendamiento } from '@data/arrendamiento.metadata';
 import { OperatorFormulario } from 'src/app/admin/validators/operator';
 import { preRegistroService } from './preregistro.service';
+import { forkJoin, Observable, take } from 'rxjs';
+import { PreRegistroService } from 'src/app/admin/services/pre-registro.service';
 
 @Component({
     templateUrl: './crear-operador.component.html',
@@ -37,6 +39,8 @@ export class CrearOperadorComponent implements OnInit {
     public filePersoneria: File | null = null;
     public fileDocCreacion: File | null = null;
     public fileCi: File | null = null;
+    private sw_preregistro: boolean = false;
+    private preregistro_id: number = 0;
 
     nimniar: any[];
     tipoOperador: any[] = [];
@@ -132,7 +136,8 @@ export class CrearOperadorComponent implements OnInit {
         private router: Router,
         private municipiosService: MunicipiosService,
         private departamentosService: DepartamentosService,
-        private preRegistroServices: preRegistroService
+        private preRegistroServices: preRegistroService,
+        private preRegistroOperadorService: PreRegistroService,
     ) {
         this.nimniar = [
             {name: 'NIM', id: 1},
@@ -166,7 +171,6 @@ export class CrearOperadorComponent implements OnInit {
             {name: 'MINA', id: '6'},
             {name: 'OFICINA', id: '7'},
             {name: 'CHANCADORA', id: '8'},
-            {name: 'CHANCADORA', id: '9'},
         ];
         this.estados = [
             { label: 'ACTIVO', value: '1' },
@@ -194,48 +198,52 @@ export class CrearOperadorComponent implements OnInit {
     error: any;
 
     ngOnInit() {
-        this.preRegistroServices.currentOperador.subscribe(operador => {
+        this.configurarCapasMapa();
+        this.cargarDatosIniciales();
+    }
+    private cargarDatosIniciales(): void {
+        forkJoin([
+            this.departamentosService.verdepartamentos(this.nombre) as Observable<IDepartamento[]>,
+            this.preRegistroServices.currentOperador.pipe(take(1))
+          ]).subscribe({
+          next: ([departamentosData, operador]) => {
+            this.departamento = this.departamentosService.handledepartamento(departamentosData);
             if (operador) {
-                this.preRegistroOperador = operador;
-                if (this.departamento && this.departamento.length > 0) {
-                    this.precargarFormulario(this.preRegistroOperador);
-                } else {
-                    this.departamentoPreRegistro = operador.dl_departamento_id;
-                }
+              this.preRegistroOperador = operador;
+
+              if (this.departamento.length > 0) {
+                this.precargarFormulario(operador);
+                this.sw_preregistro = true;
+                this.preRegistroServices.clearCurrentOperador();
+              } else {
+                this.departamentoPreRegistro = operador.dl_departamento_id;
+              }
             }
+          },
+          error: (err) => {
+            this.error = this.departamentosService.handleError(err);
+          }
         });
+      }
 
-        this.departamentosService.verdepartamentos(this.nombre).subscribe(
-            (data: any) => {
-                this.departamento = this.departamentosService.handledepartamento(data);
-                if (this.preRegistroOperador) {
-                    this.precargarFormulario(this.preRegistroOperador);
-                }
-            },
-            (error: any) => {
-                this.error = this.departamentosService.handleError(error);
-            }
-        );
-
-        // Configurar capas del mapa
+      private configurarCapasMapa(): void {
         this.satelliteLayer = tileLayer(
-            'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-            {
-                attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
-                maxZoom: 19,
-                opacity: 0.4
-            }
+          'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+          {
+            attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+            maxZoom: 19,
+            opacity: 0.4
+          }
         );
 
         this.streetLayer = tileLayer(
-            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                maxZoom: 19,
-            }
+          'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 19,
+          }
         );
-    }
-
+      }
     // Método para cambio de departamento (dirección principal)
     cambioDepartamentoPrincipal(departamento_id: any) {
         this.cambioDepartamento(departamento_id, 'principal');
@@ -312,23 +320,23 @@ export class CrearOperadorComponent implements OnInit {
 
     precargarFormulario(datos: any) {
         console.log('Precargando formulario con datos:', datos);
-
+        this.preregistro_id = datos.id || 0;
         // Precargar el formulario principal
         this.operador.formulario.patchValue({
             razon_social: datos.razon_social || '',
             nit: datos.nit || '',
             nro_nim: datos.nro_nim || '',
             fecha_exp_nim: datos.fecha_exp_nim ? new Date(datos.fecha_exp_nim) : null,
-            tipo_operador: String(datos.tipo_operador),
+            tipo_operador: Number(datos.tipo_operador),
             tipo_nim_niar: datos.tipo_nim_niar,
             nro_personeria: datos.nro_personeria || '',
             nro_matricula_seprec: datos.nro_matricula_seprec || '',
             fecha_exp_seprec: datos.fecha_exp_seprec ? new Date(datos.fecha_exp_seprec) : null,
             tipo_doc_creacion: datos.tipo_doc_creacion || null,
-            doc_creacion: datos.doc_creacion || '',
+            doc_creacion: datos.doc_creacion || null,
             dl_direccion: datos.dl_direccion || '',
             correo_inst: datos.correo_inst || '',
-            tel_fijo: datos.tel_fijo || '',
+            tel_fijo: datos.tel_fijo || null,
             celular: datos.celular || null,
             act_exploracion: datos.act_exploracion === 1,
             act_comer_interna: datos.act_comer_interna === 1,
@@ -357,7 +365,7 @@ export class CrearOperadorComponent implements OnInit {
             rep_nombre_completo: datos.rep_nombre_completo || '',
             rep_telefono: datos.rep_telefono || '',
             fecha_exp_ruex: datos.fecha_exp_ruex ? new Date(datos.fecha_exp_ruex) : null,
-            verif_cert_liberacion: datos.verif_cert_liberacion || false,
+            verif_cert_liberacion: datos.verif_cert_liberacion || null,
             comercio_interno_coperativa: datos.comercio_interno_coperativa || false,
             transbordo: datos.transbordo || false,
             traslado_colas: datos.traslado_colas || false,
@@ -516,6 +524,26 @@ export class CrearOperadorComponent implements OnInit {
                 (data: any) => {
                     this.operador_registrado = this.operadorService.handleCrearoperator(data);
                     if (data) {
+                        if(this.sw_preregistro){
+                            const objetoInactivo = {
+                                estado: 'INACTIVO'
+                            };
+                            this.preRegistroOperadorService.editarPreRegistro(this.preregistro_id+'',objetoInactivo).subscribe(
+                                (data: any) => {
+                                    this.operador_registrado = data;
+                                    if (data) {
+                                        console.log('Pre registro actualizado a inactivo:', data);
+                                        this.notify.success('Guardado Correctamente bORRADO DE PRE REGISTRO');
+                                        this.router.navigate(['/admin/operador/']);
+                                    }
+                                },
+                                (error: any) => {
+                                    this.errorOperator = this.operadorService.handleCrearoperatorError(error);
+                                    this.status = error.status;
+                                    this.notify.error(error.message);
+                                }
+                            );
+                        }
                         this.notify.success('Guardado Correctamente');
                         this.router.navigate(['/admin/operador/']);
                     }

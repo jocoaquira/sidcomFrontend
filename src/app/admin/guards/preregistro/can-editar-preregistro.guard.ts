@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router} from '@angular/router';
 import { PermissionHelperService } from '../../helpers/permission.helper.service';
-const canEditar='update_preregistro';
+const canEditar='update_preregistro_id';
 
 @Injectable({
   providedIn: 'root'
