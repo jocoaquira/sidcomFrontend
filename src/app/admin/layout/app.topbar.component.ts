@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { LayoutService } from "./service/app.layout.service";
 import { AuthService } from '@core/authentication/services/auth.service';
@@ -7,6 +7,7 @@ import { TomaDeMuestraService } from '../services/toma-de-muestra/toma-de-muestr
 import { WebsocketService } from '../services/websocket.service'; // Importa el servicio WebSocket
 import { Subject, takeUntil } from 'rxjs';
 import { PreRegistroService } from '../services/pre-registro.service';
+import { TieredMenu } from 'primeng/tieredmenu';
 
 @Component({
     selector: 'app-topbar',
@@ -25,7 +26,15 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
     @ViewChild('menubutton') menuButton!: ElementRef;
     @ViewChild('topbarmenubutton') topbarMenuButton!: ElementRef;
     @ViewChild('topbarmenu') menu!: ElementRef;
-
+    // Con los otros @ViewChild:
+    @ViewChild('menu1') tieredMenu1!: TieredMenu;
+    @ViewChild('menu2') tieredMenu2!: TieredMenu;
+    // Añadir este método:
+    @HostListener('window:scroll', ['$event'])
+    onScroll() {
+        if (this.tieredMenu1) this.tieredMenu1.hide();
+        if (this.tieredMenu2) this.tieredMenu2.hide();
+    }
     constructor(
         public layoutService: LayoutService,
         public authService: AuthService,
@@ -116,4 +125,5 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
     clickmensaje(){
         this.websocketService.sendMessage('estadoPreregistroActualizado');
     }
+
 }

@@ -47,12 +47,12 @@
           <i class="pi pi-home"></i>
           <span>Mensaje</span>
         </button>
-        <button class="p-link layout-topbar-button" (click)="menu.toggle($event)">
+        <button class="p-link layout-topbar-button" (click)="menu2.toggle($event)">
             <i class="pi pi-user"></i>
             <span>Profile</span>
         </button>
 
-        <p-menu #menu [popup]="true" [model]="overlayMenuItems"></p-menu>
-        <p-menu #menu1 [popup]="true" [model]="overlayMenuItem"></p-menu>
+        <p-tieredMenu #menu2 [popup]="true" [model]="overlayMenuItems" appendTo="body" [autoZIndex]="true"></p-tieredMenu>
+        <p-tieredMenu #menu1 [popup]="true" [model]="overlayMenuItem" appendTo="body" [autoZIndex]="true"></p-tieredMenu>
     </div>
 </div>

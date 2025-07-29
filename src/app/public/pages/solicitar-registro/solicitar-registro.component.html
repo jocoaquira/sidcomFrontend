@@ -254,7 +254,7 @@
                     [options]="municipio"
                     formControlName="dl_municipio_id"
                     optionLabel="municipio"
-                    optionValue="codigo"
+                    optionValue="id"
                     (onChange)="cambioMunicipio($event)"
                 ></p-dropdown>
                 <label for="dropdown">Municipio</label>
@@ -853,8 +853,8 @@
                     [options]="municipio"
                     formControlName="rep_municipio_id"
                     optionLabel="municipio"
-                    optionValue="codigo"
-                    (onChange)="cambioMunicipio($event)"
+                    optionValue="id"
+                    (onChange)="cambioMunicipioRepresentante($event)"
                 ></p-dropdown>
                 <label for="dropdown">Municipio</label>
                 <small id="rep_municipio_id" class="p-error " *ngIf="operador.esCampoInvalido('rep_municipio_id')">

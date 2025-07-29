@@ -329,7 +329,10 @@ private markAllAsTouched(formGroup: FormGroup | FormArray) {
         );
     }
     cambioMunicipio(municipio:any){
-         console.log(this.operador.formulario.value.dl_municipio=municipio.value);
+         console.log(this.operador.formulario.value.dl_municipio_id=municipio.value);
+    }
+    cambioMunicipioRepresentante(municipio:any){
+         console.log(this.operador.formulario.value.rep_municipio_id=municipio.value);
     }
     cambioMunicipio1(municipio:any){
         this.sucursal.municipio_id=municipio.value.id;
