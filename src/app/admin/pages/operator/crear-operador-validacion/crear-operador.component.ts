@@ -317,27 +317,48 @@ export class CrearOperadorComponent implements OnInit {
         this.arrendamiento.departamento_id = departamento.value.id;
         this.cambioDepartamento(departamento, 'arrendamiento');
     }
+// Función utilitaria para normalizar valores null
+private normalizeValue(value: any): any {
+    // Si es null, undefined, string vacío, o string "null"
+    if (value === null || value === undefined || value === '' || value === 'null') {
+      return null;
+    }
 
+    // Si es un array que contiene solo null o "null"
+    if (Array.isArray(value)) {
+      if (value.length === 0 ||
+          (value.length === 1 && (value[0] === null || value[0] === 'null' || value[0] === ''))) {
+        return null;
+      }
+    }
+
+    // Si es un string "[null]"
+    if (typeof value === 'string' && value.trim() === '[null]') {
+      return null;
+    }
+
+    return value;
+  }
     precargarFormulario(datos: any) {
         console.log('Precargando formulario con datos:', datos);
         this.preregistro_id = datos.id || 0;
         // Precargar el formulario principal
         this.operador.formulario.patchValue({
-            razon_social: datos.razon_social || '',
-            nit: datos.nit || '',
-            nro_nim: datos.nro_nim || '',
-            fecha_exp_nim: datos.fecha_exp_nim ? new Date(datos.fecha_exp_nim) : null,
+            razon_social: this.normalizeValue(datos.razon_social),
+            nit: this.normalizeValue(datos.nit),
+            nro_nim: this.normalizeValue(datos.nro_nim),
+            fecha_exp_nim: this.normalizeValue(datos.fecha_exp_nim) ? new Date(datos.fecha_exp_nim) : null,
             tipo_operador: Number(datos.tipo_operador),
-            tipo_nim_niar: datos.tipo_nim_niar,
-            nro_personeria: datos.nro_personeria || '',
-            nro_matricula_seprec: datos.nro_matricula_seprec || '',
-            fecha_exp_seprec: datos.fecha_exp_seprec ? new Date(datos.fecha_exp_seprec) : null,
-            tipo_doc_creacion: datos.tipo_doc_creacion || null,
-            doc_creacion: datos.doc_creacion || null,
-            dl_direccion: datos.dl_direccion || '',
-            correo_inst: datos.correo_inst || '',
-            tel_fijo: datos.tel_fijo || null,
-            celular: datos.celular || null,
+            tipo_nim_niar: this.normalizeValue(datos.tipo_nim_niar),
+            nro_personeria: this.normalizeValue(datos.nro_personeria),
+            nro_matricula_seprec: this.normalizeValue(datos.nro_matricula_seprec),
+            fecha_exp_seprec: this.normalizeValue(datos.fecha_exp_seprec) ? new Date(datos.fecha_exp_seprec) : null,
+            tipo_doc_creacion: this.normalizeValue(datos.tipo_doc_creacion),
+            doc_creacion: this.normalizeValue(datos.doc_creacion),
+            dl_direccion: this.normalizeValue(datos.dl_direccion),
+            correo_inst: this.normalizeValue(datos.correo_inst),
+            tel_fijo: this.normalizeValue(datos.tel_fijo),
+            celular: this.normalizeValue(datos.celular),
             act_exploracion: datos.act_exploracion === 1,
             act_comer_interna: datos.act_comer_interna === 1,
             act_comer_externa: datos.act_comer_externa === 1,
@@ -347,32 +368,32 @@ export class CrearOperadorComponent implements OnInit {
             act_ben_concentracion: datos.act_ben_concentracion === 1,
             act_refinacion: datos.act_refinacion === 1,
             act_fundicion: datos.act_fundicion === 1,
-            nro_ruex: datos.nro_ruex || '',
-            nro_res_ministerial: datos.nro_res_ministerial || '',
+            nro_ruex: this.normalizeValue(datos.nro_ruex),
+            nro_res_ministerial: this.normalizeValue(datos.nro_res_ministerial),
             act_calcinacion: datos.act_calcinacion === 1,
             act_tostacion: datos.act_tostacion === 1,
-            fax_op_min: datos.fax_op_min || '',
-            observaciones: datos.observaciones || '',
-            ofi_lat: datos.ofi_lat || '',
-            ofi_lon: datos.ofi_lon || '',
-            otro_celular: datos.otro_celular || null,
-            rep_celular: datos.rep_celular || null,
-            rep_ci: datos.rep_ci || '',
-            rep_correo: datos.rep_correo || '',
-            rep_departamento_id: datos.rep_departamento_id || null,
-            rep_direccion: datos.rep_direccion || '',
-            rep_municipio_id: datos.rep_municipio_id || null,
-            rep_nombre_completo: datos.rep_nombre_completo || '',
-            rep_telefono: datos.rep_telefono || '',
-            fecha_exp_ruex: datos.fecha_exp_ruex ? new Date(datos.fecha_exp_ruex) : null,
-            verif_cert_liberacion: datos.verif_cert_liberacion || null,
+            fax_op_min: this.normalizeValue(datos.fax_op_min),
+            observaciones: this.normalizeValue(datos.observaciones),
+            ofi_lat: this.normalizeValue(datos.ofi_lat),
+            ofi_lon: this.normalizeValue(datos.ofi_lon),
+            otro_celular: this.normalizeValue(datos.otro_celular),
+            rep_celular: this.normalizeValue(datos.rep_celular),
+            rep_ci: this.normalizeValue(datos.rep_ci),
+            rep_correo: this.normalizeValue(datos.rep_correo),
+            rep_departamento_id: this.normalizeValue(datos.rep_departamento_id),
+            rep_direccion: this.normalizeValue(datos.rep_direccion),
+            rep_municipio_id: this.normalizeValue(datos.rep_municipio_id),
+            rep_nombre_completo: this.normalizeValue(datos.rep_nombre_completo),
+            rep_telefono: this.normalizeValue(datos.rep_telefono),
+            fecha_exp_ruex: this.normalizeValue(datos.fecha_exp_ruex) ? new Date(datos.fecha_exp_ruex) : null,
+            verif_cert_liberacion: this.normalizeValue(datos.verif_cert_liberacion),
             comercio_interno_coperativa: datos.comercio_interno_coperativa || false,
             transbordo: datos.transbordo || false,
             traslado_colas: datos.traslado_colas || false,
             verificacion_toma_muestra: datos.verificacion_toma_muestra || false,
-            dl_departamento_id: datos.dl_departamento_id || null,
-            dl_municipio_id: datos.dl_municipio_id || null,
-            estado: datos.estado || null
+            dl_departamento_id: this.normalizeValue(datos.dl_departamento_id),
+            dl_municipio_id: this.normalizeValue(datos.dl_municipio_id),
+            estado: this.normalizeValue(datos.estado)
         });
 
         // Precargar arrendamientos si existen
@@ -459,6 +480,7 @@ export class CrearOperadorComponent implements OnInit {
     };
 
     onSubmit() {
+        this.markAllAsTouched(this.operador.formulario);
         let formData = new FormData();
         let datos = this.convertBooleansToNumbers(this.operador.formulario.value);
         let datofin = this.removeZeroOneProperties(datos);

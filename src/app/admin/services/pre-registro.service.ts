@@ -51,7 +51,7 @@ export class PreRegistroService {
   verPreRegistro(nombre:string)
   {
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}preregistro/`+nombre);
+    return this.http.get(`${this.baseUrl}preregistro/print/`+nombre);
   }
   //-----------------Visualizar Operador Hash-------------------------------------------
   hashOperador(nombre:string)

@@ -1,9 +1,10 @@
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { IOperator } from '@data/operator.metadata';
 
 export class OperatorFormulario {
   operator!: IOperator;
   formulario: FormGroup;
+  fechaRegistro: Date = new Date();
 
   constructor() {
      this.operator={
@@ -84,7 +85,10 @@ export class OperatorFormulario {
         razon_social:new FormControl(this.operator.razon_social,[Validators.required,Validators.minLength(5)]),
         dl_departamento_id:new FormControl(this.operator.dl_departamento_id,[Validators.required,Validators.pattern('^[0-9]*$')]),
         dl_municipio_id:new FormControl(this.operator.dl_municipio_id,[Validators.required,Validators.pattern('^[0-9]*$')]),
-        fecha_exp_nim:new FormControl(this.operator.fecha_exp_nim,[Validators.required]),
+        fecha_exp_nim: new FormControl(this.operator.fecha_exp_nim, [
+            Validators.required,
+            this.fechaMayorIgualValidador(this.fechaRegistro)
+          ]),
         nro_nim:new FormControl(this.operator.nro_nim,[Validators.required]),
         correo_inst: new FormControl(this.operator.correo_inst,[Validators.required,  Validators.email]),
         celular:new FormControl(this.operator.celular,[Validators.required,Validators.pattern('^[0-9]{8}$')]),
@@ -108,7 +112,9 @@ export class OperatorFormulario {
         dl_direccion:new FormControl(this.operator.dl_direccion,[Validators.required]),
         nro_personeria:new FormControl(this.operator.nro_personeria),
         nro_matricula_seprec:new FormControl(this.operator.nro_matricula_seprec),
-        fecha_exp_seprec:new FormControl(this.operator.fecha_exp_seprec),
+        fecha_exp_seprec: new FormControl(this.operator.fecha_exp_seprec, [
+            this.fechaMayorIgualValidador(this.fechaRegistro)
+          ]),
         tipo_doc_creacion:new FormControl(this.operator.tipo_doc_creacion),
         doc_creacion:new FormControl(this.operator.doc_creacion),
         ofi_lat:new FormControl(this.operator.ofi_lat, [Validators.required]),
@@ -127,13 +133,59 @@ export class OperatorFormulario {
         //dl_ubicacion:new FormControl(this.operator.dl_ubicacion),
         created_at:new FormControl(this.operator.created_at),
         updated_at:new FormControl(this.operator.updated_at),
-        fecha_exp_ruex:new FormControl(this.operator.fecha_exp_ruex),
+        fecha_exp_ruex: new FormControl(this.operator.fecha_exp_ruex, [
+            this.fechaMayorIgualValidador(this.fechaRegistro)
+          ]),
         nro_ruex:new FormControl(this.operator.nro_ruex,[Validators.pattern('^[0-9]*$')]),
         verif_cert_liberacion:new FormControl(this.operator.verif_cert_liberacion),
         nro_res_ministerial:new FormControl(this.operator.nro_res_ministerial)
     });
   }
+  // Validador personalizado para fechas
+  fechaMayorIgualValidador(fechaMinima: Date) {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) {
+        return null; // Si no hay valor, no validar (deja que required se encargue)
+      }
 
+      const fechaIngresada = new Date(control.value);
+      const fechaMin = new Date(fechaMinima);
+
+      // Comparar solo fechas (sin hora)
+      fechaIngresada.setHours(0, 0, 0, 0);
+      fechaMin.setHours(0, 0, 0, 0);
+
+      if (fechaIngresada < fechaMin) {
+        return {
+          fechaMinima: {
+            fechaIngresada: control.value,
+            fechaMinima: fechaMinima,
+            message: `La fecha debe ser mayor o igual a ${fechaMin.toLocaleDateString()}`
+          }
+        };
+      }
+
+      return null;
+    };
+  }
+
+    // Método para actualizar los validadores de fecha cuando cambie la fecha de registro
+    private actualizarValidadoresFecha(): void {
+        const camposFecha = ['fecha_exp_nim', 'fecha_exp_seprec', 'fecha_exp_ruex'];
+
+        camposFecha.forEach(campo => {
+          const control = this.formulario.get(campo);
+          if (control) {
+            const validadoresActuales = control.validator;
+            // Mantener los validadores existentes y agregar el nuevo
+            control.setValidators([
+              validadoresActuales,
+              this.fechaMayorIgualValidador(this.fechaRegistro)
+            ]);
+            control.updateValueAndValidity();
+          }
+        });
+      }
   // Método general para obtener un FormControl
   getControl(controlName: string): FormControl | null {
     return this.formulario.get(controlName) as FormControl | null;
@@ -161,6 +213,10 @@ getErrorMessage(controlName: string): string | null {
     if (control?.hasError('maxlength')) {
       return `No puede exceder ${control.errors?.['maxlength']?.requiredLength} caracteres.`;
     }
+    // Error de fecha mínima
+    if (control?.hasError('fechaMinima')) {
+        return control.errors?.['fechaMinima']?.message;
+      }
     if (control?.hasError('pattern')) {
           if (controlName === 'celular') {
             return 'Solo se permiten 8 dígitos numéricos.';

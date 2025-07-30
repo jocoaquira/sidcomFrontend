@@ -12,6 +12,7 @@ import { PreRegistroService } from '../../services/pre-registro.service';
 import { IOperator } from '@data/operator.metadata';
 import { CanEliminarPreRegistroGuard } from '../../guards/preregistro/can-eliminar-preregistro.guard';
 import { preRegistroService } from '../operator/crear-operador-validacion/preregistro.service';
+import { SIDCOMFormService } from '../../services/pdf/preregistro.service';
 
 
 @Component({
@@ -47,7 +48,7 @@ export class PreRegistroComponent implements OnInit {
         public canCrearOperator:CanCrearOperatorGuard,
         public canEditarOperator:CanEditarPreRegistroGuard,
         public canEliminarOperator:CanEliminarPreRegistroGuard,
-        public idomServices:IDOMService,
+        public idomServices:SIDCOMFormService,
         private confirmationService:ConfirmationService,
         private notify:ToastrService,
         private router: Router,
@@ -142,7 +143,12 @@ export class PreRegistroComponent implements OnInit {
     }
 
     generarIDOM(operador:IOperator){
-        this.idomServices.generarPDF(operador);
+        this.preRegistroService.verPreRegistro(operador.id.toString()).subscribe(
+            (data:any)=>{
+                console.log(data);
+                this.idomServices.generarFormularioPDF(data);
+          },
+          (error:any)=> this.error=this.preRegistroService.handleError(error));
     }
 
 
