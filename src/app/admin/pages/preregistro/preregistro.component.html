@@ -84,55 +84,11 @@
                         <td style="width:14%; min-width:10rem;">
                             <span class="p-column-title">Category</span>
                             <div class="flex">
-                                <button *ngIf="operador.ci_link"
-                                    pButton
-                                    pRipple
-                                    type="button"
-                                    class="p-button p-button-outlined mr-1 btn-minimal-padding"
-                                    (click)="abrirPdf(operador.ci_link)">
-                                    CI
+
+                                <button pButton pRipple type="button" icon="pi pi-file-pdf"
+                                    class="p-button p-button-info p-button-outlined mr-1 btn-minimal-padding"
+                                    (click)="generarIDOM(operador)">Form. de Preregistro
                                 </button>
-                                <button *ngIf="operador.nit_link"
-                                    pButton
-                                    pRipple
-                                    type="button"
-                                    class="p-button p-button-outlined mr-1 btn-minimal-padding"
-                                    (click)="abrirPdf(operador.nit_link)">
-                                    NIT
-                                </button>
-                                <button *ngIf="operador.nim_link"
-                                    pButton
-                                    pRipple
-                                    type="button"
-                                    class="p-button p-button-outlined mr-1 btn-minimal-padding"
-                                    (click)="abrirPdf(operador.nim_link)">
-                                    NIM
-                                </button>
-                                <button *ngIf="operador.seprec_link"
-                                        pButton
-                                        pRipple
-                                        type="button"
-                                        class="p-button p-button-outlined mr-1 btn-minimal-padding"
-                                        (click)="abrirPdf(operador.seprec_link)">
-                                    SEPREC
-                                </button>
-                                <button *ngIf="operador.ruex_link"
-                                    pButton
-                                    pRipple
-                                    type="button"
-                                    class="p-button p-button-outlined mr-1 btn-minimal-padding"
-                                    (click)="abrirPdf(operador.ruex_link)">
-                                    RUEX
-                                </button>
-                                <button *ngIf="operador.doc_explotacion_link"
-                                    pButton
-                                    pRipple
-                                    type="button"
-                                    class="p-button p-button-outlined mr-1 btn-minimal-padding"
-                                    (click)="abrirPdf(operador.doc_explotacion_link)">
-                                    Explotación
-                                </button>
-                                <button pButton pRipple type="button" class="p-button p-button-info p-button-outlined mr-1 btn-minimal-padding" (click)="generarIDOM(operador)">IDOM</button>
                                 <app-idom></app-idom>
                             </div>
                             </td>

@@ -13,6 +13,8 @@ import { IOficina } from '@data/oficina.metadata';
 import { IArrendamiento } from '@data/arrendamiento.metadata';
 import { OperatorFormulario } from 'src/app/admin/validators/operator';
 import { PreRegistroService } from 'src/app/admin/services/pre-registro.service';
+import { SIDCOMFormService } from 'src/app/admin/services/pdf/preregistro.service';
+import { IRespForm101 } from '@data/resp_form_101.metadata';
 @Component({
     templateUrl: './solicitar-registro.component.html',
 
@@ -72,6 +74,16 @@ export class SolicitarRegistroComponent implements OnInit {
         longitud:null,
         estado:null
     };
+    errorRespForm101:IRespForm101={
+        id:null,
+        email: null,
+        nombre:null,
+        apellidos:null,
+        ci:null,
+        celular:null,
+        preregistro_id:null,
+        estado:null,
+    };
     arrendamiento:IArrendamiento={
         id:null,
         operator_id:null,
@@ -107,6 +119,7 @@ export class SolicitarRegistroComponent implements OnInit {
         private preRegistroService:PreRegistroService,
         private notify:ToastrService,
         private router:Router,
+        private pdfPreregistroServices:SIDCOMFormService,
         private municipiosService:MunicipiosService,
         private departamentosService:DepartamentosService,
     ) {
@@ -260,8 +273,9 @@ private markAllAsTouched(formGroup: FormGroup | FormArray) {
             this.preRegistroService.crearPreRegistro(datofin).subscribe(
                 (data: any) => {
                     console.log("Respuesta del servidor:", data);
-                    this.operador_registrado = this.preRegistroService.handleCrearoperator(data);
-                    if (data) {
+                    this.operador_registrado = this.preRegistroService.handleCrearoperator(data.preregistro);
+                    if (this.operador_registrado) {
+                        this.generarPDF(this.operador_registrado);
                         this.notify.success('Solicitud de Pre-Registro enviado Correctamente');
                         this.onVolver()
                     }
@@ -495,4 +509,13 @@ private markAllAsTouched(formGroup: FormGroup | FormArray) {
     onVolver(){
         this.router.navigate(['/auth']);
       }
+
+      generarPDF(operador:any){
+        this.preRegistroService.verPreRegistro(operador.id.toString()).subscribe(
+            (data:any)=>{
+                console.log(data);
+                this.pdfPreregistroServices.generarFormularioPDF(data);
+          },
+          (error:any)=> this.error=this.preRegistroService.handleError(error));
+    }
 }
