@@ -51,6 +51,7 @@ export class SolicitarRegistroComponent implements OnInit {
     municipio_sucursal:IMunicipio[]=[];
     municipio_arrendamiento:IMunicipio[]=[];
     oficina:IOficina[]=[];
+    respForms101:IRespForm101[]=[];
     lista_arrendamiento:IArrendamiento[]=[];
     sucursal:IOficina={
         id:null,
@@ -62,6 +63,16 @@ export class SolicitarRegistroComponent implements OnInit {
         latitud:'',
         longitud:'',
         estado:'',
+    };
+    RespForm101:IRespForm101={
+        id:null,
+        email: null,
+        nombre:null,
+        apellidos:null,
+        ci:null,
+        celular:null,
+        preregistro_id:null,
+        estado:null,
     };
     errorSucursal:IOficina={
         id:null,
@@ -500,6 +511,21 @@ private markAllAsTouched(formGroup: FormGroup | FormArray) {
     sucursalLongitud(event){
         this.sucursal.longitud =(event.target as HTMLInputElement).value;
     }
+
+
+    respForm101_nombre(event){
+        this.RespForm101.nombre =(event.target as HTMLInputElement).value;
+    }
+    respForm101_apellidos(event){
+        this.RespForm101.apellidos =(event.target as HTMLInputElement).value;
+    }
+    respForm101_ci(event){
+        this.RespForm101.ci =(event.target as HTMLInputElement).value;
+    }
+    respForm101_email(event){
+        this.RespForm101.email =(event.target as HTMLInputElement).value;
+    }
+
 
     valSwitches(event:any){
         console.log(event);

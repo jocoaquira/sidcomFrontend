@@ -5,7 +5,7 @@ export interface IRespForm101 {
     apellidos:string,
     ci?:string,
     celular?:number,
-    preregistro_id:number,
+    preregistro_id?:number,
     estado:string,
     created_at?:string,
     updated_at?:string,
