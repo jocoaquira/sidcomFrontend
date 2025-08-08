@@ -480,11 +480,17 @@ private markAllAsTouched(formGroup: FormGroup | FormArray) {
     agregarArrendamiento(){
         this.lista_arrendamiento.push({...this.arrendamiento});
     }
+    agregarRespForm101(){
+        this.respForms101.push({...this.RespForm101});
+    }
     eliminar(domicilio:IOficina) {
         //this.deleteProductDialog = false;
         this.oficina = this.oficina.filter(val => val.direccion !== domicilio.direccion);
         //this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
         //this.product = {};
+    }
+    eliminarResp(responsable:IRespForm101) {
+        this.respForms101 = this.respForms101.filter(val => val.ci !== responsable.ci);
     }
     verForm(){
         console.log( this.operador.formulario.value);
