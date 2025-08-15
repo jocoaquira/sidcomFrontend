@@ -19,6 +19,7 @@ import { FormularioExternosService } from 'src/app/admin/services/formulario-ext
 import { MineralsService } from 'src/app/admin/services/minerales.service';
 import { OperatorsService } from 'src/app/admin/services/operators.service';
 import { PresentacionService } from 'src/app/admin/services/presentacion.service';
+import { TipoTransporteService } from 'src/app/admin/services/tipo-transporte.service';
 import { FormularioExternoFormulario } from 'src/app/admin/validators/formulario-externo';
 
 @Component({
@@ -28,7 +29,7 @@ import { FormularioExternoFormulario } from 'src/app/admin/validators/formulario
 })
 export class CreateFormularioExternoComponent implements OnInit {
 
-    public formulario_externo=new FormularioExternoFormulario(this.canCrearActaTomaDeMuestra);
+    public formulario_externo=new FormularioExternoFormulario(this.canCrearActaTomaDeMuestra,this.tipoTransporteService);
     public departamento_id:number=0;
     public municipio_id:number=0;
     public declaracionJurada:boolean=false;
@@ -162,7 +163,8 @@ nextStep() {
     private listaLeyesMineralesService:FormularioExternoMineralService,
     private listaMunicipiosOrigenService:FormularioExternoMunicipioOrigenService,
     private router: Router,
-    private presentacionService:PresentacionService
+    private presentacionService:PresentacionService,
+    private tipoTransporteService: TipoTransporteService
   ) {
 
     this.formulario_externo.formulario.patchValue({

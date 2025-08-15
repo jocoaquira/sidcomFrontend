@@ -19,7 +19,7 @@ export class TipoTransporteFormulario {
         capacidad: new FormControl(this.tipo_transporte.capacidad,[Validators.required]),
         nombre: new FormControl(this.tipo_transporte.nombre, [
             Validators.required,
-            Validators.pattern('^[0-9A-Za-z-]+$') // Acepta números, letras y guiones
+            Validators.pattern('^[0-9A-Za-z-\\s]+$')// Acepta números, letras, guiones y espacios
         ]),
         id:new FormControl(this.tipo_transporte.id),
     });

@@ -19,6 +19,7 @@ import { FormularioInternoFormulario } from 'src/app/admin/validators/formulario
 import { IFormularioInternoMineralEnvio } from '@data/form_int_mineral_envio.metadata';
 import { IFormularioInternoMunicipioOrigenEnvio } from '@data/form_int_municipio_origen_envio.metadata';
 import { PresentacionService } from 'src/app/admin/services/presentacion.service';
+import { TipoTransporteService } from 'src/app/admin/services/tipo-transporte.service';
 
 @Component({
   selector: 'app-create-formulario-interno',
@@ -27,7 +28,7 @@ import { PresentacionService } from 'src/app/admin/services/presentacion.service
 })
 export class CreateFormularioInternoComponent implements OnInit {
 
-    public formulario_interno=new FormularioInternoFormulario();
+    public formulario_interno:FormularioInternoFormulario;
     public departamento_id:number=0;
     public municipio_id:number=0;
     public declaracionJurada:boolean=false;
@@ -156,12 +157,14 @@ nextStep() {
     private listaLeyesMineralesService:FormularioInternoMineralService,
     private listaMunicipiosOrigenService:FormularioInternoMunicipioOrigenService,
     private router: Router,
-    private presentacionService:PresentacionService
+    private presentacionService:PresentacionService,
+    private tipoTransporteService: TipoTransporteService
   ) {
 
     this.formulario_interno.formulario.patchValue({
         user_id: authService.getUser.id
       });
+      this.formulario_interno = new FormularioInternoFormulario(this.tipoTransporteService);
    }
 
   ngOnInit() {
