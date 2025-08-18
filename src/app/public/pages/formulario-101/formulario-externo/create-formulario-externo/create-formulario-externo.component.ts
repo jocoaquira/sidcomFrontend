@@ -327,7 +327,7 @@ nextStep() {
         municipio_origen:this.municipio_origen_envio,
         ...(!formularioEnvio.hasOwnProperty('nro_formulario_tm') && { nro_formulario_tm: null }) // Agrega solo si no existe
       }
-
+      console.log('Formulario a enviar:', formularioEnvio);
       this.formularioExternoService.crearFormularioExterno(formularioEnvio).subscribe(
         (data:any) =>
         {
@@ -474,18 +474,21 @@ nextStep() {
 
         if (this.presentacion.cantidad==1) {
             this.formulario_externo.formulario.get('cantidad')?.enable();
+            this.formulario_externo.formulario.get('cantidad')?.setValue(0);
         } else {
         this.formulario_externo.formulario.get('cantidad')?.disable();
         this.formulario_externo.formulario.get('cantidad')?.setValue(null);
         }
         if (this.presentacion.merma==1) {
         this.formulario_externo.formulario.get('merma')?.enable();
+         this.formulario_externo.formulario.get('merma')?.setValue(0);
         } else {
         this.formulario_externo.formulario.get('merma')?.disable();
         this.formulario_externo.formulario.get('merma')?.setValue(0);
         }
         if (this.presentacion.humedad==1) {
         this.formulario_externo.formulario.get('humedad')?.enable();
+        this.formulario_externo.formulario.get('humedad')?.setValue(0);
         } else {
         this.formulario_externo.formulario.get('humedad')?.disable();
         this.formulario_externo.formulario.get('humedad')?.setValue(0);
@@ -537,7 +540,12 @@ cargarDatosTDM(form:ITDMNroForm){
     lote:form.lote,
     presentacion_id:form.presentacion_id,
     humedad:form.humedad,
+    merma:0
   });
+  const present={
+    value:form.presentacion_id
+  }
+  this.cambioPresentacion(present);
   this.minerales_envio=form.minerales//.push({...envio_minerales});
   // Crear una nueva lista excluyendo ciertos campos
     this.minerales_envio = form.minerales.map(mineral => {

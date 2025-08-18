@@ -65,7 +65,7 @@ export class FormularioExternoFormulario implements OnDestroy {
       lote: new FormControl(this.formulario_externo.lote, [Validators.required]),
       presentacion_id: new FormControl(this.formulario_externo.presentacion_id, [Validators.required]),
       cantidad: new FormControl(this.formulario_externo.cantidad, [Validators.pattern('^[0-9]*$'), Validators.min(0)]),
-      peso_bruto_humedo: new FormControl(this.formulario_externo.peso_bruto_humedo, [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
+      peso_bruto_humedo: new FormControl(this.formulario_externo.peso_bruto_humedo, [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(1)]),
 
       // PESO_NETO con validador asíncrono personalizado
       peso_neto: new FormControl(

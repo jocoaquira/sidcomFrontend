@@ -90,10 +90,9 @@ export class EditFormularioExternoComponent implements OnInit {
 
     // Definir los pasos para Steps
 steps = [
-  { label: '1. Datos de la Exportación', command: (event: any) => this.gotoStep(0)},
+  { label: '1. Datos del Medio de Transporte y Exportación', command: (event: any) => this.gotoStep(0)},
   { label: '2. Datos del mineral y/o Metal',command: (event: any) => this.gotoStep(1) },
-  { label: '3. Destino del mineral y/o Metal', command: (event: any) => this.gotoStep(2) },
-  { label: '4. Datos del Medio de Transporte', command: (event: any) => this.gotoStep(3) }
+  { label: '3. Destino del mineral y/o Metal', command: (event: any) => this.gotoStep(2) }
 ];
 
 public activeStep: number = 0; // Establecer el paso activo inicial
@@ -347,6 +346,10 @@ cargar_datos(form:any){
 
     });
   });
+  const present={
+    value:form.presentacion_id
+  }
+  this.cambioPresentacion(present);
 }
 ngOnInit() {
   this.departamento_id=0;

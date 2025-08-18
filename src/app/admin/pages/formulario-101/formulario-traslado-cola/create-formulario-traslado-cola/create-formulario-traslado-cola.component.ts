@@ -19,6 +19,7 @@ import { FormularioTrasladoColaService } from 'src/app/admin/services/formulario
 import { MineralsService } from 'src/app/admin/services/minerales.service';
 import { OperatorsService } from 'src/app/admin/services/operators.service';
 import { PresentacionService } from 'src/app/admin/services/presentacion.service';
+import { TipoTransporteService } from 'src/app/admin/services/tipo-transporte.service';
 import { FormularioTrasladoColaFormulario } from 'src/app/admin/validators/formulario-cola';
 
 @Component({
@@ -28,7 +29,7 @@ import { FormularioTrasladoColaFormulario } from 'src/app/admin/validators/formu
 })
 export class CreateFormularioTrasladoColaComponent implements OnInit {
 
-    public formulario_interno=new FormularioTrasladoColaFormulario();
+    public formulario_interno=new FormularioTrasladoColaFormulario(this.tipoTransporteService);
     public departamento_id:number=0;
     public municipio_id:number=0;
     public declaracionJurada:boolean=false;
@@ -161,7 +162,8 @@ nextStep() {
     private listaLeyesMineralesService:FormularioTrasladoColaMineralService,
     private listaMunicipiosOrigenService:FormularioTrasladoColaMunicipioOrigenService,
     private router: Router,
-    private presentacionService:PresentacionService
+    private presentacionService:PresentacionService,
+      private tipoTransporteService: TipoTransporteService
   ) {
 
     this.formulario_interno.formulario.patchValue({
@@ -185,7 +187,7 @@ nextStep() {
       this.presentacionService.verpresentacions('hj').subscribe(
         (data:any)=>{
         this.presentaciones=this.presentacionService.handlepresentacion(data);
-       
+
       },
       (error:any)=> this.error=this.presentacionService.handleError(error));
 
@@ -245,7 +247,7 @@ nextStep() {
         });
       }
     }
-   
+
   }
  // Función para calcular el peso neto
  calcularPesoNeto() {
@@ -284,7 +286,7 @@ nextStep() {
         municipio_origen:this.municipio_origen_envio,
         municipio_destino:this.municipio_destino_envio
       }
-     
+
       this.formularioTrasladoColaService.crearFormularioTrasladoCola(formularioEnvio).subscribe(
         (data:any) =>
         {
@@ -292,7 +294,7 @@ nextStep() {
 
           if(this.formulario_Interno_registrado!==null)
           {
-           
+
             this.formulario_interno.formulario.reset();
             this.notify.success('El el formulario interno se generó exitosamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
             this.router.navigate(['/admin/formulario-101/formulario-traslado-cola/']);

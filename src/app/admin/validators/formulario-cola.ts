@@ -1,11 +1,16 @@
 import { IFormularioTrasladoCola } from '@data/formulario_cola.metadata';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { catchError, debounceTime, map, Observable, of } from 'rxjs';
+import { ITipoTransporte } from '@data/tipo_transporte.metadata';
+import { TipoTransporteService } from '../services/tipo-transporte.service';
 
 export class FormularioTrasladoColaFormulario {
   formulario_interno!: IFormularioTrasladoCola;
   formulario: FormGroup;
 
-  constructor() {
+  constructor(
+    private tipoTransporteService: TipoTransporteService
+  ) {
      this.formulario_interno={
         id:null,
         user_id:null,
@@ -40,9 +45,16 @@ export class FormularioTrasladoColaFormulario {
         user_id:new FormControl(this.formulario_interno.user_id,[Validators.required,Validators.pattern('^[0-9]*$')]),
         operador_id:new FormControl(this.formulario_interno.operador_id,[Validators.required,Validators.pattern('^[0-9]*$')]),
         lote:new FormControl(this.formulario_interno.lote,[Validators.required]),
-       peso_bruto_humedo:new FormControl(this.formulario_interno.peso_bruto_humedo,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
-       peso_neto:new FormControl(this.formulario_interno.peso_neto,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
-        tara:new FormControl(this.formulario_interno.tara),
+        peso_bruto_humedo:new FormControl(this.formulario_interno.peso_bruto_humedo,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
+
+       // PESO_NETO con validador asíncrono personalizado
+        peso_neto: new FormControl(
+            this.formulario_interno.peso_neto,
+            [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)],
+            [this.validarPesoNetoSegunCapacidad.bind(this)] // Validador asíncrono
+        ),
+
+       tara:new FormControl(this.formulario_interno.tara),
         destino:new FormControl(this.formulario_interno.destino,[Validators.required]),
         tipo_transporte:new FormControl(this.formulario_interno.tipo_transporte,[Validators.required]),
         almacen:new FormControl(this.formulario_interno.almacen),
@@ -66,8 +78,61 @@ export class FormularioTrasladoColaFormulario {
         this.formulario.get('destino')?.valueChanges.subscribe((valor: string) => {
         this.actualizarValidacionesSegunTipo(valor);
     });
+    // Observar cambios en tipo_transporte para revalidar peso_neto
+    this.formulario.get('tipo_transporte')?.valueChanges.subscribe(() => {
+      this.formulario.get('peso_neto')?.updateValueAndValidity();
+    });
   }
 
+    /**
+     * VALIDADOR ASÍNCRONO PERSONALIZADO
+     * Valida que el peso_neto no exceda la capacidad del tipo de transporte seleccionado
+     */
+    private validarPesoNetoSegunCapacidad(control: AbstractControl): Observable<ValidationErrors | null> {
+      if (!control.value || !this.formulario) {
+        return of(null);
+      }
+
+      const tipoTransporteControl = this.formulario.get('tipo_transporte');
+      const tipoTransporteId = tipoTransporteControl?.value;
+
+      if (!tipoTransporteId) {
+        // Si no hay tipo de transporte seleccionado, no validar aún
+        return of(null);
+      }
+
+      const pesoNeto = parseFloat(control.value);
+
+      if (isNaN(pesoNeto)) {
+        return of(null); // Dejar que otros validadores manejen el formato
+      }
+
+      return this.tipoTransporteService.verTipoTransporteNombre(tipoTransporteId).pipe(
+        debounceTime(300), // Evitar llamadas excesivas
+        map((tipoTransporte: ITipoTransporte) => {
+          console.log('Tipo de Transporte:', tipoTransporte);
+          if (!tipoTransporte) {
+            return { tipoTransporteNoEncontrado: true };
+          }
+
+          if (pesoNeto > tipoTransporte.capacidad) {
+            return {
+              pesoExcedeCapacidad: {
+                pesoNeto: pesoNeto,
+                capacidadMaxima: tipoTransporte.capacidad,
+                tipoTransporte: tipoTransporte.nombre
+              }
+            };
+          }
+
+          return null; // Válido
+        }),
+        catchError(() => {
+          // En caso de error en la consulta
+          return of({ errorConsultaCapacidad: true });
+        })
+      );
+    }
 
   // Método general para obtener un FormControl
   getControl(controlName: string): FormControl | null {

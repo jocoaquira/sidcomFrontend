@@ -21,6 +21,7 @@ import { FormularioTrasladoColaService } from 'src/app/admin/services/formulario
 import { MineralsService } from 'src/app/admin/services/minerales.service';
 import { OperatorsService } from 'src/app/admin/services/operators.service';
 import { PresentacionService } from 'src/app/admin/services/presentacion.service';
+import { TipoTransporteService } from 'src/app/admin/services/tipo-transporte.service';
 import { FormularioTrasladoColaFormulario } from 'src/app/admin/validators/formulario-cola';
 
 @Component({
@@ -30,7 +31,7 @@ import { FormularioTrasladoColaFormulario } from 'src/app/admin/validators/formu
 })
 export class CreateFormularioTrasladoColaComponent implements OnInit {
 
-    public formulario_interno=new FormularioTrasladoColaFormulario();
+    public formulario_interno=new FormularioTrasladoColaFormulario(this.tipoTransporteService);
     public departamento_id:number=0;
     public municipio_id:number=0;
     public operador_id:number=0;
@@ -168,7 +169,8 @@ nextStep() {
     private listaLeyesMineralesService:FormularioTrasladoColaMineralService,
     private listaMunicipiosOrigenService:FormularioTrasladoColaMunicipioOrigenService,
     private router: Router,
-    private presentacionService:PresentacionService
+    private presentacionService:PresentacionService,
+            private tipoTransporteService: TipoTransporteService
   ) {
     this.operador_id=this.authService.getUser.operador_id;
     this.formulario_interno.formulario.patchValue({

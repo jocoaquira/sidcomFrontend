@@ -22,6 +22,7 @@ import { FormularioTrasladoColaService } from 'src/app/admin/services/formulario
 import { FormularioTrasladoColaFormulario } from 'src/app/admin/validators/formulario-cola';
 import { IFormularioTrasladoCola } from '@data/formulario_cola.metadata';
 import { IFormularioTrasladoColaMunicipioOrigen } from '@data/form_cola_municipio_origen.metadata';
+import { TipoTransporteService } from 'src/app/admin/services/tipo-transporte.service';
 
 @Component({
   selector: 'app-edit-formulario-traslado-cola',
@@ -31,7 +32,7 @@ import { IFormularioTrasladoColaMunicipioOrigen } from '@data/form_cola_municipi
 export class EditFormularioTrasladoColaComponent implements OnInit {
   public id:number=0;
   public num_form!:any;
-  public formulario_traslado_cola=new FormularioTrasladoColaFormulario();
+  public formulario_traslado_cola=new FormularioTrasladoColaFormulario(this.tipoTransporteService);
   public departamento_id:number=0;
   public municipio_id:number=0;
   public declaracionJurada:boolean=false;
@@ -173,7 +174,8 @@ constructor(
   private presentacionService:PresentacionService,
   private actRoute:ActivatedRoute,
   private municipiosService:MunicipiosService,
-  public departamentosService: DepartamentosService
+  public departamentosService: DepartamentosService,
+        private tipoTransporteService: TipoTransporteService
 ) {
   this.actRoute.paramMap.subscribe(params=>{
      this.id=parseInt(params.get('id'));
