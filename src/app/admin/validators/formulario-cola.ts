@@ -166,6 +166,19 @@ getErrorMessage(controlName: string): string | null {
     if (control?.hasError('maxlength')) {
       return `No puede exceder ${control.errors?.['maxlength']?.requiredLength} caracteres.`;
     }
+    // VALIDACIONES PERSONALIZADAS DE PESO_NETO
+    if (controlName === 'peso_neto') {
+      if (control?.hasError('pesoExcedeCapacidad')) {
+        const error = control.errors?.['pesoExcedeCapacidad'];
+        return `El peso neto (${error.pesoNeto} kg) excede la capacidad máxima del ${error.tipoTransporte} (${error.capacidadMaxima} kg)`;
+      }
+      if (control?.hasError('tipoTransporteNoEncontrado')) {
+        return 'No se pudo verificar la capacidad del tipo de transporte seleccionado.';
+      }
+      if (control?.hasError('errorConsultaCapacidad')) {
+        return 'Error al consultar la capacidad del transporte. Intente nuevamente.';
+      }
+    }
     if (control?.hasError('pattern')) {
           if (controlName === 'user_id') {
             return 'Solo se permiten numeros.';

@@ -143,7 +143,7 @@ nextStep() {
       const humedad_valido = this.formulario_interno.formulario.get('humedad')?.disabled ||
                             this.formulario_interno.formulario.get('humedad')?.valid;
       const cantidad_valido = this.formulario_interno.formulario.get('cantidad')?.disabled ||
-                             this.formulario_interno.formulario.get('cantidad')?.valid;
+                            this.formulario_interno.formulario.get('cantidad')?.valid;
 
       // Validar que hay al menos un mineral agregado
       const minerales_valido = this.lista_leyes_mineral.length > 0;

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 import { CanCrearUsuarioGuard } from 'src/app/admin/guards/usuarios/can-crear-usuario.guard';
 
@@ -53,7 +53,19 @@ export class ControlarTrancaComponent {
         observaciones:null
       }
     public error:any=null;
+    //------------------------UBICACION--------------------------------
+    latitude: number | undefined;
+    longitude: number | undefined;
+    private watchId: number | undefined;
     //----------------------------------------------------------------=null;
+    // Propiedades para la cámara
+    @ViewChild('videoElement') videoElement: ElementRef<HTMLVideoElement>;
+    @ViewChild('canvasElement') canvasElement: ElementRef<HTMLCanvasElement>;
+
+    public isCameraOpen: boolean = false;
+    stream: MediaStream | null = null;
+    facingMode: 'user' | 'environment' = 'environment'; // Iniciar con cámara trasera
+    capturedImage: string | null = null;
 
     constructor(
         private authService:AuthService,
@@ -67,7 +79,7 @@ export class ControlarTrancaComponent {
         private turnoTrancaService:TurnoTrancaService,
         private controlTrancaService:ControlTrancaService
     ) {
-
+        this.verUbicacion();
     }
 
 
@@ -346,6 +358,11 @@ export class ControlarTrancaComponent {
         this.nro_formulario='';
       this.qrResult = null;
       this.errorMessage = null;
+      this.formulario_interno=null;
+        this.formulario_externo=null;
+        this.formulario_interno_cooperativa=null;
+        this.formulario_cola=null;
+        this.formulario_tdm=null;
       if (this.fileUploadComponent) {
         this.fileUploadComponent.clear();
       }
@@ -596,4 +613,256 @@ cargarFormularioNumero() {
       );
 
   }
+  verUbicacion(){
+    if (navigator.geolocation) {
+        this.watchId = navigator.geolocation.watchPosition(
+            (position) => {
+            this.latitude = position.coords.latitude;
+            this.longitude = position.coords.longitude;
+            console.log(`Ubicación actual: Latitud ${this.latitude}, Longitud ${this.longitude}`);
+            },
+            (error) => {
+            console.error("Error getting location:", error);
+            }
+        );
+    } else {
+    console.log("Geolocation is not supported by this browser.");
+    }
+  }
+
+
+
+  //-------------------------------ACCESOS A LA CAMARA---------------------------------------
+  // Método para cerrar la cámara
+closeCamera() {
+  if (this.stream) {
+    this.stream.getTracks().forEach(track => track.stop());
+    this.stream = null;
+  }
+
+  if (this.videoElement?.nativeElement) {
+    this.videoElement.nativeElement.srcObject = null;
+  }
+
+  this.isCameraOpen = false;
+  this.capturedImage = null;
+}
+// Método para manejar errores de cámara
+private handleCameraError(error: any) {
+  let errorMessage = 'Error al acceder a la cámara: ';
+
+  switch (error.name) {
+    case 'NotAllowedError':
+      errorMessage += 'Permisos denegados. Por favor, permite el acceso a la cámara.';
+      break;
+    case 'NotFoundError':
+      errorMessage += 'No se encontró ninguna cámara en el dispositivo.';
+      break;
+    case 'NotReadableError':
+      errorMessage += 'La cámara está siendo usada por otra aplicación.';
+      break;
+    case 'OverconstrainedError':
+      errorMessage += 'La configuración solicitada no es compatible.';
+      break;
+    default:
+      errorMessage += error.message || 'Error desconocido.';
+  }
+
+  this.errorMessage = errorMessage;
+  this.isCameraOpen = false;
+}
+
+
+  // Método para abrir/cerrar la cámara
+// En tu controlar-tranca.component.ts
+
+// Método corregido para abrir la cámara
+async openCamera() {
+  try {
+    // Cerrar stream anterior si existe
+    if (this.stream) {
+      this.stream.getTracks().forEach(track => track.stop());
+    }
+
+    // Constraints mejorados para móviles
+    const constraints: MediaStreamConstraints = {
+      video: {
+        facingMode: this.facingMode,
+        width: { ideal: 1280, max: 1920 },
+        height: { ideal: 720, max: 1080 },
+        frameRate: { ideal: 30 }
+      }
+    };
+
+    // Solicitar permisos de cámara
+    this.stream = await navigator.mediaDevices.getUserMedia(constraints);
+
+    if (this.videoElement?.nativeElement) {
+      this.videoElement.nativeElement.srcObject = this.stream;
+
+      // Esperar a que el video esté listo
+      await new Promise<void>((resolve) => {
+        if (this.videoElement?.nativeElement) {
+          this.videoElement.nativeElement.onloadedmetadata = () => {
+            resolve();
+          };
+        }
+      });
+
+
+      this.errorMessage = null;
+
+      // Iniciar detección de QR en tiempo real si está en cámara trasera
+      if (this.facingMode === 'environment') {
+        this.startQRDetection();
+      }
+    }
+  } catch (error) {
+    console.error('Error al abrir la cámara:', error);
+    this.handleCameraError(error);
+  }
+}
+
+// Nuevo método para detección continua de QR
+private qrDetectionInterval: any;
+startQRDetection() {
+  // Limpiar intervalo anterior si existe
+  if (this.qrDetectionInterval) {
+    clearInterval(this.qrDetectionInterval);
+  }
+
+  this.qrDetectionInterval = setInterval(() => {
+    if (this.isCameraOpen && this.videoElement?.nativeElement) {
+      this.scanQRFromVideo();
+    }
+  }, 500); // Escanear cada 500ms
+}
+
+// Método para escanear QR desde el video
+async scanQRFromVideo() {
+  if (!this.videoElement?.nativeElement || !this.canvasElement?.nativeElement) {
+    return;
+  }
+
+  const video = this.videoElement.nativeElement;
+  const canvas = this.canvasElement.nativeElement;
+  const ctx = canvas.getContext('2d');
+
+  if (!ctx || video.videoWidth === 0 || video.videoHeight === 0) {
+    return;
+  }
+
+  // Configurar canvas con las dimensiones del video
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+
+  // Dibujar frame actual del video en el canvas
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  // Obtener imagen para procesar
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+  // Intentar detectar QR
+  const qrCode = jsQR(imageData.data, imageData.width, imageData.height);
+
+  if (qrCode && qrCode.data) {
+    console.log('QR detectado:', qrCode.data);
+    this.qrResult = qrCode.data;
+
+    // Detener la detección continua
+    if (this.qrDetectionInterval) {
+      clearInterval(this.qrDetectionInterval);
+      this.qrDetectionInterval = null;
+    }
+
+    // Procesar el resultado
+    let datosForm = this.extraerDatosFormulario(this.qrResult);
+    if (datosForm) {
+      this.cargarFormulario(datosForm.tipoFormulario, datosForm.hash);
+    }
+
+    // Cerrar la cámara automáticamente
+    this.closeCamera();
+  }
+}
+
+// Método mejorado para cambiar entre cámaras
+async switchCamera() {
+  if (!this.isCameraOpen) return;
+
+  // Detener detección de QR
+  if (this.qrDetectionInterval) {
+    clearInterval(this.qrDetectionInterval);
+    this.qrDetectionInterval = null;
+  }
+
+  this.facingMode = this.facingMode === 'user' ? 'environment' : 'user';
+
+  // Cerrar cámara actual
+  this.closeCamera();
+
+  // Pequeña pausa antes de abrir la nueva cámara
+  await new Promise(resolve => setTimeout(resolve, 300));
+
+  // Abrir nueva cámara
+  await this.openCamera();
+}
+
+// Método mejorado para verificar soporte de cámara
+checkCameraSupport(): boolean {
+  const isSecure = window.location.protocol === 'https:' ||
+                  window.location.hostname === 'localhost' ||
+                  window.location.hostname === '127.0.0.1';
+
+  const hasGetUserMedia = !!(navigator.mediaDevices &&
+                            navigator.mediaDevices.getUserMedia);
+
+  return isSecure && hasGetUserMedia;
+}
+
+// Método para mostrar alerta amigable sobre HTTPS
+showHTTPSWarning() {
+  if (window.location.protocol !== 'https:' &&
+      window.location.hostname !== 'localhost' &&
+      window.location.hostname !== '127.0.0.1') {
+    this.errorMessage = 'La cámara requiere una conexión segura (HTTPS) o localhost para funcionar.';
+    return true;
+  }
+  return false;
+}
+
+// Modificar toggleCamera para incluir verificación HTTPS
+async toggleCamera() {
+  if (this.isCameraOpen) {
+    this.closeCamera();
+  } else {
+    if (this.showHTTPSWarning()) {
+      return;
+    }
+    this.isCameraOpen = true;
+    await this.openCamera();
+  }
+}
+
+// Modificar capturePhoto para usar la detección existente
+capturePhoto() {
+  if (!this.videoElement?.nativeElement) {
+    this.errorMessage = 'Error: elemento de video no disponible';
+    return;
+  }
+
+  // Simplemente forzar una detección de QR
+  this.scanQRFromVideo();
+}
+
+// Asegurar limpieza completa
+ngOnDestroy() {
+  this.closeCamera();
+  if (this.qrDetectionInterval) {
+    clearInterval(this.qrDetectionInterval);
+  }
+  if (this.watchId) {
+    navigator.geolocation.clearWatch(this.watchId);
+  }
+}
 }

@@ -89,10 +89,9 @@ export class CreateFormularioInternoCooperativaComponent implements OnInit {
 
       // Definir los pasos para Steps
   steps = [
-    { label: '1. Datos del mineral y/o Metal', command: (event: any) => this.gotoStep(0)},
+    { label: '1. Datos del Medio de Transporte y mineral y/o Metal', command: (event: any) => this.gotoStep(0)},
     { label: '2. Origen del mineral y/o Metal',command: (event: any) => this.gotoStep(1) },
-    { label: '3. Destino del mineral y/o Metal', command: (event: any) => this.gotoStep(2) },
-    { label: '4. Datos del Medio de Transporte', command: (event: any) => this.gotoStep(3) }
+    { label: '3. Destino del mineral y/o Metal', command: (event: any) => this.gotoStep(2) }
   ];
 
   public activeStep: number = 0; // Establecer el paso activo inicial

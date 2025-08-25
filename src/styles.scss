@@ -13,3 +13,38 @@ $gutter: 1rem; //for primeflex grid system
 @import "assets/demo/styles/badges.scss";
 @import "assets/demo/styles/code.scss";
 
+/* Quitar padding y margin global de todos los componentes PrimeNG */
+:root {
+  --p-component-padding: 0;
+  --p-component-margin: 0;
+}
+
+/* Sobrescribir padding/margin de todos los contenedores PrimeNG */
+::ng-deep .p-component,
+::ng-deep .p-grid,
+::ng-deep .p-card,
+::ng-deep .p-panel,
+::ng-deep .p-col {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Solo en móviles */
+@media (max-width: 768px) {
+  ::ng-deep .p-component,
+  ::ng-deep .p-grid,
+  ::ng-deep .p-card,
+  ::ng-deep .p-panel,
+  ::ng-deep .p-col {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+/* Ajustar el body y contenedor raíz */
+body, app-root {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100%;
+  height: 100%;
+}
