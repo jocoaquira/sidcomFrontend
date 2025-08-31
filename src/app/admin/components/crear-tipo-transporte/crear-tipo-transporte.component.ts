@@ -100,9 +100,7 @@ export class CrearTipoTransporteComponent implements OnInit {
     }
   }
   actualizarResponsable() {
-
-    this.form.formulario.value.tipo=this.form.formulario.value.tipo.nombre;
-    this.form.formulario.value.estado=this.form.formulario.value.estado.label;
+console.log(this.form.formulario.value);
 
     if (this.form.formulario.valid) {
         let limpio:any= Object.fromEntries(

@@ -1,11 +1,16 @@
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { IFormularioInterno } from '@data/formulario_interno.metadata';
+import { ITipoTransporte } from '@data/tipo_transporte.metadata';
+import { catchError, debounceTime, map, Observable, of } from 'rxjs';
+import { TipoTransporteService } from '../services/tipo-transporte.service';
 
 export class FormularioCooperativaFormulario {
   formulario_interno!: IFormularioInterno;
   formulario: FormGroup;
 
-  constructor() {
+  constructor(
+    private tipoTransporteService: TipoTransporteService
+  ) {
      this.formulario_interno={
         id:null,
         user_id:null,
@@ -48,7 +53,13 @@ export class FormularioCooperativaFormulario {
         presentacion_id:new FormControl(this.formulario_interno.presentacion_id,[Validators.required]),
         cantidad:new FormControl(this.formulario_interno.cantidad,[Validators.pattern('^[0-9]*$'),  Validators.min(0)]),
         peso_bruto_humedo:new FormControl(this.formulario_interno.peso_bruto_humedo,[Validators.required,Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
-        peso_neto: new FormControl(this.formulario_interno.peso_neto,[Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
+
+        // PESO_NETO con validador asíncrono personalizado
+        peso_neto: new FormControl(
+            this.formulario_interno.peso_neto,
+            [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)],
+            [this.validarPesoNetoSegunCapacidad.bind(this)] // Validador asíncrono
+        ),
         tara:new FormControl(this.formulario_interno.tara),
         humedad: new FormControl(this.formulario_interno.humedad),
         merma:new FormControl(this.formulario_interno.merma),
@@ -77,7 +88,62 @@ export class FormularioCooperativaFormulario {
         this.formulario.get('des_tipo')?.valueChanges.subscribe((valor: string) => {
         this.actualizarValidacionesSegunTipo(valor);
     });
+
+    // Observar cambios en tipo_transporte para revalidar peso_neto
+    this.formulario.get('tipo_transporte')?.valueChanges.subscribe(() => {
+      this.formulario.get('peso_neto')?.updateValueAndValidity();
+    });
   }
+
+    /**
+     * VALIDADOR ASÍNCRONO PERSONALIZADO
+     * Valida que el peso_neto no exceda la capacidad del tipo de transporte seleccionado
+     */
+    private validarPesoNetoSegunCapacidad(control: AbstractControl): Observable<ValidationErrors | null> {
+      if (!control.value || !this.formulario) {
+        return of(null);
+      }
+
+      const tipoTransporteControl = this.formulario.get('tipo_transporte');
+      const tipoTransporteId = tipoTransporteControl?.value;
+
+      if (!tipoTransporteId) {
+        // Si no hay tipo de transporte seleccionado, no validar aún
+        return of(null);
+      }
+
+      const pesoNeto = parseFloat(control.value);
+
+      if (isNaN(pesoNeto)) {
+        return of(null); // Dejar que otros validadores manejen el formato
+      }
+
+      return this.tipoTransporteService.verTipoTransporteNombre(tipoTransporteId).pipe(
+        debounceTime(300), // Evitar llamadas excesivas
+        map((tipoTransporte: ITipoTransporte) => {
+          console.log('Tipo de Transporte:', tipoTransporte);
+          if (!tipoTransporte) {
+            return { tipoTransporteNoEncontrado: true };
+          }
+
+          if (pesoNeto > tipoTransporte.capacidad) {
+            return {
+              pesoExcedeCapacidad: {
+                pesoNeto: pesoNeto,
+                capacidadMaxima: tipoTransporte.capacidad,
+                tipoTransporte: tipoTransporte.nombre
+              }
+            };
+          }
+
+          return null; // Válido
+        }),
+        catchError(() => {
+          // En caso de error en la consulta
+          return of({ errorConsultaCapacidad: true });
+        })
+      );
+    }
 
 
   // Método general para obtener un FormControl
@@ -111,6 +177,19 @@ getErrorMessage(controlName: string): string | null {
     }
     if (control?.hasError('maxlength')) {
       return `No puede exceder ${control.errors?.['maxlength']?.requiredLength} caracteres.`;
+    }
+    // VALIDACIONES PERSONALIZADAS DE PESO_NETO
+    if (controlName === 'peso_neto') {
+      if (control?.hasError('pesoExcedeCapacidad')) {
+        const error = control.errors?.['pesoExcedeCapacidad'];
+        return `El peso neto (${error.pesoNeto} kg) excede la capacidad máxima del ${error.tipoTransporte} (${error.capacidadMaxima} kg)`;
+      }
+      if (control?.hasError('tipoTransporteNoEncontrado')) {
+        return 'No se pudo verificar la capacidad del tipo de transporte seleccionado.';
+      }
+      if (control?.hasError('errorConsultaCapacidad')) {
+        return 'Error al consultar la capacidad del transporte. Intente nuevamente.';
+      }
     }
     if (control?.hasError('pattern')) {
           if (controlName === 'user_id') {

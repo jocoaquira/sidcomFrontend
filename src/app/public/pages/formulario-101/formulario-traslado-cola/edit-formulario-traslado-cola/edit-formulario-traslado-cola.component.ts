@@ -4,7 +4,6 @@ import { AuthService } from '@core/authentication/services/auth.service';
 import { IDepartamento } from '@data/departamento.metadata';
 import { IFormularioInternoMineral } from '@data/form_int_mineral.metadata';
 import { IFormularioInternoMineralEnvio } from '@data/form_int_mineral_envio.metadata';
-import { IFormularioInternoMunicipioOrigen } from '@data/form_int_municipio_origen.metadata';
 import { IFormularioInternoMunicipioOrigenEnvio } from '@data/form_int_municipio_origen_envio.metadata';
 import { IMineral } from '@data/mineral.metadata';
 import { IMunicipio } from '@data/municipio.metadata';
@@ -12,8 +11,6 @@ import { IOperatorSimple } from '@data/operador_simple.metadata';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, of, retry } from 'rxjs';
 import { DepartamentosService } from 'src/app/admin/services/departamentos.service';
-import { FormularioInternoMineralService } from 'src/app/admin/services/formulario-interno/formulariointerno-mineral.service';
-import { FormularioInternoMunicipioOrigenService } from 'src/app/admin/services/formulario-interno/formulariointerno-municipioorigen.service';
 import { MineralsService } from 'src/app/admin/services/minerales.service';
 import { MunicipiosService } from 'src/app/admin/services/municipios.service';
 import { PresentacionService } from 'src/app/admin/services/presentacion.service';
@@ -24,6 +21,7 @@ import { IFormularioTrasladoCola } from '@data/formulario_cola.metadata';
 import { IFormularioTrasladoColaMunicipioOrigen } from '@data/form_cola_municipio_origen.metadata';
 import { IChofer } from '@data/chofer.metadata';
 import { IVehiculo } from '@data/vehiculo.metadata';
+import { TipoTransporteService } from 'src/app/admin/services/tipo-transporte.service';
 
 @Component({
   selector: 'app-edit-formulario-traslado-cola',
@@ -33,7 +31,7 @@ import { IVehiculo } from '@data/vehiculo.metadata';
 export class EditFormularioTrasladoColaComponent implements OnInit {
   public id:number=0;
   public num_form!:any;
-  public formulario_traslado_cola=new FormularioTrasladoColaFormulario();
+  public formulario_traslado_cola=new FormularioTrasladoColaFormulario(this.tipoTransporteService);
   public departamento_id:number=0;
   public municipio_id:number=0;
   public operador_id:number=0;
@@ -99,12 +97,11 @@ cambioDepartamento1(departamentoId: number): void {
  }
 
     // Definir los pasos para Steps
-steps = [
-  { label: '1. Datos del mineral y/o Metal', command: (event: any) => this.gotoStep(0)},
-  { label: '2. Origen del mineral y/o Metal',command: (event: any) => this.gotoStep(1) },
-  { label: '3. Destino del mineral y/o Metal', command: (event: any) => this.gotoStep(2) },
-  { label: '4. Datos del Medio de Transporte', command: (event: any) => this.gotoStep(3) }
-];
+    steps = [
+        { label: '1. Datos del Medio de Transporte y mineral y/o Metal', command: (event: any) => this.gotoStep(0)},
+        { label: '2. Origen del mineral y/o Metal',command: (event: any) => this.gotoStep(1) },
+        { label: '3. Destino del mineral y/o Metal', command: (event: any) => this.gotoStep(2) },
+    ];
 
 public activeStep: number = 0; // Establecer el paso activo inicial
 
@@ -144,11 +141,37 @@ isStepValid(stepIndex: number): boolean {
   let valid = true;
   switch (stepIndex) {
     case 0:
-      // Validar los campos del Paso 1
-      valid = this.formulario_traslado_cola.formulario.get('peso_bruto_humedo')?.valid && this.formulario_traslado_cola.formulario.get('tara')?.valid &&
-      this.formulario_traslado_cola.formulario.get('lote')?.valid &&
-      this.formulario_traslado_cola.formulario.get('peso_neto')?.valid && this.lista_leyes_mineral.length>0;
+       // CORRECCIÓN: Separar las validaciones para debugging
+        const tipoTransporte = this.formulario_traslado_cola.formulario.get('tipo_transporte')?.value;
+        const peso_bruto_valido = this.formulario_traslado_cola.formulario.get('peso_bruto_humedo')?.valid;
+        const tara_valido = this.formulario_traslado_cola.formulario.get('tara')?.valid;
+        const peso_neto_valido = this.formulario_traslado_cola.formulario.get('peso_neto')?.valid;
 
+        // Validar los campos del Paso 1
+        valid = this.formulario_traslado_cola.formulario.get('peso_bruto_humedo')?.valid && this.formulario_traslado_cola.formulario.get('tara')?.valid &&
+        this.formulario_traslado_cola.formulario.get('lote')?.valid  &&
+        this.formulario_traslado_cola.formulario.get('peso_neto')?.valid && this.lista_leyes_mineral.length>0 &&
+        peso_bruto_valido&&tara_valido&&peso_neto_valido&&
+        // Tipo de transporte es obligatorio
+          this.formulario_traslado_cola.formulario.get('tipo_transporte')?.valid &&
+          // Validaciones condicionales según el tipo de transporte
+          (
+            // Si es VIA FERREA, validar campos de tren
+            tipoTransporte === 'VIA FERREA' ? (
+              this.formulario_traslado_cola.formulario.get('empresa_ferrea')?.valid !== false &&
+              this.formulario_traslado_cola.formulario.get('nro_vagon')?.valid !== false &&
+              this.formulario_traslado_cola.formulario.get('fecha_ferrea')?.valid !== false &&
+              this.formulario_traslado_cola.formulario.get('hr_ferrea')?.valid !== false
+            ) :
+            // Si es VIA AEREA, no hay campos adicionales requeridos (por ahora)
+            tipoTransporte === 'VIA AEREA' ? true :
+            // Para otros tipos de transporte, validar campos de vehículo
+            (
+              this.formulario_traslado_cola.formulario.get('placa')?.valid !== false &&
+              this.formulario_traslado_cola.formulario.get('nom_conductor')?.valid !== false &&
+              this.formulario_traslado_cola.formulario.get('licencia')?.valid !== false
+            )
+          );
       break;
     case 1:
       valid =this.lista_municipios_origen.length>0
@@ -174,13 +197,12 @@ constructor(
   private mineralesService:MineralsService,
   private notify:ToastrService,
   private authService:AuthService,
-  private listaLeyesMineralesService:FormularioInternoMineralService,
-  private listaMunicipiosOrigenService:FormularioInternoMunicipioOrigenService,
   private router: Router,
   private presentacionService:PresentacionService,
   private actRoute:ActivatedRoute,
   private municipiosService:MunicipiosService,
-  public departamentosService: DepartamentosService
+  public departamentosService: DepartamentosService,
+          private tipoTransporteService: TipoTransporteService
 ) {
   this.actRoute.paramMap.subscribe(params=>{
      this.id=parseInt(params.get('id'));

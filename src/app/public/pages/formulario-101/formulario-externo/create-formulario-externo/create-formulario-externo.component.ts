@@ -18,15 +18,15 @@ import { IVehiculo } from '@data/vehiculo.metadata';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, first, of, retry } from 'rxjs';
 import { CanCrearTomaDeMuestraGuard } from 'src/app/admin/guards/toma-de-muestra/can-crear-toma-de-muestra.guard';
-import { CanVerTomaDeMuestraGuard } from 'src/app/admin/guards/toma-de-muestra/can-ver-toma-de-muestra.guard';
+
 import { DepartamentosService } from 'src/app/admin/services/departamentos.service';
 import { FormularioExternoMineralService } from 'src/app/admin/services/formulario-externo/formularioexterno-mineral.service';
 import { FormularioExternoMunicipioOrigenService } from 'src/app/admin/services/formulario-externo/formularioexterno-municipioorigen.service';
 import { FormularioExternosService } from 'src/app/admin/services/formulario-externo/formulariosexternos.service';
 import { MineralsService } from 'src/app/admin/services/minerales.service';
 import { MunicipiosService } from 'src/app/admin/services/municipios.service';
-import { OperatorsService } from 'src/app/admin/services/operators.service';
 import { PresentacionService } from 'src/app/admin/services/presentacion.service';
+import { TipoTransporteService } from 'src/app/admin/services/tipo-transporte.service';
 import { TomaDeMuestraService } from 'src/app/admin/services/toma-de-muestra/toma-de-muestra.service';
 import { FormularioExternoFormulario } from 'src/app/admin/validators/formulario-externo';
 
@@ -37,7 +37,7 @@ import { FormularioExternoFormulario } from 'src/app/admin/validators/formulario
 })
 export class CreateFormularioExternoComponent implements OnInit {
 
-    public formulario_externo;
+    public formulario_externo:FormularioExternoFormulario;
     public departamento_id:number=0;
     public municipio_id:number=0;
     public operador_id:number=0;
@@ -98,11 +98,10 @@ export class CreateFormularioExternoComponent implements OnInit {
 
       // Definir los pasos para Steps
   steps = [
-    { label: '1. Datos de Exportación', command: (event: any) => this.gotoStep(0)},
+    { label: '1. Datos del Medio de Transporte y Exportación', command: (event: any) => this.gotoStep(0)},
     { label: '2. Datos y Origen del mineral y/o Metal',command: (event: any) => this.gotoStep(1) },
     { label: '3. Destino del mineral y/o Metal', command: (event: any) => this.gotoStep(2) },
-    { label: '4. Datos del Medio de Transporte', command: (event: any) => this.gotoStep(3) }
-  ];
+    ];
 
   public activeStep: number = 0; // Establecer el paso activo inicial
 
@@ -142,12 +141,37 @@ nextStep() {
     let valid = true;
     switch (stepIndex) {
       case 0:
-        // Validar los campos del Paso 1
-        valid = this.formulario_externo.formulario.get('operador_id')?.valid && this.formulario_externo.formulario.get('m03_id')?.valid &&
-        this.formulario_externo.formulario.get('nro_factura_exportacion')?.valid && this.formulario_externo.formulario.get('laboratorio')?.valid &&
-        this.formulario_externo.formulario.get('codigo_analisis')?.valid &&
-        ((this.formulario_externo.formulario.get('nro_formulario_tm')?.valid && this.acta_TDM) || this.formulario_externo.formulario.get('nro_formulario_tm')?.disabled);
-        break;
+        const tipoTransporte = this.formulario_externo.formulario.get('tipo_transporte')?.value;
+
+  // Validaciones básicas existentes
+        valid = this.formulario_externo.formulario.get('operador_id')?.valid &&
+          this.formulario_externo.formulario.get('m03_id')?.valid &&
+          this.formulario_externo.formulario.get('nro_factura_exportacion')?.valid &&
+          this.formulario_externo.formulario.get('laboratorio')?.valid &&
+          this.formulario_externo.formulario.get('codigo_analisis')?.valid &&
+          ((this.formulario_externo.formulario.get('nro_formulario_tm')?.valid && this.acta_TDM != null) ||
+           this.formulario_externo.formulario.get('nro_formulario_tm')?.disabled) &&
+          // Tipo de transporte es obligatorio
+          this.formulario_externo.formulario.get('tipo_transporte')?.valid &&
+          // Validaciones condicionales según el tipo de transporte
+          (
+            // Si es VIA FERREA, validar campos de tren
+            tipoTransporte === 'VIA FERREA' ? (
+              this.formulario_externo.formulario.get('empresa_ferrea')?.valid !== false &&
+              this.formulario_externo.formulario.get('nro_vagon')?.valid !== false &&
+              this.formulario_externo.formulario.get('fecha_ferrea')?.valid !== false &&
+              this.formulario_externo.formulario.get('hr_ferrea')?.valid !== false
+            ) :
+            // Si es VIA AEREA, no hay campos adicionales requeridos (por ahora)
+            tipoTransporte === 'VIA AEREA' ? true :
+            // Para otros tipos de transporte, validar campos de vehículo
+            (
+              this.formulario_externo.formulario.get('placa')?.valid !== false &&
+              this.formulario_externo.formulario.get('nom_conductor')?.valid !== false &&
+              this.formulario_externo.formulario.get('licencia')?.valid !== false
+            )
+          );
+          break;
       case 1:
         valid = this.formulario_externo.formulario.get('peso_bruto_humedo')?.valid && this.formulario_externo.formulario.get('tara')?.valid &&
         (this.formulario_externo.formulario.get('merma')?.valid || this.formulario_externo.formulario.get('merma')?.disable) &&
@@ -176,16 +200,15 @@ nextStep() {
     private mineralesService:MineralsService,
     private notify:ToastrService,
     private authService:AuthService,
-    private listaLeyesMineralesService:FormularioExternoMineralService,
-    private listaMunicipiosOrigenService:FormularioExternoMunicipioOrigenService,
     private router: Router,
     private presentacionService:PresentacionService,
     private tomaDeMuestraService:TomaDeMuestraService,
     private municipiosService:MunicipiosService,
     private departamentosService:DepartamentosService,
     public canCrearTomaDeMuestra:CanCrearTomaDeMuestraGuard,
+    private tipoTransporteService: TipoTransporteService
   ) {
-    this.formulario_externo=new FormularioExternoFormulario(this.canCrearTomaDeMuestra);
+    this.formulario_externo=new FormularioExternoFormulario(this.canCrearTomaDeMuestra,this.tipoTransporteService);
     this.operador_id=this.authService.getUser.operador_id;
     this.formulario_externo.formulario.patchValue({
         user_id: authService.getUser.id,
@@ -213,6 +236,13 @@ nextStep() {
       },
       (error:any)=> this.error=this.presentacionService.handleError(error));
 
+        this.tipoTransporteService.verTipoTransportes('hj').subscribe(
+            (data:any)=>{
+            this.tipo_transporte=this.tipoTransporteService.handleTipoTransportes(data);
+        },
+        (error:any)=> this.error=this.tipoTransporteService.handleError(error));
+
+
     this.destinos = [
         { nombre: 'COMPRADOR', id: '1' },
         { nombre: 'PLANTA DE TRATAMIENTO', id: '2' },
@@ -221,23 +251,7 @@ nextStep() {
         { nombre: '%', id: '1' },
         { nombre: 'g/TM', id: '2' },
     ];
-    this.tipo_transporte = [
-        { nombre: 'TRAILER', id: '1' },
-        { nombre: 'CAMION', id: '2' },
-        { nombre: 'VOLQUETA', id: '3' },
-        { nombre: 'CAMION CON ACOPLE', id: '4' },
-        { nombre: 'VIA FERREA', id: '5' },
-        { nombre: 'VIA AEREA', id: '6' },
-        { nombre: 'JEEP', id: '7' },
-        { nombre: 'FURGONETA BLINDADA', id: '8' },
-        { nombre: 'CAMIONETA', id: '9' },
-        { nombre: 'VAGONETA', id: '10' },
-        { nombre: 'MINIBUS', id: '11' },
-        { nombre: 'TAXI', id: '12' },
-        { nombre: 'ALZAPATA', id: '13' },
-        { nombre: 'FLOTA', id: '14' },
-        { nombre: 'TRAILER FURGON', id: '15' }
-    ];
+
     this.formulario_externo.formulario.get('cantidad')?.disable();
     this.formulario_externo.formulario.get('humedad')?.disable();
     this.formulario_externo.formulario.get('merma')?.disable();
@@ -313,7 +327,7 @@ nextStep() {
         municipio_origen:this.municipio_origen_envio,
         ...(!formularioEnvio.hasOwnProperty('nro_formulario_tm') && { nro_formulario_tm: null }) // Agrega solo si no existe
       }
-
+      console.log('Formulario a enviar:', formularioEnvio);
       this.formularioExternoService.crearFormularioExterno(formularioEnvio).subscribe(
         (data:any) =>
         {
@@ -460,18 +474,21 @@ nextStep() {
 
         if (this.presentacion.cantidad==1) {
             this.formulario_externo.formulario.get('cantidad')?.enable();
+            this.formulario_externo.formulario.get('cantidad')?.setValue(0);
         } else {
         this.formulario_externo.formulario.get('cantidad')?.disable();
         this.formulario_externo.formulario.get('cantidad')?.setValue(null);
         }
         if (this.presentacion.merma==1) {
         this.formulario_externo.formulario.get('merma')?.enable();
+         this.formulario_externo.formulario.get('merma')?.setValue(0);
         } else {
         this.formulario_externo.formulario.get('merma')?.disable();
         this.formulario_externo.formulario.get('merma')?.setValue(0);
         }
         if (this.presentacion.humedad==1) {
         this.formulario_externo.formulario.get('humedad')?.enable();
+        this.formulario_externo.formulario.get('humedad')?.setValue(0);
         } else {
         this.formulario_externo.formulario.get('humedad')?.disable();
         this.formulario_externo.formulario.get('humedad')?.setValue(0);
@@ -523,7 +540,12 @@ cargarDatosTDM(form:ITDMNroForm){
     lote:form.lote,
     presentacion_id:form.presentacion_id,
     humedad:form.humedad,
+    merma:0
   });
+  const present={
+    value:form.presentacion_id
+  }
+  this.cambioPresentacion(present);
   this.minerales_envio=form.minerales//.push({...envio_minerales});
   // Crear una nueva lista excluyendo ciertos campos
     this.minerales_envio = form.minerales.map(mineral => {

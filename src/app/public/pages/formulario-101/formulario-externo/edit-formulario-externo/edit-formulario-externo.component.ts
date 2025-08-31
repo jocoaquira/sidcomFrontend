@@ -24,6 +24,7 @@ import { MineralsService } from 'src/app/admin/services/minerales.service';
 import { MunicipiosService } from 'src/app/admin/services/municipios.service';
 import { OperatorsService } from 'src/app/admin/services/operators.service';
 import { PresentacionService } from 'src/app/admin/services/presentacion.service';
+import { TipoTransporteService } from 'src/app/admin/services/tipo-transporte.service';
 import { TomaDeMuestraService } from 'src/app/admin/services/toma-de-muestra/toma-de-muestra.service';
 import { FormularioExternoFormulario } from 'src/app/admin/validators/formulario-externo';
 
@@ -35,7 +36,7 @@ import { FormularioExternoFormulario } from 'src/app/admin/validators/formulario
 export class EditFormularioExternoComponent implements OnInit {
   public id:number=null;
   public num_form!:any;
-  public formulario_externo=new FormularioExternoFormulario(this.canCrearActaTomaDeMuestra);
+  public formulario_externo=new FormularioExternoFormulario(this.canCrearActaTomaDeMuestra,this.tipoTransporteService);
   public departamento_id:number=0;
   public municipio_id:number=0;
   public operador_id:number=0;
@@ -89,10 +90,9 @@ export class EditFormularioExternoComponent implements OnInit {
 
     // Definir los pasos para Steps
 steps = [
-  { label: '1. Datos de la Exportación', command: (event: any) => this.gotoStep(0)},
+  { label: '1. Datos del Medio de Transporte y Exportación', command: (event: any) => this.gotoStep(0)},
   { label: '2. Datos del mineral y/o Metal',command: (event: any) => this.gotoStep(1) },
-  { label: '3. Destino del mineral y/o Metal', command: (event: any) => this.gotoStep(2) },
-  { label: '4. Datos del Medio de Transporte', command: (event: any) => this.gotoStep(3) }
+  { label: '3. Destino del mineral y/o Metal', command: (event: any) => this.gotoStep(2) }
 ];
 
 public activeStep: number = 0; // Establecer el paso activo inicial
@@ -133,13 +133,37 @@ isStepValid(stepIndex: number): boolean {
   let valid = true;
   switch (stepIndex) {
     case 0:
+        const tipoTransporte = this.formulario_externo.formulario.get('tipo_transporte')?.value;
 
-      /// Validar los campos del Paso 1
-        valid = this.formulario_externo.formulario.get('operador_id')?.valid && this.formulario_externo.formulario.get('m03_id')?.valid &&
-        this.formulario_externo.formulario.get('nro_factura_exportacion')?.valid && this.formulario_externo.formulario.get('laboratorio')?.valid &&
-        this.formulario_externo.formulario.get('codigo_analisis')?.valid &&
-        ((this.formulario_externo.formulario.get('nro_formulario_tm')?.valid && this.acta_TDM!=null) || this.formulario_externo.formulario.get('nro_formulario_tm')?.disabled);
-      break;
+  // Validaciones básicas existentes
+        valid = this.formulario_externo.formulario.get('operador_id')?.valid &&
+          this.formulario_externo.formulario.get('m03_id')?.valid &&
+          this.formulario_externo.formulario.get('nro_factura_exportacion')?.valid &&
+          this.formulario_externo.formulario.get('laboratorio')?.valid &&
+          this.formulario_externo.formulario.get('codigo_analisis')?.valid &&
+          ((this.formulario_externo.formulario.get('nro_formulario_tm')?.valid && this.acta_TDM != null) ||
+           this.formulario_externo.formulario.get('nro_formulario_tm')?.disabled) &&
+          // Tipo de transporte es obligatorio
+          this.formulario_externo.formulario.get('tipo_transporte')?.valid &&
+          // Validaciones condicionales según el tipo de transporte
+          (
+            // Si es VIA FERREA, validar campos de tren
+            tipoTransporte === 'VIA FERREA' ? (
+              this.formulario_externo.formulario.get('empresa_ferrea')?.valid !== false &&
+              this.formulario_externo.formulario.get('nro_vagon')?.valid !== false &&
+              this.formulario_externo.formulario.get('fecha_ferrea')?.valid !== false &&
+              this.formulario_externo.formulario.get('hr_ferrea')?.valid !== false
+            ) :
+            // Si es VIA AEREA, no hay campos adicionales requeridos (por ahora)
+            tipoTransporte === 'VIA AEREA' ? true :
+            // Para otros tipos de transporte, validar campos de vehículo
+            (
+              this.formulario_externo.formulario.get('placa')?.valid !== false &&
+              this.formulario_externo.formulario.get('nom_conductor')?.valid !== false &&
+              this.formulario_externo.formulario.get('licencia')?.valid !== false
+            )
+          );
+          break;
     case 1:
       valid =this.lista_municipios_origen.length>0
       break;
@@ -169,6 +193,7 @@ constructor(
   private municipiosService:MunicipiosService,
   public departamentosService: DepartamentosService,
   private tomaDeMuestraService:TomaDeMuestraService,
+  private tipoTransporteService: TipoTransporteService
 ) {
   this.actRoute.paramMap.subscribe(params=>{
      this.id=parseInt(params.get('id'));
@@ -321,6 +346,10 @@ cargar_datos(form:any){
 
     });
   });
+  const present={
+    value:form.presentacion_id
+  }
+  this.cambioPresentacion(present);
 }
 ngOnInit() {
   this.departamento_id=0;

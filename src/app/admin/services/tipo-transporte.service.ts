@@ -37,7 +37,7 @@ export class TipoTransporteService {
     let tipoTransporte:ITipoTransporte[]=data;
     return tipoTransporte
   }
-//-----------------Ver de Roles-------------------------------------------
+//-----------------Ver de Tipo Transporte-------------------------------------------
   verTipoTransporte(data:any)
   {
     return this.http.get(`${this.baseUrl}tipotransporte/`+data);
@@ -46,7 +46,11 @@ export class TipoTransporteService {
     let tipoTransporte:ITipoTransporte=data;
     return tipoTransporte
   }
-
+//-----------------Ver de Tipo Transporte Nombre-------------------------------------------
+  verTipoTransporteNombre(data:any)
+  {
+    return this.http.get(`${this.baseUrl}tipotransporte/nombre/`+data);
+  }
 //---------------------crear   tipoTransporte-------------------------------------------
 crearTipoTransporte(data:ITipoTransporte) {
   this.token();

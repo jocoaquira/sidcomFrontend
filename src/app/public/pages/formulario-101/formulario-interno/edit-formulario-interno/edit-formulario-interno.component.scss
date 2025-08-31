@@ -148,4 +148,20 @@
     font-size: 1em;
 }
 
+/* Opción 2: Contenedor con espaciado compacto */
+.form-section-compact {
+    gap: 0.5rem;
+}
+
+.form-section-compact .field {
+    margin-bottom: 0.5rem;
+}
+
+.form-section-compact .section-title {
+    margin: 0.5rem 0 0.25rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #5c6268;
+}
+
 

@@ -1,9 +1,11 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { IFormularioExterno } from '@data/formulario_externo.metadata';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable, of, Subject } from 'rxjs';
+import { catchError, debounceTime, map, takeUntil } from 'rxjs/operators';
 import { CanCrearTomaDeMuestraGuard } from '../guards/toma-de-muestra/can-crear-toma-de-muestra.guard';
+import { TipoTransporteService } from '../services/tipo-transporte.service';
+import { ITipoTransporte } from '@data/tipo_transporte.metadata';
 
 @Injectable()
 export class FormularioExternoFormulario implements OnDestroy {
@@ -11,7 +13,10 @@ export class FormularioExternoFormulario implements OnDestroy {
   formulario: FormGroup;
   private destroy$ = new Subject<void>();
 
-  constructor(private canCrearTomaDeMuestra: CanCrearTomaDeMuestraGuard) {
+  constructor(
+    private canCrearTomaDeMuestra: CanCrearTomaDeMuestraGuard,
+    private tipoTransporteService: TipoTransporteService
+) {
     this.inicializarFormulario();
     this.configurarValidacionDinamica();
   }
@@ -60,8 +65,14 @@ export class FormularioExternoFormulario implements OnDestroy {
       lote: new FormControl(this.formulario_externo.lote, [Validators.required]),
       presentacion_id: new FormControl(this.formulario_externo.presentacion_id, [Validators.required]),
       cantidad: new FormControl(this.formulario_externo.cantidad, [Validators.pattern('^[0-9]*$'), Validators.min(0)]),
-      peso_bruto_humedo: new FormControl(this.formulario_externo.peso_bruto_humedo, [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
-      peso_neto: new FormControl(this.formulario_externo.peso_neto, [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
+      peso_bruto_humedo: new FormControl(this.formulario_externo.peso_bruto_humedo, [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(1)]),
+
+      // PESO_NETO con validador asíncrono personalizado
+      peso_neto: new FormControl(
+        this.formulario_externo.peso_neto,
+        [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)],
+        [this.validarPesoNetoSegunCapacidad.bind(this)] // Validador asíncrono
+      ),
       tara: new FormControl(this.formulario_externo.tara, [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0)]),
       humedad: new FormControl(this.formulario_externo.humedad, [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0), Validators.max(100)]),
       merma: new FormControl(this.formulario_externo.merma, [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$'), Validators.min(0), Validators.max(1)]),
@@ -70,9 +81,12 @@ export class FormularioExternoFormulario implements OnDestroy {
       pais_destino_id: new FormControl(this.formulario_externo.pais_destino_id),
       m03_id: new FormControl(this.formulario_externo.m03_id, [Validators.required]),
       tipo_transporte: new FormControl(this.formulario_externo.tipo_transporte, [Validators.required]),
+
+      // Campos que serán condicionales según el tipo de transporte
       placa: new FormControl(this.formulario_externo.placa),
-      nom_conductor: new FormControl(this.formulario_externo.nom_conductor, Validators.pattern('^[a-zA-ZÀ-ÿ\\s]+$')),
+      nom_conductor: new FormControl(this.formulario_externo.nom_conductor),
       licencia: new FormControl(this.formulario_externo.licencia),
+
       observaciones: new FormControl(this.formulario_externo.observaciones),
       fecha_creacion: new FormControl(this.formulario_externo.fecha_creacion),
       fecha_vencimiento: new FormControl(this.formulario_externo.fecha_vencimiento),
@@ -92,9 +106,116 @@ export class FormularioExternoFormulario implements OnDestroy {
       ),
     });
 
+    // Suscribirse a los cambios del tipo de transporte
+    this.formulario.get('tipo_transporte')?.valueChanges.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe((tipoTransporteId: number) => {
+      this.actualizarValidacionesSegunTipoTransporte(tipoTransporteId);
+    });
+
     this.formulario.get('des_tipo')?.valueChanges.subscribe((valor: string) => {
       this.actualizarValidacionesSegunTipo(valor);
     });
+  }
+
+  /**
+   * Actualiza las validaciones de placa, conductor y licencia según el tipo de transporte
+   */
+  private actualizarValidacionesSegunTipoTransporte(tipoTransporteId: number): void {
+    if (!tipoTransporteId) {
+      return;
+    }
+
+    // Obtener información del tipo de transporte
+    this.tipoTransporteService.verTipoTransporteNombre(tipoTransporteId).pipe(
+      takeUntil(this.destroy$),
+      catchError(() => of(null))
+    ).subscribe((tipoTransporte: ITipoTransporte | null) => {
+      if (!tipoTransporte) {
+        return;
+      }
+
+      const esViaFerrea = tipoTransporte.nombre.toLowerCase().includes('VIA FERREA');
+
+      const esViaAerea = tipoTransporte.nombre.toLowerCase().includes('VIA AEREA');
+
+      // Si es vía férrea o aérea, no son obligatorios
+      const noRequiereCamposVehiculo = esViaFerrea || esViaAerea;
+
+      this.configurarValidacionesCamposVehiculo(noRequiereCamposVehiculo);
+    });
+  }
+
+  /**
+   * Configura las validaciones de los campos de vehículo (placa, conductor, licencia)
+   */
+  private configurarValidacionesCamposVehiculo(esOpcional: boolean): void {
+    const placaControl = this.formulario.get('placa');
+    const conductorControl = this.formulario.get('nom_conductor');
+    const licenciaControl = this.formulario.get('licencia');
+
+    if (esOpcional) {
+      // Para vía férrea o aérea: campos opcionales
+      placaControl?.clearValidators();
+      conductorControl?.clearValidators();
+      licenciaControl?.clearValidators();
+    } else {
+      // Para otros tipos de transporte: campos obligatorios
+      placaControl?.setValidators([Validators.required]);
+      conductorControl?.setValidators([Validators.required, Validators.pattern('^[a-zA-ZÀ-ÿ\\s]+$')]);
+      licenciaControl?.setValidators([Validators.required]);
+    }
+
+    // Actualizar validez de los controles
+    placaControl?.updateValueAndValidity();
+    conductorControl?.updateValueAndValidity();
+    licenciaControl?.updateValueAndValidity();
+  }
+
+  private validarPesoNetoSegunCapacidad(control: AbstractControl): Observable<ValidationErrors | null> {
+    if (!control.value || !this.formulario) {
+      return of(null);
+    }
+
+    const tipoTransporteControl = this.formulario.get('tipo_transporte');
+    const tipoTransporteId = tipoTransporteControl?.value;
+
+    if (!tipoTransporteId) {
+      // Si no hay tipo de transporte seleccionado, no validar aún
+      return of(null);
+    }
+
+    const pesoNeto = parseFloat(control.value);
+
+    if (isNaN(pesoNeto)) {
+      return of(null); // Dejar que otros validadores manejen el formato
+    }
+
+    return this.tipoTransporteService.verTipoTransporteNombre(tipoTransporteId).pipe(
+      debounceTime(300), // Evitar llamadas excesivas
+      map((tipoTransporte: ITipoTransporte) => {
+        console.log('Tipo de Transporte:', tipoTransporte);
+        if (!tipoTransporte) {
+          return { tipoTransporteNoEncontrado: true };
+        }
+
+        if (pesoNeto > tipoTransporte.capacidad) {
+          return {
+            pesoExcedeCapacidad: {
+              pesoNeto: pesoNeto,
+              capacidadMaxima: tipoTransporte.capacidad,
+              tipoTransporte: tipoTransporte.nombre
+            }
+          };
+        }
+
+        return null; // Válido
+      }),
+      catchError(() => {
+        // En caso de error en la consulta
+        return of({ errorConsultaCapacidad: true });
+      })
+    );
   }
 
   private configurarValidacionDinamica(): void {
@@ -133,8 +254,19 @@ export class FormularioExternoFormulario implements OnDestroy {
     const control = this.formulario.get(controlName);
 
     if (control?.hasError('required')) {
+      // Mensajes específicos para campos condicionales
+      if (controlName === 'placa') {
+        return 'La placa del vehículo es obligatoria para este tipo de transporte.';
+      }
+      if (controlName === 'nom_conductor') {
+        return 'El nombre del conductor es obligatorio para este tipo de transporte.';
+      }
+      if (controlName === 'licencia') {
+        return 'La licencia del conductor es obligatoria para este tipo de transporte.';
+      }
       return 'Este campo es obligatorio.';
     }
+
     if (control?.hasError('email')) {
       return 'Debe ingresar un correo electrónico válido.';
     }
@@ -150,6 +282,21 @@ export class FormularioExternoFormulario implements OnDestroy {
     if (control?.hasError('maxlength')) {
       return `No puede exceder ${control.errors?.['maxlength']?.requiredLength} caracteres.`;
     }
+
+    // VALIDACIONES PERSONALIZADAS DE PESO_NETO
+    if (controlName === 'peso_neto') {
+      if (control?.hasError('pesoExcedeCapacidad')) {
+        const error = control.errors?.['pesoExcedeCapacidad'];
+        return `El peso neto (${error.pesoNeto} kg) excede la capacidad máxima del ${error.tipoTransporte} (${error.capacidadMaxima} kg)`;
+      }
+      if (control?.hasError('tipoTransporteNoEncontrado')) {
+        return 'No se pudo verificar la capacidad del tipo de transporte seleccionado.';
+      }
+      if (control?.hasError('errorConsultaCapacidad')) {
+        return 'Error al consultar la capacidad del transporte. Intente nuevamente.';
+      }
+    }
+
     if (control?.hasError('pattern')) {
       if (controlName === 'user_id' || controlName === 'operador_id') {
         return 'Solo se permiten números.';
@@ -198,6 +345,21 @@ export class FormularioExternoFormulario implements OnDestroy {
       desPlanta?.clearValidators();
       desPlanta?.updateValueAndValidity();
     }
+  }
+
+  /**
+   * Método helper para verificar si un campo debe ser visible/habilitado
+   * Útil para mostrar/ocultar campos en el template
+   */
+  requiereCamposVehiculo(): boolean {
+    const tipoTransporteId = this.formulario.get('tipo_transporte')?.value;
+    if (!tipoTransporteId) {
+      return true; // Por defecto, mostrar los campos
+    }
+
+    // Aquí podrías implementar lógica adicional si necesitas
+    // mostrar/ocultar campos dinámicamente en el template
+    return true;
   }
 
   ngOnDestroy(): void {

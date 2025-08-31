@@ -21,6 +21,7 @@ import { FormularioCooperativaFormulario } from 'src/app/admin/validators/formul
 import { FormularioCooperativaService } from 'src/app/admin/services/formulario-interno-cooperativa/formulario-cooperativa.service';
 import { IChofer } from '@data/chofer.metadata';
 import { IVehiculo } from '@data/vehiculo.metadata';
+import { TipoTransporteService } from 'src/app/admin/services/tipo-transporte.service';
 
 @Component({
   selector: 'app-create-formulario-interno-cooperativa',
@@ -29,7 +30,7 @@ import { IVehiculo } from '@data/vehiculo.metadata';
 })
 export class CreateFormularioInternoCooperativaComponent implements OnInit {
 
-    public formulario_interno=new FormularioCooperativaFormulario();
+    public formulario_interno=new FormularioCooperativaFormulario(this.tipoTransporteService);
     public departamento_id:number=0;
     public municipio_id:number=0;
     public operador_id:number=0;
@@ -88,10 +89,9 @@ export class CreateFormularioInternoCooperativaComponent implements OnInit {
 
       // Definir los pasos para Steps
   steps = [
-    { label: '1. Datos del mineral y/o Metal', command: (event: any) => this.gotoStep(0)},
+    { label: '1. Datos del Medio de Transporte y mineral y/o Metal', command: (event: any) => this.gotoStep(0)},
     { label: '2. Origen del mineral y/o Metal',command: (event: any) => this.gotoStep(1) },
-    { label: '3. Destino del mineral y/o Metal', command: (event: any) => this.gotoStep(2) },
-    { label: '4. Datos del Medio de Transporte', command: (event: any) => this.gotoStep(3) }
+    { label: '3. Destino del mineral y/o Metal', command: (event: any) => this.gotoStep(2) }
   ];
 
   public activeStep: number = 0; // Establecer el paso activo inicial
@@ -168,7 +168,8 @@ nextStep() {
     private listaLeyesMineralesService:FormularioInternoMineralService,
     private listaMunicipiosOrigenService:FormularioInternoMunicipioOrigenService,
     private router: Router,
-    private presentacionService:PresentacionService
+    private presentacionService:PresentacionService,
+    private tipoTransporteService: TipoTransporteService
   ) {
         this.operador_id=this.authService.getUser.operador_id;
         this.formulario_interno.formulario.patchValue({

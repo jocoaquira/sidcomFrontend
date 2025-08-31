@@ -21,6 +21,7 @@ import { MineralsService } from 'src/app/admin/services/minerales.service';
 import { MunicipiosService } from 'src/app/admin/services/municipios.service';
 import { OperatorsService } from 'src/app/admin/services/operators.service';
 import { PresentacionService } from 'src/app/admin/services/presentacion.service';
+import { TipoTransporteService } from 'src/app/admin/services/tipo-transporte.service';
 import { FormularioExternoFormulario } from 'src/app/admin/validators/formulario-externo';
 
 @Component({
@@ -31,7 +32,7 @@ import { FormularioExternoFormulario } from 'src/app/admin/validators/formulario
 export class EditFormularioExternoComponent implements OnInit {
   public id:number=null;
   public num_form!:any;
-  public formulario_externo=new FormularioExternoFormulario(this.canCrearActaTomaDeMuestra);
+  public formulario_externo=new FormularioExternoFormulario(this.canCrearActaTomaDeMuestra, this.tipoTransporteService);
   public departamento_id:number=0;
   public municipio_id:number=0;
   public declaracionJurada:boolean=false;
@@ -162,7 +163,8 @@ constructor(
   private presentacionService:PresentacionService,
   private actRoute:ActivatedRoute,
   private municipiosService:MunicipiosService,
-  public departamentosService: DepartamentosService
+  public departamentosService: DepartamentosService,
+  private tipoTransporteService: TipoTransporteService
 ) {
   this.actRoute.paramMap.subscribe(params=>{
      this.id=parseInt(params.get('id'));

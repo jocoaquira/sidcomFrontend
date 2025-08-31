@@ -23,6 +23,7 @@ import { MineralsService } from 'src/app/admin/services/minerales.service';
 import { MunicipiosService } from 'src/app/admin/services/municipios.service';
 import { OperatorsService } from 'src/app/admin/services/operators.service';
 import { PresentacionService } from 'src/app/admin/services/presentacion.service';
+import { TipoTransporteService } from 'src/app/admin/services/tipo-transporte.service';
 import { FormularioInternoFormulario } from 'src/app/admin/validators/formulario-interno';
 
 @Component({
@@ -33,8 +34,8 @@ import { FormularioInternoFormulario } from 'src/app/admin/validators/formulario
 export class EditFormularioInternoComponent implements OnInit {
   public id:number=null;
   public num_form!:any;
-  public formulario_interno=new FormularioInternoFormulario();
-  public departamento_id:number=0;
+  public formulario_interno: FormularioInternoFormulario;
+public departamento_id:number=0;
   public municipio_id:number=0;
   public declaracionJurada:boolean=false;
   //public minerales:IMineral[]=[];
@@ -94,10 +95,9 @@ cambioDepartamento1(departamentoId: number): void {
 
     // Definir los pasos para Steps
 steps = [
-  { label: '1. Datos del mineral y/o Metal', command: (event: any) => this.gotoStep(0)},
-  { label: '2. Origen del mineral y/o Metal',command: (event: any) => this.gotoStep(1) },
-  { label: '3. Destino del mineral y/o Metal', command: (event: any) => this.gotoStep(2) },
-  { label: '4. Datos del Medio de Transporte', command: (event: any) => this.gotoStep(3) }
+    { label: '1. Medio de Transporte y Mineral y/o Metal ', command: (event: any) => this.gotoStep(0)},
+    { label: '2. Origen del mineral y/o Metal',command: (event: any) => this.gotoStep(1) },
+    { label: '3. Destino del mineral y/o Metal', command: (event: any) => this.gotoStep(2) }
 ];
 
 public activeStep: number = 0; // Establecer el paso activo inicial
@@ -138,11 +138,27 @@ isStepValid(stepIndex: number): boolean {
   let valid = true;
   switch (stepIndex) {
     case 0:
-      // Validar los campos del Paso 1
-      valid = this.formulario_interno.formulario.get('peso_bruto_humedo')?.valid && this.formulario_interno.formulario.get('tara')?.valid &&
-      (this.formulario_interno.formulario.get('merma')?.valid || this.formulario_interno.formulario.get('merma')?.disable) && (this.formulario_interno.formulario.get('humedad')?.valid || this.formulario_interno.formulario.get('humedad')?.disable) &&
-      this.formulario_interno.formulario.get('lote')?.valid && this.formulario_interno.formulario.get('presentacion_id')?.valid &&
-      (this.formulario_interno.formulario.get('cantidad')?.valid || this.formulario_interno.formulario.get('cantidad')?.disabled) && this.formulario_interno.formulario.get('peso_neto')?.valid && this.lista_leyes_mineral.length>0;
+              // CORRECCIÓN: Separar las validaciones para debugging
+      const peso_bruto_valido = this.formulario_interno.formulario.get('peso_bruto_humedo')?.valid;
+      const tara_valido = this.formulario_interno.formulario.get('tara')?.valid;
+      const lote_valido = this.formulario_interno.formulario.get('lote')?.valid;
+      const presentacion_valido = this.formulario_interno.formulario.get('presentacion_id')?.valid;
+      const peso_neto_valido = this.formulario_interno.formulario.get('peso_neto')?.valid;
+
+      // Validaciones condicionales para campos que pueden estar deshabilitados
+      const merma_valido = this.formulario_interno.formulario.get('merma')?.disabled ||
+                          this.formulario_interno.formulario.get('merma')?.valid;
+      const humedad_valido = this.formulario_interno.formulario.get('humedad')?.disabled ||
+                            this.formulario_interno.formulario.get('humedad')?.valid;
+      const cantidad_valido = this.formulario_interno.formulario.get('cantidad')?.disabled ||
+                             this.formulario_interno.formulario.get('cantidad')?.valid;
+
+      // Validar que hay al menos un mineral agregado
+      const minerales_valido = this.lista_leyes_mineral.length > 0;
+
+      valid = peso_bruto_valido && tara_valido && lote_valido && presentacion_valido &&
+              peso_neto_valido && merma_valido && humedad_valido && cantidad_valido &&
+              minerales_valido;
 
       break;
     case 1:
@@ -175,27 +191,31 @@ constructor(
   private presentacionService:PresentacionService,
   private actRoute:ActivatedRoute,
   private municipiosService:MunicipiosService,
-  public departamentosService: DepartamentosService
+  public departamentosService: DepartamentosService,
+  private tipoTransporteService: TipoTransporteService
 ) {
-  this.actRoute.paramMap.subscribe(params=>{
-     this.id=parseInt(params.get('id'));
-     this.operador_id=this.authService.getUser.operador_id;
-    this.formularioInternoService.verFormularioInterno(this.id.toString()).subscribe(
-      (data:any)=>{
-      let formulario_int=data;
-      this.num_form=formulario_int.nro_formulario;
+    this.formulario_interno = new FormularioInternoFormulario(this.tipoTransporteService);
+    this.actRoute.paramMap.subscribe(params=>{
+        this.id=parseInt(params.get('id'));
+        this.operador_id=this.authService.getUser.operador_id;
+        this.formularioInternoService.verFormularioInterno(this.id.toString()).subscribe(
+        (data:any)=>{
+        let formulario_int=data;
+        this.num_form=formulario_int.nro_formulario;
 
-      this.cargar_datos(formulario_int);
-      this.placa=this.formulario_interno.formulario.value.placa;
-      this.nro_licencia=this.formulario_interno.formulario.value.licencia;
-      this.formulario_interno.formulario.get('operador_id')?.disable(); // Para desactivar
+        this.cargar_datos(formulario_int);
+        this.placa=this.formulario_interno.formulario.value.placa;
+        this.nro_licencia=this.formulario_interno.formulario.value.licencia;
+        this.formulario_interno.formulario.get('operador_id')?.disable(); // Para desactivar
 
-    },
-    (error:any)=> this.error=this.formularioInternoService.handleError(error));
-  });
-  this.formulario_interno.formulario.patchValue({
-      user_id: authService.getUser.id
+        },
+        (error:any)=> this.error=this.formularioInternoService.handleError(error));
     });
+
+    this.formulario_interno.formulario.patchValue({
+        user_id: authService.getUser.id
+    });
+
  }
 cargar_datos(form:any){
   this.formulario_interno.formulario.patchValue({
@@ -354,9 +374,14 @@ ngOnInit() {
     this.presentacionService.verpresentacions('hj').subscribe(
       (data:any)=>{
       this.presentaciones=this.presentacionService.handlepresentacion(data);
-
     },
     (error:any)=> this.error=this.presentacionService.handleError(error));
+
+    this.tipoTransporteService.verTipoTransportes('hj').subscribe(
+        (data:any)=>{
+        this.tipo_transporte=this.tipoTransporteService.handleTipoTransportes(data);
+      },
+      (error:any)=> this.error=this.tipoTransporteService.handleError(error));
 
   this.destinos = [
       { nombre: 'COMPRADOR', id: '1' },
@@ -366,23 +391,7 @@ ngOnInit() {
       { nombre: '%', id: '1' },
       { nombre: 'g/TM', id: '2' },
   ];
-  this.tipo_transporte = [
-      { nombre: 'TRAILER', id: '1' },
-      { nombre: 'CAMION', id: '2' },
-      { nombre: 'VOLQUETA', id: '3' },
-      { nombre: 'CAMION CON ACOPLE', id: '4' },
-      { nombre: 'VIA FERREA', id: '5' },
-      { nombre: 'VIA AEREA', id: '6' },
-      { nombre: 'JEEP', id: '7' },
-      { nombre: 'FURGONETA BLINDADA', id: '8' },
-      { nombre: 'CAMIONETA', id: '9' },
-      { nombre: 'VAGONETA', id: '10' },
-      { nombre: 'MINIBUS', id: '11' },
-      { nombre: 'TAXI', id: '12' },
-      { nombre: 'ALZAPATA', id: '13' },
-      { nombre: 'FLOTA', id: '14' },
-      { nombre: 'TRAILER FURGON', id: '15' }
-  ];
+
   this.formulario_interno.formulario.get('cantidad')?.disable();
   this.formulario_interno.formulario.get('humedad')?.disable();
   this.formulario_interno.formulario.get('merma')?.disable();

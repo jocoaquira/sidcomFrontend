@@ -21,6 +21,7 @@ import { FormularioTrasladoColaService } from 'src/app/admin/services/formulario
 import { MineralsService } from 'src/app/admin/services/minerales.service';
 import { OperatorsService } from 'src/app/admin/services/operators.service';
 import { PresentacionService } from 'src/app/admin/services/presentacion.service';
+import { TipoTransporteService } from 'src/app/admin/services/tipo-transporte.service';
 import { FormularioTrasladoColaFormulario } from 'src/app/admin/validators/formulario-cola';
 
 @Component({
@@ -30,7 +31,7 @@ import { FormularioTrasladoColaFormulario } from 'src/app/admin/validators/formu
 })
 export class CreateFormularioTrasladoColaComponent implements OnInit {
 
-    public formulario_interno=new FormularioTrasladoColaFormulario();
+    public formulario_interno=new FormularioTrasladoColaFormulario(this.tipoTransporteService);
     public departamento_id:number=0;
     public municipio_id:number=0;
     public operador_id:number=0;
@@ -91,11 +92,10 @@ export class CreateFormularioTrasladoColaComponent implements OnInit {
 
       // Definir los pasos para Steps
   steps = [
-    { label: '1. Datos del mineral y/o Metal', command: (event: any) => this.gotoStep(0)},
+    { label: '1. Datos del Medio de Transporte y mineral y/o Metal', command: (event: any) => this.gotoStep(0)},
     { label: '2. Origen del mineral y/o Metal',command: (event: any) => this.gotoStep(1) },
     { label: '3. Destino del mineral y/o Metal', command: (event: any) => this.gotoStep(2) },
-    { label: '4. Datos del Medio de Transporte', command: (event: any) => this.gotoStep(3) }
-  ];
+    ];
 
   public activeStep: number = 0; // Establecer el paso activo inicial
 
@@ -135,10 +135,37 @@ nextStep() {
     let valid = true;
     switch (stepIndex) {
       case 0:
+        // CORRECCIÓN: Separar las validaciones para debugging
+        const tipoTransporte = this.formulario_interno.formulario.get('tipo_transporte')?.value;
+        const peso_bruto_valido = this.formulario_interno.formulario.get('peso_bruto_humedo')?.valid;
+        const tara_valido = this.formulario_interno.formulario.get('tara')?.valid;
+        const peso_neto_valido = this.formulario_interno.formulario.get('peso_neto')?.valid;
+
         // Validar los campos del Paso 1
         valid = this.formulario_interno.formulario.get('peso_bruto_humedo')?.valid && this.formulario_interno.formulario.get('tara')?.valid &&
         this.formulario_interno.formulario.get('lote')?.valid  &&
-        this.formulario_interno.formulario.get('peso_neto')?.valid && this.lista_leyes_mineral.length>0;
+        this.formulario_interno.formulario.get('peso_neto')?.valid && this.lista_leyes_mineral.length>0 &&
+        peso_bruto_valido&&tara_valido&&peso_neto_valido&&
+        // Tipo de transporte es obligatorio
+          this.formulario_interno.formulario.get('tipo_transporte')?.valid &&
+          // Validaciones condicionales según el tipo de transporte
+          (
+            // Si es VIA FERREA, validar campos de tren
+            tipoTransporte === 'VIA FERREA' ? (
+              this.formulario_interno.formulario.get('empresa_ferrea')?.valid !== false &&
+              this.formulario_interno.formulario.get('nro_vagon')?.valid !== false &&
+              this.formulario_interno.formulario.get('fecha_ferrea')?.valid !== false &&
+              this.formulario_interno.formulario.get('hr_ferrea')?.valid !== false
+            ) :
+            // Si es VIA AEREA, no hay campos adicionales requeridos (por ahora)
+            tipoTransporte === 'VIA AEREA' ? true :
+            // Para otros tipos de transporte, validar campos de vehículo
+            (
+              this.formulario_interno.formulario.get('placa')?.valid !== false &&
+              this.formulario_interno.formulario.get('nom_conductor')?.valid !== false &&
+              this.formulario_interno.formulario.get('licencia')?.valid !== false
+            )
+          );
 
         break;
       case 1:
@@ -168,7 +195,8 @@ nextStep() {
     private listaLeyesMineralesService:FormularioTrasladoColaMineralService,
     private listaMunicipiosOrigenService:FormularioTrasladoColaMunicipioOrigenService,
     private router: Router,
-    private presentacionService:PresentacionService
+    private presentacionService:PresentacionService,
+            private tipoTransporteService: TipoTransporteService
   ) {
     this.operador_id=this.authService.getUser.operador_id;
     this.formulario_interno.formulario.patchValue({

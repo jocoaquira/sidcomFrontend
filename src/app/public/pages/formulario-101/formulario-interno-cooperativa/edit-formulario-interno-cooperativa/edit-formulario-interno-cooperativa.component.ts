@@ -24,6 +24,7 @@ import { FormularioCooperativaFormulario } from 'src/app/admin/validators/formul
 import { FormularioCooperativaService } from 'src/app/admin/services/formulario-interno-cooperativa/formulario-cooperativa.service';
 import { IChofer } from '@data/chofer.metadata';
 import { IVehiculo } from '@data/vehiculo.metadata';
+import { TipoTransporteService } from 'src/app/admin/services/tipo-transporte.service';
 
 @Component({
   selector: 'app-edit-formulario-interno-cooperativa',
@@ -33,7 +34,7 @@ import { IVehiculo } from '@data/vehiculo.metadata';
 export class EditFormularioInternoCooperativaComponent implements OnInit {
   public id:number=null;
   public num_form!:any;
-  public formulario_interno=new FormularioCooperativaFormulario();
+  public formulario_interno=new FormularioCooperativaFormulario(this.tipoTransporteService);
   public departamento_id:number=0;
   public municipio_id:number=0;
   public operador_id:number=0;
@@ -177,7 +178,8 @@ constructor(
   private presentacionService:PresentacionService,
   private actRoute:ActivatedRoute,
   private municipiosService:MunicipiosService,
-  public departamentosService: DepartamentosService
+  public departamentosService: DepartamentosService,
+  private tipoTransporteService: TipoTransporteService
 ) {
   this.actRoute.paramMap.subscribe(params=>{
      this.id=parseInt(params.get('id'));

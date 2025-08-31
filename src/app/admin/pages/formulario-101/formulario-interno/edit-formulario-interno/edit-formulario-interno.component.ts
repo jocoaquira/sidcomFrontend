@@ -20,6 +20,7 @@ import { MineralsService } from 'src/app/admin/services/minerales.service';
 import { MunicipiosService } from 'src/app/admin/services/municipios.service';
 import { OperatorsService } from 'src/app/admin/services/operators.service';
 import { PresentacionService } from 'src/app/admin/services/presentacion.service';
+import { TipoTransporteService } from 'src/app/admin/services/tipo-transporte.service';
 import { FormularioInternoFormulario } from 'src/app/admin/validators/formulario-interno';
 
 @Component({
@@ -30,7 +31,7 @@ import { FormularioInternoFormulario } from 'src/app/admin/validators/formulario
 export class EditFormularioInternoComponent implements OnInit {
   public id:number=null;
   public num_form!:any;
-  public formulario_interno=new FormularioInternoFormulario();
+  public formulario_interno:FormularioInternoFormulario;
   public departamento_id:number=0;
   public municipio_id:number=0;
   public declaracionJurada:boolean=false;
@@ -164,7 +165,8 @@ constructor(
   private presentacionService:PresentacionService,
   private actRoute:ActivatedRoute,
   private municipiosService:MunicipiosService,
-  public departamentosService: DepartamentosService
+  public departamentosService: DepartamentosService,
+  private tipoTransporteService: TipoTransporteService
 ) {
   this.actRoute.paramMap.subscribe(params=>{
      this.id=parseInt(params.get('id'));
@@ -182,6 +184,7 @@ constructor(
   this.formulario_interno.formulario.patchValue({
       user_id: authService.getUser.id
     });
+    this.formulario_interno = new FormularioInternoFormulario(this.tipoTransporteService);
  }
 cargar_datos(form:any){
   this.formulario_interno.formulario.patchValue({
