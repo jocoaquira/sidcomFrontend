@@ -582,6 +582,7 @@ cargarFormularioNumero() {
   guardar() {
     let fecha=new Date().toISOString();
     let usuarioId=this.authService.getUser.id;
+    console.log(fecha,usuarioId);
     this.turnoTrancaService.verificarFechaUsuario(fecha,usuarioId).subscribe(
         (data: any) => {
             if(data.existe){
