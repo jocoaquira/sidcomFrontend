@@ -154,6 +154,6 @@ export class ListarFormularioInternoComponent implements OnInit {
                 trancaData: tranca
               }
             });
-          }
+        }
 
 }
