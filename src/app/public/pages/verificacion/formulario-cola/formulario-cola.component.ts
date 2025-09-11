@@ -54,7 +54,7 @@ export class VerificacionFormularioTrasladoColaComponent {
       );
     });
   }
-
+/*
   async loadPDF(formulario_colaData: IFormularioTrasladoColaPDF) {
     this.loading = true;
     try {
@@ -72,4 +72,20 @@ export class VerificacionFormularioTrasladoColaComponent {
       this.loading = false;
     }
   }
+*/
+  async loadPDF(formulario_colaData: IFormularioTrasladoColaPDF) {
+  this.loading = true;
+  try {
+    // Genera el PDF directamente (se descargará automáticamente)
+    await this.formularioTrasladoColaPDFService.generarPDF(formulario_colaData);
+
+    // Cambia el mensaje después de la descarga
+    this.loading = false;
+    this.error = "PDF descargado correctamente. Puede cerrar esta página.";
+
+  } catch (error) {
+    this.error = this.formularioColaService.handleError(error);
+    this.loading = false;
+  }
+}
 }

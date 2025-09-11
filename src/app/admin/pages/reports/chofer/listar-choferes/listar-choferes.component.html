@@ -1,0 +1,105 @@
+<div class="grid" >
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button pButton pRipple label="Nuevo Chofer" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #dt *ngIf="listaUsuarios" [value]="listaUsuarios" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['id','fecha_vencimiento','nombre_apellidos','nro_licencia','categoria' ,'fecha_nacimiento','celular','operador_id','estado']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Administrar Responsables de Tomas de Muestra</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."  class="w-full sm:w-auto"/>
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+
+                        <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                        <th pSortableColumn="nombre_apellidos">Nombre y Apellido <p-sortIcon field="nombre_apellidos"></p-sortIcon></th>
+                        <th pSortableColumn="nro_licencia">Nro. Licencia  <p-sortIcon field="nro_licencia"></p-sortIcon></th>
+                        <th pSortableColumn="fecha_vencimiento">Fecha de Vencimiento<p-sortIcon field="fecha_vencimiento"></p-sortIcon></th>
+                        <th pSortableColumn="celular">Celular <p-sortIcon field="celular"></p-sortIcon></th>
+                        <th pSortableColumn="categoria">Categoria <p-sortIcon field="categoria"></p-sortIcon></th>
+                        <th pSortableColumn="razon_social">Razon Social <p-sortIcon field="razon_social"></p-sortIcon></th>
+                        <th pSortableColumn="estado">Estado <p-sortIcon field="estado"></p-sortIcon></th>
+                        <th pSortableColumn="inventoryStatus">Acciones <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-usuario>
+                    <tr>
+
+                        <td style="width:3%; min-width:5rem;"><span class="p-column-title">ID</span>
+                            {{usuario.id}}
+                        </td>
+                        <td style="width:20%; min-width:15rem;">
+                            <span class="p-column-title">Nombres y Apellidos</span>
+                            {{usuario.nombre_apellidos}}
+                        </td>
+                        <td style="width:15%; min-width:8rem;">
+                            <span class="p-column-title">Nro. Licencia</span>
+                            {{usuario.nro_licencia}}
+                          </td>
+                        <td style="width:15%; min-width:8rem;">
+                            <span class="p-column-title">Fecha de Vencimiento</span>
+                            {{usuario.fecha_vencimiento| date:'dd/MM/yyyy'}}
+                          </td>
+                        <td style="width:5%; min-width:5rem;" >
+                            <span class="p-column-title">celular</span>
+                            {{usuario.celular}}
+                        </td>
+                        <td style="width:3%; min-width:3rem;" >
+                            <span class="p-column-title">categoria</span>
+                            {{usuario.categoria}}
+                        </td>
+                        <td style="width:15%; min-width:15rem;" >
+                            <span class="p-column-title">razon_social</span>
+                            {{usuario.razon_social}}
+                        </td>
+
+                        <td style="width:5%; min-width: 10rem;"><span class="p-column-title">Estado</span>
+                            <p-tag severity="success" *ngIf="usuario.estado=='ACTIVO'" value="ACTIVO"></p-tag>
+                            <p-tag severity="danger" *ngIf="usuario.estado=='INACTIVO'" value="INACTIVO"></p-tag>
+                        </td>
+
+                        <td style="width:5%; min-width: 10rem;">
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="edit(usuario)"></button>
+                                <button pButton pRipple icon="pi pi-lock" *ngIf="usuario.estado=='ACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-danger mr-1" (click)="bloquearDialogo(usuario)"></button>
+                                <button pButton pRipple icon="pi pi-unlock" *ngIf="usuario.estado=='INACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="bloquearDialogo(usuario)"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-dialog [(visible)]="productDialog" [style]="{width: '700px'}"
+          [modal]="true" header="{{isEditMode ? 'Editar Responsable' : 'Agregar Responsable'}}"
+          class="p-fluid">
+            <app-crear-chofer-admin
+                [usuario]="responsable"
+                [isEditMode]="isEditMode"
+                (estadoDialogo)="cerrar($event)">
+            </app-crear-chofer-admin>
+        </p-dialog>
+        <p-confirmDialog header="Confirmación" key="confirm1" icon="pi pi-exclamation-triangle" message="¿Está seguro de anular el formulario?"
+        [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
+        acceptLabel="Sí"
+        rejectLabel="No"
+    ></p-confirmDialog>
+
+    </div>
+</div>

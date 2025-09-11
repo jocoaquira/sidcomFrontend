@@ -847,7 +847,10 @@ autoTable(doc, {
                               });
 
 
-                              window.open(doc.output('bloburl'), '_blank');
+                              //window.open(doc.output('bloburl'), '_blank');
+                              //const pdfDataUrl = doc.output('datauristring');
+                              //window.open(pdfDataUrl, '_blank');
+                              doc.save(`Formulario_101_${formulario_externo.nro_formulario || 'GENERADO'}.pdf`);
                             };
                             sello_autorizado.onerror = () => {
 
