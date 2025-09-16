@@ -1,0 +1,133 @@
+
+<form [formGroup]="comprador.formulario" (ngSubmit)="onSubmit()">
+    <p-dialog (onShow)="actualizarMapa()" [(visible)]="mapaDialogo" [style]="{width: '800px',height:'800px'}" header="Mapa (Hacer click en el razon_social que desee)" [modal]="true" class="p-fluid">
+        <div style="height: 90%;" leaflet [leafletOptions]="options" [leafletLayers]="[streetLayer,satelliteLayer]" (leafletMapReady)="onMapReady($event)"></div>
+        <div class="grid p-fluid" >
+            <div class="col-12 md:col-6">
+                <button (click)="agregarPunto()" pButton pRipple type="button" icon="pi pi-plus" label="Agregar" class="p-button-outlined p-button-info" ></button>
+            </div>
+            <div class="col-12 md:col-6">
+                <button (click)="cerrarMapa()" pButton pRipple type="button" icon="pi pi-times" label="Cancelar" class="p-button-outlined p-button-danger"></button>
+            </div>
+        </div>
+    </p-dialog>
+
+
+  <div class="card-titulo">
+      <h4 class="text-center" style="color: white;">EDITAR COMPRADOR</h4>
+  </div>
+      <div class="grid p-fluid">
+          <div class="card card-w-title flex flex-wrap col-12">
+
+              <div class="col-12" >
+                      <div class="grid p-fluid">
+
+
+                        <div class="field col-12 md:col-4">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                    inputId="municipio"
+                                    [autoDisplayFirst]="false"
+                                    [options]="municipio"
+                                    formControlName="municipio_id"
+                                    optionLabel="municipio"
+                                    optionValue="id"
+                                    (onChange)="cambioMunicipioMapa($event)"
+                                ></p-dropdown>
+                                <label for="dropdown">Municipio</label>
+                                <small id="municipio_id" class="p-error " *ngIf="comprador.esCampoInvalido('municipio_id')">
+                                    {{comprador.getErrorMessage('municipio_id')}}
+                                </small>
+                            </span>
+                        </div>
+
+                          <div class="field col-12 md:col-3">
+                            <span class="p-float-label">
+                                <input
+                                    type="number"
+                                    id="latitud"
+                                    pInputText
+                                    formControlName="latitud"
+                                />
+                                <label for="latitud">Latitud </label>
+                        <small id="latitud" class="p-error " *ngIf="comprador.esCampoInvalido('latitud')">
+                                    {{comprador.getErrorMessage('latitud')}}
+                                </small>
+                            </span>
+                        </div>
+                        <div class="field col-12 md:col-3">
+                            <span class="p-float-label">
+                                <input
+                                    type="number"
+                                    id="longitud"
+                                    pInputText
+                                    formControlName="longitud"
+                                />
+                                <label for="longitud">Longitud </label>
+                        <small id="longitud" class="p-error " *ngIf="comprador.esCampoInvalido('longitud')">
+                                    {{comprador.getErrorMessage('longitud')}}
+                                </small>
+                            </span>
+                        </div>
+                        <div class="field col-12 md:col-2">
+                            <button pButton pRipple type="button" icon="pi pi-map" label="Buscar en Mapa" class="p-button-outlined p-button-info" (click)="abrirMapa()"></button>
+                        </div>
+
+                          <div class="field col-12 md:col-10">
+                              <span class="p-float-label">
+                                  <input
+                                      type="text"
+                                      id="razon_social"
+                                      pInputText
+                                      formControlName="razon_social"
+                            class="ng-dirty"
+                            />
+                                  <label for="razon_social">Comprador </label>
+                                <small id="razon_social" class="p-error " *ngIf="comprador.esCampoInvalido('razon_social')">
+                                      {{comprador.getErrorMessage('razon_social')}}
+                                </small>
+                              </span>
+                          </div>
+                          <div class="field col-12 md:col-2">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                    inputId="dropdown"
+                                    [autoDisplayFirst]="false"
+                                    [options]="estados"
+                                    formControlName="estado"
+                                    optionLabel="label"
+                                    optionValue="label"
+                                >
+                                    <ng-template let-option pTemplate="item">
+                                        <span [class]="'usuario-badge estado-' + option.value">{{option.label}}</span>
+                                    </ng-template>
+                                </p-dropdown>
+
+                                <label for="dropdown">Estado</label>
+                            </span>
+                        </div>
+                      </div>
+
+                  <div class="centrar-botones">
+                    <div class="botones-container">
+
+                        <div class="col-33" >
+                            <button pButton pRipple type="button" label="Guardar"
+                                class="p-button-rounded p-button-info boton-ajustado"
+                                (click)="onSubmit()" icon="pi pi-save">
+                            </button>
+                        </div>
+                        <div class="col-33">
+                            <button pButton pRipple type="button" label="Cancelar"
+                                class="p-button-rounded p-button-danger boton-ajustado"
+                                (click)="cancelar()" icon="pi pi-trash">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+              </div>
+
+          </div>
+
+      </div>
+</form>

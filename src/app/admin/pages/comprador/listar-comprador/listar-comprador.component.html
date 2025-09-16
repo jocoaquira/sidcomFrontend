@@ -1,0 +1,112 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button
+                            *ngIf="canCrearLugarVerificacionTDM.canActivate()"
+                            pButton pRipple label="Nuevo Comprador"
+                            icon="pi pi-plus" class="p-button-success mr-2"
+                            routerLink="/admin/comprador/crear"
+                        ></button>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #dt [value]="listaLugaresVerificacion" [columns]="cols" responsiveLayout="scroll" [rows]="30"
+                    [globalFilterFields]="['id','municipio_id','razon_social','latitud','longitud','estado']"
+                    [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                    currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"
+                    selectionMode="multiple" [rowHover]="true" dataKey="id" [sortField]="'razon_social'"
+                    [sortOrder]="-1">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Administrar Compradores</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..." class="w-full sm:w-auto"/>
+                        </span>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                        <th pSortableColumn="razon_social">Comprador <p-sortIcon field="razon_social"></p-sortIcon></th>
+                        <th pSortableColumn="latitud">Latitud <p-sortIcon field="latitud"></p-sortIcon></th>
+                        <th pSortableColumn="longitud">Longitud <p-sortIcon field="longitud"></p-sortIcon></th>
+                        <th pSortableColumn="mapa">Mapa <p-sortIcon field="mapa"></p-sortIcon></th>
+                        <th pSortableColumn="estado">Estado <p-sortIcon field="estado"></p-sortIcon></th>
+                        <th pSortableColumn="inventoryStatus">Acciones <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
+                    </tr>
+                </ng-template>
+
+                <!-- Cuerpo de la tabla -->
+                <ng-template pTemplate="body" let-comprador>
+                    <tr>
+                        <td>{{comprador.id}}</td>
+                        <td>{{comprador.razon_social}}</td>
+                        <td>{{comprador.latitud}}</td>
+                        <td>{{comprador.longitud}}</td>
+                        <td style="width:8%; min-width: 5rem;">
+                        <span class="p-column-title">Reviews</span>
+                            <button pButton pRipple icon="pi pi-map-marker"
+                                    type="button"
+                                    class="p-button p-button-outlined p-button-help btn-minimal-padding"
+                                    (click)="openGoogleMaps(comprador.latitud, comprador.longitud)"
+                                    [disabled]="!comprador.latitud || !comprador.longitud"
+                                    pTooltip="Ver ubicación en Google Maps" tooltipPosition="top">
+                            </button>
+                        </td>
+                        <td style="width:10%; min-width: 10rem;"><span class="p-column-title">Status</span>
+
+                            <p-tag severity="success" *ngIf="comprador.estado=='ACTIVO'" value="ACTIVO"></p-tag>
+                            <p-tag severity="danger" *ngIf="comprador.estado=='INACTIVO'" value="INACTIVO"></p-tag>
+                            </td>
+                        <td>
+                            <div class="flex">
+                                <button
+                                    *ngIf="canEditarLugarVerificacionTDM.canActivate()"
+                                    pButton pRipple icon="pi pi-pencil"
+                                    class="p-button-text p-button-plain p-button-rounded p-button-info mr-1"
+                                    (click)="edit(comprador)"
+                                ></button>
+                                <button
+                                    *ngIf="canEliminarLugarVerificacionTDM.canActivate()"
+                                    pButton pRipple icon="pi pi-trash"
+                                    class="p-button-text p-button-plain p-button-rounded p-button-danger mr-1"
+                                    (click)="eliminar(comprador)"
+                                ></button>
+                                <div *ngIf="canEditarLugarVerificacionTDM.canActivate()">
+                                    <button pButton pRipple icon="pi pi-lock" *ngIf="comprador.estado === 'ACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-danger mr-1" (click)="bloquearDialogo(comprador)"></button>
+                                    <button pButton pRipple icon="pi pi-unlock" *ngIf="comprador.estado === 'INACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="bloquearDialogo(comprador)"></button>
+                                </div>
+
+                                </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <p-dialog [(visible)]="productDialog" [style]="{width: '700px'}"
+          [modal]="true" header="{{isEditMode ? 'Editar Comprador' : 'Agregar Comprador'}}"
+          class="p-fluid">
+            <app-crear-comprador
+                [comprador]="comprador"
+                [isEditMode]="isEditMode"
+                (estadoDialogo)="cerrar($event)">
+            </app-crear-comprador>
+        </p-dialog>
+        <p-confirmDialog header="Confirmación" key="confirm1" icon="pi pi-exclamation-triangle" message="¿Está seguro de anular el formulario?"
+            [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
+            acceptLabel="Sí"
+            rejectLabel="No"
+        ></p-confirmDialog>
+    </div>
+</div>

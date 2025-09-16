@@ -1,12 +1,10 @@
-export interface IComprador {
+export interface IPlantaDeTratamiento {
   id?:number,
-  nit?:string,
-  razon_social:string,
+  nombre:string,
   municipio_id:number,
   direccion?:string,
   latitud?:string,
   longitud?:string,
-  estado?:string,
   created_at?:string,
   updated_at?:string
 }
