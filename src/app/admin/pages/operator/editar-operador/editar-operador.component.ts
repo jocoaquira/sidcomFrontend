@@ -481,31 +481,34 @@ export class EditarOperadorComponent implements OnInit {
     }
 
     // Métodos para manejar departamentos y municipios
-    cambioDepartamentoPrincipal(departamento_id: any) {
-        this.cambioDepartamento(departamento_id, 'principal');
+    cambioDepartamentoPrincipal(departamento: any) {
+        console.log('Departamento seleccionado para dirección principal:', departamento);
+        this.cambioDepartamento(departamento.value, 'principal');
     }
 
-    cambioDepartamentoRepresentante(departamento_id: any) {
-        this.cambioDepartamento(departamento_id, 'representante');
+    cambioDepartamentoRepresentante(departamento: any) {
+        console.log('Departamento seleccionado para representante legal:', departamento.value);
+        this.cambioDepartamento(departamento.value, 'representante');
     }
 
     cambioDepartamentoSucursal(departamento: any) {
+        console.log('Departamento seleccionado para sucursal:', departamento.value);
         this.sucursal.departamento_id = departamento.value;
-        this.cambioDepartamento(departamento, 'sucursal');
+        this.cambioDepartamento(departamento.value, 'sucursal');
     }
 
     cambioDepartamentoArrendamiento(departamento: any) {
         this.arrendamiento.departamento_id = departamento.value.id;
-        this.cambioDepartamento(departamento, 'arrendamiento');
+        this.cambioDepartamento(departamento.value.id, 'arrendamiento');
     }
 
     cambioDepartamento(departamento_id: any, tipo: 'principal' | 'representante' | 'sucursal' | 'arrendamiento' = 'principal') {
-        if (!departamento_id || !departamento_id.value) return;
+        if (!departamento_id || !departamento_id) return;
 
-        let dept: IDepartamento = this.departamento.find(element => element.id === departamento_id.value);
+        let dept: IDepartamento = this.departamento.find(element => element.id === departamento_id);
         if (!dept) return;
 
-        this.municipiosService.vermunicipios(departamento_id.value.toString()).subscribe(
+        this.municipiosService.vermunicipios(departamento_id.toString()).subscribe(
             (data: any) => {
                 switch (tipo) {
                     case 'principal':

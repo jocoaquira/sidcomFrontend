@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import {CanActivate, Router} from '@angular/router';
 import { PermissionHelperService } from '../../helpers/permission.helper.service';
-const canVer='view_comprador_id';
+const canVer='view_planta_de_tratamiento';
 @Injectable({
   providedIn: 'root'
 })
-export class CanVerCompradorGuard implements CanActivate {
+export class CanListarPlantaDeTratamientoGuard implements CanActivate {
 
   constructor(
     private router:Router,

@@ -19,9 +19,9 @@ import { CompradoresService } from 'src/app/admin/services/compradores.service';
 export class CrearCompradorComponent implements OnInit {
 
 
-    public lugar_verificacion_tdm=new CompradorFormulario();
+    public comprador=new CompradorFormulario();
     public departamento_id:number=0;
-    public municipio_id:number=0;
+    public municipioId:number=0;
     public dept:IDepartamento={
         longitud:null,
         latitud:null
@@ -51,10 +51,10 @@ export class CrearCompradorComponent implements OnInit {
     private departamentosService:DepartamentosService,
   ) {
 
-    this.lugar_verificacion_tdm.formulario.patchValue({
+    this.comprador.formulario.patchValue({
         user_id: authService.getUser.id
       });
-    this.lugar_verificacion_tdm.formulario.patchValue({
+    this.comprador.formulario.patchValue({
         operador_id: authService.getUser.operador_id
       });
 
@@ -83,7 +83,7 @@ export class CrearCompradorComponent implements OnInit {
       (data:any)=>{
       this.departamento=this.departamentosService.handledepartamento(data);
       // Para asignar todos los valores del formulario (debe incluir todos los campos)
-        this.lugar_verificacion_tdm.formulario.get('departamento_id')?.setValue(4);
+        this.comprador.formulario.get('departamento_id')?.setValue(4);
       // Esperamos un momento para asegurar que el mapa esté listo
       setTimeout(() => {
         this.cambioDepartamentoMapa(4);
@@ -99,13 +99,13 @@ export class CrearCompradorComponent implements OnInit {
   cambioDestino(event){
     if(event.value=='COMPRADOR')
     {
-      this.lugar_verificacion_tdm.formulario.patchValue({
+      this.comprador.formulario.patchValue({
         des_planta: null
       });
     }
     else{
       {
-        this.lugar_verificacion_tdm.formulario.patchValue({
+        this.comprador.formulario.patchValue({
           des_comprador: null
         });
       }
@@ -141,7 +141,7 @@ agregarPunto() {
         const position = this.currentMarker.getLatLng();
         if(!this.sw_mapa)
             {
-                this.lugar_verificacion_tdm.formulario.patchValue({latitud: position.lat, longitud:position.lng});
+                this.comprador.formulario.patchValue({latitud: position.lat, longitud:position.lng});
             }
             else{
             }
@@ -187,15 +187,20 @@ abrirMapa() {
 }
 
   onSubmit(){
-      if (this.lugar_verificacion_tdm.formulario.valid) {
-         // Ahora puedes enviar el formulario reducido
-        this.compradorService.crearComprador(this.lugar_verificacion_tdm.formulario.value).subscribe(
+    console.log('Formulario válido:', this.comprador.formulario.value);
+      if (this.comprador.formulario.valid) {
+        const valorLimpio = Object.fromEntries(
+            Object.entries(this.comprador.formulario.value).filter(([key, value]) =>
+                value !== null && value !== undefined && value !== ''
+            )
+            );
+        this.compradorService.crearComprador(valorLimpio).subscribe(
           (data: any) => {
             this.lugar_verificaicon_tdm_registrado = this.compradorService.handleCrearComprador(data);
             if (this.lugar_verificaicon_tdm_registrado !== null) {
 
-              this.lugar_verificacion_tdm.formulario.reset();
-              this.notify.success('El formulario interno se generó exitosamente', 'Creado Correctamente', { timeOut: 2500, positionClass: 'toast-top-right' });
+              this.comprador.formulario.reset();
+              this.notify.success('El Comprador se generó exitosamente', 'Creado Correctamente', { timeOut: 2500, positionClass: 'toast-top-right' });
               this.router.navigate(['/admin/comprador']);
             } else {
               this.notify.error('Falló... Revise los campos y vuelva a enviar...', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
@@ -209,16 +214,16 @@ abrirMapa() {
           }
         );
       } else {
-        this.mostrarErrorFormularios(this.lugar_verificacion_tdm);
+        this.mostrarErrorFormularios(this.comprador);
         this.notify.error('Revise los datos e intente nuevamente', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
       }
   }
     cambioDepartamentoMapa(departamento_id:any){
 
-
-            this.lugar_verificacion_tdm.formulario.value.departamento_id=departamento_id;
+            console.log(departamento_id);
+            this.comprador.formulario.value.departamento_id=departamento_id;
             this.dept=this.departamento.find(element => element.id === departamento_id);
-            this.municipiosService.vermunicipios( departamento_id.toString()).subscribe(
+            this.municipiosService.vermunicipios( departamento_id.value.toString()).subscribe(
                 (data:any)=>{
 
                 this.municipio=this.municipiosService.handlemunicipio(data);
@@ -233,8 +238,9 @@ abrirMapa() {
               (error:any)=> this.error=this.municipiosService.handleError(error)
             );
         }
+
     cambioMunicipio(event){
-        this.municipio_id=event;
+        this.municipioId=event;
     }
     cambioMunicipioMapa(municipio:any){
 
@@ -258,6 +264,9 @@ private mostrarErrorFormularios(formGroup: CompradorFormulario): void {
 }
 cancelar(){
 
+}
+cerrarMapa(){
+    this.mapaDialogo = false;
 }
  formatFechaCompleta(fecha: string | Date): string {
   const fechaObj = new Date(fecha);

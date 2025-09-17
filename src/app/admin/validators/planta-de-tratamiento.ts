@@ -1,16 +1,15 @@
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { IComprador } from '@data/comprador.metadata';
+import { IPlantaDeTratamiento } from '@data/planta_tratamiento.metadata';
 
 
-export class CompradorFormulario {
-  comprador!: IComprador;
+export class PlantaDeTratamientoFormulario {
+  planta_de_tratamiento!: IPlantaDeTratamiento;
   formulario: FormGroup;
 
   constructor() {
-    this.comprador = {
+    this.planta_de_tratamiento = {
         id: null,
-        nit:null,
-        razon_social:null,
+        nombre:null,
         direccion:null,
         latitud:null,
         longitud:null,
@@ -19,14 +18,13 @@ export class CompradorFormulario {
     };
 
     this.formulario = new FormGroup({
-        id: new FormControl(this.comprador.id),
-        razon_social:new FormControl(this.comprador.razon_social,[Validators.required,Validators.pattern('^[a-zA-ZÀ-ÿ0-9\\s(),.#-]+$')]),
-        latitud:new FormControl(this.comprador.latitud,[Validators.required]),
-        longitud:new FormControl(this.comprador.longitud,[Validators.required]),
-        municipioId:new FormControl(this.comprador.municipioId,[Validators.required]),
-        direccion:new FormControl(this.comprador.direccion),
-        nit:new FormControl(this.comprador.nit),
-        estado:new FormControl(this.comprador.estado),
+        id: new FormControl(this.planta_de_tratamiento.id),
+        nombre:new FormControl(this.planta_de_tratamiento.nombre,[Validators.required,Validators.pattern('^[a-zA-ZÀ-ÿ0-9\\s(),.#-]+$')]),
+        latitud:new FormControl(this.planta_de_tratamiento.latitud,[Validators.required]),
+        longitud:new FormControl(this.planta_de_tratamiento.longitud,[Validators.required]),
+        municipioId:new FormControl(this.planta_de_tratamiento.municipioId,[Validators.required]),
+        direccion:new FormControl(this.planta_de_tratamiento.direccion),
+        estado:new FormControl(this.planta_de_tratamiento.estado),
     });
   }
 
@@ -55,7 +53,7 @@ getErrorMessage(controlName: string): string | null {
       return `No puede exceder ${control.errors?.['maxlength']?.requiredLength} caracteres.`;
     }
     if (control?.hasError('pattern')) {
-          if (controlName === 'razon_social') {
+          if (controlName === 'nombre') {
             return 'Solo se permiten letras, espacios, parentecis y comas.';
           }
           return 'Formato no válido.';

@@ -22,21 +22,35 @@
               <div class="col-12" >
                       <div class="grid p-fluid">
 
-
-                        <div class="field col-12 md:col-4">
+                        <div class="field col-12 md:col-2">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                    inputId="departamento_id"
+                                    [autoDisplayFirst]="false"
+                                    [ngModelOptions]="{standalone: true}"
+                                    [options]="departamento"
+                                    [(ngModel)]="departamento_id"
+                                    optionLabel="nombre"
+                                    optionValue="id"
+                                    (onChange)="cambioDepartamentoMapa($event)"
+                                ></p-dropdown>
+                                <label for="dropdown">Departamento</label>
+                            </span>
+                        </div>
+                        <div class="field col-12 md:col-2">
                             <span class="p-float-label">
                                 <p-dropdown
                                     inputId="municipio"
                                     [autoDisplayFirst]="false"
                                     [options]="municipio"
-                                    formControlName="municipio_id"
+                                    formControlName="municipioId"
                                     optionLabel="municipio"
                                     optionValue="id"
                                     (onChange)="cambioMunicipioMapa($event)"
                                 ></p-dropdown>
                                 <label for="dropdown">Municipio</label>
-                                <small id="municipio_id" class="p-error " *ngIf="comprador.esCampoInvalido('municipio_id')">
-                                    {{comprador.getErrorMessage('municipio_id')}}
+                                <small id="municipioId" class="p-error " *ngIf="comprador.esCampoInvalido('municipioId')">
+                                    {{comprador.getErrorMessage('municipioId')}}
                                 </small>
                             </span>
                         </div>
@@ -73,7 +87,22 @@
                             <button pButton pRipple type="button" icon="pi pi-map" label="Buscar en Mapa" class="p-button-outlined p-button-info" (click)="abrirMapa()"></button>
                         </div>
 
-                          <div class="field col-12 md:col-10">
+                          <div class="field col-12 md:col-4">
+                              <span class="p-float-label">
+                                  <input
+                                      type="text"
+                                      id="nit"
+                                      pInputText
+                                      formControlName="nit"
+                            class="ng-dirty"
+                            />
+                                  <label for="nit">NIT</label>
+                                <small id="nit" class="p-error " *ngIf="comprador.esCampoInvalido('nit')">
+                                      {{comprador.getErrorMessage('nit')}}
+                                </small>
+                              </span>
+                          </div>
+                          <div class="field col-12 md:col-8">
                               <span class="p-float-label">
                                   <input
                                       type="text"
@@ -82,9 +111,24 @@
                                       formControlName="razon_social"
                             class="ng-dirty"
                             />
-                                  <label for="razon_social">Comprador </label>
+                                  <label for="razon_social">Razon Social</label>
                                 <small id="razon_social" class="p-error " *ngIf="comprador.esCampoInvalido('razon_social')">
                                       {{comprador.getErrorMessage('razon_social')}}
+                                </small>
+                              </span>
+                          </div>
+                          <div class="field col-12 md:col-12">
+                              <span class="p-float-label">
+                                  <input
+                                      type="text"
+                                      id="direccion"
+                                      pInputText
+                                      formControlName="direccion"
+                            class="ng-dirty"
+                            />
+                                  <label for="direccion">Dirección</label>
+                                <small id="direccion" class="p-error " *ngIf="comprador.esCampoInvalido('direccion')">
+                                      {{comprador.getErrorMessage('direccion')}}
                                 </small>
                               </span>
                           </div>

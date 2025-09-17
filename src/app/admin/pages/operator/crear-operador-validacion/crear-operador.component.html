@@ -23,7 +23,7 @@
 
 
     <div class="grid p-fluid mt-3">
-        <div class="field col-12 md:col-8">
+        <div class="field col-12 md:col-7">
             <span class="p-float-label">
                 <input
                     type="text"
@@ -38,7 +38,7 @@
 				</small>
             </span>
         </div>
-		<div class="field col-12 md:col-2">
+		<div class="field col-12 md:col-3">
             <span class="p-float-label">
                 <input
                     type="number"
@@ -53,7 +53,7 @@
 				</small>
             </span>
         </div>
-		<div class="field col-12 md:col-3">
+		<div class="field col-12 md:col-2">
             <p-fileUpload mode="basic" accept=".pdf,.jpg,.jpeg,.png"
                 [maxFileSize]="10000000"
                 chooseLabel="Subir NIT"
@@ -279,7 +279,7 @@
                     formControlName="dl_departamento_id"
                     optionLabel="nombre"
                     optionValue="id"
-                    (onChange)="cambioDepartamento($event, 'principal')"
+                    (onChange)="cambioDepartamentoPrincipal($event)"
                 ></p-dropdown>
                 <label for="dropdown">Departamento</label>
                 <small id="nit" class="p-error " *ngIf="operador.esCampoInvalido('dl_departamento_id')">

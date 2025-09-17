@@ -28,6 +28,8 @@ import { CanVercontrolTrancaGuard } from '../guards/control_tranca/can-ver-contr
 import { CanVerTurnoTrancaGuard } from '../guards/turno-tranca/can-ver-turno-tranca.guard';
 import { CanListarPreRegistroGuard } from '../guards/preregistro/can-listar-preregistro.guard';
 import { CanListarTipoTransporteGuard } from '../guards/tipo-transporte/can-listar-tipo-transporte.guard';
+import { CanListarCompradorGuard } from '../guards/comprador/can-listar-comprador.guard';
+import { CanListarPlantaDeTratamientoGuard } from '../guards/planta-de-tratamiento/can-listar-planta-de-tratamiento.guard';
 
 @Component({
     selector: 'app-menu',
@@ -64,7 +66,9 @@ export class AppMenuComponent implements OnInit {
         private canListarTipoTransporteGuard:CanListarTipoTransporteGuard,
         private canVerTomaDeMuestraGuard:CanVerTomaDeMuestraGuard,
         private canListarLugarVerificacionTDMGuard:CanListarLugarVerificacionTDMGuard,
-        private canListarPreRegistroGuard:CanListarPreRegistroGuard
+        private canListarPreRegistroGuard:CanListarPreRegistroGuard,
+        private canListarCompradorGuard:CanListarCompradorGuard,
+        private canListarPlantaDeTratamientoGuard:CanListarPlantaDeTratamientoGuard
         ) { }
 
     ngOnInit() {
@@ -97,6 +101,8 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Municipios', icon: 'pi pi-fw pi-flag-fill', routerLink: ['/admin/municipio'],visible: this.canVerMunicipioGuard.canActivate() },
                     { label: 'Aduanas', icon: 'pi pi-fw pi-box', routerLink: ['/admin/aduana'],visible: this.canVerAduanaGuard.canActivate() },
                     { label: 'Lugar de Verificacion TDM', icon: 'pi pi-map-marker', routerLink: ['/admin/lugar-verificacion-tdm'],visible: this.canListarLugarVerificacionTDMGuard.canActivate() },
+                    { label: 'Compradores', icon: 'pi pi-shopping-cart', routerLink: ['/admin/comprador'],visible: this.canListarCompradorGuard.canActivate() },
+                    { label: 'Plantas de Tratamiento', icon: 'pi pi-building', routerLink: ['/admin/planta-tratamiento'],visible: this.canListarPlantaDeTratamientoGuard.canActivate() },
                 ]
             },
             {

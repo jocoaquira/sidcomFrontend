@@ -43,7 +43,7 @@ export class CompradoresService {
   return this.http.get(`${this.baseUrl}comprador/`+nombre);
 }
 //---------------------crear   Comprador-------------------------------------------
-crearComprador(data:IComprador) {
+crearComprador(data:any) {
   this.token();
   return this.http.post(`${this.baseUrl}comprador`,data, {headers:this.headers})
 }

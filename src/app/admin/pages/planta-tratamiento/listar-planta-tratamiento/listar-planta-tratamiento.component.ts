@@ -5,20 +5,20 @@ import { IRol } from '@data/rol.metadata';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { IComprador } from '@data/comprador.metadata';
-import { CompradoresService } from 'src/app/admin/services/compradores.service';
-import { CanCrearCompradorGuard } from 'src/app/admin/guards/comprador/can-crear-comprador.guard';
-import { CanEditarCompradorGuard } from 'src/app/admin/guards/comprador/can-editar-comprador.guard';
-import { CanEliminarCompradorGuard } from 'src/app/admin/guards/comprador/can-eliminar-comprador.guard';
+import { IPlantaDeTratamiento } from '@data/planta_tratamiento.metadata';
+import { PlantaDeTratamientoService } from 'src/app/admin/services/planta-tratamientos.service';
+import { CanCrearPlantaDeTratamientoGuard } from 'src/app/admin/guards/planta-de-tratamiento/can-crear-planta-de-tratamiento.guard';
+import { CanEditarPlantaDeTratamientoGuard } from 'src/app/admin/guards/planta-de-tratamiento/can-editar-planta-de-tratamiento.guard';
+import { CanEliminarPlantaDeTratamientoGuard } from 'src/app/admin/guards/planta-de-tratamiento/can-eliminar-planta-de-tratamiento.guard';
 
 @Component({
-    templateUrl: './listar-comprador.component.html',
-    styleUrls: ['./listar-comprador.component.scss'],
+    templateUrl: './listar-planta-tratamiento.component.html',
+    styleUrls: ['./listar-planta-tratamiento.component.scss'],
     providers: [MessageService]
 })
-export class ListarCompradorComponent implements OnInit {
+export class ListarPlantaDeTratamientoComponent implements OnInit {
 
-    public listarCompradores!:IComprador[];
+    public listarPlantaDeTratamientos!:IPlantaDeTratamiento[];
 
     public roles!:IRol[];
     public error!:any;
@@ -28,11 +28,10 @@ export class ListarCompradorComponent implements OnInit {
     public statuses!:any;
     public productDialog=false;
     public isEditMode: boolean = false;
-    public comprador:IComprador={
+    public plantaDeTratamiento:IPlantaDeTratamiento={
         id: null,
-        nit:null,
         direccion:null,
-        razon_social:null,
+        nombre:null,
         latitud:null,
         longitud:null,
         municipioId:null,
@@ -45,10 +44,10 @@ export class ListarCompradorComponent implements OnInit {
 
     constructor(
         private messageService: MessageService,
-        private compradorService:CompradoresService,
-        public canCrearComprador:CanCrearCompradorGuard,
-        public canEditarComprador:CanEditarCompradorGuard,
-        public canEliminarComprador:CanEliminarCompradorGuard,
+        private plantaDeTratamientoService:PlantaDeTratamientoService,
+        public canCrearPlantaDeTratamiento:CanCrearPlantaDeTratamientoGuard,
+        public canEditarPlantaDeTratamiento:CanEditarPlantaDeTratamientoGuard,
+        public canEliminarPlantaDeTratamiento:CanEliminarPlantaDeTratamientoGuard,
         private authService:AuthService,
         private notify:ToastrService,
         private confirmationService:ConfirmationService,
@@ -59,12 +58,12 @@ export class ListarCompradorComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.compradorService.verCompradores('nada').subscribe(
+        this.plantaDeTratamientoService.verPlantaDeTratamientos('nada').subscribe(
             (data:any)=>{
-            this.listarCompradores=this.limpiarArrayCompradores(this.compradorService.handleComprador(data));
+            this.listarPlantaDeTratamientos=this.limpiarArrayPlantas(this.plantaDeTratamientoService.handlePlantaDeTratamiento(data));
 
           },
-          (error:any)=> this.error=this.compradorService.handleError(error));
+          (error:any)=> this.error=this.plantaDeTratamientoService.handleError(error));
 
         this.cols = [
             { field: 'product', header: 'Product' },
@@ -82,13 +81,13 @@ export class ListarCompradorComponent implements OnInit {
     }
     cerrar(event:any){
         this.productDialog=event;
-        this.compradorService.verCompradores('nada').subscribe(
+        this.plantaDeTratamientoService.verPlantaDeTratamientos('nada').subscribe(
             (data:any)=>{
-            this.listarCompradores=this.limpiarArrayCompradores(this.compradorService.handleComprador(data));
+            this.listarPlantaDeTratamientos=this.limpiarArrayPlantas(this.plantaDeTratamientoService.handlePlantaDeTratamiento(data));
 
 
           },
-          (error:any)=> this.error=this.compradorService.handleError(error));
+          (error:any)=> this.error=this.plantaDeTratamientoService.handleError(error));
     }
     openNew() {
         //this.product = {};
@@ -96,30 +95,30 @@ export class ListarCompradorComponent implements OnInit {
         this.productDialog = true;
         this.isEditMode = false;
     }
-    edit(comprador:IComprador) {
-        this.comprador = { ...comprador };
+    edit(plantaDeTratamiento:IPlantaDeTratamiento) {
+        this.plantaDeTratamiento = { ...plantaDeTratamiento };
 
-        this.router.navigate(['/admin/comprador/editar', this.comprador.id]);
+        this.router.navigate(['/admin/planta-tratamiento/editar', this.plantaDeTratamiento.id]);
     }
-    eliminar(comprador:IComprador) {
+    eliminar(plantaDeTratamiento:IPlantaDeTratamiento) {
         this.confirmationService.confirm({
             key: 'confirm1',
-            message: '¿Estas seguro de Eliminar el registro de '+comprador.razon_social+' definitivamente?',
+            message: '¿Estas seguro de Eliminar el registro de '+plantaDeTratamiento.nombre+' definitivamente?',
             accept: () => {
-                this.comprador = { ...comprador };
+                this.plantaDeTratamiento = { ...plantaDeTratamiento };
 
-                this.compradorService.eliminarComprador(comprador.id).subscribe(
+                this.plantaDeTratamientoService.eliminarPlantaDeTratamiento(plantaDeTratamiento.id).subscribe(
                     (data:any)=>{
-                        this.compradorService.verCompradores('nada').subscribe(
+                        this.plantaDeTratamientoService.verPlantaDeTratamientos('nada').subscribe(
                             (data:any)=>{
-                            this.listarCompradores=this.limpiarArrayCompradores(this.compradorService.handleComprador(data));
+                            this.listarPlantaDeTratamientos=this.limpiarArrayPlantas(this.plantaDeTratamientoService.handlePlantaDeTratamiento(data));
 
                         },
-                        (error:any)=> this.error=this.compradorService.handleError(error));
-                        this.notify.success('El Comprador se eliminó exitosamente', 'Eliminado Correctamente', { timeOut: 2500, positionClass: 'toast-top-right' });
-                        this.router.navigate(['/admin/comprador']);
+                        (error:any)=> this.error=this.plantaDeTratamientoService.handleError(error));
+                        this.notify.success('El PlantaDeTratamiento se eliminó exitosamente', 'Eliminado Correctamente', { timeOut: 2500, positionClass: 'toast-top-right' });
+                        this.router.navigate(['/admin/planta-tratamiento']);
                 },
-                (error:any)=> this.error=this.compradorService.handleError(error));
+                (error:any)=> this.error=this.plantaDeTratamientoService.handleError(error));
               },
         });
     }
@@ -141,8 +140,8 @@ export class ListarCompradorComponent implements OnInit {
     }
     findIndexById(id: number): number {
         let index = -1;
-        for (let i = 0; i < this.listarCompradores.length; i++) {
-            if (this.listarCompradores[i].id === id) {
+        for (let i = 0; i < this.listarPlantaDeTratamientos.length; i++) {
+            if (this.listarPlantaDeTratamientos[i].id === id) {
                 index = i;
                 break;
             }
@@ -178,33 +177,34 @@ openGoogleMaps(lat: number, lon: number) {
             // Opcional: Mostrar mensaje al usuario
         }
     }
-    bloquearDialogo(comprador:IComprador){
+    bloquearDialogo(plantaDeTratamiento:IPlantaDeTratamiento){
+        console.log('esto es:',plantaDeTratamiento);
 
         this.confirmationService.confirm({
             key: 'confirm1',
             message: '¿Estas seguro de Realizar esta Operación?',
             accept: () => {
-                if(comprador.estado=='ACTIVO')
+                if(plantaDeTratamiento.estado=='ACTIVO')
                     {
-                        comprador.estado='INACTIVO';
+                        plantaDeTratamiento.estado='INACTIVO';
                     }
                     else{
-                        comprador.estado='ACTIVO';
+                        plantaDeTratamiento.estado='ACTIVO';
                     }
-                this.compradorService.editarComprador(comprador).subscribe(
+                this.plantaDeTratamientoService.editarPlantaDeTratamiento(plantaDeTratamiento).subscribe(
                     (data:any) =>
                     {
-                      this.compradorService.handleCrearComprador(data);
+                      this.plantaDeTratamientoService.handleCrearPlantaDeTratamiento(data);
 
                       if(data.error==null)
                       {
-                        this.compradorService.verCompradores('nada').subscribe(
+                        this.plantaDeTratamientoService.verPlantaDeTratamientos('nada').subscribe(
                             (data:any)=>{
-                            this.listarCompradores=this.limpiarArrayCompradores(this.compradorService.handleComprador(data));
+                            this.listarPlantaDeTratamientos=this.limpiarArrayPlantas(this.plantaDeTratamientoService.handlePlantaDeTratamiento(data));
 
 
                           },
-                          (error:any)=> this.error=this.compradorService.handleError(error));
+                          (error:any)=> this.error=this.plantaDeTratamientoService.handleError(error));
 
                         this.notify.success('Actualizado Correctamente','Actualizado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
                       }
@@ -220,7 +220,7 @@ openGoogleMaps(lat: number, lon: number) {
               },
         });
     }
-    limpiarArrayCompradores(plantas: any[]): IComprador[] {
-            return plantas.map(({ departamento, municipio, ...plantaLimpia }) => plantaLimpia);
-        }
+    limpiarArrayPlantas(plantas: any[]): IPlantaDeTratamiento[] {
+        return plantas.map(({ departamento, municipio, ...plantaLimpia }) => plantaLimpia);
+    }
 }

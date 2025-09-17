@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import {CanActivate, Router} from '@angular/router';
+import { CanActivate, Router} from '@angular/router';
 import { PermissionHelperService } from '../../helpers/permission.helper.service';
-const canVer='view_comprador_id';
+const canEliminar='delete_planta_de_tratamiento';
+
 @Injectable({
   providedIn: 'root'
 })
-export class CanVerCompradorGuard implements CanActivate {
-
+export class CanEliminarPlantaDeTratamientoGuard implements CanActivate {
   constructor(
     private router:Router,
     private permissionHelperService:PermissionHelperService,
@@ -14,10 +14,11 @@ export class CanVerCompradorGuard implements CanActivate {
   public canActivate(
   ):boolean{
     if(this.permissionHelperService.existeUsuarioPermisos()){
-      return this.permissionHelperService.existePermiso(canVer);
+      return this.permissionHelperService.existePermiso(canEliminar);
     }
     this.router.navigate(['auth']);
     return false;
   }
+
 
 }

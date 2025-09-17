@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { tileLayer, latLng, Marker,marker, MapOptions,Map, LeafletEvent , control } from 'leaflet';
@@ -7,33 +7,31 @@ import { IDepartamento } from '@data/departamento.metadata';
 import { MunicipiosService } from 'src/app/admin/services/municipios.service';
 import { DepartamentosService } from 'src/app/admin/services/departamentos.service';
 import { IMunicipio } from '@data/municipio.metadata';
-import { CompradorFormulario } from 'src/app/admin/validators/comprador';
-import { IComprador } from '@data/comprador.metadata';
-import { CompradoresService } from 'src/app/admin/services/compradores.service';
+import { PlantaDeTratamientoFormulario } from 'src/app/admin/validators/planta-de-tratamiento';
+import { IPlantaDeTratamiento } from '@data/planta_tratamiento.metadata';
+import { PlantaDeTratamientoService } from 'src/app/admin/services/planta-tratamientos.service';
 
 @Component({
-  selector: 'app-editar-comprador',
-  templateUrl: './editar-comprador.component.html',
-  styleUrls: ['./editar-comprador.component.scss']
+  selector: 'app-crear-planta-tratamiento',
+  templateUrl: './crear-planta-tratamiento.component.html',
+  styleUrls: ['./crear-planta-tratamiento.component.scss']
 })
-export class EditarCompradorComponent implements OnInit {
+export class CrearPlantaDeTratamientoComponent implements OnInit {
 
 
-    public comprador=new CompradorFormulario();
+    public planta_de_tratamiento=new PlantaDeTratamientoFormulario();
     public departamento_id:number=0;
     public municipio_id:number=0;
-    public id:number=0;
     public dept:IDepartamento={
         longitud:null,
         latitud:null
         };
-    public estados:any[] = [];
   // Método que se llama cuando cambia el departamento
   cambioDepartamento1(departamentoId: number): void {
 
     // Aquí puedes hacer cualquier acción extra cuando el departamento cambie
   }
-    public lugar_verificaicon_tdm_registrado:IComprador=null;
+    public planta_de_tratamiento_registrado:IPlantaDeTratamiento=null;
 
     public error!:any;
     public nombre:string='';
@@ -41,41 +39,28 @@ export class EditarCompradorComponent implements OnInit {
 
 
   public activeStep: number = 0; // Establecer el paso activo inicial
+
+
   constructor(
 
-    private compradorService:CompradoresService,
+    private plantaDeTratamientoService:PlantaDeTratamientoService,
     private notify:ToastrService,
     private authService:AuthService,
     private router: Router,
     private municipiosService:MunicipiosService,
     private departamentosService:DepartamentosService,
-    private actRoute:ActivatedRoute,
   ) {
-        this.actRoute.paramMap.subscribe(params=>{
-        this.id=parseInt(params.get('id'));
-        this.compradorService.verComprador(this.id.toString()).subscribe(
-        (data:any)=>{
-        let formulario_int=data;
-            this.cargar_datos(formulario_int);
-        },
-        (error:any)=> this.error=this.compradorService.handleError(error));
-    });
+
+    this.planta_de_tratamiento.formulario.patchValue({
+        user_id: authService.getUser.id
+      });
+    this.planta_de_tratamiento.formulario.patchValue({
+        operador_id: authService.getUser.operador_id
+      });
 
    }
 
   ngOnInit() {
-    this.departamento_id = 4;
-    this.municipiosService.vermunicipios( this.departamento_id.toString()).subscribe(
-        (data:any)=>{
-
-        this.municipio=this.municipiosService.handlemunicipio(data);
-      },
-      (error:any)=> this.error=this.municipiosService.handleError(error)
-    );
-    this.estados = [
-        { label: 'ACTIVO', value: '1' },
-        { label: 'INACTIVO', value: '0' }
-    ];
 
     this.satelliteLayer = tileLayer(
       'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
@@ -93,22 +78,42 @@ export class EditarCompradorComponent implements OnInit {
         maxZoom: 19,
       }
     );
+
     this.departamentosService.verdepartamentos(this.nombre).subscribe(
       (data:any)=>{
       this.departamento=this.departamentosService.handledepartamento(data);
       // Para asignar todos los valores del formulario (debe incluir todos los campos)
-
+        this.planta_de_tratamiento.formulario.get('departamento_id')?.setValue(4);
+      // Esperamos un momento para asegurar que el mapa esté listo
       setTimeout(() => {
         this.cambioDepartamentoMapa(4);
       }, 800);
 
-
+      this.departamento_id = 4;
 
     },
     (error:any)=> this.error=this.departamentosService.handleError(error)
   );
 
   }
+  cambioDestino(event){
+    if(event.value=='COMPRADOR')
+    {
+      this.planta_de_tratamiento.formulario.patchValue({
+        des_planta: null
+      });
+    }
+    else{
+      {
+        this.planta_de_tratamiento.formulario.patchValue({
+          des_planta_de_tratamiento: null
+        });
+      }
+    }
+
+  }
+
+
       options: any;
       satelliteLayer: any;
       standardLayer:any;
@@ -123,29 +128,6 @@ export class EditarCompradorComponent implements OnInit {
       departamento:IDepartamento[]=[];
       municipio:IMunicipio[]=[];
 
-cargar_datos(form:any){
-  this.comprador.formulario.patchValue({
-      id: form.id,
-      municipioId: form.municipioId,
-      nit:form.nit,
-      razon_social: form.razon_social,
-      direccion: form.direccion,
-      latitud: form.latitud,
-      longitud: form.longitud,
-      estado: form.estado
-  });
-  this.municipiosService.vermunicipios( "").subscribe(
-        (data:any)=>{
-        this.municipio=this.municipiosService.handlemunicipio(data);
-        const municipioEncontrado = this.municipio.find(
-            (muni: IMunicipio) => muni.id === form.municipioId
-        );
-        this.departamento_id=municipioEncontrado.departamento_id;
-    },
-      (error:any)=> this.error=this.municipiosService.handleError(error)
-    );
-}
-
   actualizarMapa() {
     if (this.map) {
       setTimeout(() => {
@@ -159,7 +141,7 @@ agregarPunto() {
         const position = this.currentMarker.getLatLng();
         if(!this.sw_mapa)
             {
-                this.comprador.formulario.patchValue({latitud: position.lat, longitud:position.lng});
+                this.planta_de_tratamiento.formulario.patchValue({latitud: position.lat, longitud:position.lng});
             }
             else{
             }
@@ -203,43 +185,46 @@ abrirMapa() {
       this.notify.error('Seleccione un departamento para abrir el mapa....','Error al Abrir el Mapa',{timeOut:2000,positionClass: 'toast-bottom-right'});
   }
 }
-cerrarMapa(){
-    this.mapaDialogo = false;
-}
 
   onSubmit(){
-      if (this.comprador.formulario.valid) {
+      if (this.planta_de_tratamiento.formulario.valid) {
+        const valorLimpio = Object.fromEntries(
+            Object.entries(this.planta_de_tratamiento.formulario.value).filter(([key, value]) =>
+                value !== null && value !== undefined && value !== ''
+            )
+            );
          // Ahora puedes enviar el formulario reducido
-        this.compradorService.editarComprador(this.comprador.formulario.value).subscribe(
+         console.log('Formulario válido:', this.planta_de_tratamiento.formulario.value);
+        this.plantaDeTratamientoService.crearplantaDeTratamiento(valorLimpio).subscribe(
           (data: any) => {
-            this.lugar_verificaicon_tdm_registrado = this.compradorService.handleCrearComprador(data);
-            if (this.lugar_verificaicon_tdm_registrado !== null) {
+            this.planta_de_tratamiento_registrado = this.plantaDeTratamientoService.handleCrearPlantaDeTratamiento(data);
+            if (this.planta_de_tratamiento_registrado !== null) {
 
-              this.comprador.formulario.reset();
-              this.notify.success('El Comprador se actualizó exitosamente', 'Actualizado Correctamente', { timeOut: 2500, positionClass: 'toast-top-right' });
-              this.router.navigate(['/admin/comprador']);
+              this.planta_de_tratamiento.formulario.reset();
+              this.notify.success('La planta de tratamiento se creó exitosamente', 'Creado Correctamente', { timeOut: 2500, positionClass: 'toast-top-right' });
+              this.router.navigate(['/admin/planta-tratamiento']);
             } else {
               this.notify.error('Falló... Revise los campos y vuelva a enviar...', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
             }
           },
           (error: any) => {
-            this.error = this.compradorService.handleCrearCompradorError(error.error.data);
+            this.error = this.plantaDeTratamientoService.handleCrearPlantaDeTratamientoError(error.error.data);
             if (error.error.status == 'fail') {
               this.notify.error('Falló... Revise los campos y vuelva a enviar...', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
             }
           }
         );
       } else {
-        this.mostrarErrorFormularios(this.comprador);
+        this.mostrarErrorFormularios(this.planta_de_tratamiento);
         this.notify.error('Revise los datos e intente nuevamente', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
       }
   }
-    cambioDepartamentoMapa(departamento_id:any){
+    cambioDepartamentoMapa(departamento:any){
 
-
-            this.comprador.formulario.value.departamento_id=departamento_id.value;
-            this.dept=this.departamento.find(element => element.id === departamento_id.value);
-            this.municipiosService.vermunicipios( departamento_id.value.toString()).subscribe(
+            const departamento_id=departamento.value;
+            this.planta_de_tratamiento.formulario.value.departamento_id=departamento_id;
+            this.dept=this.departamento.find(element => element.id === departamento_id);
+            this.municipiosService.vermunicipios( departamento_id.toString()).subscribe(
                 (data:any)=>{
 
                 this.municipio=this.municipiosService.handlemunicipio(data);
@@ -261,7 +246,7 @@ cerrarMapa(){
 
  }
 
-private mostrarErrorFormularios(formGroup: CompradorFormulario): void {
+private mostrarErrorFormularios(formGroup: PlantaDeTratamientoFormulario): void {
     const errores: any[] = [];
   Object.keys(formGroup.formulario.controls).forEach((campo) => {
     const control = formGroup.formulario.get(campo);
@@ -277,28 +262,31 @@ private mostrarErrorFormularios(formGroup: CompradorFormulario): void {
 
   }
 }
-cancelar(): void {
-    this.router.navigate(['/admin/comprador']);
+cancelar(){
+
+}
+cerrarMapa(){
+    this.mapaDialogo = false;
 }
  formatFechaCompleta(fecha: string | Date): string {
-    const fechaObj = new Date(fecha);
-    if (isNaN(fechaObj.getTime())) {
-        throw new Error("Fecha inválida");
-    }
+  const fechaObj = new Date(fecha);
+  if (isNaN(fechaObj.getTime())) {
+    throw new Error("Fecha inválida");
+  }
 
-    const anio = fechaObj.getFullYear();
-    const mes = String(fechaObj.getMonth() + 1).padStart(2, '0'); // Mes comienza en 0
-    const dia = String(fechaObj.getDate()).padStart(2, '0');
-    const hora = String(fechaObj.getHours()).padStart(2, '0');
-    const minutos = String(fechaObj.getMinutes()).padStart(2, '0');
-    const segundos = String(fechaObj.getSeconds()).padStart(2, '0');
+  const anio = fechaObj.getFullYear();
+  const mes = String(fechaObj.getMonth() + 1).padStart(2, '0'); // Mes comienza en 0
+  const dia = String(fechaObj.getDate()).padStart(2, '0');
+  const hora = String(fechaObj.getHours()).padStart(2, '0');
+  const minutos = String(fechaObj.getMinutes()).padStart(2, '0');
+  const segundos = String(fechaObj.getSeconds()).padStart(2, '0');
 
-    let esto=`${anio}-${mes}-${dia} ${hora}:${minutos}:${segundos}`;
-    // Convierte el string al formato Date
-    let fechas = new Date(esto.replace(' ', 'T'));
+  let esto=`${anio}-${mes}-${dia} ${hora}:${minutos}:${segundos}`;
+  // Convierte el string al formato Date
+  let fechas = new Date(esto.replace(' ', 'T'));
 
-    // Convierte a formato ISO 8601 con el sufijo 'Z' para indicar UTC
-    let fechaConvertida = fechas.toISOString();
-    return fechaConvertida;
+// Convierte a formato ISO 8601 con el sufijo 'Z' para indicar UTC
+  let fechaConvertida = fechas.toISOString();
+  return fechaConvertida;
 }
 }

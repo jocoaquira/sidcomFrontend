@@ -1,5 +1,5 @@
 
-<form [formGroup]="comprador.formulario" (ngSubmit)="onSubmit()">
+<form [formGroup]="plantaDeTratamiento.formulario" (ngSubmit)="onSubmit()">
     <p-dialog (onShow)="actualizarMapa()" [(visible)]="mapaDialogo" [style]="{width: '800px',height:'800px'}" header="Mapa (Hacer click en el razon_social que desee)" [modal]="true" class="p-fluid">
         <div style="height: 90%;" leaflet [leafletOptions]="options" [leafletLayers]="[streetLayer,satelliteLayer]" (leafletMapReady)="onMapReady($event)"></div>
         <div class="grid p-fluid" >
@@ -14,15 +14,14 @@
 
 
   <div class="card-titulo">
-      <h4 class="text-center" style="color: white;">CREACION DE NUEVO COMPRADOR</h4>
+      <h4 class="text-center" style="color: white;">EDITAR PLANTA DE TRATAMIENTO</h4>
   </div>
       <div class="grid p-fluid">
           <div class="card card-w-title flex flex-wrap col-12">
 
               <div class="col-12" >
                       <div class="grid p-fluid">
-
-                        <div class="field col-12 md:col-2">
+                        <div class="field col-12 md:col-3">
                             <span class="p-float-label">
                                 <p-dropdown
                                     inputId="departamento_id"
@@ -37,7 +36,7 @@
                                 <label for="dropdown">Departamento</label>
                             </span>
                         </div>
-                        <div class="field col-12 md:col-2">
+                        <div class="field col-12 md:col-3">
                             <span class="p-float-label">
                                 <p-dropdown
                                     inputId="municipio"
@@ -49,13 +48,13 @@
                                     (onChange)="cambioMunicipioMapa($event)"
                                 ></p-dropdown>
                                 <label for="dropdown">Municipio</label>
-                                <small id="municipioId" class="p-error " *ngIf="comprador.esCampoInvalido('municipioId')">
-                                    {{comprador.getErrorMessage('municipioId')}}
+                                <small id="municipioId" class="p-error " *ngIf="plantaDeTratamiento.esCampoInvalido('municipioId')">
+                                    {{plantaDeTratamiento.getErrorMessage('municipioId')}}
                                 </small>
                             </span>
                         </div>
 
-                          <div class="field col-12 md:col-3">
+                          <div class="field col-12 md:col-2">
                             <span class="p-float-label">
                                 <input
                                     type="number"
@@ -64,12 +63,12 @@
                                     formControlName="latitud"
                                 />
                                 <label for="latitud">Latitud </label>
-                        <small id="latitud" class="p-error " *ngIf="comprador.esCampoInvalido('latitud')">
-                                    {{comprador.getErrorMessage('latitud')}}
+                        <small id="latitud" class="p-error " *ngIf="plantaDeTratamiento.esCampoInvalido('latitud')">
+                                    {{plantaDeTratamiento.getErrorMessage('latitud')}}
                                 </small>
                             </span>
                         </div>
-                        <div class="field col-12 md:col-3">
+                        <div class="field col-12 md:col-2">
                             <span class="p-float-label">
                                 <input
                                     type="number"
@@ -78,8 +77,8 @@
                                     formControlName="longitud"
                                 />
                                 <label for="longitud">Longitud </label>
-                        <small id="longitud" class="p-error " *ngIf="comprador.esCampoInvalido('longitud')">
-                                    {{comprador.getErrorMessage('longitud')}}
+                        <small id="longitud" class="p-error " *ngIf="plantaDeTratamiento.esCampoInvalido('longitud')">
+                                    {{plantaDeTratamiento.getErrorMessage('longitud')}}
                                 </small>
                             </span>
                         </div>
@@ -87,37 +86,22 @@
                             <button pButton pRipple type="button" icon="pi pi-map" label="Buscar en Mapa" class="p-button-outlined p-button-info" (click)="abrirMapa()"></button>
                         </div>
 
-                          <div class="field col-12 md:col-4">
-                              <span class="p-float-label">
-                                  <input
-                                      type="text"
-                                      id="nit"
-                                      pInputText
-                                      formControlName="nit"
-                            class="ng-dirty"
-                            />
-                                  <label for="nit">NIT</label>
-                                <small id="nit" class="p-error " *ngIf="comprador.esCampoInvalido('nit')">
-                                      {{comprador.getErrorMessage('nit')}}
-                                </small>
-                              </span>
-                          </div>
-                          <div class="field col-12 md:col-8">
-                              <span class="p-float-label">
-                                  <input
-                                      type="text"
-                                      id="razon_social"
-                                      pInputText
-                                      formControlName="razon_social"
-                            class="ng-dirty"
-                            />
-                                  <label for="razon_social">Razon Social</label>
-                                <small id="razon_social" class="p-error " *ngIf="comprador.esCampoInvalido('razon_social')">
-                                      {{comprador.getErrorMessage('razon_social')}}
-                                </small>
-                              </span>
-                          </div>
                           <div class="field col-12 md:col-12">
+                              <span class="p-float-label">
+                                  <input
+                                      type="text"
+                                      id="nombre"
+                                      pInputText
+                                      formControlName="nombre"
+                            class="ng-dirty"
+                            />
+                                  <label for="nombre">Planta de Tratamiento</label>
+                                <small id="nombre" class="p-error " *ngIf="plantaDeTratamiento.esCampoInvalido('nombre')">
+                                      {{plantaDeTratamiento.getErrorMessage('nombre')}}
+                                </small>
+                              </span>
+                          </div>
+                          <div class="field col-12 md:col-10">
                               <span class="p-float-label">
                                   <input
                                       type="text"
@@ -127,11 +111,29 @@
                             class="ng-dirty"
                             />
                                   <label for="direccion">Dirección</label>
-                                <small id="direccion" class="p-error " *ngIf="comprador.esCampoInvalido('direccion')">
-                                      {{comprador.getErrorMessage('direccion')}}
+                                <small id="direccion" class="p-error " *ngIf="plantaDeTratamiento.esCampoInvalido('direccion')">
+                                      {{plantaDeTratamiento.getErrorMessage('direccion')}}
                                 </small>
                               </span>
                           </div>
+                          <div class="field col-12 md:col-2">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                    inputId="dropdown"
+                                    [autoDisplayFirst]="false"
+                                    [options]="estados"
+                                    formControlName="estado"
+                                    optionLabel="label"
+                                    optionValue="label"
+                                >
+                                    <ng-template let-option pTemplate="item">
+                                        <span [class]="'usuario-badge estado-' + option.value">{{option.label}}</span>
+                                    </ng-template>
+                                </p-dropdown>
+
+                                <label for="dropdown">Estado</label>
+                            </span>
+                        </div>
                       </div>
 
                   <div class="centrar-botones">
@@ -146,7 +148,7 @@
                         <div class="col-33">
                             <button pButton pRipple type="button" label="Cancelar"
                                 class="p-button-rounded p-button-danger boton-ajustado"
-                                [routerLink]="['/admin/comprador']" icon="pi pi-trash">
+                                (click)="cancelar()" icon="pi pi-trash">
                             </button>
                         </div>
                     </div>

@@ -43,7 +43,7 @@ export class PlantaDeTratamientoService {
   return this.http.get(`${this.baseUrl}plantatratamiento/`+nombre);
 }
 //---------------------crear   plantaDeTratamiento-------------------------------------------
-crearplantaDeTratamiento(data:IPlantaDeTratamiento) {
+crearplantaDeTratamiento(data:any) {
   this.token();
   return this.http.post(`${this.baseUrl}plantatratamiento`,data, {headers:this.headers})
 }
@@ -66,6 +66,11 @@ handleEditarPlantaDeTratamiento(data: boolean):boolean {
   let plantaDeTratamiento:boolean=data;
   return plantaDeTratamiento
 }
+//---------------------Eliminar   Planta De Tratamiento-------------------------------------------
+eliminarPlantaDeTratamiento(data:number) {
+    this.token();
+    return this.http.delete(`${this.baseUrl}plantatratamiento/`+data)
+  }
 //-----------------Listado de Empelados por Dependencia--------------------------------------------
 private token(){
   this.user=this.authService.getUser;

@@ -35,6 +35,9 @@ import { AppLayoutComponent } from './layout/app.layout.component';
         { path: 'departamento', loadChildren: () => import('./pages/departamento/departamento.module').then(m => m.DepartamentoModule) },
         { path: 'pre-registro', loadChildren: () => import('./pages/preregistro/preregistro.module').then(m => m.PreRegistroModule) },
         { path: 'lugar-verificacion-tdm', loadChildren: () => import('./pages/lugar-verificacion-tdm/lugar-verificacion-tdm.module').then(m => m.LugarVerificacionTDMModule) },
+        { path: 'responsable-tm', loadChildren: () => import('./pages/responsable-tm/responsable-tm.module').then(m => m.ResponsableTMModule) },
+        { path: 'comprador', loadChildren: () => import('./pages/comprador/comprador.module').then(m => m.CompradorModule) },
+        { path: 'planta-tratamiento', loadChildren: () => import('./pages/planta-tratamiento/planta-tratamiento.module').then(m => m.plantaDeTratamientoModule) },
         { path: '**', redirectTo: '/notfound' }
         ]
         }

@@ -22,6 +22,7 @@ import { FormularioCooperativaService } from 'src/app/admin/services/formulario-
 import { IChofer } from '@data/chofer.metadata';
 import { IVehiculo } from '@data/vehiculo.metadata';
 import { TipoTransporteService } from 'src/app/admin/services/tipo-transporte.service';
+import { IOperator } from '@data/operator.metadata';
 
 @Component({
   selector: 'app-create-formulario-interno-cooperativa',
@@ -50,6 +51,7 @@ export class CreateFormularioInternoCooperativaComponent implements OnInit {
   }
     public formulario_Interno_registrado:IFormularioInterno=null;
     public operadores!:IOperatorSimple[];
+    public operador!:IOperator;
     public minerales!:IMineral[];
     public presentaciones!:any;
     public presentacion:any={
@@ -182,9 +184,17 @@ nextStep() {
     this.departamento_id=0;
     this.operadoresService.verOperatorsSimple('hj').subscribe(
         (data:any)=>{
-        this.operadores=this.operadoresService.handleOperatorSimple(data);
-      },
-      (error:any)=> this.error=this.operadoresService.handleOperatorSimpleError(error));
+            this.operadores=this.operadoresService.handleOperatorSimple(data);
+        },
+    (error:any)=> this.error=this.operadoresService.handleOperatorSimpleError(error));
+
+    this.operadoresService.verOperator(this.operador_id.toString()).subscribe(
+        (data:any)=>{
+            this.operador=this.operadoresService.handleCrearoperator(data);
+            console.log(this.operador);
+        },
+    (error:any)=> this.error=this.operadoresService.handleOperatorSimpleError(error));
+
       this.mineralesService.verminerals('hj').subscribe(
         (data:any)=>{
         this.minerales=this.mineralesService.handlemineral(data);
@@ -299,6 +309,7 @@ nextStep() {
         minerales:this.minerales_envio,
         municipio_origen:this.municipio_origen_envio
       }
+      console.log(formularioEnvio);
       this.formularioCooperativaService.crearFormularioInterno(formularioEnvio).subscribe(
         (data:any) =>
         {

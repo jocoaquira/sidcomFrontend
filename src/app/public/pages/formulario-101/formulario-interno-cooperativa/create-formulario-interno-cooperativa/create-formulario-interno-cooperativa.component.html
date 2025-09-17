@@ -15,7 +15,7 @@
                     >
                         <div class="grid p-fluid">
                             <h5 class="field-subtitle mb-0 mt-1 col-12 py-1">Información de Medio de Transporte</h5>
-                            <div class="field col-12 md:col-4">
+                            <div class="field col-12 md:col-4" [style.display]="'none'">
                                 <span class="p-float-label">
                                     <p-dropdown
                                         inputId="dropdown"
@@ -82,7 +82,7 @@
                             <div class="field col-12 md:col-3 " *ngIf="formulario_interno.formulario.value.tipo_transporte!=='VIA FERREA'">
                                 <app-choferSelect [operador_id]="operador_id" [nro_licencia]="nro_licencia"  (chofer)="cambioChofer($event)" ></app-choferSelect>
                             </div>
-                            <div *ngIf="formulario_interno.formulario.value.tipo_transporte!=='VIA FERREA'" class="field col-12 md:col-4">
+                            <div *ngIf="formulario_interno.formulario.value.tipo_transporte!=='VIA FERREA'" class="field col-12 md:col-4" [style.display]="'none'">
                                 <span class="p-float-label">
                                     <input
                                         type="text"

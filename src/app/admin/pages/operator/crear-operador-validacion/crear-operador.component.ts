@@ -245,18 +245,19 @@ export class CrearOperadorComponent implements OnInit {
         );
       }
     // Método para cambio de departamento (dirección principal)
-    cambioDepartamentoPrincipal(departamento_id: any) {
-        this.cambioDepartamento(departamento_id, 'principal');
+    cambioDepartamentoPrincipal(departamento: any) {
+        console.log('Departamento seleccionado para dirección principal:', departamento);
+        this.cambioDepartamento(departamento.value, 'principal');
     }
 
     // Método para cambio de departamento (representante legal)
-    cambioDepartamentoRepresentante(departamento_id: any) {
-        this.cambioDepartamento(departamento_id, 'representante');
+    cambioDepartamentoRepresentante(departamento: any) {
+        this.cambioDepartamento(departamento.value, 'representante');
     }
 
     // Método genérico para cambio de departamento
     cambioDepartamento(departamento_id: any, tipo: 'principal' | 'representante' | 'sucursal' | 'arrendamiento' = 'principal') {
-        if (!departamento_id || !departamento_id.value) {
+        if (!departamento_id || !departamento_id) {
             console.warn('departamento_id is invalid:', departamento_id);
             return;
         }
@@ -266,14 +267,14 @@ export class CrearOperadorComponent implements OnInit {
             return;
         }
 
-        let dept: IDepartamento = this.departamento.find(element => element.id === departamento_id.value);
+        let dept: IDepartamento = this.departamento.find(element => element.id === departamento_id);
 
         if (!dept) {
-            console.warn('Departamento not found with id:', departamento_id.value);
+            console.warn('Departamento not found with id:', departamento_id);
             return;
         }
-
-        this.municipiosService.vermunicipios(departamento_id.value.toString()).subscribe(
+        console.log('Departamento seleccionado:', departamento_id.toString());
+        this.municipiosService.vermunicipios(departamento_id.toString()).subscribe(
             (data: any) => {
                 switch (tipo) {
                     case 'principal':
@@ -310,12 +311,13 @@ export class CrearOperadorComponent implements OnInit {
 
     cambioDepartamentoSucursal(departamento: any) {
         this.sucursal.departamento_id = departamento.value;
-        this.cambioDepartamento(departamento, 'sucursal');
+        this.cambioDepartamento(departamento.value, 'sucursal');
     }
 
     cambioDepartamentoArrendamiento(departamento: any) {
-        this.arrendamiento.departamento_id = departamento.value.id;
-        this.cambioDepartamento(departamento, 'arrendamiento');
+        console.log('Departamento seleccionado para arrendamiento:', departamento.value.id);
+        this.arrendamiento.departamento_id = departamento.id;
+        this.cambioDepartamento(departamento.value.id, 'arrendamiento');
     }
 // Función utilitaria para normalizar valores null
 private normalizeValue(value: any): any {
