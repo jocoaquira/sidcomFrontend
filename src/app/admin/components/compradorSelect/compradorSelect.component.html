@@ -2,13 +2,13 @@
     <p-dropdown
         inputId="dropdown"
         [autoDisplayFirst]="false"
-        [options]="operadores"
-        [(ngModel)]="nombre"
+        [options]="compradores"
+        [(ngModel)]="razon_social"
         [filter]="true"
         filterBy="razon_social"
         optionLabel="razon_social"
         optionValue="razon_social"
-        (onChange)="cambioOperador($event)"
+        (onChange)="cambioComprador($event)"
     ></p-dropdown>
     <label for="dropdown">Compradores</label>
     <small id="presentacion" class="p-error " *ngIf="error">

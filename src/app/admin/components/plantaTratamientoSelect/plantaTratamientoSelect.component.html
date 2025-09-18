@@ -1,0 +1,17 @@
+<span class="p-float-label">
+    <p-dropdown
+        inputId="dropdown"
+        [autoDisplayFirst]="false"
+        [options]="plantaTratamientos"
+        [(ngModel)]="nombre"
+        [filter]="true"
+        filterBy="nombre"
+        optionLabel="nombre"
+        optionValue="nombre"
+        (onChange)="cambioPlantaTratamiento($event)"
+    ></p-dropdown>
+    <label for="dropdown">Plantas de Tratamiento</label>
+    <small id="planta_de_tratamiento" class="p-error " *ngIf="error">
+        {{error}}
+    </small>
+</span>

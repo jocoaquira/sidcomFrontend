@@ -10,20 +10,21 @@ import { CompradoresService } from '../../services/compradores.service';
   styleUrls: ['./compradorSelect.component.scss'],
 })
 export class CompradorSelectComponent implements OnInit {
-  @Input() nombre: String | null = null; // Permite seleccionar un mineral por defecto
+  @Input() razon_social: String | null = null;
+  @Input() nombre: String | null = null;
   @Output() comprador = new EventEmitter<IComprador>();
   compradores: IComprador[] = [];
   error: any;
   loading: boolean = true;
 
-  constructor(public compradorService: CompradoresService) {}
+  constructor(private compradorService: CompradoresService) {}
 
   ngOnInit() {
     this.cargarCompradores();
   }
 
   cargarCompradores() {
-    this.compradorService.verCompradores('gh')
+    this.compradorService.verCompradores('')
       .pipe(
         retry(3), // Intenta 3 veces si hay un error
         catchError((error) => {

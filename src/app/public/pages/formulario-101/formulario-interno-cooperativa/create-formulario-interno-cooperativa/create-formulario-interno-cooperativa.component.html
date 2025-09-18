@@ -337,33 +337,94 @@
                                     </small>
                                 </span>
                             </div>
-                            <div class="field col-12 md:col-2" *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR'" >
-                                <div class="field-checkbox">
-                                    <p-inputSwitch (onChange)="valSwitches($event)"></p-inputSwitch>
-                                    <label for="sf">Otro Comprador</label>
+                        </div>
+                        <div class="grid p-fluid mt-2" *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR'">
+                                <div class="field col-12 md:col-2" *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR'" >
+                                    <div class="field-checkbox">
+                                        <p-inputSwitch (onChange)="valSwitches($event)"></p-inputSwitch>
+                                        <label for="sf">Otro Comprador</label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR'  && valSwitch" class="field col-12 md:col-4">
-                                <span class="p-float-label">
-                                    <input
-                                        type="text"
-                                        id="des_comprador"
-                                        pInputText
-                                        formControlName="des_comprador"
-                                        class="ng-dirty"
-                                    />
-                                    <label for="des_comprador">Comprador</label>
+                                <div *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR'  && valSwitch" class="field col-12 md:col-4">
+                                    <span class="p-float-label">
+                                        <input
+                                            type="text"
+                                            id="des_comprador"
+                                            pInputText
+                                            formControlName="des_comprador"
+                                            class="ng-dirty"
+                                        />
+                                        <label for="des_comprador">Comprador</label>
+                                        <small id="des_comprador" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_comprador')">
+                                            {{formulario_interno.getErrorMessage('des_comprador')}}
+                                        </small>
+                                    </span>
+                                </div>
+                                <div class="field col-12 md:col-3 " *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR' && valSwitch==false">
+                                    <app-compradorSelect [nombre]="razon_social" (comprador)="cambioComprador($event)" ></app-compradorSelect>
                                     <small id="des_comprador" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_comprador')">
                                         {{formulario_interno.getErrorMessage('des_comprador')}}
                                     </small>
-                                </span>
+                                </div>
+                                <div class="field col-12 md:col-4">
+                                    <span class="p-float-label">
+                                        <input
+                                            type="number"
+                                            id="cantidad_comprador"
+                                            pInputText
+                                            [(ngModel)]="cantidadSacos"
+                                            [ngModelOptions]="{standalone: true}"
+                                            class="ng-dirty"
+                                            #cantidadCompradorRef="ngModel"
+                                            required
+                                            min="1"
+                                        />
+                                        <label for="cantidad_comprador">Cantidad de Sacos</label>
+                                        <small id="cantidad_comprador-error" class="p-error"
+                                            *ngIf="cantidadCompradorRef.invalid && (cantidadCompradorRef.dirty || cantidadCompradorRef.touched)">
+                                            <span *ngIf="cantidadCompradorRef.errors?.['required']">La cantidad de sacos es requerida</span>
+                                            <span *ngIf="cantidadCompradorRef.errors?.['min']">La cantidad debe ser mayor a 0</span>
+                                        </small>
+                                    </span>
+                                </div>
+                                <div class="field col-12 md:col-2">
+                                    <button pButton pRipple (click)="agregarComprador()" type="button" icon="pi pi-plus" label="Agregar Comprador" class="p-button-outlined p-button-success"></button>
+                                </div>
+                                <div class="field col-12 md:col-12">
+                                    <p-table #dt [value]="compradores"
+                                    responsiveLayout="scroll" [rows]="10"
+                                    [paginator]="false"  [showCurrentPageReport]="false"
+                                    selectionMode="multiple"
+                                    [rowHover]="true"
+                                    dataKey="id">
+
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th pSortableColumn="comprador">Comprador <p-sortIcon field="comprador"></p-sortIcon></th>
+                                                <th pSortableColumn="cantidad">Cantidad <p-sortIcon field="cantidad"></p-sortIcon></th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-comprador>
+                                            <tr>
+                                                <td style="width:70%; min-width:20rem;"><span class="p-column-title">Comprador</span>
+                                                    {{comprador.comprador}}
+                                                </td>
+                                                <td style="width:14%; min-width:8rem;">
+                                                    <span class="p-column-title">Cantidad</span>
+                                                    {{comprador.cantidad}}
+                                                </td>
+                                                <td>
+                                                    <div class="flex">
+                                                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminarMunicipio(product)"></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
                             </div>
-                            <div class="field col-12 md:col-3 " *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR' && valSwitch==false">
-                                <app-operadoresSelect [nombre]="razon_social" (operador)="cambioOperadorSimple($event)" ></app-operadoresSelect>
-                                <small id="des_comprador" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_comprador')">
-                                    {{formulario_interno.getErrorMessage('des_comprador')}}
-                                </small>
-                            </div>
+
+
                             <div *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO'" class="field col-12 md:col-4">
                                 <span class="p-float-label">
                                     <input
@@ -386,7 +447,7 @@
                             <div class="field col-12 md:col-4 ">
                                 <app-municipioSelect [departamento_id]="departamento_id1" [municipio_id1]="municipio_id1" (municipio_id)="cambioMunicipio1($event)" ></app-municipioSelect>
                             </div>
-                                                    <div class="field col-12 md:col-12">
+                        <div class="field col-12 md:col-12">
                             <span class="p-float-label">
                                 <textarea
                                     id="observaciones"
@@ -423,7 +484,7 @@
                                   />
                                   <label for="sf">Acepto la DDJJ</label>
                                 </div>
-                        </div>
+
                         </div>
                     </div>
 

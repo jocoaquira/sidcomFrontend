@@ -59,7 +59,7 @@ export class ListarCompradorComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.compradorService.verCompradores('nada').subscribe(
+        this.compradorService.verCompradores('').subscribe(
             (data:any)=>{
             this.listarCompradores=this.limpiarArrayCompradores(this.compradorService.handleComprador(data));
 
