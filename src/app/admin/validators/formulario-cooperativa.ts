@@ -66,7 +66,7 @@ export class FormularioCooperativaFormulario {
         des_tipo: new FormControl(this.formulario_interno.des_tipo,[Validators.required]),
         des_comprador:new FormControl(this.formulario_interno.des_comprador),
         des_planta: new FormControl(this.formulario_interno.des_planta),
-        id_municipio_destino:new FormControl(this.formulario_interno.id_municipio_destino,[Validators.required,Validators.pattern('^[0-9]*$')]),
+        id_municipio_destino:new FormControl(this.formulario_interno.id_municipio_destino,[Validators.pattern('^[0-9]*$')]),
         tipo_transporte:new FormControl(this.formulario_interno.tipo_transporte,[Validators.required]),
         placa:new FormControl(this.formulario_interno.placa),
         nom_conductor:new FormControl(this.formulario_interno.nom_conductor,Validators.pattern('^[a-zA-ZÀ-ÿ\\s]+$')),
@@ -224,13 +224,14 @@ getErrorMessage(controlName: string): string | null {
 
     const desComprador = this.formulario.get('des_comprador');
     const desPlanta = this.formulario.get('des_planta');
+    const DestinoMunicipioId=this.formulario.get('id_municipio_destino');
 
     if (valor === 'COMPRADOR') {
       // Activar y hacer requerido `des_comprador`
       desComprador?.enable();
-      desComprador?.setValidators([Validators.required]);
+    //  desComprador?.setValidators([Validators.required]);
       desComprador?.updateValueAndValidity();
-
+        DestinoMunicipioId?.clearValidators();
       // Deshabilitar y limpiar validaciones de `des_planta`
       desPlanta?.disable();
       desPlanta?.clearValidators();
@@ -239,6 +240,7 @@ getErrorMessage(controlName: string): string | null {
       // Activar y hacer requerido `des_planta`
       desPlanta?.enable();
       desPlanta?.setValidators([Validators.required]);
+      DestinoMunicipioId?.setValidators([Validators.required,Validators.pattern('^[0-9]*$')]);
       desPlanta?.updateValueAndValidity();
 
       // Deshabilitar y limpiar validaciones de `des_comprador`

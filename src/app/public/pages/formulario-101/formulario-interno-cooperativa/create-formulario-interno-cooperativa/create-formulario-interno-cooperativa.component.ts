@@ -1,6 +1,6 @@
 import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { IFormularioInterno } from '@data/formulario_interno.metadata';
@@ -46,6 +46,8 @@ export class CreateFormularioInternoCooperativaComponent implements OnInit {
     public declaracionJurada:boolean=false;
     departamento_id1: number | null = null;  // Guardar el ID del departamento seleccionado
     municipio_id1: number | null = null;
+    departamento_id_pt:number|null=null;
+    municipio_id_pt:number|null=null
   // Método que se llama cuando cambia el departamento
   cambioDepartamento1(departamentoId: number): void {
     this.departamento_id1 = departamentoId;
@@ -66,6 +68,7 @@ export class CreateFormularioInternoCooperativaComponent implements OnInit {
         cantidad:0
     }
     public valSwitch:boolean=false;
+    public valSwitchPT:boolean=false;
     public tipo_transporte!:any;
     public destinos!:any;
     public unidades!:any;
@@ -102,8 +105,7 @@ export class CreateFormularioInternoCooperativaComponent implements OnInit {
       // Definir los pasos para Steps
   steps = [
     { label: '1. Datos del Medio de Transporte y mineral y/o Metal', command: (event: any) => this.gotoStep(0)},
-    { label: '2. Origen del mineral y/o Metal',command: (event: any) => this.gotoStep(1) },
-    { label: '3. Destino del mineral y/o Metal', command: (event: any) => this.gotoStep(2) }
+    { label: '3. Destino del mineral y/o Metal',command: (event: any) => this.gotoStep(1) }
   ];
 
   public activeStep: number = 0; // Establecer el paso activo inicial
@@ -154,9 +156,6 @@ nextStep() {
 
         break;
       case 1:
-        valid =this.lista_municipios_origen.length>0
-        break;
-      case 2:
         valid = this.formulario_interno.formulario.get('des_tipo')?.valid &&
        (this.formulario_interno.formulario.get('des_comprador')?.valid ||
         this.formulario_interno.formulario.get('des_comprador')?.disabled) &&
@@ -311,16 +310,73 @@ nextStep() {
   onSubmit(){
 
   }
+
+
+getAllFormErrors(form: FormGroup): any {
+  let formErrors: any = {};
+
+  Object.keys(form.controls).forEach(key => {
+    const controlErrors = form.get(key)?.errors;
+    if (controlErrors) {
+      formErrors[key] = controlErrors;
+    }
+
+    // Si es un FormGroup anidado, buscar recursivamente
+    if (form.get(key) instanceof FormGroup) {
+      const nestedErrors = this.getAllFormErrors(form.get(key) as FormGroup);
+      if (Object.keys(nestedErrors).length > 0) {
+        formErrors[key] = { ...formErrors[key], ...nestedErrors };
+      }
+    }
+
+    // Si es un FormArray
+    if (form.get(key) instanceof FormArray) {
+      const formArray = form.get(key) as FormArray;
+      formArray.controls.forEach((control, index) => {
+        if (control instanceof FormGroup) {
+          const arrayErrors = this.getAllFormErrors(control);
+          if (Object.keys(arrayErrors).length > 0) {
+            if (!formErrors[key]) formErrors[key] = {};
+            formErrors[key][index] = arrayErrors;
+          }
+        } else if (control.errors) {
+          if (!formErrors[key]) formErrors[key] = {};
+          formErrors[key][index] = control.errors;
+        }
+      });
+    }
+  });
+
+  return formErrors;
+}
+
+
+  mostrarErrores() {
+  const errores = this.getAllFormErrors(this.formulario_interno.formulario);
+  console.log('Errores del formulario:', errores);
+
+  // También puedes mostrar errores específicos
+  Object.keys(errores).forEach(campo => {
+    console.log(`Campo ${campo}:`, errores[campo]);
+  });
+}
+
+marcarCamposComoTocados() {
+  this.formulario_interno.formulario.markAllAsTouched();
+}
   guardar(){
     this.formulario_interno.formulario.patchValue({
         estado: 'GENERADO'
       });
+      this.mostrarErrores();
+      this.marcarCamposComoTocados();
     if(this.formulario_interno.formulario.valid){
       let formularioEnvio=this.formulario_interno.formulario.value;
       formularioEnvio={
         ...formularioEnvio,
         minerales:this.minerales_envio,
-        municipio_origen:this.municipio_origen_envio
+        municipio_origen:this.municipio_origen_envio,
+        compradores:this.compradores
       }
       console.log(formularioEnvio);
       this.formularioCooperativaService.crearFormularioInterno(formularioEnvio).subscribe(
@@ -383,22 +439,195 @@ nextStep() {
         this.notify.error('Por favor, complete todos los campos','Error con el Registro',{timeOut:2000,positionClass: 'toast-bottom-right'});
     }
   }
-    agregarComprador(){
-        if(this.valSwitch){
-            this.comprador.comprador=this.formulario_interno.formulario.value.des_comprador;
+agregarComprador(){
+    try {
+        // Verificar si el campo cantidad existe y está deshabilitado
+        const controlCantidad = this.formulario_interno.formulario.get('cantidad');
+        const cantidadDisabled = controlCantidad ? controlCantidad.disabled : false;
+        console.log('Campo cantidad:', controlCantidad);
+        console.log('Cantidad deshabilitada:', cantidadDisabled);
+
+        // Controlar límite cuando cantidad está deshabilitada
+        if (cantidadDisabled && this.compradores.length >= 1) {
+            this.notify.error('Solo se permite agregar un comprador cuando cantidad está deshabilitada', 'Límite alcanzado', {
+                timeOut: 2000,
+                positionClass: 'toast-bottom-right'
+            });
+            return;
         }
-        else{
-            if(this.comprador.comprador!=null && this.cantidadSacos>0)
-            {
-                this.comprador.cantidad=this.cantidadSacos;
-                this.compradores.push({...this.comprador});
-                console.log(this.compradores);
+
+        // Calcular la suma total de cantidades de compradores existentes
+        const sumaCantidadesCompradores = this.compradores.reduce((total, comprador) => {
+            return total + (comprador.cantidad || 0);
+        }, 0);
+
+        // Obtener el valor del campo cantidad del formulario
+        const cantidadFormulario = this.formulario_interno.formulario.value.cantidad;
+
+        // Nueva restricción: Verificar que la suma no exceda la cantidad del formulario
+        if (cantidadFormulario !== null && cantidadFormulario !== undefined) {
+            const cantidadTotalConNuevo = sumaCantidadesCompradores + (this.cantidadSacos || 0);
+
+            if (cantidadTotalConNuevo > cantidadFormulario) {
+                this.notify.error(`La suma total de cantidades (${cantidadTotalConNuevo}) excede la cantidad disponible (${cantidadFormulario})`, 'Límite excedido', {
+                    timeOut: 3000,
+                    positionClass: 'toast-bottom-right'
+                });
+                return;
             }
-
         }
 
+        // Configurar cantidad por defecto si está deshabilitada
+        if (cantidadDisabled && this.compradores.length < 1) {
+            this.cantidadSacos = 1;
+        }
+
+        // Validar según el modo (valSwitch)
+        if (this.valSwitch) {
+            this.agregarEnModoSwitch(sumaCantidadesCompradores);
+        } else {
+            this.agregarEnModoNormal(sumaCantidadesCompradores);
+        }
+
+    } catch (error) {
+        console.error('Error en agregarComprador:', error);
+        this.notify.error('Error al agregar comprador', 'Error', {
+            timeOut: 2000,
+            positionClass: 'toast-bottom-right'
+        });
+    }
+}
+
+agregarEnModoSwitch(sumaCantidadesCompradores) {
+    // Validaciones para modo switch activado
+    if (!this.municipio_id1) {
+        this.notify.error('Seleccione un municipio', 'Campo requerido', {
+            timeOut: 2000,
+            positionClass: 'toast-bottom-right'
+        });
+        return;
     }
 
+    if (!this.formulario_interno.formulario.value.des_comprador ||
+        this.formulario_interno.formulario.value.des_comprador.trim() === '') {
+        this.notify.error('Ingrese el nombre del comprador', 'Campo requerido', {
+            timeOut: 2000,
+            positionClass: 'toast-bottom-right'
+        });
+        return;
+    }
+
+    if (!this.cantidadSacos || this.cantidadSacos <= 0) {
+        this.notify.error('La cantidad debe ser mayor a 0', 'Campo requerido', {
+            timeOut: 2000,
+            positionClass: 'toast-bottom-right'
+        });
+        return;
+    }
+
+    // Verificar restricción de cantidad final
+    const cantidadFormulario = this.formulario_interno.formulario.value.cantidad;
+    const cantidadTotalFinal = sumaCantidadesCompradores + this.cantidadSacos;
+
+    if (cantidadFormulario !== null && cantidadFormulario !== undefined &&
+        cantidadTotalFinal > cantidadFormulario) {
+        this.notify.error(`No puede agregar ${this.cantidadSacos} sacos. La cantidad total sería ${cantidadTotalFinal}, excediendo el límite de ${cantidadFormulario}`, 'Límite excedido', {
+            timeOut: 3000,
+            positionClass: 'toast-bottom-right'
+        });
+        return;
+    }
+
+    // Agregar comprador
+    this.comprador.comprador = this.formulario_interno.formulario.value.des_comprador;
+    this.comprador.municipioId = this.municipio_id1;
+    this.comprador.cantidad = this.cantidadSacos;
+    this.compradores.push({...this.comprador});
+
+    // Limpiar formulario
+    this.limpiarFormulario();
+
+    this.notify.success('Comprador agregado exitosamente', 'Éxito', {
+        timeOut: 2000,
+        positionClass: 'toast-bottom-right'
+    });
+}
+
+agregarEnModoNormal(sumaCantidadesCompradores) {
+    // Validaciones para modo switch desactivado
+    if (!this.comprador.comprador) {
+        this.notify.error('El comprador es requerido', 'Campo requerido', {
+            timeOut: 2000,
+            positionClass: 'toast-bottom-right'
+        });
+        return;
+    }
+
+    if (!this.cantidadSacos || this.cantidadSacos <= 0) {
+        this.notify.error('La cantidad debe ser mayor a 0', 'Campo requerido', {
+            timeOut: 2000,
+            positionClass: 'toast-bottom-right'
+        });
+        return;
+    }
+
+    // Verificar restricción de cantidad final
+    const cantidadFormulario = this.formulario_interno.formulario.value.cantidad;
+    const cantidadTotalFinal = sumaCantidadesCompradores + this.cantidadSacos;
+
+    if (cantidadFormulario !== null && cantidadFormulario !== undefined &&
+        cantidadTotalFinal > cantidadFormulario) {
+        this.notify.error(`No puede agregar ${this.cantidadSacos} sacos. La cantidad total sería ${cantidadTotalFinal}, excediendo el límite de ${cantidadFormulario}`, 'Límite excedido', {
+            timeOut: 3000,
+            positionClass: 'toast-bottom-right'
+        });
+        return;
+    }
+
+    // Agregar comprador
+    this.comprador.cantidad = this.cantidadSacos;
+    this.compradores.push({...this.comprador});
+
+    // Limpiar datos
+    this.comprador = {
+        comprador: null,
+        municipioId: null,
+        cantidad: null
+    };
+    this.cantidadSacos = null;
+
+    console.log('Compradores actualizados:', this.compradores);
+    this.notify.success('Comprador agregado exitosamente', 'Éxito', {
+        timeOut: 2000,
+        positionClass: 'toast-bottom-right'
+    });
+}
+
+limpiarFormulario() {
+    this.municipio_id1 = null;
+    this.departamento_id1 = null;
+    this.cantidadSacos = null;
+    this.formulario_interno.formulario.patchValue({
+        des_comprador: null,
+    });
+}
+
+// Método adicional para obtener la suma actual (útil para mostrar en UI)
+getSumaTotalCompradores() {
+    return this.compradores.reduce((total, comprador) => total + (comprador.cantidad || 0), 0);
+}
+
+// Método para verificar si se puede agregar más
+puedeAgregarMas() {
+    const cantidadFormulario = this.formulario_interno.formulario.value.cantidad;
+    const sumaActual = this.getSumaTotalCompradores();
+
+    if (cantidadFormulario === null || cantidadFormulario === undefined) {
+        return true; // No hay restricción si no hay cantidad definida
+    }
+
+    return sumaActual < cantidadFormulario;
+}
 
     cambioLey(event:any)
     {
@@ -550,7 +779,15 @@ cambioComprador(event:any){
           });
           console.log(this.formulario_interno.formulario.value);
 }
-
+cambioPlantaDeTratamiento(event:any){
+    //this.comprador=event;
+        console.log(event);
+        this.formulario_interno.formulario.patchValue({
+            des_planta: event.nombre,
+            id_municipio_destino:event.municipioId
+          });
+          console.log(this.formulario_interno.formulario.value);
+}
 cambioOperadorSimple(event:any){
     this.comprador=event;
         this.razon_social=this.comprador.razon_social;
@@ -564,7 +801,10 @@ valSwitches(event:any){
 
     this.valSwitch=event.checked;
 }
+valSwitchesPT(event:any){
 
+    this.valSwitchPT=event.checked;
+}
 
 cargar_datos(operador: any) {
   // Mapear los municipios de origen desde arrendamientos
@@ -622,4 +862,17 @@ cargar_datos(operador: any) {
         });
     });
 }
+cambioDepartamentoPT(departamentoId: number): void {
+    this.departamento_id_pt = departamentoId;
+    // Aquí puedes hacer cualquier acción extra cuando el departamento cambie
+  }
+cambioMunicipioPT(event){
+        this.municipio_id_pt=event;
+        this.formulario_interno.formulario.value.id_municipio_destino=event;
+
+        this.formulario_interno.formulario.patchValue({
+            id_municipio_destino: event
+          });
+          console.log(this.formulario_interno.formulario.value)
+    }
 }

@@ -260,6 +260,7 @@
 
                         </div>
                     </div>
+                    <!--
                     <div *ngIf="activeStep === 1"
                     >
                         <div class="grid p-fluid mt-2">
@@ -317,7 +318,8 @@
                             </div>
                         </div>
                     </div>
-                    <div *ngIf="activeStep === 2"
+                -->
+                    <div *ngIf="activeStep === 1"
                     >
                         <div class="grid p-fluid mt-2">
                             <div class="field col-12 md:col-4">
@@ -436,8 +438,19 @@
                                 </div>
                             </div>
 
-
-                            <div *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO'" class="field col-12 md:col-4">
+                            <div class="field col-12 md:col-3" *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO'" >
+                                <div class="field-checkbox">
+                                    <p-inputSwitch (onChange)="valSwitchesPT($event)"></p-inputSwitch>
+                                    <label for="sf">Otra Planta de Tratamiento</label>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-3 " *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO' && valSwitchPT==false">
+                                <app-plantaDeTratamientoSelect [nombre]="des_planta" (plantaTratamiento)="cambioPlantaDeTratamiento($event)" ></app-plantaDeTratamientoSelect>
+                                <small id="des_comprador" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_comprador')">
+                                    {{formulario_interno.getErrorMessage('des_comprador')}}
+                                </small>
+                            </div>
+                            <div *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO' && valSwitchPT" class="field col-12 md:col-3">
                                 <span class="p-float-label">
                                     <input
                                         type="text"
@@ -452,6 +465,12 @@
                                     </small>
                                 </span>
                             </div>
+                            <div class="field col-12 md:col-3 " *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO'&& valSwitchPT">
+                                    <app-departamentoSelect [departamento_id]="departamento_id_pt" (cambioDepartamento)="cambioDepartamentoPT($event)" ></app-departamentoSelect>
+                                </div>
+                                <div class="field col-12 md:col-3 " *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO'&& valSwitchPT">
+                                    <app-municipioSelect [departamento_id]="departamento_id_pt" [municipio_id1]="municipio_id_pt" (municipio_id)="cambioMunicipioPT($event)" ></app-municipioSelect>
+                                </div>
 
 
                         <div class="field col-12 md:col-12">

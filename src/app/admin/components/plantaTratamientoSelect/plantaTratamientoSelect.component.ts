@@ -5,7 +5,7 @@ import { catchError, retry} from 'rxjs/operators';
 import { PlantaDeTratamientoService } from '../../services/planta-tratamientos.service';
 
 @Component({
-  selector: 'app-plantaTratamientoSelect',
+  selector: 'app-plantaDeTratamientoSelect',
   templateUrl: './plantaTratamientoSelect.component.html',
   styleUrls: ['./plantaTratamientoSelect.component.scss'],
 })
