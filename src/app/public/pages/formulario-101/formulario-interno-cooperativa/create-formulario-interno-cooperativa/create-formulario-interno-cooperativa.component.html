@@ -339,13 +339,21 @@
                             </div>
                         </div>
                         <div class="grid p-fluid mt-2" *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR'">
-                                <div class="field col-12 md:col-2" *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR'" >
+                                <div class="field col-12 md:col-3" *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR'" >
                                     <div class="field-checkbox">
                                         <p-inputSwitch (onChange)="valSwitches($event)"></p-inputSwitch>
                                         <label for="sf">Otro Comprador</label>
                                     </div>
                                 </div>
-                                <div *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR'  && valSwitch" class="field col-12 md:col-4">
+
+                                <div class="field col-12 md:col-4 " *ngIf="valSwitch===true">
+                                    <app-departamentoSelect [departamento_id]="departamento_id1" (cambioDepartamento)="cambioDepartamento1($event)" ></app-departamentoSelect>
+                                </div>
+                                <div class="field col-12 md:col-4 " *ngIf="valSwitch===true">
+                                    <app-municipioSelect [departamento_id]="departamento_id1" [municipio_id1]="municipio_id1" (municipio_id)="cambioMunicipio1($event)" ></app-municipioSelect>
+                                </div>
+
+                                <div *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR'  && valSwitch" class="field col-12 md:col-5">
                                     <span class="p-float-label">
                                         <input
                                             type="text"
@@ -360,13 +368,16 @@
                                         </small>
                                     </span>
                                 </div>
+
+
+
                                 <div class="field col-12 md:col-3 " *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR' && valSwitch==false">
                                     <app-compradorSelect [nombre]="razon_social" (comprador)="cambioComprador($event)" ></app-compradorSelect>
                                     <small id="des_comprador" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_comprador')">
                                         {{formulario_interno.getErrorMessage('des_comprador')}}
                                     </small>
                                 </div>
-                                <div class="field col-12 md:col-4">
+                                <div class="field col-12 md:col-3">
                                     <span class="p-float-label">
                                         <input
                                             type="number"
@@ -378,6 +389,7 @@
                                             #cantidadCompradorRef="ngModel"
                                             required
                                             min="1"
+                                            [disabled]="formulario_interno.formulario.get('cantidad')?.disabled"
                                         />
                                         <label for="cantidad_comprador">Cantidad de Sacos</label>
                                         <small id="cantidad_comprador-error" class="p-error"
@@ -387,10 +399,10 @@
                                         </small>
                                     </span>
                                 </div>
-                                <div class="field col-12 md:col-2">
-                                    <button pButton pRipple (click)="agregarComprador()" type="button" icon="pi pi-plus" label="Agregar Comprador" class="p-button-outlined p-button-success"></button>
+                                <div class="field col-12 md:col-3">
+                                    <button pButton pRipple (click)="agregarComprador()" type="button" icon="pi pi-plus" label="Agregar un Comprador" class="p-button-outlined p-button-success"></button>
                                 </div>
-                                <div class="field col-12 md:col-12">
+                                <div class="field col-12 md:col-11">
                                     <p-table #dt [value]="compradores"
                                     responsiveLayout="scroll" [rows]="10"
                                     [paginator]="false"  [showCurrentPageReport]="false"
@@ -441,12 +453,7 @@
                                 </span>
                             </div>
 
-                            <div class="field col-12 md:col-4 ">
-                                <app-departamentoSelect [departamento_id]="departamento_id1" (cambioDepartamento)="cambioDepartamento1($event)" ></app-departamentoSelect>
-                            </div>
-                            <div class="field col-12 md:col-4 ">
-                                <app-municipioSelect [departamento_id]="departamento_id1" [municipio_id1]="municipio_id1" (municipio_id)="cambioMunicipio1($event)" ></app-municipioSelect>
-                            </div>
+
                         <div class="field col-12 md:col-12">
                             <span class="p-float-label">
                                 <textarea
