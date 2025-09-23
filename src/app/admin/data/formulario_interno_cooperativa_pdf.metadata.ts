@@ -23,8 +23,10 @@ export interface IFormularioInternoCooperativaPDF{
 	minerales:IMineral[],
 	municipio_origen:IMunicipioOrigen[],
 
-	comprador:string,
-	munipio_destino:string
+	des_tipo:string,
+    des_comprador:string,
+    des_planta:string,
+	munipio_destino:string,
 	departamento_destino:string,
 	tipo_transporte:string,
 	conductor:string,

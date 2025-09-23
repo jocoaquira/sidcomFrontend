@@ -353,9 +353,9 @@ export class PdfFormularioInternoCooperativaService {
                             body: [
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: 'COMPRADOR:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_cooperativa.comprador, styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                                { content: 'DESTINO FINAL (MUNICIPIO):', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: formulario_cooperativa.des_tipo+':', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: formulario_cooperativa.des_tipo === 'COMPRADOR' ? formulario_cooperativa.des_comprador : formulario_cooperativa.des_planta, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                 { content: 'DESTINO FINAL (MUNICIPIO):', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: formulario_cooperativa.departamento_destino+', '+formulario_cooperativa.munipio_destino, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
