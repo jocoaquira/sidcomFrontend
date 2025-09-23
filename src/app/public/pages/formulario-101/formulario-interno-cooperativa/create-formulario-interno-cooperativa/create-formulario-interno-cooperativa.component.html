@@ -112,7 +112,7 @@
 
                                 </span>
                             </div>
-                            <div class="field col-12 md:col-3">
+                            <div class="field col-12 md:col-3" *ngIf="!operador.generacion_nro_lote">
                                 <span class="p-float-label">
                                     <input
                                         type="text"
@@ -121,7 +121,7 @@
                                         formControlName="lote"
                                         class="ng-dirty"
                                     />
-                                    <label for="Razón Social">Lote/ N° de Tornaguia</label>
+                                    <label for="Razón Social">Lote y/o N° de Tornaguia</label>
                                     <small id="lote" class="p-error "*ngIf="formulario_interno.esCampoInvalido('lote')">
                                         {{formulario_interno.getErrorMessage('lote')}}
                                     </small>

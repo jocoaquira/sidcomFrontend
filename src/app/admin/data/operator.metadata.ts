@@ -50,6 +50,7 @@ export interface IOperator {
     comercio_interno_coperativa:boolean,
     traslado_colas:boolean,
     transbordo:boolean,
+    generacion_nro_lote:boolean,
     nit_link:string,
     nim_link:string,
     seprec_link:string,
@@ -68,6 +69,7 @@ export interface IOperator {
     rep_celular:number,
     rep_correo:string,
     observaciones:string,
+
     hash?:string,
     created_at?: string,
 	updated_at?: string

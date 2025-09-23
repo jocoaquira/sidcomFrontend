@@ -1221,6 +1221,22 @@
             {{operador.getErrorMessage('transbordo')}}
         </small>
     </div>
+    <div class="grid p-fluid mt-3">
+        <label class="mb-3">  GENERAR NRO. DE LOTE AUTOMATICAMENTE:</label>
+        <div class="formgrid grid">
+            <div class="field-radiobutton col-4 ml-5">
+                <p-radioButton id="category1" name="generacion_nro_lote" value=1 formControlName="generacion_nro_lote"></p-radioButton>
+                <label for="category1">Si</label>
+            </div>
+            <div class="field-radiobutton col-6">
+                <p-radioButton id="category2" name="generacion_nro_lote" value=0 formControlName="generacion_nro_lote"></p-radioButton>
+                <label for="category2">No</label>
+            </div>
+        </div>
+        <small id="generacion_nro_lote" class="p-error " *ngIf="operador.esCampoInvalido('generacion_nro_lote')">
+            {{operador.getErrorMessage('generacion_nro_lote')}}
+        </small>
+    </div>
 </div>
 <div class="card">
     <div class="grid p-fluid mt-2">

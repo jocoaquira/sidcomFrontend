@@ -391,6 +391,7 @@ private normalizeValue(value: any): any {
             verif_cert_liberacion: this.normalizeValue(datos.verif_cert_liberacion),
             comercio_interno_coperativa: datos.comercio_interno_coperativa || false,
             transbordo: datos.transbordo || false,
+            generacion_nro_lote: datos.generacion_nro_lote || false,
             traslado_colas: datos.traslado_colas || false,
             verificacion_toma_muestra: datos.verificacion_toma_muestra || false,
             dl_departamento_id: this.normalizeValue(datos.dl_departamento_id),

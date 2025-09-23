@@ -291,6 +291,7 @@ export class EditarOperadorComponent implements OnInit {
             verif_cert_liberacion: datos.verif_cert_liberacion || false,
             comercio_interno_coperativa: datos.comercio_interno_coperativa || false,
             transbordo: datos.transbordo || false,
+            generacion_nro_lote: datos.generacion_nro_lote || false,
             traslado_colas: datos.traslado_colas || false,
             verificacion_toma_muestra: datos.verificacion_toma_muestra || false,
             dl_departamento_id: datos.dl_departamento_id || null,
@@ -363,14 +364,26 @@ export class EditarOperadorComponent implements OnInit {
 
     removeZeroOneProperties = (data: any) => {
         const filteredData = { ...data };
+        const booleanFields = [
+            'verificacion_toma_muestra',
+            'comercio_interno_coperativa',
+            'traslado_colas',
+            'transbordo',
+            'generacion_nro_lote'
+        ];
         for (const key in filteredData) {
-            if (filteredData[key] === 0) {
+            if (booleanFields.includes(key)) {
+                if (filteredData[key] === 0 || filteredData[key] === "0") {
+                    filteredData[key] = false;
+                } else if (filteredData[key] === 1 || filteredData[key] === "1") {
+                    filteredData[key] = true;
+                }
+            } else if (filteredData[key] === 0 || filteredData[key] === "0") {
                 delete filteredData[key];
             }
         }
         return filteredData;
     };
-
     removeNullProperties = (data: any) => {
         const filteredData = { ...data };
         for (const key in filteredData) {
@@ -396,19 +409,23 @@ export class EditarOperadorComponent implements OnInit {
 
         let datos = this.convertBooleansToNumbers(this.operador.formulario.value);
         let datofin = this.removeZeroOneProperties(datos);
+
         datofin = this.removeNullProperties(datofin);
 
         for (const key in datofin) {
             const value = datofin[key];
             if (typeof value === 'boolean') {
                 formData.append(key, value ? '1' : '0');
+                console.log(key, value);
             } else if (typeof value === 'number') {
                 formData.append(key, value.toString());
+                console.log(key, value);
             } else {
                 formData.append(key, value);
+                console.log(key, value);
             }
         }
-
+        console.log(datofin);
         const listaArrendamientoLimpia = this.lista_arrendamiento.map((item: any) => {
             const { id, operator_id, ...resto } = item;
             return resto;

@@ -16,24 +16,24 @@ export class PdfFormularioInternoCooperativaService {
   constructor(
     private imageToBase64Service: ImageToBase64Service,
     ) {}
-// Función para generar el código QR sin bordes blancos
+
  generateQRCode(data: string): Promise<string> {
     return QRCode.toDataURL(data, {
-      margin: 0, // Establecer el margen en 0 para eliminar el borde blanco
-      errorCorrectionLevel: 'H', // Nivel de corrección de errores (puedes ajustarlo según tus necesidades)
-      width: 120, // Ancho del código QR
+      margin: 0,
+      errorCorrectionLevel: 'H',
+      width: 120,
       color: {
         dark: '#000000',
         light: '#FFFFFF',
       },
     });
   }
-  // Función para mostrar los nombres de los minerales
+
   mostrarMinerales(mineral_tdm): string {
     return mineral_tdm.map(mineral => mineral.mineral).join(', ');
   }
 
-  // Función para mostrar los detalles de los minerales
+
   mostrarDetalles(mineral_tdm): string {
     return mineral_tdm.map(mineral => `${mineral.sigla} (${mineral.unidad})`).join(', ');
   }
@@ -44,18 +44,18 @@ export class PdfFormularioInternoCooperativaService {
     return municipios.map(municipio => municipio.codigo).join(', ');
   }
   formatFecha(fecha: string): string {
-    const date = new Date(fecha); // Convierte la fecha en un objeto Date
-    const day = String(date.getDate()).padStart(2, '0'); // Día con 2 dígitos
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Mes con 2 dígitos (recordando que los meses empiezan en 0)
-    const year = date.getFullYear(); // Año
-    const hours = String(date.getHours()).padStart(2, '0'); // Hora con 2 dígitos
-    const minutes = String(date.getMinutes()).padStart(2, '0'); // Minutos con 2 dígitos
+    const date = new Date(fecha);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
 
-    return `${day}/${month}/${year} a Hrs.: ${hours}:${minutes}`; // Formato final
+    return `${day}/${month}/${year} a Hrs.: ${hours}:${minutes}`;
   }
     generarPDF(formulario_cooperativa: IFormularioInternoCooperativaPDF) {
 
-        // Obtener datos del formulario interno y el operador
+
 
                       const doc = new jsPDF('p', 'pt', 'letter');
 
@@ -80,7 +80,7 @@ export class PdfFormularioInternoCooperativaService {
                             autoTable(doc, {
 
                                 body: [
-                                  // Fila con 4 celdas, cada una ocupando una columna igual
+
                                   [
                                     { content: '',  styles: { halign: 'center',fillColor: [255, 255, 255] } },
                                     { content: '',  styles: { halign: 'center',fillColor: [255, 255, 255] } },
@@ -98,35 +98,35 @@ export class PdfFormularioInternoCooperativaService {
                                 ],
                                 theme: 'striped',
                                 styles: {
-                                  fillColor: [255, 255, 0], // Color de fondo amarillo
-                                  textColor: [0, 0, 0], // Color del texto negro
-                                  halign: 'center', // Alineación centrada
-                                  valign: 'middle', // Alineación vertical centrada
-                                  fontSize: 10, // Tamaño de fuente
-                                  cellPadding: 3, // Reduce el relleno dentro de las celdas
+                                  fillColor: [255, 255, 0],
+                                  textColor: [0, 0, 0],
+                                  halign: 'center',
+                                  valign: 'middle',
+                                  fontSize: 10,
+                                  cellPadding: 3,
                                 },
                                 headStyles: {
-                                  fillColor: [0, 51, 102], // Fondo azul oscuro para el encabezado
-                                  textColor: [255, 255, 255], // Texto blanco para el encabezado
-                                  fontStyle: 'bold', // Texto en negrita
+                                  fillColor: [0, 51, 102],
+                                  textColor: [255, 255, 255],
+                                  fontStyle: 'bold',
                                 },
 
 
-                                margin: { top: 0, bottom: 0 }, // Ajustar el margen entre tablas
+                                margin: { top: 0, bottom: 0 },
 
-                                startY: 80, // Posición inicial de la tabla
+                                startY: 80,
                               });
 
-                        const mostrarDato2 = formulario_cooperativa.estado === 'GENERADO'; // Verifica si el estado es 'GENERADO'
+                        const mostrarDato2 = formulario_cooperativa.estado === 'GENERADO';
 
-                        // Crear las celdas basadas en la condición
+
                         const celdas = [];
 
                         if (mostrarDato2) {
-                        // Si el estado es 'GENERADO', agregar solo la primera celda
+
                         celdas.push({ content: 'ESTE FORMULARIO NO SE EMITIO, ESTA EN MODO GENERADO Y NO ES VALIDO PARA CIRCULACIÓN.', colSpan: 2, styles: { halign: 'center', fillColor: [255, 255, 0] } });
                         } else {
-                        // Si no es 'GENERADO', agregar la segunda celda
+
                         celdas.push({ content: 'FECHA DE EMISIÓN:', styles: { halign: 'right',fontSize:10,fontStyle:'bold',fillColor: [255, 255, 255] } });
                         celdas.push({ content: formulario_cooperativa.fecha_emision+' a Hrs.:'+ formulario_cooperativa.hora_emision, styles: { halign: 'left' ,fillColor: [255, 255, 255] } });
                         celdas.push({ content: 'FECHA DE VENCIMIENTO:', styles: { halign: 'right',fontSize:10,fontStyle:'bold' ,fillColor: [255, 255, 255] } });
@@ -135,11 +135,11 @@ export class PdfFormularioInternoCooperativaService {
                         autoTable(doc, {
                             body: [celdas],
                             startY: (doc as any).lastAutoTable.finalY,
-                            margin: { top: 0, bottom: 0 }, // Ajustar el margen entre tablas
+                            margin: { top: 0, bottom: 0 },
                             styles: {
-                                cellPadding: 6, // Reduce el relleno dentro de las celdas
+                                cellPadding: 6,
                                 textColor: [0, 0, 0],
-                                valign: 'middle', // Alineación vertical centrada
+                                valign: 'middle',
                               },
                           });
 
@@ -167,25 +167,25 @@ export class PdfFormularioInternoCooperativaService {
                             ],
 
                             styles: {
-                              fillColor: [255, 255, 255], // Color de fondo por defecto
-                              textColor: [0, 0, 0], // Color de texto negro
-                              halign: 'left', // Alineación horizontal izquierda por defecto
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
-                              cellPadding: 2, // Espaciado interno de las celdas
+                              fillColor: [255, 255, 255],
+                              textColor: [0, 0, 0],
+                              halign: 'left',
+                              valign: 'middle',
+                              fontSize: 9,
+                              cellPadding: 2,
                             },
                             headStyles: {
-                              fillColor: [161, 216, 158]  , // Fondo verde para el encabezado
-                              textColor: [0, 0, 0], // Texto negro para el encabezado
-                              fontStyle: 'bold', // Texto en negrita
+                              fillColor: [161, 216, 158]  ,
+                              textColor: [0, 0, 0],
+                              fontStyle: 'bold',
                             },
                             columnStyles: {
-                              0: { cellWidth: 100 }, // Primera columna
-                              1: { cellWidth: 80 }, // Segunda columna
-                              2: { cellWidth: 'auto' }, // Ajusta automáticamente
-                              3: { cellWidth: 'auto' }, // Ajusta automáticamente
-                              4: { cellWidth: 'auto' }, // Ajusta automáticamente
-                              5: { cellWidth: 80 }, // Última columna
+                              0: { cellWidth: 100 },
+                              1: { cellWidth: 80 },
+                              2: { cellWidth: 'auto' },
+                              3: { cellWidth: 'auto' },
+                              4: { cellWidth: 'auto' },
+                              5: { cellWidth: 80 },
                             },
                           });
                           autoTable(doc, {
@@ -207,22 +207,22 @@ export class PdfFormularioInternoCooperativaService {
                             ],
 
                             styles: {
-                              textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
-                              cellPadding: 2, // Espaciado interno de las celdas
+                              textColor: [0, 0, 0],
+                              valign: 'middle',
+                              fontSize: 9,
+                              cellPadding: 2,
                             },
                             headStyles: {
-                              fillColor: [161, 216, 158]  , // Fondo verde para el encabezado
-                              textColor: [0, 0, 0], // Texto negro para el encabezado
-                              fontStyle: 'bold', // Texto en negrita
+                              fillColor: [161, 216, 158]  ,
+                              textColor: [0, 0, 0],
+                              fontStyle: 'bold',
                             },
                             columnStyles: {
-                              0: { cellWidth: 20 }, // Primera columna
-                              1: { cellWidth: 120 }, // Primera columna
-                              2: { cellWidth: 120 }, // Segunda columna
-                              3: { cellWidth:90}, // Ajusta automáticamente
-                              4: { cellWidth:180 }, // Ajusta automáticamente
+                              0: { cellWidth: 20 },
+                              1: { cellWidth: 120 },
+                              2: { cellWidth: 120 },
+                              3: { cellWidth:90},
+                              4: { cellWidth:180 },
                             },
                           });
 
@@ -239,17 +239,17 @@ export class PdfFormularioInternoCooperativaService {
                               ],
                             ],
                             styles: {
-                              textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
-                              cellPadding: 2, // Espaciado interno de las celdas
+                              textColor: [0, 0, 0],
+                              valign: 'middle',
+                              fontSize: 9,
+                              cellPadding: 2,
                             },
                             columnStyles: {
-                              0: { cellWidth:20 }, // Primera columna
-                              1: { cellWidth:80 }, // Primera columna
-                              2: { cellWidth:160 }, // Segunda columna
-                              3: { cellWidth:105 }, // Ajusta automáticamente
-                              4: { cellWidth:185 }, // Ajusta automáticamente
+                              0: { cellWidth:20 },
+                              1: { cellWidth:80 },
+                              2: { cellWidth:160 },
+                              3: { cellWidth:105 },
+                              4: { cellWidth:185 },
                             },
                           });
                           autoTable(doc, {
@@ -265,17 +265,17 @@ export class PdfFormularioInternoCooperativaService {
                               ],
                             ],
                             styles: {
-                              textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
-                              cellPadding: 2, // Espaciado interno de las celdas
+                              textColor: [0, 0, 0],
+                              valign: 'middle',
+                              fontSize: 9,
+                              cellPadding: 2,
                             },
                             columnStyles: {
-                              0: { cellWidth: 20 }, // Primera columna
-                              1: { cellWidth: 110 }, // Primera columna
-                              2: { cellWidth: 130 }, // Segunda columna
-                              3: { cellWidth:30 }, // Ajusta automáticamente
-                              4: { cellWidth:260 }, // Ajusta automáticamente
+                              0: { cellWidth: 20 },
+                              1: { cellWidth: 110 },
+                              2: { cellWidth: 130 },
+                              3: { cellWidth:30 },
+                              4: { cellWidth:260 },
                             },
                           });
                           autoTable(doc, {
@@ -289,17 +289,17 @@ export class PdfFormularioInternoCooperativaService {
                               ],
                             ],
                             styles: {
-                              textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
-                              cellPadding: 2, // Espaciado interno de las celdas
+                              textColor: [0, 0, 0],
+                              valign: 'middle',
+                              fontSize: 9,
+                              cellPadding: 2,
                             },
                             columnStyles: {
-                              0: { cellWidth: 20 }, // Primera columna
-                              1: { cellWidth: 60 }, // Primera columna
-                              2: { cellWidth: 180 }, // Segunda columna
-                              3: { cellWidth:50 }, // Ajusta automáticamente
-                              4: { cellWidth:220 }, // Ajusta automáticamente
+                              0: { cellWidth: 20 },
+                              1: { cellWidth: 60 },
+                              2: { cellWidth: 180 },
+                              3: { cellWidth:50 },
+                              4: { cellWidth:220 },
                             },
                            });
 
@@ -323,63 +323,121 @@ export class PdfFormularioInternoCooperativaService {
                             ],
 
                             styles: {
-                              textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
-                              cellPadding: 2, // Espaciado interno de las celdas
+                              textColor: [0, 0, 0],
+                              valign: 'middle',
+                              fontSize: 9,
+                              cellPadding: 2,
                             },
                             headStyles: {
-                              fillColor: [161, 216, 158]  , // Fondo verde para el encabezado
-                              textColor: [0, 0, 0], // Texto negro para el encabezado
-                              fontStyle: 'bold', // Texto en negrita
+                              fillColor: [161, 216, 158]  ,
+                              textColor: [0, 0, 0],
+                              fontStyle: 'bold',
                             },
                             columnStyles: {
-                              0: { cellWidth: 20 }, // Primera columna
-                              1: { cellWidth: 120 }, // Primera columna
-                              2: { cellWidth: 120 }, // Segunda columna
-                              3: { cellWidth:100 }, // Ajusta automáticamente
-                              4: { cellWidth:170 }, // Ajusta automáticamente
+                              0: { cellWidth: 20 },
+                              1: { cellWidth: 120 },
+                              2: { cellWidth: 120 },
+                              3: { cellWidth:100 },
+                              4: { cellWidth:170 },
                             },
                           });
 
-                          autoTable(doc, {
+                        if (formulario_cooperativa.des_tipo === 'COMPRADOR' && formulario_cooperativa.compradores.length > 1) {
+                        // Encabezado verde
+                        autoTable(doc, {
                             startY: (doc as any).lastAutoTable?.finalY || 10,
-
                             head: [
-                              [
-                                { content:  '4. DESTINO DEL MINERAL Y/O METAL', colSpan: 5, styles: { halign: 'left', fillColor: [161, 216, 158]  , fontStyle: 'bold' } },
-                              ],
+                            [
+                                { content: '4. DESTINO DEL MINERAL Y/O METAL', colSpan: 5, styles: { halign: 'left', fillColor: [161, 216, 158], fontStyle: 'bold' } },
+                            ],
+                            ],
+                            styles: { fontSize: 9, cellPadding: 2 },
+                            headStyles: { fontSize: 10, fontStyle: 'bold', fillColor: [161, 216, 158], textColor: [0, 0, 0] }
+                        });
+
+                        // Tabla de compradores con encabezado gris/plomo claro
+                        autoTable(doc, {
+                            startY: (doc as any).lastAutoTable?.finalY || 10,
+                            head: [[
+                                { content: '', styles: { halign: 'center', fillColor: [255, 255, 255], fontStyle: 'bold' } },
+                                { content: 'Nro.', styles: { halign: 'center', fontStyle: 'bold' } },
+                                { content: 'Comprador', styles: { halign: 'center', fontStyle: 'bold' } },
+                                { content: 'Municipio', styles: { halign: 'center', fontStyle: 'bold' } },
+                                { content: 'Departamento', styles: { halign: 'center', fontStyle: 'bold' } },
+                                { content: 'Cantidad', styles: { halign: 'center', fontStyle: 'bold' } },
+                            ]],
+                                body: formulario_cooperativa.compradores.map((c, idx) => [
+                                { content: '', styles: { halign: 'center' ,fillColor: [255, 255, 255]} },
+                                { content: (idx + 1).toString(), styles: { halign: 'center' } },
+                                { content: c.comprador, styles: { halign: 'left' } },
+                                { content: c.municipio_destino || '', styles: { halign: 'center' } },
+                                { content: c.departamento_destino || '', styles: { halign: 'center' } },
+                                { content: `${c.cantidad} ${formulario_cooperativa.presentacion}`, styles: { halign: 'center' } },
+                            ]),
+                            styles: {
+                            textColor: [0, 0, 0],
+                            valign: 'middle',
+                            fontSize: 9,
+                            cellPadding: 2,
+                            },
+                            headStyles: {
+                            fillColor: [220, 220, 220], // plomo claro
+                            textColor: [0, 0, 0],
+                            fontStyle: 'bold',
+                            halign: 'center',
+                            },
+                            columnStyles: {
+                            0: { cellWidth: 30 },
+                            1: { cellWidth: 30 },
+                            2: { cellWidth: 170 },
+                            3: { cellWidth: 100 },
+                            4: { cellWidth: 100 },
+                            5: { cellWidth: 70 },
+                            },
+                        });
+                        } else {
+                        autoTable(doc, {
+                            startY: (doc as any).lastAutoTable?.finalY || 10,
+                            head: [
+                            [
+                                { content: '4. DESTINO DEL MINERAL Y/O METAL', colSpan: 5, styles: { halign: 'left', fillColor: [161, 216, 158], fontStyle: 'bold' } },
+                            ],
                             ],
                             body: [
-                              [
-                                {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: formulario_cooperativa.des_tipo+':', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_cooperativa.des_tipo === 'COMPRADOR' ? formulario_cooperativa.des_comprador : formulario_cooperativa.des_planta, styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                                 { content: 'DESTINO FINAL (MUNICIPIO):', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
-                                { content: formulario_cooperativa.departamento_destino+', '+formulario_cooperativa.munipio_destino, styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                              ],
+                                [
+                                    { content: '', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                    { content: formulario_cooperativa.des_tipo + ':', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                    { content: formulario_cooperativa.des_tipo === 'COMPRADOR' && Array.isArray(formulario_cooperativa.compradores) && formulario_cooperativa.compradores.length === 1
+                                        ? formulario_cooperativa.compradores[0].comprador
+                                        : formulario_cooperativa.des_planta,
+                                    styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    { content: 'DESTINO FINAL (MUNICIPIO):', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                    { content: formulario_cooperativa.des_tipo === 'COMPRADOR' && Array.isArray(formulario_cooperativa.compradores) && formulario_cooperativa.compradores.length === 1
+                                        ? (formulario_cooperativa.compradores[0].municipio_destino || '') + ', ' + (formulario_cooperativa.compradores[0].departamento_destino || '')
+                                        : formulario_cooperativa.municipio_destino + ', ' + formulario_cooperativa.departamento_destino,
+                                    styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                ],
                             ],
-
                             styles: {
-                              textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
-                              cellPadding: 2, // Espaciado interno de las celdas
+                            textColor: [0, 0, 0],
+                            valign: 'middle',
+                            fontSize: 9,
+                            cellPadding: 2,
                             },
                             headStyles: {
-                              fillColor: [161, 216, 158]  , // Fondo verde para el encabezado
-                              textColor: [0, 0, 0], // Texto negro para el encabezado
-                              fontStyle: 'bold', // Texto en negrita
-
+                            fillColor: [161, 216, 158],
+                            textColor: [0, 0, 0],
+                            fontStyle: 'bold',
                             },
                             columnStyles: {
-                              0: { cellWidth: 20 }, // Primera columna
-                              1: { cellWidth: 70 }, // Primera columna
-                              2: { cellWidth: 170 }, // Segunda columna
-                              3: { cellWidth:140 }, // Ajusta automáticamente
-                              4: { cellWidth:130 }, // Ajusta automáticamente
+                            0: { cellWidth: 20 },
+                            1: { cellWidth: 70 },
+                            2: { cellWidth: 170 },
+                            3: { cellWidth: 140 },
+                            4: { cellWidth: 130 },
                             },
-                          });
+                        });
+                        }
                           if(formulario_cooperativa.tipo_transporte=='VIA FERREA'){
                             autoTable(doc, {
                                 startY: (doc as any).lastAutoTable?.finalY || 10,
@@ -400,23 +458,23 @@ export class PdfFormularioInternoCooperativaService {
                                 ],
 
                                 styles: {
-                                  textColor: [0, 0, 0], // Color de texto negro
-                                  valign: 'middle', // Alineación vertical centrada
-                                  fontSize: 9, // Tamaño de fuente
-                                  cellPadding: 2, // Espaciado interno de las celdas
+                                  textColor: [0, 0, 0],
+                                  valign: 'middle',
+                                  fontSize: 9,
+                                  cellPadding: 2,
                                 },
                                 headStyles: {
-                                  fillColor: [161, 216, 158]  , // Fondo verde para el encabezado
-                                  textColor: [0, 0, 0], // Texto negro para el encabezado
-                                  fontStyle: 'bold', // Texto en negrita
+                                  fillColor: [161, 216, 158]  ,
+                                  textColor: [0, 0, 0],
+                                  fontStyle: 'bold',
 
                                 },
                                 columnStyles: {
-                                  0: { cellWidth: 20 }, // Primera columna
-                                  1: { cellWidth: 110 }, // Primera columna
-                                  2: { cellWidth: 130 }, // Segunda columna
-                                  3: { cellWidth:90 }, // Ajusta automáticamente
-                                  4: { cellWidth:180 }, // Ajusta automáticamente
+                                  0: { cellWidth: 20 },
+                                  1: { cellWidth: 110 },
+                                  2: { cellWidth: 130 },
+                                  3: { cellWidth:90 },
+                                  4: { cellWidth:180 },
                                 },
                               });
                               autoTable(doc, {
@@ -432,17 +490,17 @@ export class PdfFormularioInternoCooperativaService {
                                   ],
                                 ],
                                 styles: {
-                                  textColor: [0, 0, 0], // Color de texto negro
-                                  valign: 'middle', // Alineación vertical centrada
-                                  fontSize: 9, // Tamaño de fuente
-                                  cellPadding: 2, // Espaciado interno de las celdas
+                                  textColor: [0, 0, 0],
+                                  valign: 'middle',
+                                  fontSize: 9,
+                                  cellPadding: 2,
                                 },
                                 columnStyles: {
-                                  0: { cellWidth: 20 }, // Primera columna
-                                  1: { cellWidth: 100 }, // Primera columna
-                                  2: { cellWidth: 140 }, // Segunda columna
-                                  3: { cellWidth:100 }, // Ajusta automáticamente
-                                  4: { cellWidth:190 }, // Ajusta automáticamente
+                                  0: { cellWidth: 20 },
+                                  1: { cellWidth: 100 },
+                                  2: { cellWidth: 140 },
+                                  3: { cellWidth:100 },
+                                  4: { cellWidth:190 },
                                 },
                                });
 
@@ -459,17 +517,17 @@ export class PdfFormularioInternoCooperativaService {
                                   ],
                                 ],
                                 styles: {
-                                  textColor: [0, 0, 0], // Color de texto negro
-                                  valign: 'middle', // Alineación vertical centrada
-                                  fontSize: 9, // Tamaño de fuente
-                                  cellPadding: 2, // Espaciado interno de las celdas
+                                  textColor: [0, 0, 0],
+                                  valign: 'middle',
+                                  fontSize: 9,
+                                  cellPadding: 2,
                                 },
                                 columnStyles: {
-                                  0: { cellWidth: 20 }, // Primera columna
-                                  1: { cellWidth: 90 }, // Primera columna
-                                  2: { cellWidth: 150 }, // Segunda columna
-                                  3: { cellWidth:30 }, // Ajusta automáticamente
-                                  4: { cellWidth:260 }, // Ajusta automáticamente
+                                  0: { cellWidth: 20 },
+                                  1: { cellWidth: 90 },
+                                  2: { cellWidth: 150 },
+                                  3: { cellWidth:30 },
+                                  4: { cellWidth:260 },
                                 },
                                });
                           }
@@ -493,23 +551,23 @@ export class PdfFormularioInternoCooperativaService {
                                 ],
 
                                 styles: {
-                                  textColor: [0, 0, 0], // Color de texto negro
-                                  valign: 'middle', // Alineación vertical centrada
-                                  fontSize: 9, // Tamaño de fuente
-                                  cellPadding: 2, // Espaciado interno de las celdas
+                                  textColor: [0, 0, 0],
+                                  valign: 'middle',
+                                  fontSize: 9,
+                                  cellPadding: 2,
                                 },
                                 headStyles: {
-                                  fillColor: [161, 216, 158]  , // Fondo verde para el encabezado
-                                  textColor: [0, 0, 0], // Texto negro para el encabezado
-                                  fontStyle: 'bold', // Texto en negrita
+                                  fillColor: [161, 216, 158]  ,
+                                  textColor: [0, 0, 0],
+                                  fontStyle: 'bold',
 
                                 },
                                 columnStyles: {
-                                  0: { cellWidth: 20 }, // Primera columna
-                                  1: { cellWidth: 110 }, // Primera columna
-                                  2: { cellWidth: 130 }, // Segunda columna
-                                  3: { cellWidth:70 }, // Ajusta automáticamente
-                                  4: { cellWidth:200 }, // Ajusta automáticamente
+                                  0: { cellWidth: 20 },
+                                  1: { cellWidth: 110 },
+                                  2: { cellWidth: 130 },
+                                  3: { cellWidth:70 },
+                                  4: { cellWidth:200 },
                                 },
                               });
                               autoTable(doc, {
@@ -525,17 +583,17 @@ export class PdfFormularioInternoCooperativaService {
                                   ],
                                 ],
                                 styles: {
-                                  textColor: [0, 0, 0], // Color de texto negro
-                                  valign: 'middle', // Alineación vertical centrada
-                                  fontSize: 9, // Tamaño de fuente
-                                  cellPadding: 2, // Espaciado interno de las celdas
+                                  textColor: [0, 0, 0],
+                                  valign: 'middle',
+                                  fontSize: 9,
+                                  cellPadding: 2,
                                 },
                                 columnStyles: {
-                                  0: { cellWidth: 20 }, // Primera columna
-                                  1: { cellWidth: 40 }, // Primera columna
-                                  2: { cellWidth: 200 }, // Segunda columna
-                                  3: { cellWidth:115 }, // Ajusta automáticamente
-                                  4: { cellWidth:175 }, // Ajusta automáticamente
+                                  0: { cellWidth: 20 },
+                                  1: { cellWidth: 40 },
+                                  2: { cellWidth: 200 },
+                                  3: { cellWidth:115 },
+                                  4: { cellWidth:175 },
                                 },
                                });
                           }
@@ -555,20 +613,20 @@ export class PdfFormularioInternoCooperativaService {
                             ],
 
                             styles: {
-                              textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
-                              cellPadding: 2, // Espaciado interno de las celdas
+                              textColor: [0, 0, 0],
+                              valign: 'middle',
+                              fontSize: 9,
+                              cellPadding: 2,
                             },
                             headStyles: {
-                              fillColor: [161, 216, 158]  , // Fondo verde para el encabezado
-                              textColor: [0, 0, 0], // Texto negro para el encabezado
-                              fontStyle: 'bold', // Texto en negrita
+                              fillColor: [161, 216, 158]  ,
+                              textColor: [0, 0, 0],
+                              fontStyle: 'bold',
 
                             },
                             columnStyles: {
                               0:{cellWidth:20},
-                              1: { cellWidth: 510 }, // Primera columna
+                              1: { cellWidth: 510 },
                             },
                           });
 
@@ -591,25 +649,25 @@ export class PdfFormularioInternoCooperativaService {
                             ],
 
                             styles: {
-                              textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'bottom', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
-                              cellPadding: 2, // Espaciado interno de las celdas
-                              lineWidth: 1, // Ancho de la línea del borde
-                              lineColor: [0, 0, 0], // Color de la línea del borde
+                              textColor: [0, 0, 0],
+                              valign: 'bottom',
+                              fontSize: 9,
+                              cellPadding: 2,
+                              lineWidth: 1,
+                              lineColor: [0, 0, 0],
                             },
                             headStyles: {
-                              fillColor: [161, 216, 158]  , // Fondo verde para el encabezado
-                              textColor: [0, 0, 0], // Texto negro para el encabezado
-                              fontStyle: 'bold', // Texto en negrita
-                              cellPadding: 7, // Espaciado interno de las celdas
-                              lineColor: [255, 255, 255], // Color de la línea del borde
+                              fillColor: [161, 216, 158]  ,
+                              textColor: [0, 0, 0],
+                              fontStyle: 'bold',
+                              cellPadding: 7,
+                              lineColor: [255, 255, 255],
                             },
                             columnStyles: {
                               0:{cellWidth:130,minCellHeight:100},
-                              1: { cellWidth: 130 }, // Primera columna
+                              1: { cellWidth: 130 },
                               2:{cellWidth:20},
-                              3: { cellWidth: 130 }, // Primera columna
+                              3: { cellWidth: 130 },
                               4:{cellWidth:130},
                             },
                           });
@@ -666,16 +724,16 @@ export class PdfFormularioInternoCooperativaService {
                                 ],
 
                                 styles: {
-                                  textColor: [0, 0, 0], // Color de texto negro
-                                  valign: 'bottom', // Alineación vertical centrada
-                                  fontSize: 9, // Tamaño de fuente
-                                  cellPadding: 2, // Espaciado interno de las celdas
+                                  textColor: [0, 0, 0],
+                                  valign: 'bottom',
+                                  fontSize: 9,
+                                  cellPadding: 2,
                                 },
                                 headStyles: {
-                                  fontSize: 9, // Tamaño de fuente
-                                  fillColor: [161, 216, 158]  , // Fondo verde para el encabezado
-                                  textColor: [0, 0, 0], // Texto negro para el encabezado
-                                  cellPadding: 7, // Espaciado interno de las celdas
+                                  fontSize: 9,
+                                  fillColor: [161, 216, 158]  ,
+                                  textColor: [0, 0, 0],
+                                  cellPadding: 7,
                                 },
                                 columnStyles: {
                                   0:{cellWidth:530},
@@ -694,7 +752,7 @@ export class PdfFormularioInternoCooperativaService {
 
                           };
 
-                            // Abrir el PDF
+
 
                           }
                         );
@@ -705,4 +763,12 @@ export class PdfFormularioInternoCooperativaService {
                       };
 
       }
+    mostrarCompradores(compradores,presentacion): string {
+        if (!Array.isArray(compradores)) return compradores || '';
+        return compradores.map(c => `${c.comprador} (${c.cantidad} ${presentacion})`).join(', ');
+    }
+    mostrarDestinos(compradores): string {
+        if (!Array.isArray(compradores)) return compradores || '';
+        return compradores.map(c => `${c.departamento_destino} ${c.municipio_destino}`).join(', ');
+    }
 }

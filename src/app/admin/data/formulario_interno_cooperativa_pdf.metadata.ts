@@ -22,11 +22,11 @@ export interface IFormularioInternoCooperativaPDF{
 
 	minerales:IMineral[],
 	municipio_origen:IMunicipioOrigen[],
-
+    compradores:ICompradores[],
 	des_tipo:string,
     des_comprador:string,
     des_planta:string,
-	munipio_destino:string,
+	municipio_destino:string,
 	departamento_destino:string,
 	tipo_transporte:string,
 	conductor:string,
@@ -50,4 +50,10 @@ export interface IMineral {
 export interface IMunicipioOrigen {
     municipio_origen:string,
 	codigo:string,
+}
+export interface ICompradores {
+    cantidad:number,
+	comprador:string,
+    municipio_destino?:string,
+    departamento_destino?:string
 }
