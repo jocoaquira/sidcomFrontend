@@ -10,7 +10,8 @@ import { PlantaDeTratamientoService } from '../../services/planta-tratamientos.s
   styleUrls: ['./plantaTratamientoSelect.component.scss'],
 })
 export class PlantaTratamientoSelectComponent implements OnInit {
-  @Input() nombre: String | null = null; // Permite seleccionar un mineral por defecto
+  @Input() nombre: String | null = null;
+  @Input() municipioId:number | null = null;
   @Output() plantaTratamiento = new EventEmitter<IPlantaDeTratamiento>();
   plantaTratamientos: IPlantaDeTratamiento[] = [];
   error: any;
@@ -34,7 +35,7 @@ export class PlantaTratamientoSelectComponent implements OnInit {
       .subscribe(
         (data: any) => {
           this.plantaTratamientos = this.plantaTratamientoService.handlePlantaDeTratamiento(data);
-
+            console.log(this.plantaTratamientos);
           this.loading = false;
         },
         (error: any) => {
@@ -44,10 +45,13 @@ export class PlantaTratamientoSelectComponent implements OnInit {
       );
   }
 
-  cambioPlantaTratamiento(event: any) {
-    const plantaTratamiento = this.plantaTratamientos.find((element) => element.nombre === event.value);
-    if (plantaTratamiento) {
-      this.plantaTratamiento.emit(plantaTratamiento);
-    }
+cambioPlantaTratamiento(event: any) {
+    console.log(event);
+  const plantaTratamiento = this.plantaTratamientos.find(
+    (element) => element.nombre === event.value && element.municipioId === this.municipioId
+  );
+  if (plantaTratamiento) {
+    this.plantaTratamiento.emit(plantaTratamiento);
   }
+}
 }

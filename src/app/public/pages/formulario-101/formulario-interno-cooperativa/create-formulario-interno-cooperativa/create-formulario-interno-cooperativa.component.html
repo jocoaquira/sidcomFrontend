@@ -437,41 +437,42 @@
                                     </p-table>
                                 </div>
                             </div>
-
-                            <div class="field col-12 md:col-3" *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO'" >
-                                <div class="field-checkbox">
-                                    <p-inputSwitch (onChange)="valSwitchesPT($event)"></p-inputSwitch>
-                                    <label for="sf">Otra Planta de Tratamiento</label>
+                            <div class="grid p-fluid mt-2" *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO'">
+                                <div class="field col-12 md:col-3" *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO'" >
+                                    <div class="field-checkbox">
+                                        <p-inputSwitch (onChange)="valSwitchesPT($event)"></p-inputSwitch>
+                                        <label for="sf">Otra Planta de Tratamiento</label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="field col-12 md:col-3 " *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO' && valSwitchPT==false">
-                                <app-plantaDeTratamientoSelect [nombre]="des_planta" (plantaTratamiento)="cambioPlantaDeTratamiento($event)" ></app-plantaDeTratamientoSelect>
-                                <small id="des_comprador" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_comprador')">
-                                    {{formulario_interno.getErrorMessage('des_comprador')}}
-                                </small>
-                            </div>
-                            <div *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO' && valSwitchPT" class="field col-12 md:col-3">
-                                <span class="p-float-label">
-                                    <input
-                                        type="text"
-                                        id="des_planta"
-                                        pInputText
-                                        formControlName="des_planta"
-                                        class="ng-dirty"
-                                    />
-                                    <label for="des_planta">Planta de Tratamiento</label>
-                                    <small id="des_planta" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_planta')">
-                                        {{formulario_interno.getErrorMessage('des_planta')}}
+                                <div class="field col-12 md:col-5 " *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO' && valSwitchPT==false">
+                                    <app-plantaDeTratamientoSelect [nombre]="des_planta" (plantaTratamiento)="cambioPlantaDeTratamiento($event)" ></app-plantaDeTratamientoSelect>
+                                    <small id="des_comprador" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_comprador')">
+                                        {{formulario_interno.getErrorMessage('des_comprador')}}
                                     </small>
-                                </span>
-                            </div>
-                            <div class="field col-12 md:col-3 " *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO'&& valSwitchPT">
+                                </div>
+                                <div *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO' && valSwitchPT" class="field col-12 md:col-3">
+                                    <span class="p-float-label">
+                                        <input
+                                            type="text"
+                                            id="des_planta"
+                                            pInputText
+                                            formControlName="des_planta"
+                                            class="ng-dirty"
+                                        />
+                                        <label for="des_planta">Planta de Tratamiento</label>
+                                        <small id="des_planta" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_planta')">
+                                            {{formulario_interno.getErrorMessage('des_planta')}}
+                                        </small>
+                                    </span>
+                                </div>
+                                <div class="field col-12 md:col-3 " *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO'&& valSwitchPT">
                                     <app-departamentoSelect [departamento_id]="departamento_id_pt" (cambioDepartamento)="cambioDepartamentoPT($event)" ></app-departamentoSelect>
                                 </div>
                                 <div class="field col-12 md:col-3 " *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO'&& valSwitchPT">
                                     <app-municipioSelect [departamento_id]="departamento_id_pt" [municipio_id1]="municipio_id_pt" (municipio_id)="cambioMunicipioPT($event)" ></app-municipioSelect>
                                 </div>
 
+                            </div>
 
                         <div class="field col-12 md:col-12">
                             <span class="p-float-label">

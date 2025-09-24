@@ -5,13 +5,30 @@
         [options]="compradores"
         [(ngModel)]="razon_social"
         [filter]="true"
-        filterBy="razon_social"
-        optionLabel="razon_social"
+        filterBy="displayText"
+        optionLabel="displayText"
         optionValue="razon_social"
         (onChange)="cambioComprador($event)"
-    ></p-dropdown>
+    >
+        <!-- Template personalizado para mostrar razón social y municipio -->
+        <ng-template pTemplate="item" let-comprador>
+            <div class="flex align-items-center">
+                <div>
+                    <div class="font-medium">{{ comprador.razon_social }}</div>
+                    <div class="text-sm text-gray-600">{{ comprador.municipio }}</div>
+                </div>
+            </div>
+        </ng-template>
+
+        <!-- Template para el valor seleccionado -->
+        <ng-template pTemplate="selectedItem" let-comprador>
+            <div *ngIf="comprador">
+                {{ comprador.razon_social }} - {{ comprador.municipio }}
+            </div>
+        </ng-template>
+    </p-dropdown>
     <label for="dropdown">Compradores</label>
-    <small id="presentacion" class="p-error " *ngIf="error">
+    <small id="presentacion" class="p-error" *ngIf="error">
         {{error}}
     </small>
 </span>
