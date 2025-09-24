@@ -428,7 +428,7 @@
                                                     </td>
                                                     <td>
                                                         <div class="flex">
-                                                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminarMunicipio(product)"></button>
+                                                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminarComprador(product)"></button>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -439,14 +439,18 @@
 
                                 <div class="field col-12 md:col-3" *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO'" >
                                     <div class="field-checkbox">
-                                        <p-inputSwitch (onChange)="valSwitchesPT($event)"></p-inputSwitch>
+                                        <p-inputSwitch
+                                            [(ngModel)]="valSwitchPT"
+                                            [ngModelOptions]="{standalone: true}"
+                                            (onChange)="valSwitchesPT($event)">
+                                        </p-inputSwitch>
                                         <label for="sf">Otra Planta de Tratamiento</label>
                                     </div>
                                 </div>
                                 <div class="field col-12 md:col-3 " *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO' && valSwitchPT==false">
-                                    <app-plantaDeTratamientoSelect [nombre]="des_planta" (plantaTratamiento)="cambioPlantaDeTratamiento($event)" ></app-plantaDeTratamientoSelect>
-                                    <small id="des_comprador" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_comprador')">
-                                        {{formulario_interno.getErrorMessage('des_comprador')}}
+                                    <app-plantaDeTratamientoSelect [nombre]="formulario_interno.formulario.value.des_planta" [municipioId]="formulario_interno.formulario.value.id_municipio_destino" (plantaTratamiento)="cambioPlantaDeTratamiento($event)" ></app-plantaDeTratamientoSelect>
+                                    <small id="des_planta" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_planta')">
+                                        {{formulario_interno.getErrorMessage('des_planta')}}
                                     </small>
                                 </div>
                                 <div *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO' && valSwitchPT" class="field col-12 md:col-3">

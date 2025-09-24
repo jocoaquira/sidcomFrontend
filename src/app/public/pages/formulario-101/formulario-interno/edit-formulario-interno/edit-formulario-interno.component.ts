@@ -12,7 +12,6 @@ import { IMineral } from '@data/mineral.metadata';
 import { IMunicipio } from '@data/municipio.metadata';
 import { IOperatorSimple } from '@data/operador_simple.metadata';
 import { IVehiculo } from '@data/vehiculo.metadata';
-import { co } from '@fullcalendar/core/internal-common';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, of, retry } from 'rxjs';
 import { DepartamentosService } from 'src/app/admin/services/departamentos.service';

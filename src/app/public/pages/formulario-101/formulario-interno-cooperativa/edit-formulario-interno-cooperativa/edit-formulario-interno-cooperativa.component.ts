@@ -24,6 +24,7 @@ import { IChofer } from '@data/chofer.metadata';
 import { IVehiculo } from '@data/vehiculo.metadata';
 import { TipoTransporteService } from 'src/app/admin/services/tipo-transporte.service';
 import { IOperator } from '@data/operator.metadata';
+import { PlantaDeTratamientoService } from 'src/app/admin/services/planta-tratamientos.service';
 
 @Component({
   selector: 'app-edit-formulario-interno-cooperativa',
@@ -184,7 +185,8 @@ constructor(
   private router: Router,
   private presentacionService:PresentacionService,
   private actRoute:ActivatedRoute,
-  private tipoTransporteService: TipoTransporteService
+  private tipoTransporteService: TipoTransporteService,
+  private plantaTratamientoService:PlantaDeTratamientoService
 ) {
   this.actRoute.paramMap.subscribe(params=>{
      this.id=parseInt(params.get('id'));
@@ -242,6 +244,7 @@ cargar_datos(form:any){
       nro_viajes: form.nro_viajes,
       estado: form.estado
   });
+  console.log('Formulario Interno cargado:', this.formulario_interno.formulario.value);
   this.minerales_envio=form.minerales//.push({...envio_minerales});
   // Crear una nueva lista excluyendo ciertos campos
     this.minerales_envio = form.minerales.map(mineral => {
@@ -291,51 +294,98 @@ cargar_datos(form:any){
     .subscribe((data: any) => {
       this.departamentos = this.departamentosService.handledepartamento(data);
 
-      this.mineralesService.verminerals('gh')
-      .pipe(
-        retry(3), // Intenta 3 veces si hay un error
-        catchError((error) => {
-          this.error = this.mineralesService.handleError(error);
-          return of([]); // Retorna un arreglo vacío en caso de error
-        })
-      )
-      .subscribe(
-        (data: any) => {
-          this.minerales = this.mineralesService.handlemineral(data);
+      // Cargar plantas de tratamiento para verificar si la planta existente está en la lista
+      this.plantaTratamientoService.verPlantaDeTratamientos('gh')
+        .pipe(
+          retry(3),
+          catchError((error) => {
+            console.error('Error al cargar plantas de tratamiento:', error);
+            return of([]);
+          })
+        )
+        .subscribe(
+          (data: any) => {
+            const plantasTratamiento = this.plantaTratamientoService.handlePlantaDeTratamiento(data);
 
+            this.mineralesService.verminerals('gh')
+            .pipe(
+              retry(3), // Intenta 3 veces si hay un error
+              catchError((error) => {
+                this.error = this.mineralesService.handleError(error);
+                return of([]); // Retorna un arreglo vacío en caso de error
+              })
+            )
+            .subscribe(
+              (data: any) => {
+                this.minerales = this.mineralesService.handlemineral(data);
 
-          this.municipio_origen_envio.forEach((item) => {
-            let index = this.municipios.findIndex(i => i.id === item.id);
-            let departamento=this.departamentos.find(dat=>dat.id===this.municipios[index].departamento_id);
+                this.municipio_origen_envio.forEach((item) => {
+                  let index = this.municipios.findIndex(i => i.id === item.id);
+                  let departamento=this.departamentos.find(dat=>dat.id===this.municipios[index].departamento_id);
 
-            let  origen_mun:IFormularioInternoMunicipioOrigen={
-              municipio:this.municipios[index].municipio,
-              departamento:departamento.nombre,
-              municipio_id:this.municipios[index].id,
-            }
-            this.lista_municipios_origen.push({...origen_mun});
-          });
+                  let  origen_mun:IFormularioInternoMunicipioOrigen={
+                    municipio:this.municipios[index].municipio,
+                    departamento:departamento.nombre,
+                    municipio_id:this.municipios[index].id,
+                  }
+                  this.lista_municipios_origen.push({...origen_mun});
+                });
 
-          this.minerales_envio.forEach((item) => {
-            let index = this.minerales.findIndex(i => i.id === item.mineralId);
-            //let mineral=this.minerales.find(dat=>dat.id===this.minerales[index].id);
+                this.minerales_envio.forEach((item) => {
+                  let index = this.minerales.findIndex(i => i.id === item.mineralId);
 
-            let  origen_min:IFormularioInternoMineral={
-              sigla_mineral:this.minerales[index].sigla,
-              descripcion:this.minerales[index].nombre,
-              ley:item.ley,
-              unidad:item.unidad,
-              mineral_id:this.minerales[index].id
-            }
-            this.lista_leyes_mineral.push({...origen_min});
-          });
-          this.municipio_id1=this.formulario_interno.formulario.value.id_municipio_destino;
-          this.departamento_id1=this.municipios.find(dat=>dat.id===this.municipio_id1).departamento_id;
+                  let  origen_min:IFormularioInternoMineral={
+                    sigla_mineral:this.minerales[index].sigla,
+                    descripcion:this.minerales[index].nombre,
+                    ley:item.ley,
+                    unidad:item.unidad,
+                    mineral_id:this.minerales[index].id
+                  }
+                  this.lista_leyes_mineral.push({...origen_min});
+                });
 
-        }
-      );
+                // Manejar la precarga de destino basado en el tipo
+                if (this.formulario_interno.formulario.value.des_tipo === 'PLANTA DE TRATAMIENTO') {
+                  // Verificar si la planta de tratamiento existe en la lista de opciones
+                  const plantaExiste = plantasTratamiento.some(
+                    planta => planta.nombre === this.formulario_interno.formulario.value.des_planta
+                      && planta.municipioId === this.formulario_interno.formulario.value.id_municipio_destino
+                  );
+                  console.log('Planta existe:', plantaExiste);
+                  if (!plantaExiste) {
+                    // Si la planta no existe en la lista, activar el switch y cargar manualmente
+                    this.valSwitchPT = true;
+                  } else {
+                    // Si la planta existe en la lista pero aún no se ha seleccionado correctamente,
+                    // intentamos asegurar que el selector tenga los datos adecuados
+                    this.valSwitchPT = false; // Aseguramos que el switch esté desactivado para usar el selector
+                  }
+                } else if (this.formulario_interno.formulario.value.des_tipo === 'COMPRADOR') {
+                  // Para comprador, cargar los valores si existen
+                  if (this.formulario_interno.formulario.value.id_municipio_destino) {
+                    this.municipio_id1 = this.formulario_interno.formulario.value.id_municipio_destino;
+                    const municipioDestino = this.municipios.find(dat => dat.id === this.municipio_id1);
+                    if (municipioDestino) {
+                      this.departamento_id1 = municipioDestino.departamento_id;
+                    }
+                  }
+                }
 
+                // Si hay compradores, recalcular la suma total
+                if (this.compradores && this.compradores.length > 0) {
+                  console.log('Compradores cargados:', this.compradores);
+                }
+              }
+            );
+          }
+        );
     });
+  });
+
+  Object.values(this.formulario_interno.formulario.controls).forEach(control => {
+    control.markAsTouched();
+    control.markAsDirty();
+    control.updateValueAndValidity();
   });
 }
 
@@ -481,24 +531,31 @@ calcularPesoNeto() {
   const merma = this.formulario_interno.formulario.get('merma')?.value;
   const humedad = this.formulario_interno.formulario.get('humedad')?.value;
 
-
   // Validar que los campos necesarios tengan valores
-  if (peso_bruto_humedo && tara !== null && merma !== null && humedad !== null) {
+  if (peso_bruto_humedo !== null && peso_bruto_humedo !== undefined &&
+      tara !== null && tara !== undefined) {
+    // Calcular el peso neto después de la tara
     const pesoSinTara = peso_bruto_humedo - tara;
-    const pesoConMerma = peso_bruto_humedo * (merma / 100);
-    const pesoConHumedad = peso_bruto_humedo * (humedad / 100);
 
-    // Calcular el peso neto
-    let pesoNeto = pesoSinTara - pesoConMerma - pesoConHumedad;
+    // Calcular merma y humedad basadas en el peso bruto húmedo
+    const valorMerma = (merma !== null && merma !== undefined) ? (peso_bruto_humedo * (merma / 100)) : 0;
+    const valorHumedad = (humedad !== null && humedad !== undefined) ? (peso_bruto_humedo * (humedad / 100)) : 0;
+
+    // Calcular el peso neto final
+    let pesoNeto = pesoSinTara - valorMerma - valorHumedad;
+
+    // Asegurarse de que el peso neto no sea negativo
+    if (pesoNeto < 0) {
+      pesoNeto = 0;
+    }
+
     this.formulario_interno.formulario.patchValue({
       peso_neto: pesoNeto
     });
-
-
   }
 }
 onSubmit(){
-
+  this.guardar();
 }
 
 
@@ -692,6 +749,12 @@ agregarLey(){
 
 eliminarComprador(compradorIndex: number) {
     this.compradores.splice(compradorIndex, 1);
+}
+
+eliminarCompradorPorIndice(indice: number) {
+    if (indice >= 0 && indice < this.compradores.length) {
+        this.compradores.splice(indice, 1);
+    }
 }
 
 agregarComprador(){
@@ -968,7 +1031,7 @@ if (errores.length > 0) {
 }
 }
 cancelar(){
-
+  this.router.navigate(['/public/formulario-101/formulario-cooperativa']);
 }
 cambioVehiculo(event:any){
     this.vehiculo=event;
