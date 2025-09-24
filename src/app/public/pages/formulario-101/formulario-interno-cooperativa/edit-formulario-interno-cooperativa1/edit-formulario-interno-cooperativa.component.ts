@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { IDepartamento } from '@data/departamento.metadata';
@@ -14,6 +13,9 @@ import { IOperatorSimple } from '@data/operador_simple.metadata';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, of, retry } from 'rxjs';
 import { DepartamentosService } from 'src/app/admin/services/departamentos.service';
+import { FormularioInternoMineralService } from 'src/app/admin/services/formulario-interno/formulariointerno-mineral.service';
+import { FormularioInternoMunicipioOrigenService } from 'src/app/admin/services/formulario-interno/formulariointerno-municipioorigen.service';
+import { FormularioInternosService } from 'src/app/admin/services/formulario-interno/formulariosinternos.service';
 import { MineralsService } from 'src/app/admin/services/minerales.service';
 import { MunicipiosService } from 'src/app/admin/services/municipios.service';
 import { OperatorsService } from 'src/app/admin/services/operators.service';
@@ -23,7 +25,6 @@ import { FormularioCooperativaService } from 'src/app/admin/services/formulario-
 import { IChofer } from '@data/chofer.metadata';
 import { IVehiculo } from '@data/vehiculo.metadata';
 import { TipoTransporteService } from 'src/app/admin/services/tipo-transporte.service';
-import { IOperator } from '@data/operator.metadata';
 
 @Component({
   selector: 'app-edit-formulario-interno-cooperativa',
@@ -42,12 +43,13 @@ export class EditFormularioInternoCooperativaComponent implements OnInit {
   public nro_licencia:string='';
   public chofer:IChofer | null = null; // ID del chofer seleccionado
   public vehiculo:IVehiculo | null = null; // ID del vehiculo seleccionado
-  //public comprador:IOperatorSimple | null = null; // ID del vehiculo seleccionado
+  public comprador:IOperatorSimple | null = null; // ID del vehiculo seleccionado
+  public valSwitch:boolean=false;
   public declaracionJurada:boolean=false;
+  //public minerales:IMineral[]=[];
+
   departamento_id1: number | null = null;  // Guardar el ID del departamento seleccionado
-  municipio_id1: number | null = null;
-  departamento_id_pt:number|null=null;
-  municipio_id_pt:number|null=null
+municipio_id1: number | null = null;
 // Método que se llama cuando cambia el departamento
 cambioDepartamento1(departamentoId: number): void {
   this.departamento_id1 = departamentoId;
@@ -55,10 +57,9 @@ cambioDepartamento1(departamentoId: number): void {
 }
   public formulario_Interno_registrado:IFormularioInterno=null;
   public operadores!:IOperatorSimple[];
-  public operador!:IOperator;
   public minerales!:IMineral[];
-  public municipios!:IMunicipio[];
-  public departamentos!:IDepartamento[];
+  public municipios: IMunicipio[] = [];
+  public departamentos: IDepartamento[] = [];
   public presentaciones!:any;
   public presentacion:any={
       nombre:null,
@@ -67,13 +68,11 @@ cambioDepartamento1(departamentoId: number): void {
       merma:0,
       cantidad:0
   }
-  public valSwitch:boolean=false;
-  public valSwitchPT:boolean=false;
+  public tipo_traslado!:any;
+  public ley!:any;
   public tipo_transporte!:any;
   public destinos!:any;
   public unidades!:any;
-  public tipo_traslado!:any;
-  public ley!:any;
   public error!:any;
   public nombre:string='';
   public lista_leyes_mineral:IFormularioInternoMineral[]=[];
@@ -87,7 +86,6 @@ cambioDepartamento1(departamentoId: number): void {
    };
    public minerales_envio:any=[];
    public municipio_origen_envio:any=[];
-   public compradores:any[]=[];
    public lista_municipios_origen:IFormularioInternoMunicipioOrigen[]=[];
    public municipio_origen:IFormularioInternoMunicipioOrigen={
       id:null,
@@ -96,16 +94,13 @@ cambioDepartamento1(departamentoId: number): void {
       municipio:null,
       municipio_id:null
    }
-   public comprador:any={
-      municipioId:null,
-      comprador:null,
-      cantidad:null
-   }
-  public cantidadSacos:number=0;
+
     // Definir los pasos para Steps
 steps = [
-  { label: '1. Datos del Medio de Transporte y mineral y/o Metal', command: (event: any) => this.gotoStep(0)},
-  { label: '3. Destino del mineral y/o Metal',command: (event: any) => this.gotoStep(1) }
+  { label: '1. Datos del mineral y/o Metal', command: (event: any) => this.gotoStep(0)},
+  { label: '2. Origen del mineral y/o Metal',command: (event: any) => this.gotoStep(1) },
+  { label: '3. Destino del mineral y/o Metal', command: (event: any) => this.gotoStep(2) },
+  { label: '4. Datos del Medio de Transporte', command: (event: any) => this.gotoStep(3) }
 ];
 
 public activeStep: number = 0; // Establecer el paso activo inicial
@@ -120,54 +115,54 @@ onStepChange(event: any): void {
 }
 // Función para ir al siguiente paso
 nextStep() {
-    if ((this.activeStep < this.steps.length - 1) && this.isStepValid(this.activeStep)) {
-            this.activeStep++;
-    }
-    else{
-        this.formulario_interno.formulario.markAllAsTouched();
-        this.notify.error('Por favor, complete todos los campos','Error con el Registro',{timeOut:2000,positionClass: 'toast-bottom-right'});
-    }
+  if ((this.activeStep < this.steps.length - 1) && this.isStepValid(this.activeStep)) {
+          this.activeStep++;
+  }
+  else{
+      this.formulario_interno.formulario.markAllAsTouched();
+      this.notify.error('Por favor, complete todos los campos','Error con el Registro',{timeOut:2000,positionClass: 'toast-bottom-right'});
+  }
+}
+
+// Función para ir al paso anterior
+prevStep() {
+  if (this.activeStep > 0) {
+    this.activeStep--;
+  }
+}
+
+// Función para ir a un paso específico
+gotoStep(index: number) {
+  this.activeStep = index;
+}
+
+// Validar si los campos del paso actual son correctos
+isStepValid(stepIndex: number): boolean {
+  let valid:boolean = true;
+  switch (stepIndex) {
+    case 0:
+      // Validar los campos del Paso 1
+      valid = this.formulario_interno.formulario.get('peso_bruto_humedo')?.valid &&
+
+      this.formulario_interno.formulario.get('lote')?.valid && this.formulario_interno.formulario.get('presentacion_id')?.valid &&
+      (this.formulario_interno.formulario.get('cantidad')?.valid || this.formulario_interno.formulario.get('cantidad')?.disabled) &&
+      this.formulario_interno.formulario.get('peso_neto')?.valid && this.lista_leyes_mineral.length>0;
+      break;
+    case 1:
+      valid =this.lista_municipios_origen.length>0
+      break;
+    case 2:
+      valid = this.formulario_interno.formulario.get('des_tipo')?.valid &&
+     (this.formulario_interno.formulario.get('des_comprador')?.valid ||
+      this.formulario_interno.formulario.get('des_comprador')?.disabled) &&
+     (this.formulario_interno.formulario.get('des_planta')?.valid ||
+      this.formulario_interno.formulario.get('des_planta')?.disabled);
+      break;
+    // Agregar validaciones para otros pasos si es necesario
   }
 
-  // Función para ir al paso anterior
-  prevStep() {
-    if (this.activeStep > 0) {
-      this.activeStep--;
-    }
-  }
-
-  // Función para ir a un paso específico
-  gotoStep(index: number) {
-    this.activeStep = index;
-  }
-
-  // Validar si los campos del paso actual son correctos
-  isStepValid(stepIndex: number): boolean {
-    let valid = true;
-    switch (stepIndex) {
-      case 0:
-        // Validar los campos del Paso 1
-        valid = this.formulario_interno.formulario.get('peso_bruto_humedo')?.valid && this.formulario_interno.formulario.get('tara')?.valid &&
-        (this.formulario_interno.formulario.get('merma')?.valid || this.formulario_interno.formulario.get('merma')?.disable) &&
-        (this.formulario_interno.formulario.get('humedad')?.valid || this.formulario_interno.formulario.get('humedad')?.disable) &&
-        (this.formulario_interno.formulario.get('lote')?.valid || this.operador.generacion_nro_lote) &&
-        this.formulario_interno.formulario.get('presentacion_id')?.valid &&
-        (this.formulario_interno.formulario.get('cantidad')?.valid || this.formulario_interno.formulario.get('cantidad')?.disabled) &&
-        this.lista_leyes_mineral.length>0;
-
-        break;
-      case 1:
-        valid = this.formulario_interno.formulario.get('des_tipo')?.valid &&
-       (this.formulario_interno.formulario.get('des_comprador')?.valid ||
-        this.formulario_interno.formulario.get('des_comprador')?.disabled) &&
-       (this.formulario_interno.formulario.get('des_planta')?.valid ||
-        this.formulario_interno.formulario.get('des_planta')?.disabled);
-        break;
-      // Agregar validaciones para otros pasos si es necesario
-    }
-
-    return valid;
-  }
+  return valid;
+}
 
 
 
@@ -177,13 +172,13 @@ constructor(
   private mineralesService:MineralsService,
   private notify:ToastrService,
   private authService:AuthService,
-  private departamentosService: DepartamentosService,
-  private municipiosService:  MunicipiosService,
- // private listaLeyesMineralesService:FormularioInternoMineralService,
- // private listaMunicipiosOrigenService:FormularioInternoMunicipioOrigenService,
+  private listaLeyesMineralesService:FormularioInternoMineralService,
+  private listaMunicipiosOrigenService:FormularioInternoMunicipioOrigenService,
   private router: Router,
   private presentacionService:PresentacionService,
   private actRoute:ActivatedRoute,
+  private municipiosService:MunicipiosService,
+  public departamentosService: DepartamentosService,
   private tipoTransporteService: TipoTransporteService
 ) {
   this.actRoute.paramMap.subscribe(params=>{
@@ -203,8 +198,7 @@ constructor(
     (error:any)=> this.error=this.formularioCooperativaService.handleError(error));
   });
   this.formulario_interno.formulario.patchValue({
-      user_id: authService.getUser.id,
-      operador_id:authService.getUser.operador_id
+      user_id: authService.getUser.id
     });
  }
 cargar_datos(form:any){
@@ -263,11 +257,6 @@ cargar_datos(form:any){
       id: destino.municipioId,
     };
   });
-
-  // Asegurar que también obtenemos los compradores del formulario existente
-  if (form.compradores) {
-      this.compradores = [...form.compradores];
-  }
 
   this.municipiosService.verTodosMunicipios()
   .pipe(
@@ -338,79 +327,24 @@ cargar_datos(form:any){
     });
   });
 }
-
-cargar_datos_inicial(operador: any) {
-  // Mapear los municipios de origen desde arrendamientos
-  this.municipio_origen_envio = operador.arrendamientos.map(destino => ({
-    id: destino.municipio_id
-  }));
-
-  // Cargar municipios
-  this.municipiosService.verTodosMunicipios()
-    .pipe(
-      catchError((error) => {
-        this.error = this.municipiosService.handleError(error);
-        this.municipios = [];
-        return of([]);
-      })
-    )
-    .subscribe((data: any) => {
-      this.municipios = this.municipiosService.handlemunicipio(data);
-
-      // Cargar departamentos
-      this.departamentosService.verdepartamentos('ds')
-        .pipe(
-          catchError((error) => {
-            this.error = this.departamentosService.handleError(error);
-            this.departamentos = [];
-            return of([]);
-          })
-        )
-        .subscribe((data: any) => {
-          this.departamentos = this.departamentosService.handledepartamento(data);
-
-          // Procesar municipios de origen
-          this.municipio_origen_envio.forEach((item) => {
-            const municipio = this.municipios.find(m => m.id === item.id);
-            if (municipio) {
-              const departamento = this.departamentos.find(d => d.id === municipio.departamento_id);
-
-              if (departamento) {
-                const origen_mun: IFormularioInternoMunicipioOrigen = {
-                  municipio: municipio.municipio,
-                  departamento: departamento.nombre,
-                  municipio_id: municipio.id
-                };
-                this.lista_municipios_origen.push({ ...origen_mun });
-              }
-            }
-          });
-
-          // Actualizar municipio y departamento de destino
-          this.municipio_id1 = this.formulario_interno.formulario.value.id_municipio_destino;
-          const municipioDestino = this.municipios.find(dat => dat.id === this.municipio_id1);
-          if (municipioDestino) {
-            this.departamento_id1 = municipioDestino.departamento_id;
-          }
-        });
-    });
-}
 ngOnInit() {
   this.departamento_id=0;
   this.operadoresService.verOperatorsSimple('hj').subscribe(
       (data:any)=>{
-          this.operadores=this.operadoresService.handleOperatorSimple(data);
-      },
-  (error:any)=> this.error=this.operadoresService.handleOperatorSimpleError(error));
+      this.operadores=this.operadoresService.handleOperatorSimple(data);
+      const operadorEncontrado = this.operadores.find(operador =>
+        operador.razon_social===this.formulario_interno.formulario.value.des_comprador
+        );
 
-  this.operadoresService.verOperator(this.operador_id.toString()).subscribe(
-      (data:any)=>{
-          this.operador=this.operadoresService.handleCrearoperator(data);
-          this.cargar_datos_inicial(this.operador);
-          console.log(this.operador);
-      },
-  (error:any)=> this.error=this.operadoresService.handleOperatorSimpleError(error));
+        if (operadorEncontrado) {
 
+            this.valSwitch=false;
+            this.razon_social=operadorEncontrado.razon_social;
+        } else {
+            this.valSwitch=true;
+        }
+    },
+    (error:any)=> this.error=this.operadoresService.handleOperatorSimpleError(error));
     this.mineralesService.verminerals('hj').subscribe(
       (data:any)=>{
       this.minerales=this.mineralesService.handlemineral(data);
@@ -420,6 +354,7 @@ ngOnInit() {
     this.presentacionService.verpresentacions('hj').subscribe(
       (data:any)=>{
       this.presentaciones=this.presentacionService.handlepresentacion(data);
+
     },
     (error:any)=> this.error=this.presentacionService.handleError(error));
 
@@ -445,6 +380,8 @@ ngOnInit() {
       { nombre: 'CAMION', id: '2' },
       { nombre: 'VOLQUETA', id: '3' },
       { nombre: 'CAMION CON ACOPLE', id: '4' },
+      { nombre: 'VIA FERREA', id: '5' },
+      { nombre: 'VIA AEREA', id: '6' },
       { nombre: 'JEEP', id: '7' },
       { nombre: 'FURGONETA BLINDADA', id: '8' },
       { nombre: 'CAMIONETA', id: '9' },
@@ -500,60 +437,6 @@ calcularPesoNeto() {
 onSubmit(){
 
 }
-
-
-getAllFormErrors(form: FormGroup): any {
-  let formErrors: any = {};
-
-  Object.keys(form.controls).forEach(key => {
-    const controlErrors = form.get(key)?.errors;
-    if (controlErrors) {
-      formErrors[key] = controlErrors;
-    }
-
-    // Si es un FormGroup anidado, buscar recursivamente
-    if (form.get(key) instanceof FormGroup) {
-      const nestedErrors = this.getAllFormErrors(form.get(key) as FormGroup);
-      if (Object.keys(nestedErrors).length > 0) {
-        formErrors[key] = { ...formErrors[key], ...nestedErrors };
-      }
-    }
-
-    // Si es un FormArray
-    if (form.get(key) instanceof FormArray) {
-      const formArray = form.get(key) as FormArray;
-      formArray.controls.forEach((control, index) => {
-        if (control instanceof FormGroup) {
-          const arrayErrors = this.getAllFormErrors(control);
-          if (Object.keys(arrayErrors).length > 0) {
-            if (!formErrors[key]) formErrors[key] = {};
-            formErrors[key][index] = arrayErrors;
-          }
-        } else if (control.errors) {
-          if (!formErrors[key]) formErrors[key] = {};
-          formErrors[key][index] = control.errors;
-        }
-      });
-    }
-  });
-
-  return formErrors;
-}
-
-
-  mostrarErrores() {
-  const errores = this.getAllFormErrors(this.formulario_interno.formulario);
-  console.log('Errores del formulario:', errores);
-
-  // También puedes mostrar errores específicos
-  Object.keys(errores).forEach(campo => {
-    console.log(`Campo ${campo}:`, errores[campo]);
-  });
-}
-
-marcarCamposComoTocados() {
-  this.formulario_interno.formulario.markAllAsTouched();
-}
 guardar(){
  /* this.formulario_interno.formulario.patchValue({
       estado: 'GENERADO'
@@ -563,8 +446,7 @@ guardar(){
     formularioEnvio={
       ...formularioEnvio,
       minerales:this.minerales_envio,
-      municipio_origen:this.municipio_origen_envio,
-      compradores:this.compradores
+      municipio_origen:this.municipio_origen_envio
     }
 
     this.formularioCooperativaService.editarFormularioInterno(formularioEnvio,this.id).subscribe(
@@ -597,7 +479,57 @@ guardar(){
  }
 
 }
+guardarMinerales(formulario_int_id:any) {
+  this.lista_leyes_mineral.forEach((item) => {
 
+      item.formulario_int_id=formulario_int_id;
+    this.listaLeyesMineralesService.crearFormularioInternoMineral(item).subscribe((data:any) =>
+    {
+
+       this.listaLeyesMineralesService.handleCrearFormularioInternoMineral(data);
+
+
+      if(data.error==null)
+      {
+        this.notify.success('Minerales Agregados Correctamente','Creado Correctamente',{timeOut:500,positionClass: 'toast-top-right'});
+      }
+    },
+    (error:any) =>
+    {
+
+      this.error=this.listaLeyesMineralesService.handleCrearFormularioInternoMineralError(error.error.data);
+      if(error.error.status=='fail')
+      {
+        this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
+      }
+    });
+  });
+}
+guardarMunicipiosOrigen(formulario_int_id:any) {
+  this.lista_municipios_origen.forEach((item) => {
+
+      item.formulario_int_id=formulario_int_id;
+    this.listaMunicipiosOrigenService.crearFormularioInternoMunicipioOrigen(item).subscribe((data:any) =>
+    {
+       this.listaMunicipiosOrigenService.handleCrearFormularioInternoMunicipioOrigen(data);
+
+
+      if(data.error==null)
+      {
+        this.notify.success('Municios Origen Agregados Correctamente','Creado Correctamente',{timeOut:500,positionClass: 'toast-top-right'});
+      }
+    },
+    (error:any) =>
+    {
+
+      this.error=this.listaMunicipiosOrigenService.handleCrearFormularioInternoMunicipioOrigenError(error.error.data);
+      if(error.error.status=='fail')
+      {
+        this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
+      }
+    });
+  });
+}
 
 agregarLey(){
   // Verifica si el formulario tiene datos completos
@@ -690,200 +622,6 @@ agregarLey(){
 
     }
 
-eliminarComprador(compradorIndex: number) {
-    this.compradores.splice(compradorIndex, 1);
-}
-
-agregarComprador(){
-    try {
-        // Verificar si el campo cantidad existe y está deshabilitado
-        const controlCantidad = this.formulario_interno.formulario.get('cantidad');
-        const cantidadDisabled = controlCantidad ? controlCantidad.disabled : false;
-        console.log('Campo cantidad:', controlCantidad);
-        console.log('Cantidad deshabilitada:', cantidadDisabled);
-
-        // Controlar límite cuando cantidad está deshabilitada
-        if (cantidadDisabled && this.compradores.length >= 1) {
-            this.notify.error('Solo se permite agregar un comprador cuando cantidad está deshabilitada', 'Límite alcanzado', {
-                timeOut: 2000,
-                positionClass: 'toast-bottom-right'
-            });
-            return;
-        }
-
-        // Calcular la suma total de cantidades de compradores existentes
-        const sumaCantidadesCompradores = this.compradores.reduce((total, comprador) => {
-            return total + (comprador.cantidad || 0);
-        }, 0);
-
-        // Obtener el valor del campo cantidad del formulario
-        const cantidadFormulario = this.formulario_interno.formulario.value.cantidad;
-
-        // Nueva restricción: Verificar que la suma no exceda la cantidad disponible
-        if (cantidadFormulario !== null && cantidadFormulario !== undefined) {
-            const cantidadTotalConNuevo = sumaCantidadesCompradores + (this.cantidadSacos || 0);
-
-            if (cantidadTotalConNuevo > cantidadFormulario) {
-                this.notify.error(`La suma total de cantidades (${cantidadTotalConNuevo}) excede la cantidad disponible (${cantidadFormulario})`, 'Límite excedido', {
-                    timeOut: 3000,
-                    positionClass: 'toast-bottom-right'
-                });
-                return;
-            }
-        }
-
-        // Configurar cantidad por defecto si está deshabilitada
-        if (cantidadDisabled && this.compradores.length < 1) {
-            this.cantidadSacos = 1;
-        }
-
-        // Validar según el modo (valSwitch)
-        if (this.valSwitch) {
-            this.agregarEnModoSwitch(sumaCantidadesCompradores);
-        } else {
-            this.agregarEnModoNormal(sumaCantidadesCompradores);
-        }
-
-    } catch (error) {
-        console.error('Error en agregarComprador:', error);
-        this.notify.error('Error al agregar comprador', 'Error', {
-            timeOut: 2000,
-            positionClass: 'toast-bottom-right'
-        });
-    }
-}
-
-agregarEnModoSwitch(sumaCantidadesCompradores) {
-    // Validaciones para modo switch activado
-    if (!this.municipio_id1) {
-        this.notify.error('Seleccione un municipio', 'Campo requerido', {
-            timeOut: 2000,
-            positionClass: 'toast-bottom-right'
-        });
-        return;
-    }
-
-    if (!this.formulario_interno.formulario.value.des_comprador ||
-        this.formulario_interno.formulario.value.des_comprador.trim() === '') {
-        this.notify.error('Ingrese el nombre del comprador', 'Campo requerido', {
-            timeOut: 2000,
-            positionClass: 'toast-bottom-right'
-        });
-        return;
-    }
-
-    if (!this.cantidadSacos || this.cantidadSacos <= 0) {
-        this.notify.error('La cantidad debe ser mayor a 0', 'Campo requerido', {
-            timeOut: 2000,
-            positionClass: 'toast-bottom-right'
-        });
-        return;
-    }
-
-    // Verificar restricción de cantidad final
-    const cantidadFormulario = this.formulario_interno.formulario.value.cantidad;
-    const cantidadTotalFinal = sumaCantidadesCompradores + this.cantidadSacos;
-
-    if (cantidadFormulario !== null && cantidadFormulario !== undefined &&
-        cantidadTotalFinal > cantidadFormulario) {
-        this.notify.error(`No puede agregar ${this.cantidadSacos} sacos. La cantidad total sería ${cantidadTotalFinal}, excediendo el límite de ${cantidadFormulario}`, 'Límite excedido', {
-            timeOut: 3000,
-            positionClass: 'toast-bottom-right'
-        });
-        return;
-    }
-
-    // Agregar comprador
-    this.comprador.comprador = this.formulario_interno.formulario.value.des_comprador;
-    this.comprador.municipioId = this.municipio_id1;
-    this.comprador.cantidad = this.cantidadSacos;
-    this.compradores.push({...this.comprador});
-
-    // Limpiar formulario
-    this.limpiarFormulario();
-
-    this.notify.success('Comprador agregado exitosamente', 'Éxito', {
-        timeOut: 2000,
-        positionClass: 'toast-bottom-right'
-    });
-}
-
-agregarEnModoNormal(sumaCantidadesCompradores) {
-    // Validaciones para modo switch desactivado
-    if (!this.comprador.comprador) {
-        this.notify.error('El comprador es requerido', 'Campo requerido', {
-            timeOut: 2000,
-            positionClass: 'toast-bottom-right'
-        });
-        return;
-    }
-
-    if (!this.cantidadSacos || this.cantidadSacos <= 0) {
-        this.notify.error('La cantidad debe ser mayor a 0', 'Campo requerido', {
-            timeOut: 2000,
-            positionClass: 'toast-bottom-right'
-        });
-        return;
-    }
-
-    // Verificar restricción de cantidad final
-    const cantidadFormulario = this.formulario_interno.formulario.value.cantidad;
-    const cantidadTotalFinal = sumaCantidadesCompradores + this.cantidadSacos;
-
-    if (cantidadFormulario !== null && cantidadFormulario !== undefined &&
-        cantidadTotalFinal > cantidadFormulario) {
-        this.notify.error(`No puede agregar ${this.cantidadSacos} sacos. La cantidad total sería ${cantidadTotalFinal}, excediendo el límite de ${cantidadFormulario}`, 'Límite excedido', {
-            timeOut: 3000,
-            positionClass: 'toast-bottom-right'
-        });
-        return;
-    }
-
-    // Agregar comprador
-    this.comprador.cantidad = this.cantidadSacos;
-    this.compradores.push({...this.comprador});
-
-    // Limpiar datos
-    this.comprador = {
-        comprador: null,
-        municipioId: null,
-        cantidad: null
-    };
-    this.cantidadSacos = null;
-
-    console.log('Compradores actualizados:', this.compradores);
-    this.notify.success('Comprador agregado exitosamente', 'Éxito', {
-        timeOut: 2000,
-        positionClass: 'toast-bottom-right'
-    });
-}
-
-limpiarFormulario() {
-    this.municipio_id1 = null;
-    this.departamento_id1 = null;
-    this.cantidadSacos = null;
-    this.formulario_interno.formulario.patchValue({
-        des_comprador: null,
-    });
-}
-
-// Método adicional para obtener la suma actual (útil para mostrar en UI)
-getSumaTotalCompradores() {
-    return this.compradores.reduce((total, comprador) => total + (comprador.cantidad || 0), 0);
-}
-
-// Método para verificar si se puede agregar más
-puedeAgregarMas() {
-    const cantidadFormulario = this.formulario_interno.formulario.value.cantidad;
-    const sumaActual = this.getSumaTotalCompradores();
-
-    if (cantidadFormulario === null || cantidadFormulario === undefined) {
-        return true; // No hay restricción si no hay cantidad definida
-    }
-
-    return sumaActual < cantidadFormulario;
-}
-
   cambioMunicipio1(event){
       this.municipio_id1=event;
       this.formulario_interno.formulario.value.id_municipio_destino=event;
@@ -895,22 +633,6 @@ puedeAgregarMas() {
   declaracionJuradaSwitch(event:any){
       const checkbox = event.target as HTMLInputElement;
       this.declaracionJurada=checkbox.checked;
-  }
-
-  1(event){
-    if(event.value=='COMPRADOR')
-    {
-      this.formulario_interno.formulario.patchValue({
-        des_planta: null
-      });
-    }
-    else{
-      {
-        this.formulario_interno.formulario.patchValue({
-          des_comprador: null
-        });
-      }
-    }
   }
   cambioDestino(event){
     if(event.value=='COMPRADOR')
@@ -1000,33 +722,4 @@ valSwitches(event:any){
 
     this.valSwitch=event.checked;
 }
-valSwitchesPT(event:any){
-
-    this.valSwitchPT=event.checked;
-}
-
-cambioMunicipioPT(event){
-    this.municipio_id_pt=event;
-    this.formulario_interno.formulario.value.id_municipio_destino=event;
-
-    this.formulario_interno.formulario.patchValue({
-        id_municipio_destino: event
-      });
-      console.log(this.formulario_interno.formulario.value)
-  }
-
-cambioPlantaDeTratamiento(event:any){
-    //this.comprador=event;
-        console.log(event);
-        this.formulario_interno.formulario.patchValue({
-            des_planta: event.nombre,
-            id_municipio_destino:event.municipioId
-          });
-          console.log(this.formulario_interno.formulario.value);
-}
-
-cambioDepartamentoPT(departamentoId: number): void {
-    this.departamento_id_pt = departamentoId;
-    // Aquí puedes hacer cualquier acción extra cuando el departamento cambie
-  }
 }
