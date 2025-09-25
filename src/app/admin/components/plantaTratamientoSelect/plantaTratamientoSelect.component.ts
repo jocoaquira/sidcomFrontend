@@ -61,11 +61,12 @@ cargarCompradores() {
     );
 }
 cambioPlantaTratamiento(event: any) {
-    console.log(event);
+    console.log('el evento',event);
   const plantaTratamiento = this.plantaTratamientos.find(
-    (element) => element.nombre === event.value && element.municipioId === this.municipioId
+    (element) => element.id === event.value
   );
   if (plantaTratamiento) {
+    console.log('Planta de Tratamiento seleccionada:', plantaTratamiento);
     this.plantaTratamiento.emit(plantaTratamiento);
   }
 }

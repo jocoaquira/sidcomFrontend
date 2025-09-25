@@ -612,18 +612,20 @@ marcarCamposComoTocados() {
   this.formulario_interno.formulario.markAllAsTouched();
 }
 guardar(){
- /* this.formulario_interno.formulario.patchValue({
-      estado: 'GENERADO'
-    });*/
+
   if(this.formulario_interno.formulario.valid){
     let formularioEnvio=this.formulario_interno.formulario.value;
     formularioEnvio={
       ...formularioEnvio,
       minerales:this.minerales_envio,
       municipio_origen:this.municipio_origen_envio,
-      compradores:this.compradores
     }
-
+    if(this.formulario_interno.formulario.value.des_tipo==='COMPRADOR'){
+        formularioEnvio={
+            ...formularioEnvio,
+            compradores:this.compradores
+          }
+    }
     this.formularioCooperativaService.editarFormularioInterno(formularioEnvio,this.id).subscribe(
       (data:any) =>
       {
@@ -1087,7 +1089,16 @@ cambioPlantaDeTratamiento(event:any){
           });
           console.log(this.formulario_interno.formulario.value);
 }
-
+cambioComprador(event:any){
+    //this.comprador=event;
+        console.log(event);
+        this.comprador.comprador=event.razon_social;
+        this.comprador.municipioId=event.municipioId;
+        this.formulario_interno.formulario.patchValue({
+            des_comprador: this.comprador.razon_social,
+          });
+          console.log(this.formulario_interno.formulario.value);
+}
 cambioDepartamentoPT(departamentoId: number): void {
     this.departamento_id_pt = departamentoId;
     // Aquí puedes hacer cualquier acción extra cuando el departamento cambie

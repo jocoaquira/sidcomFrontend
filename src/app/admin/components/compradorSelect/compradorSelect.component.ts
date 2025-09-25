@@ -45,7 +45,7 @@ export class CompradorSelectComponent implements OnInit {
       );
   }
 
-  cambioComprador(event: any) {
+  public cambioComprador(event: any) {
     const comprador = this.compradores.find((element) => element.razon_social === event.value);
     if (comprador) {
       this.comprador.emit(comprador);
