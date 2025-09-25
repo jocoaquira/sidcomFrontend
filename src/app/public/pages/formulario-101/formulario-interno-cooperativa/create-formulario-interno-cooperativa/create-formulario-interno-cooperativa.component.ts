@@ -153,7 +153,7 @@ nextStep() {
         (this.formulario_interno.formulario.get('lote')?.valid || this.operador.generacion_nro_lote) &&
         this.formulario_interno.formulario.get('presentacion_id')?.valid &&
         (this.formulario_interno.formulario.get('cantidad')?.valid || this.formulario_interno.formulario.get('cantidad')?.disabled) &&
-        this.lista_leyes_mineral.length>0;
+        this.lista_leyes_mineral.length>0 && this.formulario_interno.formulario.get('peso_neto')?.valid;
 
         break;
       case 1:
@@ -713,7 +713,9 @@ puedeAgregarMas() {
         const checkbox = event.target as HTMLInputElement;
         this.declaracionJurada=checkbox.checked;
     }
-
+    eliminarComprador(compradorIndex: number) {
+        this.compradores.splice(compradorIndex, 1);
+    }
 
     cambioPresentacion(event:any){
         this.presentacion=this.presentaciones.filter(val => val.id === event.value)[0];

@@ -170,8 +170,8 @@
                                         class="ng-dirty"
                                     />
                                     <label for="Razón Social">Peso bruto humedo Aprox. (Kg.)</label>
-                                    <small id="peso_bruto_humedo" class="p-error "*ngIf="formulario_interno.esCampoInvalido('peso_bruto_humedo')">
-                                        {{formulario_interno.getErrorMessage('peso_bruto_humedo')}}
+                                    <small id="peso_neto" class="p-error "*ngIf="formulario_interno.esCampoInvalido('peso_neto')">
+                                        {{formulario_interno.getErrorMessage('peso_neto')}}
                                     </small>
                                 </span>
                             </div>
@@ -429,7 +429,7 @@
                                                 </td>
                                                 <td>
                                                     <div class="flex">
-                                                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminarMunicipio(product)"></button>
+                                                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminarComprador(product)"></button>
                                                     </div>
                                                 </td>
                                             </tr>
