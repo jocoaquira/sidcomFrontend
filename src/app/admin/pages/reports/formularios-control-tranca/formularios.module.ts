@@ -17,14 +17,14 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { BadgeModule } from 'primeng/badge';
 import { TagModule } from 'primeng/tag';
-import { ChoferRoutingModule } from './chofer.routing';
-import { ListarChoferModule } from './listar-choferes/listar-chofer.module';
+import { ListarFormulariosModule } from './listar-formularios/listar-formularios.module';
+import { FormulariosRoutingModule } from './formularios.routing';
 
 @NgModule({
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [
         CommonModule,
-        ChoferRoutingModule,
+        FormulariosRoutingModule,
         TableModule,
         FileUploadModule,
         FormsModule,
@@ -41,8 +41,8 @@ import { ListarChoferModule } from './listar-choferes/listar-chofer.module';
         RadioButtonModule,
         InputNumberModule,
         DialogModule,
-        ListarChoferModule
+        ListarFormulariosModule
     ],
     declarations: [],
 })
-export class ChoferModule { }
+export class FormulariosModule { }

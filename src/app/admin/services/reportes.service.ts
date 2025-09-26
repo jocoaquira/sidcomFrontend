@@ -20,21 +20,21 @@ export class CompradoresService {
 
     //this.requestOptions = { headers: headers };
   }
-//-----------------Visualizar operadores-------------------------------------------
-  verCompradores(nombre:string)
+//-----------------Visualizar Reporte Formulario 101-------------------------------------------
+  listarFormulariosInterno(fecha_inicio:string,fecha_fin:string)
   {
     // Inicializacion de objeto params
     let params = new HttpParams();
-    params = params.append('id', nombre);
-
+    params = params.append('fecha_inicio', fecha_inicio);
+    params = params.append('fecha_fin', fecha_fin);
     // asignacion de parametros
-    return this.http.get(`${this.baseUrl}comprador`,{params:params});
+    return this.http.get(`${this.baseUrl}formint/reporte/general`,{params:params});
   }
   handleError(error: any): any {
     return error=error.error.error;
   }
-  handleComprador(data: IComprador[]):IComprador[] {
-    let Comprador:IComprador[]=data;
+  handleListarFormulariosInterno(data: IF[]):IF[] {
+    let Comprador:IF[]=data;
     return Comprador
   }
   //-------visualizar municipio-------------------------------------------------

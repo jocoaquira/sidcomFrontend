@@ -17,11 +17,9 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { BadgeModule } from 'primeng/badge';
 import { TagModule } from 'primeng/tag';
-import { CrearChoferModule } from 'src/app/public/components/crear-chofer/crear-chofer.module';
-import { ListarChoferComponent } from './listar-choferes.component';
-import { CrearChoferAdminModule } from 'src/app/admin/components/crear-chofer-admin/crear-chofer-admin.module';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
+import { ListarFormulariosComponent } from './listar-formularios.component';
 
 
 @NgModule({
@@ -46,10 +44,9 @@ import { ConfirmationService } from 'primeng/api';
         RadioButtonModule,
         InputNumberModule,
         DialogModule,
-        CrearChoferAdminModule,
         ConfirmDialogModule
     ],
-    declarations: [ListarChoferComponent],
+    declarations: [ListarFormulariosComponent],
     providers: [ConfirmationService]
 })
-export class ListarChoferModule { }
+export class ListarFormulariosModule { }

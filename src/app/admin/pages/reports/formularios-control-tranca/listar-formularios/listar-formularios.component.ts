@@ -16,10 +16,10 @@ import { IChoferAdmin } from '@data/chofer_admin.metadata';
 
 
 @Component({
-    templateUrl: './listar-choferes.component.html',
+    templateUrl: './listar-formularios.component.html',
     providers: [MessageService]
 })
-export class ListarChoferComponent implements OnInit {
+export class ListarFormulariosComponent implements OnInit {
 
     public listaUsuarios!:IChoferAdmin[];
 
