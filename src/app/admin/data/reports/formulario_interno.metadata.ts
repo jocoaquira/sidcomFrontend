@@ -20,7 +20,7 @@ export interface IFormularioTranca {
 }
 
 // Interface principal del formulario
-export interface IFormulario {
+export interface IFormularioInternoReporte {
   nro_formulario: string;
   fecha_emision: string;
   fecha_vencimiento: string;

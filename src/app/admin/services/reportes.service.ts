@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.metadata';
 import { IComprador } from '@data/comprador.metadata';
+import { IFormularioInternoReporte } from '@data/reports/formulario_interno.metadata';
 
 
 @Injectable({
@@ -21,7 +22,7 @@ export class CompradoresService {
     //this.requestOptions = { headers: headers };
   }
 //-----------------Visualizar Reporte Formulario 101-------------------------------------------
-  listarFormulariosInterno(fecha_inicio:string,fecha_fin:string)
+  listarFormulariosInternoReporte(fecha_inicio:string,fecha_fin:string)
   {
     // Inicializacion de objeto params
     let params = new HttpParams();
@@ -33,8 +34,8 @@ export class CompradoresService {
   handleError(error: any): any {
     return error=error.error.error;
   }
-  handleListarFormulariosInterno(data: IF[]):IF[] {
-    let Comprador:IF[]=data;
+  handleListarFormulariosInternoReporte(data: IFormularioInternoReporte[]):IFormularioInternoReporte[] {
+    let Comprador:IFormularioInternoReporte[]=data;
     return Comprador
   }
   //-------visualizar municipio-------------------------------------------------
