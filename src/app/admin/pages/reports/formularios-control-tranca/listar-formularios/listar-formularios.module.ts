@@ -1,7 +1,7 @@
 
 import { CommonModule } from '@angular/common';
 import { NgModule,CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
@@ -20,6 +20,7 @@ import { TagModule } from 'primeng/tag';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { ListarFormulariosComponent } from './listar-formularios.component';
+import { CalendarModule } from 'primeng/calendar';
 
 
 @NgModule({
@@ -44,7 +45,9 @@ import { ListarFormulariosComponent } from './listar-formularios.component';
         RadioButtonModule,
         InputNumberModule,
         DialogModule,
-        ConfirmDialogModule
+        ConfirmDialogModule,
+        CalendarModule,
+        ReactiveFormsModule
     ],
     declarations: [ListarFormulariosComponent],
     providers: [ConfirmationService]

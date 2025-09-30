@@ -1,3 +1,4 @@
+import * as XLSX from 'xlsx';
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
@@ -12,6 +13,8 @@ import { ToastrService } from 'ngx-toastr';
 import { ChoferService } from 'src/app/admin/services/chofer.service';
 import { IChofer } from '@data/chofer.metadata';
 import { IChoferAdmin } from '@data/chofer_admin.metadata';
+import { ReportesService } from 'src/app/admin/services/reportes.service';
+import { IFormularioControlTranca } from '@data/reports/formulario_control_puesto.metadata';
 
 
 
@@ -21,7 +24,7 @@ import { IChoferAdmin } from '@data/chofer_admin.metadata';
 })
 export class ListarFormulariosComponent implements OnInit {
 
-    public listaUsuarios!:IChoferAdmin[];
+    public listaFormulariosControlTranca!:IFormularioControlTranca[];
 
 
     public operadores!:IOperatorSimple[];
@@ -50,8 +53,7 @@ export class ListarFormulariosComponent implements OnInit {
 
     constructor(
         private messageService: MessageService,
-        private choferService:ChoferService,
-        private operadoresService:OperatorsService,
+        private formulariosControlTranca:ReportesService,
         public canCrearUsuario:CanCrearUsuarioGuard,
         public canEditarUsuario:CanEditarUsuarioGuard,
         public canEliminarUsuario:CanEliminarUsuarioGuard,
@@ -65,11 +67,12 @@ export class ListarFormulariosComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.choferService.verChofer(this.operador_id.toString()).subscribe(
+        this.formulariosControlTranca.listarFormulariosControlTrancaReporte('2025-01-01','2025-09-30',348).subscribe(
             (data:any)=>{
-            this.listaUsuarios=this.choferService.handlechoferAdmin(data);
+                console.log(data);
+            this.listaFormulariosControlTranca=this.formulariosControlTranca.handleFormulariosControlTrancaReporte(data);
           },
-          (error:any)=> this.error=this.choferService.handleError(error));
+          (error:any)=> this.error=this.formulariosControlTranca.handleError(error));
 
         //this.productService.getProducts().then(data => this.products = data);
 
@@ -87,36 +90,14 @@ export class ListarFormulariosComponent implements OnInit {
             { label: 'OUTOFSTOCK', value: 'outofstock' }
         ];
     }
-    cerrar(event:any){
-        this.productDialog=event;
-        this.choferService.verChofer(this.operador_id.toString()).subscribe(
-            (data:any)=>{
-            this.listaUsuarios=this.choferService.handlechofer(data);
-          },
-          (error:any)=> this.error=this.choferService.handleError(error));
-    }
+
     openNew() {
         //this.product = {};
         //this.submitted = false;
         this.productDialog = true;
         this.isEditMode = false;
     }
-    edit(responsable:any) {
-        // Crear una copia del objeto, excluyendo el campo "operador"
-        const { operador, ...rest } = responsable;
 
-        // Asignar el resto de las propiedades al objeto responsable
-        this.responsable = { ...rest };
-
-        this.productDialog = true;
-        this.isEditMode = true;
-    }
-
-
-    hideDialog() {
-        this.productDialog = false;
-        this.submitted = false;
-    }
 
     diasActivos(fecha1:string):number{
         let dias:any;
@@ -128,10 +109,10 @@ export class ListarFormulariosComponent implements OnInit {
         dias=Math.round (dias);
         return dias;
     }
-    findIndexById(id: number): number {
+    findIndexById(id: string): number {
         let index = -1;
-        for (let i = 0; i < this.listaUsuarios.length; i++) {
-            if (this.listaUsuarios[i].id === id) {
+        for (let i = 0; i < this.listaFormulariosControlTranca.length; i++) {
+            if (this.listaFormulariosControlTranca[i].nro_formulario === id) {
                 index = i;
                 break;
             }
@@ -144,52 +125,40 @@ export class ListarFormulariosComponent implements OnInit {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
 
-    bloquearDialogo(responsable:any){
-        this.confirmationService.confirm({
-            key: 'confirm1',
-            message: '¿Estas seguro de Realizar esta Operación?',
-            accept: () => {
-        // Crear una copia del objeto, excluyendo el campo "operador"
-        const { razon_social, ...rest } = responsable;
+    exportarAExcel(jsonData: any[], fileName: string): void {
+    // Crear hoja de trabajo
+    const flattenedData = this.flattenData(jsonData);
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(flattenedData);
 
-        // Asignar el resto de las propiedades al objeto responsable
-        this.responsable = { ...rest };
-       //
+    // Crear libro de trabajo
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Datos');
 
-        if(this.responsable.estado=='ACTIVO')
-        {
-            this.responsable.estado='INACTIVO';
-        }
-        else{
-            this.responsable.estado='ACTIVO';
-        }
-        this.choferService.editarChofer(this.responsable).subscribe(
-            (data:any) =>
-            {
-              this.choferService.handleCrearchofer(data);
-
-              if(data.error==null)
-              {
-                this.notify.success('Actualizado Correctamente','Actualizado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
-                this.choferService.verChofer(this.responsable.id.toString()).subscribe(
-                    (data:any)=>{
-                    this.listaUsuarios=this.choferService.handlechofer(data);
-
-
-
-                  },
-                  (error:any)=> this.error=this.choferService.handleError(error));
-              }
-            },
-            (error:any) =>
-            {
-              if(error.error.status=='fail')
-              {
-                this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con la Actualizacion',{timeOut:2000,positionClass: 'toast-top-right'});
-              }
-            }
-          );
-        },
+    // Generar archivo Excel
+    XLSX.writeFile(wb, `${fileName}.xlsx`);
+  }
+private flattenData(data: any[]): any[] {
+    return data.map(item => {
+      const flatItem: any = {};
+      this.flattenObject(item, flatItem);
+      return flatItem;
     });
+  }
+ private flattenObject(obj: any, result: any, prefix: string = ''): void {
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        const newKey = prefix ? `${prefix}.${key}` : key;
+
+        if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key])) {
+          this.flattenObject(obj[key], result, newKey);
+        } else {
+          result[newKey] = obj[key];
+        }
+      }
     }
+  }
+
+  guardar(){
+    this.exportarAExcel(this.listaFormulariosControlTranca,'formularios_control_tranca');
+  }
 }

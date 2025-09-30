@@ -3,12 +3,41 @@
         <div class="card px-6 py-6">
             <p-toast></p-toast>
             <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="flex">
+                        <div class="field mr-3">
+                            <label for="fecha_inicio">Fecha de Inicio</label>
+                            <p-calendar
+                                inputId="fecha_inicio"
+                                (ngModel)="fecha_inicio"
+                                dateFormat="dd/mm/yy"
+                                showIcon="true"
+                                placeholder="dd/mm/yyyy"
+                            ></p-calendar>
+                        </div>
+                        <div class="field mr-3">
+                            <label for="fecha_fin">Fecha Final</label>
+                            <p-calendar
+                                inputId="fecha_fin"
+                                (ngModel)="fecha_fin"
+                                dateFormat="dd/mm/yy"
+                                showIcon="true"
+                                placeholder="dd/mm/yyyy"
+                            ></p-calendar>
+                        </div>
+                        <div class="field">
+                            <button pButton pRipple label="Buscar" icon="pi pi-search" class=" p-button-outlined p-button-info" (click)="buscar()"></button>
+                        </div>
+
+                    </div>
+                </ng-template>
+
                 <ng-template pTemplate="right">
-                    <button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+                    <button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-help" (click)="guardar()"></button>
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt *ngIf="listaUsuarios" [value]="listaUsuarios" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['id','fecha_vencimiento','nombre_apellidos','nro_licencia','categoria' ,'fecha_nacimiento','celular','operador_id','estado']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-table #dt *ngIf="listaFormulariosControlTranca" [value]="listaFormulariosControlTranca" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['id','razon_social','conductor','licencia','peso_neto' ,'nro_formulario','minerales','tipo_formulario','municipio_origen']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Reporte de Formularios 101</h5>
@@ -20,75 +49,58 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-
-                        <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
-                        <th pSortableColumn="nombre_apellidos">Nombre y Apellido <p-sortIcon field="nombre_apellidos"></p-sortIcon></th>
-                        <th pSortableColumn="nro_licencia">Nro. Licencia  <p-sortIcon field="nro_licencia"></p-sortIcon></th>
-                        <th pSortableColumn="fecha_vencimiento">Fecha de Vencimiento<p-sortIcon field="fecha_vencimiento"></p-sortIcon></th>
-                        <th pSortableColumn="celular">Celular <p-sortIcon field="celular"></p-sortIcon></th>
-                        <th pSortableColumn="categoria">Categoria <p-sortIcon field="categoria"></p-sortIcon></th>
+                        <th pSortableColumn="nro_formulario">Nro. Formulario<p-sortIcon field="nro_formulario"></p-sortIcon></th>
                         <th pSortableColumn="razon_social">Razon Social <p-sortIcon field="razon_social"></p-sortIcon></th>
-                        <th pSortableColumn="estado">Estado <p-sortIcon field="estado"></p-sortIcon></th>
-                        <th pSortableColumn="inventoryStatus">Acciones <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
+                        <th pSortableColumn="licencia">Nro. Licencia  <p-sortIcon field="licencia"></p-sortIcon></th>
+                        <th pSortableColumn="conductor">Conductor<p-sortIcon field="conductor"></p-sortIcon></th>
+                        <th pSortableColumn="minerales">Minerales <p-sortIcon field="minerales"></p-sortIcon></th>
+                        <th pSortableColumn="peso_neto">Peso Neto <p-sortIcon field="peso_neto"></p-sortIcon></th>
+                        <th pSortableColumn="tipo_formulario">Tipo de Formulario <p-sortIcon field="tipo_formulario"></p-sortIcon></th>
+                        <th pSortableColumn="formulario_tranca">Formulario Tranca <p-sortIcon field="formulario_tranca"></p-sortIcon></th>
+                        <th pSortableColumn="municipio_origen">Municipio Origen <p-sortIcon field="municipio_origen"></p-sortIcon></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-usuario>
                     <tr>
-
-                        <td style="width:3%; min-width:5rem;"><span class="p-column-title">ID</span>
-                            {{usuario.id}}
+                        <td style="width:5%; min-width:5rem;"><span class="p-column-title">Nro. de Formulario</span>
+                            {{usuario.nro_formulario}}
                         </td>
-                        <td style="width:20%; min-width:15rem;">
-                            <span class="p-column-title">Nombres y Apellidos</span>
-                            {{usuario.nombre_apellidos}}
-                        </td>
-                        <td style="width:15%; min-width:8rem;">
-                            <span class="p-column-title">Nro. Licencia</span>
-                            {{usuario.nro_licencia}}
-                          </td>
-                        <td style="width:15%; min-width:8rem;">
-                            <span class="p-column-title">Fecha de Vencimiento</span>
-                            {{usuario.fecha_vencimiento| date:'dd/MM/yyyy'}}
-                          </td>
-                        <td style="width:5%; min-width:5rem;" >
-                            <span class="p-column-title">celular</span>
-                            {{usuario.celular}}
-                        </td>
-                        <td style="width:3%; min-width:3rem;" >
-                            <span class="p-column-title">categoria</span>
-                            {{usuario.categoria}}
-                        </td>
-                        <td style="width:15%; min-width:15rem;" >
-                            <span class="p-column-title">razon_social</span>
+                        <td style="width:25%; min-width:10rem;"><span class="p-column-title">Razon Social</span>
                             {{usuario.razon_social}}
                         </td>
-
-                        <td style="width:5%; min-width: 10rem;"><span class="p-column-title">Estado</span>
-                            <p-tag severity="success" *ngIf="usuario.estado=='ACTIVO'" value="ACTIVO"></p-tag>
-                            <p-tag severity="danger" *ngIf="usuario.estado=='INACTIVO'" value="INACTIVO"></p-tag>
+                        <td style="width:5%; min-width:5rem;">
+                            <span class="p-column-title"> Nro. Licencia</span>
+                            {{usuario.licencia}}
                         </td>
-
-                        <td style="width:5%; min-width: 10rem;">
-                            <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="edit(usuario)"></button>
-                                <button pButton pRipple icon="pi pi-lock" *ngIf="usuario.estado=='ACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-danger mr-1" (click)="bloquearDialogo(usuario)"></button>
-                                <button pButton pRipple icon="pi pi-unlock" *ngIf="usuario.estado=='INACTIVO'" class="p-button-text p-button-plain p-button-rounded p-button-info mr-1" (click)="bloquearDialogo(usuario)"></button>
-                            </div>
+                        <td style="width:15%; min-width:10rem;">
+                            <span class="p-column-title">Conductor</span>
+                            {{usuario.conductor}}
+                          </td>
+                        <td style="width:10%; min-width:8rem;">
+                            <span class="p-column-title">Minerales</span>
+                            {{usuario.minerales}}
+                          </td>
+                        <td style="width:5%; min-width:5rem;" >
+                            <span class="p-column-title">Peso Neto </span>
+                            {{usuario.peso_neto}}
+                        </td>
+                        <td style="width:5%; min-width:3rem;" >
+                            <span class="p-column-title">Tipo de Formulario</span>
+                            {{usuario.tipo_formulario}}
+                        </td>
+                        <td style="width:15%; min-width:5rem;" >
+                            <span class="p-column-title">Municipio Origen</span>
+                            {{usuario.municipio_origen}}
+                        </td>
+                        <td style="width:15%; min-width:5rem;" >
+                            <span class="p-column-title">Formulario Tranca</span>
+                            {{usuario.formulario_tranca}}
                         </td>
                     </tr>
                 </ng-template>
             </p-table>
         </div>
 
-        <p-dialog [(visible)]="productDialog" [style]="{width: '700px'}"
-          [modal]="true" header="{{isEditMode ? 'Editar Responsable' : 'Agregar Responsable'}}"
-          class="p-fluid">
-            <app-crear-chofer-admin
-                [usuario]="responsable"
-                [isEditMode]="isEditMode"
-                (estadoDialogo)="cerrar($event)">
-            </app-crear-chofer-admin>
-        </p-dialog>
         <p-confirmDialog header="Confirmación" key="confirm1" icon="pi pi-exclamation-triangle" message="¿Está seguro de anular el formulario?"
         [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
         acceptLabel="Sí"

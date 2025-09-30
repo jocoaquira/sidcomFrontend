@@ -4,12 +4,13 @@ import { AuthService } from '@core/authentication/services/auth.service';
 import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.metadata';
 import { IComprador } from '@data/comprador.metadata';
 import { IFormularioInternoReporte } from '@data/reports/formulario_interno.metadata';
+import { IFormularioControlTranca } from '@data/reports/formulario_control_puesto.metadata';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class CompradoresService {
+export class ReportesService {
   private user!:IApiUserAuthenticated;
   private baseUrl = localStorage.getItem('url-backend');
   private headers!:HttpHeaders;
@@ -38,7 +39,22 @@ export class CompradoresService {
     let Comprador:IFormularioInternoReporte[]=data;
     return Comprador
   }
-  //-------visualizar municipio-------------------------------------------------
+//-----------------Visualizar Reporte Formulario 101-------------------------------------------
+  listarFormulariosControlTrancaReporte(fecha_inicio:string,fecha_fin:string,usuario_id:number)
+  {
+    // Inicializacion de objeto params
+    let params = new HttpParams();
+    params = params.append('fecha_inicio', fecha_inicio);
+    params = params.append('fecha_fin', fecha_fin);
+    // asignacion de parametros
+    return this.http.get(`${this.baseUrl}controltrancas/usuario/`+usuario_id,{params:params});
+  }
+
+  handleFormulariosControlTrancaReporte(data: IFormularioControlTranca[]):IFormularioControlTranca[] {
+    let Comprador:IFormularioControlTranca[]=data;
+    return Comprador
+  }
+  //-------visualizar municipio----------IFormularioControlTranca---------------------------------------
   verComprador(nombre:string)
 {
   return this.http.get(`${this.baseUrl}comprador/`+nombre);

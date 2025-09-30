@@ -61,13 +61,3 @@ export interface IFormularioInternoReporte {
   nro_viajes: number | null;
   estado: string;
 }
-
-// Interface para respuesta de API
-export interface IFormularioResponse {
-  success: boolean;
-  message: string;
-  data: IFormulario | IFormulario[];
-  total?: number;
-  page?: number;
-  limit?: number;
-}

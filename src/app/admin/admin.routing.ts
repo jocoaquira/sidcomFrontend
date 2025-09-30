@@ -38,6 +38,7 @@ import { AppLayoutComponent } from './layout/app.layout.component';
         { path: 'responsable-tm', loadChildren: () => import('./pages/responsable-tm/responsable-tm.module').then(m => m.ResponsableTMModule) },
         { path: 'comprador', loadChildren: () => import('./pages/comprador/comprador.module').then(m => m.CompradorModule) },
         { path: 'planta-tratamiento', loadChildren: () => import('./pages/planta-tratamiento/planta-tratamiento.module').then(m => m.plantaDeTratamientoModule) },
+        { path: 'formularios-puesto-control', loadChildren: () => import('./pages/reports/formularios-control-tranca/formularios.module').then(m => m.FormulariosModule) },
         { path: '**', redirectTo: '/notfound' }
         ]
         }

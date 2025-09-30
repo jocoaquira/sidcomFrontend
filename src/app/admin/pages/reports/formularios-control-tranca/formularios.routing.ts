@@ -4,7 +4,6 @@ import { ListarFormulariosComponent } from './listar-formularios/listar-formular
 @NgModule({
 	imports: [RouterModule.forChild([
 		{ path: '', component: ListarFormulariosComponent },
-		//{path:'crear',component:OpeCrearradorComponent}
 	])],
 	exports: [RouterModule]
 })
