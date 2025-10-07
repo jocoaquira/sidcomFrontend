@@ -24,7 +24,7 @@ import { IFormularioControlTranca } from '@data/reports/formulario_control_puest
 })
 export class ListarFormulariosComponent implements OnInit {
 
-    public listaFormulariosControlTranca!:IFormularioControlTranca[];
+    public listaFormulariosControlTranca!:any[];
 
 
     public operadores!:IOperatorSimple[];
@@ -69,9 +69,27 @@ export class ListarFormulariosComponent implements OnInit {
     ngOnInit() {
         this.formulariosControlTranca.listarFormulariosControlTrancaReporte('2025-01-01','2025-09-30',348).subscribe(
             (data:any)=>{
-                console.log(data);
+
             this.listaFormulariosControlTranca=this.formulariosControlTranca.handleFormulariosControlTrancaReporte(data);
-          },
+            this.listaFormulariosControlTranca = this.listaFormulariosControlTranca.map(item => ({
+                ...item,
+                minerales: item.minerales.map(m => m.mineral).join(', '),
+                municipio_origen: item.municipio_origen.map(m => m.municipio_origen).join(', '),
+                municipio_destino: item.municipio_destino && item.municipio_destino.length > 0
+                    ? item.municipio_destino.map(m => m.municipio_destino).join(', ')
+                    : '',
+                fecha_control: item.formulario_tranca && item.formulario_tranca.length > 0
+                    ? item.formulario_tranca[0].fecha_control
+                    : '',
+                hora_control: item.formulario_tranca && item.formulario_tranca.length > 0
+                    ? item.formulario_tranca[0].hora_control
+                    : '',
+                tranca: item.formulario_tranca && item.formulario_tranca.length > 0
+                    ? item.formulario_tranca[0].tranca
+                    : '',
+            }));
+            console.log(this.listaFormulariosControlTranca);
+        },
           (error:any)=> this.error=this.formulariosControlTranca.handleError(error));
 
         //this.productService.getProducts().then(data => this.products = data);
@@ -99,16 +117,7 @@ export class ListarFormulariosComponent implements OnInit {
     }
 
 
-    diasActivos(fecha1:string):number{
-        let dias:any;
-        let fechas1 = new Date(fecha1);
-        const tiempoTranscurrido = Date.now();
-        const hoy = new Date(tiempoTranscurrido);
-        dias=fechas1.getTime()-hoy.getTime();
-        dias=dias / 1000 / 60 / 60 / 24;
-        dias=Math.round (dias);
-        return dias;
-    }
+
     findIndexById(id: string): number {
         let index = -1;
         for (let i = 0; i < this.listaFormulariosControlTranca.length; i++) {
@@ -125,10 +134,54 @@ export class ListarFormulariosComponent implements OnInit {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
 
-    exportarAExcel(jsonData: any[], fileName: string): void {
-    // Crear hoja de trabajo
-    const flattenedData = this.flattenData(jsonData);
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(flattenedData);
+exportarAExcel(jsonData: any[], fileName: string): void {
+    // Define el mapeo de campos y encabezados
+    const columnas = [
+        { key: 'hora_control', header: 'Hora' },
+        { key: 'fecha_control', header: 'Fecha' },
+        { key: 'placa', header: 'Placa' },
+        { key: 'conductor', header: 'Nombre del Conductor' },
+        { key: 'licencia', header: 'Lic. o Doc.' },
+        { key: 'tranca', header: 'Punto de Control' },
+        { key: 'razon_social', header: 'Empresa' },
+        { key: 'minerales', header: 'Mineral' },
+        { key: 'peso_neto', header: 'Peso Neto' },
+        { key: 'municipio_origen', header: 'Proc. DEPTO.' },
+        { key: 'municipio_origen', header: 'Proc. MUNICIPIO' },
+        { key: 'pais_destino', header: 'Dest. PAIS O CIUDAD' },
+        { key: 'tipo_formulario', header: 'DESCRIPCION' },
+        { key: 'nro_formulario', header: 'N° Form.' },
+        { key: 'observaciones', header: 'Observaciones' },
+
+    ];
+    // Transforma los datos para usar los encabezados personalizados
+    const datosTransformados = jsonData.map(item => {
+        const obj: any = {};
+        columnas.forEach(col => {
+            obj[col.header] = item[col.key];
+        });
+        return obj;
+    });
+    // Crear hoja de trabajo con los encabezados personalizados
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(datosTransformados);
+    // Definir el ancho de las columnas (en caracteres)
+    ws['!cols'] = [
+        { wch: 6 }, // Fecha
+        { wch: 9 }, // Hora
+        { wch: 8 }, // PLACA
+        { wch: 22 }, // Nombre del Conductor
+        { wch: 10 }, // Lic. o Doc.
+        { wch: 12 }, // Lic. o Doc.
+        { wch: 30 }, // Empresa
+        { wch: 25 }, // Mineral
+        { wch: 8 }, // Peso Neto
+        { wch: 12 }, // Proc. dEEPTO.
+        { wch: 12 }, // Proc. MUNICIPIO
+        { wch: 12 }, // Proc. MUNICIPIO DESTINO
+        { wch: 12 }, // PAIS ORIGEN
+        { wch: 12 },  // Tipo Formulario
+        { wch: 20 }  // Tipo Formulario
+    ];
 
     // Crear libro de trabajo
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
@@ -136,7 +189,7 @@ export class ListarFormulariosComponent implements OnInit {
 
     // Generar archivo Excel
     XLSX.writeFile(wb, `${fileName}.xlsx`);
-  }
+}
 private flattenData(data: any[]): any[] {
     return data.map(item => {
       const flatItem: any = {};

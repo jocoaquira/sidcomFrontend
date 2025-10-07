@@ -49,12 +49,14 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
+                        <th pSortableColumn="hora_control">Hora de Control<p-sortIcon field="hora_control"></p-sortIcon></th>
+                        <th pSortableColumn="fecha_control">Fecha de Control<p-sortIcon field="fecha_control"></p-sortIcon></th>
                         <th pSortableColumn="nro_formulario">Nro. Formulario<p-sortIcon field="nro_formulario"></p-sortIcon></th>
                         <th pSortableColumn="razon_social">Razon Social <p-sortIcon field="razon_social"></p-sortIcon></th>
                         <th pSortableColumn="licencia">Nro. Licencia  <p-sortIcon field="licencia"></p-sortIcon></th>
                         <th pSortableColumn="conductor">Conductor<p-sortIcon field="conductor"></p-sortIcon></th>
                         <th pSortableColumn="minerales">Minerales <p-sortIcon field="minerales"></p-sortIcon></th>
-                        <th pSortableColumn="peso_neto">Peso Neto <p-sortIcon field="peso_neto"></p-sortIcon></th>
+                        <th pSortableColumn="peso_neto">Peso Neto (Kg.) <p-sortIcon field="peso_neto"></p-sortIcon></th>
                         <th pSortableColumn="tipo_formulario">Tipo de Formulario <p-sortIcon field="tipo_formulario"></p-sortIcon></th>
                         <th pSortableColumn="formulario_tranca">Formulario Tranca <p-sortIcon field="formulario_tranca"></p-sortIcon></th>
                         <th pSortableColumn="municipio_origen">Municipio Origen <p-sortIcon field="municipio_origen"></p-sortIcon></th>
@@ -62,6 +64,12 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-usuario>
                     <tr>
+                        <td style="width:5%; min-width:5rem;"><span class="p-column-title">Hora de Control</span>
+                            {{usuario.hora_control}}
+                        </td>
+                        <td style="width:5%; min-width:5rem;"><span class="p-column-title">Fecha de Control</span>
+                            {{usuario.fecha_control}}
+                        </td>
                         <td style="width:5%; min-width:5rem;"><span class="p-column-title">Nro. de Formulario</span>
                             {{usuario.nro_formulario}}
                         </td>
@@ -81,7 +89,7 @@
                             {{usuario.minerales}}
                           </td>
                         <td style="width:5%; min-width:5rem;" >
-                            <span class="p-column-title">Peso Neto </span>
+                            <span class="p-column-title">Peso Neto (Kg) </span>
                             {{usuario.peso_neto}}
                         </td>
                         <td style="width:5%; min-width:3rem;" >
@@ -93,8 +101,8 @@
                             {{usuario.municipio_origen}}
                         </td>
                         <td style="width:15%; min-width:5rem;" >
-                            <span class="p-column-title">Formulario Tranca</span>
-                            {{usuario.formulario_tranca}}
+                            <span class="p-column-title">Tranca</span>
+                            {{usuario.tranca}}
                         </td>
                     </tr>
                 </ng-template>
