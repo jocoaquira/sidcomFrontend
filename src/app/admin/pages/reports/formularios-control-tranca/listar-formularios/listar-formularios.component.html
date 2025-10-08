@@ -9,7 +9,7 @@
                             <label for="fecha_inicio">Fecha de Inicio</label>
                             <p-calendar
                                 inputId="fecha_inicio"
-                                (ngModel)="fecha_inicio"
+                                [(ngModel)]="fecha_inicio"
                                 dateFormat="dd/mm/yy"
                                 showIcon="true"
                                 placeholder="dd/mm/yyyy"
@@ -19,7 +19,7 @@
                             <label for="fecha_fin">Fecha Final</label>
                             <p-calendar
                                 inputId="fecha_fin"
-                                (ngModel)="fecha_fin"
+                                [(ngModel)]="fecha_fin"
                                 dateFormat="dd/mm/yy"
                                 showIcon="true"
                                 placeholder="dd/mm/yyyy"
@@ -58,8 +58,8 @@
                         <th pSortableColumn="minerales">Minerales <p-sortIcon field="minerales"></p-sortIcon></th>
                         <th pSortableColumn="peso_neto">Peso Neto (Kg.) <p-sortIcon field="peso_neto"></p-sortIcon></th>
                         <th pSortableColumn="tipo_formulario">Tipo de Formulario <p-sortIcon field="tipo_formulario"></p-sortIcon></th>
-                        <th pSortableColumn="formulario_tranca">Formulario Tranca <p-sortIcon field="formulario_tranca"></p-sortIcon></th>
-                        <th pSortableColumn="municipio_origen">Municipio Origen <p-sortIcon field="municipio_origen"></p-sortIcon></th>
+                        <th pSortableColumn="formulario_tranca">Municipio origen <p-sortIcon field="formulario_tranca"></p-sortIcon></th>
+                        <th pSortableColumn="municipio_origen">Puesto de Control <p-sortIcon field="municipio_origen"></p-sortIcon></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-usuario>

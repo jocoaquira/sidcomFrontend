@@ -127,7 +127,7 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Operadores Mineros', icon: 'pi pi-fw pi-id-card', routerLink: ['/blocks'], badge: 'NEW' },
                     { label: 'Formularios Interno', icon: 'pi pi-fw pi-file-o', url: ['https://www.primefaces.org/primeblocks-ng'], target: '_blank' },
                     { label: 'Formularios Externo', icon: 'pi pi-fw pi-globe', routerLink: ['/utilities/icons'] },
-                    { label: 'Formularios de Control en Puesto ', icon: 'pi pi-fw pi-file-o', routerLink: ['/admin/formularios-puesto-control'],visible: this.canVerTomaDeMuestraGuard.canActivate()  },
+                    { label: 'Formularios de Control en Puesto ', icon: 'pi pi-fw pi-file-o', routerLink: ['/admin/formularios-puesto-control'],visible: this.canVerControlTrancaGuard.canActivate()  },
                 ]
             },
             {

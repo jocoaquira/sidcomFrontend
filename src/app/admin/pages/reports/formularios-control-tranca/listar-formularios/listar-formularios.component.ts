@@ -25,7 +25,9 @@ import { IFormularioControlTranca } from '@data/reports/formulario_control_puest
 export class ListarFormulariosComponent implements OnInit {
 
     public listaFormulariosControlTranca!:any[];
-
+    public fecha_inicio:string='2025-01-01';
+    public fecha_fin:string='2025-09-30';
+    public user_id:any;
 
     public operadores!:IOperatorSimple[];
     public error!:any;
@@ -63,35 +65,13 @@ export class ListarFormulariosComponent implements OnInit {
     ) {
 
         this.operador_id=0
-
+        this.user_id=this.authService.getUser.id;
+        console.log(this.user_id);
     }
 
     ngOnInit() {
-        this.formulariosControlTranca.listarFormulariosControlTrancaReporte('2025-01-01','2025-09-30',348).subscribe(
-            (data:any)=>{
 
-            this.listaFormulariosControlTranca=this.formulariosControlTranca.handleFormulariosControlTrancaReporte(data);
-            this.listaFormulariosControlTranca = this.listaFormulariosControlTranca.map(item => ({
-                ...item,
-                minerales: item.minerales.map(m => m.mineral).join(', '),
-                municipio_origen: item.municipio_origen.map(m => m.municipio_origen).join(', '),
-                municipio_destino: item.municipio_destino && item.municipio_destino.length > 0
-                    ? item.municipio_destino.map(m => m.municipio_destino).join(', ')
-                    : '',
-                fecha_control: item.formulario_tranca && item.formulario_tranca.length > 0
-                    ? item.formulario_tranca[0].fecha_control
-                    : '',
-                hora_control: item.formulario_tranca && item.formulario_tranca.length > 0
-                    ? item.formulario_tranca[0].hora_control
-                    : '',
-                tranca: item.formulario_tranca && item.formulario_tranca.length > 0
-                    ? item.formulario_tranca[0].tranca
-                    : '',
-            }));
-            console.log(this.listaFormulariosControlTranca);
-        },
-          (error:any)=> this.error=this.formulariosControlTranca.handleError(error));
-
+        this.buscar();
         //this.productService.getProducts().then(data => this.products = data);
 
         this.cols = [
@@ -108,7 +88,32 @@ export class ListarFormulariosComponent implements OnInit {
             { label: 'OUTOFSTOCK', value: 'outofstock' }
         ];
     }
+    buscar(){
+        console.log(this.fecha_inicio);
+        console.log(this.fecha_fin);
+        this.formulariosControlTranca.listarFormulariosControlTrancaReporte(this.fecha_inicio,this.fecha_fin,this.user_id).subscribe(
+            (data:any)=>{
 
+            this.listaFormulariosControlTranca=this.formulariosControlTranca.handleFormulariosControlTrancaReporte(data);
+            this.listaFormulariosControlTranca = this.listaFormulariosControlTranca.map(item => ({
+                ...item,
+                minerales: Array.isArray(item.minerales) ? item.minerales.map(m => m.mineral).join(', ') : '',
+                municipio_origen: Array.isArray(item.municipio_origen) ? item.municipio_origen.map(m => m.municipio_origen).join(', ') : '',
+                municipio_destino: Array.isArray(item.municipio_destino) ? item.municipio_destino.map(m => m.municipio_destino).join(', ') : '',
+                fecha_control: item.formulario_tranca && item.formulario_tranca.length > 0
+                    ? item.formulario_tranca[0].fecha_control
+                    : '',
+                hora_control: item.formulario_tranca && item.formulario_tranca.length > 0
+                    ? item.formulario_tranca[0].hora_control
+                    : '',
+                tranca: item.formulario_tranca && item.formulario_tranca.length > 0
+                    ? item.formulario_tranca[0].tranca
+                    : '',
+            }));
+            console.log(this.listaFormulariosControlTranca);
+        },
+          (error:any)=> this.error=this.formulariosControlTranca.handleError(error));
+    }
     openNew() {
         //this.product = {};
         //this.submitted = false;
