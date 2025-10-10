@@ -39,7 +39,7 @@ export class ReportesService {
     let Comprador:IFormularioInternoReporte[]=data;
     return Comprador
   }
-//-----------------Visualizar Reporte Formulario 101-------------------------------------------
+//-----------------Visualizar Reporte Control Trancas-------------------------------------------
   listarFormulariosControlTrancaReporte(fecha_inicio:string,fecha_fin:string,usuario_id:number)
   {
     // Inicializacion de objeto params

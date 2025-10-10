@@ -128,6 +128,7 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Formularios Interno', icon: 'pi pi-fw pi-file-o', url: ['https://www.primefaces.org/primeblocks-ng'], target: '_blank' },
                     { label: 'Formularios Externo', icon: 'pi pi-fw pi-globe', routerLink: ['/utilities/icons'] },
                     { label: 'Formularios de Control en Puesto ', icon: 'pi pi-fw pi-file-o', routerLink: ['/admin/formularios-puesto-control'],visible: this.canVerControlTrancaGuard.canActivate()  },
+                    { label: 'Formularios Internos', icon: 'pi pi-fw pi-file-o', routerLink: ['/admin/reporte-formularios-internos'],visible: this.canVerFormIntGuard.canActivate()  },
                 ]
             },
             {

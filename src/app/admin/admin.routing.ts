@@ -39,6 +39,7 @@ import { AppLayoutComponent } from './layout/app.layout.component';
         { path: 'comprador', loadChildren: () => import('./pages/comprador/comprador.module').then(m => m.CompradorModule) },
         { path: 'planta-tratamiento', loadChildren: () => import('./pages/planta-tratamiento/planta-tratamiento.module').then(m => m.plantaDeTratamientoModule) },
         { path: 'formularios-puesto-control', loadChildren: () => import('./pages/reports/formularios-control-tranca/formularios.module').then(m => m.FormulariosModule) },
+        { path: 'reporte-formularios-internos', loadChildren: () => import('./pages/reports/formularios-internos/formularios-internos.module').then(m => m.FormulariosInternosModule) },
         { path: '**', redirectTo: '/notfound' }
         ]
         }
