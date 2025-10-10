@@ -37,7 +37,7 @@
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt *ngIf="listaFormulariosInternos" [value]="listaFormulariosControlTranca" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['id','razon_social','conductor','licencia','peso_neto' ,'nro_formulario','minerales','tipo_formulario','municipio_origen']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-table #dt *ngIf="listaFormulariosInternos" [value]="listaFormulariosInternos" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['id','razon_social','conductor','licencia','peso_neto' ,'nro_formulario','minerales','tipo_formulario','municipio_origen']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Reporte de Formularios 101</h5>
@@ -65,7 +65,7 @@
                 <ng-template pTemplate="body" let-usuario>
                     <tr>
                         <td style="width:5%; min-width:5rem;"><span class="p-column-title">Hora de Control</span>
-                            {{usuario.hora_control}}
+                            {{usuario.nro_formulario}}
                         </td>
                         <td style="width:5%; min-width:5rem;"><span class="p-column-title">Fecha de Control</span>
                             {{usuario.fecha_control}}
