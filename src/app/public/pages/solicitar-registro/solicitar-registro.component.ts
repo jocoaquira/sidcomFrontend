@@ -291,7 +291,7 @@ private markAllAsTouched(formGroup: FormGroup | FormArray) {
                         this.onVolver()
                     }
                     else{
-                        this.notify.success('nada de nada');
+                        this.notify.success('error al enviar la Solicitud de Pre-Registro');
                     }
                 },
                 (error: any) => {
