@@ -11,7 +11,7 @@
         <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('nro_licencia')">{{form.getErrorMessage('nro_licencia')}}</small>
     </div>
     <div class="field">
-        <label for="fecha_vencimiento">Fecha de Vencimiento Licencia</label>
+        <label for="fecha_vencimiento">Fecha de Vencimiento Licencia (opcional)</label>
         <p-calendar
             inputId="fecha_vencimiento"
             formControlName="fecha_vencimiento"
@@ -24,7 +24,7 @@
         </small>
     </div>
     <div class="field">
-        <label for="fecha_vencimiento">Fecha de Nacimiento</label>
+        <label for="fecha_vencimiento">Fecha de Nacimiento (opcional)</label>
         <p-calendar
             inputId="fecha_nacimiento"
             formControlName="fecha_nacimiento"
@@ -37,7 +37,7 @@
         </small>
     </div>
     <div class="field">
-        <label for="celular">Celular</label>
+        <label for="celular">Celular (opcional)</label>
         <input type="text" pInputText id="celular" formControlName="celular" autofocus/>
         <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('celular')">{{form.getErrorMessage('celular')}}</small>
     </div>
@@ -59,6 +59,7 @@
 
             <label for="dropdown">Categoria</label>
         </span>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('categoria')">{{form.getErrorMessage('categoria')}}</small>
     </div>
     <div class="field">
         <span class="p-float-label mt-5">
@@ -78,6 +79,7 @@
 
             <label for="dropdown">Estado</label>
         </span>
+        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('categoria')">{{form.getErrorMessage('categoria')}}</small>
     </div>
     <div class="botones-derecha">
         <span class="p-buttonset col-12 md:col-6 ">

@@ -147,15 +147,15 @@ export class CrearChoferComponent implements OnInit {
       }
   }
   crearResponsable() {
-
-    this.form.formulario.patchValue({
-      operador_id: this.operador_id,
-      celular:parseInt(this.form.formulario.value.celular),
-      estado:this.form.formulario.value.estado.label,
-      categoria:this.form.formulario.value.categoria.label
-    });
-
+        const formValue = this.form.formulario.value;
+        this.form.formulario.patchValue({
+            operador_id: this.operador_id,
+            celular: formValue.celular ? parseInt(formValue.celular) : null,
+            estado: formValue.estado?.label || null,
+            categoria: formValue.categoria?.label || null
+        });
     if (this.form.formulario.valid) {
+
         let limpio:any= Object.fromEntries(
             Object.entries(this.form.formulario.value).filter(([_, v]) => v !== null)
           );
@@ -180,6 +180,9 @@ export class CrearChoferComponent implements OnInit {
             }
           );
       } else {
+        Object.values(this.form.formulario.controls).forEach(control => {
+            control.markAsTouched();
+        });
         this.notify.error('Revise los datos e intente nuevamente','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
       }
   }

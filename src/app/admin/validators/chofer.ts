@@ -23,11 +23,11 @@ export class ChoferFormulario {
     this.formulario = new FormGroup({
         nro_licencia: new FormControl(this.usuario.nro_licencia,[Validators.required]),
         nombre_apellidos:new FormControl(this.usuario.nombre_apellidos,[Validators.required,Validators.pattern('^[a-zA-ZÀ-ÿ\\s]+$')]),
-        fecha_vencimiento:new FormControl(this.usuario.fecha_vencimiento,[Validators.required]),
-        celular:new FormControl(this.usuario.celular,[Validators.required,Validators.pattern('^[0-9]{8}$')]),
+        fecha_vencimiento:new FormControl(this.usuario.fecha_vencimiento),
+        celular:new FormControl(this.usuario.celular),
         operador_id:new FormControl(this.usuario.operador_id,[Validators.required]),
         fecha_nacimiento:new FormControl(this.usuario.fecha_nacimiento),
-        categoria:new FormControl(this.usuario.categoria),
+        categoria:new FormControl(this.usuario.categoria,[Validators.required]),
         id:new FormControl(this.usuario.id),
         estado:new FormControl(this.usuario.estado,[Validators.required])
     });
