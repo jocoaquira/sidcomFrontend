@@ -39,7 +39,7 @@ export class CreateFormularioInternoComponent implements OnInit {
     public razon_social:string='';
     public chofer:IChofer | null = null; // ID del chofer seleccionado
     public vehiculo:IVehiculo | null = null; // ID del vehiculo seleccionado
-    public comprador:IOperatorSimple | null = null; // ID del vehiculo seleccionado
+    //public comprador:IOperatorSimple | null = null; // ID del vehiculo seleccionado
     public declaracionJurada:boolean=false;
     departamento_id1: number | null = null;  // Guardar el ID del departamento seleccionado
   municipio_id1: number | null = null;
@@ -83,6 +83,11 @@ export class CreateFormularioInternoComponent implements OnInit {
         departamento:null,
         municipio:null,
         municipio_id:null
+     }
+     public comprador:any={
+        municipioId:null,
+        comprador:null,
+        cantidad:null
      }
 
       // Definir los pasos para Steps
@@ -562,5 +567,15 @@ cambioOperadorSimple(event:any){
 valSwitches(event:any){
 
     this.valSwitch=event.checked;
+}
+cambioComprador(event:any){
+    //this.comprador=event;
+        console.log(event);
+        this.comprador.comprador=event.razon_social;
+        this.comprador.municipioId=event.municipioId;
+        this.formulario_interno.formulario.patchValue({
+            des_comprador: this.comprador.razon_social,
+          });
+          console.log(this.formulario_interno.formulario.value);
 }
 }

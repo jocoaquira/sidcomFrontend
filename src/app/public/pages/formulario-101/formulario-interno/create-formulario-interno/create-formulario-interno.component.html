@@ -7,7 +7,7 @@
             <div class="card card-w-title flex flex-wrap col-12">
                 <div class="col-12">
                     <p-steps [model]="steps" [(activeIndex)]="activeStep"
-                    styleClass="mt-1" [readonly]="true"
+                    styleClass="mt-1" [readonly]="false"
                     ></p-steps>
                 </div>
                 <div class="col-12" >
@@ -432,33 +432,51 @@
                                     </small>
                                 </span>
                             </div>
-                            <div class="field col-12 md:col-2" *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR'" >
-                                <div class="field-checkbox">
-                                    <p-inputSwitch (onChange)="valSwitches($event)"></p-inputSwitch>
-                                    <label for="sf">Otro Comprador</label>
+                        </div>
+
+
+
+                        <div class="grid p-fluid mt-2" *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR'">
+                                <div class="field col-12 md:col-3" *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR'" >
+                                    <div class="field-checkbox">
+                                        <p-inputSwitch (onChange)="valSwitches($event)"></p-inputSwitch>
+                                        <label for="sf">Otro Comprador</label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR' && valSwitch" class="field col-12 md:col-3">
-                                <span class="p-float-label">
-                                    <input
-                                        type="text"
-                                        id="des_comprador"
-                                        pInputText
-                                        formControlName="des_comprador"
-                                        class="ng-dirty"
-                                    />
-                                    <label for="des_comprador">Comprador</label>
+
+                                <div class="field col-12 md:col-4 " *ngIf="valSwitch===true">
+                                    <app-departamentoSelect [departamento_id]="departamento_id1" (cambioDepartamento)="cambioDepartamento1($event)" ></app-departamentoSelect>
+                                </div>
+                                <div class="field col-12 md:col-4 " *ngIf="valSwitch===true">
+                                    <app-municipioSelect [departamento_id]="departamento_id1" [municipio_id1]="municipio_id1" (municipio_id)="cambioMunicipio1($event)" ></app-municipioSelect>
+                                </div>
+
+                                <div *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR'  && valSwitch" class="field col-12 md:col-5">
+                                    <span class="p-float-label">
+                                        <input
+                                            type="text"
+                                            id="des_comprador"
+                                            pInputText
+                                            formControlName="des_comprador"
+                                            class="ng-dirty"
+                                        />
+                                        <label for="des_comprador">Comprador</label>
+                                        <small id="des_comprador" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_comprador')">
+                                            {{formulario_interno.getErrorMessage('des_comprador')}}
+                                        </small>
+                                    </span>
+                                </div>
+
+
+
+                                <div class="field col-12 md:col-3 " *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR' && valSwitch==false">
+                                    <app-compradorSelect [nombre]="razon_social" (comprador)="cambioComprador($event)" ></app-compradorSelect>
                                     <small id="des_comprador" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_comprador')">
                                         {{formulario_interno.getErrorMessage('des_comprador')}}
                                     </small>
-                                </span>
+                                </div>
                             </div>
-                            <div class="field col-12 md:col-3 " *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR' && valSwitch==false">
-                                <app-operadoresSelect [nombre]="razon_social" (operador)="cambioOperadorSimple($event)" ></app-operadoresSelect>
-                                <small id="des_comprador" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_comprador')">
-                                    {{formulario_interno.getErrorMessage('des_comprador')}}
-                                </small>
-                            </div>
+
 
                             <div *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO'" class="field col-12 md:col-3">
                                 <span class="p-float-label">
@@ -519,7 +537,6 @@
                                   />
                                   <label for="sf">Acepto la DDJJ</label>
                                 </div>
-                        </div>
                         </div>
                     </div>
                     </div>
