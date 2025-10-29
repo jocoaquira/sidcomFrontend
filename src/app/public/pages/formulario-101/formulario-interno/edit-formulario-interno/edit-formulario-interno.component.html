@@ -418,112 +418,149 @@
                   </div>
                   <div *ngIf="activeStep === 2"
                   >
-                      <div class="grid p-fluid mt-2">
-                          <div class="field col-12 md:col-4">
-                              <span class="p-float-label">
-                                  <p-dropdown
-                                      inputId="dropdown"
-                                      [autoDisplayFirst]="false"
-                                      [options]="destinos"
-                                      formControlName="des_tipo"
-                                      optionLabel="nombre"
-                                      optionValue="nombre"
-                                      (onChange)="cambioDestino($event)"
-                                  ></p-dropdown>
-                                  <label for="dropdown">Destino</label>
-                                  <small id="des_tipo" class="p-error " *ngIf="formulario_interno.esCampoInvalido('des_tipo')">
-                                      {{formulario_interno.getErrorMessage('des_tipo')}}
-                                  </small>
-                              </span>
-                          </div>
-                            <div class="field col-12 md:col-2" *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR'" >
+                        <div class="grid p-fluid mt-2">
+                            <div class="field col-12 md:col-4">
+                                <span class="p-float-label">
+                                    <p-dropdown
+                                        inputId="dropdown"
+                                        [autoDisplayFirst]="false"
+                                        [options]="destinos"
+                                        formControlName="des_tipo"
+                                        optionLabel="nombre"
+                                        optionValue="nombre"
+                                        (ngChange)="cambioDestino($event)"
+                                    ></p-dropdown>
+                                    <label for="dropdown">Destino</label>
+                                    <small id="des_tipo" class="p-error " *ngIf="formulario_interno.esCampoInvalido('des_tipo')">
+                                        {{formulario_interno.getErrorMessage('des_tipo')}}
+                                    </small>
+                                </span>
+                            </div>
+                        </div>
+
+
+
+                        <div class="grid p-fluid mt-2" *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR'">
+                                <div class="field col-12 md:col-2" *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR'" >
+                                    <div class="field-checkbox">
+                                        <p-inputSwitch
+                                            [(ngModel)]="valSwitch"
+                                            [ngModelOptions]="{standalone: true}"
+                                            (onChange)="valSwitches($event)">
+                                        </p-inputSwitch>
+                                        <label for="sf">Otro Comprador</label>
+                                    </div>
+                                </div>
+
+                                <div class="field col-12 md:col-3 " *ngIf="valSwitch===true">
+                                    <app-departamentoSelect [departamento_id]="departamento_id1" (cambioDepartamento)="cambioDepartamento1($event)" ></app-departamentoSelect>
+                                </div>
+                                <div class="field col-12 md:col-3 " *ngIf="valSwitch===true">
+                                    <app-municipioSelect [departamento_id]="departamento_id1" [municipio_id1]="municipio_id1" (municipio_id)="cambioMunicipio1($event)" ></app-municipioSelect>
+                                </div>
+
+                                <div *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR'  && valSwitch" class="field col-12 md:col-4">
+                                    <span class="p-float-label">
+                                        <input
+                                            type="text"
+                                            id="des_comprador"
+                                            pInputText
+                                            formControlName="des_comprador"
+                                            class="ng-dirty"
+                                        />
+                                        <label for="des_comprador">Comprador</label>
+                                        <small id="des_comprador" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_comprador')">
+                                            {{formulario_interno.getErrorMessage('des_comprador')}}
+                                        </small>
+                                    </span>
+                                </div>
+
+                                <div class="field col-12 md:col-3 " *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR' && valSwitch==false">
+                                    <app-compradorSelect [razon_social]="formulario_interno.formulario.value.des_comprador" [municipioId]="formulario_interno.formulario.value.id_municipio_destino" (comprador)="cambioComprador($event)" ></app-compradorSelect>
+                                    <small id="des_comprador" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_comprador')">
+                                        {{formulario_interno.getErrorMessage('des_comprador')}}
+                                    </small>
+                                </div>
+                        </div>
+                        <div class="grid p-fluid mt-2" *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO'">
+                            <div class="field col-12 md:col-3" *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO'" >
                                 <div class="field-checkbox">
-                                    <p-inputSwitch [ngModelOptions]="{ standalone: true }" [(ngModel)]="valSwitch" (onChange)="valSwitches($event)"></p-inputSwitch>
-                                    <label for="sf">Otro Comprador</label>
+                                    <p-inputSwitch
+                                        [(ngModel)]="valSwitchPT"
+                                        [ngModelOptions]="{standalone: true}"
+                                        (onChange)="valSwitchesPT($event)">
+                                    </p-inputSwitch>
+                                    <label for="sf">Otra Planta de Tratamiento</label>
                                 </div>
                             </div>
-                          <div *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR' && valSwitch" class="field col-12 md:col-3">
-                              <span class="p-float-label">
-                                  <input
-                                      type="text"
-                                      id="des_comprador"
-                                      pInputText
-                                      formControlName="des_comprador"
-                                      class="ng-dirty"
-                                  />
-                                  <label for="des_comprador">Comprador</label>
-                                  <small id="des_comprador" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_comprador')">
-                                      {{formulario_interno.getErrorMessage('des_comprador')}}
-                                  </small>
-                              </span>
-                          </div>
-                            <div class="field col-12 md:col-3 " *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR' && valSwitch==false">
-                                <app-operadoresSelect [nombre]="razon_social" (operador)="cambioOperadorSimple($event)" ></app-operadoresSelect>
-                                <small id="des_comprador" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_comprador')">
-                                    {{formulario_interno.getErrorMessage('des_comprador')}}
+                            <div class="field col-12 md:col-5 " *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO' && valSwitchPT==false">
+                                <app-plantaDeTratamientoSelect [nombre]="des_planta" (plantaTratamiento)="cambioPlantaDeTratamiento($event)" ></app-plantaDeTratamientoSelect>
+                                <small id="des_planta" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_planta')">
+                                    {{formulario_interno.getErrorMessage('des_planta')}}
                                 </small>
                             </div>
-                          <div *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO'" class="field col-12 md:col-3">
-                              <span class="p-float-label">
+
+                            <div class="field col-12 md:col-3 " *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO'&& valSwitchPT">
+                                <app-departamentoSelect [departamento_id]="departamento_id_pt" (cambioDepartamento)="cambioDepartamentoPT($event)" ></app-departamentoSelect>
+                            </div>
+                            <div class="field col-12 md:col-3 " *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO'&& valSwitchPT">
+                                <app-municipioSelect [departamento_id]="departamento_id_pt" [municipio_id1]="municipio_id_pt" (municipio_id)="cambioMunicipioPT($event)" ></app-municipioSelect>
+                            </div>
+                            <div *ngIf="formulario_interno.formulario.value.des_tipo==='PLANTA DE TRATAMIENTO' && valSwitchPT" class="field col-12 md:col-3">
+                                <span class="p-float-label">
+                                    <input
+                                        type="text"
+                                        id="des_planta"
+                                        pInputText
+                                        formControlName="des_planta"
+                                        class="ng-dirty"
+                                    />
+                                    <label for="des_planta">Planta de Tratamiento</label>
+                                    <small id="des_planta" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_planta')">
+                                        {{formulario_interno.getErrorMessage('des_planta')}}
+                                    </small>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="field col-12 md:col-12">
+                            <span class="p-float-label">
+                                <textarea
+                                    id="observaciones"
+                                    pInputTextarea
+                                    formControlName="observaciones"
+                                    class="ng-dirty"
+                                    rows="4"
+                                    cols="150"
+                                ></textarea>
+                                <label for="observaciones">Observaciones</label>
+                                <small id="observaciones" class="p-error" *ngIf="formulario_interno.esCampoInvalido('observaciones')">
+                                    {{ formulario_interno.getErrorMessage('observaciones') }}
+                                </small>
+                            </span>
+                        </div>
+                        <div class="card-declaracion text-center">
+                            <h5 class="text-center"><strong>DECLARACIÓN JURADA DE TRANSPORTE DE MINERALES</strong></h5>
+                            <p>El Formulario 101 es el único instrumento que habilita el transporte de minerales y/o
+                                metales al interior o exterior del país, que permite la identificación del Municipio,
+                                Departamento Productor y otros datos técnicos,<strong> tiene carácter de Declaración Jurada
+                                de uso obligatorio conforme al Art. 31 del D.D. de Oruro N° 157 </strong>para los actores productivos mineros, operadores mineros, comercializadoras y personas naturales que se encuentran en posesión o realicen el transporte de minerales y/o metales en sujeción al D.S. N° 2288, Art 7
+
+
+                            </p>
+
+                                <div class="field-checkbox">
                                   <input
-                                      type="text"
-                                      id="des_planta"
-                                      pInputText
-                                      formControlName="des_planta"
-                                      class="ng-dirty"
+                                    type="checkbox"
+                                    id="sf"
+                                    [ngModelOptions]="{standalone: true}"
+                                    [(ngModel)]="declaracionJurada"
+                                    (change)="declaracionJuradaSwitch($event)"
+                                    class="custom-checkbox"
                                   />
-                                  <label for="des_planta">Planta de Tratamiento</label>
-                                  <small id="des_planta" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_planta')">
-                                      {{formulario_interno.getErrorMessage('des_planta')}}
-                                  </small>
-                              </span>
-                          </div>
-
-                          <div class="field col-12 md:col-3 ">
-                              <app-departamentoSelect [departamento_id]="departamento_id1" (cambioDepartamento)="cambioDepartamento1($event)" ></app-departamentoSelect>
-                          </div>
-                          <div class="field col-12 md:col-3 ">
-                              <app-municipioSelect [departamento_id]="departamento_id1" [municipio_id1]="municipio_id1" (municipio_id)="cambioMunicipio1($event)" ></app-municipioSelect>
-                          </div>
-                          <div class="field col-12 md:col-12">
-                          <span class="p-float-label">
-                              <textarea
-                                  id="observaciones"
-                                  pInputTextarea
-                                  formControlName="observaciones"
-                                  class="ng-dirty"
-                                  rows="4"
-                                  cols="150"
-                              ></textarea>
-                              <label for="observaciones">Observaciones</label>
-                              <small id="observaciones" class="p-error" *ngIf="formulario_interno.esCampoInvalido('observaciones')">
-                                  {{ formulario_interno.getErrorMessage('observaciones') }}
-                              </small>
-                          </span>
-                      </div>
-                      <div class="card-declaracion text-center">
-                          <h5 class="text-center"><strong>DECLARACIÓN JURADA DE TRANSPORTE DE MINERALES</strong></h5>
-                          <p>El Formulario 101 es el único instrumento que habilita el transporte de minerales y/o
-                              metales al interior o exterior del país, que permite la identificación del Municipio,
-                              Departamento Productor y otros datos técnicos,<strong> tiene carácter de Declaración Jurada
-                              de uso obligatorio conforme al Art. 31 del D.D. de Oruro N° 157 </strong>para los actores productivos mineros, operadores mineros, comercializadoras y personas naturales que se encuentran en posesión o realicen el transporte de minerales y/o metales en sujeción al D.S. N° 2288, Art 7
-
-
-                          </p>
-
-                              <div class="field-checkbox">
-                                <input
-                                  type="checkbox"
-                                  id="sf"
-                                  [ngModelOptions]="{standalone: true}"
-                                  [(ngModel)]="declaracionJurada"
-                                  (change)="declaracionJuradaSwitch($event)"
-                                  class="custom-checkbox"
-                                />
-                                <label for="sf">Acepto la DDJJ</label>
-                              </div>
-                      </div>
-                      </div>
+                                  <label for="sf">Acepto la DDJJ</label>
+                                </div>
+                        </div>
                   </div>
                   <div  *ngIf="activeStep === 3"
                   >

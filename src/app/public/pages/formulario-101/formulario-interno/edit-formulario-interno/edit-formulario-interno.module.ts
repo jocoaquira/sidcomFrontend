@@ -19,6 +19,8 @@ import { ChoferSelectModule } from 'src/app/admin/components/choferSelect/chofer
 import { VehiculoSelectModule } from 'src/app/admin/components/vehiculoSelect/vehiculoSelect.module';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { OperadoresSelectModule } from 'src/app/admin/components/operadoresSelect/operadoresSelect.module';
+import { PlantaTratamientoSelectModule } from 'src/app/admin/components/plantaTratamientoSelect/plantaTratamientoSelect.module';
+import { CompradorSelectModule } from 'src/app/admin/components/compradorSelect/compradorSelect.module';
 
 @NgModule({
   imports: [
@@ -36,6 +38,8 @@ import { OperadoresSelectModule } from 'src/app/admin/components/operadoresSelec
     MunicipioSelectModule,
     MineralesSelectModule,
     OperadoresSelectModule,
+    PlantaTratamientoSelectModule,
+    CompradorSelectModule,
     ChoferSelectModule,
     VehiculoSelectModule,
     CheckboxModule,

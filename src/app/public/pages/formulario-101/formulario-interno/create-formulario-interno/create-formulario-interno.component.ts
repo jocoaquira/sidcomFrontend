@@ -46,7 +46,7 @@ export class CreateFormularioInternoComponent implements OnInit {
     departamento_id_pt:number|null=null;
     municipio_id_pt:number|null=null
   // Método que se llama cuando cambia el departamento
-  cambioDepartamento1(departamentoId: number): void {
+    cambioDepartamento1(departamentoId: number): void {
     this.departamento_id1 = departamentoId;
     // Aquí puedes hacer cualquier acción extra cuando el departamento cambie
   }
