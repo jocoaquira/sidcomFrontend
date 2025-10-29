@@ -39,10 +39,12 @@ export class CreateFormularioInternoComponent implements OnInit {
     public razon_social:string='';
     public chofer:IChofer | null = null; // ID del chofer seleccionado
     public vehiculo:IVehiculo | null = null; // ID del vehiculo seleccionado
-    public comprador:IOperatorSimple | null = null; // ID del vehiculo seleccionado
+    //public comprador:IOperatorSimple | null = null; // ID del vehiculo seleccionado
     public declaracionJurada:boolean=false;
     departamento_id1: number | null = null;  // Guardar el ID del departamento seleccionado
-  municipio_id1: number | null = null;
+    municipio_id1: number | null = null;
+    departamento_id_pt:number|null=null;
+    municipio_id_pt:number|null=null
   // Método que se llama cuando cambia el departamento
   cambioDepartamento1(departamentoId: number): void {
     this.departamento_id1 = departamentoId;
@@ -60,6 +62,7 @@ export class CreateFormularioInternoComponent implements OnInit {
         cantidad:0
     }
     public valSwitch:boolean=false;
+    public valSwitchPT:boolean=false;
     public tipo_transporte!:any;
     public destinos!:any;
     public unidades!:any;
@@ -83,6 +86,11 @@ export class CreateFormularioInternoComponent implements OnInit {
         departamento:null,
         municipio:null,
         municipio_id:null
+     }
+     public comprador:any={
+        municipioId:null,
+        comprador:null,
+        cantidad:null
      }
 
       // Definir los pasos para Steps
@@ -562,5 +570,34 @@ cambioOperadorSimple(event:any){
 valSwitches(event:any){
 
     this.valSwitch=event.checked;
+}
+valSwitchesPT(event:any){
+
+    this.valSwitchPT=event.checked;
+}
+cambioDepartamentoPT(departamentoId: number): void {
+    this.departamento_id_pt = departamentoId;
+    // Aquí puedes hacer cualquier acción extra cuando el departamento cambie
+  }
+cambioComprador(event:any){
+    //this.comprador=event;
+
+        this.comprador.comprador=event.razon_social;
+        this.comprador.municipioId=event.municipioId;
+        console.log(this.comprador);
+        this.formulario_interno.formulario.patchValue({
+            des_comprador: this.comprador.comprador,
+            id_municipio_destino:this.comprador.municipioId
+        });
+          console.log(this.formulario_interno.formulario.value);
+}
+cambioPlantaDeTratamiento(event:any){
+    //this.comprador=event;
+        console.log(event);
+        this.formulario_interno.formulario.patchValue({
+            des_planta: event.nombre,
+            id_municipio_destino:event.municipioId
+          });
+          console.log(this.formulario_interno.formulario.value);
 }
 }
