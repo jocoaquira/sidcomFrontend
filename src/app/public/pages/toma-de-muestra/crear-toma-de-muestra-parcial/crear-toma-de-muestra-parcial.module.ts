@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CrearTomaDeMuestraComponent } from './crear-toma-de-muestra.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputMaskModule } from 'primeng/inputmask';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -21,6 +20,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { AduanaSelectModule } from 'src/app/admin/components/aduanaSelect/aduanaSelect.module';
 import { PaisSelectModule } from 'src/app/admin/components/paisSelect/paisSelect.module';
+import { CrearTomaDeMuestraParcialComponent } from './crear-toma-de-muestra-parcial.component';
 
 @NgModule({
   imports: [
@@ -48,6 +48,6 @@ import { PaisSelectModule } from 'src/app/admin/components/paisSelect/paisSelect
     AduanaSelectModule,
 
   ],
-  declarations: [CrearTomaDeMuestraComponent]
+  declarations: [CrearTomaDeMuestraParcialComponent]
 })
-export class CrearTomaDeMuestraModule { }
+export class CrearTomaDeMuestraParcialModule { }

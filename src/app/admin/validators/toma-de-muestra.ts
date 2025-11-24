@@ -36,7 +36,20 @@ export class TomaDeMuestraFormulario {
         fecha_aprobacion: null,
         fecha_firma:null,
         justificacion_anulacion: null,
-        estado:null
+        estado:null,
+        //agragados
+        merma:0,
+        m03_id:null,
+        laboratorio:null,
+        comprador:null,
+        codigo_analisis:null,
+        aduana_id:null,
+        pais_destino_id:null,
+        nro_factura_exportacion:null,
+        nro_camiones_parcial:null,
+        nro_parcial:null,
+        procedimiento_parcial:null,
+        generar_parcial:null,
     }
     this.formulario = new FormGroup({
         user_id:new FormControl(this.form_toma_de_muestra.user_id,[Validators.required,Validators.pattern('^[0-9]*$')]),
@@ -66,6 +79,16 @@ export class TomaDeMuestraFormulario {
        fecha_firma:new FormControl(this.form_toma_de_muestra.fecha_firma),
         fecha_aprobacion:new FormControl(this.form_toma_de_muestra.fecha_aprobacion),
         estado:new FormControl(this.form_toma_de_muestra.estado,[Validators.required]),
+
+        //--------------agregados----------------
+        merma:new FormControl(this.form_toma_de_muestra.merma,[Validators.pattern('^\\d+(\\.\\d+)?$'),  Validators.min(0),Validators.max(1)]),
+        aduana_id:new FormControl(this.form_toma_de_muestra.aduana_id,[Validators.required,Validators.pattern('^[0-9]*$')]),
+        pais_destino_id:new FormControl(this.form_toma_de_muestra.pais_destino_id,[Validators.required,Validators.pattern('^[0-9]*$')]),
+        m03_id:new FormControl(this.form_toma_de_muestra.m03_id,[Validators.required]),
+        laboratorio:new FormControl(this.form_toma_de_muestra.laboratorio,[Validators.required]),
+        comprador:new FormControl(this.form_toma_de_muestra.comprador,[Validators.required]),
+        codigo_analisis:new FormControl(this.form_toma_de_muestra.codigo_analisis,[Validators.required]),
+        nro_factura_exportacion:new FormControl(this.form_toma_de_muestra.nro_factura_exportacion,[Validators.required]),
     });
 
   }

@@ -1,6 +1,6 @@
 <span class="p-float-label">
     <p-dropdown
-        inputId="dropdown"
+        inputId="dropdown_pais"
         [autoDisplayFirst]="false"
         [options]="paises"
         [loading]="true"
@@ -13,8 +13,8 @@
         (onChange)="cambioPaises($event)"
         [appendTo]="'body'"
     ></p-dropdown>
-    <label for="dropdown">Pais de Dastino</label>
-    <small id="pais" class="p-error " *ngIf="error">
-        {{error}}
-    </small>
+    <label for="dropdown_pais">Pais de Destino</label>
 </span>
+<small id="dropdown_pais_error" class="p-error " *ngIf="error">
+    {{error}}
+</small>

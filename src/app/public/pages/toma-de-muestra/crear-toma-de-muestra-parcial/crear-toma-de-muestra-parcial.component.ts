@@ -24,11 +24,11 @@ import { ILugarVerificacionTDM } from '@data/lugar_verificacion_tdm.metadata';
 import { LugarVerificacionTDMService } from 'src/app/admin/services/lugar_verificacion_tdm.service';
 
 @Component({
-  selector: 'app-crear-toma-de-muestra',
-  templateUrl: './crear-toma-de-muestra.component.html',
-  styleUrls: ['./crear-toma-de-muestra.component.scss']
+  selector: 'app-crear-toma-de-muestra-parcial',
+  templateUrl: './crear-toma-de-muestra-parcial.component.html',
+  styleUrls: ['./crear-toma-de-muestra-parcial.component.scss']
 })
-export class CrearTomaDeMuestraComponent implements OnInit {
+export class CrearTomaDeMuestraParcialComponent implements OnInit {
 
     public listaUsuarios!:IResponsableTM[];
     public formulario_interno=new TomaDeMuestraFormulario();
@@ -472,10 +472,10 @@ valSwitches(event:any){
         estado: 'GENERADO',
         aduana_id:this.aduana_id,
         pais_destino_id:this.pais_id,
-        tipo_muestra:'TOTAL',
+        tipo_muestra:'PARCIAL',
+        generar_parcial:true,
         fecha_hora_tdm: this.formatFechaCompleta(this.formulario_interno.formulario.value.fecha_hora_tdm)
       });
-
 
       console.log(this.formulario_interno.formulario.value);
       console.log(this.formulario_interno.formulario.valid );

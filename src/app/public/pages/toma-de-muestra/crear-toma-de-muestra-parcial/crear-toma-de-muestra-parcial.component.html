@@ -14,7 +14,7 @@
 
 
   <div class="card-titulo">
-      <h4 class="text-center" style="color: white;">CREACION DE NUEVO ACTA DE TOMA DE MUESTRA</h4>
+      <h4 class="text-center" style="color: white;">CREACION DE NUEVA TOMA DE MUESTRA PARCIAL</h4>
   </div>
       <div class="grid p-fluid">
           <div class="card card-w-title flex flex-wrap col-12">
@@ -206,7 +206,7 @@
                                 </small>
                             </span>
                         </div>
-                        <div class="field col-12 md:col-3">
+                        <div class="field col-12 md:col-4">
                             <span class="p-float-label">
                                 <input
                                     type="number"
@@ -215,7 +215,7 @@
                                     formControlName="nro_camiones"
                                     class="ng-dirty"
                                 />
-                                <label for="Razón Social">Nro. de Camiones/Vagones</label>
+                                <label for="Razón Social">Nro. de Camiones/Vagones Total de Parciales</label>
                                 <small id="nro_camiones" class="p-error "*ngIf="formulario_interno.esCampoInvalido('nro_camiones')">
                                     {{formulario_interno.getErrorMessage('nro_camiones')}}
                                 </small>
@@ -246,7 +246,7 @@
                                     formControlName="peso_neto_total"
                                     class="ng-dirty"
                                 />
-                                <label for="Razón Social">Peso Aproximado (Kg.)</label>
+                                <label for="Razón Social">Peso Aproximado Total Parciales (Kg.)</label>
                                 <small id="peso_neto_total" class="p-error "*ngIf="formulario_interno.esCampoInvalido('peso_neto_total')">
                                     {{formulario_interno.getErrorMessage('peso_neto_total')}}
                                 </small>
