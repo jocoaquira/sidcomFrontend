@@ -19,17 +19,6 @@
         <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('placa')">{{form.getErrorMessage('placa')}}</small>
     </div>
     <div class="field">
-        <label for="modelo">Modelo</label>
-        <input type="number" pInputText id="modelo" formControlName="modelo" autofocus/>
-        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('modelo')">{{form.getErrorMessage('modelo')}}</small>
-    </div>
-    <div class="field">
-        <label for="marca">Marca</label>
-        <input type="text" pInputText id="marca" formControlName="marca" autofocus/>
-        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('marca') || errorVerificarEmail" >{{form.getErrorMessage('marca')}}</small>
-        <small class="ng-dirty ng-invalid" *ngIf="errorVerificarEmail" >El marca ya existe en el sistema</small>
-    </div>
-    <div class="field">
         <span class="p-float-label mt-5">
             <p-dropdown
                 inputId="dropdown"

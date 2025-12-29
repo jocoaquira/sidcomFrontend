@@ -36,10 +36,6 @@ export class ListarChoferComponent implements OnInit {
         id: null,
         nombre_apellidos: null,
         nro_licencia:null,
-        celular:null,
-        fecha_vencimiento:null,
-        categoria:null,
-        fecha_nacimiento:null,
         operador_id:null,
         estado:null,
     };

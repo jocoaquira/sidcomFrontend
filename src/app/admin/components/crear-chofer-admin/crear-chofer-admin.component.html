@@ -23,56 +23,6 @@
         <input type="text" pInputText id="nro_licencia" formControlName="nro_licencia" autofocus/>
         <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('nro_licencia')">{{form.getErrorMessage('nro_licencia')}}</small>
     </div>
-    <div class="field">
-        <label for="fecha_vencimiento">Fecha de Vencimiento Licencia</label>
-        <p-calendar
-            inputId="fecha_vencimiento"
-            formControlName="fecha_vencimiento"
-            dateFormat="dd/mm/yy"
-            showIcon="true"
-            placeholder="dd/mm/yyyy"
-        ></p-calendar>
-        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('fecha_vencimiento')">
-            {{ form.getErrorMessage('fecha_vencimiento') }}
-        </small>
-    </div>
-    <div class="field">
-        <label for="fecha_vencimiento">Fecha de Nacimiento</label>
-        <p-calendar
-            inputId="fecha_nacimiento"
-            formControlName="fecha_nacimiento"
-            dateFormat="dd/mm/yy"
-            showIcon="true"
-            placeholder="dd/mm/yyyy"
-        ></p-calendar>
-        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('fecha_nacimiento')">
-            {{ form.getErrorMessage('fecha_nacimiento') }}
-        </small>
-    </div>
-    <div class="field">
-        <label for="celular">Celular</label>
-        <input type="text" pInputText id="celular" formControlName="celular" autofocus/>
-        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('celular')">{{form.getErrorMessage('celular')}}</small>
-    </div>
-    <div class="field">
-        <span class="p-float-label mt-5">
-            <p-dropdown
-                inputId="dropdown"
-                *ngIf="categorias"
-                [autoDisplayFirst]="false"
-                [options]="categorias"
-                formControlName="categoria"
-                optionLabel="label"
-                (ngModelChange)="onChangeEstado($event)"
-            >
-                <ng-template let-option pTemplate="item">
-                    <span [class]="'usuario-badge estado-' + option.value">{{option.label}}</span>
-                </ng-template>
-            </p-dropdown>
-
-            <label for="dropdown">Categoria</label>
-        </span>
-    </div>
 
     <div class="field">
         <span class="p-float-label mt-5">

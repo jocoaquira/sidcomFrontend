@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { OperatorsService } from 'src/app/admin/services/operators.service';
 import { IChofer } from '@data/chofer.metadata';
-import { ChoferFormulario } from 'src/app/admin/validators/chofer';
+import { ChoferFormulario } from '../../validators/chofer';
 import { ChoferService } from 'src/app/admin/services/chofer.service';
 import { IOperatorSimple } from '@data/operador_simple.metadata';
 
@@ -29,7 +29,6 @@ export class CrearChoferAdminComponent implements OnInit {
   public sw2:any;
   public submitted:boolean=false;
   public estados:any;
-  public categorias:any;
   public admin:boolean=false;
   public form=new ChoferFormulario();
   public errorUsuario:any={};
@@ -56,11 +55,6 @@ export class CrearChoferAdminComponent implements OnInit {
       { label: 'ACTIVO', value: '1' },
       { label: 'INACTIVO', value: '0' }
   ];
-  this.categorias = [
-    { label: 'A', value: '0' },
-    { label: 'B', value: '1' },
-    { label: 'C', value: '2' }
-];
   }
   ngOnChanges(changes: SimpleChanges): void {
     if (changes && this.usuario && this.isEditMode) {
@@ -68,10 +62,6 @@ export class CrearChoferAdminComponent implements OnInit {
         id:this.usuario.id,
         nombre_apellidos: this.usuario.nombre_apellidos,
         nro_licencia: this.usuario.nro_licencia,
-        fecha_vencimiento: this.usuario.fecha_vencimiento ? new Date(this.usuario.fecha_vencimiento) : null,
-        categoria:this.categorias.find((e: any) => e.label === this.usuario.categoria) || null,
-        celular: this.usuario.celular,
-        fecha_nacimiento: this.usuario.fecha_nacimiento ? new Date(this.usuario.fecha_nacimiento) : null,
         operador_id: this.operadores.find((op: any) => op.id === this.usuario.operador_id).id || null, // Buscar el operador en la lista
         estado: this.estados.find((e: any) => e.label === this.usuario.estado) || null,
       });
@@ -110,19 +100,16 @@ export class CrearChoferAdminComponent implements OnInit {
   }
   actualizarResponsable() {
 
-    if (!this.form.formulario.value.categoria || !this.form.formulario.value.estado) {
-        this.notify.error('Seleccione una categoría y estado válidos', 'Error', { timeOut: 2000 });
+    if (!this.form.formulario.value.estado) {
+        this.notify.error('Seleccione un estado valido', 'Error', { timeOut: 2000 });
         return;
     }
 
     // Usa optional chaining (?.) para evitar errores
-    const categoriaLabel = this.form.formulario.value.categoria?.label;
     const estadoLabel = this.form.formulario.value.estado?.label;
 
     this.form.formulario.patchValue({
-        categoria: categoriaLabel,
-        estado: estadoLabel,
-        celular: parseInt(this.form.formulario.value.celular)
+        estado: estadoLabel
     });
     if (this.form.formulario.valid) {
         let limpio:any= Object.fromEntries(
@@ -158,9 +145,7 @@ export class CrearChoferAdminComponent implements OnInit {
   crearResponsable() {
 
     this.form.formulario.patchValue({
-      celular:parseInt(this.form.formulario.value.celular),
-      estado:this.form.formulario.value.estado.label,
-      categoria:this.form.formulario.value.categoria.label
+      estado:this.form.formulario.value.estado.label
     });
 
     if (this.form.formulario.valid) {

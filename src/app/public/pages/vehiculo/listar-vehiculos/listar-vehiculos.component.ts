@@ -34,8 +34,6 @@ export class ListarVehiculoComponent implements OnInit {
     public responsable:IVehiculo={
         id: null,
         placa: null,
-        modelo:null,
-        marca:null,
         tipo:null,
         operador_id:null,
         estado:null,

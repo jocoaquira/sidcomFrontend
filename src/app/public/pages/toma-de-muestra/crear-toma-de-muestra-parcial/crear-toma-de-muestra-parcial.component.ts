@@ -473,7 +473,7 @@ valSwitches(event:any){
         aduana_id:this.aduana_id,
         pais_destino_id:this.pais_id,
         tipo_muestra:'PARCIAL',
-        generar_parcial:true,
+
         fecha_hora_tdm: this.formatFechaCompleta(this.formulario_interno.formulario.value.fecha_hora_tdm)
       });
 
@@ -485,9 +485,11 @@ valSwitches(event:any){
 
         formularioEnvio={
           ...formularioEnvio,
+          generar_parcial:true,
           minerales:this.minerales_envio,
           municipio_origen:this.municipio_origen_envio
         }
+        console.log(formularioEnvio);
         const humedad = this.formulario_interno.formulario.get('humedad')?.value;
         const merma = this.formulario_interno.formulario.get('merma')?.value;
 

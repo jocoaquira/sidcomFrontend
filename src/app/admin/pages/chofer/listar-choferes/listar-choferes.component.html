@@ -14,7 +14,7 @@
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt *ngIf="listaUsuarios" [value]="listaUsuarios" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['id','fecha_vencimiento','nombre_apellidos','nro_licencia','categoria' ,'fecha_nacimiento','celular','operador_id','estado']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-table #dt *ngIf="listaUsuarios" [value]="listaUsuarios" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['id','nombre_apellidos','nro_licencia','operador_id','estado','razon_social']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Administrar Responsables de Tomas de Muestra</h5>
@@ -30,9 +30,6 @@
                         <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
                         <th pSortableColumn="nombre_apellidos">Nombre y Apellido <p-sortIcon field="nombre_apellidos"></p-sortIcon></th>
                         <th pSortableColumn="nro_licencia">Nro. Licencia  <p-sortIcon field="nro_licencia"></p-sortIcon></th>
-                        <th pSortableColumn="fecha_vencimiento">Fecha de Vencimiento<p-sortIcon field="fecha_vencimiento"></p-sortIcon></th>
-                        <th pSortableColumn="celular">Celular <p-sortIcon field="celular"></p-sortIcon></th>
-                        <th pSortableColumn="categoria">Categoria <p-sortIcon field="categoria"></p-sortIcon></th>
                         <th pSortableColumn="razon_social">Razon Social <p-sortIcon field="razon_social"></p-sortIcon></th>
                         <th pSortableColumn="estado">Estado <p-sortIcon field="estado"></p-sortIcon></th>
                         <th pSortableColumn="inventoryStatus">Acciones <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
@@ -52,18 +49,6 @@
                             <span class="p-column-title">Nro. Licencia</span>
                             {{usuario.nro_licencia}}
                           </td>
-                        <td style="width:15%; min-width:8rem;">
-                            <span class="p-column-title">Fecha de Vencimiento</span>
-                            {{usuario.fecha_vencimiento| date:'dd/MM/yyyy'}}
-                          </td>
-                        <td style="width:5%; min-width:5rem;" >
-                            <span class="p-column-title">celular</span>
-                            {{usuario.celular}}
-                        </td>
-                        <td style="width:3%; min-width:3rem;" >
-                            <span class="p-column-title">categoria</span>
-                            {{usuario.categoria}}
-                        </td>
                         <td style="width:15%; min-width:15rem;" >
                             <span class="p-column-title">razon_social</span>
                             {{usuario.razon_social}}

@@ -73,8 +73,6 @@ export class CrearVehiculoComponent implements OnInit {
       this.form.formulario.patchValue({
         id:this.usuario.id,
         placa: this.usuario.placa,
-        modelo: this.usuario.modelo,
-        marca: this.usuario.marca,
         tipo: this.tipos.find((e: any) => e.nombre === this.usuario.tipo) || null,
         operador_id: this.usuario.operador_id,
         estado: this.estados.find((e: any) => e.label === this.usuario.estado) || null,
@@ -122,6 +120,7 @@ export class CrearVehiculoComponent implements OnInit {
         let limpio:any= Object.fromEntries(
             Object.entries(this.form.formulario.value).filter(([_, v]) => v !== null)
           );
+        console.log('Enviar vehiculo (public):', limpio);
         this.vehiculoService.editarVehiculo(limpio).subscribe(
             (data:any) =>
             {
@@ -160,6 +159,7 @@ export class CrearVehiculoComponent implements OnInit {
         let limpio:any= Object.fromEntries(
             Object.entries(this.form.formulario.value).filter(([_, v]) => v !== null)
           );
+        console.log('Enviar vehiculo (public):', limpio);
         this.vehiculoService.crearVehiculo(limpio).subscribe(
             (data:any) =>
             {

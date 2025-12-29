@@ -10,8 +10,6 @@ export class VehiculoFormulario {
     this.vehiculo = {
         id: null,
         placa: null,
-        modelo:null,
-        marca:null,
         tipo:null,
         operador_id:null,
         estado:null,
@@ -20,12 +18,10 @@ export class VehiculoFormulario {
     };
 
     this.formulario = new FormGroup({
-        modelo: new FormControl(this.vehiculo.modelo,[Validators.required]),
         placa: new FormControl(this.vehiculo.placa, [
             Validators.required,
             Validators.pattern('^[0-9A-Za-z-]+$') // Acepta números, letras y guiones
         ]),
-        marca:new FormControl(this.vehiculo.marca,[Validators.required]),
         tipo:new FormControl(this.vehiculo.tipo,[Validators.required]),
         operador_id:new FormControl(this.vehiculo.operador_id,[Validators.required]),
         id:new FormControl(this.vehiculo.id),
