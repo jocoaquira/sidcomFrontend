@@ -16,6 +16,9 @@ import { StepsModule } from 'primeng/steps';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { RouterModule } from '@angular/router';
 import { CreateFormularioInternoCooperativaComponent } from './create-formulario-interno-cooperativa.component';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { PlantaTratamientoSelectModule } from 'src/app/admin/components/plantaTratamientoSelect/plantaTratamientoSelect.module';
+import { CompradorSelectModule } from 'src/app/admin/components/compradorSelect/compradorSelect.module';
 
 @NgModule({
   imports: [
@@ -24,13 +27,16 @@ import { CreateFormularioInternoCooperativaComponent } from './create-formulario
     InputMaskModule,
     InputNumberModule,
     ReactiveFormsModule,
-	  InputTextModule,
+	InputTextModule,
+    InputSwitchModule,
     TableModule,
     ButtonModule,
     InputTextareaModule,
     DepartamentoSelectModule,
     MunicipioSelectModule,
     MineralesSelectModule,
+    PlantaTratamientoSelectModule,
+    CompradorSelectModule,
     CheckboxModule,
     StepsModule,
     TabMenuModule,

@@ -375,7 +375,7 @@
 
 
                                 <div class="field col-12 md:col-3 " *ngIf="formulario_interno.formulario.value.des_tipo==='COMPRADOR' && valSwitch==false">
-                                    <app-compradorSelect [nombre]="razon_social" (comprador)="cambioComprador($event)" ></app-compradorSelect>
+                                    <app-compradorSelect [razon_social]="razon_social" (comprador)="cambioComprador($event)" ></app-compradorSelect>
                                     <small id="des_comprador" class="p-error "*ngIf="formulario_interno.esCampoInvalido('des_comprador')">
                                         {{formulario_interno.getErrorMessage('des_comprador')}}
                                     </small>

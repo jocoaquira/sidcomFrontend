@@ -783,7 +783,7 @@ cambioComprador(event:any){
         this.comprador.comprador=event.razon_social;
         this.comprador.municipioId=event.municipioId;
         this.formulario_interno.formulario.patchValue({
-            des_comprador: this.comprador.razon_social,
+            des_comprador: this.comprador.comprador,
           });
           console.log(this.formulario_interno.formulario.value);
 }

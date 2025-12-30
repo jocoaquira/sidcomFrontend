@@ -3,11 +3,11 @@
         inputId="dropdown"
         [autoDisplayFirst]="false"
         [options]="compradores"
-        [(ngModel)]="razon_social"
+        [(ngModel)]="id"
         [filter]="true"
         filterBy="displayText"
         optionLabel="displayText"
-        optionValue="razon_social"
+        optionValue="id"
         (onChange)="cambioComprador($event)"
     >
         <!-- Template personalizado para mostrar razón social y municipio -->

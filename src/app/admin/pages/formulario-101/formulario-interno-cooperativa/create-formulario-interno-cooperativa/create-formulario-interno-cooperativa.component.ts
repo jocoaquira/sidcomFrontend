@@ -31,9 +31,13 @@ export class CreateFormularioInternoCooperativaComponent implements OnInit {
     public formulario_interno=new FormularioCooperativaFormulario(this.tipoTransporteService);
     public departamento_id:number=0;
     public municipio_id:number=0;
+    public razon_social:string='';
+    public des_planta:string='';
     public declaracionJurada:boolean=false;
     departamento_id1: number | null = null;  // Guardar el ID del departamento seleccionado
-  municipio_id1: number | null = null;
+    municipio_id1: number | null = null;
+    departamento_id_pt:number|null=null;
+    municipio_id_pt:number|null=null;
   // Método que se llama cuando cambia el departamento
   cambioDepartamento1(departamentoId: number): void {
     this.departamento_id1 = departamentoId;
@@ -50,6 +54,8 @@ export class CreateFormularioInternoCooperativaComponent implements OnInit {
         merma:0,
         cantidad:0
     }
+    public valSwitch:boolean=false;
+    public valSwitchPT:boolean=false;
     public tipo_transporte!:any;
     public destinos!:any;
     public unidades!:any;
@@ -68,6 +74,7 @@ export class CreateFormularioInternoCooperativaComponent implements OnInit {
      };
      public minerales_envio:any=[];
      public municipio_origen_envio:any=[];
+     public compradores:any[]=[];
      public lista_municipios_origen:IFormularioInternoMunicipioOrigen[]=[];
      public municipio_origen:IFormularioInternoMunicipioOrigen={
         id:null,
@@ -76,13 +83,18 @@ export class CreateFormularioInternoCooperativaComponent implements OnInit {
         municipio:null,
         municipio_id:null
      }
+     public comprador:any={
+        municipioId:null,
+        comprador:null,
+        cantidad:null
+     }
+    public cantidadSacos:number=0;
 
       // Definir los pasos para Steps
   steps = [
-    { label: '1. Datos del mineral y/o Metal', command: (event: any) => this.gotoStep(0)},
+    { label: '1. Datos del Medio de Transporte y mineral y/o Metal', command: (event: any) => this.gotoStep(0)},
     { label: '2. Origen del mineral y/o Metal',command: (event: any) => this.gotoStep(1) },
-    { label: '3. Destino del mineral y/o Metal', command: (event: any) => this.gotoStep(2) },
-    { label: '4. Datos del Medio de Transporte', command: (event: any) => this.gotoStep(3) }
+    { label: '3. Destino del mineral y/o Metal', command: (event: any) => this.gotoStep(2) }
   ];
 
   public activeStep: number = 0; // Establecer el paso activo inicial
@@ -289,7 +301,8 @@ nextStep() {
       formularioEnvio={
         ...formularioEnvio,
         minerales:this.minerales_envio,
-        municipio_origen:this.municipio_origen_envio
+        municipio_origen:this.municipio_origen_envio,
+        compradores:this.compradores
       }
 
       this.formularioInternoService.crearFormularioInterno(formularioEnvio).subscribe(
@@ -327,6 +340,192 @@ nextStep() {
    }
 
   }
+  agregarComprador(){
+    try {
+        // Verificar si el campo cantidad existe y estß deshabilitado
+        const controlCantidad = this.formulario_interno.formulario.get('cantidad');
+        const cantidadDisabled = controlCantidad ? controlCantidad.disabled : false;
+
+        // Controlar lÝmite cuando cantidad estß deshabilitada
+        if (cantidadDisabled && this.compradores.length >= 1) {
+            this.notify.error('Solo se permite agregar un comprador cuando cantidad estß deshabilitada', 'LÝmite alcanzado', {
+                timeOut: 2000,
+                positionClass: 'toast-bottom-right'
+            });
+            return;
+        }
+
+        // Calcular la suma total de cantidades de compradores existentes
+        const sumaCantidadesCompradores = this.compradores.reduce((total, comprador) => {
+            return total + (comprador.cantidad || 0);
+        }, 0);
+
+        // Obtener el valor del campo cantidad del formulario
+        const cantidadFormulario = this.formulario_interno.formulario.value.cantidad;
+
+        // Nueva restricci¾n: Verificar que la suma no exceda la cantidad del formulario
+        if (cantidadFormulario !== null && cantidadFormulario !== undefined) {
+            const cantidadTotalConNuevo = sumaCantidadesCompradores + (this.cantidadSacos || 0);
+
+            if (cantidadTotalConNuevo > cantidadFormulario) {
+                this.notify.error(`La suma total de cantidades (${cantidadTotalConNuevo}) excede la cantidad disponible (${cantidadFormulario})`, 'LÝmite excedido', {
+                    timeOut: 3000,
+                    positionClass: 'toast-bottom-right'
+                });
+                return;
+            }
+        }
+
+        // Configurar cantidad por defecto si estß deshabilitada
+        if (cantidadDisabled && this.compradores.length < 1) {
+            this.cantidadSacos = 1;
+        }
+
+        // Validar seg·n el modo (valSwitch)
+        if (this.valSwitch) {
+            this.agregarEnModoSwitch(sumaCantidadesCompradores);
+        } else {
+            this.agregarEnModoNormal(sumaCantidadesCompradores);
+        }
+
+    } catch (error) {
+        console.error('Error en agregarComprador:', error);
+        this.notify.error('Error al agregar comprador', 'Error', {
+            timeOut: 2000,
+            positionClass: 'toast-bottom-right'
+        });
+    }
+}
+
+agregarEnModoSwitch(sumaCantidadesCompradores) {
+    // Validaciones para modo switch activado
+    if (!this.municipio_id1) {
+        this.notify.error('Seleccione un municipio', 'Campo requerido', {
+            timeOut: 2000,
+            positionClass: 'toast-bottom-right'
+        });
+        return;
+    }
+
+    if (!this.formulario_interno.formulario.value.des_comprador ||
+        this.formulario_interno.formulario.value.des_comprador.trim() === '') {
+        this.notify.error('Ingrese el nombre del comprador', 'Campo requerido', {
+            timeOut: 2000,
+            positionClass: 'toast-bottom-right'
+        });
+        return;
+    }
+
+    if (!this.cantidadSacos || this.cantidadSacos <= 0) {
+        this.notify.error('La cantidad debe ser mayor a 0', 'Campo requerido', {
+            timeOut: 2000,
+            positionClass: 'toast-bottom-right'
+        });
+        return;
+    }
+
+    // Verificar restricci¾n de cantidad final
+    const cantidadFormulario = this.formulario_interno.formulario.value.cantidad;
+    const cantidadTotalFinal = sumaCantidadesCompradores + this.cantidadSacos;
+
+    if (cantidadFormulario !== null && cantidadFormulario !== undefined &&
+        cantidadTotalFinal > cantidadFormulario) {
+        this.notify.error(`No puede agregar ${this.cantidadSacos} sacos. La cantidad total serÝa ${cantidadTotalFinal}, excediendo el lÝmite de ${cantidadFormulario}`, 'LÝmite excedido', {
+            timeOut: 3000,
+            positionClass: 'toast-bottom-right'
+        });
+        return;
+    }
+
+    // Agregar comprador
+    this.comprador.comprador = this.formulario_interno.formulario.value.des_comprador;
+    this.comprador.municipioId = this.municipio_id1;
+    this.comprador.cantidad = this.cantidadSacos;
+    this.compradores.push({...this.comprador});
+
+    // Limpiar formulario
+    this.limpiarFormulario();
+
+    this.notify.success('Comprador agregado exitosamente', '╔xito', {
+        timeOut: 2000,
+        positionClass: 'toast-bottom-right'
+    });
+}
+
+agregarEnModoNormal(sumaCantidadesCompradores) {
+    // Validaciones para modo switch desactivado
+    if (!this.comprador.comprador) {
+        this.notify.error('El comprador es requerido', 'Campo requerido', {
+            timeOut: 2000,
+            positionClass: 'toast-bottom-right'
+        });
+        return;
+    }
+
+    if (!this.cantidadSacos || this.cantidadSacos <= 0) {
+        this.notify.error('La cantidad debe ser mayor a 0', 'Campo requerido', {
+            timeOut: 2000,
+            positionClass: 'toast-bottom-right'
+        });
+        return;
+    }
+
+    // Verificar restricci¾n de cantidad final
+    const cantidadFormulario = this.formulario_interno.formulario.value.cantidad;
+    const cantidadTotalFinal = sumaCantidadesCompradores + this.cantidadSacos;
+
+    if (cantidadFormulario !== null && cantidadFormulario !== undefined &&
+        cantidadTotalFinal > cantidadFormulario) {
+        this.notify.error(`No puede agregar ${this.cantidadSacos} sacos. La cantidad total serÝa ${cantidadTotalFinal}, excediendo el lÝmite de ${cantidadFormulario}`, 'LÝmite excedido', {
+            timeOut: 3000,
+            positionClass: 'toast-bottom-right'
+        });
+        return;
+    }
+
+    // Agregar comprador
+    this.comprador.cantidad = this.cantidadSacos;
+    this.compradores.push({...this.comprador});
+
+    // Limpiar datos
+    this.comprador = {
+        comprador: null,
+        municipioId: null,
+        cantidad: null
+    };
+    this.cantidadSacos = null;
+
+    this.notify.success('Comprador agregado exitosamente', '╔xito', {
+        timeOut: 2000,
+        positionClass: 'toast-bottom-right'
+    });
+}
+
+limpiarFormulario() {
+    this.municipio_id1 = null;
+    this.departamento_id1 = null;
+    this.cantidadSacos = null;
+    this.formulario_interno.formulario.patchValue({
+        des_comprador: null,
+    });
+}
+
+// M╔todo adicional para obtener la suma actual (┌til para mostrar en UI)
+getSumaTotalCompradores() {
+    return this.compradores.reduce((total, comprador) => total + (comprador.cantidad || 0), 0);
+}
+
+// M╔todo para verificar si se puede agregar mßs
+puedeAgregarMas() {
+    const cantidadFormulario = this.formulario_interno.formulario.value.cantidad;
+    const sumaActual = this.getSumaTotalCompradores();
+
+    if (cantidadFormulario === null || cantidadFormulario === undefined) {
+        return true; // No hay restricci¾n si no hay cantidad definida
+    }
+
+    return sumaActual < cantidadFormulario;
+}
   guardarMinerales(formulario_int_id:any) {
     this.lista_leyes_mineral.forEach((item) => {
 
@@ -482,6 +681,9 @@ nextStep() {
         const checkbox = event.target as HTMLInputElement;
         this.declaracionJurada=checkbox.checked;
     }
+    eliminarComprador(compradorIndex: number) {
+        this.compradores.splice(compradorIndex, 1);
+    }
 
 
     cambioPresentacion(event:any){
@@ -526,4 +728,41 @@ private mostrarErrorFormularios(formGroup: FormularioCooperativaFormulario): voi
 cancelar(){
 
 }
+cambioComprador(event:any){
+    //this.comprador=event;
+
+        this.comprador.comprador=event.razon_social;
+        this.comprador.municipioId=event.municipioId;
+        this.formulario_interno.formulario.patchValue({
+            des_comprador: this.comprador.comprador,
+            id_municipio_destino: this.comprador.municipioId
+          });
+}
+cambioPlantaDeTratamiento(event:any){
+    //this.comprador=event;
+        this.formulario_interno.formulario.patchValue({
+            des_planta: event.nombre,
+            id_municipio_destino:event.municipioId
+          });
+}
+valSwitches(event:any){
+
+    this.valSwitch=event.checked;
+}
+valSwitchesPT(event:any){
+
+    this.valSwitchPT=event.checked;
+}
+cambioDepartamentoPT(departamentoId: number): void {
+    this.departamento_id_pt = departamentoId;
+    // Aqu╠ puedes hacer cualquier acciТn extra cuando el departamento cambie
+  }
+cambioMunicipioPT(event){
+        this.municipio_id_pt=event;
+        this.formulario_interno.formulario.value.id_municipio_destino=event;
+
+        this.formulario_interno.formulario.patchValue({
+            id_municipio_destino: event
+          });
+    }
 }
