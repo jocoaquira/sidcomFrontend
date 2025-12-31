@@ -15,6 +15,12 @@ import { MineralesSelectModule } from 'src/app/admin/components/mineralesSelect/
 import { CheckboxModule } from 'primeng/checkbox';
 import { StepsModule } from 'primeng/steps';
 import { TabMenuModule } from 'primeng/tabmenu';
+import { ChoferSelectModule } from 'src/app/admin/components/choferSelect/choferSelect.module';
+import { VehiculoSelectModule } from 'src/app/admin/components/vehiculoSelect/vehiculoSelect.module';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { OperadoresSelectModule } from 'src/app/admin/components/operadoresSelect/operadoresSelect.module';
+import { PlantaTratamientoSelectModule } from 'src/app/admin/components/plantaTratamientoSelect/plantaTratamientoSelect.module';
+import { CompradorSelectModule } from 'src/app/admin/components/compradorSelect/compradorSelect.module';
 
 @NgModule({
   imports: [
@@ -23,6 +29,7 @@ import { TabMenuModule } from 'primeng/tabmenu';
     InputMaskModule,
     InputNumberModule,
     ReactiveFormsModule,
+    InputSwitchModule,
 	  InputTextModule,
     TableModule,
     ButtonModule,
@@ -30,6 +37,11 @@ import { TabMenuModule } from 'primeng/tabmenu';
     DepartamentoSelectModule,
     MunicipioSelectModule,
     MineralesSelectModule,
+    OperadoresSelectModule,
+    PlantaTratamientoSelectModule,
+    CompradorSelectModule,
+    ChoferSelectModule,
+    VehiculoSelectModule,
     CheckboxModule,
     StepsModule,
     TabMenuModule,

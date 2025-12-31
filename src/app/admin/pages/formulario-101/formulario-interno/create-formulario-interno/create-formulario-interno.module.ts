@@ -16,6 +16,12 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { StepsModule } from 'primeng/steps';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { RouterModule } from '@angular/router';
+import { ChoferSelectModule } from 'src/app/admin/components/choferSelect/choferSelect.module';
+import { VehiculoSelectModule } from 'src/app/admin/components/vehiculoSelect/vehiculoSelect.module';
+import { OperadoresSelectModule } from 'src/app/admin/components/operadoresSelect/operadoresSelect.module';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { PlantaTratamientoSelectModule } from 'src/app/admin/components/plantaTratamientoSelect/plantaTratamientoSelect.module';
+import { CompradorSelectModule } from 'src/app/admin/components/compradorSelect/compradorSelect.module';
 
 @NgModule({
   imports: [
@@ -24,11 +30,17 @@ import { RouterModule } from '@angular/router';
     InputMaskModule,
     InputNumberModule,
     ReactiveFormsModule,
+    InputSwitchModule,
 	  InputTextModule,
     TableModule,
     ButtonModule,
     InputTextareaModule,
     DepartamentoSelectModule,
+    ChoferSelectModule,
+    VehiculoSelectModule,
+    PlantaTratamientoSelectModule,
+    CompradorSelectModule,
+    OperadoresSelectModule,
     MunicipioSelectModule,
     MineralesSelectModule,
     CheckboxModule,
