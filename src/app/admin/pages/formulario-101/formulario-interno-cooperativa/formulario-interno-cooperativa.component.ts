@@ -58,11 +58,12 @@ export class FormularioInternoCooperativaComponent implements OnInit {
         //this.productService.getProducts().then(data => this.products = data);
 
         this.cols = [
-            { field: 'product', header: 'Product' },
-            { field: 'price', header: 'Price' },
-            { field: 'category', header: 'Category' },
-            { field: 'rating', header: 'Reviews' },
-            { field: 'inventoryStatus', header: 'Status' }
+            { field: 'nro_formulario', header: 'Núm.' },
+            { field: 'razon_social', header: 'Operador' },
+            { field: 'lote', header: 'Lote' },
+            { field: 'fecha_creacion', header: 'Fecha Creación' },
+            { field: 'estado', header: 'Estado' },
+            { field: 'fecha_vencimiento', header: 'Vencimiento' }
         ];
 
     }

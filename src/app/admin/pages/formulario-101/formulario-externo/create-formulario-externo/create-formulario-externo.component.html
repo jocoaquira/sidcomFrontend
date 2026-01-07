@@ -13,8 +13,7 @@
                 <div class="col-12" >
                     <div *ngIf="activeStep === 0"
                     >
-                        <div class="grid p-fluid">
-                            <div class="grid p-fluid mt-2">
+                        <div class="grid p-fluid mt-2">
                                 <div class="field col-12 md:col-10">
                                     <span class="p-float-label">
                                         <p-dropdown
@@ -32,7 +31,6 @@
                                         </small>
                                     </span>
                                 </div>
-                            </div>
                             <h5 class="field-subtitle mb-0 mt-1 col-12 py-1">Información de Medio de Transporte</h5>
 
                             <div class="field col-12 md:col-3">
@@ -173,6 +171,28 @@
 
 
                             <h5 class="field-subtitle mb-0 mt-1 col-12 py-1">Datos de Exportación</h5>
+                            <div class="field col-12 md:col-4" *ngIf="canCrearTomaDeMuestra.canActivate()">
+                                <span class="p-float-label">
+                                    <input
+                                        type="text"
+                                        id="nro_formulario_tm"
+                                        pInputText
+                                        formControlName="nro_formulario_tm"
+                                        class="ng-dirty"
+                                        (input)="cambioNroFormulario($event)"
+                                    />
+                                    <label for="Acta de Verificacion">Acta de Verificacion Toma de Muestra</label>
+                                    <small id="nro_formulario_tm" class="p-error" *ngIf="formulario_externo.esCampoInvalido('nro_formulario_tm')">
+                                        {{formulario_externo.getErrorMessage('nro_formulario_tm')}}
+                                    </small>
+                                    <small class="p-text-secondary">
+                                        Es necesario llenar los datos para cargar los demas datos
+                                    </small>
+                                    <small id="nro_formulario_tm" class="p-error " *ngIf="!acta_TDM">
+                                        Se requiere un formulario de Toma de Muestra Aprobado
+                                    </small>
+                                </span>
+                            </div>
                             <div class="field col-12 md:col-4">
                                 <span class="p-float-label">
                                     <input
@@ -233,25 +253,7 @@
                                     </small>
                                 </span>
                             </div>
-                            <div class="field col-12 md:col-4" *ngIf="canCrearTomaDeMuestra.canActivate()">
-                                <span class="p-float-label">
-                                    <input
-                                        type="text"
-                                        id="nro_formulario_tm"
-                                        pInputText
-                                        formControlName="nro_formulario_tm"
-                                        class="ng-dirty"
-                                        (input)="cambioNroFormulario($event)"
-                                    />
-                                    <label for="Acta de Verificación">Acta de Verificacion Toma de Muestra</label>
-                                    <small id="nro_formulario_tm" class="p-error" *ngIf="formulario_externo.esCampoInvalido('nro_formulario_tm')">
-                                        {{formulario_externo.getErrorMessage('nro_formulario_tm')}}
-                                    </small>
-                                    <small id="nro_formulario_tm" class="p-error " *ngIf="!acta_TDM">
-                                        Se requiere un formulario de Toma de Muestra Aprobado
-                                    </small>
-                                </span>
-                            </div>
+                            
 
 
                         </div>
@@ -623,4 +625,7 @@
 
         </div>
 </form>
+
+
+
 

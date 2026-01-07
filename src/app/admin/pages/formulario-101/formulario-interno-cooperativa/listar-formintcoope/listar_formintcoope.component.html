@@ -16,7 +16,7 @@
     dataKey="id"
     [sortField]="sortField"
     [sortOrder]="sortOrder"
-    [globalFilterFields]="['nro_formulario','razon_social','fecha_creacion','estado','fecha_vencimiento']">
+    [globalFilterFields]="['nro_formulario','razon_social','lote','fecha_creacion','estado','fecha_vencimiento']">
 
       <ng-template pTemplate="caption">
 
@@ -48,6 +48,9 @@
           <th pSortableColumn="razon_social">
             Operador <p-sortIcon field="razon_social"></p-sortIcon>
           </th>
+          <th pSortableColumn="lote">
+            Lote <p-sortIcon field="lote"></p-sortIcon>
+          </th>
           <th pSortableColumn="fecha_creacion">
             Fecha Creación <p-sortIcon field="fecha_creacion"></p-sortIcon>
           </th>
@@ -70,6 +73,7 @@
         <tr>
           <td>{{ form.nro_formulario }}</td>
           <td>{{ form.razon_social }}</td>
+          <td>{{ form.lote }}</td>
           <td>{{ form.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</td>
           <td>{{ form.fecha_vencimiento | date:'dd/MM/yyyy HH:mm' }}</td>
           <td style="width:5%; min-width:5rem;">
@@ -136,7 +140,7 @@
 
       <ng-template pTemplate="emptymessage">
         <tr>
-          <td colspan="5">No se encontraron registros</td>
+          <td colspan="9">No se encontraron registros</td>
         </tr>
       </ng-template>
     </p-table>

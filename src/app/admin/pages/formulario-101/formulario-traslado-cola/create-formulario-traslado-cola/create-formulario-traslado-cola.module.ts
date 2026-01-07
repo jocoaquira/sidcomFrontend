@@ -10,6 +10,8 @@ import { ButtonModule } from 'primeng/button';
 import { DepartamentoSelectModule } from 'src/app/admin/components/departamentoSelect/departamentoSelect.module';
 import { MunicipioSelectModule } from 'src/app/admin/components/municipioSelect/municipioSelect.module';
 import { MineralesSelectModule } from 'src/app/admin/components/mineralesSelect/mineralesSelect.module';
+import { ChoferSelectModule } from 'src/app/admin/components/choferSelect/choferSelect.module';
+import { VehiculoSelectModule } from 'src/app/admin/components/vehiculoSelect/vehiculoSelect.module';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CheckboxModule } from 'primeng/checkbox';
 import { StepsModule } from 'primeng/steps';
@@ -31,6 +33,8 @@ import { CreateFormularioTrasladoColaComponent } from './create-formulario-trasl
     DepartamentoSelectModule,
     MunicipioSelectModule,
     MineralesSelectModule,
+    ChoferSelectModule,
+    VehiculoSelectModule,
     CheckboxModule,
     StepsModule,
     TabMenuModule,

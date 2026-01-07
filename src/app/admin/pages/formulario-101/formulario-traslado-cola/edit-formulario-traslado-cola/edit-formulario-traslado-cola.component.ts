@@ -10,6 +10,8 @@ import { IMineral } from '@data/mineral.metadata';
 import { IMunicipio } from '@data/municipio.metadata';
 import { IOperatorSimple } from '@data/operador_simple.metadata';
 import { ToastrService } from 'ngx-toastr';
+import { IChofer } from '@data/chofer.metadata';
+import { IVehiculo } from '@data/vehiculo.metadata';
 import { catchError, of, retry } from 'rxjs';
 import { DepartamentosService } from 'src/app/admin/services/departamentos.service';
 import { FormularioInternoMineralService } from 'src/app/admin/services/formulario-interno/formulariointerno-mineral.service';
@@ -35,6 +37,11 @@ export class EditFormularioTrasladoColaComponent implements OnInit {
   public formulario_traslado_cola=new FormularioTrasladoColaFormulario(this.tipoTransporteService);
   public departamento_id:number=0;
   public municipio_id:number=0;
+  public operador_id:number | null = null;
+  public placa:string='';
+  public nro_licencia:string='';
+  public chofer:IChofer | null = null;
+  public vehiculo:IVehiculo | null = null;
   public declaracionJurada:boolean=false;
   //public minerales:IMineral[]=[];
 
@@ -94,10 +101,9 @@ cambioDepartamento1(departamentoId: number): void {
 
     // Definir los pasos para Steps
 steps = [
-  { label: '1. Datos del mineral y/o Metal', command: (event: any) => this.gotoStep(0)},
+  { label: '1. Datos del Medio de Transporte y mineral y/o Metal', command: (event: any) => this.gotoStep(0)},
   { label: '2. Origen del mineral y/o Metal',command: (event: any) => this.gotoStep(1) },
   { label: '3. Destino del mineral y/o Metal', command: (event: any) => this.gotoStep(2) },
-  { label: '4. Datos del Medio de Transporte', command: (event: any) => this.gotoStep(3) }
 ];
 
 public activeStep: number = 0; // Establecer el paso activo inicial
@@ -132,6 +138,18 @@ prevStep() {
 gotoStep(index: number) {
   this.activeStep = index;
 }
+  cambioOperador(event:any){
+    this.operador_id = event?.value ?? null;
+    this.placa = '';
+    this.nro_licencia = '';
+    this.chofer = null;
+    this.vehiculo = null;
+    this.formulario_traslado_cola.formulario.patchValue({
+      placa: null,
+      nom_conductor: null,
+      licencia: null
+    });
+  }
 
 // Validar si los campos del paso actual son correctos
 isStepValid(stepIndex: number): boolean {
@@ -186,6 +204,9 @@ constructor(
       this.num_form=formulario_int.nro_formulario;
 
       this.cargar_datos(formulario_int);
+      this.operador_id = formulario_int.operador_id ?? null;
+      this.placa=this.formulario_traslado_cola.formulario.value.placa;
+      this.nro_licencia=this.formulario_traslado_cola.formulario.value.licencia;
      // this.formulario_traslado_cola.formulario.get('operador_id')?.disable(); // Para desactivar
 
     },
@@ -661,5 +682,22 @@ if (errores.length > 0) {
 }
 cancelar(){
 
+}
+cambioVehiculo(event:any){
+    this.vehiculo=event;
+    this.placa=this.vehiculo.placa;
+
+    this.formulario_traslado_cola.formulario.patchValue({
+        placa: this.vehiculo.placa,
+        tipo_transporte:this.vehiculo.tipo,
+        });
+}
+cambioChofer(event:any){
+    this.chofer=event;
+    this.nro_licencia=this.chofer.nro_licencia;
+    this.formulario_traslado_cola.formulario.patchValue({
+        nom_conductor: event.nombre_apellidos,
+        licencia: event.nro_licencia,
+        });
 }
 }

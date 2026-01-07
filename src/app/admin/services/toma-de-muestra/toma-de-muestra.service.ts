@@ -78,7 +78,8 @@ verTomaDeMuestra(nombre:string)
 verTomaDeMuestraForm(form:string,id_operador:number)
 {
   // asignacion de parametros
-  return this.http.get(`${this.baseUrl}sample/print_nro_formv/`+form+`/`+id_operador);
+  const normalizedForm = encodeURIComponent((form ?? '').trim());
+  return this.http.get(`${this.baseUrl}sample/print_nro_formv/`+normalizedForm+`/`+id_operador);
 }
 handleTomaDeMuestraNroForm(data: ITDMNroForm):ITDMNroForm {
   let TomaDeMuestra:ITDMNroForm=data;

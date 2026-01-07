@@ -17,6 +17,10 @@ import { StepsModule } from 'primeng/steps';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { DialogModule } from 'primeng/dialog';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { CalendarModule } from 'primeng/calendar';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { AduanaSelectModule } from 'src/app/admin/components/aduanaSelect/aduanaSelect.module';
+import { PaisSelectModule } from 'src/app/admin/components/paisSelect/paisSelect.module';
 
 @NgModule({
   imports: [
@@ -27,6 +31,7 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
     ReactiveFormsModule,
     InputTextModule,
     TableModule,
+    InputSwitchModule,
     ButtonModule,
     InputTextareaModule,
     DepartamentoSelectModule,
@@ -37,7 +42,10 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
     TabMenuModule,
     FormsModule,
     DialogModule,
-    LeafletModule
+    LeafletModule,
+    CalendarModule,
+    PaisSelectModule,
+    AduanaSelectModule
   ],
   declarations: [CrearTomaDeMuestraComponent]
 })

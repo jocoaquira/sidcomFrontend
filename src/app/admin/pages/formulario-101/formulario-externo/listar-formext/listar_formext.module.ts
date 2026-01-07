@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
@@ -8,6 +9,7 @@ import { BadgeModule } from 'primeng/badge';
 import { TagModule } from 'primeng/tag';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { DropdownModule } from 'primeng/dropdown';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { RouterModule } from '@angular/router';
 import { ListarFormularioExternoComponent } from './listar_formext.component';
@@ -17,6 +19,7 @@ import { TrancaDetailComponent } from './components/control-tranca-detalle.compo
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     RouterModule,
     ToolbarModule,
     TableModule,
@@ -26,6 +29,7 @@ import { TrancaDetailComponent } from './components/control-tranca-detalle.compo
     TagModule,
     InputTextModule,
     InputNumberModule,
+    DropdownModule,
     ConfirmDialogModule,
     DynamicDialogModule
   ],

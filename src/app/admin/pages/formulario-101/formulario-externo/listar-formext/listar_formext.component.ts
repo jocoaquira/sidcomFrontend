@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { IFormularioExterno } from "@data/formulario_externo.metadata";
 import { IFormularioExternoPDF } from "@data/formulario_externo_pdf.metadata";
 import { IFormularioExternoSimple } from "@data/formulario_externo_simple.metadata";
+import { IOperatorSimple } from "@data/operador_simple.metadata";
 
 import { ToastrService } from "ngx-toastr";
 import { ConfirmationService } from "primeng/api";
@@ -15,6 +16,7 @@ import { CanListarFormularioExternoGuard } from "src/app/admin/guards/formulario
 import { CanVerFormularioExternoGuard } from "src/app/admin/guards/formulario-externos/can-ver-formulario-externo.guard";
 import { CanEliminarOperatorGuard } from "src/app/admin/guards/operators/can-eliminar-operator.guard";
 import { FormularioExternosService } from "src/app/admin/services/formulario-externo/formulariosexternos.service";
+import { OperatorsService } from "src/app/admin/services/operators.service";
 import { PdfFormularioExternoService } from "src/app/admin/services/pdf/formulario-externo-pdf.service";
 import { TrancaDetailComponent } from "./components/control-tranca-detalle.component";
 
@@ -28,6 +30,8 @@ export class ListarFormularioExternoComponent implements OnInit {
     @ViewChild('dt') dt!: Table;
     public error!:any;
     listaFormularioExternos: IFormularioExternoSimple[] = [];
+    operadores: IOperatorSimple[] = [];
+    operador_id: number | null = null;
     cols: any[] = [];
     loading: boolean = true;
     totalRecords: number = 0;
@@ -49,6 +53,7 @@ export class ListarFormularioExternoComponent implements OnInit {
         private confirmationService:ConfirmationService,
         private notify:ToastrService,
         private formExtService: FormularioExternosService,
+        private operadoresService: OperatorsService,
         private dialogService: DialogService,
     ) { }
 
@@ -56,10 +61,17 @@ export class ListarFormularioExternoComponent implements OnInit {
       this.cols = [
         { field: 'nro_formulario', header: 'Número' },
         { field: 'razon_social', header: 'Operador' },
+        { field: 'lote', header: 'Lote' },
         { field: 'fecha_creacion', header: 'Fecha Creación' },
         { field: 'estado', header: 'Estado' },
         { field: 'fecha_vencimiento', header: 'Vencimiento' }
       ];
+
+      this.operadoresService.verOperatorsSimple('hj').subscribe(
+        (data:any)=>{
+          this.operadores=this.operadoresService.handleOperatorSimple(data);
+        },
+        (error:any)=> this.error=this.operadoresService.handleOperatorSimpleError(error));
 
       this.loadData();
     }
@@ -67,13 +79,25 @@ export class ListarFormularioExternoComponent implements OnInit {
     loadData() {
 
         this.loading = true;
-        this.formExtService.getFormReducidoOptimizado(
-          this.dt?.first / this.rows + 1 || 1,
-          this.rows,
-          this.searchTerm,
-          this.sortField,
-          this.sortOrder
-        ).subscribe({
+        const page = this.dt?.first / this.rows + 1 || 1;
+        const operadorId = this.operador_id ?? null;
+        const request$ = operadorId
+          ? this.formExtService.getFormReducidoOperadorOptimizado(
+              page,
+              this.rows,
+              this.searchTerm,
+              this.sortField,
+              this.sortOrder,
+              operadorId
+            )
+          : this.formExtService.getFormReducidoOptimizado(
+              page,
+              this.rows,
+              this.searchTerm,
+              this.sortField,
+              this.sortOrder
+            );
+        request$.subscribe({
           next: (response) => {
             this.listaFormularioExternos = response.data;
             this.totalRecords = response.total;
@@ -102,6 +126,14 @@ export class ListarFormularioExternoComponent implements OnInit {
         this.dt.first = 0;       // <-- Reinicia a la primera página
         this.loadData();         // <-- Vuelve a cargar los datos
 
+    }
+
+    cambioOperador(event: any) {
+        this.operador_id = event?.value ?? null;
+        if (this.dt) {
+          this.dt.first = 0;
+        }
+        this.loadData();
     }
 
     generarPDF(formulario_interno:IFormularioExternoSimple){
@@ -146,6 +178,13 @@ export class ListarFormularioExternoComponent implements OnInit {
                     this.notify.error('Falló...Revise los datos y vuelva a enviar....','Error con la Emisión del Formulario',{timeOut:2000,positionClass: 'toast-top-right'});
                 });
         }
+    vigenteAnulacion(form:any): boolean {
+
+        const fecha_vencimiento:Date = new Date(form.fecha_vencimiento);
+        const fechaLimite = new Date();
+        let sw:boolean=fechaLimite <= fecha_vencimiento;
+        return sw; // Se muestra solo despuゼs de DIAS_ANULACION d魈as
+      }
 showTrancaDetail(tranca: any) {
             const ref = this.dialogService.open(TrancaDetailComponent, {
               header: 'Detalle del Control en Tranca',

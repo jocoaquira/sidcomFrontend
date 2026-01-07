@@ -7,6 +7,14 @@ export interface ITDMNroForm {
     cantidad?:number,
     peso_neto:number,
     humedad?:number,
+    merma?:number,
+    m03_id?:string,
+    nro_factura_exportacion?:string,
+    laboratorio?:string,
+    codigo_analisis?:string,
+    comprador?:string,
+    pais_destino_id?:number,
+    aduana_id?:number,
 
     estado:string //'GENERADO','EMITIDO','VENCIDO', 'ANULADO'
     minerales:IMinerales[],

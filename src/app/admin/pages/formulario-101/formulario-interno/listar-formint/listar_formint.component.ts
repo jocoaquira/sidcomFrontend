@@ -55,6 +55,7 @@ export class ListarFormularioInternoComponent implements OnInit {
       this.cols = [
         { field: 'nro_formulario', header: 'Número' },
         { field: 'razon_social', header: 'Operador' },
+            { field: 'lote', header: 'Lote' },
         { field: 'fecha_creacion', header: 'Fecha Creación' },
         { field: 'estado', header: 'Estado' },
         { field: 'fecha_vencimiento', header: 'Vencimiento' }

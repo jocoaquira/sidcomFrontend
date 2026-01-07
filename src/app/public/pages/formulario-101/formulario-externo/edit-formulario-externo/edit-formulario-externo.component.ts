@@ -753,11 +753,44 @@ cambioNroFormulario(event:any){
   (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
 }
 cargarDatosTDM(form:ITDMNroForm){
+  console.log('TDM payload (public/externo/editar):', form);
   this.formulario_externo.formulario.patchValue({
     lote:form.lote,
     presentacion_id:form.presentacion_id,
-    humedad:form.humedad,
   });
+  const extraData: any = {};
+  if (form.humedad !== undefined) {
+    extraData.humedad = form.humedad;
+  }
+  if (form.merma !== undefined) {
+    extraData.merma = form.merma;
+  }
+  if (form.m03_id !== undefined) {
+    extraData.m03_id = form.m03_id;
+  }
+  if (form.nro_factura_exportacion !== undefined) {
+    extraData.nro_factura_exportacion = form.nro_factura_exportacion;
+  }
+  if (form.laboratorio !== undefined) {
+    extraData.laboratorio = form.laboratorio;
+  }
+  if (form.codigo_analisis !== undefined) {
+    extraData.codigo_analisis = form.codigo_analisis;
+  }
+  if (form.comprador !== undefined) {
+    extraData.comprador = form.comprador;
+  }
+  if (form.pais_destino_id !== undefined) {
+    extraData.pais_destino_id = form.pais_destino_id;
+    this.pais_id1 = form.pais_destino_id;
+  }
+  if (form.aduana_id !== undefined) {
+    extraData.aduana_id = form.aduana_id;
+    this.aduana_id1 = form.aduana_id;
+  }
+  if (Object.keys(extraData).length > 0) {
+    this.formulario_externo.formulario.patchValue(extraData);
+  }
   this.minerales_envio=form.minerales//.push({...envio_minerales});
   // Crear una nueva lista excluyendo ciertos campos
     this.minerales_envio = form.minerales.map(mineral => {
