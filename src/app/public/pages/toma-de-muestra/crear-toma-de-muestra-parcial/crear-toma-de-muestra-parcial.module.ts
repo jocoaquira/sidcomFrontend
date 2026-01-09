@@ -20,6 +20,11 @@ import { CalendarModule } from 'primeng/calendar';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { AduanaSelectModule } from 'src/app/admin/components/aduanaSelect/aduanaSelect.module';
 import { PaisSelectModule } from 'src/app/admin/components/paisSelect/paisSelect.module';
+import { CardModule } from 'primeng/card';
+import { TagModule } from 'primeng/tag';
+import { MessageModule } from 'primeng/message';
+import { DividerModule } from 'primeng/divider';
+import { RouterModule } from '@angular/router';
 import { CrearTomaDeMuestraParcialComponent } from './crear-toma-de-muestra-parcial.component';
 
 @NgModule({
@@ -46,6 +51,11 @@ import { CrearTomaDeMuestraParcialComponent } from './crear-toma-de-muestra-parc
     CalendarModule,
     PaisSelectModule,
     AduanaSelectModule,
+    CardModule,
+    TagModule,
+    MessageModule,
+    DividerModule,
+    RouterModule
 
   ],
   declarations: [CrearTomaDeMuestraParcialComponent]

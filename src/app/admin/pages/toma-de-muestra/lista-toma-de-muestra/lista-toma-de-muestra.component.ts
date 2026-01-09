@@ -117,6 +117,11 @@ export class ListaTomaDeMuestraComponent implements OnInit {
         ).subscribe({
           next: (response) => {
             this.listaTomaDeMuestras = response.data;
+            // Debug: ver primer registro para verificar campos
+            if (response.data && response.data.length > 0) {
+              console.log('Primer registro de muestra:', response.data[0]);
+              console.log('¿Tiene generar_parcial?', 'generar_parcial' in response.data[0]);
+            }
             this.totalRecords = response.total;
             this.loading = false;
           },
@@ -173,6 +178,7 @@ export class ListaTomaDeMuestraComponent implements OnInit {
         });
     }
     aprobarSolicitud(event:ITomaDeMuestraSimple){
+        console.log(event);
         this.tomaDeMuestra=event;
         this.productDialog = true;
         this.isEditMode = true;

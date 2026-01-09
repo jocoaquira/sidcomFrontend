@@ -103,7 +103,8 @@ export class AprobarProcedimientoComponent implements OnInit {
         responsable_tdm_id:this.tmd.responsable_tdm_id,
         procedimiento: [],
       });
-
+      console.log(this.tmd);
+      console.log(this.form.formulario.value);
       this.tomaDeMuestraService.verTomaDeMuestraPDF(this.tmd.id+'').subscribe(
             (data:any)=>{
             this.tdm_completo=this.tomaDeMuestraService.handleTomaDeMuestraPDF(data);
@@ -173,7 +174,7 @@ export class AprobarProcedimientoComponent implements OnInit {
     this.form.formulario.patchValue({
       procedimiento: this.procedimientosSeleccionados,
     });
-
+    console.log(this.form.formulario.value);
 
     if (this.form.formulario.valid) {
         this.tomaDeMuestraService.aprobarTomaDeMuestra(this.form.formulario.value,this.form.formulario.value.id).subscribe(
@@ -205,6 +206,11 @@ export class AprobarProcedimientoComponent implements OnInit {
 
   aprobarResponsable() {
 
+    // Si es PARCIAL PADRE, aprobar de forma simplificada (solo cambiar estado)
+    if (this.tmd.generar_parcial) {
+      this.aprobarParcialPadre();
+      return;
+    }
 
     // Verificar si hay un archivo seleccionado
     if (!this.selectedFile) {
@@ -292,6 +298,50 @@ export class AprobarProcedimientoComponent implements OnInit {
         if (error.error.status == 'fail') {
           this.notify.error('Falló... Revise los campos y vuelva a enviar.', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
         }
+      }
+    );
+  }
+
+  // Método simplificado para aprobar PARCIAL PADRE (solo cambia estado)
+  aprobarParcialPadre() {
+    console.log('========== aprobarParcialPadre EJECUTADO ==========');
+    console.log('tmd completo:', this.tmd);
+    console.log('tmd.id:', this.tmd.id);
+    console.log('tmd.operador_id:', this.tmd.operador_id);
+    console.log('tmd.responsable_tdm_id:', this.tmd.responsable_tdm_id);
+    console.log('tmd.generar_parcial:', this.tmd.generar_parcial);
+
+    let formData = new FormData();
+
+    formData.append("estado", "APROBADO");
+    formData.append("operador_id", this.tmd.operador_id.toString());
+    formData.append("responsable_tdm_id", this.tmd.responsable_tdm_id.toString());
+    formData.append("observaciones", "Muestra parcial padre aprobada");
+    formData.append("procedimiento[]", ""); // Sin procedimientos
+
+    console.log('FormData a enviar:');
+    formData.forEach((value, key) => {
+      console.log(`  ${key}: ${value}`);
+    });
+
+    console.log('Llamando a aprobarTomaDeMuestra con id:', this.tmd.id);
+
+    this.tomaDeMuestraService.aprobarTomaDeMuestra(formData, this.tmd.id).subscribe(
+      (data: any) => {
+        console.log('Respuesta del servidor:', data);
+        if (data.error == null) {
+          console.log('Aprobación exitosa, cerrando diálogo');
+          this.estadoDialogo.emit(false);
+          this.notify.success('Muestra Parcial Padre aprobada exitosamente. Ahora puede generar los parciales hijos.', 'Aprobado Correctamente', { timeOut: 3500, positionClass: 'toast-top-right' });
+        } else {
+          console.error('Respuesta con error:', data.error);
+        }
+      },
+      (error: any) => {
+        console.error("Error completo en la petición:", error);
+        console.error("Error.error:", error.error);
+        console.error("Error.status:", error.status);
+        this.notify.error('Error al aprobar muestra parcial padre', 'Error', { timeOut: 2000, positionClass: 'toast-top-right' });
       }
     );
   }

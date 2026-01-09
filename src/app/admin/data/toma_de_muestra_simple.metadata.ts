@@ -12,6 +12,7 @@ export interface ITomaDeMuestraSimple {
     estado:string,
     razon_social:string,
     responsable_tdm_id:number,
-    operador_id:number
+    operador_id:number,
+    generar_parcial?:boolean
 }
 

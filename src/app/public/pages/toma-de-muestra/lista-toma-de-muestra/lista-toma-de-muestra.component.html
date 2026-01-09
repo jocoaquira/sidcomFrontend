@@ -59,6 +59,7 @@
 
                         <td style="width:10%; min-width:6rem;"><span class="p-column-title">Numero de Formulario</span>
                             {{operador.nro_formulario}}
+                            <p-tag *ngIf="operador.generar_parcial" value="PARCIAL PADRE" severity="warning" styleClass="ml-2"></p-tag>
                         </td>
                         <td style="width:10%; min-width:10rem;">
                             <span class="p-column-title">Fecha de Toma de Muestra</span>

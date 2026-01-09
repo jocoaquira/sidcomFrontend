@@ -1,6 +1,26 @@
 
+<!-- FORMULARIO SIMPLIFICADO PARA PARCIAL PADRE -->
+<div *ngIf="tmd.generar_parcial">
+    <app-ver-toma-de-muestra [id]="tmd.id"></app-ver-toma-de-muestra>
 
-<form [formGroup]="form.formulario" (ngSubmit)="onSubmit()">
+    <p-message severity="info" styleClass="mt-3">
+        <div>
+            <strong>Muestra Parcial Padre</strong>
+            <p>Esta es una muestra parcial padre. Al aprobar, solo se cambiará el estado a APROBADO sin requerir foto ni procedimientos.</p>
+            <p>Una vez aprobada, el operador podrá generar los parciales hijos.</p>
+        </div>
+    </p-message>
+
+    <div class="flex justify-content-end gap-2 mt-4">
+        <button pButton pRipple type="button" label="Aprobar Muestra Parcial"
+                icon="pi pi-check" class="p-button-success"
+                (click)="aprobarParcialPadre()">
+        </button>
+    </div>
+</div>
+
+<!-- FORMULARIO NORMAL PARA MUESTRAS REGULARES -->
+<form [formGroup]="form.formulario" (ngSubmit)="onSubmit()" *ngIf="!tmd.generar_parcial">
     <app-ver-toma-de-muestra [id]="tmd.id"></app-ver-toma-de-muestra>
     <div class="field col-12 md:col-12" *ngIf="!admin">
         <span class="p-float-label mt-5">

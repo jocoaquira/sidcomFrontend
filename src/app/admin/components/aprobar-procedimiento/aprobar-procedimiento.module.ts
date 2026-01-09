@@ -14,6 +14,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { DropdownModule } from 'primeng/dropdown';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { MessageModule } from 'primeng/message';
 import { AprobarProcedimientoComponent } from './aprobar-procedimiento.component';
 import { VerTomaDeMuestraModule } from '../ver-components/ver-toma-de-muestra/ver-toma-de-muestra.module';
 import { InputSwitchModule } from 'primeng/inputswitch';
@@ -45,6 +46,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
     DropdownModule,
     RadioButtonModule,
     InputNumberModule,
+    MessageModule,
     ReactiveFormsModule,
     VerTomaDeMuestraModule
   ],

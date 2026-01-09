@@ -1,5 +1,144 @@
+<!-- VISTA DE GESTIÓN DE PARCIALES (Se muestra después de crear el padre) -->
+<div *ngIf="muestraPadreCreada" class="card">
+    <div class="card-titulo">
+        <h4 class="text-center" style="color: white;">GESTIÓN DE PARCIALES - LOTE: {{muestraPadre?.lote}}</h4>
+    </div>
 
-<form [formGroup]="formulario_interno.formulario" (ngSubmit)="onSubmit()">
+    <div class="grid p-fluid mt-3">
+        <!-- Información de la Muestra Padre -->
+        <div class="col-12">
+            <p-card styleClass="p-card-shadow">
+                <ng-template pTemplate="header">
+                    <div class="flex align-items-center justify-content-between p-3">
+                        <span class="text-xl font-bold">Muestra Parcial Padre</span>
+                        <p-tag value="PARCIAL PADRE" severity="warning" styleClass="text-lg"></p-tag>
+                    </div>
+                </ng-template>
+                <div class="grid">
+                    <div class="col-12 md:col-3">
+                        <strong>Nro. Formulario:</strong> {{muestraPadre?.nro_formulario}}
+                    </div>
+                    <div class="col-12 md:col-3">
+                        <strong>Estado:</strong>
+                        <p-tag [value]="muestraPadre?.estado"
+                               [severity]="muestraPadre?.estado === 'APROBADO' ? 'success' :
+                                          muestraPadre?.estado === 'SOLICITADO' ? 'info' :
+                                          muestraPadre?.estado === 'FIRMADO' ? 'success' : 'warning'">
+                        </p-tag>
+                    </div>
+                    <div class="col-12 md:col-3">
+                        <strong>Lote:</strong> {{muestraPadre?.lote}}
+                    </div>
+                    <div class="col-12 md:col-3">
+                        <strong>Nro. Parciales Planeados:</strong> <span class="text-primary font-bold">{{muestraPadre?.nro_parcial || 'N/A'}}</span>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <strong>Peso Total Aproximado:</strong> {{muestraPadre?.peso_neto_total}} Kg
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <strong>Lugar Verificación:</strong> {{muestraPadre?.lugar_verificacion}}
+                    </div>
+                </div>
+            </p-card>
+        </div>
+
+        <!-- Botones de acción según el estado -->
+        <div class="col-12">
+            <!-- Botón SOLICITAR (solo si está en GENERADO) -->
+            <button *ngIf="muestraPadre?.estado === 'GENERADO'"
+                    pButton pRipple type="button"
+                    label="Solicitar Aprobación"
+                    icon="pi pi-send"
+                    class="p-button-info mr-2"
+                    (click)="solicitarMuestraPadre()">
+            </button>
+
+            <!-- Mensaje cuando está SOLICITADO -->
+            <p-message *ngIf="muestraPadre?.estado === 'SOLICITADO'"
+                       severity="info"
+                       text="Esperando aprobación de SENARECOM/GADOR. Una vez aprobada podrá generar los parciales.">
+            </p-message>
+
+            <!-- Botón GENERAR PARCIALES (solo si está APROBADO o FIRMADO) -->
+            <button *ngIf="muestraPadre?.estado === 'APROBADO' || muestraPadre?.estado === 'FIRMADO'"
+                    pButton pRipple type="button"
+                    label="Generar Parcial Hijo"
+                    icon="pi pi-plus"
+                    class="p-button-success"
+                    (click)="abrirDialogoAgregarParcial()">
+            </button>
+        </div>
+
+        <!-- Tabla de parciales hijos (solo se muestra cuando está APROBADO o FIRMADO) -->
+        <div class="col-12" *ngIf="muestraPadre?.estado === 'APROBADO' || muestraPadre?.estado === 'FIRMADO'">
+            <p-card styleClass="p-card-shadow">
+                <ng-template pTemplate="header">
+                    <div class="flex align-items-center justify-content-between p-3">
+                        <span class="text-xl font-bold">Parciales Hijos Generados ({{parcialesHijos.length}} / {{muestraPadre?.nro_parcial || 0}})</span>
+                        <p-tag [value]="'Progreso: ' + Math.floor((parcialesHijos.length / (muestraPadre?.nro_parcial || 1)) * 100) + '%'"
+                               [severity]="parcialesHijos.length >= (muestraPadre?.nro_parcial || 0) ? 'success' : 'info'">
+                        </p-tag>
+                    </div>
+                </ng-template>
+                <p-table [value]="parcialesHijos" responsiveLayout="scroll" [rows]="10" [paginator]="true">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Nro. Formulario</th>
+                            <th>Peso Neto (Kg)</th>
+                            <th>Nro. Camiones</th>
+                            <th>Estado</th>
+                            <th>Fecha Creación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-parcial let-rowIndex="rowIndex">
+                        <tr>
+                            <td>
+                                <p-tag value="HIJO" severity="info" styleClass="text-sm"></p-tag>
+                            </td>
+                            <td>{{parcial.nro_formulario}}</td>
+                            <td>{{parcial.peso_neto_total}}</td>
+                            <td>{{parcial.nro_camiones}}</td>
+                            <td>
+                                <p-tag [value]="parcial.estado"
+                                    [severity]="parcial.estado === 'APROBADO' ? 'success' :
+                                               parcial.estado === 'SOLICITADO' ? 'info' :
+                                               parcial.estado === 'FIRMADO' ? 'success' : 'warning'">
+                                </p-tag>
+                            </td>
+                            <td>{{parcial.created_at | date:'dd/MM/yyyy HH:mm'}}</td>
+                            <td>
+                                <button *ngIf="parcial.estado === 'GENERADO'" pButton pRipple type="button"
+                                    icon="pi pi-send" label="Solicitar" class="p-button-sm p-button-info mr-2"
+                                    (click)="solicitarParcial(parcial)"></button>
+                                <button pButton pRipple type="button" icon="pi pi-eye" label="Ver"
+                                    class="p-button-sm p-button-secondary"
+                                    [routerLink]="['/public/toma-de-muestra/ver', parcial.id]"></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td colspan="7" class="text-center">
+                                <p-message severity="info" text="No hay parciales hijos generados aún. Use el botón 'Generar Parcial Hijo' para agregar." styleClass="w-full"></p-message>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-card>
+        </div>
+
+        <!-- Botón para finalizar -->
+        <div class="col-12 text-center">
+            <button pButton pRipple type="button" label="Finalizar y Volver a Lista" icon="pi pi-check"
+                class="p-button-primary" (click)="volverAFormulario()"></button>
+        </div>
+    </div>
+</div>
+
+<!-- FORMULARIO ORIGINAL (Se oculta cuando se crea el padre) -->
+<form [formGroup]="formulario_interno.formulario" (ngSubmit)="onSubmit()" *ngIf="!muestraPadreCreada">
     <p-dialog (onShow)="actualizarMapa()" [(visible)]="mapaDialogo" [style]="{width: '800px',height:'800px'}" header="Mapa (Hacer click en el lugar que desee)" [modal]="true" class="p-fluid">
         <div style="height: 90%;" leaflet [leafletOptions]="options" [leafletLayers]="[streetLayer,satelliteLayer]" (leafletMapReady)="onMapReady($event)"></div>
         <div class="grid p-fluid" >
@@ -567,3 +706,61 @@
           </div>
 
 </form>
+
+<!-- MODAL PARA GENERAR PARCIAL HIJO -->
+<p-dialog [(visible)]="dialogoAgregarParcial" [style]="{width: '700px'}" header="Generar Parcial Hijo" [modal]="true" class="p-fluid">
+    <form [formGroup]="formularioParcialHijo.formulario">
+        <div class="grid p-fluid">
+            <div class="col-12">
+                <p-message severity="info" text="Los datos del padre se heredan automáticamente. Solo ingrese los datos específicos de este parcial."></p-message>
+            </div>
+
+            <div class="field col-12 md:col-6">
+                <span class="p-float-label">
+                    <input type="number" id="nro_camiones_hijo" pInputText formControlName="nro_camiones" class="ng-dirty" required/>
+                    <label for="nro_camiones_hijo">Nro. de Camiones/Vagones *</label>
+                </span>
+            </div>
+
+            <div class="field col-12 md:col-6">
+                <span class="p-float-label">
+                    <input type="number" id="peso_neto_total_hijo" pInputText formControlName="peso_neto_total" class="ng-dirty" required/>
+                    <label for="peso_neto_total_hijo">Peso Neto (Kg.) *</label>
+                </span>
+            </div>
+
+            <div class="field col-12">
+                <span class="p-float-label">
+                    <p-calendar inputId="fecha_hora_tdm_hijo" dateFormat="dd-mm-yy" formControlName="fecha_hora_tdm"
+                        [showTime]="true" hourFormat="24" [required]="true"></p-calendar>
+                    <label for="fecha_hora_tdm_hijo">Fecha y Hora de Toma de Muestra *</label>
+                </span>
+            </div>
+
+            <div class="field col-12">
+                <span class="p-float-label">
+                    <textarea id="observaciones_hijo" pInputTextarea formControlName="observaciones" rows="3"></textarea>
+                    <label for="observaciones_hijo">Observaciones (Opcional)</label>
+                </span>
+            </div>
+
+            <div class="col-12">
+                <p-divider></p-divider>
+                <p><strong>Datos heredados del padre:</strong></p>
+                <ul>
+                    <li>Lote: {{muestraPadre?.lote}}</li>
+                    <li>Lugar: {{muestraPadre?.lugar_verificacion}}</li>
+                    <li>Minerales: Heredados automáticamente</li>
+                    <li>Municipios origen: Heredados automáticamente</li>
+                </ul>
+            </div>
+        </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple type="button" label="Cancelar" icon="pi pi-times"
+            class="p-button-text" (click)="dialogoAgregarParcial = false"></button>
+        <button pButton pRipple type="button" label="Guardar Parcial" icon="pi pi-check"
+            class="p-button-success" (click)="crearParcialHijo()"></button>
+    </ng-template>
+</p-dialog>

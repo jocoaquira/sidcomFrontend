@@ -44,6 +44,14 @@ export class CrearTomaDeMuestraParcialComponent implements OnInit {
     pais_id: number | null = null;  // Guardar el ID del departamento seleccionado
     aduana_id: number | null = null;  // Guardar el ID del departamento seleccionado
 
+    // Variables para gestión de parciales
+    public muestraPadreCreada: boolean = false;
+    public muestraPadre: any = null;
+    public parcialesHijos: any[] = [];
+    public dialogoAgregarParcial: boolean = false;
+    public formularioParcialHijo = new TomaDeMuestraFormulario();
+    public Math = Math; // Para usar Math.floor en el template
+
     public dept:IDepartamento={
       longitud:null,
       latitud:null
@@ -547,10 +555,12 @@ valSwitches(event:any){
           (data: any) => {
             this.formulario_Interno_registrado = this.tomaDeMuestrasService.handleCrearTomaDeMuestra(data);
             if (this.formulario_Interno_registrado !== null) {
-
-              this.formulario_interno.formulario.reset();
-              this.notify.success('El formulario interno se generó exitosamente', 'Creado Correctamente', { timeOut: 2500, positionClass: 'toast-top-right' });
-              this.router.navigate(['/public/toma-de-muestra']);
+              // Guardar la muestra padre y cambiar a vista de gestión
+              this.muestraPadre = this.formulario_Interno_registrado;
+              this.muestraPadreCreada = true;
+              this.notify.success('Muestra Parcial Padre creada exitosamente. Ahora puede agregar los parciales hijos.', 'Creado Correctamente', { timeOut: 3000, positionClass: 'toast-top-right' });
+              // Cargar los parciales hijos si existen
+              this.cargarParcialesHijos();
             } else {
               this.notify.error('Falló... Revise los campos y vuelva a enviar...', 'Error con el Registro', { timeOut: 2000, positionClass: 'toast-top-right' });
             }
@@ -772,4 +782,147 @@ cancelar(){
   let fechaConvertida = fechas.toISOString();
   return fechaConvertida;
 }
+
+// ============= MÉTODOS PARA GESTIÓN DE PARCIALES =============
+
+cargarParcialesHijos() {
+  if (!this.muestraPadre || !this.muestraPadre.lote) {
+    return;
+  }
+
+  // Buscar todas las muestras con el mismo lote y que NO sean generadas con generar_parcial=true
+  this.tomaDeMuestrasService.verTomaDeMuestrasOperador(this.authService.getUser.operador_id).subscribe(
+    (data: any) => {
+      const todasMuestras = data.data || [];
+      // Filtrar solo las que tienen el mismo lote y son parciales hijos
+      this.parcialesHijos = todasMuestras.filter(m =>
+        m.lote === this.muestraPadre.lote &&
+        m.id !== this.muestraPadre.id &&
+        m.tipo_muestra === 'PARCIAL'
+      );
+    },
+    (error: any) => {
+      console.error('Error al cargar parciales hijos', error);
+    }
+  );
+}
+
+abrirDialogoAgregarParcial() {
+  // Resetear formulario hijo y heredar datos del padre
+  this.formularioParcialHijo = new TomaDeMuestraFormulario();
+
+  // Pre-llenar campos heredados del padre
+  this.formularioParcialHijo.formulario.patchValue({
+    user_id: this.authService.getUser.id,
+    operador_id: this.muestraPadre.operador_id,
+    responsable_tdm_id: this.muestraPadre.responsable_tdm_id,
+    lugar_verificacion: this.muestraPadre.lugar_verificacion,
+    ubicacion_lat: this.muestraPadre.ubicacion_lat,
+    ubicacion_lon: this.muestraPadre.ubicacion_lon,
+    departamento_id: this.muestraPadre.departamento_id,
+    municipio_id: this.muestraPadre.municipio_id,
+    lote: this.muestraPadre.lote, // MISMO LOTE para relacionar
+    tipo_muestra: 'PARCIAL',
+    presentacion_id: this.muestraPadre.presentacion_id,
+    m03_id: this.muestraPadre.m03_id,
+    laboratorio: this.muestraPadre.laboratorio,
+    comprador: this.muestraPadre.comprador,
+    codigo_analisis: this.muestraPadre.codigo_analisis,
+    nro_factura_exportacion: this.muestraPadre.nro_factura_exportacion,
+    aduana_id: this.muestraPadre.aduana_id,
+    pais_destino_id: this.muestraPadre.pais_destino_id,
+    generar_parcial: false, // Es hijo, no padre
+    estado: 'GENERADO',
+    cantidad: this.muestraPadre.cantidad,
+    fecha_hora_tdm: new Date() // Fecha/hora actual por defecto
+  });
+
+  this.dialogoAgregarParcial = true;
+}
+
+crearParcialHijo() {
+  if (!this.formularioParcialHijo.formulario.valid) {
+    this.notify.error('Complete todos los campos requeridos', 'Error', { timeOut: 2000, positionClass: 'toast-top-right' });
+    return;
+  }
+
+  // Preparar datos del parcial hijo (similar al onSubmit pero más simple)
+  const formValue = this.formularioParcialHijo.formulario.value;
+
+  const parcialHijoData = {
+    operador_id: formValue.operador_id,
+    responsable_tdm_id: formValue.responsable_tdm_id,
+    lugar_verificacion: formValue.lugar_verificacion,
+    ubicacion_lat: formValue.ubicacion_lat.toString(),
+    ubicacion_lon: formValue.ubicacion_lon.toString(),
+    departamento_id: formValue.departamento_id,
+    municipio_id: formValue.municipio_id,
+    lote: formValue.lote, // MISMO LOTE del padre
+    tipo_muestra: 'PARCIAL',
+    presentacion_id: formValue.presentacion_id,
+    nro_camiones: formValue.nro_camiones || 1,
+    peso_neto_total: formValue.peso_neto_total,
+    humedad: formValue.humedad || 0,
+    merma: formValue.merma || 0,
+    observaciones: formValue.observaciones || '',
+    fecha_hora_tdm: this.formatFechaCompleta(formValue.fecha_hora_tdm),
+    m03_id: formValue.m03_id,
+    laboratorio: formValue.laboratorio,
+    comprador: formValue.comprador,
+    codigo_analisis: formValue.codigo_analisis,
+    nro_factura_exportacion: formValue.nro_factura_exportacion,
+    aduana_id: formValue.aduana_id,
+    pais_destino_id: formValue.pais_destino_id,
+    generar_parcial: false,
+    minerales: this.muestraPadre.minerales || [],
+    municipio_origen: this.muestraPadre.municipio_origen || [],
+    procedimiento: []
+  };
+
+  this.tomaDeMuestrasService.crearTomaDeMuestra(parcialHijoData).subscribe(
+    (data: any) => {
+      const parcialCreado = this.tomaDeMuestrasService.handleCrearTomaDeMuestra(data);
+      if (parcialCreado) {
+        this.notify.success('Parcial hijo agregado exitosamente', 'Éxito', { timeOut: 2500, positionClass: 'toast-top-right' });
+        this.dialogoAgregarParcial = false;
+        this.cargarParcialesHijos(); // Recargar lista
+      }
+    },
+    (error: any) => {
+      this.notify.error('Error al crear parcial hijo', 'Error', { timeOut: 2000, positionClass: 'toast-top-right' });
+    }
+  );
+}
+
+solicitarMuestraPadre() {
+  this.tomaDeMuestrasService.solicitarTomaDeMuestra(this.muestraPadre.id).subscribe(
+    (data: any) => {
+      this.muestraPadre.estado = 'SOLICITADO';
+      this.notify.success('Muestra parcial padre solicitada para aprobación', 'Éxito', { timeOut: 2500, positionClass: 'toast-top-right' });
+    },
+    (error: any) => {
+      this.notify.error('Error al solicitar muestra padre', 'Error', { timeOut: 2000, positionClass: 'toast-top-right' });
+    }
+  );
+}
+
+solicitarParcial(parcial: any) {
+  this.tomaDeMuestrasService.solicitarTomaDeMuestra(parcial.id).subscribe(
+    (data: any) => {
+      this.notify.success('Parcial solicitado para aprobación', 'Éxito', { timeOut: 2000, positionClass: 'toast-top-right' });
+      this.cargarParcialesHijos();
+    },
+    (error: any) => {
+      this.notify.error('Error al solicitar parcial', 'Error', { timeOut: 2000, positionClass: 'toast-top-right' });
+    }
+  );
+}
+
+volverAFormulario() {
+  this.muestraPadreCreada = false;
+  this.muestraPadre = null;
+  this.parcialesHijos = [];
+  this.router.navigate(['/public/toma-de-muestra']);
+}
+
 }
