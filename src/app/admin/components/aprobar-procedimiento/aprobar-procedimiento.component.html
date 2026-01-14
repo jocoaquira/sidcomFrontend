@@ -1,6 +1,6 @@
 
 <!-- FORMULARIO SIMPLIFICADO PARA PARCIAL PADRE -->
-<div *ngIf="tmd.generar_parcial">
+<div *ngIf="tmd.procedimiento_parcial === 'INICIADO'">
     <app-ver-toma-de-muestra [id]="tmd.id"></app-ver-toma-de-muestra>
 
     <p-message severity="info" styleClass="mt-3">
@@ -20,7 +20,7 @@
 </div>
 
 <!-- FORMULARIO NORMAL PARA MUESTRAS REGULARES -->
-<form [formGroup]="form.formulario" (ngSubmit)="onSubmit()" *ngIf="!tmd.generar_parcial">
+<form [formGroup]="form.formulario" (ngSubmit)="onSubmit()" *ngIf="tmd.procedimiento_parcial !== 'INICIADO'">
     <app-ver-toma-de-muestra [id]="tmd.id"></app-ver-toma-de-muestra>
     <div class="field col-12 md:col-12" *ngIf="!admin">
         <span class="p-float-label mt-5">

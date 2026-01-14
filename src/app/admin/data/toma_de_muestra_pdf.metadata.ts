@@ -25,6 +25,7 @@ export interface ITomaDeMuestraPDF {
     minerales:IMineralTDM[],
     municipio_origen:IMunicipioOrigenTDM[],
     procedimiento:IProcedimientoTDM[],
+    procedimiento_parcial?: string,
 }
 
 export interface IMineralTDM {

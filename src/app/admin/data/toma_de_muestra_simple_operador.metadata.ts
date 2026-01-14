@@ -8,6 +8,9 @@ export interface ITomaDeMuestraSimpleOperador {
     fecha_aprobacion:string,
     fecha_firma?:string,
     estado?:string,
+    generar_parcial?:boolean,
+    procedimiento_parcial?:string,
+    tipo_muestra?:string,
     responsableTM:string,
     responsableTM_id:number,
     operador_id:number

@@ -4,6 +4,7 @@ import { TomaDeMuestraRoutingModule } from './toma-de-muestra.routing';
 import { ListaTomaDeMuestraModule } from './lista-toma-de-muestra/lista-toma-de-muestra.module';
 import { CrearTomaDeMuestraModule } from './crear-toma-de-muestra/crear-toma-de-muestra.module';
 import { EditarTomaDeMuestraModule } from './editar-toma-de-muestra/editar-toma-de-muestra.module';
+import { CrearTomaDeMuestraParcialModule } from 'src/app/public/pages/toma-de-muestra/crear-toma-de-muestra-parcial/crear-toma-de-muestra-parcial.module';
 
 @NgModule({
   imports: [
@@ -12,6 +13,7 @@ import { EditarTomaDeMuestraModule } from './editar-toma-de-muestra/editar-toma-
     ListaTomaDeMuestraModule,
     CrearTomaDeMuestraModule,
     EditarTomaDeMuestraModule,
+    CrearTomaDeMuestraParcialModule,
   ],
   declarations: []
 })

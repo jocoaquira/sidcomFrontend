@@ -189,6 +189,16 @@ firmarTomaDeMuestra(id:number) {
   return this.http.put(`${this.baseUrl}sample/firmar/`+id.toString(), sol)
 }
 
+cerrarParcialPadre(id:number, procedimiento_parcial: string) {
+  this.token();
+  return this.http.put(`${this.baseUrl}sample/cerrar_parcial/`+id.toString(), { procedimiento_parcial });
+}
+
+cerrarParcialPadreOperador(id:number) {
+  this.token();
+  return this.http.put(`${this.baseUrl}sample/cerrar_parcial_operador/`+id.toString(), {});
+}
+
 // Función para aprobar la toma de muestra
 aprobarTomaDeMuestra(formData: FormData, id: number): Observable<any> {
     this.token();

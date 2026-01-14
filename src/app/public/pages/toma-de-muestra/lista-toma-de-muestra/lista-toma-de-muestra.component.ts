@@ -17,6 +17,7 @@ import { ITomaDeMuestraSimpleOperador } from '@data/toma_de_muestra_simple_opera
 import { ITomaDeMuestraSimple } from '@data/toma_de_muestra_simple.metadata';
 import { ITomaDeMuestraPDF } from '@data/toma_de_muestra_pdf.metadata';
 import { PdfTomaDeMuestraService } from 'src/app/admin/services/pdf/toma-de-muestra-pdf.service';
+import { PdfTomaDeMuestraParcialService } from 'src/app/admin/services/pdf/toma-de-muestra-parcial-pdf.service';
 
 @Component({
   selector: 'app-lista-toma-de-muestra',
@@ -72,6 +73,7 @@ export class ListaTomaDeMuestraComponent implements OnInit {
         public canEliminarFormularioInterno:CanEliminarOperatorGuard,
         public tomaDeMuestraService:TomaDeMuestraService,
         private pdfTomaDemuestra:PdfTomaDeMuestraService,
+        private pdfTomaDemuestraParcial:PdfTomaDeMuestraParcialService,
         private notify:ToastrService,
         private authService:AuthService,
         private confirmationService:ConfirmationService
@@ -105,7 +107,17 @@ export class ListaTomaDeMuestraComponent implements OnInit {
           this.operador_id
         ).subscribe({
           next: (response) => {
-            this.listaTomaDeMuestra = response.data;
+            console.log('[PUBLIC][TDM] getFormReducidoOperadorOptimizado response:', response);
+            this.listaTomaDeMuestra = (response.data || []).filter((item: any) => {
+              const isParcialHijo = item?.generar_parcial === true && item?.procedimiento_parcial == null;
+              return !isParcialHijo;
+            });
+            if (response?.data?.length) {
+              console.log('[PUBLIC][TDM] first item:', response.data[0]);
+              console.log('[PUBLIC][TDM] parciales padre candidates:', response.data.filter((item: any) =>
+                item?.procedimiento_parcial === 'INICIADO' || item?.generar_parcial === true
+              ));
+            }
             this.totalRecords = response.total;
             this.loading = false;
           },
@@ -137,7 +149,13 @@ export class ListaTomaDeMuestraComponent implements OnInit {
             (data:any)=>{
             this.tdm_completo=this.tomaDeMuestraService.handleTomaDeMuestraPDF(data);
 
-            this.pdfTomaDemuestra.generarPDF(this.tdm_completo);
+            const isParcialPadre = this.tdm_completo?.procedimiento_parcial === 'INICIADO'
+              || this.tdm_completo?.procedimiento_parcial?.startsWith('EMITIDO');
+            if (isParcialPadre) {
+              this.pdfTomaDemuestraParcial.generarPDF(this.tdm_completo);
+            } else {
+              this.pdfTomaDemuestra.generarPDF(this.tdm_completo);
+            }
           },
           (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
 
@@ -162,7 +180,7 @@ export class ListaTomaDeMuestraComponent implements OnInit {
     confirmarSolicitud(event:ITomaDeMuestra) {
         this.confirmationService.confirm({
             key: 'confirm1',
-            message: '¿Estas seguro de Solicitar la Toma de Muestra: '+event.nro_formulario+'?',
+            message: 'Estas seguro de Solicitar la ' + this.getTipoMuestraLabel(event) + ': ' + event.nro_formulario + '?',
             accept: () => {
                 this.solicitar(event); // Llama a onSubmit cuando el usuario acepta
               },
@@ -172,10 +190,27 @@ export class ListaTomaDeMuestraComponent implements OnInit {
 
         this.confirmationService.confirm({
             key: 'confirm1',
-            message: '¿Estas seguro de Aprobar la Toma de Muestra: '+event.nro_formulario+'?',
+            message: 'Estas seguro de Aprobar la ' + this.getTipoMuestraLabel(event) + ': ' + event.nro_formulario + '?',
             accept: () => {
                 this.firmar(event); // Llama a onSubmit cuando el usuario acepta
               },
+        });
+    }
+    cerrarParcialPadre(event: ITomaDeMuestra) {
+        this.tomaDeMuestraService.cerrarParcialPadreOperador(event.id).subscribe(
+            () => {
+                this.loadData();
+            },
+            (error: any) => this.error = this.tomaDeMuestraService.handleError(error)
+        );
+    }
+    confirmarCerrarParcialPadre(event: ITomaDeMuestra) {
+        this.confirmationService.confirm({
+            key: 'confirm1',
+            message: 'Estas seguro de Cerrar la ' + this.getTipoMuestraLabel(event) + ': ' + event.nro_formulario + '?',
+            accept: () => {
+                this.cerrarParcialPadre(event);
+            },
         });
     }
     verSolicitud(event:ITomaDeMuestraSimple){
@@ -190,6 +225,16 @@ export class ListaTomaDeMuestraComponent implements OnInit {
                 this.loadData();
             },
             (error:any)=> this.error=this.tomaDeMuestraService.handleError(error));
+    }
+
+    private getTipoMuestraLabel(event: ITomaDeMuestra): string {
+        if (event?.generar_parcial === true) {
+            return 'Muestra Parcial Padre';
+        }
+        if (event?.tipo_muestra === 'PARCIAL') {
+            return 'Muestra Parcial';
+        }
+        return 'Toma de Muestra';
     }
 
 }

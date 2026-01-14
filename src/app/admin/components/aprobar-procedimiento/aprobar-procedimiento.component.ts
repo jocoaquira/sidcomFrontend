@@ -206,8 +206,9 @@ export class AprobarProcedimientoComponent implements OnInit {
 
   aprobarResponsable() {
 
+    const isParcialPadre = this.tmd.procedimiento_parcial === 'INICIADO';
     // Si es PARCIAL PADRE, aprobar de forma simplificada (solo cambiar estado)
-    if (this.tmd.generar_parcial) {
+    if (isParcialPadre) {
       this.aprobarParcialPadre();
       return;
     }
@@ -310,6 +311,7 @@ export class AprobarProcedimientoComponent implements OnInit {
     console.log('tmd.operador_id:', this.tmd.operador_id);
     console.log('tmd.responsable_tdm_id:', this.tmd.responsable_tdm_id);
     console.log('tmd.generar_parcial:', this.tmd.generar_parcial);
+    console.log('tmd.procedimiento_parcial:', this.tmd.procedimiento_parcial);
 
     let formData = new FormData();
 

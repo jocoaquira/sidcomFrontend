@@ -20,8 +20,9 @@
                     </div>
                     <div class="col-12 md:col-3">
                         <strong>Estado:</strong>
-                        <p-tag [value]="muestraPadre?.estado"
-                               [severity]="muestraPadre?.estado === 'APROBADO' ? 'success' :
+                        <p-tag [value]="muestraPadre?.procedimiento_parcial === 'EMITIDO' ? 'FINALIZADO' : muestraPadre?.estado"
+                               [severity]="muestraPadre?.procedimiento_parcial === 'EMITIDO' ? 'success' :
+                                          muestraPadre?.estado === 'APROBADO' ? 'success' :
                                           muestraPadre?.estado === 'SOLICITADO' ? 'info' :
                                           muestraPadre?.estado === 'FIRMADO' ? 'success' : 'warning'">
                         </p-tag>
@@ -32,8 +33,17 @@
                     <div class="col-12 md:col-3">
                         <strong>Nro. Parciales Planeados:</strong> <span class="text-primary font-bold">{{muestraPadre?.nro_parcial || 'N/A'}}</span>
                     </div>
+                    <div class="col-12" *ngIf="muestraPadre?.procedimiento_parcial === 'EMITIDO'">
+                        <p-message severity="success" text="Parcial finalizado. Ya no se pueden generar mas parciales hijos."></p-message>
+                    </div>
                     <div class="col-12 md:col-6">
                         <strong>Peso Total Aproximado:</strong> {{muestraPadre?.peso_neto_total}} Kg
+                    </div>
+                    <div class="col-12 md:col-3">
+                        <strong>Peso Disponible:</strong> {{pesoRestante}} Kg
+                    </div>
+                    <div class="col-12 md:col-3">
+                        <strong>Camiones Disponibles:</strong> {{camionesRestantes}}
                     </div>
                     <div class="col-12 md:col-6">
                         <strong>Lugar Verificación:</strong> {{muestraPadre?.lugar_verificacion}}
@@ -56,11 +66,18 @@
             <!-- Mensaje cuando está SOLICITADO -->
             <p-message *ngIf="muestraPadre?.estado === 'SOLICITADO'"
                        severity="info"
-                       text="Esperando aprobación de SENARECOM/GADOR. Una vez aprobada podrá generar los parciales.">
+                       text="Esperando aprobación de GADOR. Una vez aprobada podrá generar los parciales.">
             </p-message>
+            <button *ngIf="muestraPadre?.estado === 'SOLICITADO'"
+                    pButton pRipple type="button"
+                    label="Actualizar estado"
+                    icon="pi pi-refresh"
+                    class="p-button-secondary ml-2"
+                    (click)="actualizarMuestraPadre()">
+            </button>
 
             <!-- Botón GENERAR PARCIALES (solo si está APROBADO o FIRMADO) -->
-            <button *ngIf="muestraPadre?.estado === 'APROBADO' || muestraPadre?.estado === 'FIRMADO'"
+            <button *ngIf="muestraPadre?.procedimiento_parcial !== 'EMITIDO' && ((muestraPadre?.estado || '').trim() === 'APROBADO' || (muestraPadre?.estado || '').trim() === 'FIRMADO')"
                     pButton pRipple type="button"
                     label="Generar Parcial Hijo"
                     icon="pi pi-plus"
@@ -69,8 +86,8 @@
             </button>
         </div>
 
-        <!-- Tabla de parciales hijos (solo se muestra cuando está APROBADO o FIRMADO) -->
-        <div class="col-12" *ngIf="muestraPadre?.estado === 'APROBADO' || muestraPadre?.estado === 'FIRMADO'">
+        <!-- Tabla de parciales hijos (visible para APROBADO, FIRMADO o CERRADO) -->
+        <div class="col-12" *ngIf="(muestraPadre?.estado || '').trim() === 'APROBADO' || (muestraPadre?.estado || '').trim() === 'FIRMADO' || (muestraPadre?.estado || '').trim() === 'CERRADO'">
             <p-card styleClass="p-card-shadow">
                 <ng-template pTemplate="header">
                     <div class="flex align-items-center justify-content-between p-3">
@@ -90,6 +107,7 @@
                             <th>Estado</th>
                             <th>Fecha Creación</th>
                             <th>Acciones</th>
+                            <th>Imprimir</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-parcial let-rowIndex="rowIndex">
@@ -108,19 +126,38 @@
                                 </p-tag>
                             </td>
                             <td>{{parcial.created_at | date:'dd/MM/yyyy HH:mm'}}</td>
+                                                        <td>
+                                <div class="flex">
+                                    <button pButton pRipple icon="pi pi-eye"
+                                            (click)="verSolicitud(parcial)"
+                                            class="p-button-outlined p-button-info mr-2"></button>
+                                    <button *ngIf="parcial.estado === 'GENERADO'" pButton pRipple icon="pi pi-pencil"
+                                            class="p-button-outlined p-button-warning mr-2"
+                                            routerLink="/public/toma-de-muestra/editar/{{parcial?.id}}"></button>
+                                    <button *ngIf="parcial.estado === 'GENERADO'" pButton pRipple icon="pi pi-send"
+                                            (click)="confirmarSolicitudParcial(parcial)" label="Solicitar"
+                                            class="p-button-outlined p-button-success mr-2"></button>
+                                    <button *ngIf="parcial.estado === 'EMITIDO'" pButton pRipple icon="pi pi-check-circle"
+                                            (click)="confirmarAprobacionParcial(parcial)" label="Aprobar"
+                                            class="p-button-outlined p-button-success mr-2"></button>
+                                    <button *ngIf="parcial.estado !== 'ANULADO' && parcial.estado !== 'APROBADO' && parcial.estado !== 'EMITIDO'"
+                                            pButton pRipple icon="pi pi-trash" label="Anular"
+                                            class="p-button-outlined p-button-danger mr-2"
+                                            routerLink="/public/toma-de-muestra/anular/{{parcial?.id}}"></button>
+                                </div>
+                            </td>
                             <td>
-                                <button *ngIf="parcial.estado === 'GENERADO'" pButton pRipple type="button"
-                                    icon="pi pi-send" label="Solicitar" class="p-button-sm p-button-info mr-2"
-                                    (click)="solicitarParcial(parcial)"></button>
-                                <button pButton pRipple type="button" icon="pi pi-eye" label="Ver"
-                                    class="p-button-sm p-button-secondary"
-                                    [routerLink]="['/public/toma-de-muestra/ver', parcial.id]"></button>
+                                <div class="flex">
+                                    <button pButton pRipple icon="pi pi-print"
+                                            class="p-button-outlined p-button-info mr-2"
+                                            (click)="generarPDFParcial(parcial)"></button>
+                                </div>
                             </td>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="emptymessage">
                         <tr>
-                            <td colspan="7" class="text-center">
+                            <td colspan="8" class="text-center">
                                 <p-message severity="info" text="No hay parciales hijos generados aún. Use el botón 'Generar Parcial Hijo' para agregar." styleClass="w-full"></p-message>
                             </td>
                         </tr>
@@ -714,6 +751,9 @@
             <div class="col-12">
                 <p-message severity="info" text="Los datos del padre se heredan automáticamente. Solo ingrese los datos específicos de este parcial."></p-message>
             </div>
+            <div class="col-12">
+                <p-message severity="info" text="Disponible: {{pesoRestante}} Kg, Camiones: {{camionesRestantes}}"></p-message>
+            </div>
 
             <div class="field col-12 md:col-6">
                 <span class="p-float-label">
@@ -734,6 +774,19 @@
                     <p-calendar inputId="fecha_hora_tdm_hijo" dateFormat="dd-mm-yy" formControlName="fecha_hora_tdm"
                         [showTime]="true" hourFormat="24" [required]="true"></p-calendar>
                     <label for="fecha_hora_tdm_hijo">Fecha y Hora de Toma de Muestra *</label>
+                </span>
+            </div>
+
+            <div class="field col-12">
+                <span class="p-float-label">
+                    <p-dropdown
+                        [options]="listaUsuarios"
+                        formControlName="responsable_tdm_id"
+                        optionLabel="nombreCompleto"
+                        optionValue="id"
+                        [autoDisplayFirst]="false"
+                        placeholder="Seleccione Responsable"></p-dropdown>
+                    <label for="responsable_tdm_id">Responsable de Toma de Muestra *</label>
                 </span>
             </div>
 
@@ -764,3 +817,23 @@
             class="p-button-success" (click)="crearParcialHijo()"></button>
     </ng-template>
 </p-dialog>
+
+<p-confirmDialog header="Confirmacion" key="confirm1" icon="pi pi-exclamation-triangle" message="Esta seguro de anular el formulario?"
+                [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
+                acceptLabel="Si"
+                rejectLabel="No">
+</p-confirmDialog>
+
+<p-dialog [(visible)]="verDialog" [style]="{width: '700px'}"
+        [modal]="true" header="Estado de Toma de Muestra"
+        class="p-fluid">
+    <app-ver-toma-de-muestra
+        [id]="toma_de_muestra_id"
+        (estadoDialogo)="cerrar($event)">
+    </app-ver-toma-de-muestra>
+</p-dialog>
+
+
+
+
+

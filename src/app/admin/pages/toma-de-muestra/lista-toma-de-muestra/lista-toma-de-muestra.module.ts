@@ -10,6 +10,8 @@ import { TagModule } from 'primeng/tag';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { AprobarProcedimientoModule } from 'src/app/admin/components/aprobar-procedimiento/aprobar-procedimiento.module';
@@ -28,6 +30,8 @@ import { AnularTomaDeMuestraModule } from '../anular-toma-de-muestra/anular-toma
     TagModule,
     InputTextModule,
     InputNumberModule,
+    InputTextareaModule,
+    FormsModule,
     ConfirmDialogModule,
     RouterModule,
     DialogModule,

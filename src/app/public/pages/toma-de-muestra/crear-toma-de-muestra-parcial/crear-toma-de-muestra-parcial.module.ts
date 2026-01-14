@@ -26,6 +26,8 @@ import { MessageModule } from 'primeng/message';
 import { DividerModule } from 'primeng/divider';
 import { RouterModule } from '@angular/router';
 import { CrearTomaDeMuestraParcialComponent } from './crear-toma-de-muestra-parcial.component';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { VerTomaDeMuestraModule } from 'src/app/admin/components/ver-components/ver-toma-de-muestra/ver-toma-de-muestra.module';
 
 @NgModule({
   imports: [
@@ -55,9 +57,12 @@ import { CrearTomaDeMuestraParcialComponent } from './crear-toma-de-muestra-parc
     TagModule,
     MessageModule,
     DividerModule,
+    ConfirmDialogModule,
+    VerTomaDeMuestraModule,
     RouterModule
 
   ],
-  declarations: [CrearTomaDeMuestraParcialComponent]
+  declarations: [CrearTomaDeMuestraParcialComponent],
+  exports: [CrearTomaDeMuestraParcialComponent]
 })
 export class CrearTomaDeMuestraParcialModule { }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { IMineral } from '@data/mineral.metadata';
 import { IOperatorSimple } from '@data/operador_simple.metadata';
@@ -9,6 +9,7 @@ import { ITomaDeMuestraMineralEnvio } from '@data/toma_de_muestra_mineral_envio.
 import { ITomaDeMuestraMunicipioOrigen } from '@data/toma_de_muestra_municipio_origen.metadata';
 import { ITomaDeMuestraMunicipioOrigenEnvio } from '@data/toma_de_muestra_municipio_origen_envio.metadata';
 import { ToastrService } from 'ngx-toastr';
+import { ConfirmationService } from 'primeng/api';
 import { MineralsService } from 'src/app/admin/services/minerales.service';
 import { PresentacionService } from 'src/app/admin/services/presentacion.service';
 import { TomaDeMuestraService } from 'src/app/admin/services/toma-de-muestra/toma-de-muestra.service';
@@ -22,6 +23,7 @@ import { ResponsableTMService } from 'src/app/admin/services/toma-de-muestra/res
 import { IResponsableTM } from '@data/responsable_tm.metadata';
 import { ILugarVerificacionTDM } from '@data/lugar_verificacion_tdm.metadata';
 import { LugarVerificacionTDMService } from 'src/app/admin/services/lugar_verificacion_tdm.service';
+import { PdfTomaDeMuestraService } from 'src/app/admin/services/pdf/toma-de-muestra-pdf.service';
 
 @Component({
   selector: 'app-crear-toma-de-muestra-parcial',
@@ -48,7 +50,13 @@ export class CrearTomaDeMuestraParcialComponent implements OnInit {
     public muestraPadreCreada: boolean = false;
     public muestraPadre: any = null;
     public parcialesHijos: any[] = [];
+    public operadorIdContext: number | null = null;
     public dialogoAgregarParcial: boolean = false;
+    public verDialog: boolean = false;
+    public toma_de_muestra_id: number = null;
+    public skipMapInit: boolean = false;
+    public pesoRestante: number = 0;
+    public camionesRestantes: number = 0;
     public formularioParcialHijo = new TomaDeMuestraFormulario();
     public Math = Math; // Para usar Math.floor en el template
 
@@ -184,7 +192,10 @@ nextStep() {
     private notify:ToastrService,
     private authService:AuthService,
     private lugaresVerificacionTDMService:LugarVerificacionTDMService,
+    private confirmationService:ConfirmationService,
+    private pdfTomaDemuestra:PdfTomaDeMuestraService,
     private router: Router,
+    private route: ActivatedRoute,
     private presentacionService:PresentacionService,
     private municipiosService:MunicipiosService,
     private departamentosService:DepartamentosService,
@@ -201,6 +212,10 @@ nextStep() {
 
   ngOnInit() {
 
+    const padreIdSnapshotInit = this.getParamNumber('padreId');
+    if (!Number.isNaN(padreIdSnapshotInit) && padreIdSnapshotInit > 0) {
+      this.skipMapInit = true;
+    }
 
 
     this.satelliteLayer = tileLayer(
@@ -238,16 +253,19 @@ nextStep() {
       },
       (error:any)=> this.error=this.presentacionService.handleError(error));
 
-      this.responsableTMService.verResponsableTMOperador(this.formulario_interno.formulario.value.operador_id.toString()).subscribe(
-      (data:any)=>{
-      this.listaUsuarios = this.responsableTMService.handleusuario(data)
-        .filter(usuario => usuario.estado === 'ACTIVO')
-        .map(usuario => ({
-            ...usuario,
-            nombreCompleto: `${usuario.nombre} ${usuario.apellidos}`
-        }));
-    },
-    (error:any)=> this.error=this.responsableTMService.handleError(error));
+      const operadorIdResponsable = this.formulario_interno.formulario.value.operador_id ?? this.operadorIdContext;
+      if (operadorIdResponsable) {
+        this.responsableTMService.verResponsableTMOperador(operadorIdResponsable.toString()).subscribe(
+        (data:any)=>{
+        this.listaUsuarios = this.responsableTMService.handleusuario(data)
+          .filter(usuario => usuario.estado === 'ACTIVO')
+          .map(usuario => ({
+              ...usuario,
+              nombreCompleto: `${usuario.nombre} ${usuario.apellidos}`
+          }));
+      },
+      (error:any)=> this.error=this.responsableTMService.handleError(error));
+      }
     this.departamentosService.verdepartamentos(this.nombre).subscribe(
       (data:any)=>{
       this.departamento=this.departamentosService.handledepartamento(data);
@@ -255,9 +273,11 @@ nextStep() {
         this.formulario_interno.formulario.get('departamento_id')?.setValue(4);
 
       // Esperamos un momento para asegurar que el mapa esté listo
-      setTimeout(() => {
-        this.cambioDepartamentoMapa(4);
-      }, 800);
+      if (!this.skipMapInit) {
+        setTimeout(() => {
+          this.cambioDepartamentoMapa(4);
+        }, 800);
+      }
 
       this.departamento_id = 4;
 
@@ -342,6 +362,44 @@ nextStep() {
       this.formulario_interno.formulario.get('humedad')?.valueChanges.subscribe(() => {
         this.calcularPesoNeto();
       });
+
+    const padreIdSnapshot = this.getParamNumber('padreId');
+    const operadorIdSnapshot = this.getParamNumber('operadorId');
+    if (!Number.isNaN(operadorIdSnapshot)) {
+      this.operadorIdContext = operadorIdSnapshot;
+    }
+    if (!Number.isNaN(padreIdSnapshot) && padreIdSnapshot > 0) {
+      this.cargarMuestraPadrePorId(padreIdSnapshot);
+    }
+
+    this.route.queryParams.subscribe(params => {
+      const padreId = this.parseParamValue(params['padreId']);
+      const operadorId = this.parseParamValue(params['operadorId']);
+      if (!Number.isNaN(operadorId)) {
+        this.operadorIdContext = operadorId;
+      }
+      if (!Number.isNaN(padreId) && padreId > 0) {
+        this.cargarMuestraPadrePorId(padreId);
+      }
+    });
+  }
+
+  private getParamNumber(name: string): number {
+    const snapshotValue = this.route.snapshot.queryParamMap.get(name);
+    const parsedSnapshot = this.parseParamValue(snapshotValue);
+    if (!Number.isNaN(parsedSnapshot)) {
+      return parsedSnapshot;
+    }
+    const searchValue = new URLSearchParams(window.location.search).get(name);
+    return this.parseParamValue(searchValue);
+  }
+
+  private parseParamValue(value: any): number {
+    if (value == null) {
+      return NaN;
+    }
+    const parsed = parseInt(value.toString(), 10);
+    return Number.isNaN(parsed) ? NaN : parsed;
   }
   cambioDestino(event){
     if(event.value=='COMPRADOR')
@@ -480,7 +538,10 @@ valSwitches(event:any){
         estado: 'GENERADO',
         aduana_id:this.aduana_id,
         pais_destino_id:this.pais_id,
-        tipo_muestra:'PARCIAL',
+        tipo_muestra:'SIN CARACTERIZACION',
+        procedimiento_parcial: 'INICIADO',
+        total_parcial: this.formulario_interno.formulario.value.peso_neto_total,
+        nro_camiones_parcial: this.formulario_interno.formulario.value.nro_camiones,
 
         fecha_hora_tdm: this.formatFechaCompleta(this.formulario_interno.formulario.value.fecha_hora_tdm)
       });
@@ -527,12 +588,14 @@ valSwitches(event:any){
           municipio_id: formularioEnvio.municipio_id,
           lote: formularioEnvio.lote,
           tipo_muestra: formularioEnvio.tipo_muestra,
-          total_parcial: formularioEnvio.total_parcial,
+          total_parcial: formularioEnvio.peso_neto_total,
           peso_neto_parcial: formularioEnvio.peso_neto_parcial,
+          procedimiento_parcial: 'INICIADO',
           presentacion_id: formularioEnvio.presentacion_id,
           cantidad: formularioEnvio.cantidad,
           humedad:humedadFinal,
           nro_camiones: formularioEnvio.nro_camiones,
+          nro_camiones_parcial: formularioEnvio.nro_camiones,
           peso_neto_total: formularioEnvio.peso_neto_total,
           observaciones: formularioEnvio.observaciones,
           fecha_hora_tdm: formularioEnvio.fecha_hora_tdm,
@@ -659,6 +722,9 @@ valSwitches(event:any){
 
             this.formulario_interno.formulario.value.departamento=departamento_id;
             this.dept=this.departamento.find(element => element.id === departamento_id);
+            if (!this.dept) {
+                return;
+            }
             this.municipiosService.vermunicipios( departamento_id.toString()).subscribe(
                 (data:any)=>{
 
@@ -791,18 +857,64 @@ cargarParcialesHijos() {
   }
 
   // Buscar todas las muestras con el mismo lote y que NO sean generadas con generar_parcial=true
-  this.tomaDeMuestrasService.verTomaDeMuestrasOperador(this.authService.getUser.operador_id).subscribe(
+  const operadorId = this.operadorIdContext ?? this.muestraPadre?.operador_id ?? this.authService.getUser.operador_id;
+  this.tomaDeMuestrasService.verTomaDeMuestrasOperador(operadorId).subscribe(
     (data: any) => {
       const todasMuestras = data.data || [];
       // Filtrar solo las que tienen el mismo lote y son parciales hijos
       this.parcialesHijos = todasMuestras.filter(m =>
         m.lote === this.muestraPadre.lote &&
+        m.operador_id === this.muestraPadre.operador_id &&
         m.id !== this.muestraPadre.id &&
-        m.tipo_muestra === 'PARCIAL'
+        m.procedimiento_parcial == null
       );
+      console.log('[PARCIALES][PADRE]', this.muestraPadre);
+      console.log('[PARCIALES][HIJOS]', this.parcialesHijos);
+      const totalPadrePeso = Number(this.muestraPadre?.total_parcial ?? this.muestraPadre?.peso_neto_total ?? 0);
+      const totalPadreCamiones = Number(this.muestraPadre?.nro_camiones_parcial ?? this.muestraPadre?.nro_camiones ?? 0);
+      const hijosAprobados = this.parcialesHijos.filter(hijo => (hijo?.estado || '').trim() === 'APROBADO');
+      console.log('[PARCIALES][HIJOS][APROBADOS]', hijosAprobados.map((hijo: any) => ({
+        id: hijo.id,
+        estado: hijo.estado,
+        peso_neto_parcial: hijo.peso_neto_parcial,
+        peso_neto_total: hijo.peso_neto_total,
+        nro_camiones: hijo.nro_camiones
+      })));
+      const totalHijosPeso = hijosAprobados.reduce((sum, hijo) => sum + Number(hijo.peso_neto_parcial ?? hijo.peso_neto_total ?? 0), 0);
+      const totalHijosCamiones = hijosAprobados.reduce((sum, hijo) => sum + Number(hijo.nro_camiones ?? 0), 0);
+      this.pesoRestante = Math.max(0, totalPadrePeso - totalHijosPeso);
+      this.camionesRestantes = Math.max(0, totalPadreCamiones - totalHijosCamiones);
+      console.log('[PARCIALES][DISPONIBLE]', {
+        totalPadrePeso,
+        totalHijosPeso,
+        pesoRestante: this.pesoRestante,
+        totalPadreCamiones,
+        totalHijosCamiones,
+        camionesRestantes: this.camionesRestantes
+      });
     },
     (error: any) => {
       console.error('Error al cargar parciales hijos', error);
+    }
+  );
+}
+
+cargarMuestraPadrePorId(id: number) {
+  this.tomaDeMuestrasService.verTomaDeMuestra(id.toString()).subscribe(
+    (data: any) => {
+      const sample = data?.data ?? data;
+      if (!sample) {
+        return;
+      }
+      this.muestraPadre = sample;
+      if (!this.operadorIdContext && sample?.operador_id) {
+        this.operadorIdContext = sample.operador_id;
+      }
+      this.muestraPadreCreada = true;
+      this.cargarParcialesHijos();
+    },
+    (error: any) => {
+      this.notify.error('No se pudo cargar la muestra padre', 'Error', { timeOut: 2000, positionClass: 'toast-top-right' });
     }
   );
 }
@@ -822,7 +934,7 @@ abrirDialogoAgregarParcial() {
     departamento_id: this.muestraPadre.departamento_id,
     municipio_id: this.muestraPadre.municipio_id,
     lote: this.muestraPadre.lote, // MISMO LOTE para relacionar
-    tipo_muestra: 'PARCIAL',
+    tipo_muestra: 'SIN CARACTERIZACION',
     presentacion_id: this.muestraPadre.presentacion_id,
     m03_id: this.muestraPadre.m03_id,
     laboratorio: this.muestraPadre.laboratorio,
@@ -831,7 +943,7 @@ abrirDialogoAgregarParcial() {
     nro_factura_exportacion: this.muestraPadre.nro_factura_exportacion,
     aduana_id: this.muestraPadre.aduana_id,
     pais_destino_id: this.muestraPadre.pais_destino_id,
-    generar_parcial: false, // Es hijo, no padre
+    generar_parcial: true, // Hijo tambien se marca como parcial
     estado: 'GENERADO',
     cantidad: this.muestraPadre.cantidad,
     fecha_hora_tdm: new Date() // Fecha/hora actual por defecto
@@ -849,6 +961,26 @@ crearParcialHijo() {
   // Preparar datos del parcial hijo (similar al onSubmit pero más simple)
   const formValue = this.formularioParcialHijo.formulario.value;
 
+  const pesoHijo = Number(formValue.peso_neto_total) || 0;
+  const camionesHijo = Number(formValue.nro_camiones) || 0;
+
+  if (this.pesoRestante <= 0) {
+    this.notify.error('No hay peso disponible en el parcial padre', 'Error', { timeOut: 2000, positionClass: 'toast-top-right' });
+    return;
+  }
+  if (pesoHijo > this.pesoRestante) {
+    this.notify.error('El peso del parcial excede el peso disponible', 'Error', { timeOut: 2000, positionClass: 'toast-top-right' });
+    return;
+  }
+  if (this.camionesRestantes <= 0) {
+    this.notify.error('No hay camiones disponibles en el parcial padre', 'Error', { timeOut: 2000, positionClass: 'toast-top-right' });
+    return;
+  }
+  if (camionesHijo > this.camionesRestantes) {
+    this.notify.error('El numero de camiones excede el disponible', 'Error', { timeOut: 2000, positionClass: 'toast-top-right' });
+    return;
+  }
+
   const parcialHijoData = {
     operador_id: formValue.operador_id,
     responsable_tdm_id: formValue.responsable_tdm_id,
@@ -858,10 +990,12 @@ crearParcialHijo() {
     departamento_id: formValue.departamento_id,
     municipio_id: formValue.municipio_id,
     lote: formValue.lote, // MISMO LOTE del padre
-    tipo_muestra: 'PARCIAL',
+    tipo_muestra: 'SIN CARACTERIZACION',
     presentacion_id: formValue.presentacion_id,
     nro_camiones: formValue.nro_camiones || 1,
+    nro_camiones_parcial: this.muestraPadre?.nro_camiones_parcial ?? this.muestraPadre?.nro_camiones,
     peso_neto_total: formValue.peso_neto_total,
+    peso_neto_parcial: formValue.peso_neto_total,
     humedad: formValue.humedad || 0,
     merma: formValue.merma || 0,
     observaciones: formValue.observaciones || '',
@@ -873,9 +1007,12 @@ crearParcialHijo() {
     nro_factura_exportacion: formValue.nro_factura_exportacion,
     aduana_id: formValue.aduana_id,
     pais_destino_id: formValue.pais_destino_id,
-    generar_parcial: false,
+    generar_parcial: true,
+    procedimiento_parcial: null,
     minerales: this.muestraPadre.minerales || [],
-    municipio_origen: this.muestraPadre.municipio_origen || [],
+    municipio_origen: (this.muestraPadre.municipio_origen || []).map((municipio: any) => ({
+      id: municipio?.id ?? municipio?.municipioId
+    })),
     procedimiento: []
   };
 
@@ -906,6 +1043,26 @@ solicitarMuestraPadre() {
   );
 }
 
+actualizarMuestraPadre() {
+  if (!this.muestraPadre?.id) {
+    return;
+  }
+
+  this.tomaDeMuestrasService.verTomaDeMuestra(this.muestraPadre.id.toString()).subscribe(
+    (data: any) => {
+      const updated = data?.data ?? data;
+      this.muestraPadre = { ...this.muestraPadre, ...updated };
+      if (this.muestraPadre?.estado === 'APROBADO' || this.muestraPadre?.estado === 'FIRMADO') {
+        this.cargarParcialesHijos();
+      }
+    },
+    (error: any) => {
+      this.notify.error('No se pudo actualizar el estado', 'Error', { timeOut: 2000, positionClass: 'toast-top-right' });
+    }
+  );
+}
+
+
 solicitarParcial(parcial: any) {
   this.tomaDeMuestrasService.solicitarTomaDeMuestra(parcial.id).subscribe(
     (data: any) => {
@@ -916,6 +1073,60 @@ solicitarParcial(parcial: any) {
       this.notify.error('Error al solicitar parcial', 'Error', { timeOut: 2000, positionClass: 'toast-top-right' });
     }
   );
+}
+
+
+confirmarSolicitudParcial(parcial: any) {
+  this.confirmationService.confirm({
+    key: 'confirm1',
+    message: 'Estas seguro de Solicitar la Muestra Parcial: ' + parcial.nro_formulario + '?',
+    accept: () => {
+      this.solicitarParcial(parcial);
+    },
+  });
+}
+
+firmarParcial(parcial: any) {
+  this.tomaDeMuestrasService.firmarTomaDeMuestra(parcial.id).subscribe(
+    (data: any) => {
+      this.cargarParcialesHijos();
+    },
+    (error: any) => {
+      this.notify.error('Error al aprobar parcial', 'Error', { timeOut: 2000, positionClass: 'toast-top-right' });
+    }
+  );
+}
+
+confirmarAprobacionParcial(parcial: any) {
+  this.confirmationService.confirm({
+    key: 'confirm1',
+    message: 'Estas seguro de Aprobar la Muestra Parcial: ' + parcial.nro_formulario + '?',
+    accept: () => {
+      this.firmarParcial(parcial);
+    },
+  });
+}
+
+generarPDFParcial(parcial: any) {
+  this.tomaDeMuestrasService.verTomaDeMuestraPDF(parcial.id.toString()).subscribe(
+    (data: any) => {
+      const tdm = this.tomaDeMuestrasService.handleTomaDeMuestraPDF(data);
+      this.pdfTomaDemuestra.generarPDF(tdm);
+    },
+    (error: any) => {
+      this.notify.error('Error al generar PDF', 'Error', { timeOut: 2000, positionClass: 'toast-top-right' });
+    }
+  );
+}
+
+
+verSolicitud(parcial: any) {
+  this.toma_de_muestra_id = parcial.id;
+  this.verDialog = true;
+}
+
+cerrar(event: any) {
+  this.verDialog = event;
 }
 
 volverAFormulario() {

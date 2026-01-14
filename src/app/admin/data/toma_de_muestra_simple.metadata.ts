@@ -14,5 +14,6 @@ export interface ITomaDeMuestraSimple {
     responsable_tdm_id:number,
     operador_id:number,
     generar_parcial?:boolean
+    procedimiento_parcial?:string,
 }
 
