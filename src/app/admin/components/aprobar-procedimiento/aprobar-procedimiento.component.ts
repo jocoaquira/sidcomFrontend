@@ -349,10 +349,103 @@ export class AprobarProcedimientoComponent implements OnInit {
   }
 
   // Método para capturar el archivo seleccionado
-  onFileSelect(event: any) {
-    const file: File = event.files[0]; // Aquí capturamos el primer archivo seleccionado
-    this.selectedFile = file; // Lo guardamos en la propiedad selectedFile
+  async onFileSelect(event: any) {
+    const file: File = event.files[0];
+    if (!file) {
+      this.selectedFile = null;
+      return;
+    }
 
+    if (file.type === 'application/pdf') {
+      this.selectedFile = file;
+      return;
+    }
+
+    if (this.isCompressibleImage(file)) {
+      try {
+        this.selectedFile = await this.compressImage(file);
+      } catch (error) {
+        console.error('Error al comprimir la imagen:', error);
+        this.selectedFile = file;
+      }
+      return;
+    }
+
+    this.selectedFile = file;
+  }
+
+  private isCompressibleImage(file: File): boolean {
+    return file.type === 'image/jpeg' || file.type === 'image/png';
+  }
+
+  private async compressImage(file: File): Promise<File> {
+    const img = await this.loadImage(file);
+    const maxDim = 1600;
+    let width = img.width;
+    let height = img.height;
+
+    if (width > maxDim || height > maxDim) {
+      const scale = maxDim / Math.max(width, height);
+      width = Math.round(width * scale);
+      height = Math.round(height * scale);
+    }
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      return file;
+    }
+
+    let quality = 0.8;
+    let blob: Blob | null = null;
+
+    const drawAndEncode = async () => {
+      canvas.width = width;
+      canvas.height = height;
+      ctx.clearRect(0, 0, width, height);
+      ctx.drawImage(img, 0, 0, width, height);
+      blob = await this.canvasToBlob(canvas, file.type, quality);
+    };
+
+    await drawAndEncode();
+
+    while (blob && blob.size > 1048576 && quality > 0.4) {
+      quality = Math.max(0.4, quality - 0.1);
+      await drawAndEncode();
+    }
+
+    while (blob && blob.size > 1048576 && width > 300 && height > 300) {
+      width = Math.round(width * 0.85);
+      height = Math.round(height * 0.85);
+      quality = 0.8;
+      await drawAndEncode();
+    }
+
+    if (!blob) {
+      return file;
+    }
+
+    return new File([blob], file.name, { type: file.type });
+  }
+
+  private loadImage(file: File): Promise<HTMLImageElement> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = reader.result as string;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  private canvasToBlob(canvas: HTMLCanvasElement, type: string, quality: number): Promise<Blob | null> {
+    return new Promise((resolve) => {
+      canvas.toBlob((blob) => resolve(blob), type, quality);
+    });
   }
 
 
