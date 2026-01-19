@@ -94,6 +94,7 @@ handleCrearusuario(data: IUsuario):IUsuario {
 }
 //---------------------Editar   usuario-------------------------------------------
 editarusuario(data:any) {
+    console.log(data);
   let { id, ...dataSinId } = data;
   this.token();
   return this.http.put(`${this.baseUrl}user/`+data.id, this.limpiarObjeto(dataSinId));

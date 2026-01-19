@@ -13,6 +13,7 @@
                 --></ng-template>
             </p-toolbar>
 
+            <div class="desktop-only">
             <p-table #dt
                 [value]="listaTomaDeMuestras"
                 [columns]="cols"
@@ -132,6 +133,84 @@
                     </tr>
                 </ng-template>
             </p-table>
+            </div>
+            <div class="mobile-only">
+                <div class="tm-mobile-header">
+                    <h5 class="m-0">Administrar Tomas de Muestra</h5>
+                    <span class="block mt-2 p-input-icon-left w-full">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Buscar..." class="w-full" />
+                    </span>
+                </div>
+                <div class="tm-card" *ngFor="let operador of listaTomaDeMuestras">
+                    <div class="tm-card-header">
+                        <div>
+                            <div class="tm-card-title">
+                                Formulario #{{ operador.nro_formulario }}
+                                <p-tag *ngIf="operador.procedimiento_parcial === 'INICIADO' || operador.procedimiento_parcial?.startsWith('EMITIDO')"
+                                    value="PARCIAL PADRE" severity="warning" styleClass="ml-2"></p-tag>
+                            </div>
+                            <div class="tm-card-subtitle">{{ operador.razon_social }}</div>
+                        </div>
+                        <div>
+                            <div *ngIf="operador.estado === 'GENERADO'" class="custom-tag generado-tag">
+                                GENERADO
+                            </div>
+                            <div *ngIf="operador.estado === 'SOLICITADO'" class="custom-tag solicitado-tag">
+                                SOLICITADO
+                            </div>
+                            <div *ngIf="operador.estado === 'EMITIDO'" class="custom-tag aprobado-tag">
+                                EMITIDO
+                            </div>
+                            <div *ngIf="operador.procedimiento_parcial?.startsWith('EMITIDO') && operador.estado !== 'CERRADO'" class="custom-tag aprobado-tag">
+                                FINALIZADO
+                            </div>
+                            <div *ngIf="operador.estado === 'APROBADO' && !operador.procedimiento_parcial?.startsWith('EMITIDO')" class="custom-tag firmado-tag">
+                                APROBADO
+                            </div>
+                            <div *ngIf="operador.estado === 'CERRADO'" class="custom-tag aprobado-tag">
+                                CERRADO
+                            </div>
+                            <div *ngIf="operador.estado === 'ANULADO'" class="custom-tag anulado-tag">
+                                ANULADO
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tm-card-body">
+                        <div class="tm-card-row">
+                            <span class="tm-card-label">Fecha</span>
+                            <span>{{ operador.fecha_hora_tdm | date:'dd/MM/yyyy' }}</span>
+                        </div>
+                        <div class="tm-card-row">
+                            <span class="tm-card-label">Hora</span>
+                            <span>{{ operador.fecha_hora_tdm | date:'HH:mm' }}</span>
+                        </div>
+                    </div>
+                    <div class="tm-card-actions">
+                        <button pButton pRipple icon="pi pi-eye" (click)="verSolicitud(operador)" class="p-button-outlined p-button-info"></button>
+                        <button *ngIf="operador.procedimiento_parcial === 'INICIADO' || operador.procedimiento_parcial?.startsWith('EMITIDO')"
+                            pButton pRipple icon="pi pi-sitemap"
+                            class="p-button-outlined p-button-secondary"
+                            label="Parciales"
+                            [routerLink]="['/admin/toma-de-muestra/crear-parcial']"
+                            [queryParams]="{ padreId: operador.id, operadorId: operador.operador_id }"></button>
+                        <button *ngIf="operador.estado === 'GENERADO'||operador.estado==='SOLICITADO'" pButton pRipple icon="pi pi-pencil" class="p-button-outlined p-button-warning" routerLink="/admin/toma-de-muestra/editar/{{operador?.id}}"></button>
+                        <button *ngIf="operador.estado === 'SOLICITADO'" pButton pRipple icon="pi pi-check-circle" (click)="aprobarSolicitud(operador)" label="Emitir" class="p-button-outlined p-button-info"></button>
+                        <button *ngIf="operador.estado === 'GENERADO'" pButton pRipple icon="pi pi-send" (click)="confirmarSolicitud(operador)" label="Solicitar" class="p-button-outlined p-button-success"></button>
+                        <button *ngIf="operador.estado === 'APROBADO' && operador.procedimiento_parcial === 'INICIADO'" pButton pRipple icon="pi pi-flag"
+                            (click)="cerrarParcialPadre(operador)" label="Finalizar Parcial"
+                            class="p-button-outlined p-button-secondary"></button>
+                        <button *ngIf="(
+                                    (operador.procedimiento_parcial === 'INICIADO' || operador.procedimiento_parcial?.startsWith('EMITIDO'))
+                                        ? (operador.estado === 'GENERADO' || operador.estado === 'SOLICITADO' || operador.estado === 'EMITIDO')
+                                        : (operador.estado !== 'EMITIDO' && operador.estado !== 'APROBADO' && operador.estado !== 'ANULADO' && operador.estado !== 'CERRADO')
+                                )"
+                                pButton pRipple icon="pi pi-trash" label="Anular" class="p-button-outlined p-button-danger"
+                                routerLink="/admin/toma-de-muestra/anular/{{operador?.id}}"></button>
+                        <button pButton pRipple icon="pi pi-print" class="p-button-outlined p-button-info" (click)="generarPDF(operador)"></button>
+                    </div>
+                </div>
+            </div>
             <p-confirmDialog header="Confirmación" key="confirm1" icon="pi pi-exclamation-triangle" message="¿Está seguro de anular el formulario?"
                                     [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
                                     acceptLabel="Sí"

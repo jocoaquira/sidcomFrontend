@@ -117,7 +117,7 @@ export class ListarUsuarioComponent implements OnInit {
     }
     edit(usuario:IUsuario) {
             this.usuario = { ...usuario };
-          
+
             //this.submitted = false;
             this.productDialog = true;
             this.isEditMode = true;
@@ -230,7 +230,7 @@ export class ListarUsuarioComponent implements OnInit {
                         usuario.estado='ACTIVO';
                     }
                 delete usuario.password;
-              
+
                 this.usuariosService.editarusuario(usuario).subscribe(
                     (data:any) =>
                     {
@@ -265,12 +265,17 @@ export class ListarUsuarioComponent implements OnInit {
             key: 'confirm1',
             message: '¿Estas seguro de Resetear Password?',
             accept: () => {
-                usuario.password='12345678'
-                this.usuariosService.editarusuario(usuario).subscribe(
+                usuario.password='12345678';
+                const credenciales = {
+                    id: usuario.id,
+                    password: usuario.password
+                };
+                console.log(credenciales);
+                this.usuariosService.editarusuario(credenciales).subscribe(
                     (data:any) =>
                     {
                       this.usuariosService.handleCrearusuario(data);
-                    
+
                       if(data.error==null)
                       {
                         this.usuariosService.verusuarios('nada').subscribe(

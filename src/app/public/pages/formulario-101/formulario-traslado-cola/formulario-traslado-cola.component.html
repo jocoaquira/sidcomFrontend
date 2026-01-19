@@ -18,6 +18,7 @@
                 --></ng-template>
             </p-toolbar>
 
+            <div class="desktop-only">
             <p-table #dt
                 [value]="listaFormularioTrasladoColas"
                 [columns]="cols"
@@ -139,6 +140,86 @@
                     </tr>
                 </ng-template>
             </p-table>
+            </div>
+            <div class="mobile-only">
+                <div class="tm-mobile-header">
+                    <h5 class="m-0">Administrar Formulario de Traslado de Colas</h5>
+                    <span class="block mt-2 p-input-icon-left w-full">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Buscar..." class="w-full"/>
+                    </span>
+                </div>
+                <div class="tm-card" *ngFor="let form of listaFormularioTrasladoColas">
+                    <div class="tm-card-header">
+                        <div>
+                            <div class="tm-card-title">Formulario #{{ form.nro_formulario }}</div>
+                            <div class="tm-card-subtitle">{{ form.razon_social }}</div>
+                        </div>
+                        <div>
+                            <div *ngIf="form.estado === 'GENERADO'" class="custom-tag generado-tag">
+                                GENERADO
+                            </div>
+
+                            <div *ngIf="form.estado === 'EMITIDO'" class="custom-tag emitido-tag">
+                                EMITIDO
+                            </div>
+
+                            <div *ngIf="form.estado === 'VENCIDO'" class="custom-tag vencido-tag">
+                                VENCIDO
+                            </div>
+
+                            <div *ngIf="form.estado === 'ANULADO'" class="custom-tag anulado-tag">
+                                ANULADO
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tm-card-body">
+                        <div class="tm-card-row">
+                            <span class="tm-card-label">Creacion</span>
+                            <span>{{ form.fecha_creacion | date: 'HH:mm:ss dd/MM/yyyy' }}</span>
+                        </div>
+                        <div class="tm-card-row">
+                            <span class="tm-card-label">Vencimiento</span>
+                            <span>{{ form.fecha_vencimiento | date: 'HH:mm:ss dd/MM/yyyy' }}</span>
+                        </div>
+                        <div class="tm-card-row">
+                            <span class="tm-card-label">Trancas</span>
+                        </div>
+                        <div class="tm-card-trancas">
+                            <div class="trancas-container" *ngIf="form.control_trancas?.length>0">
+                                <div *ngFor="let tranca of form.control_trancas; let j = index"
+                                    class="tranca-item tranca-color-{{j % 10}}"
+                                    (click)="showTrancaDetail(tranca)" style="cursor: pointer;"
+                                >
+                                    <div class="tranca-nombre">{{ tranca.nombre_tranca }}</div>
+                                    <div class="tranca-fecha">{{ tranca.fecha_inspeccion | date:'dd/MM/yyyy'}}</div>
+                                    <div class="tranca-hora">{{ tranca.fecha_inspeccion | date:'HH:mm' }}</div>
+                                </div>
+                                <div *ngIf="!form.control_trancas || form.control_trancas.length === 0"
+                                     class="sin-trancas">
+                                    Sin Control en Trancas
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tm-card-actions">
+                        <button *ngIf="form.estado === 'GENERADO' && canEditarFormularioTrasladoCola.canActivate()"
+                            pButton pRipple icon="pi pi-pencil" label="Modificar"
+                            class="p-button-rounded p-button-warning"
+                            routerLink="/public/formulario-101/formulario-traslado-cola/editar/{{form?.id}}"
+                        ></button>
+                        <button *ngIf="form.estado === 'GENERADO'" pButton pRipple icon="pi pi-lock" label="Emitir" class="p-button-rounded p-button-success" (click)="confirmarEmision(form)"></button>
+                        <button *ngIf="form.estado !== 'GENERADO' && form.estado !== 'ANULADO' && canAnularFormularioTrasladoCola.canActivate()"
+                            pButton pRipple icon="pi pi-trash" label="Anular"
+                            class="p-button-rounded p-button-danger"
+                            routerLink="/public/formulario-101/formulario-traslado-cola/anular/{{form?.id}}"></button>
+                        <button pButton pRipple icon="pi pi-print"
+                            class="p-button-rounded p-button-info" (click)="generarPDF(form)"
+                            *ngIf="canImprimirFormularioTrasladoCola.canActivate()"
+                        ></button>
+                    </div>
+                </div>
+            </div>
             <p-confirmDialog header="Confirmación" key="confirm1" icon="pi pi-exclamation-triangle" message="¿Está seguro de anular el formulario?"
                 [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
                 acceptLabel="Sí"
