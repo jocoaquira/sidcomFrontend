@@ -81,7 +81,7 @@ export class ListarUsuarioComponent implements OnInit {
           (error:any)=> this.error=this.rolesServices.handleError(error));
         this.operadoresService.verOperatorsSimple(this.nombre).subscribe(
             (data:any)=>{
-            this.operadores=this.operadoresService.handleOperatorSimple(data.data);
+            this.operadores=this.operadoresService.handleOperatorSimple(data);
         },
         (error:any)=> this.error=this.operadoresService.handleOperatorSimpleError(error));
         //this.productService.getProducts().then(data => this.products = data);
@@ -207,7 +207,10 @@ export class ListarUsuarioComponent implements OnInit {
                 break;
             }
         }
-        return this.operadores[index].razon_social;
+        if (index !== -1) {
+            return this.operadores[index].razon_social;
+        }
+        return '';
         }
         else{ return '';}
 

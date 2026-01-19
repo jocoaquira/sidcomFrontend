@@ -14,7 +14,7 @@
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="listaUsuarios" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['id','email','nombre','apellidos','ci','estado']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-table #dt [value]="listaUsuarios" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['id','email','nombre','apellidos','ci','estado','razon_social']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Administrar Usuarios</h5>
@@ -31,6 +31,7 @@
                         <th pSortableColumn="nombre">Nombre y Apellido <p-sortIcon field="nombre"></p-sortIcon></th>
                         <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
                         <th pSortableColumn="rol_id">Nivel <p-sortIcon field="rol_id"></p-sortIcon></th>
+                        <th>Razon Social</th>
                         <th pSortableColumn="estado">Estado <p-sortIcon field="estado"></p-sortIcon></th>
                         <th pSortableColumn="inventoryStatus">Acciones <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
                     </tr>
@@ -49,9 +50,13 @@
                             <span class="p-column-title">Email</span>
                             {{usuario.email}}
                           </td>
-                        <td style="width:30%; min-width:20rem;" *ngIf="usuario.rol_id || usuario.operator_id">
-                            <span class="p-column-title">rol_id</span>
-                            {{userRol(usuario.rol_id)+' '+userOperador(usuario.operator_id)}}
+                        <td style="width:20%; min-width:15rem;">
+                            <span class="p-column-title">Nivel</span>
+                            {{userRol(usuario.rol_id)}}
+                        </td>
+                        <td style="width:20%; min-width:15rem;">
+                            <span class="p-column-title">Razon Social</span>
+                            {{usuario.razon_social || userOperador(usuario.operador_id)}}
                         </td>
                         <td style="width:10%; min-width: 10rem;"><span class="p-column-title">Estado</span>
 

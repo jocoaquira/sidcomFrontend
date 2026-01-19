@@ -18,6 +18,7 @@ import { ITomaDeMuestraSimple } from '@data/toma_de_muestra_simple.metadata';
 import { ITomaDeMuestraPDF } from '@data/toma_de_muestra_pdf.metadata';
 import { PdfTomaDeMuestraService } from 'src/app/admin/services/pdf/toma-de-muestra-pdf.service';
 import { PdfTomaDeMuestraParcialService } from 'src/app/admin/services/pdf/toma-de-muestra-parcial-pdf.service';
+import { CanTDMParcialGuard } from 'src/app/admin/guards/toma-de-muestra/can-parcial.guard';
 
 @Component({
   selector: 'app-lista-toma-de-muestra',
@@ -70,6 +71,7 @@ export class ListaTomaDeMuestraComponent implements OnInit {
         public canVerFormularioInterno:CanVerFormularioInternoGuard,
         public canCrearFormularioInterno:CanCrearFormularioInternoGuard,
         public canEditarFormularioInterno:CanEditarFormularioInternoGuard,
+        public canTDMParcial:CanTDMParcialGuard,
         public canEliminarFormularioInterno:CanEliminarOperatorGuard,
         public tomaDeMuestraService:TomaDeMuestraService,
         private pdfTomaDemuestra:PdfTomaDeMuestraService,
