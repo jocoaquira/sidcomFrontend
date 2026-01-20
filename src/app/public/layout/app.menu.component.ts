@@ -37,7 +37,7 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
-                label: 'Adminsitracion',
+                label: 'Administración',
                 items: [
                     { label: 'Responsables de Toma de Muestra', icon: 'pi pi-fw pi-users', routerLink: ['/public/responsable-tm'],visible: this.canVerResponsableTMGuard.canActivate() },
                     { label: 'Choferes', icon: 'pi pi-fw pi-id-card', routerLink: ['/public/chofer'] },
