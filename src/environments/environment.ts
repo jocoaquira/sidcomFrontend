@@ -15,6 +15,7 @@ export const environment = {
    // API_WS: 'wss://apimin.jocrock.lat/',
    //API_URL: 'http://192.168.205.129:3000/',
    //API_WS: 'ws://192.168.205.129:3000/',
+   //-------SERVIDOR ORURO ---------------------------------------------
    API_URL: 'https://apim.oruro.gob.bo/',
    API_WS: 'wss://apim.oruro.gob.bo/',
    //API_URL: 'http://192.168.205.73:4201/',
