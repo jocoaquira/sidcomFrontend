@@ -230,8 +230,11 @@ export class ListarUsuarioComponent implements OnInit {
                         usuario.estado='ACTIVO';
                     }
                 delete usuario.password;
-
-                this.usuariosService.editarusuario(usuario).subscribe(
+                const credenciales = {
+                    id: usuario.id,
+                    estado: usuario.estado
+                };
+                this.usuariosService.editarusuario(credenciales).subscribe(
                     (data:any) =>
                     {
                       this.usuariosService.handleCrearusuario(data);

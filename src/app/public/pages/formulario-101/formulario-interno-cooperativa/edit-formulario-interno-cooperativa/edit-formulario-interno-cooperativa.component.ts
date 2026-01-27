@@ -545,8 +545,8 @@ calcularPesoNeto() {
     const pesoSinTara = peso_bruto_humedo - tara;
 
     // Calcular merma y humedad basadas en el peso bruto húmedo
-    const valorMerma = (merma !== null && merma !== undefined) ? (peso_bruto_humedo * (merma / 100)) : 0;
-    const valorHumedad = (humedad !== null && humedad !== undefined) ? (peso_bruto_humedo * (humedad / 100)) : 0;
+    const valorMerma = (merma !== null && merma !== undefined) ? (pesoSinTara * (merma / 100)) : 0;
+    const valorHumedad = (humedad !== null && humedad !== undefined) ? (pesoSinTara *  (humedad / 100)) : 0;
 
     // Calcular el peso neto final
     let pesoNeto = pesoSinTara - valorMerma - valorHumedad;
