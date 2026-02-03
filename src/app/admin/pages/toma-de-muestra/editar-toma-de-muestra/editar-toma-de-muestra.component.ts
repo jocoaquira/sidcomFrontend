@@ -45,6 +45,8 @@ export class EditarTomaDeMuestraComponent implements OnInit {
     public lingotes:boolean=false;
     public sal:boolean=false;
     public otro:boolean=false;
+    pais_id: number | null = null;
+    aduana_id: number | null = null;
     public municipios: IMunicipio[] = [];
     public departamentos: IDepartamento[] = [];
     public dept:IDepartamento={
@@ -100,7 +102,8 @@ export class EditarTomaDeMuestraComponent implements OnInit {
       // Definir los pasos para Steps
   steps = [
     { label: '1. Datos Generales', command: (event: any) => this.gotoStep(0)},
-    { label: '2. Datos de Mineral y Origen',command: (event: any) => this.gotoStep(1) }
+    { label: '2. Datos de Mineral y Origen',command: (event: any) => this.gotoStep(1) },
+    { label: '3. Datos de Exportación',command: (event: any) => this.gotoStep(2) }
   ];
 
   public activeStep: number = 0; // Establecer el paso activo inicial
@@ -225,6 +228,7 @@ cargar_datos(form:any){
       fecha_firma: form.fecha_firma,
       justificacion_anulacion: form.justificacion_anulacion,
       nro_camiones: form.nro_camiones,
+      merma: form.merma,
       lugar_verificacion: form.lugar_verificacion,
       tipo_muestra: form.tipo_muestra,
       total_parcial:form.total_parcial,
@@ -232,8 +236,17 @@ cargar_datos(form:any){
       ubicacion_lon: form.ubicacion_lon,
       responsable_tdm_id: form.responsable_tdm_id,
       responsable_tdm_senarecom_id:form.responsable_tdm_senarecom_id,
+      m03_id: form.m03_id,
+      laboratorio: form.laboratorio,
+      codigo_analisis: form.codigo_analisis,
+      nro_factura_exportacion: form.nro_factura_exportacion,
+      comprador: form.comprador,
+      aduana_id: form.aduana_id,
+      pais_destino_id: form.pais_destino_id,
       estado: form.estado
   });
+  this.pais_id = form.pais_destino_id ?? null;
+  this.aduana_id = form.aduana_id ?? null;
   this.responsableTMService.verResponsableTMOperador(this.formulario_interno.formulario.value.operador_id.toString()).subscribe(
     (data:any)=>{
     this.listaUsuarios = this.responsableTMService.handleusuario(data)
@@ -255,12 +268,12 @@ cargar_datos(form:any){
         if (existeLugar) {
             this.valSwitch=false;
 
-           
+
         // El lugar existe en la lista
         // Puedes hacer alguna acción aquí si lo necesitas
         } else {
             this.valSwitch=true;
-           
+
         // El lugar NO existe en la lista
         }
     },
@@ -358,14 +371,14 @@ cargar_datos(form:any){
 }
 
 valSwitches(event:any){
-   
+
     this.valSwitch=event.checked;
 }
 cambioLugarVerificacionTDM(event:any){
     const lugarEncontrado = this.listaLugaresVerificacion.find(
   (item) => item.lugar === event.value
 );
-   
+
 
     this.formulario_interno.formulario.patchValue({
         lugar_verificacion: lugarEncontrado.lugar,
@@ -496,6 +509,12 @@ cambioLugarVerificacionTDM(event:any){
         this.calcularPesoNeto();
       });
   }
+  cambioPais(paisId: number): void {
+    this.pais_id = paisId;
+  }
+  cambioAduana(aduanaId: number): void {
+    this.aduana_id = aduanaId;
+  }
   cambioDestino(event){
     if(event.value=='COMPRADOR')
     {
@@ -524,11 +543,11 @@ cambioLugarVerificacionTDM(event:any){
     // Validar que los campos necesarios tengan valores
     if (peso_bruto_humedo && tara !== null && merma !== null && humedad !== null) {
       const pesoSinTara = peso_bruto_humedo - tara;
-      const pesoConMerma = peso_bruto_humedo * (merma / 100);
-      const pesoConHumedad = peso_bruto_humedo * (humedad / 100);
+      const pesoConMerma = pesoSinTara * (merma / 100);
+      const pesoConHumedad = pesoSinTara *  (humedad / 100);
 
       // Calcular el peso neto
-      let pesoNeto = pesoSinTara - pesoConMerma - pesoConHumedad;
+      let pesoNeto = pesoSinTara*(1-humedad/100)*(1-merma/100);
       this.formulario_interno.formulario.patchValue({
         peso_neto: pesoNeto
       });
@@ -620,7 +639,9 @@ abrirMapa() {
   guardar(){
 
       this.formulario_interno.formulario.patchValue({
-        fecha_hora_tdm: this.formatFechaCompleta(this.formulario_interno.formulario.value.fecha_hora_tdm)
+        fecha_hora_tdm: this.formatFechaCompleta(this.formulario_interno.formulario.value.fecha_hora_tdm),
+        aduana_id: this.aduana_id,
+        pais_destino_id: this.pais_id
       });
 
 

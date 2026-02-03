@@ -296,11 +296,11 @@ nextStep() {
     // Validar que los campos necesarios tengan valores
     if (peso_bruto_humedo && tara !== null && merma !== null && humedad !== null) {
       const pesoSinTara = peso_bruto_humedo - tara;
-      const pesoConMerma = peso_bruto_humedo * (merma / 100);
-      const pesoConHumedad = peso_bruto_humedo * (humedad / 100);
+      const pesoConMerma = pesoSinTara * (merma / 100);
+      const pesoConHumedad = pesoSinTara *  (humedad / 100);
 
       // Calcular el peso neto
-      let pesoNeto = pesoSinTara - pesoConMerma - pesoConHumedad;
+      let pesoNeto = pesoSinTara*(1-humedad/100)*(1-merma/100);
       this.formulario_externo.formulario.patchValue({
         peso_neto: pesoNeto
       });

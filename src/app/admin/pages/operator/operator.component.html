@@ -40,6 +40,7 @@
                         <th pSortableColumn="fecha_expiracion">Vigencia IDOM <p-sortIcon field="fecha_expiracion"></p-sortIcon></th>
                         <th pSortableColumn="fecha_exp_nim">Vigencia NIM <p-sortIcon field="fecha_exp_nim"></p-sortIcon></th>
                         <th pSortableColumn="fecha_exp_seprec">Vigencia SEPREC <p-sortIcon field="fecha_exp_seprec"></p-sortIcon></th>
+                        <th pSortableColumn="fecha_exp_ruex">Vigencia RUEX <p-sortIcon field="fecha_exp_ruex"></p-sortIcon></th>
                         <th pSortableColumn="category">Documentos <p-sortIcon field="category"></p-sortIcon></th>
                         <th pSortableColumn="rating">Mapa <p-sortIcon field="rating"></p-sortIcon></th>
                         <th pSortableColumn="estado">Estado <p-sortIcon field="estado"></p-sortIcon></th>
@@ -75,6 +76,13 @@
                                 <p-tag severity="success" *ngIf="diasActivos(operador.fecha_exp_seprec)>5" value="{{diasActivos(operador.fecha_exp_seprec)+' dias'}}"></p-tag>
                                 <p-tag severity="warning" *ngIf="diasActivos(operador.fecha_exp_seprec)<5 && diasActivos(operador.fecha_exp_seprec)>0" value="{{diasActivos(operador.fecha_exp_seprec)+' dias'}}"></p-tag>
                                 <p-tag severity="danger" *ngIf="diasActivos(operador.fecha_exp_seprec)<1" value="{{diasActivos(operador.fecha_exp_seprec)+' dias'}}"></p-tag>
+                            </div>
+                        </td>
+                        <td style="width:10%; min-width:5rem;" >
+                            <div *ngIf="operador.fecha_exp_ruex">
+                                <p-tag severity="success" *ngIf="diasActivos(operador.fecha_exp_ruex)>5" value="{{diasActivos(operador.fecha_exp_ruex)+' dias'}}"></p-tag>
+                                <p-tag severity="warning" *ngIf="diasActivos(operador.fecha_exp_ruex)<5 && diasActivos(operador.fecha_exp_ruex)>0" value="{{diasActivos(operador.fecha_exp_ruex)+' dias'}}"></p-tag>
+                                <p-tag severity="danger" *ngIf="diasActivos(operador.fecha_exp_ruex)<1" value="{{diasActivos(operador.fecha_exp_ruex)+' dias'}}"></p-tag>
                             </div>
                         </td>
                         <td style="width:14%; min-width:10rem;">

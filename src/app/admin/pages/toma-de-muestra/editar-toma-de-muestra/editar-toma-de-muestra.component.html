@@ -279,6 +279,21 @@
                                 </small>
                             </span>
                         </div>
+                        <div class="field col-12 md:col-4">
+                            <span class="p-float-label">
+                                <input
+                                    type="number"
+                                    id="merma"
+                                    pInputText
+                                    formControlName="merma"
+                                    class="ng-dirty"
+                                />
+                                <label for="Razon Social">Merma (0-1)</label>
+                                <small id="merma" class="p-error "*ngIf="formulario_interno.esCampoInvalido('merma')">
+                                    {{formulario_interno.getErrorMessage('merma')}}
+                                </small>
+                            </span>
+                        </div>
                         <div *ngIf="false" class="field col-12 md:col-4">
                             <span class="p-float-label">
                                 <input
@@ -435,34 +450,125 @@
                       </div>
                   </div>
 
-                  <div class="centrar-botones">
-                    <div class="botones-container">
-                        <div class="col-33" *ngIf="activeStep > 0">
+                  <div *ngIf="activeStep === 2">
+                      <div class="grid p-fluid mt-2">
+                          <div class="field col-12 md:col-12 ">
+                              <h5>2.1 Datos de Exportacion </h5>
+                          </div>
+                          <div class="field col-12 md:col-4">
+                              <span class="p-float-label">
+                                  <input
+                                      type="text"
+                                      id="m03_id"
+                                      pInputText
+                                      formControlName="m03_id"
+                                      class="ng-dirty"
+                                  />
+                                  <label for="m03_id">ID M-03</label>
+                                  <small id="m03_id" class="p-error "*ngIf="formulario_interno.esCampoInvalido('m03_id')">
+                                      {{formulario_interno.getErrorMessage('m03_id')}}
+                                  </small>
+                              </span>
+                          </div>
+                          <div class="field col-12 md:col-4">
+                              <span class="p-float-label">
+                                  <input
+                                      type="text"
+                                      id="laboratorio"
+                                      pInputText
+                                      formControlName="laboratorio"
+                                      class="ng-dirty"
+                                  />
+                                  <label for="laboratorio">Laboratorio</label>
+                                  <small id="laboratorio" class="p-error "*ngIf="formulario_interno.esCampoInvalido('laboratorio')">
+                                      {{formulario_interno.getErrorMessage('laboratorio')}}
+                                  </small>
+                              </span>
+                          </div>
+                          <div class="field col-12 md:col-4">
+                              <span class="p-float-label">
+                                  <input
+                                      type="text"
+                                      id="codigo_analisis"
+                                      pInputText
+                                      formControlName="codigo_analisis"
+                                      class="ng-dirty"
+                                  />
+                                  <label for="codigo_analisis">Codigo de Analisis</label>
+                                  <small id="codigo_analisis" class="p-error "*ngIf="formulario_interno.esCampoInvalido('codigo_analisis')">
+                                      {{formulario_interno.getErrorMessage('codigo_analisis')}}
+                                  </small>
+                              </span>
+                          </div>
+                          <div class="field col-12 md:col-4">
+                              <span class="p-float-label">
+                                  <input
+                                      type="text"
+                                      id="nro_factura_exportacion"
+                                      pInputText
+                                      formControlName="nro_factura_exportacion"
+                                      class="ng-dirty"
+                                  />
+                                  <label for="nro_factura_exportacion">N° Factura Comercial de Exportación</label>
+                                  <small id="nro_factura_exportacion" class="p-error "*ngIf="formulario_interno.esCampoInvalido('nro_factura_exportacion')">
+                                      {{formulario_interno.getErrorMessage('nro_factura_exportacion')}}
+                                  </small>
+                              </span>
+                          </div>
+                          <div class="field col-12 md:col-12 ">
+                              <h5>2.1 Datos de Destino </h5>
+                          </div>
+                          <div  class="field col-12 md:col-3">
+                              <span class="p-float-label">
+                                  <input
+                                      type="text"
+                                      id="comprador"
+                                      pInputText
+                                      formControlName="comprador"
+                                      class="ng-dirty"
+                                  />
+                                  <label for="comprador">Comprador</label>
+                                  <small id="comprador" class="p-error "*ngIf="formulario_interno.esCampoInvalido('comprador')">
+                                      {{formulario_interno.getErrorMessage('comprador')}}
+                                  </small>
+                              </span>
+                          </div>
+                          <div class="field col-12 md:col-3 ">
+                              <app-paisSelect [pais_id]="pais_id" (cambioPais)="cambioPais($event)" ></app-paisSelect>
+                          </div>
+                          <div class="field col-12 md:col-3 ">
+                              <app-aduanaSelect [aduana_id]="aduana_id" (cambioAduana)="cambioAduana($event)" ></app-aduanaSelect>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="flex justify-content-center gap-3 mt-4">
+                        <div *ngIf="activeStep > 0">
                             <button pButton pRipple type="button" label="Anterior"
-                                class="p-button-rounded p-button-secondary boton-ajustado"
+                                class="p-button-rounded p-button-secondary"
                                 (click)="prevStep()" icon="pi pi-arrow-left">
                             </button>
                         </div>
-                        <div class="col-33" *ngIf="activeStep !== steps.length - 1">
+                        <div *ngIf="activeStep !== steps.length - 1">
                             <button pButton pRipple type="button" label="Siguiente"
-                                class="p-button-rounded p-button-success boton-icono-derecha boton-ajustado"
-                                (click)="nextStep()" icon="pi pi-arrow-right">
+                                class="p-button-rounded p-button-success"
+                                (click)="nextStep()" icon="pi pi-arrow-right" iconPos="right">
                             </button>
                         </div>
-                        <div class="col-33" *ngIf="activeStep === steps.length - 1">
+                        <div *ngIf="activeStep === steps.length - 1">
                             <button pButton pRipple type="button" label="Guardar"
-                                class="p-button-rounded p-button-info boton-ajustado"
+                                class="p-button-rounded p-button-info"
                                 (click)="guardar()" icon="pi pi-save">
                             </button>
                         </div>
-                        <div class="col-33">
+                        <div>
                             <button pButton pRipple type="button" label="Cancelar"
-                                class="p-button-rounded p-button-danger boton-ajustado"
+                                class="p-button-rounded p-button-danger"
                                 [routerLink]="['/admin/toma-de-muestra']" icon="pi pi-trash">
                             </button>
                         </div>
                     </div>
-                </div>
+                  </div>
               </div>
 
           </div>
