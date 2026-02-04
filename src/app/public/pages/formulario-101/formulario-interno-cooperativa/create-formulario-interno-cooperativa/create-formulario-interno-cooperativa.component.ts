@@ -88,7 +88,8 @@ export class CreateFormularioInternoCooperativaComponent implements OnInit {
      public minerales_envio:any=[];
      public municipio_origen_envio:any=[];
      public compradores:any[]=[];
-     public lista_municipios_origen:IFormularioInternoMunicipioOrigen[]=[];
+    public lista_municipios_origen:IFormularioInternoMunicipioOrigen[]=[];
+    public bloqueoMensaje: string | null = null;
      public municipio_origen:IFormularioInternoMunicipioOrigen={
         id:null,
         formulario_int_id:null,
@@ -153,7 +154,10 @@ nextStep() {
         (this.formulario_interno.formulario.get('lote')?.valid || this.operador.generacion_nro_lote) &&
         this.formulario_interno.formulario.get('presentacion_id')?.valid &&
         (this.formulario_interno.formulario.get('cantidad')?.valid || this.formulario_interno.formulario.get('cantidad')?.disabled) &&
-        this.lista_leyes_mineral.length>0 && this.formulario_interno.formulario.get('peso_neto')?.valid;
+        this.lista_leyes_mineral.length>0 &&
+        this.formulario_interno.formulario.get('peso_neto')?.valid &&
+        this.formulario_interno.formulario.get('traslado_mineral')?.valid &&
+        this.formulario_interno.formulario.get('nro_viajes')?.valid;
 
         break;
       case 1:
@@ -366,6 +370,7 @@ marcarCamposComoTocados() {
   this.formulario_interno.formulario.markAllAsTouched();
 }
   guardar(){
+    this.bloqueoMensaje = null;
     this.formulario_interno.formulario.patchValue({
         estado: 'GENERADO'
       });
@@ -373,6 +378,25 @@ marcarCamposComoTocados() {
         this.formulario_interno.formulario.patchValue({
             lote: '12'
         });
+      }
+      if (!this.lista_municipios_origen || this.lista_municipios_origen.length === 0) {
+        this.bloqueoMensaje = 'Debe agregar municipio de origen. Contáctese con la Secretaría de Minería';
+        this.notify.error('Debe agregar municipio de origen. Contáctese con la Secretaría de Minería', 'No existe municipio de origen', {timeOut:2000,positionClass: 'toast-top-right'});
+        return;
+      }
+      const destino = this.formulario_interno.formulario.value.des_tipo;
+      if (destino === 'COMPRADOR' && (!this.compradores || this.compradores.length === 0)) {
+        this.bloqueoMensaje = 'Debe agregar al menos un comprador';
+        this.notify.error('Debe agregar al menos un comprador', 'Error con el Registro', {timeOut:2000,positionClass: 'toast-top-right'});
+        return;
+      }
+      if (destino === 'PLANTA DE TRATAMIENTO') {
+        const planta = this.formulario_interno.formulario.value.des_planta;
+        if (!planta || String(planta).trim() === '') {
+          this.bloqueoMensaje = 'Debe seleccionar una planta de tratamiento';
+          this.notify.error('Debe seleccionar una planta de tratamiento', 'Error con el Registro', {timeOut:2000,positionClass: 'toast-top-right'});
+          return;
+        }
       }
       this.mostrarErrores();
       this.marcarCamposComoTocados();

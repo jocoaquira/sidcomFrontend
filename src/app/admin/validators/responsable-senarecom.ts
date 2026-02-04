@@ -22,14 +22,14 @@ export class ResponsableSenarecomFormulario {
 
     this.formulario = new FormGroup({
         id: new FormControl(this.responsable_senarecom.id),
-        email: new FormControl(this.responsable_senarecom.email,[Validators.required,  Validators.email]),
-        nombre:new FormControl(this.responsable_senarecom.nombre,[Validators.required,Validators.pattern('^[a-zA-ZÃ€-Ã¿\\s]+$')]),
-        apellidos:new FormControl(this.responsable_senarecom.apellidos,[Validators.required, Validators.pattern('^[a-zA-ZÃ€-Ã¿\\s]+$')]),
+        email: new FormControl(this.responsable_senarecom.email,[Validators.email]),
+        nombre:new FormControl(this.responsable_senarecom.nombre,[Validators.required,Validators.pattern('^[a-zA-ZÀ-ÿ\\u00d1\\u00f1\\s]+$')]),
+        apellidos:new FormControl(this.responsable_senarecom.apellidos,[Validators.required, Validators.pattern('^[a-zA-ZÀ-ÿ\\u00d1\\u00f1\\s]+$')]),
         ci:new FormControl(this.responsable_senarecom.ci,[Validators.required]),
         celular:new FormControl(this.responsable_senarecom.celular,[Validators.required,Validators.pattern('^[0-9]{8}$')]),
         cargo: new FormControl(this.responsable_senarecom.cargo, [
           Validators.required, 
-          Validators.pattern('^[a-zA-ZÃ€-Ã¿0-9\\s]+$')
+          Validators.pattern('^[a-zA-ZÀ-ÿÑñ0-9\\s]+$')
         ]),
         estado:new FormControl(this.responsable_senarecom.estado,[Validators.required])
     },
@@ -86,3 +86,6 @@ getErrorMessage(controlName: string): string | null {
   }
 
 }
+
+
+

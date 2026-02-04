@@ -64,6 +64,19 @@ export class PdfFormularioTrasladoColaService {
 
     return `${day}/${month}/${year} a Hrs.: ${hours}:${minutes}`; // Formato final
   }
+  formatSimpleValue(value: any): string {
+    if (value === null || value === undefined) return '';
+    if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') return String(value);
+    if (typeof value === 'object') {
+      if ('value' in value) return String((value as any).value);
+      if ('nro_viajes' in value) return String((value as any).nro_viajes);
+      if ('camiones' in value) return String((value as any).camiones);
+      if (typeof value.toString === 'function' && value.toString !== Object.prototype.toString) {
+        return value.toString();
+      }
+    }
+    return '';
+  }
     generarPDF(formulario_externo: IFormularioTrasladoColaPDF) {
         let minerales!:IMineral[];
         let municipios: IMunicipio[] = [];
@@ -550,6 +563,31 @@ export class PdfFormularioTrasladoColaService {
                                   3: { cellWidth:30 }, // Ajusta automáticamente
                                   4: { cellWidth:260 }, // Ajusta automáticamente
                                 },
+                               });                              autoTable(doc, {
+                                startY: (doc as any).lastAutoTable?.finalY || 10,
+
+                                body: [
+                                  [
+                                    {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                    { content: 'NRO. DE VIAJES: ', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                    { content: this.formatSimpleValue(formulario_externo.nro_viajes), styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                    {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                  ],
+                                ],
+                                styles: {
+                                  textColor: [0, 0, 0], // Color de texto negro
+                                  valign: 'middle', // Alineación vertical centrada
+                                  fontSize: 9, // Tamaño de fuente
+                                  cellPadding: 2, // Espaciado interno de las celdas
+                                },
+                                columnStyles: {
+                                  0: { cellWidth: 20 }, // Primera columna
+                                  1: { cellWidth: 90 }, // Primera columna
+                                  2: { cellWidth: 150 }, // Segunda columna
+                                  3: { cellWidth:30 }, // Ajusta automáticamente
+                                  4: { cellWidth:260 }, // Ajusta automáticamente
+                                },
                                });
                           }
                           else{
@@ -615,6 +653,31 @@ export class PdfFormularioTrasladoColaService {
                                   2: { cellWidth: 200 }, // Segunda columna
                                   3: { cellWidth:115 }, // Ajusta automáticamente
                                   4: { cellWidth:175 }, // Ajusta automáticamente
+                                },
+                               });                              autoTable(doc, {
+                                startY: (doc as any).lastAutoTable?.finalY || 10,
+
+                                body: [
+                                  [
+                                    {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                    { content: 'NRO. DE VIAJES: ', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                    { content: this.formatSimpleValue(formulario_externo.nro_viajes), styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                    {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                  ],
+                                ],
+                                styles: {
+                                  textColor: [0, 0, 0], // Color de texto negro
+                                  valign: 'middle', // Alineación vertical centrada
+                                  fontSize: 9, // Tamaño de fuente
+                                  cellPadding: 2, // Espaciado interno de las celdas
+                                },
+                                columnStyles: {
+                                  0: { cellWidth: 20 }, // Primera columna
+                                  1: { cellWidth: 90 }, // Primera columna
+                                  2: { cellWidth: 150 }, // Segunda columna
+                                  3: { cellWidth:30 }, // Ajusta automáticamente
+                                  4: { cellWidth:260 }, // Ajusta automáticamente
                                 },
                                });
                           }

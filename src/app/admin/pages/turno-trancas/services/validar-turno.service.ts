@@ -28,7 +28,7 @@ export class TurnoValidatorService {
     }
 
     // Nueva función para verificar usuarios simultáneos máximos
-    verificarUsuariosSimultaneos(nuevoTurno: ITurnoTrancaLista, turnosExistentes: ITurnoTrancaLista[], maxUsuarios: number = 2): boolean {
+    verificarUsuariosSimultaneos(nuevoTurno: ITurnoTrancaLista, turnosExistentes: ITurnoTrancaLista[], maxUsuarios: number = 4): boolean {
         // Filtrar solo turnos de la misma tranca
         const turnosEnTranca = turnosExistentes.filter(t => t.trancaId === nuevoTurno.trancaId);
 
@@ -103,10 +103,10 @@ export class TurnoValidatorService {
         const nombreTranca = nuevoTurno.nombre_tranca || `ID ${nuevoTurno.trancaId}`;
 
         // Validación 1: Verificar que no se exceda el máximo de usuarios simultáneos
-        if (!this.verificarUsuariosSimultaneos(nuevoTurno, turnosExistentes, 2)) {
+        if (!this.verificarUsuariosSimultaneos(nuevoTurno, turnosExistentes, 4)) {
             return {
                 valido: false,
-                mensaje: `La tranca ${nombreTranca} excedería el límite de 2 usuarios simultáneos en este período.`
+                                mensaje: `La tranca ${nombreTranca} excederia el limite de 4 usuarios simultaneos en este periodo.`
             };
         }
 

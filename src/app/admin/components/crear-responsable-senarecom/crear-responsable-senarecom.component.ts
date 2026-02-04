@@ -176,6 +176,10 @@ export class CrearResponsableSenarecomComponent implements OnInit {
   }
   errorEmailRepetido(event:any){
     const email = (event.target as HTMLInputElement).value;
+    if (!email || String(email).trim() === '') {
+      this.errorVerificarEmail = false;
+      return;
+    }
     this.responsableSenarecomService.verificarEmail(email).subscribe(
       (data:any)=>{
 

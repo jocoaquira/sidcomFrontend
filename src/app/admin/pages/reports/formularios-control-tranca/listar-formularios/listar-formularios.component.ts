@@ -1,5 +1,5 @@
 import * as XLSX from 'xlsx';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { CanCrearUsuarioGuard } from 'src/app/admin/guards/usuarios/can-crear-usuario.guard';
@@ -15,6 +15,7 @@ import { IChofer } from '@data/chofer.metadata';
 import { IChoferAdmin } from '@data/chofer_admin.metadata';
 import { ReportesService } from 'src/app/admin/services/reportes.service';
 import { IFormularioControlTranca } from '@data/reports/formulario_control_puesto.metadata';
+import { PermissionHelperService } from 'src/app/admin/helpers/permission.helper.service';
 
 
 
@@ -24,6 +25,7 @@ import { IFormularioControlTranca } from '@data/reports/formulario_control_puest
 })
 export class ListarFormulariosComponent implements OnInit {
 
+    @ViewChild('dt') dt!: Table;
     public listaFormulariosControlTranca!:any[];
     public fecha_inicio:string='2025-01-01';
     public fecha_fin:string='2025-09-30';
@@ -58,6 +60,7 @@ export class ListarFormulariosComponent implements OnInit {
         private authService:AuthService,
         private notify:ToastrService,
         private confirmationService:ConfirmationService,
+        private permissionHelperService:PermissionHelperService,
     ) {
 
         this.operador_id=0
@@ -87,7 +90,11 @@ export class ListarFormulariosComponent implements OnInit {
     buscar(){
         console.log(this.fecha_inicio);
         console.log(this.fecha_fin);
-        this.formulariosControlTranca.listarFormulariosControlTrancaReporte(this.fecha_inicio,this.fecha_fin,this.user_id).subscribe(
+        const puedeListarTodos = this.permissionHelperService.existePermiso('list_control_tranca');
+        const request$ = puedeListarTodos
+            ? this.formulariosControlTranca.listarFormulariosControlTrancaReporteAll(this.fecha_inicio,this.fecha_fin)
+            : this.formulariosControlTranca.listarFormulariosControlTrancaReporte(this.fecha_inicio,this.fecha_fin,this.user_id);
+        request$.subscribe(
             (data:any)=>{
 
             this.listaFormulariosControlTranca=this.formulariosControlTranca.handleFormulariosControlTrancaReporte(data);
@@ -95,12 +102,37 @@ export class ListarFormulariosComponent implements OnInit {
                 ...item,
                 minerales: Array.isArray(item.minerales) ? item.minerales.map(m => m.mineral).join(', ') : '',
                 municipio_origen: Array.isArray(item.municipio_origen) ? item.municipio_origen.map(m => m.municipio_origen).join(', ') : '',
-                municipio_destino: Array.isArray(item.municipio_destino) ? item.municipio_destino.map(m => m.municipio_destino).join(', ') : '',
+                municipio_destino: Array.isArray(item.municipio_destino)
+                    ? item.municipio_destino.map((m: any) => m.municipio_destino).join(', ')
+                    : (item.municipio_destino ?? ''),
+                destino_pais_ciudad: item.tipo_formulario === 'EXTERNO'
+                    ? (item.pais_destino ?? '')
+                    : (Array.isArray(item.compradores) && item.compradores.length > 0
+                        ? item.compradores.map((c: any) => {
+                            const depto = c.departamento_destino ?? '';
+                            const muni = c.municipio_destino ?? '';
+                            return depto && muni ? `${depto} - ${muni}` : (depto || muni);
+                          }).join(', ')
+                        : (Array.isArray(item.municipio_destino) && item.municipio_destino.length > 0
+                            ? item.municipio_destino.map((m: any) => {
+                                const depto = (m.departamento && m.departamento.nombre) ? m.departamento.nombre : (m.departamento ?? '');
+                                const muni = m.municipio_destino ?? '';
+                                return depto && muni ? `${depto} - ${muni}` : (depto || muni);
+                              }).join(', ')
+                            : (() => {
+                                const depto = item.departamento_destino ? `${item.departamento_destino}` : '';
+                                const muni = item.municipio_destino ?? '';
+                                const base = depto && muni ? `${depto} - ${muni}` : (depto || muni);
+                                return item.des_planta ? (base ? `${base} - ${item.des_planta}` : item.des_planta) : base;
+                              })())),
                 fecha_control: item.formulario_tranca && item.formulario_tranca.length > 0
                     ? item.formulario_tranca[0].fecha_control
                     : '',
                 hora_control: item.formulario_tranca && item.formulario_tranca.length > 0
                     ? item.formulario_tranca[0].hora_control
+                    : '',
+                nombre_usuario: item.formulario_tranca && item.formulario_tranca.length > 0
+                    ? item.formulario_tranca[0].nombre_usuario
                     : '',
                 tranca: item.formulario_tranca && item.formulario_tranca.length > 0
                     ? item.formulario_tranca[0].tranca
@@ -149,10 +181,11 @@ exportarAExcel(jsonData: any[], fileName: string): void {
         { key: 'peso_neto', header: 'Peso Neto' },
         { key: 'municipio_origen', header: 'Proc. DEPTO.' },
         { key: 'municipio_origen', header: 'Proc. MUNICIPIO' },
-        { key: 'pais_destino', header: 'Dest. PAIS O CIUDAD' },
+        { key: 'destino_pais_ciudad', header: 'Dest. PAIS O CIUDAD' },
         { key: 'tipo_formulario', header: 'DESCRIPCION' },
         { key: 'nro_formulario', header: 'N° Form.' },
         { key: 'observaciones', header: 'Observaciones' },
+        { key: 'nombre_usuario', header: 'Realizó el Control' },
 
     ];
     // Transforma los datos para usar los encabezados personalizados
@@ -181,7 +214,8 @@ exportarAExcel(jsonData: any[], fileName: string): void {
         { wch: 12 }, // Proc. MUNICIPIO DESTINO
         { wch: 12 }, // PAIS ORIGEN
         { wch: 12 },  // Tipo Formulario
-        { wch: 20 }  // Tipo Formulario
+        { wch: 20 },  // Tipo Formulario
+        { wch: 24 }   // Realizó el Control
     ];
 
     // Crear libro de trabajo
@@ -213,6 +247,9 @@ private flattenData(data: any[]): any[] {
   }
 
   guardar(){
-    this.exportarAExcel(this.listaFormulariosControlTranca,'formularios_control_tranca');
+    const dataToExport = (this.dt && this.dt.filteredValue && this.dt.filteredValue.length > 0)
+        ? this.dt.filteredValue
+        : this.listaFormulariosControlTranca;
+    this.exportarAExcel(dataToExport,'formularios_control_tranca');
   }
 }

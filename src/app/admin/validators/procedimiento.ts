@@ -15,7 +15,7 @@ export class ProcedimientoFormulario {
 
     this.formulario = new FormGroup({
         id: new FormControl(this.procedimiento.id),
-        nombre:new FormControl(this.procedimiento.nombre,[Validators.required,Validators.pattern('^[a-zA-ZÃ€-Ã¿\\s]+$')]),
+        nombre:new FormControl(this.procedimiento.nombre,[Validators.required,Validators.pattern('^[a-zA-ZÀ-ÿ\\u00d1\\u00f1\\s]+$')]),
         estado:new FormControl(this.procedimiento.estado,[Validators.required]),
     });
   }
@@ -59,3 +59,5 @@ getErrorMessage(controlName: string): string | null {
   }
 
 }
+
+

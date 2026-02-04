@@ -576,6 +576,12 @@ valSwitchesPT(event:any){
 
     this.valSwitchPT=event.checked;
 }
+cambioMunicipioPT(event:any){
+    this.municipio_id_pt=event;
+    this.formulario_interno.formulario.patchValue({
+        id_municipio_destino: event
+      });
+}
 cambioDepartamentoPT(departamentoId: number): void {
     this.departamento_id_pt = departamentoId;
     // Aquí puedes hacer cualquier acción extra cuando el departamento cambie

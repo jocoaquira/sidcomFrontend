@@ -1,5 +1,5 @@
 import * as XLSX from 'xlsx';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { CanCrearUsuarioGuard } from 'src/app/admin/guards/usuarios/can-crear-usuario.guard';
@@ -24,6 +24,7 @@ import { IFormularioControlTranca } from '@data/reports/formulario_control_puest
 })
 export class ListarFormulariosInternosComponent implements OnInit {
 
+    @ViewChild('dt') dt!: Table;
     public listaFormulariosInternos!:any[];
     public fecha_inicio:string='2025-01-01';
     public fecha_fin:string='2025-05-30';
@@ -34,6 +35,7 @@ export class ListarFormulariosInternosComponent implements OnInit {
     public nombre:string='fd';
     public buscarTexto:string='';
     public cols!:any;
+    public globalFilterFields: string[] = [];
     public statuses!:any;
     public productDialog=false;
     public isEditMode: boolean = false;
@@ -71,12 +73,52 @@ export class ListarFormulariosInternosComponent implements OnInit {
         //this.productService.getProducts().then(data => this.products = data);
 
         this.cols = [
-            { field: 'product', header: 'Product' },
-            { field: 'price', header: 'Price' },
-            { field: 'category', header: 'Category' },
-            { field: 'rating', header: 'Reviews' },
-            { field: 'inventoryStatus', header: 'Status' }
+            { field: 'nro', header: 'Nro.' },
+            { field: 'operador_minero', header: 'Operador Minero' },
+            { field: 'numero_formulario', header: 'Numero de Formulario' },
+            { field: 'actor_minero', header: 'Actor Minero' },
+            { field: 'tipo_comercio', header: 'Tipo de Comercio' },
+            { field: 'fecha_emision', header: 'Fecha de Emisión' },
+            { field: 'fecha_vencimiento', header: 'Fecha de Vencimiento' },
+            { field: 'estado', header: 'Estado' },
+            { field: 'idom', header: 'IDOM' },
+            { field: 'nit', header: 'NIT' },
+            { field: 'nim_niar', header: 'NIM/NIAR' },
+            { field: 'lote', header: 'Lote' },
+            { field: 'presentacion', header: 'Presentación' },
+            { field: 'cantidad', header: 'Cantidad' },
+            { field: 'peso_bruto', header: 'Peso Bruto (kg)' },
+            { field: 'tara', header: 'Tara (kg)' },
+            { field: 'humedad', header: 'Humedad (%)' },
+            { field: 'merma', header: 'Merma (%)' },
+            { field: 'peso_neto', header: 'Peso Neto (kg)' },
+            { field: 'mineral_metal', header: 'Mineral y/o Metal' },
+            { field: 'ley', header: 'Ley' },
+            { field: 'municipio_productor', header: 'Municipio Productor' },
+            { field: 'codigo_municipio', header: 'Código de Municipio' },
+            { field: 'comprador', header: 'Comprador' },
+            { field: 'planta_tratamiento', header: 'Planta Tratamiento' },
+            { field: 'destino_final', header: 'Destino Final (Municipio)' },
+            { field: 'tipo_transporte', header: 'Tipo de Transporte' },
+            { field: 'tara_volqueta', header: 'Tara(volqueta)' },
+            { field: 'placa', header: 'Placa' },
+            { field: 'color', header: 'Color' },
+            { field: 'conductor', header: 'Nombre del Conductor' },
+            { field: 'licencia', header: 'Licencia de conducir' },
+            { field: 'empresa_transportadora', header: 'Empresa Transportadora' },
+            { field: 'nro_vagon', header: 'N° Vagon' },
+            { field: 'fecha_salida', header: 'Fecha de Salida' },
+            { field: 'hora_salida', header: 'Hora de Salida' },
+            { field: 'observaciones', header: 'Observaciones' },
+            { field: 'solicitud_modificacion', header: 'Solicitud de Modificación' },
+            { field: 'solicitud_anulacion', header: 'Solicitud de Anulación' },
+            { field: 'representante_legal', header: 'Nombre Representante Legal' },
+            { field: 'ci_representante_legal', header: 'Ci Representante Legal' },
+            { field: 'ley_reducida', header: 'Ley reducida' },
+            { field: 'tipo_traslado_mineral', header: 'Tipo traslado mineral' },
+            { field: 'nro_viajes', header: 'Nro. viajes' }
         ];
+        this.globalFilterFields = this.cols.map((c: any) => c.field);
 
         this.statuses = [
             { label: 'INSTOCK', value: 'instock' },
@@ -90,22 +132,71 @@ export class ListarFormulariosInternosComponent implements OnInit {
         this.formulariosInternosReportesService.listarFormulariosInternoReporte(this.fecha_inicio,this.fecha_fin).subscribe(
             (data:any)=>{
                 console.log(data);
-            this.listaFormulariosInternos=this.formulariosInternosReportesService.handleFormulariosControlTrancaReporte(data);
-            this.listaFormulariosInternos = this.listaFormulariosInternos.map(item => ({
-                ...item,
-                minerales: Array.isArray(item.minerales) ? item.minerales.map(m => m.mineral).join(', ') : '',
-                municipio_origen: Array.isArray(item.municipio_origen) ? item.municipio_origen.map(m => m.municipio_origen).join(', ') : '',
-                municipio_destino: Array.isArray(item.municipio_destino) ? item.municipio_destino.map(m => m.municipio_destino).join(', ') : '',
-                fecha_control: item.formulario_tranca && item.formulario_tranca.length > 0
-                    ? item.formulario_tranca[0].fecha_control
-                    : '',
-                hora_control: item.formulario_tranca && item.formulario_tranca.length > 0
-                    ? item.formulario_tranca[0].hora_control
-                    : '',
-                tranca: item.formulario_tranca && item.formulario_tranca.length > 0
-                    ? item.formulario_tranca[0].tranca
-                    : '',
-            }));
+            this.listaFormulariosInternos=this.formulariosInternosReportesService.handleListarFormulariosInternoReporte(data);
+            this.listaFormulariosInternos = this.listaFormulariosInternos.map((item, index) => {
+                const minerales = Array.isArray(item.minerales) ? item.minerales : [];
+                const municipio_origen = Array.isArray(item.municipio_origen) ? item.municipio_origen : [];
+                const mineral_metal = minerales.map((m: any) => m.mineral).filter(Boolean).join(', ');
+                const ley = minerales.map((m: any) => {
+                    const sigla = m.sigla ? m.sigla : '';
+                    const valorLey = m.ley ? m.ley : '';
+                    const unidad = m.unidad ? ` ${m.unidad}` : '';
+                    if (sigla && valorLey) return `${sigla}(${valorLey}${unidad})`;
+                    if (valorLey) return `${valorLey}${unidad}`.trim();
+                    return '';
+                }).filter(Boolean).join(', ');
+                const municipio_productor = municipio_origen.map((m: any) => m.municipio_origen).filter(Boolean).join(', ');
+                const codigo_municipio = municipio_origen.map((m: any) => m.codigo).filter(Boolean).join(', ');
+                const destino_final = [item.departamento_destino, item.municipio_destino].filter(Boolean).join('-');
+
+                return {
+                    ...item,
+                    nro: index + 1,
+                    operador_minero: item.razon_social ?? '',
+                    numero_formulario: item.nro_formulario ?? '',
+                    actor_minero: this.mapActorMinero(item.tipo_operador),
+                    tipo_comercio: 'INTERNO',
+                    fecha_emision: this.formatUtcToLocalDateTime(item.fecha_emision),
+                    fecha_vencimiento: this.formatUtcToLocalDateTime(item.fecha_vencimiento),
+                    estado: item.estado ?? '',
+                    idom: item.IDOM ?? '',
+                    nit: item.nit ?? '',
+                    nim_niar: item.nro_nim ?? '',
+                    lote: item.lote ?? '',
+                    presentacion: item.presentacion ?? '',
+                    cantidad: item.cantidad ?? '',
+                    peso_bruto: item.peso_bruto_humedo ?? '',
+                    tara: item.tara ?? '',
+                    humedad: item.humedad ?? '',
+                    merma: item.merma ?? '',
+                    peso_neto: item.peso_neto ?? '',
+                    mineral_metal,
+                    ley,
+                    municipio_productor,
+                    codigo_municipio,
+                    comprador: item.comprador ?? '',
+                    planta_tratamiento: item.planta_tratamiento ?? '',
+                    destino_final,
+                    tipo_transporte: item.tipo_transporte ?? '',
+                    tara_volqueta: item.tara ?? '',
+                    placa: item.placa ?? '',
+                    color: '',
+                    conductor: item.conductor ?? '',
+                    licencia: item.licencia ?? '',
+                    empresa_transportadora: item.empresa_ferrea ?? '',
+                    nro_vagon: item.nro_vagon ?? '',
+                    fecha_salida: this.formatUtcToLocalDateTime(item.fecha_ferrea),
+                    hora_salida: this.formatUtcToLocalTime(item.hr_ferrea),
+                    observaciones: item.observaciones ?? '',
+                    solicitud_modificacion: '',
+                    solicitud_anulacion: item.anulacion ?? '',
+                    representante_legal: item.representante_legal ?? '',
+                    ci_representante_legal: item.ci_representante_legal ?? '',
+                    ley_reducida: '',
+                    tipo_traslado_mineral: item.tipo_mineral ?? '',
+                    nro_viajes: item.nro_viajes ?? ''
+                };
+            });
             console.log(this.listaFormulariosInternos);
         },
           (error:any)=> this.error=this.formulariosInternosReportesService.handleError(error));
@@ -136,25 +227,7 @@ export class ListarFormulariosInternosComponent implements OnInit {
     }
 
 exportarAExcel(jsonData: any[], fileName: string): void {
-    // Define el mapeo de campos y encabezados
-    const columnas = [
-        { key: 'hora_control', header: 'Hora' },
-        { key: 'fecha_control', header: 'Fecha' },
-        { key: 'placa', header: 'Placa' },
-        { key: 'conductor', header: 'Nombre del Conductor' },
-        { key: 'licencia', header: 'Lic. o Doc.' },
-        { key: 'tranca', header: 'Punto de Control' },
-        { key: 'razon_social', header: 'Empresa' },
-        { key: 'minerales', header: 'Mineral' },
-        { key: 'peso_neto', header: 'Peso Neto' },
-        { key: 'municipio_origen', header: 'Proc. DEPTO.' },
-        { key: 'municipio_origen', header: 'Proc. MUNICIPIO' },
-        { key: 'pais_destino', header: 'Dest. PAIS O CIUDAD' },
-        { key: 'tipo_formulario', header: 'DESCRIPCION' },
-        { key: 'nro_formulario', header: 'N° Form.' },
-        { key: 'observaciones', header: 'Observaciones' },
-
-    ];
+    const columnas = this.cols.map((c: any) => ({ key: c.field, header: c.header }));
     // Transforma los datos para usar los encabezados personalizados
     const datosTransformados = jsonData.map(item => {
         const obj: any = {};
@@ -166,23 +239,7 @@ exportarAExcel(jsonData: any[], fileName: string): void {
     // Crear hoja de trabajo con los encabezados personalizados
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(datosTransformados);
     // Definir el ancho de las columnas (en caracteres)
-    ws['!cols'] = [
-        { wch: 6 }, // Fecha
-        { wch: 9 }, // Hora
-        { wch: 8 }, // PLACA
-        { wch: 22 }, // Nombre del Conductor
-        { wch: 10 }, // Lic. o Doc.
-        { wch: 12 }, // Lic. o Doc.
-        { wch: 30 }, // Empresa
-        { wch: 25 }, // Mineral
-        { wch: 8 }, // Peso Neto
-        { wch: 12 }, // Proc. dEEPTO.
-        { wch: 12 }, // Proc. MUNICIPIO
-        { wch: 12 }, // Proc. MUNICIPIO DESTINO
-        { wch: 12 }, // PAIS ORIGEN
-        { wch: 12 },  // Tipo Formulario
-        { wch: 20 }  // Tipo Formulario
-    ];
+    ws['!cols'] = columnas.map(() => ({ wch: 18 }));
 
     // Crear libro de trabajo
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
@@ -191,6 +248,7 @@ exportarAExcel(jsonData: any[], fileName: string): void {
     // Generar archivo Excel
     XLSX.writeFile(wb, `${fileName}.xlsx`);
 }
+
 private flattenData(data: any[]): any[] {
     return data.map(item => {
       const flatItem: any = {};
@@ -212,7 +270,50 @@ private flattenData(data: any[]): any[] {
     }
   }
 
+  private mapActorMinero(tipo: any): string {
+    switch (Number(tipo)) {
+      case 1:
+        return 'COOPERATIVA';
+      case 2:
+        return 'EMPRESA ESTATAL';
+      case 3:
+        return 'EMPRESA PRIVADA';
+      default:
+        return '';
+    }
+  }
+
+  private formatUtcToLocalDateTime(value: any): string {
+    if (!value) return '';
+    const date = new Date(value);
+    if (isNaN(date.getTime())) return String(value);
+    const dd = String(date.getDate()).padStart(2, '0');
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const yyyy = date.getFullYear();
+    const hh = String(date.getHours()).padStart(2, '0');
+    const min = String(date.getMinutes()).padStart(2, '0');
+    return `${hh}:${min} ${dd}/${mm}/${yyyy}`;
+  }
+
+  private formatUtcToLocalTime(value: any): string {
+    if (!value) return '';
+    const date = new Date(value);
+    if (!isNaN(date.getTime())) {
+      const hh = String(date.getHours()).padStart(2, '0');
+      const min = String(date.getMinutes()).padStart(2, '0');
+      return `${hh}:${min}`;
+    }
+    // Si ya viene solo hora en formato string, devolver tal cual
+    return String(value);
+  }
+
   guardar(){
-    this.exportarAExcel(this.listaFormulariosInternos,'formularios_control_tranca');
+    const dataToExport = (this.dt && this.dt.filteredValue && this.dt.filteredValue.length > 0)
+        ? this.dt.filteredValue
+        : this.listaFormulariosInternos;
+    this.exportarAExcel(dataToExport,'reporte_comercio_interno');
   }
 }
+
+
+

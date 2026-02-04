@@ -33,6 +33,15 @@ export interface IFormularioControlTranca {
     municipio_origen: IMunicipioOrigen[];
     municipio_destino?: IMunicipioDestino[]; // Opcional
     pais_destino?: string; // Opcional
+    departamento_destino?: string;
+    des_planta?: string;
+    des_tipo?: string;
+    compradores?: {
+        municipio_destino?: string;
+        departamento_destino?: string;
+        comprador?: string;
+        cantidad?: number;
+    }[];
     tipo_formulario: string;
     nro_formulario: string;
 }

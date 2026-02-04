@@ -152,7 +152,21 @@ nextStep() {
 
         break;
       case 1:
-        valid =this.lista_municipios_origen.length>0
+        const lote_valido = this.formulario_interno.formulario.get('lote')?.valid;
+        const presentacion_valido = this.formulario_interno.formulario.get('presentacion_id')?.valid;
+        const peso_neto_total_valido = this.formulario_interno.formulario.get('peso_neto_total')?.valid;
+        const cantidad_valido = this.formulario_interno.formulario.get('cantidad')?.disabled ||
+          this.formulario_interno.formulario.get('cantidad')?.valid;
+        const humedad_valido = this.formulario_interno.formulario.get('humedad')?.disabled ||
+          this.formulario_interno.formulario.get('humedad')?.valid;
+        const merma_valido = this.formulario_interno.formulario.get('merma')?.disabled ||
+          this.formulario_interno.formulario.get('merma')?.valid;
+        const minerales_valido = this.lista_leyes_mineral.length > 0;
+        const municipios_valido = this.lista_municipios_origen.length > 0;
+
+        valid = lote_valido && presentacion_valido && peso_neto_total_valido &&
+          cantidad_valido && humedad_valido && merma_valido &&
+          minerales_valido && municipios_valido;
         break;
       case 2:
         valid = this.formulario_interno.formulario.get('des_tipo')?.valid &&

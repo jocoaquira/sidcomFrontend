@@ -180,6 +180,10 @@ export class CrearResponsableTMAdminComponent implements OnInit {
   }
   errorEmailRepetido(event:any){
     const email = (event.target as HTMLInputElement).value;
+    if (!email || String(email).trim() === '') {
+      this.errorVerificarEmail = false;
+      return;
+    }
     this.responsableTMAdminService.verificarEmail(email).subscribe(
       (data:any)=>{
 

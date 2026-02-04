@@ -51,6 +51,15 @@ export class PdfFormularioExternoService {
 
     return `${day}/${month}/${year} a Hrs.: ${hours}:${minutes}`; // Formato final
   }
+  formatFechaSimple(fecha: string): string {
+    if (!fecha) return '';
+    const date = new Date(fecha);
+    if (isNaN(date.getTime())) return String(fecha);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
     generarPDF(formulario_externo: IFormularioExternoPDF) {
 
         // Obtener datos del formulario interno y el operador
@@ -584,7 +593,7 @@ export class PdfFormularioExternoService {
                                     { content: 'Nro. DE VAGON(ES):', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                     { content: formulario_externo.nro_vagon, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                     {content:'FECHA DE SALIDA: ',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                    {content:formulario_externo.fecha_ferrea,  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                    {content:this.formatFechaSimple(formulario_externo.fecha_ferrea),  styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                   ],
                                 ],
                                 styles: {

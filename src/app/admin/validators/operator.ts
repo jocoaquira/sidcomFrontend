@@ -98,7 +98,7 @@ export class OperatorFormulario {
         tipo_operador:new FormControl(this.operator.tipo_operador,[Validators.required,Validators.pattern('^[0-9]*$')]),
         nit:new FormControl(this.operator.nit,[Validators.required,Validators.minLength(5),Validators.pattern('^[0-9]*$')]),
         tipo_nim_niar:new FormControl(this.operator.tipo_nim_niar,[Validators.required]),
-        rep_nombre_completo:new FormControl(this.operator.rep_nombre_completo,[Validators.required,Validators.pattern('^[a-zA-ZÃ€-Ã¿\\s]+$')]),
+        rep_nombre_completo:new FormControl(this.operator.rep_nombre_completo,[Validators.required,Validators.pattern('^[a-zA-ZÀ-ÿ\\u00d1\\u00f1\\s]+$')]),
         rep_ci:new FormControl(this.operator.rep_ci,[Validators.required]),
         rep_departamento_id:new FormControl(this.operator.rep_departamento_id,[Validators.required,Validators.pattern('^[0-9]*$')]),
         rep_municipio_id:new FormControl(this.operator.rep_municipio_id,[Validators.required,Validators.pattern('^[0-9]*$')]),
@@ -242,3 +242,5 @@ getErrorMessage(controlName: string): string | null {
   }
 
 }
+
+

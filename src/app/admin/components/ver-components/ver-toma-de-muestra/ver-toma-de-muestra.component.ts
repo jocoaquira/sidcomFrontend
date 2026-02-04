@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+﻿import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IDepartamento } from '@data/departamento.metadata';
 import { IMineral } from '@data/mineral.metadata';
 import { IMunicipio } from '@data/municipio.metadata';
@@ -51,7 +51,7 @@ export class VerTomaDeMuestraComponent implements OnInit {
   cargarTomaDeMuestra() {
     this.tomaDeMuestraService.verTomaDeMuestraPDF(this.id.toString()).subscribe(
       (data: any) => {
-        this.tomaDM = this.tomaDeMuestraService.handleCrearTomaDeMuestra(data);
+        this.tomaDM = this.tomaDeMuestraService.handleTomaDeMuestraPDF(data);
 
           this.listarMunicipioOrigen();
         this.listarMinerales();
@@ -87,7 +87,7 @@ export class VerTomaDeMuestraComponent implements OnInit {
     }
 
 
-    // Inicializar variables vacías
+    // Inicializar variables vacÃ­as
     this.ley_mineral = "";
     this.elementos = "";
 
@@ -104,7 +104,7 @@ export class VerTomaDeMuestraComponent implements OnInit {
       console.error('No hay datos en tomaDM.municipio_origen');
       return;
     }
-    // Asegurar que la variable municipio esté inicializada
+    // Asegurar que la variable municipio estÃ© inicializada
     this.municipio = "";
 
     this.tomaDM.municipio_origen.forEach((element, index) => {
@@ -115,3 +115,4 @@ export class VerTomaDeMuestraComponent implements OnInit {
   }
 
 }
+

@@ -132,7 +132,7 @@
                                 <button *ngIf="form.estado === 'GENERADO'" pButton pRipple icon="pi pi-pencil" label="Modificar" class="p-button-rounded p-button-warning mr-2" routerLink="/public/formulario-101/formulario-externo/editar/{{form?.id}}"></button>
 
                                 <button *ngIf="form.estado === 'GENERADO'" pButton pRipple icon="pi pi-lock" label="Emitir" class="p-button-rounded p-button-success mr-2" (click)="confirmarEmision(form)"></button>
-                                <button *ngIf="form.estado !== 'GENERADO' && form.estado !== 'ANULADO' && vigenteAnulacion(form)"
+                                <button *ngIf="form.estado !== 'GENERADO' && form.estado !== 'ANULADO' && vigenteAnulacion(form) && (!form.control_trancas || form.control_trancas.length === 0)"
                                     pButton
                                     pRipple
                                     icon="pi pi-trash"
@@ -219,7 +219,7 @@
                     <div class="tm-card-actions">
                         <button *ngIf="form.estado === 'GENERADO'" pButton pRipple icon="pi pi-pencil" label="Modificar" class="p-button-rounded p-button-warning" routerLink="/public/formulario-101/formulario-externo/editar/{{form?.id}}"></button>
                         <button *ngIf="form.estado === 'GENERADO'" pButton pRipple icon="pi pi-lock" label="Emitir" class="p-button-rounded p-button-success" (click)="confirmarEmision(form)"></button>
-                        <button *ngIf="form.estado !== 'GENERADO' && form.estado !== 'ANULADO' && vigenteAnulacion(form)"
+                        <button *ngIf="form.estado !== 'GENERADO' && form.estado !== 'ANULADO' && vigenteAnulacion(form) && (!form.control_trancas || form.control_trancas.length === 0)"
                             pButton
                             pRipple
                             icon="pi pi-trash"

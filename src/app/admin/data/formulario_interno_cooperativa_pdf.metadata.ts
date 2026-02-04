@@ -39,6 +39,7 @@ export interface IFormularioInternoCooperativaPDF{
 	empresa_ferrea:string,
 	fecha_ferrea:string,
 	hr_ferrea:string,
+    nro_viajes?: number,
 	tara_volqueta:string
 }
 export interface IMineral {

@@ -1,0 +1,54 @@
+<div class="grid" >
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="flex">
+                        <div class="field">
+                            <button pButton pRipple label="Actualizar" icon="pi pi-refresh" class="p-button-outlined p-button-info" (click)="buscar()"></button>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-help" (click)="guardar()"></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #dt *ngIf="listaOperadores" [value]="listaOperadores" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="globalFilterFields" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Reporte de Operadores Mineros</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."  class="w-full sm:w-auto"/>
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th *ngFor="let col of cols" [pSortableColumn]="col.field">
+                            {{ col.header }} <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-usuario>
+                    <tr>
+                        <td *ngFor="let col of cols">
+                            <span class="p-column-title">{{ col.header }}</span>
+                            {{usuario[col.field]}}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-confirmDialog header="Confirmación" key="confirm1" icon="pi pi-exclamation-triangle" message="¿Está seguro de anular el formulario?"
+        [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text"
+        acceptLabel="Sí"
+        rejectLabel="No"
+    ></p-confirmDialog>
+
+    </div>
+</div>

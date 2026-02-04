@@ -1,4 +1,4 @@
-
+﻿
 <form [formGroup]="formulario_interno.formulario" (ngSubmit)="onSubmit()">
     <p-dialog (onShow)="actualizarMapa()" [(visible)]="mapaDialogo" [style]="{width: '800px',height:'800px'}" header="Mapa (Hacer click en el lugar que desee)" [modal]="true" class="p-fluid">
         <div style="height: 90%;" leaflet [leafletOptions]="options" [leafletLayers]="[streetLayer,satelliteLayer]" (leafletMapReady)="onMapReady($event)"></div>
@@ -14,7 +14,7 @@
 
 
   <div class="card-titulo">
-      <h4 class="text-center" style="color: white;">EDICION DE SOLICITUD DE TOMA DE MUESTRA {{num_form}}</h4>
+      <h4 class="text-center" style="color: white;">EDICIÓN DE SOLICITUD DE TOMA DE MUESTRA {{num_form}}</h4>
   </div>
       <div class="grid p-fluid">
           <div class="card card-w-title flex flex-wrap col-12">
@@ -279,6 +279,21 @@
                                 </small>
                             </span>
                         </div>
+                        <div class="field col-12 md:col-4">
+                            <span class="p-float-label">
+                                <input
+                                    type="number"
+                                    id="merma"
+                                    pInputText
+                                    formControlName="merma"
+                                    class="ng-dirty"
+                                />
+                                <label for="Razón Social">Merma (0-1)</label>
+                                <small id="merma" class="p-error "*ngIf="formulario_interno.esCampoInvalido('merma')">
+                                    {{formulario_interno.getErrorMessage('merma')}}
+                                </small>
+                            </span>
+                        </div>
                         <div *ngIf="false" class="field col-12 md:col-4">
                             <span class="p-float-label">
                                 <input
@@ -294,87 +309,93 @@
                                 </small>
                             </span>
                         </div>
-                        <div class="field col-12 md:col-3 ">
-                            <app-mineralesSelect [tipo]="'NO COMPUESTO'" (mineral_id)="cambioMineralId($event)" (sigla)="cambioSigla($event)" (nombre)="cambioNombreMineral($event)"></app-mineralesSelect>
-                        </div>
-                        <div class="field col-12 md:col-3">
-                            <span class="p-float-label">
-                                <input
-                                    type="number"
-                                    id="nro_viajes"
-                                    pInputText
-                                    (input)="cambioLey($event)"
-                                    class="ng-dirty"
-                                />
-                                <label for="Razón Social">Ley</label>
-                                <small id="nro_viajes" class="p-error "*ngIf="formulario_interno.esCampoInvalido('nro_viajes')">
-                                    {{formulario_interno.getErrorMessage('nro_viajes')}}
-                                </small>
-                            </span>
-                        </div>
-                        <div class="field col-12 md:col-3 ">
-                            <span class="p-float-label">
-                                <p-dropdown
-                                    inputId="dropdown"
-                                    [autoDisplayFirst]="false"
-                                    [options]="unidades"
-                                    optionLabel="nombre"
-                                    optionValue="nombre"
-                                    (onChange)="cambioUnidad($event)"
-                                ></p-dropdown>
-                                <label for="dropdown">Unidad</label>
+                        <div class="col-12">
+                            <div class="card">
+                                <h5 class="mt-0">2.1.1 Mineral, Ley y Unidad</h5>
+                                <div class="grid p-fluid">
+                                    <div class="field col-12 md:col-3 ">
+                                        <app-mineralesSelect [tipo]="'NO COMPUESTO'" (mineral_id)="cambioMineralId($event)" (sigla)="cambioSigla($event)" (nombre)="cambioNombreMineral($event)"></app-mineralesSelect>
+                                    </div>
+                                    <div class="field col-12 md:col-3">
+                                        <span class="p-float-label">
+                                            <input
+                                                type="number"
+                                                id="nro_viajes"
+                                                pInputText
+                                                (input)="cambioLey($event)"
+                                                class="ng-dirty"
+                                            />
+                                            <label for="Razón Social">Ley</label>
+                                            <small id="nro_viajes" class="p-error "*ngIf="formulario_interno.esCampoInvalido('nro_viajes')">
+                                                {{formulario_interno.getErrorMessage('nro_viajes')}}
+                                            </small>
+                                        </span>
+                                    </div>
+                                    <div class="field col-12 md:col-3 ">
+                                        <span class="p-float-label">
+                                            <p-dropdown
+                                                inputId="dropdown"
+                                                [autoDisplayFirst]="false"
+                                                [options]="unidades"
+                                                optionLabel="nombre"
+                                                optionValue="nombre"
+                                                (onChange)="cambioUnidad($event)"
+                                            ></p-dropdown>
+                                            <label for="dropdown">Unidad</label>
+                                        </span>
+                                    </div>
+                                    <div class="field col-12 md:col-2">
+                                        <button pButton pRipple (click)="agregarLey()" type="button" icon="pi pi-plus" label="Agregar" class="p-button-outlined p-button-success"></button>
+                                    </div>
 
-                            </span>
-                        </div>
-                        <div class="field col-12 md:col-2">
-                            <button pButton pRipple (click)="agregarLey()" type="button" icon="pi pi-plus" label="Agregar" class="p-button-outlined p-button-success"></button>
-                        </div>
+                                    <div class="field col-12">
+                                        <p-table #dt [value]="lista_leyes_mineral"
+                                        responsiveLayout="scroll" [rows]="10"
+                                        [paginator]="false"  [showCurrentPageReport]="false"
+                                        selectionMode="multiple"
+                                        [rowHover]="true"
+                                        dataKey="id">
 
-                        <div class="field col-12">
-                            <p-table #dt [value]="lista_leyes_mineral"
-                            responsiveLayout="scroll" [rows]="10"
-                            [paginator]="false"  [showCurrentPageReport]="false"
-                            selectionMode="multiple"
-                            [rowHover]="true"
-                            dataKey="id">
+                                            <ng-template pTemplate="header">
+                                                <tr>
 
-                                <ng-template pTemplate="header">
-                                    <tr>
+                                                    <th pSortableColumn="code">Descripción <p-sortIcon field="code"></p-sortIcon></th>
+                                                    <th pSortableColumn="code">Sigla <p-sortIcon field="code"></p-sortIcon></th>
+                                                    <th pSortableColumn="name">Ley <p-sortIcon field="name"></p-sortIcon></th>
+                                                    <th pSortableColumn="price">Unidad <p-sortIcon field="price"></p-sortIcon></th>
+                                                    <th pSortableColumn="price">Acción <p-sortIcon field="price"></p-sortIcon></th>
 
-                                        <th pSortableColumn="code">Descripción <p-sortIcon field="code"></p-sortIcon></th>
-                                        <th pSortableColumn="code">Sigla <p-sortIcon field="code"></p-sortIcon></th>
-                                        <th pSortableColumn="name">Ley <p-sortIcon field="name"></p-sortIcon></th>
-                                        <th pSortableColumn="price">Unidad <p-sortIcon field="price"></p-sortIcon></th>
-                                        <th pSortableColumn="price">Acción <p-sortIcon field="price"></p-sortIcon></th>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body" let-product>
+                                                <tr>
 
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let-product>
-                                    <tr>
-
-                                        <td style="width:30%; min-width:20rem;"><span class="p-column-title">Descripción</span>
-                                            {{product.descripcion}}
-                                        </td>
-                                        <td style="width:14%; min-width:8rem;">
-                                            <span class="p-column-title">Sigla</span>
-                                            {{product.sigla_mineral}}
-                                        </td>
-                                        <td style="width:14%; min-width:10rem;">
-                                            <span class="p-column-title">Ley</span>
-                                            {{product.ley}}
-                                        </td>
-                                        <td style="width:14%; min-width:8rem;">
-                                            <span class="p-column-title">Unidad</span>
-                                            {{product.unidad}}
-                                        </td>
-                                        <td>
-                                            <div class="flex">
-                                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminar(product)"></button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </ng-template>
-                            </p-table>
+                                                    <td style="width:30%; min-width:20rem;"><span class="p-column-title">Descripción</span>
+                                                        {{product.descripcion}}
+                                                    </td>
+                                                    <td style="width:14%; min-width:8rem;">
+                                                        <span class="p-column-title">Sigla</span>
+                                                        {{product.sigla_mineral}}
+                                                    </td>
+                                                    <td style="width:14%; min-width:10rem;">
+                                                        <span class="p-column-title">Ley</span>
+                                                        {{product.ley}}
+                                                    </td>
+                                                    <td style="width:14%; min-width:8rem;">
+                                                        <span class="p-column-title">Unidad</span>
+                                                        {{product.unidad}}
+                                                    </td>
+                                                    <td>
+                                                        <div class="flex">
+                                                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminar(product)"></button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                        </p-table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="field col-12 md:col-12 ">
                             <h5>2.2 Origen del Mineral </h5>
@@ -435,7 +456,97 @@
                       </div>
                   </div>
 
-                  <div class="centrar-botones">
+                                    <div *ngIf="activeStep === 2">
+                        <div class="grid p-fluid mt-2">
+                            <div class="field col-12 md:col-12 ">
+                                <h5>2.1 Datos de Exportación </h5>
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <span class="p-float-label">
+                                    <input
+                                        type="text"
+                                        id="m03_id"
+                                        pInputText
+                                        formControlName="m03_id"
+                                        class="ng-dirty"
+                                    />
+                                    <label for="m03_id">ID M-03</label>
+                                    <small id="m03_id" class="p-error "*ngIf="formulario_interno.esCampoInvalido('m03_id')">
+                                        {{formulario_interno.getErrorMessage('m03_id')}}
+                                    </small>
+                                </span>
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <span class="p-float-label">
+                                    <input
+                                        type="text"
+                                        id="laboratorio"
+                                        pInputText
+                                        formControlName="laboratorio"
+                                        class="ng-dirty"
+                                    />
+                                    <label for="laboratorio">Laboratorio</label>
+                                    <small id="laboratorio" class="p-error "*ngIf="formulario_interno.esCampoInvalido('laboratorio')">
+                                        {{formulario_interno.getErrorMessage('laboratorio')}}
+                                    </small>
+                                </span>
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <span class="p-float-label">
+                                    <input
+                                        type="text"
+                                        id="codigo_analisis"
+                                        pInputText
+                                        formControlName="codigo_analisis"
+                                        class="ng-dirty"
+                                    />
+                                    <label for="codigo_analisis">Código de Análisis</label>
+                                    <small id="codigo_analisis" class="p-error "*ngIf="formulario_interno.esCampoInvalido('codigo_analisis')">
+                                        {{formulario_interno.getErrorMessage('codigo_analisis')}}
+                                    </small>
+                                </span>
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <span class="p-float-label">
+                                    <input
+                                        type="text"
+                                        id="nro_factura_exportacion"
+                                        pInputText
+                                        formControlName="nro_factura_exportacion"
+                                        class="ng-dirty"
+                                    />
+                                    <label for="nro_factura_exportacion">N° Factura Comercial de Exportación</label>
+                                    <small id="nro_factura_exportacion" class="p-error "*ngIf="formulario_interno.esCampoInvalido('nro_factura_exportacion')">
+                                        {{formulario_interno.getErrorMessage('nro_factura_exportacion')}}
+                                    </small>
+                                </span>
+                            </div>
+                            <div class="field col-12 md:col-12 ">
+                                <h5>2.1 Datos de Destino </h5>
+                            </div>
+                            <div  class="field col-12 md:col-3">
+                                <span class="p-float-label">
+                                    <input
+                                        type="text"
+                                        id="comprador"
+                                        pInputText
+                                        formControlName="comprador"
+                                        class="ng-dirty"
+                                    />
+                                    <label for="comprador">Comprador</label>
+                                    <small id="comprador" class="p-error "*ngIf="formulario_interno.esCampoInvalido('comprador')">
+                                        {{formulario_interno.getErrorMessage('comprador')}}
+                                    </small>
+                                </span>
+                            </div>
+                            <div class="field col-12 md:col-3 ">
+                                <app-paisSelect [pais_id]="pais_id" (cambioPais)="cambioPais($event)" ></app-paisSelect>
+                            </div>
+                            <div class="field col-12 md:col-3 ">
+                                <app-aduanaSelect [aduana_id]="aduana_id" (cambioAduana)="cambioAduana($event)" ></app-aduanaSelect>
+                            </div>
+                        </div>
+                    </div><div class="centrar-botones">
                     <div class="botones-container">
                         <div class="col-33" *ngIf="activeStep > 0">
                             <button pButton pRipple type="button" label="Anterior"
@@ -469,3 +580,10 @@
 
       </div>
 </form>
+
+
+
+
+
+
+

@@ -167,18 +167,7 @@ export class CrearResponsableTMComponent implements OnInit {
       }
   }
   errorEmailRepetido(event:any){
-    const email = (event.target as HTMLInputElement).value;
-    this.responsableTMAdminService.verificarEmail(email).subscribe(
-      (data:any)=>{
-        if(data==true)
-        {
-          this.errorVerificarEmail=true;
-        }
-        else{
-          this.errorVerificarEmail=false;
-        }
-    },
-    (error:any)=> this.error=this.responsableTMAdminService.handleError);
+    this.errorVerificarEmail = false;
   }
   verificar(event:Event){
     const input = (event.target as HTMLInputElement).value;

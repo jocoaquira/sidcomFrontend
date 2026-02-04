@@ -30,6 +30,7 @@ export interface IFormularioTrasladoColaPDF {
 	empresa_ferrea: string,
 	fecha_ferrea: string,
 	hr_ferrea: string,
+    nro_viajes?: number,
 	destino: string,
 	almacen: string,
 	dique_cola: string

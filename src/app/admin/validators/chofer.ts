@@ -20,7 +20,7 @@ export class ChoferFormulario {
       nro_licencia: new FormControl(this.usuario.nro_licencia, [Validators.required]),
       nombre_apellidos: new FormControl(
         this.usuario.nombre_apellidos,
-        [Validators.required, Validators.pattern('^[a-zA-ZÃ‡?-Ã‡Â¨\\s]+$')]
+        [Validators.required, Validators.pattern('^[a-zA-ZÀ-ÿ\\u00d1\\u00f1\\s]+$')]
       ),
       operador_id: new FormControl(this.usuario.operador_id, [Validators.required]),
       id: new FormControl(this.usuario.id),
@@ -79,3 +79,5 @@ export class ChoferFormulario {
     return Object.keys(this.formulario.controls);
   }
 }
+
+

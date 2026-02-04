@@ -154,7 +154,9 @@ nextStep() {
         (this.formulario_interno.formulario.get('lote')?.valid || this.operador.generacion_nro_lote) &&
         this.formulario_interno.formulario.get('presentacion_id')?.valid &&
         (this.formulario_interno.formulario.get('cantidad')?.valid || this.formulario_interno.formulario.get('cantidad')?.disabled) &&
-        this.lista_leyes_mineral.length>0;
+        this.lista_leyes_mineral.length>0 &&
+        this.formulario_interno.formulario.get('traslado_mineral')?.valid &&
+        this.formulario_interno.formulario.get('nro_viajes')?.valid;
 
         break;
       case 1:

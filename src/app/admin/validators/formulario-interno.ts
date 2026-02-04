@@ -81,7 +81,7 @@ export class FormularioInternoFormulario {
       tipo_transporte: new FormControl(this.formulario_interno.tipo_transporte, [Validators.required]),
 
       placa: new FormControl(this.formulario_interno.placa),
-      nom_conductor: new FormControl(this.formulario_interno.nom_conductor, Validators.pattern('^[a-zA-ZÃ€-Ã¿\\s]+$')),
+      nom_conductor: new FormControl(this.formulario_interno.nom_conductor, Validators.pattern('^[a-zA-ZÀ-ÿ\\u00d1\\u00f1\\s]+$')),
       licencia: new FormControl(this.formulario_interno.licencia),
       observaciones: new FormControl(this.formulario_interno.observaciones),
       fecha_creacion: new FormControl(this.formulario_interno.fecha_creacion),
@@ -270,3 +270,5 @@ export class FormularioInternoFormulario {
     }
   }
 }
+
+

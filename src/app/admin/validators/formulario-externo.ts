@@ -135,9 +135,9 @@ export class FormularioExternoFormulario implements OnDestroy {
         return;
       }
 
-      const esViaFerrea = tipoTransporte.nombre.toLowerCase().includes('VIA FERREA');
+      const esViaFerrea = tipoTransporte.nombre.toLowerCase().includes('via ferrea');
 
-      const esViaAerea = tipoTransporte.nombre.toLowerCase().includes('VIA AEREA');
+      const esViaAerea = tipoTransporte.nombre.toLowerCase().includes('via aerea');
 
       // Si es vía férrea o aérea, no son obligatorios
       const noRequiereCamposVehiculo = esViaFerrea || esViaAerea;
@@ -162,7 +162,7 @@ export class FormularioExternoFormulario implements OnDestroy {
     } else {
       // Para otros tipos de transporte: campos obligatorios
       placaControl?.setValidators([Validators.required]);
-      conductorControl?.setValidators([Validators.required, Validators.pattern('^[a-zA-ZÀ-ÿ\\s]+$')]);
+      conductorControl?.setValidators([Validators.required, Validators.pattern('^[a-zA-Z�-�\\u00d1\\u00f1\\s]+$')]);
       licenciaControl?.setValidators([Validators.required]);
     }
 
@@ -367,3 +367,5 @@ export class FormularioExternoFormulario implements OnDestroy {
     this.destroy$.complete();
   }
 }
+
+

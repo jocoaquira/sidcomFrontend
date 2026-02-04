@@ -315,6 +315,17 @@ convertirHTMLATextoConViñetas(html) {
                                 { content: 'COMPUESTO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: this.mostrarDetalles(toma_de_muestra.minerales), styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
+                              [
+                                {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                { content: (toma_de_muestra.humedad !== null && toma_de_muestra.humedad !== undefined)
+                                    ? 'HUMEDAD:'
+                                    : '', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: (toma_de_muestra.humedad !== null && toma_de_muestra.humedad !== undefined)
+                                    ? toma_de_muestra.humedad + ' %'
+                                    : '', styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                { content: '', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: '', styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                              ],
                             ],
                             styles: {
                               textColor: [0, 0, 0], // Color de texto negro

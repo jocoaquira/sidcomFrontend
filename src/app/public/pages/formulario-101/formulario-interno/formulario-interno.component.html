@@ -109,7 +109,7 @@
                                 <button *ngIf="form.estado === 'GENERADO'" pButton pRipple icon="pi pi-pencil" label="Modificar" class="p-button-rounded p-button-warning mr-2" routerLink="/public/formulario-101/formulario-interno/editar/{{form?.id}}"></button>
 
                                 <button *ngIf="form.estado === 'GENERADO'" pButton pRipple icon="pi pi-lock" label="Emitir" class="p-button-rounded p-button-success mr-2" (click)="confirmarEmision(form)"></button>
-                                <button *ngIf="form.estado !== 'GENERADO' && form.estado !== 'ANULADO' && vigenteAnulacion(form)" pButton pRipple icon="pi pi-trash" label="Anular" class="p-button-rounded p-button-danger mr-2" routerLink="/public/formulario-101/formulario-interno/anular/{{form?.id}}"></button>
+                                <button *ngIf="form.estado !== 'GENERADO' && form.estado !== 'ANULADO' && vigenteAnulacion(form) && (!form.control_trancas || form.control_trancas.length === 0)" pButton pRipple icon="pi pi-trash" label="Anular" class="p-button-rounded p-button-danger mr-2" routerLink="/public/formulario-101/formulario-interno/anular/{{form?.id}}"></button>
                                 </div>
                         </td>
                         <td>
@@ -189,7 +189,7 @@
                     <div class="tm-card-actions">
                         <button *ngIf="form.estado === 'GENERADO'" pButton pRipple icon="pi pi-pencil" label="Modificar" class="p-button-rounded p-button-warning" routerLink="/public/formulario-101/formulario-interno/editar/{{form?.id}}"></button>
                         <button *ngIf="form.estado === 'GENERADO'" pButton pRipple icon="pi pi-lock" label="Emitir" class="p-button-rounded p-button-success" (click)="confirmarEmision(form)"></button>
-                        <button *ngIf="form.estado !== 'GENERADO' && form.estado !== 'ANULADO' && vigenteAnulacion(form)" pButton pRipple icon="pi pi-trash" label="Anular" class="p-button-rounded p-button-danger" routerLink="/public/formulario-101/formulario-interno/anular/{{form?.id}}"></button>
+                        <button *ngIf="form.estado !== 'GENERADO' && form.estado !== 'ANULADO' && vigenteAnulacion(form) && (!form.control_trancas || form.control_trancas.length === 0)" pButton pRipple icon="pi pi-trash" label="Anular" class="p-button-rounded p-button-danger" routerLink="/public/formulario-101/formulario-interno/anular/{{form?.id}}"></button>
                         <button pButton pRipple icon="pi pi-print" class="p-button-rounded p-button-info" (click)="generarPDF(form)"></button>
                     </div>
                 </div>

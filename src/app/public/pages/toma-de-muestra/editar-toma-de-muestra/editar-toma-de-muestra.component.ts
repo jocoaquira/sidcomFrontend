@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { IDepartamento } from '@data/departamento.metadata';
@@ -47,6 +47,8 @@ export class EditarTomaDeMuestraComponent implements OnInit {
     public otro:boolean=false;
     public municipios: IMunicipio[] = [];
     public departamentos: IDepartamento[] = [];
+    public pais_id: number | null = null;
+    public aduana_id: number | null = null;
     public dept:IDepartamento={
       longitud:null,
       latitud:null
@@ -54,11 +56,18 @@ export class EditarTomaDeMuestraComponent implements OnInit {
     public listaLugaresVerificacion:ILugarVerificacionTDM[]=[];
     departamento_id1: number | null = null;  // Guardar el ID del departamento seleccionado
   municipio_id1: number | null = null;
-  // Método que se llama cuando cambia el departamento
+  // MÃ©todo que se llama cuando cambia el departamento
   cambioDepartamento1(departamentoId: number): void {
     this.departamento_id1 = departamentoId;
-    // Aquí puedes hacer cualquier acción extra cuando el departamento cambie
+    // AquÃ­ puedes hacer cualquier acciÃ³n extra cuando el departamento cambie
   }
+  
+    cambioPais(paisId: number): void {
+        this.pais_id = paisId;
+    }
+    cambioAduana(aduanaId: number): void {
+        this.aduana_id = aduanaId;
+    }
     public formulario_Interno_registrado:ITomaDeMuestra=null;
     public operadores!:IOperatorSimple[];
     public minerales!:IMineral[];
@@ -100,7 +109,8 @@ export class EditarTomaDeMuestraComponent implements OnInit {
       // Definir los pasos para Steps
   steps = [
     { label: '1. Datos Generales', command: (event: any) => this.gotoStep(0)},
-    { label: '2. Datos de Mineral y Origen',command: (event: any) => this.gotoStep(1) }
+    { label: '2. Datos de Mineral y Origen',command: (event: any) => this.gotoStep(1) },
+    { label: '3. Datos de Exportación',command: (event: any) => this.gotoStep(2) }
   ];
 
   public activeStep: number = 0; // Establecer el paso activo inicial
@@ -109,11 +119,11 @@ export class EditarTomaDeMuestraComponent implements OnInit {
   onStepChange(event: any): void {
 
     if (!this.isStepValid(this.activeStep)) {
-      event.preventDefault(); // Evita que el paso cambie si no es válido
+      event.preventDefault(); // Evita que el paso cambie si no es vÃ¡lido
       alert('Por favor, completa el paso actual.');
     }
   }
-// Función para ir al siguiente paso
+// FunciÃ³n para ir al siguiente paso
 nextStep() {
 
     if ((this.activeStep < this.steps.length - 1) && this.isStepValid(this.activeStep)) {
@@ -125,14 +135,14 @@ nextStep() {
     }
   }
 
-  // Función para ir al paso anterior
+  // FunciÃ³n para ir al paso anterior
   prevStep() {
     if (this.activeStep > 0) {
       this.activeStep--;
     }
   }
 
-  // Función para ir a un paso específico
+  // FunciÃ³n para ir a un paso especÃ­fico
   gotoStep(index: number) {
     this.activeStep = index;
   }
@@ -150,7 +160,21 @@ nextStep() {
 
         break;
       case 1:
-        valid =this.lista_municipios_origen.length>0
+        const lote_valido = this.formulario_interno.formulario.get('lote')?.valid;
+        const presentacion_valido = this.formulario_interno.formulario.get('presentacion_id')?.valid;
+        const peso_neto_total_valido = this.formulario_interno.formulario.get('peso_neto_total')?.valid;
+        const cantidad_valido = this.formulario_interno.formulario.get('cantidad')?.disabled ||
+          this.formulario_interno.formulario.get('cantidad')?.valid;
+        const humedad_valido = this.formulario_interno.formulario.get('humedad')?.disabled ||
+          this.formulario_interno.formulario.get('humedad')?.valid;
+        const merma_valido = this.formulario_interno.formulario.get('merma')?.disabled ||
+          this.formulario_interno.formulario.get('merma')?.valid;
+        const minerales_valido = this.lista_leyes_mineral.length > 0;
+        const municipios_valido = this.lista_municipios_origen.length > 0;
+
+        valid = lote_valido && presentacion_valido && peso_neto_total_valido &&
+          cantidad_valido && humedad_valido && merma_valido &&
+          minerales_valido && municipios_valido;
         break;
       case 2:
         valid = this.formulario_interno.formulario.get('des_tipo')?.valid &&
@@ -213,6 +237,7 @@ cargar_datos(form:any){
       nro_formulario: form.nro_formulario,
       cantidad: form.cantidad,
       humedad: form.humedad,
+      merma: form.merma,
       departamento_id: form.departamento_id,
       lote: form.lote,
       municipio_id:form.municipio_id,
@@ -232,8 +257,17 @@ cargar_datos(form:any){
       ubicacion_lon: form.ubicacion_lon,
       responsable_tdm_id: form.responsable_tdm_id,
       responsable_tdm_senarecom_id:form.responsable_tdm_senarecom_id,
+      m03_id: form.m03_id,
+      laboratorio: form.laboratorio,
+      codigo_analisis: form.codigo_analisis,
+      nro_factura_exportacion: form.nro_factura_exportacion,
+      comprador: form.comprador,
+      aduana_id: form.aduana_id,
+      pais_destino_id: form.pais_destino_id,
       estado: form.estado
   });
+  this.pais_id = form.pais_destino_id;
+  this.aduana_id = form.aduana_id;
     this.lugaresVerificacionTDMService.verlugarverificacionTDMs('hj').subscribe(
         (data:any)=>{
         this.listaLugaresVerificacion=this.lugaresVerificacionTDMService.handlelugarverificacion(data);
@@ -302,7 +336,7 @@ cargar_datos(form:any){
         retry(3), // Intenta 3 veces si hay un error
         catchError((error) => {
           this.error = this.mineralesService.handleError(error);
-          return of([]); // Retorna un arreglo vacío en caso de error
+          return of([]); // Retorna un arreglo vacÃ­o en caso de error
         })
       )
       .subscribe(
@@ -430,12 +464,12 @@ cambioLugarVerificacionTDM(event:any){
       descripcion: `
       <h6>A GRANEL</h6>
       <ul>
-        <li>Verificación del número de camiones conjuntamente con SENARECOM</li>
+        <li>VerificaciÃ³n del nÃºmero de camiones conjuntamente con SENARECOM</li>
         <li>Tomar incrementos con sonda tubo</li>
-        <li>Homogenización de la submuestra</li>
+        <li>HomogenizaciÃ³n de la submuestra</li>
         <li>Cuarteos consecutivos</li>
-        <li>Obtención de muestras finales embolsadas y selladas</li>
-        <li>Obtención de una muestra para caracterización del mineral</li>
+        <li>ObtenciÃ³n de muestras finales embolsadas y selladas</li>
+        <li>ObtenciÃ³n de una muestra para caracterizaciÃ³n del mineral</li>
       </ul>
     `
     , id: '1' },
@@ -443,13 +477,13 @@ cambioLugarVerificacionTDM(event:any){
       descripcion: `
       <h6>ENSACADO</h6>
       <ul>
-        <li>Verificación del número de camiones conjuntamente con SENARECOM</li>
-        <li>Calcular la raíz cuadrada del lote</li>
+        <li>VerificaciÃ³n del nÃºmero de camiones conjuntamente con SENARECOM</li>
+        <li>Calcular la raÃ­z cuadrada del lote</li>
         <li>Sondeo para obtener la sub-muestra</li>
-        <li>Homogenización de la sub-muestra</li>
+        <li>HomogenizaciÃ³n de la sub-muestra</li>
         <li>Cuarteos consecutivos</li>
-        <li>Obtención de muestras finales embolsadas y selladas</li>
-        <li>Obtención de una muestra para caracterización del mineral</li>
+        <li>ObtenciÃ³n de muestras finales embolsadas y selladas</li>
+        <li>ObtenciÃ³n de una muestra para caracterizaciÃ³n del mineral</li>
       </ul>
     `
     , id: '2' },
@@ -506,7 +540,7 @@ cambioLugarVerificacionTDM(event:any){
     }
 
   }
- // Función para calcular el peso neto
+ // FunciÃ³n para calcular el peso neto
  calcularPesoNeto() {
         // Obtener los valores de cada campo individualmente
     const peso_bruto_humedo = this.formulario_interno.formulario.get('peso_bruto_humedo')?.value;
@@ -614,6 +648,8 @@ abrirMapa() {
   guardar(){
 
       this.formulario_interno.formulario.patchValue({
+        aduana_id:this.aduana_id,
+        pais_destino_id:this.pais_id,
         fecha_hora_tdm: this.formatFechaCompleta(this.formulario_interno.formulario.value.fecha_hora_tdm)
       });
 
@@ -647,11 +683,11 @@ abrirMapa() {
           {
 
             this.formulario_interno.formulario.reset();
-            this.notify.success('El el formulario interno se generó exitosamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
+            this.notify.success('El el formulario interno se generÃ³ exitosamente','Creado Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
             this.router.navigate(['/public/toma-de-muestra']);
           }
           else{
-            this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
+            this.notify.error('FallÃ³...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
           }
         },
         (error:any) =>
@@ -660,7 +696,7 @@ abrirMapa() {
           this.error=this.tomaDeMuestrasService.handleCrearTomaDeMuestraError(error.error.data);
           if(error.error.status=='fail')
           {
-            this.notify.error('Falló...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
+            this.notify.error('FallÃ³...Revise los campos y vuelva a enviar....','Error con el Registro',{timeOut:2000,positionClass: 'toast-top-right'});
           }
         }
           );
@@ -846,7 +882,7 @@ cancelar(){
  formatFechaCompleta(fecha: string | Date): string {
   const fechaObj = new Date(fecha);
   if (isNaN(fechaObj.getTime())) {
-    throw new Error("Fecha inválida");
+    throw new Error("Fecha invÃ¡lida");
   }
 
   const anio = fechaObj.getFullYear();
@@ -865,3 +901,7 @@ cancelar(){
   return fechaConvertida;
 }
 }
+
+
+
+

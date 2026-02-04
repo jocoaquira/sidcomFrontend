@@ -1,0 +1,126 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="flex">
+                        <div class="field mr-3">
+                            <label for="fecha_inicio">Fecha de Inicio</label>
+                            <p-calendar
+                                inputId="fecha_inicio"
+                                [(ngModel)]="fecha_inicio"
+                                dateFormat="dd/mm/yy"
+                                showIcon="true"
+                                placeholder="dd/mm/yyyy"
+                            ></p-calendar>
+                        </div>
+                        <div class="field mr-3">
+                            <label for="fecha_fin">Fecha Final</label>
+                            <p-calendar
+                                inputId="fecha_fin"
+                                [(ngModel)]="fecha_fin"
+                                dateFormat="dd/mm/yy"
+                                showIcon="true"
+                                placeholder="dd/mm/yyyy"
+                            ></p-calendar>
+                        </div>
+                        <div class="field">
+                            <button pButton pRipple label="Buscar" icon="pi pi-search" class="p-button-outlined p-button-info" (click)="buscar()"></button>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-help" (click)="guardar()"></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table
+                #dt
+                *ngIf="listaTomaDeMuestra"
+                [value]="listaTomaDeMuestra"
+                [columns]="cols"
+                responsiveLayout="scroll"
+                [rows]="30"
+                [globalFilterFields]="['nro_formulario','operador','mineral','ley_mineral','lote','departamento','tecnico']"
+                [paginator]="true"
+                [rowsPerPageOptions]="[10,20,30]"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"
+                selectionMode="multiple"
+                [rowHover]="true"
+                dataKey="nro_formulario"
+            >
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Reporte de Toma de Muestra</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..." class="w-full sm:w-auto"/>
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="nro">N°<p-sortIcon field="nro"></p-sortIcon></th>
+                        <th pSortableColumn="fecha">FECHA<p-sortIcon field="fecha"></p-sortIcon></th>
+                        <th pSortableColumn="operador">OPERADOR MINERO<p-sortIcon field="operador"></p-sortIcon></th>
+                        <th pSortableColumn="sn">Sn%<p-sortIcon field="sn"></p-sortIcon></th>
+                        <th pSortableColumn="pb">Pb%<p-sortIcon field="pb"></p-sortIcon></th>
+                        <th pSortableColumn="f_pb">F. Pb<p-sortIcon field="f_pb"></p-sortIcon></th>
+                        <th pSortableColumn="zn">Zn%<p-sortIcon field="zn"></p-sortIcon></th>
+                        <th pSortableColumn="f_zn">F. Zn<p-sortIcon field="f_zn"></p-sortIcon></th>
+                        <th pSortableColumn="ag">Ag. (g/Tn.)<p-sortIcon field="ag"></p-sortIcon></th>
+                        <th pSortableColumn="f_ag">F. Ag<p-sortIcon field="f_ag"></p-sortIcon></th>
+                        <th pSortableColumn="cu">Cu%<p-sortIcon field="cu"></p-sortIcon></th>
+                        <th pSortableColumn="f_cu">F. Cu<p-sortIcon field="f_cu"></p-sortIcon></th>
+                        <th pSortableColumn="sb">Sb%<p-sortIcon field="sb"></p-sortIcon></th>
+                        <th pSortableColumn="f_sb">F. Sb<p-sortIcon field="f_sb"></p-sortIcon></th>
+                        <th pSortableColumn="otros">OTROS<p-sortIcon field="otros"></p-sortIcon></th>
+                        <th pSortableColumn="mineral">Mineral<p-sortIcon field="mineral"></p-sortIcon></th>
+                        <th pSortableColumn="ley_mineral">LEY MINERAL Y/O METAL<p-sortIcon field="ley_mineral"></p-sortIcon></th>
+                        <th pSortableColumn="peso_humedo">PESO HUMEDO [TN]<p-sortIcon field="peso_humedo"></p-sortIcon></th>
+                        <th pSortableColumn="humedad">HUMEDAD %<p-sortIcon field="humedad"></p-sortIcon></th>
+                        <th pSortableColumn="peso_seco">PESO SECO [Tn]<p-sortIcon field="peso_seco"></p-sortIcon></th>
+                        <th pSortableColumn="lote">LOTE<p-sortIcon field="lote"></p-sortIcon></th>
+                        <th pSortableColumn="departamento">DEPARTAMENTO PRODUCTOR<p-sortIcon field="departamento"></p-sortIcon></th>
+                        <th pSortableColumn="nro_formulario">N° FORMULARIO<p-sortIcon field="nro_formulario"></p-sortIcon></th>
+                        <th pSortableColumn="camiones">N° CAMIONES<p-sortIcon field="camiones"></p-sortIcon></th>
+                        <th pSortableColumn="tecnico">TECNICO<p-sortIcon field="tecnico"></p-sortIcon></th>
+                        <th pSortableColumn="hora">HORA<p-sortIcon field="hora"></p-sortIcon></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                    <tr>
+                        <td><span class="p-column-title">N°</span>{{item.nro}}</td>
+                        <td><span class="p-column-title">FECHA</span>{{item.fecha}}</td>
+                        <td><span class="p-column-title">OPERADOR MINERO</span>{{item.operador}}</td>
+                        <td><span class="p-column-title">Sn%</span>{{item.sn}}</td>
+                        <td><span class="p-column-title">Pb%</span>{{item.pb}}</td>
+                        <td><span class="p-column-title">F. Pb</span>{{item.f_pb}}</td>
+                        <td><span class="p-column-title">Zn%</span>{{item.zn}}</td>
+                        <td><span class="p-column-title">F. Zn</span>{{item.f_zn}}</td>
+                        <td><span class="p-column-title">Ag. (g/Tn.)</span>{{item.ag}}</td>
+                        <td><span class="p-column-title">F. Ag</span>{{item.f_ag}}</td>
+                        <td><span class="p-column-title">Cu%</span>{{item.cu}}</td>
+                        <td><span class="p-column-title">F. Cu</span>{{item.f_cu}}</td>
+                        <td><span class="p-column-title">Sb%</span>{{item.sb}}</td>
+                        <td><span class="p-column-title">F. Sb</span>{{item.f_sb}}</td>
+                        <td><span class="p-column-title">OTROS</span>{{item.otros}}</td>
+                        <td><span class="p-column-title">Mineral</span>{{item.mineral}}</td>
+                        <td><span class="p-column-title">LEY MINERAL Y/O METAL</span>{{item.ley_mineral}}</td>
+                        <td><span class="p-column-title">PESO HUMEDO [TN]</span>{{item.peso_humedo}}</td>
+                        <td><span class="p-column-title">HUMEDAD %</span>{{item.humedad}}</td>
+                        <td><span class="p-column-title">PESO SECO [Tn]</span>{{item.peso_seco}}</td>
+                        <td><span class="p-column-title">LOTE</span>{{item.lote}}</td>
+                        <td><span class="p-column-title">DEPARTAMENTO PRODUCTOR</span>{{item.departamento}}</td>
+                        <td><span class="p-column-title">N° FORMULARIO</span>{{item.nro_formulario}}</td>
+                        <td><span class="p-column-title">N° CAMIONES</span>{{item.camiones}}</td>
+                        <td><span class="p-column-title">TECNICO</span>{{item.tecnico}}</td>
+                        <td><span class="p-column-title">HORA</span>{{item.hora}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

@@ -216,7 +216,7 @@ export class ListaTurnoTrancaFechaComponent implements OnInit {
   endDrag(): void {
     if (this.dragging && this.draggedElement) {
       const closestColumn = Math.round(this.draggedElement.positionX / this.columnWidth) * this.columnWidth;
-      const closestRow = Math.round(this.draggedElement.positionY / (this.rowHeight / 2)) * (this.rowHeight / 2);
+      const closestRow = Math.round(this.draggedElement.positionY / (this.rowHeight / 4)) * (this.rowHeight / 4);
 
     this.draggedElement.positionX = closestColumn;
     this.draggedElement.positionY = closestRow;
@@ -515,7 +515,7 @@ private calcularDiasAjustados(fechaIniAjustada: Date, fechaFinAjustada: Date): n
 // ASIGNACIÓN MEJORADA CON MEJOR ALGORITMO
 private asignarTurnoAPosicion(id: number, fechaInicio: Date, fechaFin: Date, trancaId: number, turno: any, dias: number): number {
     // Intentar asignar en la posición más óptima
-    for (let posicion = 1; posicion <= 2; posicion++) {
+    for (let posicion = 1; posicion <= 4; posicion++) {
         if (!this.siFechaOcupada(this.listaTurnosMatriz, fechaInicio, fechaFin, posicion, trancaId)) {
             this.listaTurnosMatriz.push({
                 id: id,
@@ -590,7 +590,7 @@ async colocarTurnosEnPantalla(): Promise<void> {
                 return;
             }
 
-            const posX = turno.posFila === 2 ? 1 : 0;
+            const posX = Math.max(0, turno.posFila - 1);
             const fechaTurno = this.normalizarFecha(new Date(turno.fecha_inicio));
             const fechaact = Math.floor((fechaTurno.getTime() - filtroInicio.getTime()) / (1000 * 60 * 60 * 24));
 
@@ -609,7 +609,7 @@ async colocarTurnosEnPantalla(): Promise<void> {
             }
 
             const posicionX = (fechaact + 1) * this.columnWidth;
-            const posicionY = (trancaIndex + 1) * this.rowHeight + (posX * this.rowHeight) / 2;
+            const posicionY = (trancaIndex + 1) * this.rowHeight + (posX * this.rowHeight) / 4;
             const ancho = turno.dias * this.columnWidth;
 
             // Validar dimensiones
@@ -634,7 +634,7 @@ async colocarTurnosEnPantalla(): Promise<void> {
                 positionX: posicionX,
                 positionY: posicionY,
                 width: ancho,
-                height: this.rowHeight / 2,
+                height: this.rowHeight / 4,
                 backgroundColor: color,
                 borderColor: colorBorde,
                 textColor: '#000000'

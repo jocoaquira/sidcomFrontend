@@ -37,7 +37,7 @@
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt *ngIf="listaFormulariosControlTranca" [value]="listaFormulariosControlTranca" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['id','razon_social','conductor','licencia','peso_neto' ,'nro_formulario','minerales','tipo_formulario','municipio_origen']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-table #dt *ngIf="listaFormulariosControlTranca" [value]="listaFormulariosControlTranca" [columns]="cols" responsiveLayout="scroll" [rows]="30" [globalFilterFields]="['id','razon_social','conductor','licencia','peso_neto' ,'nro_formulario','minerales','tipo_formulario','municipio_origen','nombre_usuario']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrar {first} a {last} de {totalRecords} registros"  selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Reporte de Formularios 101</h5>
@@ -60,6 +60,7 @@
                         <th pSortableColumn="tipo_formulario">Tipo de Formulario <p-sortIcon field="tipo_formulario"></p-sortIcon></th>
                         <th pSortableColumn="formulario_tranca">Municipio origen <p-sortIcon field="formulario_tranca"></p-sortIcon></th>
                         <th pSortableColumn="municipio_origen">Puesto de Control <p-sortIcon field="municipio_origen"></p-sortIcon></th>
+                        <th pSortableColumn="nombre_usuario">Realizó el Control <p-sortIcon field="nombre_usuario"></p-sortIcon></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-usuario>
@@ -103,6 +104,10 @@
                         <td style="width:15%; min-width:5rem;" >
                             <span class="p-column-title">Tranca</span>
                             {{usuario.tranca}}
+                        </td>
+                        <td style="width:15%; min-width:8rem;" >
+                            <span class="p-column-title">Realizó el Control</span>
+                            {{usuario.nombre_usuario}}
                         </td>
                     </tr>
                 </ng-template>

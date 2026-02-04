@@ -4,7 +4,10 @@ import { AuthService } from '@core/authentication/services/auth.service';
 import { IApiUserAuthenticated } from '@core/authentication/data/iapi-auth-user.metadata';
 import { IComprador } from '@data/comprador.metadata';
 import { IFormularioInternoReporte } from '@data/reports/formulario_interno.metadata';
+import { IFormularioExternoReporte } from '@data/reports/formulario_externo.metadata';
+import { IOperator } from '@data/operator.metadata';
 import { IFormularioControlTranca } from '@data/reports/formulario_control_puesto.metadata';
+import { ITomaDeMuestraReporte } from '@data/reports/toma_de_muestra_reporte.metadata';
 
 
 @Injectable({
@@ -39,6 +42,37 @@ export class ReportesService {
     let Comprador:IFormularioInternoReporte[]=data;
     return Comprador
   }
+  listarFormulariosExternoReporte(fecha_inicio:string,fecha_fin:string)
+  {
+    let params = new HttpParams();
+    params = params.append('fecha_inicio', fecha_inicio);
+    params = params.append('fecha_fin', fecha_fin);
+    return this.http.get(`${this.baseUrl}formext/reporte/general`,{params:params});
+  }
+  handleListarFormulariosExternoReporte(data: IFormularioExternoReporte[]):IFormularioExternoReporte[] {
+    let reporte:IFormularioExternoReporte[]=data;
+    return reporte
+  }
+  listarOperadoresReporte()
+  {
+    return this.http.get(`${this.baseUrl}operator`);
+  }
+  handleListarOperadoresReporte(data: IOperator[]):IOperator[] {
+    let reporte:IOperator[]=data;
+    return reporte
+  }
+//-----------------Visualizar Reporte Toma de Muestra-------------------------------------------
+  listarTomaDeMuestraReporte(fecha_inicio:string,fecha_fin:string)
+  {
+    let params = new HttpParams();
+    params = params.append('fecha_inicio', fecha_inicio);
+    params = params.append('fecha_fin', fecha_fin);
+    return this.http.get(`${this.baseUrl}sample/reporte/general`,{params:params});
+  }
+  handleListarTomaDeMuestraReporte(data: ITomaDeMuestraReporte[]):ITomaDeMuestraReporte[] {
+    let reporte:ITomaDeMuestraReporte[]=data;
+    return reporte
+  }
 //-----------------Visualizar Reporte Control Trancas-------------------------------------------
   listarFormulariosControlTrancaReporte(fecha_inicio:string,fecha_fin:string,usuario_id:number)
   {
@@ -48,6 +82,13 @@ export class ReportesService {
     params = params.append('fecha_fin', fecha_fin);
     // asignacion de parametros
     return this.http.get(`${this.baseUrl}controltrancas/usuario/`+usuario_id,{params:params});
+  }
+  listarFormulariosControlTrancaReporteAll(fecha_inicio:string,fecha_fin:string)
+  {
+    let params = new HttpParams();
+    params = params.append('fecha_inicio', fecha_inicio);
+    params = params.append('fecha_fin', fecha_fin);
+    return this.http.get(`${this.baseUrl}controltrancas`,{params:params});
   }
 
   handleFormulariosControlTrancaReporte(data: IFormularioControlTranca[]):IFormularioControlTranca[] {

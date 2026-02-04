@@ -1,4 +1,4 @@
-
+﻿
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { AuthService } from '@core/authentication/services/auth.service';
@@ -80,7 +80,7 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
-                label: 'ADMINISTRACION',
+                label: 'ADMINISTRACIÓN',
                 items: [
                     { label: 'Pre Registro', icon: 'pi pi-fw pi-comment', routerLink: ['/admin/pre-registro'],visible: this.canListarPreRegistroGuard.canActivate() },
                     { label: 'Operadores Mineros', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/operador'], visible: this.canVerOperatorGuard.canActivate() },
@@ -95,12 +95,12 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Control de Formulario 101', icon: 'pi pi-fw pi-directions', routerLink: ['/admin/control-tranca'],visible: this.canVerControlTrancaGuard.canActivate() },
                     { label: 'Procedimientos', icon: 'pi pi-fw pi-directions', routerLink: ['/admin/procedimiento-tm'],visible: this.canVerProcedimientoGuard.canActivate() },
                     { label: 'Minerales', icon: 'pi pi-fw pi-prime', routerLink: ['/admin/mineral'],visible: this.canVerMineralGuard.canActivate() },
-                    { label: 'Presentaciónes', icon: 'pi pi-fw pi-shopping-bag', routerLink: ['/admin/presentacion'],visible: this.canVerPresentacionGuard.canActivate() },
-                    { label: 'Paises', icon: 'pi pi-fw pi-flag-fill', routerLink: ['/admin/pais'],visible: this.canVerPaisGuard.canActivate() },
+                    { label: 'Presentaciones', icon: 'pi pi-fw pi-shopping-bag', routerLink: ['/admin/presentacion'],visible: this.canVerPresentacionGuard.canActivate() },
+                    { label: 'Países', icon: 'pi pi-fw pi-flag-fill', routerLink: ['/admin/pais'],visible: this.canVerPaisGuard.canActivate() },
                     { label: 'Departamentos', icon: 'pi pi-fw pi-flag', routerLink: ['/admin/departamento'],visible: this.canVerDepartamentoGuard.canActivate() },
                     { label: 'Municipios', icon: 'pi pi-fw pi-flag-fill', routerLink: ['/admin/municipio'],visible: this.canVerMunicipioGuard.canActivate() },
                     { label: 'Aduanas', icon: 'pi pi-fw pi-box', routerLink: ['/admin/aduana'],visible: this.canVerAduanaGuard.canActivate() },
-                    { label: 'Lugar de Verificacion TDM', icon: 'pi pi-map-marker', routerLink: ['/admin/lugar-verificacion-tdm'],visible: this.canListarLugarVerificacionTDMGuard.canActivate() },
+                    { label: 'Lugar de Verificación TDM', icon: 'pi pi-map-marker', routerLink: ['/admin/lugar-verificacion-tdm'],visible: this.canListarLugarVerificacionTDMGuard.canActivate() },
                     { label: 'Compradores', icon: 'pi pi-shopping-cart', routerLink: ['/admin/comprador'],visible: this.canListarCompradorGuard.canActivate() },
                     { label: 'Plantas de Tratamiento', icon: 'pi pi-building', routerLink: ['/admin/planta-tratamiento'],visible: this.canListarPlantaDeTratamientoGuard.canActivate() },
                 ]
@@ -122,13 +122,13 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
-                label: 'REPORTES',
+                label: 'Reportes',
                 items: [
-                    { label: 'Operadores Mineros', icon: 'pi pi-fw pi-id-card', routerLink: ['/blocks'], badge: 'NEW' },
-                    { label: 'Formularios Interno', icon: 'pi pi-fw pi-file-o', url: ['https://www.primefaces.org/primeblocks-ng'], target: '_blank' },
-                    { label: 'Formularios Externo', icon: 'pi pi-fw pi-globe', routerLink: ['/utilities/icons'] },
-                    { label: 'Formularios de Control en Puesto ', icon: 'pi pi-fw pi-file-o', routerLink: ['/admin/formularios-puesto-control'],visible: this.canVerControlTrancaGuard.canActivate()  },
-                    { label: 'Formularios Internos', icon: 'pi pi-fw pi-file-o', routerLink: ['/admin/reporte-formularios-internos'],visible: this.canVerFormIntGuard.canActivate()  },
+                    { label: 'Formularios Internos', icon: 'pi pi-fw pi-file', routerLink: ['/admin/reporte-formularios-internos'], visible: true },
+                    { label: 'Formularios Externos', icon: 'pi pi-fw pi-file', routerLink: ['/admin/reporte-formularios-externos'], visible: true },
+                    { label: 'Consolidado de Reporte Externo', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/admin/reporte-consolidado-form101-externo'], visible: true },
+                    { label: 'Operadores Mineros', icon: 'pi pi-fw pi-users', routerLink: ['/admin/reporte-operadores-mineros'], visible: true },
+                    { label: 'Toma de Muestra', icon: 'pi pi-fw pi-briefcase', routerLink: ['/admin/reporte-toma-de-muestra'], visible: true }
                 ]
             },
             {
@@ -152,3 +152,4 @@ export class AppMenuComponent implements OnInit {
         this.authService.logout();
     }
 }
+

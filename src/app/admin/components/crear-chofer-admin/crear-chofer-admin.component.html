@@ -7,10 +7,11 @@
             [options]="operadores"
             [filter]="true"
             filterBy="razon_social"
+            appendTo="target"
             formControlName="operador_id"
             optionLabel="razon_social"
             optionValue="id"
-            (ngModelChange)="onChangeOperadores($event)"
+            (onChange)="onChangeOperadores($event)"
         ></p-dropdown>
     </div>
     <div class="field">

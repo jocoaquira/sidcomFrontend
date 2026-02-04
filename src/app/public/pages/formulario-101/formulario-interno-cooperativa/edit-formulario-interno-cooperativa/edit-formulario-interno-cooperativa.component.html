@@ -99,18 +99,21 @@
                                 <h5 class="field-subtitle mb-0 mt-1 col-12 py-1">Datos del Mineral y/o Metal</h5>
                                 <div class="field col-12 md:col-3 ">
                                     <span class="p-float-label">
-                                        <p-dropdown
-                                            inputId="dropdown"
-                                            [autoDisplayFirst]="false"
-                                            [options]="tipo_traslado"
-                                            formControlName="traslado_mineral"
-                                            optionLabel="nombre"
-                                            optionValue="nombre"
-                                        ></p-dropdown>
-                                        <label for="dropdown">Traslado del Mineral</label>
+                                    <p-dropdown
+                                        inputId="dropdown"
+                                        [autoDisplayFirst]="false"
+                                        [options]="tipo_traslado"
+                                        formControlName="traslado_mineral"
+                                        optionLabel="nombre"
+                                        optionValue="nombre"
+                                    ></p-dropdown>
+                                    <label for="dropdown">Traslado del Mineral</label>
+                                    <small id="traslado_mineral" class="p-error " *ngIf="formulario_interno.esCampoInvalido('traslado_mineral')">
+                                        {{formulario_interno.getErrorMessage('traslado_mineral')}}
+                                    </small>
 
-                                    </span>
-                                </div>
+                                </span>
+                            </div>
                                 <div class="field col-12 md:col-3" *ngIf="!operador?.generacion_nro_lote">
                                     <span class="p-float-label">
                                         <input
@@ -192,26 +195,28 @@
                                         </small>
                                     </span>
                                 </div>
-                                <div class="field col-12 md:col-3 ">
-                                    <app-mineralesSelect [tipo]="'COMPUESTO'" (mineral_id)="cambioMineralId($event)" (sigla)="cambioSigla($event)" (nombre)="cambioNombreMineral($event)"></app-mineralesSelect>
-                                </div>
-
-                                <div class="field col-12 md:col-3 ">
-                                    <span class="p-float-label">
-                                        <p-dropdown
-                                            inputId="dropdown"
-                                            [autoDisplayFirst]="false"
-                                            [options]="ley"
-                                            optionLabel="nombre"
-                                            optionValue="nombre"
-                                            (onChange)="cambioUnidad($event)"
-                                        ></p-dropdown>
-                                        <label for="dropdown">Ley (Aprox)</label>
-
-                                    </span>
-                                </div>
-                                <div class="field col-12 md:col-2">
-                                    <button pButton pRipple (click)="agregarLey()" type="button" icon="pi pi-plus" label="Agregar" class="p-button-outlined p-button-success"></button>
+                            <div class="col-12 mineral-box">
+                                <div class="mineral-title">Mineral, Ley y Agregar</div>
+                                <div class="grid p-fluid mineral-row">
+                                    <div class="field col-12 md:col-4">
+                                        <app-mineralesSelect [tipo]="'COMPUESTO'" (mineral_id)="cambioMineralId($event)" (sigla)="cambioSigla($event)" (nombre)="cambioNombreMineral($event)"></app-mineralesSelect>
+                                    </div>
+                                    <div class="field col-12 md:col-4">
+                                        <span class="p-float-label">
+                                            <p-dropdown
+                                                inputId="dropdown"
+                                                [autoDisplayFirst]="false"
+                                                [options]="ley"
+                                                optionLabel="nombre"
+                                                optionValue="nombre"
+                                                (onChange)="cambioUnidad($event)"
+                                            ></p-dropdown>
+                                            <label for="dropdown">Ley (Aprox)</label>
+                                        </span>
+                                    </div>
+                                    <div class="field col-12 md:col-4">
+                                        <button pButton pRipple (click)="agregarLey()" type="button" icon="pi pi-plus" label="Agregar" class="p-button-outlined p-button-success w-full"></button>
+                                    </div>
                                 </div>
 
                                 <div class="field col-12">
@@ -255,6 +260,7 @@
                                         </ng-template>
                                     </p-table>
                                 </div>
+                            </div>
 
 
                             </div>

@@ -18,8 +18,8 @@
     <div class="field">
         <label for="email">Correo Electrónico</label>
         <input type="text" pInputText id="email" formControlName="email" autofocus (input)="errorEmailRepetido($event)"/>
-        <small class="ng-dirty ng-invalid" *ngIf="form.esCampoInvalido('email') || errorVerificarEmail" >{{form.getErrorMessage('email')}}</small>
-        <small class="ng-dirty ng-invalid" *ngIf="errorVerificarEmail" >El email ya existe en el sistema</small>
+        <small class="ng-dirty ng-invalid" *ngIf="(form.esCampoInvalido('email') || errorVerificarEmail) && form.formulario.value.email" >{{form.getErrorMessage('email')}}</small>
+        <small class="ng-dirty ng-invalid" *ngIf="errorVerificarEmail && form.formulario.value.email" >El email ya existe en el sistema</small>
     </div>
     <div class="field">
         <label for="celular">Celular</label>

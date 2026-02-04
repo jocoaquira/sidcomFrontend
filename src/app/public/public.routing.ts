@@ -17,6 +17,7 @@ import { AppLayoutComponent } from './layout/app.layout.component';
         { path: 'vehiculo', loadChildren: () => import('./pages/vehiculo/vehiculo.module').then(m => m.VehiculoModule) },
         { path: 'toma-de-muestra', loadChildren: () => import('./pages/toma-de-muestra/toma-de-muestra.module').then(m => m.TomaDeMuestraModule) },
         { path: 'formulario-101', loadChildren: () => import('./pages/formulario-101/formulario-101.module').then(m => m.Formulario101Module) },
+        { path: 'reporte-consolidado-form101-externo', loadChildren: () => import('./pages/reportes/reporte-consolidado-form101-externo/reporte-consolidado-form101-externo.module').then(m => m.ReporteConsolidadoForm101ExternoModule) },
         //{ path: 'formulario-101', loadChildren: () => import('./pages/formulario-101/formulario-101.module').then(m => m.Formulario101Module) },
         { path: '**', redirectTo: '/notfound' }
         ]

@@ -529,6 +529,31 @@ export class PdfFormularioInternoCooperativaService {
                                   3: { cellWidth:30 },
                                   4: { cellWidth:260 },
                                 },
+                               });autoTable(doc, {
+                                startY: (doc as any).lastAutoTable?.finalY || 10,
+
+                                body: [
+                                  [
+                                    {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                    { content: 'NRO. DE VIAJES: ', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                    { content: formulario_cooperativa.nro_viajes, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                    {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                  ],
+                                ],
+                                styles: {
+                                  textColor: [0, 0, 0],
+                                  valign: 'middle',
+                                  fontSize: 9,
+                                  cellPadding: 2,
+                                },
+                                columnStyles: {
+                                  0: { cellWidth: 20 },
+                                  1: { cellWidth: 90 },
+                                  2: { cellWidth: 150 },
+                                  3: { cellWidth:30 },
+                                  4: { cellWidth:260 },
+                                },
                                });
                           }
                           else{
@@ -594,6 +619,31 @@ export class PdfFormularioInternoCooperativaService {
                                   2: { cellWidth: 200 },
                                   3: { cellWidth:115 },
                                   4: { cellWidth:175 },
+                                },
+                               });autoTable(doc, {
+                                startY: (doc as any).lastAutoTable?.finalY || 10,
+
+                                body: [
+                                  [
+                                    {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                    { content: 'NRO. DE VIAJES: ', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                    { content: formulario_cooperativa.nro_viajes, styles: { halign: 'left', fillColor: [255, 255, 255] } },
+                                    {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                    {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                  ],
+                                ],
+                                styles: {
+                                  textColor: [0, 0, 0],
+                                  valign: 'middle',
+                                  fontSize: 9,
+                                  cellPadding: 2,
+                                },
+                                columnStyles: {
+                                  0: { cellWidth: 20 },
+                                  1: { cellWidth: 90 },
+                                  2: { cellWidth: 150 },
+                                  3: { cellWidth:30 },
+                                  4: { cellWidth:260 },
                                 },
                                });
                           }

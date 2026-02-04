@@ -19,6 +19,8 @@ import { DialogModule } from 'primeng/dialog';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { CalendarModule } from 'primeng/calendar';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { AduanaSelectModule } from 'src/app/admin/components/aduanaSelect/aduanaSelect.module';
+import { PaisSelectModule } from 'src/app/admin/components/paisSelect/paisSelect.module';
 
 @NgModule({
   imports: [
@@ -41,7 +43,9 @@ import { InputSwitchModule } from 'primeng/inputswitch';
     FormsModule,
     DialogModule,
     LeafletModule,
-    CalendarModule
+    CalendarModule,
+    PaisSelectModule,
+    AduanaSelectModule
   ],
   declarations: [EditarTomaDeMuestraComponent]
 })

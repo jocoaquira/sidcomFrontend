@@ -149,3 +149,22 @@
 }
 
 
+
+.mineral-box {
+    border: 1px solid #d9e6d5;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    background: #f8fbf7;
+}
+
+.mineral-title {
+    font-weight: 600;
+    color: #1f4d2f;
+    margin-bottom: 10px;
+}
+
+.mineral-row {
+    align-items: end;
+}

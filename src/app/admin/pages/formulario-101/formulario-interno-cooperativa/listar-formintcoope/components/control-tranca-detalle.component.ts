@@ -8,6 +8,7 @@ import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
       <p><strong>Nombre:</strong> {{ tranca.nombre_tranca }}</p>
       <p><strong>Fecha:</strong> {{ tranca.fecha_inspeccion | date:'dd/MM/yyyy' }}</p>
       <p><strong>Hora:</strong> {{ tranca.fecha_inspeccion | date:'HH:mm' }}</p>
+      <p><strong>Realizó el Control:</strong> {{ tranca.nombre_funcionario || 'No registrado' }}</p>
       <p><strong>Observaciones:</strong> {{ tranca.observaciones || 'Ninguna' }}</p>
       <!-- Añade más campos según necesites -->
     </div>

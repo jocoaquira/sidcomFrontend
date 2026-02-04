@@ -123,7 +123,7 @@
                                 ></button>
 
                                 <button *ngIf="form.estado === 'GENERADO'" pButton pRipple icon="pi pi-lock" label="Emitir" class="p-button-rounded p-button-success mr-2" (click)="confirmarEmision(form)"></button>
-                                <button *ngIf="form.estado !== 'GENERADO' && form.estado !== 'ANULADO' && canAnularFormularioTrasladoCola.canActivate()"
+                                <button *ngIf="form.estado !== 'GENERADO' && form.estado !== 'ANULADO' && (!form.control_trancas || form.control_trancas.length === 0) && canAnularFormularioTrasladoCola.canActivate()"
                                 pButton pRipple icon="pi pi-trash" label="Anular"
                                 class="p-button-rounded p-button-danger mr-2"
                                 routerLink="/public/formulario-101/formulario-traslado-cola/anular/{{form?.id}}"></button>
@@ -209,7 +209,7 @@
                             routerLink="/public/formulario-101/formulario-traslado-cola/editar/{{form?.id}}"
                         ></button>
                         <button *ngIf="form.estado === 'GENERADO'" pButton pRipple icon="pi pi-lock" label="Emitir" class="p-button-rounded p-button-success" (click)="confirmarEmision(form)"></button>
-                        <button *ngIf="form.estado !== 'GENERADO' && form.estado !== 'ANULADO' && canAnularFormularioTrasladoCola.canActivate()"
+                        <button *ngIf="form.estado !== 'GENERADO' && form.estado !== 'ANULADO' && (!form.control_trancas || form.control_trancas.length === 0) && canAnularFormularioTrasladoCola.canActivate()"
                             pButton pRipple icon="pi pi-trash" label="Anular"
                             class="p-button-rounded p-button-danger"
                             routerLink="/public/formulario-101/formulario-traslado-cola/anular/{{form?.id}}"></button>

@@ -20,9 +20,9 @@ export class ResponsableTMFormulario {
     };
 
     this.formulario = new FormGroup({
-        email: new FormControl(this.usuario.email,[Validators.required,  Validators.email]),
-        nombre:new FormControl(this.usuario.nombre,[Validators.required,Validators.pattern('^[a-zA-ZÃ€-Ã¿\\s]+$')]),
-        apellidos:new FormControl(this.usuario.apellidos,[Validators.required, Validators.pattern('^[a-zA-ZÃ€-Ã¿\\s]+$')]),
+        email: new FormControl(this.usuario.email,[Validators.email]),
+        nombre:new FormControl(this.usuario.nombre,[Validators.required,Validators.pattern('^[a-zA-ZÀ-ÿ\\u00d1\\u00f1\\s]+$')]),
+        apellidos:new FormControl(this.usuario.apellidos,[Validators.required, Validators.pattern('^[a-zA-ZÀ-ÿ\\u00d1\\u00f1\\s]+$')]),
         ci:new FormControl(this.usuario.ci,[Validators.required]),
         celular:new FormControl(this.usuario.celular,[Validators.required,Validators.pattern('^[0-9]{8}$')]),
         operador_id:new FormControl(this.usuario.operador_id,[Validators.required]),
@@ -92,3 +92,6 @@ getErrorMessage(controlName: string): string | null {
   }
 
 }
+
+
+

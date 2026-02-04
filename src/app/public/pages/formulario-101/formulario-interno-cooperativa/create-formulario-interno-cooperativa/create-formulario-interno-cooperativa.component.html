@@ -109,6 +109,9 @@
                                         optionValue="nombre"
                                     ></p-dropdown>
                                     <label for="dropdown">Traslado del Mineral</label>
+                                    <small id="traslado_mineral" class="p-error " *ngIf="formulario_interno.esCampoInvalido('traslado_mineral')">
+                                        {{formulario_interno.getErrorMessage('traslado_mineral')}}
+                                    </small>
 
                                 </span>
                             </div>
@@ -193,35 +196,37 @@
                                     </small>
                                 </span>
                             </div>
-                            <div class="field col-12 md:col-3 ">
-                                <app-mineralesSelect [tipo]="'COMPUESTO'" (mineral_id)="cambioMineralId($event)" (sigla)="cambioSigla($event)" (nombre)="cambioNombreMineral($event)"></app-mineralesSelect>
-                            </div>
+                            <div class="col-12 mineral-box">
+                                <div class="mineral-title">Mineral, Ley y Agregar</div>
+                                <div class="grid p-fluid mineral-row">
+                                    <div class="field col-12 md:col-4">
+                                        <app-mineralesSelect [tipo]="'COMPUESTO'" (mineral_id)="cambioMineralId($event)" (sigla)="cambioSigla($event)" (nombre)="cambioNombreMineral($event)"></app-mineralesSelect>
+                                    </div>
+                                    <div class="field col-12 md:col-4">
+                                        <span class="p-float-label">
+                                            <p-dropdown
+                                                inputId="dropdown"
+                                                [autoDisplayFirst]="false"
+                                                [options]="ley"
+                                                optionLabel="nombre"
+                                                optionValue="nombre"
+                                                (onChange)="cambioUnidad($event)"
+                                            ></p-dropdown>
+                                            <label for="dropdown">Ley (Aprox)</label>
+                                        </span>
+                                    </div>
+                                    <div class="field col-12 md:col-4">
+                                        <button pButton pRipple (click)="agregarLey()" type="button" icon="pi pi-plus" label="Agregar" class="p-button-outlined p-button-success w-full"></button>
+                                    </div>
+                                </div>
 
-                            <div class="field col-12 md:col-3 ">
-                                <span class="p-float-label">
-                                    <p-dropdown
-                                        inputId="dropdown"
-                                        [autoDisplayFirst]="false"
-                                        [options]="ley"
-                                        optionLabel="nombre"
-                                        optionValue="nombre"
-                                        (onChange)="cambioUnidad($event)"
-                                    ></p-dropdown>
-                                    <label for="dropdown">Ley (Aprox)</label>
-
-                                </span>
-                            </div>
-                            <div class="field col-12 md:col-2">
-                                <button pButton pRipple (click)="agregarLey()" type="button" icon="pi pi-plus" label="Agregar" class="p-button-outlined p-button-success"></button>
-                            </div>
-
-                            <div class="field col-12">
-                                <p-table #dt [value]="lista_leyes_mineral"
-                                responsiveLayout="scroll" [rows]="10"
-                                [paginator]="false"  [showCurrentPageReport]="false"
-                                selectionMode="multiple"
-                                [rowHover]="true"
-                                dataKey="id">
+                                <div class="field col-12">
+                                    <p-table #dt [value]="lista_leyes_mineral"
+                                    responsiveLayout="scroll" [rows]="10"
+                                    [paginator]="false"  [showCurrentPageReport]="false"
+                                    selectionMode="multiple"
+                                    [rowHover]="true"
+                                    dataKey="id">
 
                                     <ng-template pTemplate="header">
                                         <tr>
@@ -254,7 +259,8 @@
                                             </td>
                                         </tr>
                                     </ng-template>
-                                </p-table>
+                                    </p-table>
+                                </div>
                             </div>
 
 
@@ -406,6 +412,9 @@
                                     <button pButton pRipple (click)="agregarComprador()" type="button" icon="pi pi-plus" label="Agregar un Comprador" class="p-button-outlined p-button-success"></button>
                                 </div>
                                 <div class="field col-12 md:col-11">
+                                    <small class="p-error" *ngIf="bloqueoMensaje && formulario_interno.formulario.value.des_tipo==='COMPRADOR'">
+                                        {{bloqueoMensaje}}
+                                    </small>
                                     <p-table #dt [value]="compradores"
                                     responsiveLayout="scroll" [rows]="10"
                                     [paginator]="false"  [showCurrentPageReport]="false"

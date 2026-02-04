@@ -40,6 +40,10 @@ import { AppLayoutComponent } from './layout/app.layout.component';
         { path: 'planta-tratamiento', loadChildren: () => import('./pages/planta-tratamiento/planta-tratamiento.module').then(m => m.plantaDeTratamientoModule) },
         { path: 'formularios-puesto-control', loadChildren: () => import('./pages/reports/formularios-control-tranca/formularios.module').then(m => m.FormulariosModule) },
         { path: 'reporte-formularios-internos', loadChildren: () => import('./pages/reports/formularios-internos/formularios-internos.module').then(m => m.FormulariosInternosModule) },
+        { path: 'reporte-formularios-externos', loadChildren: () => import('./pages/reports/formularios-externos/formularios-externos.module').then(m => m.FormulariosExternosModule) },
+        { path: 'reporte-consolidado-form101-externo', loadChildren: () => import('./pages/reports/reporte-consolidado-form101-externo/reporte-consolidado-form101-externo.module').then(m => m.ReporteConsolidadoForm101ExternoModule) },
+        { path: 'reporte-operadores-mineros', loadChildren: () => import('./pages/reports/operadores-mineros/operadores-mineros.module').then(m => m.OperadoresMinerosModule) },
+        { path: 'reporte-toma-de-muestra', loadChildren: () => import('./pages/reports/toma-de-muestra/toma-de-muestra.module').then(m => m.TomaDeMuestraModule) },
         { path: '**', redirectTo: '/notfound' }
         ]
         }

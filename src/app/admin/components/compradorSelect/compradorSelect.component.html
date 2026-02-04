@@ -5,8 +5,8 @@
         [options]="compradores"
         [(ngModel)]="id"
         [filter]="true"
-        filterBy="displayText"
-        optionLabel="displayText"
+        filterBy="razon_social,municipio"
+        optionLabel="razon_social"
         optionValue="id"
         (onChange)="cambioComprador($event)"
     >

@@ -53,6 +53,15 @@ export class PdfFormularioInternoService {
 
     return `${day}/${month}/${year} a Hrs.: ${hours}:${minutes}`; // Formato final
   }
+  formatFechaSimple(fecha: string): string {
+    if (!fecha) return '';
+    const date = new Date(fecha);
+    if (isNaN(date.getTime())) return String(fecha);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
     generarPDF(formulario_interno: IFormularioInternoPDF) {
         console.log(formulario_interno);
                       const doc = new jsPDF('p', 'pt', 'letter');
@@ -465,7 +474,7 @@ export class PdfFormularioInternoService {
                                     { content: 'Nro. DE VAGON(ES):', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                     { content: formulario_interno.nro_vagon, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                     {content:'FECHA DE SALIDA: ',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                    {content:formulario_interno.fecha_ferrea,  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                    {content:this.formatFechaSimple(formulario_interno.fecha_ferrea),  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                   ],
                                 ],
                                 styles: {
