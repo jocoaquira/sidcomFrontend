@@ -95,6 +95,9 @@
                             </div>
                             <div class="field col-12 md:col-3 " *ngIf="formulario_interno.formulario.value.tipo_transporte!=='VIA FERREA'">
                                 <app-vehiculoSelect [operador_id]="operador_id" [placa]="placa" (vehiculo)="cambioVehiculo($event)" ></app-vehiculoSelect>
+                                <small id="placa" class="p-error " *ngIf="formulario_interno.esCampoInvalido('placa')">
+                                    {{formulario_interno.getErrorMessage('placa')}}
+                                </small>
                             </div>
                             <div *ngIf="formulario_interno.formulario.value.tipo_transporte!=='VIA FERREA' && false" class="field col-12 md:col-2">
                                 <span class="p-float-label">
@@ -128,6 +131,12 @@
                             </div>
                             <div class="field col-12 md:col-3 " *ngIf="formulario_interno.formulario.value.tipo_transporte!=='VIA FERREA'">
                                 <app-choferSelect [operador_id]="operador_id" [nro_licencia]="nro_licencia"  (chofer)="cambioChofer($event)" ></app-choferSelect>
+                                <small id="nom_conductor" class="p-error " *ngIf="formulario_interno.esCampoInvalido('nom_conductor')">
+                                    {{formulario_interno.getErrorMessage('nom_conductor')}}
+                                </small>
+                                <small id="licencia" class="p-error " *ngIf="formulario_interno.esCampoInvalido('licencia')">
+                                    {{formulario_interno.getErrorMessage('licencia')}}
+                                </small>
                             </div>
                             <div *ngIf="formulario_interno.formulario.value.tipo_transporte!=='VIA FERREA'" class="field col-12 md:col-2">
                                 <span class="p-float-label">

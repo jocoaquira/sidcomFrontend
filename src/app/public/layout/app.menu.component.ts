@@ -57,7 +57,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Reportes',
                 items: [
-                    { label: 'Consolidado de Reporte Externo', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/public/reporte-consolidado-form101-externo'] }
+                    { label: 'Consolidado de Reporte Externo', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/public/reporte-consolidado-form101-externo'] , visible: this.canVerFormExtGuard.canActivate()}
                 ]
             },
         ];

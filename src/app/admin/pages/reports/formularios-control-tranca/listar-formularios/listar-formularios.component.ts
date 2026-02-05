@@ -64,12 +64,13 @@ export class ListarFormulariosComponent implements OnInit {
     ) {
 
         this.operador_id=0
-        this.user_id=this.authService.getUser.id;
+        this.user_id=this.obtenerUsuarioId();
         console.log(this.user_id);
     }
 
     ngOnInit() {
 
+        this.user_id = this.obtenerUsuarioId();
         this.buscar();
         //this.productService.getProducts().then(data => this.products = data);
 
@@ -88,59 +89,127 @@ export class ListarFormulariosComponent implements OnInit {
         ];
     }
     buscar(){
+        this.user_id = this.obtenerUsuarioId();
+        console.log('[formularios-control] user_id:', this.user_id);
+        console.log('[formularios-control] user_from_auth:', this.authService.getUser);
+        console.log('[formularios-control] user_from_session:', sessionStorage.getItem(this.authService.nameUserLS));
+        if (this.user_id === null || this.user_id === undefined || Number.isNaN(this.user_id)) {
+            this.listaFormulariosControlTranca = [];
+            this.error = 'Usuario no identificado';
+            return;
+        }
         console.log(this.fecha_inicio);
         console.log(this.fecha_fin);
         const puedeListarTodos = this.permissionHelperService.existePermiso('list_control_tranca');
-        const request$ = puedeListarTodos
-            ? this.formulariosControlTranca.listarFormulariosControlTrancaReporteAll(this.fecha_inicio,this.fecha_fin)
-            : this.formulariosControlTranca.listarFormulariosControlTrancaReporte(this.fecha_inicio,this.fecha_fin,this.user_id);
-        request$.subscribe(
-            (data:any)=>{
+        if (puedeListarTodos) {
+            this.formulariosControlTranca.listarFormulariosControlTrancaReporteAll(this.fecha_inicio,this.fecha_fin)
+                .subscribe(
+                    (data:any)=> {
+                        this.asignarListaFormularios(data);
+                    },
+                    (error:any)=> this.error=this.formulariosControlTranca.handleError(error)
+                );
+            return;
+        }
 
-            this.listaFormulariosControlTranca=this.formulariosControlTranca.handleFormulariosControlTrancaReporte(data);
-            this.listaFormulariosControlTranca = this.listaFormulariosControlTranca.map(item => ({
-                ...item,
-                minerales: Array.isArray(item.minerales) ? item.minerales.map(m => m.mineral).join(', ') : '',
-                municipio_origen: Array.isArray(item.municipio_origen) ? item.municipio_origen.map(m => m.municipio_origen).join(', ') : '',
-                municipio_destino: Array.isArray(item.municipio_destino)
-                    ? item.municipio_destino.map((m: any) => m.municipio_destino).join(', ')
-                    : (item.municipio_destino ?? ''),
-                destino_pais_ciudad: item.tipo_formulario === 'EXTERNO'
-                    ? (item.pais_destino ?? '')
-                    : (Array.isArray(item.compradores) && item.compradores.length > 0
-                        ? item.compradores.map((c: any) => {
-                            const depto = c.departamento_destino ?? '';
-                            const muni = c.municipio_destino ?? '';
+        const fechaInicio = this.parseDate(this.fecha_inicio);
+        const fechaFin = this.parseDate(this.fecha_fin);
+        if (!fechaInicio || !fechaFin) {
+            this.error = 'Rango de fechas inválido';
+            this.listaFormulariosControlTranca = [];
+            return;
+        }
+
+        this.formulariosControlTranca
+            .listarFormulariosControlTrancaReporte(this.fecha_inicio, this.fecha_fin, this.user_id)
+            .subscribe(
+                (data: any) => {
+                    console.log('[formularios-control] response:', data);
+                    const datosUnicos = this.deduplicarFormularios(data ?? []);
+                    console.log('[formularios-control] after-dedup count:', datosUnicos.length);
+                    this.asignarListaFormularios(datosUnicos);
+                },
+                (error: any) => this.error = this.formulariosControlTranca.handleError(error)
+            );
+    }
+
+    private asignarListaFormularios(data: any) {
+        this.listaFormulariosControlTranca=this.formulariosControlTranca.handleFormulariosControlTrancaReporte(data);
+        this.listaFormulariosControlTranca = this.listaFormulariosControlTranca.map(item => ({
+            ...item,
+            minerales: Array.isArray(item.minerales) ? item.minerales.map(m => m.mineral).join(', ') : '',
+            municipio_origen: Array.isArray(item.municipio_origen) ? item.municipio_origen.map(m => m.municipio_origen).join(', ') : '',
+            municipio_destino: Array.isArray(item.municipio_destino)
+                ? item.municipio_destino.map((m: any) => m.municipio_destino).join(', ')
+                : (item.municipio_destino ?? ''),
+            destino_pais_ciudad: item.tipo_formulario === 'EXTERNO'
+                ? (item.pais_destino ?? '')
+                : (Array.isArray(item.compradores) && item.compradores.length > 0
+                    ? item.compradores.map((c: any) => {
+                        const depto = c.departamento_destino ?? '';
+                        const muni = c.municipio_destino ?? '';
+                        return depto && muni ? `${depto} - ${muni}` : (depto || muni);
+                      }).join(', ')
+                    : (Array.isArray(item.municipio_destino) && item.municipio_destino.length > 0
+                        ? item.municipio_destino.map((m: any) => {
+                            const depto = (m.departamento && m.departamento.nombre) ? m.departamento.nombre : (m.departamento ?? '');
+                            const muni = m.municipio_destino ?? '';
                             return depto && muni ? `${depto} - ${muni}` : (depto || muni);
                           }).join(', ')
-                        : (Array.isArray(item.municipio_destino) && item.municipio_destino.length > 0
-                            ? item.municipio_destino.map((m: any) => {
-                                const depto = (m.departamento && m.departamento.nombre) ? m.departamento.nombre : (m.departamento ?? '');
-                                const muni = m.municipio_destino ?? '';
-                                return depto && muni ? `${depto} - ${muni}` : (depto || muni);
-                              }).join(', ')
-                            : (() => {
-                                const depto = item.departamento_destino ? `${item.departamento_destino}` : '';
-                                const muni = item.municipio_destino ?? '';
-                                const base = depto && muni ? `${depto} - ${muni}` : (depto || muni);
-                                return item.des_planta ? (base ? `${base} - ${item.des_planta}` : item.des_planta) : base;
-                              })())),
-                fecha_control: item.formulario_tranca && item.formulario_tranca.length > 0
-                    ? item.formulario_tranca[0].fecha_control
-                    : '',
-                hora_control: item.formulario_tranca && item.formulario_tranca.length > 0
-                    ? item.formulario_tranca[0].hora_control
-                    : '',
-                nombre_usuario: item.formulario_tranca && item.formulario_tranca.length > 0
-                    ? item.formulario_tranca[0].nombre_usuario
-                    : '',
-                tranca: item.formulario_tranca && item.formulario_tranca.length > 0
-                    ? item.formulario_tranca[0].tranca
-                    : '',
-            }));
-            console.log(this.listaFormulariosControlTranca);
-        },
-          (error:any)=> this.error=this.formulariosControlTranca.handleError(error));
+                        : (() => {
+                            const depto = item.departamento_destino ? `${item.departamento_destino}` : '';
+                            const muni = item.municipio_destino ?? '';
+                            const base = depto && muni ? `${depto} - ${muni}` : (depto || muni);
+                            return item.des_planta ? (base ? `${base} - ${item.des_planta}` : item.des_planta) : base;
+                          })())),
+            fecha_control: item.formulario_tranca && item.formulario_tranca.length > 0
+                ? item.formulario_tranca[0].fecha_control
+                : '',
+            hora_control: item.formulario_tranca && item.formulario_tranca.length > 0
+                ? item.formulario_tranca[0].hora_control
+                : '',
+            nombre_usuario: item.formulario_tranca && item.formulario_tranca.length > 0
+                ? item.formulario_tranca[0].nombre_usuario
+                : '',
+            tranca: item.formulario_tranca && item.formulario_tranca.length > 0
+                ? item.formulario_tranca[0].tranca
+                : '',
+        }));
+        console.log(this.listaFormulariosControlTranca);
+    }
+
+    private parseDate(value: any): Date | null {
+        if (!value) return null;
+        return value instanceof Date ? value : new Date(value);
+    }
+
+    private obtenerUsuarioId(): number | null {
+        const userFromService: any = this.authService.getUser;
+        const userFromSession = JSON.parse(sessionStorage.getItem(this.authService.nameUserLS) ?? 'null');
+        const user = userFromService ?? userFromSession;
+        const id = user?.id;
+        return id !== null && id !== undefined ? Number(id) : null;
+    }
+
+
+    private deduplicarFormularios(data: any[]): any[] {
+        const mapa = new Map<string, any>();
+        data.forEach(item => {
+            const fecha = item.formulario_tranca && item.formulario_tranca.length > 0
+                ? item.formulario_tranca[0].fecha_control
+                : '';
+            const hora = item.formulario_tranca && item.formulario_tranca.length > 0
+                ? item.formulario_tranca[0].hora_control
+                : '';
+            const usuario = item.formulario_tranca && item.formulario_tranca.length > 0
+                ? item.formulario_tranca[0].nombre_usuario
+                : '';
+            const key = `${item.nro_formulario || ''}|${fecha}|${hora}|${usuario}`;
+            if (!mapa.has(key)) {
+                mapa.set(key, item);
+            }
+        });
+        return Array.from(mapa.values());
     }
     openNew() {
         //this.product = {};

@@ -1,6 +1,6 @@
 import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { IFormularioInterno } from '@data/formulario_interno.metadata';
@@ -144,6 +144,9 @@ nextStep() {
       const lote_valido = this.formulario_interno.formulario.get('lote')?.valid;
       const presentacion_valido = this.formulario_interno.formulario.get('presentacion_id')?.valid;
       const peso_neto_valido = this.formulario_interno.formulario.get('peso_neto')?.valid;
+      const tipoTransporte = this.formulario_interno.formulario.get('tipo_transporte')?.value;
+      const placa_valida = !!this.formulario_interno.formulario.get('placa')?.value;
+      const vehiculo_valido = tipoTransporte === 'VIA FERREA' ? true : (!!this.vehiculo || placa_valida);
 
       // Validaciones condicionales para campos que pueden estar deshabilitados
       const merma_valido = this.formulario_interno.formulario.get('merma')?.disabled ||
@@ -158,7 +161,7 @@ nextStep() {
 
       valid = peso_bruto_valido && tara_valido && lote_valido && presentacion_valido &&
               peso_neto_valido && merma_valido && humedad_valido && cantidad_valido &&
-              minerales_valido;
+              minerales_valido && vehiculo_valido;
 
         break;
       case 1:
@@ -245,6 +248,11 @@ nextStep() {
       this.formulario_interno.formulario.get('humedad')?.valueChanges.subscribe(() => {
         this.calcularPesoNeto();
       });
+
+    this.formulario_interno.formulario.get('tipo_transporte')?.valueChanges.subscribe((valor) => {
+        this.actualizarValidacionesTransporte(valor);
+    });
+    this.actualizarValidacionesTransporte(this.formulario_interno.formulario.get('tipo_transporte')?.value);
   }
   cambioDestino(event){
     if(event.value=='COMPRADOR')
@@ -606,5 +614,25 @@ cambioPlantaDeTratamiento(event:any){
             id_municipio_destino:event.municipioId
           });
           console.log(this.formulario_interno.formulario.value);
+}
+
+private actualizarValidacionesTransporte(valor: any): void {
+    const placa = this.formulario_interno.formulario.get('placa');
+    const nomConductor = this.formulario_interno.formulario.get('nom_conductor');
+    const licencia = this.formulario_interno.formulario.get('licencia');
+
+    if (valor === 'VIA FERREA') {
+        placa?.clearValidators();
+        nomConductor?.clearValidators();
+        licencia?.clearValidators();
+    } else {
+        placa?.setValidators([Validators.required]);
+        nomConductor?.setValidators([Validators.required, Validators.pattern('^[a-zA-ZÀ-ÿ\\u00d1\\u00f1\\s]+$')]);
+        licencia?.setValidators([Validators.required]);
+    }
+
+    placa?.updateValueAndValidity();
+    nomConductor?.updateValueAndValidity();
+    licencia?.updateValueAndValidity();
 }
 }

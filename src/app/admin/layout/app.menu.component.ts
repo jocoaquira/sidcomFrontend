@@ -124,11 +124,12 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Reportes',
                 items: [
-                    { label: 'Formularios Internos', icon: 'pi pi-fw pi-file', routerLink: ['/admin/reporte-formularios-internos'], visible: true },
-                    { label: 'Formularios Externos', icon: 'pi pi-fw pi-file', routerLink: ['/admin/reporte-formularios-externos'], visible: true },
-                    { label: 'Consolidado de Reporte Externo', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/admin/reporte-consolidado-form101-externo'], visible: true },
-                    { label: 'Operadores Mineros', icon: 'pi pi-fw pi-users', routerLink: ['/admin/reporte-operadores-mineros'], visible: true },
-                    { label: 'Toma de Muestra', icon: 'pi pi-fw pi-briefcase', routerLink: ['/admin/reporte-toma-de-muestra'], visible: true }
+                    { label: 'Formularios Internos', icon: 'pi pi-fw pi-file', routerLink: ['/admin/reporte-formularios-internos'],visible: this.canVerFormIntGuard.canActivate() || this.canVerFormCooperativaGuard.canActivate() },
+                    { label: 'Formularios Externos', icon: 'pi pi-fw pi-file', routerLink: ['/admin/reporte-formularios-externos'], visible: this.canVerFormExtGuard.canActivate() },
+                    { label: 'Formularios Puesto de Control', icon: 'pi pi-fw pi-file', routerLink: ['/admin/formularios-puesto-control'], visible: this.canVerControlTrancaGuard.canActivate() },
+                    { label: 'Consolidado de Reporte Externo', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/admin/reporte-consolidado-form101-externo'], visible: this.canVerFormExtGuard.canActivate() },
+                    { label: 'Operadores Mineros', icon: 'pi pi-fw pi-users', routerLink: ['/admin/reporte-operadores-mineros'],  visible: this.canVerOperatorGuard.canActivate() },
+                    { label: 'Toma de Muestra', icon: 'pi pi-fw pi-briefcase', routerLink: ['/admin/reporte-toma-de-muestra'],  visible: this.canVerTomaDeMuestraGuard.canActivate() }
                 ]
             },
             {
