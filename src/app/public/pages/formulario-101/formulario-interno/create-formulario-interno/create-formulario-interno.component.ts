@@ -69,6 +69,7 @@ export class CreateFormularioInternoComponent implements OnInit {
     public error!:any;
     public nombre:string='';
     public lista_leyes_mineral:IFormularioInternoMineral[]=[];
+    public mineralesInvalid:boolean=false;
     public formulario_mineral:IFormularioInternoMineral={
         id:null,
         formulario_int_id:null,
@@ -79,7 +80,8 @@ export class CreateFormularioInternoComponent implements OnInit {
      };
      public minerales_envio:any=[];
      public municipio_origen_envio:any=[];
-     public lista_municipios_origen:IFormularioInternoMunicipioOrigen[]=[];
+    public lista_municipios_origen:IFormularioInternoMunicipioOrigen[]=[];
+    public municipiosInvalid:boolean=false;
      public municipio_origen:IFormularioInternoMunicipioOrigen={
         id:null,
         formulario_int_id:null,
@@ -157,7 +159,7 @@ nextStep() {
                             this.formulario_interno.formulario.get('cantidad')?.valid;
 
       // Validar que hay al menos un mineral agregado
-      const minerales_valido = this.lista_leyes_mineral.length > 0;
+      const minerales_valido = this.validarMinerales();
 
       valid = peso_bruto_valido && tara_valido && lote_valido && presentacion_valido &&
               peso_neto_valido && merma_valido && humedad_valido && cantidad_valido &&
@@ -165,7 +167,7 @@ nextStep() {
 
         break;
       case 1:
-        valid =this.lista_municipios_origen.length>0
+        valid = this.validarMunicipiosOrigen();
         break;
       case 2:
         valid = this.formulario_interno.formulario.get('des_tipo')?.valid &&
@@ -301,6 +303,16 @@ nextStep() {
     this.formulario_interno.formulario.patchValue({
         estado: 'GENERADO'
       });
+    if (!this.validarMinerales()) {
+      this.notify.error('Debe agregar al menos un mineral','Error con el Registro',{timeOut:2000,positionClass: 'toast-bottom-right'});
+      this.activeStep = 0;
+      return;
+    }
+    if (!this.validarMunicipiosOrigen()) {
+      this.notify.error('Debe agregar municipio de origen','Error con el Registro',{timeOut:2000,positionClass: 'toast-bottom-right'});
+      this.activeStep = 1;
+      return;
+    }
     if(this.formulario_interno.formulario.valid){
       let formularioEnvio=this.formulario_interno.formulario.value;
       formularioEnvio={
@@ -422,6 +434,7 @@ nextStep() {
             }
             this.minerales_envio.push({...envio_minerales});
             this.lista_leyes_mineral.push({...this.formulario_mineral});
+            this.mineralesInvalid = false;
 
         }
     } else {
@@ -439,6 +452,7 @@ nextStep() {
     eliminar(domicilio:IFormularioInternoMineral) {
       this.minerales_envio=this.minerales_envio.filter(val => val.mineralId !== domicilio.mineral_id)
       this.lista_leyes_mineral = this.lista_leyes_mineral.filter(val => val.sigla_mineral !== domicilio.sigla_mineral);
+      this.mineralesInvalid = this.lista_leyes_mineral.length === 0;
     }
 
     agregarMunicipio(){
@@ -457,6 +471,7 @@ nextStep() {
                 }
                 this.municipio_origen_envio.push({...envio_origen});
                 this.lista_municipios_origen.push({...this.municipio_origen});
+                this.municipiosInvalid = false;
             }
         } else {
             this.notify.error('Por favor, complete todos los campos','Error con el Registro',{timeOut:2000,positionClass: 'toast-bottom-right'});
@@ -508,6 +523,7 @@ nextStep() {
     eliminarMunicipio(domicilio:IFormularioInternoMunicipioOrigen) {
         this.municipio_origen_envio=this.municipio_origen_envio.filter(val => val.id !== domicilio.municipio_id)
         this.lista_municipios_origen = this.lista_municipios_origen.filter(val => val.municipio_id !== domicilio.municipio_id);
+        this.municipiosInvalid = this.lista_municipios_origen.length === 0;
 
       }
 
@@ -563,6 +579,17 @@ private mostrarErrorFormularios(formGroup: FormularioInternoFormulario): void {
   } else {
 
   }
+}
+private validarMinerales(): boolean {
+  const valido = this.lista_leyes_mineral.length > 0;
+  this.mineralesInvalid = !valido;
+  return valido;
+}
+
+private validarMunicipiosOrigen(): boolean {
+  const valido = this.lista_municipios_origen.length > 0;
+  this.municipiosInvalid = !valido;
+  return valido;
 }
 cancelar(){
 
