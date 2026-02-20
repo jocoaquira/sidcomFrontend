@@ -1,11 +1,11 @@
-  <div>
+﻿  <div>
     <div class="card-titulo">
         <h4 class="text-center" style="color: white;">SOLICITUD DE ANULACIÓN DE FORMULARIO 101 {{formulario_ext.nro_formulario}}</h4>
     </div>
     <div class="card-anulado grid">
         <div class="  p-fluid">
           <h6>
-            En caso de consignar errores en la declaración de la emisión del Formulario 101, el operador minero debe solicitar autorización de anulación a la Secretaria Departamental De Minería, Metalurgia y Recursos Energéticos.
+            En caso de consignar errores en la declaración de la emisión del Formulario 101, el operador minero debe solicitar autorización de anulación a la Secretaría Departamental de Minería, Metalurgia y Recursos Energéticos.
           </h6>
             <div class=" col-12 md:col-12 ">
               <span class="p-float-label">
@@ -18,9 +18,9 @@
                     cols="150"
                     (input)="longitudTexto($event)"
                 ></textarea>
-                <label for="observaciones">Ingresar justificación minimo 200 caractéres</label>
+                <label for="observaciones">Ingresar justificación mínimo 100 caracteres</label>
                 <small id="observaciones" class="p-error" *ngIf="!valido && formulario_ext.justificacion_anulacion!=null">
-                     El Minimo de caractéresdeve ser de 200 por favor verifique sus datos hasta el momento tiene {{formulario_ext.justificacion_anulacion.length}} caractéres
+                     El mínimo de caracteres debe ser de 100 por favor verifique sus datos hasta el momento tiene {{formulario_ext.justificacion_anulacion.length}} caracteres
                 </small>
             </span>
             </div>
@@ -54,3 +54,6 @@
 
         </div>
 </div>
+
+
+

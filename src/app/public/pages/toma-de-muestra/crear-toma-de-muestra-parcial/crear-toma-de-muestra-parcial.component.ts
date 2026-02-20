@@ -4,6 +4,7 @@ import { AuthService } from '@core/authentication/services/auth.service';
 import { IMineral } from '@data/mineral.metadata';
 import { IOperatorSimple } from '@data/operador_simple.metadata';
 import { ITomaDeMuestra } from '@data/toma_de_muestra.metadata';
+import { ITomaDeMuestraSimple } from '@data/toma_de_muestra_simple.metadata';
 import { ITomaDeMuestraMineral } from '@data/toma_de_muestra_mineral.metadata';
 import { ITomaDeMuestraMineralEnvio } from '@data/toma_de_muestra_mineral_envio.metadata';
 import { ITomaDeMuestraMunicipioOrigen } from '@data/toma_de_muestra_municipio_origen.metadata';
@@ -54,6 +55,24 @@ export class CrearTomaDeMuestraParcialComponent implements OnInit {
     public dialogoAgregarParcial: boolean = false;
     public verDialog: boolean = false;
     public toma_de_muestra_id: number = null;
+    public productDialog: boolean = false;
+    public isEditMode: boolean = true;
+    public tomaDeMuestra: ITomaDeMuestraSimple = {
+      id: null,
+      nro_formulario: null,
+      fecha_hora_tdm: null,
+      razon_social: null,
+      estado: null,
+      fecha_aprobacion: null,
+      fecha_firma: null,
+      lugar_verificacion: null,
+      ubicacion_lat: null,
+      ubicacion_lon: null,
+      responsable_tdm_id: null,
+      operador_id: null,
+      created_at: null,
+      updated_at: null
+    };
     public skipMapInit: boolean = false;
     public pesoRestante: number = 0;
     public camionesRestantes: number = 0;
@@ -114,7 +133,8 @@ export class CrearTomaDeMuestraParcialComponent implements OnInit {
         municipio:null,
         municipio_id:null
      }
-     public valSwitch: boolean = false;
+    public valSwitch: boolean = false;
+    public operadorIdFromQuery: number | null = null;
 
       // Definir los pasos para Steps
   steps = [
@@ -253,18 +273,13 @@ nextStep() {
       },
       (error:any)=> this.error=this.presentacionService.handleError(error));
 
+      const operadorIdSnapshot = this.getParamNumber('operadorId');
+      if (!Number.isNaN(operadorIdSnapshot)) {
+        this.applyOperadorContext(operadorIdSnapshot);
+      }
       const operadorIdResponsable = this.formulario_interno.formulario.value.operador_id ?? this.operadorIdContext;
       if (operadorIdResponsable) {
-        this.responsableTMService.verResponsableTMOperador(operadorIdResponsable.toString()).subscribe(
-        (data:any)=>{
-        this.listaUsuarios = this.responsableTMService.handleusuario(data)
-          .filter(usuario => usuario.estado === 'ACTIVO')
-          .map(usuario => ({
-              ...usuario,
-              nombreCompleto: `${usuario.nombre} ${usuario.apellidos}`
-          }));
-      },
-      (error:any)=> this.error=this.responsableTMService.handleError(error));
+        this.cargarResponsablesOperador(operadorIdResponsable);
       }
     this.departamentosService.verdepartamentos(this.nombre).subscribe(
       (data:any)=>{
@@ -364,9 +379,9 @@ nextStep() {
       });
 
     const padreIdSnapshot = this.getParamNumber('padreId');
-    const operadorIdSnapshot = this.getParamNumber('operadorId');
-    if (!Number.isNaN(operadorIdSnapshot)) {
-      this.operadorIdContext = operadorIdSnapshot;
+    const operadorIdSnapshotInit = this.getParamNumber('operadorId');
+    if (!Number.isNaN(operadorIdSnapshotInit)) {
+      this.applyOperadorContext(operadorIdSnapshotInit);
     }
     if (!Number.isNaN(padreIdSnapshot) && padreIdSnapshot > 0) {
       this.cargarMuestraPadrePorId(padreIdSnapshot);
@@ -376,12 +391,38 @@ nextStep() {
       const padreId = this.parseParamValue(params['padreId']);
       const operadorId = this.parseParamValue(params['operadorId']);
       if (!Number.isNaN(operadorId)) {
-        this.operadorIdContext = operadorId;
+        this.applyOperadorContext(operadorId);
       }
       if (!Number.isNaN(padreId) && padreId > 0) {
         this.cargarMuestraPadrePorId(padreId);
       }
     });
+  }
+
+  private applyOperadorContext(operadorId: number): void {
+    if (!operadorId || Number.isNaN(operadorId)) {
+      return;
+    }
+    this.operadorIdContext = operadorId;
+    this.operadorIdFromQuery = operadorId;
+    this.formulario_interno.formulario.patchValue({
+      operador_id: operadorId
+    });
+    this.cargarResponsablesOperador(operadorId);
+  }
+
+  private cargarResponsablesOperador(operadorId: number): void {
+    this.responsableTMService.verResponsableTMOperador(operadorId.toString()).subscribe(
+      (data: any) => {
+        this.listaUsuarios = this.responsableTMService.handleusuario(data)
+          .filter(usuario => usuario.estado === 'ACTIVO')
+          .map(usuario => ({
+            ...usuario,
+            nombreCompleto: `${usuario.nombre} ${usuario.apellidos}`
+          }));
+      },
+      (error: any) => this.error = this.responsableTMService.handleError(error)
+    );
   }
 
   private getParamNumber(name: string): number {
@@ -400,6 +441,17 @@ nextStep() {
     }
     const parsed = parseInt(value.toString(), 10);
     return Number.isNaN(parsed) ? NaN : parsed;
+  }
+
+  isParcialFinalizado(procedimientoParcial: string | null | undefined): boolean {
+    if (!procedimientoParcial) {
+      return false;
+    }
+    return procedimientoParcial.startsWith('EMITIDO');
+  }
+
+  isAdminUser(): boolean {
+    return this.authService.getUser?.operador_id == null;
   }
   cambioDestino(event){
     if(event.value=='COMPRADOR')
@@ -1086,6 +1138,12 @@ confirmarSolicitudParcial(parcial: any) {
   });
 }
 
+abrirEmisionParcial(parcial: ITomaDeMuestraSimple) {
+  this.tomaDeMuestra = parcial;
+  this.isEditMode = true;
+  this.productDialog = true;
+}
+
 firmarParcial(parcial: any) {
   this.tomaDeMuestrasService.firmarTomaDeMuestra(parcial.id).subscribe(
     (data: any) => {
@@ -1127,6 +1185,11 @@ verSolicitud(parcial: any) {
 
 cerrar(event: any) {
   this.verDialog = event;
+}
+
+cerrarDialogoEmision(event: any) {
+  this.productDialog = event;
+  this.cargarParcialesHijos();
 }
 
 volverAFormulario() {

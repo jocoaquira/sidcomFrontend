@@ -624,15 +624,26 @@ guardar(){
  /* this.formulario_interno.formulario.patchValue({
       estado: 'GENERADO'
     });*/
+  const destino = this.formulario_interno.formulario.value.des_tipo;
+  if (destino === 'COMPRADOR' && (!this.compradores || this.compradores.length === 0)) {
+    this.notify.error('Debe agregar al menos un comprador', 'Error con el Registro', {timeOut:2000,positionClass: 'toast-top-right'});
+    return;
+  }
+  if (destino === 'PLANTA DE TRATAMIENTO') {
+    const planta = this.formulario_interno.formulario.value.des_planta;
+    if (!planta || String(planta).trim() === '') {
+      this.notify.error('Debe seleccionar una planta de tratamiento', 'Error con el Registro', {timeOut:2000,positionClass: 'toast-top-right'});
+      return;
+    }
+  }
   if(this.formulario_interno.formulario.valid){
     let formularioEnvio=this.formulario_interno.formulario.value;
     formularioEnvio={
       ...formularioEnvio,
       minerales:this.minerales_envio,
       municipio_origen:this.municipio_origen_envio,
-
+      compradores:this.compradores
     }
-
     this.formularioCooperativaService.editarFormularioInterno(formularioEnvio,this.id).subscribe(
       (data:any) =>
       {
@@ -1059,13 +1070,23 @@ cambioChofer(event:any){
         licencia: event.nro_licencia,
         });
 }
+cambioComprador(event:any){
+    console.log(event);
+    this.comprador.comprador=event.razon_social;
+    this.comprador.municipioId=event.municipioId;
+    this.formulario_interno.formulario.patchValue({
+        des_comprador: this.comprador.comprador,
+      });
+      console.log(this.formulario_interno.formulario.value);
+}
+
 cambioOperadorSimple(event:any){
     this.comprador=event;
-        this.razon_social=this.comprador.razon_social;
+    this.razon_social=this.comprador.razon_social;
 
-        this.formulario_interno.formulario.patchValue({
-            des_comprador: this.comprador.razon_social,
-          });
+    this.formulario_interno.formulario.patchValue({
+        des_comprador: this.comprador.razon_social,
+      });
 
 }
 valSwitches(event:any){
@@ -1102,3 +1123,9 @@ cambioDepartamentoPT(departamentoId: number): void {
     // Aquí puedes hacer cualquier acción extra cuando el departamento cambie
   }
 }
+
+
+
+
+
+

@@ -229,7 +229,6 @@ getErrorMessage(controlName: string): string | null {
     if (valor === 'COMPRADOR') {
       // Activar y hacer requerido `des_comprador`
       desComprador?.enable();
-    //  desComprador?.setValidators([Validators.required]);
       desComprador?.updateValueAndValidity();
         DestinoMunicipioId?.clearValidators();
       // Deshabilitar y limpiar validaciones de `des_planta`
@@ -260,5 +259,9 @@ getErrorMessage(controlName: string): string | null {
   }
 
 }
+
+
+
+
 
 

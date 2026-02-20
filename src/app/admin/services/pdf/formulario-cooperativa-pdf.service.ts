@@ -1,7 +1,8 @@
-
+﻿
 import { Injectable } from '@angular/core';
 
 import jsPDF from 'jspdf';
+import { addAnuladoWatermark } from './pdf-watermark.util';
 import autoTable from 'jspdf-autotable'
 import * as QRCode from 'qrcode';
 import { ImageToBase64Service } from './image-to-base64.service';
@@ -124,7 +125,7 @@ export class PdfFormularioInternoCooperativaService {
 
                         if (mostrarDato2) {
 
-                        celdas.push({ content: 'ESTE FORMULARIO NO SE EMITIO, ESTA EN MODO GENERADO Y NO ES VALIDO PARA CIRCULACIÓN.', colSpan: 2, styles: { halign: 'center', fillColor: [255, 255, 0] } });
+                        celdas.push({ content: 'ESTE FORMULARIO NO SE EMITIÓ, ESTA EN MODO GENERADO Y NO ES VÁLIDO PARA CIRCULACIÃ“N.', colSpan: 2, styles: { halign: 'center', fillColor: [255, 255, 0] } });
                         } else {
 
                         celdas.push({ content: 'FECHA DE EMISIÓN:', styles: { halign: 'right',fontSize:10,fontStyle:'bold',fillColor: [255, 255, 255] } });
@@ -232,7 +233,7 @@ export class PdfFormularioInternoCooperativaService {
                             body: [
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: 'PRESENTACION:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: 'PRESENTACIÓN:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: formulario_cooperativa.presentacion, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                 { content: 'MINERAL Y/O METAL:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: this.mostrarMinerales(formulario_cooperativa.minerales), styles: { halign: 'left', fillColor: [255, 255, 255] } },
@@ -317,7 +318,7 @@ export class PdfFormularioInternoCooperativaService {
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                 { content: 'MUNICIPIO PRODUCTOR:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: this.unirMunicipios(formulario_cooperativa.municipio_origen), styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                                { content: ' CODIGO MUNICIPIO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: ' CÓDIGO MUNICIPIO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: this.unirMunicipiosCodigo(formulario_cooperativa.municipio_origen), styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
@@ -658,7 +659,7 @@ export class PdfFormularioInternoCooperativaService {
                             body: [
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                {content:formulario_cooperativa.observacion!=null?formulario_cooperativa.observacion:'',  styles: { halign: 'justify', fillColor: [255, 255, 255] } },
+                                {content: (formulario_cooperativa.observacion ?? (formulario_cooperativa as any).observaciones ?? ''),  styles: { halign: 'justify', fillColor: [255, 255, 255] } },
                               ],
                             ],
 
@@ -756,7 +757,7 @@ export class PdfFormularioInternoCooperativaService {
 
                                 head: [
                                   [
-                                    { content:  ' El Formulario 101 es el único instrumento que habilita el transporte de minerales y/o metales al interior o exterior del país, que permite la identificación del Municipio, Departamento Productor y otros datos técnicos, tiene carácter de Declaración Jurada de uso obligatorio conforme al Art. 31 del D.D. de Oruro N° 157 para los actores productivos mineros, operadores mineros, comercializadoras y personas naturales que se encuentran en posesión o realicen el transporte de minerales y/o metales en sujeción al D.S. N° 2288, Art 7', styles: { fontStyle:'normal', fontSize: 8, halign: 'center', fillColor: [255, 255, 255] } },
+                                    { content:  ' El Formulario 101 es el Único instrumento que habilita el transporte de minerales y/o metales al interior o exterior del país, que permite la identificación del Municipio, Departamento Productor y otros datos técnicos, tiene carácter de Declaración Jurada de uso obligatorio conforme al Art. 31 del D.D. de Oruro N° 157 para los actores productivos mineros, operadores mineros, comercializadoras y personas naturales que se encuentran en posesión o realicen el transporte de minerales y/o metales en sujeción al D.S. N° 2288, Art 7', styles: { fontStyle:'normal', fontSize: 8, halign: 'center', fillColor: [255, 255, 255] } },
                                   ],
                                 ],
                                 body: [
@@ -791,6 +792,7 @@ export class PdfFormularioInternoCooperativaService {
                               });
 
 
+                              addAnuladoWatermark(doc, formulario_cooperativa.estado);
                               window.open(doc.output('bloburl'), '_blank');
                             };
                             sello_autorizado.onerror = () => {
@@ -813,12 +815,17 @@ export class PdfFormularioInternoCooperativaService {
                       };
 
       }
-    mostrarCompradores(compradores,presentacion): string {
+    mostrarCompradores(compradores, presentacion): string {
         if (!Array.isArray(compradores)) return compradores || '';
-        return compradores.map(c => `${c.comprador} (${c.cantidad} ${presentacion})`).join(', ');
+        return compradores.map(c => `${c.comprador} (${c.cantidad} )`).join(', ');
     }
     mostrarDestinos(compradores): string {
         if (!Array.isArray(compradores)) return compradores || '';
         return compradores.map(c => `${c.departamento_destino} ${c.municipio_destino}`).join(', ');
     }
 }
+
+
+
+
+

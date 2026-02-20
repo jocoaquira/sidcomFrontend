@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import jsPDF from 'jspdf';
+import { addAnuladoWatermark } from './pdf-watermark.util';
 import autoTable from 'jspdf-autotable'
 import * as QRCode from 'qrcode';
 import { ImageToBase64Service } from './image-to-base64.service';
@@ -16,11 +17,11 @@ export class PdfFormularioInternoService {
     private imageToBase64Service: ImageToBase64Service,
 
     ) {}
-// Función para generar el código QR sin bordes blancos
+// FunciÃ³n para generar el código QR sin bordes blancos
  generateQRCode(data: string): Promise<string> {
     return QRCode.toDataURL(data, {
       margin: 0, // Establecer el margen en 0 para eliminar el borde blanco
-      errorCorrectionLevel: 'H', // Nivel de corrección de errores (puedes ajustarlo según tus necesidades)
+      errorCorrectionLevel: 'H', // Nivel de correcciÃ³n de errores (puedes ajustarlo segÃºn tus necesidades)
       width: 120, // Ancho del código QR
       color: {
         dark: '#000000',
@@ -28,12 +29,12 @@ export class PdfFormularioInternoService {
       },
     });
   }
-    // Función para mostrar los nombres de los minerales
+    // FunciÃ³n para mostrar los nombres de los minerales
     mostrarMinerales(mineral_tdm): string {
         return mineral_tdm.map(mineral => mineral.mineral).join(', ');
       }
 
-      // Función para mostrar los detalles de los minerales
+      // FunciÃ³n para mostrar los detalles de los minerales
       mostrarDetalles(mineral_tdm): string {
         return mineral_tdm.map(mineral => `${mineral.sigla} (${mineral.ley} ${mineral.unidad})`).join(', ');
       }
@@ -45,11 +46,11 @@ export class PdfFormularioInternoService {
   }
   formatFecha(fecha: string): string {
     const date = new Date(fecha); // Convierte la fecha en un objeto Date
-    const day = String(date.getDate()).padStart(2, '0'); // Día con 2 dígitos
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Mes con 2 dígitos (recordando que los meses empiezan en 0)
-    const year = date.getFullYear(); // Año
-    const hours = String(date.getHours()).padStart(2, '0'); // Hora con 2 dígitos
-    const minutes = String(date.getMinutes()).padStart(2, '0'); // Minutos con 2 dígitos
+    const day = String(date.getDate()).padStart(2, '0'); // DÃ­a con 2 dÃ­gitos
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Mes con 2 dÃ­gitos (recordando que los meses empiezan en 0)
+    const year = date.getFullYear(); // AÃ±o
+    const hours = String(date.getHours()).padStart(2, '0'); // Hora con 2 dÃ­gitos
+    const minutes = String(date.getMinutes()).padStart(2, '0'); // Minutos con 2 dÃ­gitos
 
     return `${day}/${month}/${year} a Hrs.: ${hours}:${minutes}`; // Formato final
   }
@@ -105,9 +106,9 @@ export class PdfFormularioInternoService {
                                 styles: {
                                   fillColor: [255, 255, 0], // Color de fondo amarillo
                                   textColor: [0, 0, 0], // Color del texto negro
-                                  halign: 'center', // Alineación centrada
-                                  valign: 'middle', // Alineación vertical centrada
-                                  fontSize: 10, // Tamaño de fuente
+                                  halign: 'center', // AlineaciÃ³n centrada
+                                  valign: 'middle', // AlineaciÃ³n vertical centrada
+                                  fontSize: 10, // TamaÃ±o de fuente
                                   cellPadding: 3, // Reduce el relleno dentro de las celdas
                                 },
                                 headStyles: {
@@ -119,17 +120,17 @@ export class PdfFormularioInternoService {
 
                                 margin: { top: 0, bottom: 0 }, // Ajustar el margen entre tablas
 
-                                startY: 80, // Posición inicial de la tabla
+                                startY: 80, // PosiciÃ³n inicial de la tabla
                               });
 
                         const mostrarDato2 = formulario_interno.estado === 'GENERADO'; // Verifica si el estado es 'GENERADO'
 
-                        // Crear las celdas basadas en la condición
+                        // Crear las celdas basadas en la condiciÃ³n
                         const celdas = [];
 
                         if (mostrarDato2) {
                         // Si el estado es 'GENERADO', agregar solo la primera celda
-                        celdas.push({ content: 'ESTE FORMULARIO NO SE EMITIO, ESTA EN MODO GENERADO Y NO ES VALIDO PARA CIRCULACIÓN.', colSpan: 2, styles: { halign: 'center', fillColor: [255, 255, 0] } });
+                        celdas.push({ content: 'ESTE FORMULARIO NO SE EMITIÓ, ESTA EN MODO GENERADO Y NO ES VÁLIDO PARA CIRCULACIÃ“N.', colSpan: 2, styles: { halign: 'center', fillColor: [255, 255, 0] } });
                         } else {
                         // Si no es 'GENERADO', agregar la segunda celda
                         celdas.push({ content: 'FECHA DE EMISIÓN:', styles: { halign: 'right',fontSize:10,fontStyle:'bold',fillColor: [255, 255, 255] } });
@@ -144,7 +145,7 @@ export class PdfFormularioInternoService {
                             styles: {
                                 cellPadding: 6, // Reduce el relleno dentro de las celdas
                                 textColor: [0, 0, 0],
-                                valign: 'middle', // Alineación vertical centrada
+                                valign: 'middle', // AlineaciÃ³n vertical centrada
                               },
                           });
 
@@ -174,9 +175,9 @@ export class PdfFormularioInternoService {
                             styles: {
                               fillColor: [255, 255, 255], // Color de fondo por defecto
                               textColor: [0, 0, 0], // Color de texto negro
-                              halign: 'left', // Alineación horizontal izquierda por defecto
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
+                              halign: 'left', // AlineaciÃ³n horizontal izquierda por defecto
+                              valign: 'middle', // AlineaciÃ³n vertical centrada
+                              fontSize: 9, // TamaÃ±o de fuente
                               cellPadding: 2, // Espaciado interno de las celdas
                             },
                             headStyles: {
@@ -187,10 +188,10 @@ export class PdfFormularioInternoService {
                             columnStyles: {
                               0: { cellWidth: 100 }, // Primera columna
                               1: { cellWidth: 80 }, // Segunda columna
-                              2: { cellWidth: 'auto' }, // Ajusta automáticamente
-                              3: { cellWidth: 'auto' }, // Ajusta automáticamente
-                              4: { cellWidth: 'auto' }, // Ajusta automáticamente
-                              5: { cellWidth: 80 }, // Última columna
+                              2: { cellWidth: 'auto' }, // Ajusta automÃ¡ticamente
+                              3: { cellWidth: 'auto' }, // Ajusta automÃ¡ticamente
+                              4: { cellWidth: 'auto' }, // Ajusta automÃ¡ticamente
+                              5: { cellWidth: 80 }, // Ãšltima columna
                             },
                           });
 
@@ -218,8 +219,8 @@ export class PdfFormularioInternoService {
 
                             styles: {
                               textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
+                              valign: 'middle', // AlineaciÃ³n vertical centrada
+                              fontSize: 9, // TamaÃ±o de fuente
                               cellPadding: 2, // Espaciado interno de las celdas
                             },
                             headStyles: {
@@ -231,8 +232,8 @@ export class PdfFormularioInternoService {
                               0: { cellWidth: 20 }, // Primera columna
                               1: { cellWidth: 40 }, // Primera columna
                               2: { cellWidth: 200 }, // Segunda columna
-                              3: { cellWidth:40 }, // Ajusta automáticamente
-                              4: { cellWidth:230 }, // Ajusta automáticamente
+                              3: { cellWidth:40 }, // Ajusta automÃ¡ticamente
+                              4: { cellWidth:230 }, // Ajusta automÃ¡ticamente
                             },
                           });
 
@@ -242,7 +243,7 @@ export class PdfFormularioInternoService {
                             body: [
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                { content: 'PRESENTACION:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: 'PRESENTACIÓN:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: formulario_interno.presentacion, styles: { halign: 'left', fillColor: [255, 255, 255] } },
                                 { content: 'PESO NETO SECO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: formulario_interno.peso_neto+' Kg.', styles: { halign: 'left', fillColor: [255, 255, 255] } },
@@ -250,16 +251,16 @@ export class PdfFormularioInternoService {
                             ],
                             styles: {
                               textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
+                              valign: 'middle', // AlineaciÃ³n vertical centrada
+                              fontSize: 9, // TamaÃ±o de fuente
                               cellPadding: 2, // Espaciado interno de las celdas
                             },
                             columnStyles: {
                               0: { cellWidth: 20 }, // Primera columna
                               1: { cellWidth: 80 }, // Primera columna
                               2: { cellWidth: 160 }, // Segunda columna
-                              3: { cellWidth:90 }, // Ajusta automáticamente
-                              4: { cellWidth:180 }, // Ajusta automáticamente
+                              3: { cellWidth:90 }, // Ajusta automÃ¡ticamente
+                              4: { cellWidth:180 }, // Ajusta automÃ¡ticamente
                             },
                           });
                           autoTable(doc, {
@@ -276,16 +277,16 @@ export class PdfFormularioInternoService {
                             ],
                             styles: {
                               textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
+                              valign: 'middle', // AlineaciÃ³n vertical centrada
+                              fontSize: 9, // TamaÃ±o de fuente
                               cellPadding: 2, // Espaciado interno de las celdas
                             },
                             columnStyles: {
                               0: { cellWidth: 20 }, // Primera columna
                               1: { cellWidth: 110 }, // Primera columna
                               2: { cellWidth: 130 }, // Segunda columna
-                              3: { cellWidth:105 }, // Ajusta automáticamente
-                              4: { cellWidth:185 }, // Ajusta automáticamente
+                              3: { cellWidth:105 }, // Ajusta automÃ¡ticamente
+                              4: { cellWidth:185 }, // Ajusta automÃ¡ticamente
                             },
                           });
                           autoTable(doc, {
@@ -302,16 +303,16 @@ export class PdfFormularioInternoService {
                             ],
                             styles: {
                               textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
+                              valign: 'middle', // AlineaciÃ³n vertical centrada
+                              fontSize: 9, // TamaÃ±o de fuente
                               cellPadding: 2, // Espaciado interno de las celdas
                             },
                             columnStyles: {
                               0: { cellWidth: 20 }, // Primera columna
                               1: { cellWidth: 40 }, // Primera columna
                               2: { cellWidth: 200 }, // Segunda columna
-                              3: { cellWidth:30 }, // Ajusta automáticamente
-                              4: { cellWidth:240 }, // Ajusta automáticamente
+                              3: { cellWidth:30 }, // Ajusta automÃ¡ticamente
+                              4: { cellWidth:240 }, // Ajusta automÃ¡ticamente
                             },
                            });
 
@@ -337,16 +338,16 @@ export class PdfFormularioInternoService {
                             ],
                             styles: {
                               textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
+                              valign: 'middle', // AlineaciÃ³n vertical centrada
+                              fontSize: 9, // TamaÃ±o de fuente
                               cellPadding: 2, // Espaciado interno de las celdas
                             },
                             columnStyles: {
                               0: { cellWidth: 20 }, // Primera columna
                               1: { cellWidth: 60 }, // Primera columna
                               2: { cellWidth: 180 }, // Segunda columna
-                              3: { cellWidth:55 }, // Ajusta automáticamente
-                              4: { cellWidth:235 }, // Ajusta automáticamente
+                              3: { cellWidth:55 }, // Ajusta automÃ¡ticamente
+                              4: { cellWidth:235 }, // Ajusta automÃ¡ticamente
                             },
                            });
 
@@ -363,15 +364,15 @@ export class PdfFormularioInternoService {
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                 { content: 'MUNICIPIO PRODUCTOR:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: this.unirMunicipios(formulario_interno.municipio_origen), styles: { halign: 'left', fillColor: [255, 255, 255] } },
-                                { content: ' CODIGO MUNICIPIO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
+                                { content: ' CÓDIGO MUNICIPIO:', styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] }  },
                                 { content: this.unirMunicipiosCodigo(formulario_interno.municipio_origen), styles: { halign: 'left', fillColor: [255, 255, 255] } },
                               ],
                             ],
 
                             styles: {
                               textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
+                              valign: 'middle', // AlineaciÃ³n vertical centrada
+                              fontSize: 9, // TamaÃ±o de fuente
                               cellPadding: 2, // Espaciado interno de las celdas
                             },
                             headStyles: {
@@ -383,8 +384,8 @@ export class PdfFormularioInternoService {
                               0: { cellWidth: 20 }, // Primera columna
                               1: { cellWidth: 120 }, // Primera columna
                               2: { cellWidth: 120 }, // Segunda columna
-                              3: { cellWidth:100 }, // Ajusta automáticamente
-                              4: { cellWidth:170 }, // Ajusta automáticamente
+                              3: { cellWidth:100 }, // Ajusta automÃ¡ticamente
+                              4: { cellWidth:170 }, // Ajusta automÃ¡ticamente
                             },
                           });
 
@@ -408,8 +409,8 @@ export class PdfFormularioInternoService {
 
                             styles: {
                               textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
+                              valign: 'middle', // AlineaciÃ³n vertical centrada
+                              fontSize: 9, // TamaÃ±o de fuente
                               cellPadding: 2, // Espaciado interno de las celdas
                             },
                             headStyles: {
@@ -422,8 +423,8 @@ export class PdfFormularioInternoService {
                               0: { cellWidth: 20 }, // Primera columna
                               1: { cellWidth: 70 }, // Primera columna
                               2: { cellWidth: 170 }, // Segunda columna
-                              3: { cellWidth:135 }, // Ajusta automáticamente
-                              4: { cellWidth:135 }, // Ajusta automáticamente
+                              3: { cellWidth:135 }, // Ajusta automÃ¡ticamente
+                              4: { cellWidth:135 }, // Ajusta automÃ¡ticamente
                             },
                           });
                           if(formulario_interno.tipo_transporte=='VIA FERREA'){
@@ -447,8 +448,8 @@ export class PdfFormularioInternoService {
 
                                 styles: {
                                   textColor: [0, 0, 0], // Color de texto negro
-                                  valign: 'middle', // Alineación vertical centrada
-                                  fontSize: 9, // Tamaño de fuente
+                                  valign: 'middle', // AlineaciÃ³n vertical centrada
+                                  fontSize: 9, // TamaÃ±o de fuente
                                   cellPadding: 2, // Espaciado interno de las celdas
                                 },
                                 headStyles: {
@@ -461,8 +462,8 @@ export class PdfFormularioInternoService {
                                   0: { cellWidth: 20 }, // Primera columna
                                   1: { cellWidth: 110 }, // Primera columna
                                   2: { cellWidth: 130 }, // Segunda columna
-                                  3: { cellWidth:90 }, // Ajusta automáticamente
-                                  4: { cellWidth:180 }, // Ajusta automáticamente
+                                  3: { cellWidth:90 }, // Ajusta automÃ¡ticamente
+                                  4: { cellWidth:180 }, // Ajusta automÃ¡ticamente
                                 },
                               });
                               autoTable(doc, {
@@ -479,16 +480,16 @@ export class PdfFormularioInternoService {
                                 ],
                                 styles: {
                                   textColor: [0, 0, 0], // Color de texto negro
-                                  valign: 'middle', // Alineación vertical centrada
-                                  fontSize: 9, // Tamaño de fuente
+                                  valign: 'middle', // AlineaciÃ³n vertical centrada
+                                  fontSize: 9, // TamaÃ±o de fuente
                                   cellPadding: 2, // Espaciado interno de las celdas
                                 },
                                 columnStyles: {
                                   0: { cellWidth: 20 }, // Primera columna
                                   1: { cellWidth: 100 }, // Primera columna
                                   2: { cellWidth: 140 }, // Segunda columna
-                                  3: { cellWidth:100 }, // Ajusta automáticamente
-                                  4: { cellWidth:190 }, // Ajusta automáticamente
+                                  3: { cellWidth:100 }, // Ajusta automÃ¡ticamente
+                                  4: { cellWidth:190 }, // Ajusta automÃ¡ticamente
                                 },
                                });
 
@@ -506,16 +507,16 @@ export class PdfFormularioInternoService {
                                 ],
                                 styles: {
                                   textColor: [0, 0, 0], // Color de texto negro
-                                  valign: 'middle', // Alineación vertical centrada
-                                  fontSize: 9, // Tamaño de fuente
+                                  valign: 'middle', // AlineaciÃ³n vertical centrada
+                                  fontSize: 9, // TamaÃ±o de fuente
                                   cellPadding: 2, // Espaciado interno de las celdas
                                 },
                                 columnStyles: {
                                   0: { cellWidth: 20 }, // Primera columna
                                   1: { cellWidth: 90 }, // Primera columna
                                   2: { cellWidth: 150 }, // Segunda columna
-                                  3: { cellWidth:30 }, // Ajusta automáticamente
-                                  4: { cellWidth:260 }, // Ajusta automáticamente
+                                  3: { cellWidth:30 }, // Ajusta automÃ¡ticamente
+                                  4: { cellWidth:260 }, // Ajusta automÃ¡ticamente
                                 },
                                });
                           }
@@ -540,8 +541,8 @@ export class PdfFormularioInternoService {
 
                                 styles: {
                                   textColor: [0, 0, 0], // Color de texto negro
-                                  valign: 'middle', // Alineación vertical centrada
-                                  fontSize: 9, // Tamaño de fuente
+                                  valign: 'middle', // AlineaciÃ³n vertical centrada
+                                  fontSize: 9, // TamaÃ±o de fuente
                                   cellPadding: 2, // Espaciado interno de las celdas
                                 },
                                 headStyles: {
@@ -554,8 +555,8 @@ export class PdfFormularioInternoService {
                                   0: { cellWidth: 20 }, // Primera columna
                                   1: { cellWidth: 110 }, // Primera columna
                                   2: { cellWidth: 130 }, // Segunda columna
-                                  3: { cellWidth:70 }, // Ajusta automáticamente
-                                  4: { cellWidth:200 }, // Ajusta automáticamente
+                                  3: { cellWidth:70 }, // Ajusta automÃ¡ticamente
+                                  4: { cellWidth:200 }, // Ajusta automÃ¡ticamente
                                 },
                               });
                               autoTable(doc, {
@@ -572,16 +573,16 @@ export class PdfFormularioInternoService {
                                 ],
                                 styles: {
                                   textColor: [0, 0, 0], // Color de texto negro
-                                  valign: 'middle', // Alineación vertical centrada
-                                  fontSize: 9, // Tamaño de fuente
+                                  valign: 'middle', // AlineaciÃ³n vertical centrada
+                                  fontSize: 9, // TamaÃ±o de fuente
                                   cellPadding: 2, // Espaciado interno de las celdas
                                 },
                                 columnStyles: {
                                   0: { cellWidth: 20 }, // Primera columna
                                   1: { cellWidth: 40 }, // Primera columna
                                   2: { cellWidth: 200 }, // Segunda columna
-                                  3: { cellWidth:115 }, // Ajusta automáticamente
-                                  4: { cellWidth:175 }, // Ajusta automáticamente
+                                  3: { cellWidth:115 }, // Ajusta automÃ¡ticamente
+                                  4: { cellWidth:175 }, // Ajusta automÃ¡ticamente
                                 },
                                });
                           }
@@ -596,14 +597,14 @@ export class PdfFormularioInternoService {
                             body: [
                               [
                                 {content:'',  styles: { halign: 'left', fontStyle: 'bold', fillColor: [255, 255, 255] } },
-                                {content:formulario_interno.observacion!=null?formulario_interno.observacion:'',  styles: { halign: 'justify', fillColor: [255, 255, 255] } },
+                                {content: (formulario_interno.observacion ?? (formulario_interno as any).observaciones ?? ''),  styles: { halign: 'justify', fillColor: [255, 255, 255] } },
                               ],
                             ],
 
                             styles: {
                               textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
+                              valign: 'middle', // AlineaciÃ³n vertical centrada
+                              fontSize: 9, // TamaÃ±o de fuente
                               cellPadding: 2, // Espaciado interno de las celdas
                             },
                             headStyles: {
@@ -720,18 +721,18 @@ autoTable(doc, {
   ],
   styles: {
     textColor: [0, 0, 0], // Color de texto negro
-    valign: 'middle', // Alineación vertical centrada
-    fontSize: 9, // Tamaño de fuente
+    valign: 'middle', // AlineaciÃ³n vertical centrada
+    fontSize: 9, // TamaÃ±o de fuente
     cellPadding: 2, // Espaciado interno de las celdas
-    lineWidth: 1, // Ancho de la línea del borde
-    lineColor: [0, 0, 0], // Color de la línea del borde
+    lineWidth: 1, // Ancho de la lÃ­nea del borde
+    lineColor: [0, 0, 0], // Color de la lÃ­nea del borde
   },
   headStyles: {
     fillColor: [161, 216, 158], // Fondo verde para el encabezado
     textColor: [0, 0, 0], // Texto negro para el encabezado
     fontStyle: 'bold', // Texto en negrita
     cellPadding: 7, // Espaciado interno de las celdas
-    lineColor: [255, 255, 255], // Color de la línea del borde
+    lineColor: [255, 255, 255], // Color de la lÃ­nea del borde
   },
   columnStyles: {
     0: { cellWidth: 130, minCellHeight: 100 },
@@ -778,7 +779,7 @@ autoTable(doc, {
 
                                 head: [
                                   [
-                                    { content:  ' El Formulario 101 es el único instrumento que habilita el transporte de minerales y/o metales al interior o exterior del país, que permite la identificación del Municipio, Departamento Productor y otros datos técnicos, tiene carácter de Declaración Jurada de uso obligatorio conforme al Art. 31 del D.D. de Oruro N° 157 para los actores productivos mineros, operadores mineros, comercializadoras y personas naturales que se encuentran en posesión o realicen el transporte de minerales y/o metales en sujeción al D.S. N° 2288, Art 7', styles: { fontStyle:'normal', fontSize: 8, halign: 'center', fillColor: [255, 255, 255] } },
+                                    { content:  ' El Formulario 101 es el Único instrumento que habilita el transporte de minerales y/o metales al interior o exterior del país, que permite la identificación del Municipio, Departamento Productor y otros datos técnicos, tiene carácter de Declaración Jurada de uso obligatorio conforme al Art. 31 del D.D. de Oruro N° 157 para los actores productivos mineros, operadores mineros, comercializadoras y personas naturales que se encuentran en posesión o realicen el transporte de minerales y/o metales en sujeción al D.S. N° 2288, Art 7', styles: { fontStyle:'normal', fontSize: 8, halign: 'center', fillColor: [255, 255, 255] } },
                                   ],
                                 ],
                                 body: [
@@ -797,12 +798,12 @@ autoTable(doc, {
 
                                 styles: {
                                   textColor: [0, 0, 0], // Color de texto negro
-                                  valign: 'bottom', // Alineación vertical centrada
-                                  fontSize: 9, // Tamaño de fuente
+                                  valign: 'bottom', // AlineaciÃ³n vertical centrada
+                                  fontSize: 9, // TamaÃ±o de fuente
                                   cellPadding: 2, // Espaciado interno de las celdas
                                 },
                                 headStyles: {
-                                  fontSize: 9, // Tamaño de fuente
+                                  fontSize: 9, // TamaÃ±o de fuente
                                   fillColor: [161, 216, 158], // Fondo verde para el encabezado
                                   textColor: [0, 0, 0], // Texto negro para el encabezado
                                   cellPadding: 7, // Espaciado interno de las celdas
@@ -813,6 +814,7 @@ autoTable(doc, {
                               });
 
 
+                              addAnuladoWatermark(doc, formulario_interno.estado);
                               window.open(doc.output('bloburl'), '_blank');
                             };
                             sello_autorizado.onerror = () => {
@@ -836,3 +838,6 @@ autoTable(doc, {
                     ///--------------------------------------------------------------------------------------------------------
       }
 }
+
+
+

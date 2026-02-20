@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+﻿import { Component, OnInit, ViewChild } from "@angular/core";
 import { IFormularioExterno } from "@data/formulario_externo.metadata";
 import { IFormularioExternoPDF } from "@data/formulario_externo_pdf.metadata";
 import { IFormularioExternoSimple } from "@data/formulario_externo_simple.metadata";
@@ -59,10 +59,10 @@ export class ListarFormularioExternoComponent implements OnInit {
 
     ngOnInit() {
       this.cols = [
-        { field: 'nro_formulario', header: 'Número' },
+        { field: 'nro_formulario', header: 'NÃºmero' },
         { field: 'razon_social', header: 'Operador' },
         { field: 'lote', header: 'Lote' },
-        { field: 'fecha_creacion', header: 'Fecha Creación' },
+        { field: 'fecha_creacion', header: 'Fecha CreaciÃ³n' },
         { field: 'estado', header: 'Estado' },
         { field: 'fecha_vencimiento', header: 'Vencimiento' }
       ];
@@ -122,8 +122,8 @@ export class ListarFormularioExternoComponent implements OnInit {
 
     onGlobalFilter(event: Event) {
         const value = (event.target as HTMLInputElement).value;
-        this.searchTerm = value;  // <-- Almacena el término de búsqueda
-        this.dt.first = 0;       // <-- Reinicia a la primera página
+        this.searchTerm = value;  // <-- Almacena el tÃ©rmino de bÃºsqueda
+        this.dt.first = 0;       // <-- Reinicia a la primera pÃ¡gina
         this.loadData();         // <-- Vuelve a cargar los datos
 
     }
@@ -149,7 +149,7 @@ export class ListarFormularioExternoComponent implements OnInit {
 
         this.confirmationService.confirm({
             key: 'confirm1',
-            message: '¿Estas seguro de Emitir el formulario '+event.nro_formulario+'?',
+            message: 'Â¿Estas seguro de Emitir el formulario '+event.nro_formulario+'?',
             accept: () => {
                 this.emitir(event); // Llama a onSubmit cuando el usuario acepta
                 },
@@ -170,20 +170,16 @@ export class ListarFormularioExternoComponent implements OnInit {
                             this.listaFormularioExternos[index].fecha_vencimiento=formulario_emitido.fecha_vencimiento;
                             this.listaFormularioExternos[index].nro_formulario=formulario_emitido.nro_formulario;
                         }
-                        this.notify.success('El el formulario interno '+formulario_emitido.nro_formulario+' se emitió exitosamente','Emitido Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
+                        this.notify.success('El el formulario interno '+formulario_emitido.nro_formulario+' se emitiÃ³ exitosamente','Emitido Correctamente',{timeOut:2500,positionClass: 'toast-top-right'});
                     }
               },
               (error:any) =>
                 {
-                    this.notify.error('Falló...Revise los datos y vuelva a enviar....','Error con la Emisión del Formulario',{timeOut:2000,positionClass: 'toast-top-right'});
+                    this.notify.error('FallÃ³...Revise los datos y vuelva a enviar....','Error con la EmisiÃ³n del Formulario',{timeOut:2000,positionClass: 'toast-top-right'});
                 });
         }
     vigenteAnulacion(form:any): boolean {
-
-        const fecha_vencimiento:Date = new Date(form.fecha_vencimiento);
-        const fechaLimite = new Date();
-        let sw:boolean=fechaLimite <= fecha_vencimiento;
-        return sw; // Se muestra solo despuゼs de DIAS_ANULACION d魈as
+        return true;
       }
 showTrancaDetail(tranca: any) {
             const ref = this.dialogService.open(TrancaDetailComponent, {
@@ -195,3 +191,4 @@ showTrancaDetail(tranca: any) {
             });
           }
 }
+

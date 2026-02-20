@@ -28,6 +28,7 @@ import { RouterModule } from '@angular/router';
 import { CrearTomaDeMuestraParcialComponent } from './crear-toma-de-muestra-parcial.component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { VerTomaDeMuestraModule } from 'src/app/admin/components/ver-components/ver-toma-de-muestra/ver-toma-de-muestra.module';
+import { AprobarProcedimientoModule } from 'src/app/admin/components/aprobar-procedimiento/aprobar-procedimiento.module';
 
 @NgModule({
   imports: [
@@ -59,6 +60,7 @@ import { VerTomaDeMuestraModule } from 'src/app/admin/components/ver-components/
     DividerModule,
     ConfirmDialogModule,
     VerTomaDeMuestraModule,
+    AprobarProcedimientoModule,
     RouterModule
 
   ],

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { IOperator } from '@data/operator.metadata';
 import jsPDF from 'jspdf';
 import * as QRCode from 'qrcode';
@@ -13,7 +13,7 @@ export class SIDCOMFormService {
 generarFormularioPDF(operador: any) {
   const doc = new jsPDF('p', 'pt', 'letter'); // 612 x 792 pts
 
-  // Función auxiliar para manejar valores nulos
+  // Funci�f³n auxiliar para manejar valores nulos
   const limpiarValor = (valor: any): string => {
     return valor == null ? '' : String(valor);
   };
@@ -29,20 +29,20 @@ generarFormularioPDF(operador: any) {
 
   // Cargar imagen de fondo
   const fondoFormulario = new Image();
-  fondoFormulario.src = 'assets/sidcom/formulario-fondo.jpg'; // Asegúrate de tener la imagen de fondo
+  fondoFormulario.src = 'assets/sidcom/formulario-fondo.jpg'; // Aseg�fºrate de tener la imagen de fondo
 
   fondoFormulario.onload = () => {
     // Agregar imagen de fondo
     doc.addImage(fondoFormulario, 'JPEG', 0, 0, 612, 792);
 
-    // Configuración de fuente base
+    // Configuraci�f³n de fuente base
     doc.setFont("Helvetica", "normal");
     doc.setFontSize(10);
     doc.setTextColor(0, 0, 0);
 
-    // === SECCIÓN A: IDENTIFICACIÓN DEL ACTOR PRODUCTIVO MINERO ===
+    // === SECCI�f�?oN A: IDENTIFICACI�f�?oN DEL ACTOR PRODUCTIVO MINERO ===
 
-    // Razón Social - usando función auxiliar
+    // Raz�f³n Social - usando funci�f³n auxiliar
     doc.setFont("Helvetica", "bold");
     doc.setFontSize(10);
     this.centrarTextoEnRectangulo(doc, limpiarValor(operador.razon_social), 160, 137, 173, 50);
@@ -62,7 +62,7 @@ generarFormularioPDF(operador: any) {
     doc.setFontSize(6);
     this.centrarTextoEnRectangulo(doc, limpiarValor(operador.direccion), 207, 226, 278, 13);
 
-    // Las siguientes líneas NO necesitan cambios porque ya manejan la lógica de X o ''
+    // Las siguientes l�f­neas NO necesitan cambios porque ya manejan la l�f³gica de X o ''
     doc.setFontSize(10);
     const textoTipoOperador = operador.tipo_operador === 2 ? 'X' : '';
     this.centrarTextoEnRectangulo(doc, textoTipoOperador, 213, 256, 15, 20);
@@ -130,32 +130,33 @@ generarFormularioPDF(operador: any) {
   };
 }
 
-  // Función para centrar texto en un rectángulo específico
+  // Funci�f³n para centrar texto en un rect�f¡ngulo espec�f­fico
   private centrarTextoEnRectangulo(doc: jsPDF, texto: string, left: number, top: number, width: number, height: number) {
-    // Dividir el texto en líneas si es muy largo para el ancho del rectángulo
+    // Dividir el texto en l�f­neas si es muy largo para el ancho del rect�f¡ngulo
      // doc.setDrawColor(0, 0, 0); // Color negro para el borde
-     // doc.setLineWidth(1); // Grosor de línea
+     // doc.setLineWidth(1); // Grosor de l�f­nea
       doc.rect(left, top, width, height);
     const lines = doc.splitTextToSize(texto, width);
 
-    // Calcular la altura de una línea de texto
+    // Calcular la altura de una l�f­nea de texto
     const fontSize = doc.getFontSize();
-    const lineHeight = fontSize * 1.15; // Factor de espaciado entre líneas
+    const lineHeight = fontSize * 1.15; // Factor de espaciado entre l�f­neas
 
     // Calcular la altura total del texto
     const totalTextHeight = lines.length * lineHeight;
 
-    // Calcular la posición Y inicial para centrar verticalmente
+    // Calcular la posici�f³n Y inicial para centrar verticalmente
     const startY = top + (height - totalTextHeight) / 2 + lineHeight * 0.75;
 
-    // Dibujar cada línea centrada horizontalmente
+    // Dibujar cada l�f­nea centrada horizontalmente
     lines.forEach((line: string, index: number) => {
       const lineWidth = doc.getTextWidth(line);
       const x = left + (width - lineWidth) / 2; // Centrar horizontalmente
-      const y = startY + (index * lineHeight); // Posición vertical de cada línea
+      const y = startY + (index * lineHeight); // Posici�f³n vertical de cada l�f­nea
 
       doc.text(line, x, y);
     });
   }
 
 }
+

@@ -1,7 +1,8 @@
-
+﻿
 import { style } from '@angular/animations';
 import { Injectable } from '@angular/core';
 import jsPDF from 'jspdf';
+import { addAnuladoWatermark } from './pdf-watermark.util';
 import autoTable from 'jspdf-autotable'
 import * as QRCode from 'qrcode';
 
@@ -15,11 +16,11 @@ export class PdfTomaDeMuestraParcialService {
    public error:any=null;
   constructor(
     ) {}
-// Función para generar el código QR sin bordes blancos
+// Funcion para generar el código QR sin bordes blancos
  generateQRCode(data: string): Promise<string> {
     return QRCode.toDataURL(data, {
       margin: 0, // Establecer el margen en 0 para eliminar el borde blanco
-      errorCorrectionLevel: 'H', // Nivel de corrección de errores (puedes ajustarlo según tus necesidades)
+      errorCorrectionLevel: 'H', // Nivel de correcciÃ³n de errores (puedes ajustarlo segÃºn tus necesidades)
       width: 120, // Ancho del código QR
       color: {
         dark: '#000000',
@@ -29,28 +30,28 @@ export class PdfTomaDeMuestraParcialService {
   }
   formatFecha(fecha: string): string {
     const date = new Date(fecha); // Convierte la fecha en un objeto Date
-    const day = String(date.getDate()).padStart(2, '0'); // Día con 2 dígitos
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Mes con 2 dígitos (recordando que los meses empiezan en 0)
-    const year = date.getFullYear(); // Año
-    const hours = String(date.getHours()).padStart(2, '0'); // Hora con 2 dígitos
-    const minutes = String(date.getMinutes()).padStart(2, '0'); // Minutos con 2 dígitos
+    const day = String(date.getDate()).padStart(2, '0'); // DÃ­a con 2 dÃ­gitos
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Mes con 2 dÃ­gitos (recordando que los meses empiezan en 0)
+    const year = date.getFullYear(); // AÃ±o
+    const hours = String(date.getHours()).padStart(2, '0'); // Hora con 2 dÃ­gitos
+    const minutes = String(date.getMinutes()).padStart(2, '0'); // Minutos con 2 dÃ­gitos
 
     return `${day}/${month}/${year} a Hrs.: ${hours}:${minutes}`; // Formato final
   }
-  // Función para mostrar los nombres de los minerales
+  // Funcion para mostrar los nombres de los minerales
   mostrarMinerales(mineral_tdm): string {
     return mineral_tdm.map(mineral => mineral.mineral).join(', ');
   }
 
-  // Función para mostrar los detalles de los minerales
+  // Funcion para mostrar los detalles de los minerales
   mostrarDetalles(mineral_tdm): string {
     return mineral_tdm.map(mineral => `${mineral.sigla} ${mineral.ley} ${mineral.unidad}`).join(', ');
   }
   unirMunicipios(municipios): string {
     return municipios.map(municipio => municipio.municipio_origen).join(', ');
   }
-  // Función que convierte HTML a texto y reemplaza <ul> y <li> por viñetas
-convertirHTMLATextoConViñetas(html) {
+  // Funcion que convierte HTML a texto y reemplaza <ul> y <li> por vinetas
+convertirHTMLATextoConVinetas(html) {
   // Crear un div temporal para manejar el HTML
   const div = document.createElement('div');
   div.innerHTML = html;
@@ -58,18 +59,18 @@ convertirHTMLATextoConViñetas(html) {
   // Encontrar todos los elementos <ul>
   const ulElements = div.querySelectorAll('ul');
 
-  // Reemplazar cada <li> con una viñeta
+  // Reemplazar cada <li> con una viÃ±eta
   ulElements.forEach(ul => {
     const lis = ul.querySelectorAll('li');
     lis.forEach(li => {
-      li.innerHTML = `* ${li.innerText.trim()}`;  // Agregar la viñeta a cada <li>
+      li.innerHTML = `* ${li.innerText.trim()}`;  // Agregar la viÃ±eta a cada <li>
     });
   });
 
   // Obtener el texto final, incluyendo <h6> y otros elementos que no son <li>
   let texto = div.innerText || div.textContent;
 
-  // Devolver el texto con las viñetas correctamente aplicadas
+  // Devolver el texto con las vinetas correctamente aplicadas
   return texto;
 }
 
@@ -132,9 +133,9 @@ convertirHTMLATextoConViñetas(html) {
                                 styles: {
                                   fillColor: [255, 255, 0], // Color de fondo amarillo
                                   textColor: [0, 0, 0], // Color del texto negro
-                                  halign: 'center', // Alineación centrada
-                                  valign: 'middle', // Alineación vertical centrada
-                                  fontSize: 10, // Tamaño de fuente
+                                  halign: 'center', // AlineaciÃ³n centrada
+                                  valign: 'middle', // AlineaciÃ³n vertical centrada
+                                  fontSize: 10, // TamaÃ±o de fuente
                                   cellPadding: 3, // Reduce el relleno dentro de las celdas
                                 },
                                 headStyles: {
@@ -146,18 +147,18 @@ convertirHTMLATextoConViñetas(html) {
 
                                 margin: { top: 0, bottom: 0 }, // Ajustar el margen entre tablas
 
-                                startY: 80, // Posición inicial de la tabla
+                                startY: 80, // PosiciÃ³n inicial de la tabla
                               });
-                        // Crear las celdas basadas en la condición
+                        // Crear las celdas basadas en la condiciÃ³n
                         const celdas = [];
 
                         if (toma_de_muestra.estado === 'GENERADO') {
                         // Si el estado es 'GENERADO', agregar solo la primera celda
-                        celdas.push({ content: 'ESTE FORMULARIO NO SE EMITIO, ESTA EN MODO GENERADO Y NO ES VALIDO APARA SU USO.', colSpan: 2, styles: { halign: 'center', fillColor: [255, 255, 0] } });
+                        celdas.push({ content: 'ESTE FORMULARIO NO SE EMITIÓ, ESTA EN MODO GENERADO Y NO ES VÁLIDO APARA SU USO.', colSpan: 2, styles: { halign: 'center', fillColor: [255, 255, 0] } });
                         }
                         if (toma_de_muestra.estado === 'SOLICITADO') {
                           // Si el estado es 'GENERADO', agregar solo la primera celda
-                          celdas.push({ content: 'ESTE FORMULARIO SE ENCUENTRA EN PROCESO DE APROBACION, NO ES VALIDO APARA SU USO.', colSpan: 2, styles: { halign: 'center', fillColor: [255, 255, 0] } });
+                          celdas.push({ content: 'ESTE FORMULARIO SE ENCUENTRA EN PROCESO DE APROBACIÓN, NO ES VÁLIDO APARA SU USO.', colSpan: 2, styles: { halign: 'center', fillColor: [255, 255, 0] } });
                           }
                         if (toma_de_muestra.estado === 'EMITIDO') {
                           // Si el estado es 'GENERADO', agregar solo la primera celda
@@ -165,7 +166,7 @@ convertirHTMLATextoConViñetas(html) {
                           }
                         if (toma_de_muestra.estado === 'ANULADO') {
                           // Si el estado es 'GENERADO', agregar solo la primera celda
-                          celdas.push({ content: 'ESTE FORMULARIO SE ANULÓ, NO VALIDO PARA SU USO.', colSpan: 2, styles: { halign: 'center', fillColor: [255, 0, 0] } });
+                          celdas.push({ content: 'ESTE FORMULARIO SE ANULÃ“, NO VÁLIDO PARA SU USO.', colSpan: 2, styles: { halign: 'center', fillColor: [255, 0, 0] } });
                           }
 
                         autoTable(doc, {
@@ -175,7 +176,7 @@ convertirHTMLATextoConViñetas(html) {
                             styles: {
                                 cellPadding: 6, // Reduce el relleno dentro de las celdas
                                 textColor: [0, 0, 0],
-                                valign: 'middle', // Alineación vertical centrada
+                                valign: 'middle', // AlineaciÃ³n vertical centrada
                               },
                           });
 
@@ -204,9 +205,9 @@ convertirHTMLATextoConViñetas(html) {
                             styles: {
                               fillColor: [255, 255, 255], // Color de fondo por defecto
                               textColor: [0, 0, 0], // Color de texto negro
-                              halign: 'left', // Alineación horizontal izquierda por defecto
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
+                              halign: 'left', // AlineaciÃ³n horizontal izquierda por defecto
+                              valign: 'middle', // AlineaciÃ³n vertical centrada
+                              fontSize: 9, // TamaÃ±o de fuente
                               cellPadding: 2, // Espaciado interno de las celdas
                             },
                             headStyles: {
@@ -217,7 +218,7 @@ convertirHTMLATextoConViñetas(html) {
                             columnStyles: {
                               0: { cellWidth: 20 }, // Primera columna
                               1: { cellWidth: 120 }, // Segunda columna
-                              2: { cellWidth: 360 }, // Ajusta automáticamente
+                              2: { cellWidth: 360 }, // Ajusta automÃ¡ticamente
                             },
                           });
 
@@ -247,9 +248,9 @@ convertirHTMLATextoConViñetas(html) {
                             styles: {
                               fillColor: [255, 255, 255], // Color de fondo por defecto
                               textColor: [0, 0, 0], // Color de texto negro
-                              halign: 'left', // Alineación horizontal izquierda por defecto
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
+                              halign: 'left', // AlineaciÃ³n horizontal izquierda por defecto
+                              valign: 'middle', // AlineaciÃ³n vertical centrada
+                              fontSize: 9, // TamaÃ±o de fuente
                               cellPadding: 2, // Espaciado interno de las celdas
                             },
                             headStyles: {
@@ -261,8 +262,8 @@ convertirHTMLATextoConViñetas(html) {
                               0: { cellWidth: 20 }, // Primera columna
                               1: { cellWidth: 90 }, // Primera columna
                               2: { cellWidth: 130 }, // Segunda columna
-                              3: { cellWidth: 105 }, // Ajusta automáticamente
-                              4: { cellWidth: 175 }, // Ajusta automáticamente
+                              3: { cellWidth: 105 }, // Ajusta automÃ¡ticamente
+                              4: { cellWidth: 175 }, // Ajusta automÃ¡ticamente
                             },
                           });
 
@@ -287,8 +288,8 @@ convertirHTMLATextoConViñetas(html) {
 
                             styles: {
                               textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
+                              valign: 'middle', // AlineaciÃ³n vertical centrada
+                              fontSize: 9, // TamaÃ±o de fuente
                               cellPadding: 2, // Espaciado interno de las celdas
                             },
                             headStyles: {
@@ -300,8 +301,8 @@ convertirHTMLATextoConViñetas(html) {
                               0: { cellWidth: 20 }, // Primera columna
                               1: { cellWidth: 80 }, // Primera columna
                               2: { cellWidth: 160 }, // Segunda columna
-                              3: { cellWidth:90 }, // Ajusta automáticamente
-                              4: { cellWidth:180 }, // Ajusta automáticamente
+                              3: { cellWidth:90 }, // Ajusta automÃ¡ticamente
+                              4: { cellWidth:180 }, // Ajusta automÃ¡ticamente
                             },
                           });
                           autoTable(doc, {
@@ -318,16 +319,16 @@ convertirHTMLATextoConViñetas(html) {
                             ],
                             styles: {
                               textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
+                              valign: 'middle', // AlineaciÃ³n vertical centrada
+                              fontSize: 9, // TamaÃ±o de fuente
                               cellPadding: 2, // Espaciado interno de las celdas
                             },
                             columnStyles: {
                               0: { cellWidth: 20 }, // Primera columna
                               1: { cellWidth: 110 }, // Primera columna
                               2: { cellWidth: 130 }, // Segunda columna
-                              3: { cellWidth:105 }, // Ajusta automáticamente
-                              4: { cellWidth:185 }, // Ajusta automáticamente
+                              3: { cellWidth:105 }, // Ajusta automÃ¡ticamente
+                              4: { cellWidth:185 }, // Ajusta automÃ¡ticamente
                             },
                           });
                           autoTable(doc, {
@@ -344,16 +345,16 @@ convertirHTMLATextoConViñetas(html) {
                             ],
                             styles: {
                               textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
+                              valign: 'middle', // AlineaciÃ³n vertical centrada
+                              fontSize: 9, // TamaÃ±o de fuente
                               cellPadding: 2, // Espaciado interno de las celdas
                             },
                             columnStyles: {
                               0: { cellWidth: 20 }, // Primera columna
                               1: { cellWidth: 110 }, // Primera columna
                               2: { cellWidth: 130 }, // Segunda columna
-                              3: { cellWidth:105 }, // Ajusta automáticamente
-                              4: { cellWidth:185 }, // Ajusta automáticamente
+                              3: { cellWidth:105 }, // Ajusta automÃ¡ticamente
+                              4: { cellWidth:185 }, // Ajusta automÃ¡ticamente
                             },
                           });
                             autoTable(doc, {
@@ -372,16 +373,16 @@ convertirHTMLATextoConViñetas(html) {
                                 ],
                                 styles: {
                                 textColor: [0, 0, 0], // Color de texto negro
-                                valign: 'middle', // Alineación vertical centrada
-                                fontSize: 9, // Tamaño de fuente
+                                valign: 'middle', // AlineaciÃ³n vertical centrada
+                                fontSize: 9, // TamaÃ±o de fuente
                                 cellPadding: 2, // Espaciado interno de las celdas
                                 },
                                 columnStyles: {
                                 0: { cellWidth: 20 }, // Primera columna
                                 1: { cellWidth: 110 }, // Primera columna
                                 2: { cellWidth: 130 }, // Segunda columna
-                                3: { cellWidth:105 }, // Ajusta automáticamente
-                                4: { cellWidth:185 }, // Ajusta automáticamente
+                                3: { cellWidth:105 }, // Ajusta automÃ¡ticamente
+                                4: { cellWidth:185 }, // Ajusta automÃ¡ticamente
                                 },
                             });
 
@@ -403,8 +404,8 @@ convertirHTMLATextoConViñetas(html) {
 
                             styles: {
                               textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
+                              valign: 'middle', // AlineaciÃ³n vertical centrada
+                              fontSize: 9, // TamaÃ±o de fuente
                               cellPadding: 2, // Espaciado interno de las celdas
                             },
                             headStyles: {
@@ -437,8 +438,8 @@ convertirHTMLATextoConViñetas(html) {
 
                             styles: {
                               textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
+                              valign: 'middle', // AlineaciÃ³n vertical centrada
+                              fontSize: 9, // TamaÃ±o de fuente
                               cellPadding: 2, // Espaciado interno de las celdas
                             },
                             headStyles: {
@@ -453,8 +454,8 @@ convertirHTMLATextoConViñetas(html) {
                               2: { cellWidth: 370 }, // Segunda columna
                             },
                           });
-                            // Función para extraer el número del paso (ej: "Paso 3" → 3)
-                            const extraerNumeroPaso = (numPasoStr: string): number => {
+                            // Funcion para extraer el nÃºmero del paso (ej: "Paso 3" â†’ 3)
+                            const extraerNÚMEROPaso = (numPasoStr: string): number => {
                                 const match = numPasoStr.match(/\d+/);
                                 return match ? parseInt(match[0]) : 0;
                             };
@@ -509,8 +510,8 @@ autoTable(doc, {
 
                             styles: {
                               textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'middle', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
+                              valign: 'middle', // AlineaciÃ³n vertical centrada
+                              fontSize: 9, // TamaÃ±o de fuente
                               cellPadding: 2, // Espaciado interno de las celdas
                             },
                             headStyles: {
@@ -535,7 +536,7 @@ autoTable(doc, {
                             ],
                             body: [
                               [
-                                { content: 'Emitido por: ' + toma_de_muestra.responsable_gador + '; Responsable de Toma de Muestra de la Secretaría de Mineria, Metalurgia y Recursos Energéticos GADOR, en fecha:' + toma_de_muestra.fecha_aprobacion + ' a Horas: ' + toma_de_muestra.hora_aprobacion, styles: { halign: 'center', fontStyle: 'bold', fillColor: [255, 255, 255] } },
+                                { content: 'Emitido por: ' + toma_de_muestra.responsable_gador + '; Responsable de Toma de Muestra de la Secretaría de Minería, Metalurgia y Recursos Energéticos GADOR, en fecha:' + toma_de_muestra.fecha_aprobacion + ' a Horas: ' + toma_de_muestra.hora_aprobacion, styles: { halign: 'center', fontStyle: 'bold', fillColor: [255, 255, 255] } },
                                 { content: 'Aprobado por: ' + toma_de_muestra.responsable_muestra + '; Responsable de Toma de Muestra de la Empresa: ' + toma_de_muestra.razon_social + ' en fecha: ' + toma_de_muestra.fecha_firma + ' a Horas: ' + toma_de_muestra.hora_firma, styles: { halign: 'center', fontStyle: 'bold', fillColor: [255, 255, 255]} },
                                 { content: 'Imagen de la Toma de Muestra', styles: { halign: 'center', fontStyle: 'bold', fillColor: [255, 255, 255], fontSize: 6 } },
                                 { content: 'Escanee el código QR para verificar la autenticidad del Formulario de Toma de Muestra', styles: { halign: 'center', fontStyle: 'bold', fillColor: [255, 255, 255], fontSize: 6 } },
@@ -544,8 +545,8 @@ autoTable(doc, {
 
                             styles: {
                               textColor: [0, 0, 0], // Color de texto negro
-                              valign: 'bottom', // Alineación vertical centrada
-                              fontSize: 9, // Tamaño de fuente
+                              valign: 'bottom', // AlineaciÃ³n vertical centrada
+                              fontSize: 9, // TamaÃ±o de fuente
                               cellPadding: 2, // Espaciado interno de las celdas
                               fillColor: [255, 255, 255], // Fondo blanco general
                             },
@@ -554,7 +555,7 @@ autoTable(doc, {
                               textColor: [0, 0, 0], // Texto negro para el encabezado
                               fontStyle: 'bold', // Texto en negrita
                               cellPadding: 7, // Espaciado interno de las celdas
-                              lineColor: [255, 255, 255], // Color de la línea del borde
+                              lineColor: [255, 255, 255], // Color de la lÃ­nea del borde
                             },
                             columnStyles: {
                               0: { cellWidth: 140, minCellHeight: 100, fillColor: [255, 255, 255] }, // Fondo blanco para la primera columna
@@ -573,7 +574,7 @@ autoTable(doc, {
                             sello_autorizado.onload = () => {
                               const nueva_imagen = new Image();
 
-                              // Verifica si toma_de_muestra.foto_link es válido
+                              // Verifica si toma_de_muestra.foto_link es vÃ¡lido
                               let correctedPath = '';
                               if (toma_de_muestra.foto_link) {
                                   // Si existe el foto_link, procesa la ruta
@@ -581,7 +582,7 @@ autoTable(doc, {
                                   nueva_imagen.src = localStorage.getItem('url-backend') + correctedPath; // Imagen desde el backend
                               } else {
                                   // Si no hay foto, asigna una imagen por defecto
-                                  nueva_imagen.src = 'ruta/a/tu/imagen/por/defecto.png'; // Aquí colocas la URL de tu imagen por defecto
+                                  nueva_imagen.src = 'ruta/a/tu/imagen/por/defecto.png'; // AquÃ­ colocas la URL de tu imagen por defecto
                               }
 
                               const extension = correctedPath.split('.').pop().toUpperCase();
@@ -593,15 +594,17 @@ autoTable(doc, {
                                       doc.addImage(sello_auth, 'JPEG', 470, (doc as any).lastAutoTable?.finalY - 110, 127, 86);
                                   }
 
-                                  // Agregar la nueva imagen en una posición específica (si la imagen se carga correctamente)
+                                  // Agregar la nueva imagen en una posiciÃ³n especÃ­fica (si la imagen se carga correctamente)
                                   doc.addImage(nueva_imagen, extension, 350, (doc as any).lastAutoTable?.finalY - 100, 100, 85);
 
                                   // Generar el PDF y abrirlo
+                                  addAnuladoWatermark(doc, toma_de_muestra.estado);
                                   window.open(doc.output('bloburl'), '_blank');
                               };
 
                               nueva_imagen.onerror = () => {
                                   // En caso de error, puedes continuar generando el PDF sin la imagen
+                                  addAnuladoWatermark(doc, toma_de_muestra.estado);
                                   window.open(doc.output('bloburl'), '_blank');
                               };
                           };
@@ -619,3 +622,7 @@ autoTable(doc, {
                       };
       }
 }
+
+
+
+

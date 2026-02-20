@@ -66,6 +66,11 @@ export class AnularFormularioInternoCooperativaComponent implements OnInit {
         this.formularioInternoService.verFormularioInterno(this.id).subscribe(
           (data:any)=>{
           this.formulario_int=this.formularioInternoService.handleCrearFormularioInterno(data);
+          if (this.formulario_int?.estado === 'VENCIDO') {
+            this.notify.error('No se puede anular un formulario vencido','Acción no permitida',{timeOut:2000,positionClass: 'toast-bottom-right'});
+            this.router.navigate(['/public/formulario-101/formulario-cooperativa']);
+            return;
+          }
 
         },
         (error:any)=> this.error=this.formularioInternoService.handleError(error));
@@ -110,7 +115,7 @@ export class AnularFormularioInternoCooperativaComponent implements OnInit {
     //if(this.formulario_int.justificacion_anulacion.length>)
   }
   longitudTexto(event:any){
-    if((event.target as HTMLInputElement).value.length>=200){
+    if((event.target as HTMLInputElement).value.length>=100){
       this.valido=true;
 
     }
@@ -129,3 +134,5 @@ export class AnularFormularioInternoCooperativaComponent implements OnInit {
     });
 }
 }
+
+

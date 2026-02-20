@@ -61,6 +61,11 @@ export class AnularFormularioTrasladoColaComponent implements OnInit {
         this.formularioInternoService.verFormularioTrasladoCola(this.id).subscribe(
           (data:any)=>{
           this.formulario_int=this.formularioInternoService.handleCrearFormularioTrasladoCola(data);
+          if (this.formulario_int?.estado === 'VENCIDO') {
+            this.notify.error('No se puede anular un formulario vencido','Acción no permitida',{timeOut:2000,positionClass: 'toast-bottom-right'});
+            this.router.navigate(['/public/formulario-101/formulario-traslado-cola']);
+            return;
+          }
 
         },
         (error:any)=> this.error=this.formularioInternoService.handleError(error));
@@ -105,7 +110,7 @@ export class AnularFormularioTrasladoColaComponent implements OnInit {
     //if(this.formulario_int.justificacion_anulacion.length>)
   }
   longitudTexto(event:any){
-    if((event.target as HTMLInputElement).value.length>=200){
+    if((event.target as HTMLInputElement).value.length>=100){
       this.valido=true;
 
     }
@@ -124,3 +129,5 @@ export class AnularFormularioTrasladoColaComponent implements OnInit {
     });
 }
 }
+
+

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IFormularioExterno } from '@data/formulario_externo.metadata';
 import { ToastrService } from 'ngx-toastr';
@@ -93,7 +93,7 @@ export class AnularFormularioExternoComponent implements OnInit {
               if(this.formulario_ext)
               {
                 this.router.navigate(['/admin/formulario-101/formulario-externo']);
-                this.notify.success('El el formulario'+this.formulario_ext.nro_formulario+' se anuló exitosamente','Anulado Correctamente',{timeOut:2500,positionClass: 'toast-bottom-right'});
+                this.notify.success('El el formulario'+this.formulario_ext.nro_formulario+' se anulÃ³ exitosamente','Anulado Correctamente',{timeOut:2500,positionClass: 'toast-bottom-right'});
               }
             },
             (error:any) =>
@@ -102,19 +102,19 @@ export class AnularFormularioExternoComponent implements OnInit {
               this.status=error.error.status;
               if(this.status=='fail')
               {
-                this.notify.error('Falló la anulación ...Revise el detalle de anulación y vuelva a enviar....','Error con la Anulación',{timeOut:2000,positionClass: 'toast-bottom-right'});
+                this.notify.error('FallÃ³ la anulaciÃ³n ...Revise el detalle de anulaciÃ³n y vuelva a enviar....','Error con la AnulaciÃ³n',{timeOut:2000,positionClass: 'toast-bottom-right'});
               }
             }
           );
 
     }
     else{
-      this.notify.error('Falló la anulación ...Revise el detalle de anulación y vuelva a enviar....','Error con la Anulación',{timeOut:2000,positionClass: 'toast-bottom-right'});
+      this.notify.error('FallÃ³ la anulaciÃ³n ...Revise el detalle de anulaciÃ³n y vuelva a enviar....','Error con la AnulaciÃ³n',{timeOut:2000,positionClass: 'toast-bottom-right'});
     }
     //if(this.formulario_ext.justificacion_anulacion.length>)
   }
   longitudTexto(event:any){
-    if((event.target as HTMLInputElement).value.length>=200){
+    if((event.target as HTMLInputElement).value.length>=100){
       this.valido=true;
       
     }
@@ -126,10 +126,11 @@ export class AnularFormularioExternoComponent implements OnInit {
   confirmarAnulacion() {
     this.confirmationService.confirm({
         key: 'confirm1',
-        message: '¿Estas seguro de anular el formulario '+this.formulario_ext.nro_formulario+'?',
+        message: 'Â¿Estas seguro de anular el formulario '+this.formulario_ext.nro_formulario+'?',
         accept: () => {
             this.onSubmit(); // Llama a onSubmit cuando el usuario acepta
           },
     });
 }
 }
+

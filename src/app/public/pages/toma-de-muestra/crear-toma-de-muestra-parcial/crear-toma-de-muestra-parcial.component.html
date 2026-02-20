@@ -20,8 +20,8 @@
                     </div>
                     <div class="col-12 md:col-3">
                         <strong>Estado:</strong>
-                        <p-tag [value]="muestraPadre?.procedimiento_parcial === 'EMITIDO' ? 'FINALIZADO' : muestraPadre?.estado"
-                               [severity]="muestraPadre?.procedimiento_parcial === 'EMITIDO' ? 'success' :
+                        <p-tag [value]="isParcialFinalizado(muestraPadre?.procedimiento_parcial) ? 'FINALIZADO' : muestraPadre?.estado"
+                               [severity]="isParcialFinalizado(muestraPadre?.procedimiento_parcial) ? 'success' :
                                           muestraPadre?.estado === 'APROBADO' ? 'success' :
                                           muestraPadre?.estado === 'SOLICITADO' ? 'info' :
                                           muestraPadre?.estado === 'FIRMADO' ? 'success' : 'warning'">
@@ -33,7 +33,7 @@
                     <div class="col-12 md:col-3">
                         <strong>Nro. Parciales Planeados:</strong> <span class="text-primary font-bold">{{muestraPadre?.nro_parcial || 'N/A'}}</span>
                     </div>
-                    <div class="col-12" *ngIf="muestraPadre?.procedimiento_parcial === 'EMITIDO'">
+                    <div class="col-12" *ngIf="isParcialFinalizado(muestraPadre?.procedimiento_parcial)">
                         <p-message severity="success" text="Parcial finalizado. Ya no se pueden generar mas parciales hijos."></p-message>
                     </div>
                     <div class="col-12 md:col-6">
@@ -77,7 +77,7 @@
             </button>
 
             <!-- Botón GENERAR PARCIALES (solo si está APROBADO o FIRMADO) -->
-            <button *ngIf="muestraPadre?.procedimiento_parcial !== 'EMITIDO' && ((muestraPadre?.estado || '').trim() === 'APROBADO' || (muestraPadre?.estado || '').trim() === 'FIRMADO')"
+            <button *ngIf="!isParcialFinalizado(muestraPadre?.procedimiento_parcial) && ((muestraPadre?.estado || '').trim() === 'APROBADO' || (muestraPadre?.estado || '').trim() === 'FIRMADO')"
                     pButton pRipple type="button"
                     label="Generar Parcial Hijo"
                     icon="pi pi-plus"
@@ -136,6 +136,9 @@
                                             routerLink="/public/toma-de-muestra/editar/{{parcial?.id}}"></button>
                                     <button *ngIf="parcial.estado === 'GENERADO'" pButton pRipple icon="pi pi-send"
                                             (click)="confirmarSolicitudParcial(parcial)" label="Solicitar"
+                                            class="p-button-outlined p-button-success mr-2"></button>
+                                    <button *ngIf="isAdminUser() && (parcial.estado || '').trim() === 'SOLICITADO'" pButton pRipple icon="pi pi-check"
+                                            (click)="abrirEmisionParcial(parcial)" label="Emitir"
                                             class="p-button-outlined p-button-success mr-2"></button>
                                     <button *ngIf="parcial.estado === 'EMITIDO'" pButton pRipple icon="pi pi-check-circle"
                                             (click)="confirmarAprobacionParcial(parcial)" label="Aprobar"
@@ -824,14 +827,23 @@
                 rejectLabel="No">
 </p-confirmDialog>
 
-<p-dialog [(visible)]="verDialog" [style]="{width: '700px'}"
-        [modal]="true" header="Estado de Toma de Muestra"
-        class="p-fluid">
-    <app-ver-toma-de-muestra
-        [id]="toma_de_muestra_id"
-        (estadoDialogo)="cerrar($event)">
-    </app-ver-toma-de-muestra>
-</p-dialog>
+        <p-dialog [(visible)]="verDialog" [style]="{width: '700px'}"
+            [modal]="true" header="Estado de Toma de Muestra"
+            class="p-fluid">
+            <app-ver-toma-de-muestra
+                [id]="toma_de_muestra_id"
+                (estadoDialogo)="cerrar($event)">
+            </app-ver-toma-de-muestra>
+        </p-dialog>
+        <p-dialog [(visible)]="productDialog" [style]="{width: '700px'}"
+            [modal]="true" header="Emisión de Toma de Muestra"
+            class="p-fluid">
+            <app-aprobar-procedimiento
+                [tmd]="tomaDeMuestra"
+                [isEditMode]="isEditMode"
+                (estadoDialogo)="cerrarDialogoEmision($event)">
+            </app-aprobar-procedimiento>
+        </p-dialog>
 
 
 
