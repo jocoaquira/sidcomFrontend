@@ -128,6 +128,16 @@ loadData() {
 
         return index.toString();
     }
+
+    onSort(event: any) {
+        this.sortField = event.field;
+        this.sortOrder = event.order;
+        this.loadData();
+      }
+    onPageChange(event: any) {
+      const page = event.first / event.rows + 1;
+      this.loadData();
+    }
     onGlobalFilter(table: Table, event: Event) {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
